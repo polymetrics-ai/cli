@@ -211,7 +211,19 @@ func validateDir(fsys fs.FS) (Report, error) {
 		findings = append(findings, bundleFindings...)
 		warnings = append(warnings, bundleWarnings...)
 	}
-	sortFindings := func(list []Finding) {
+	sortFindingLists(findings, warnings)
+
+	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}, nil
+}
+
+func validateSingleBundleDir(fsys fs.FS, name string) (Report, error) {
+	findings, warnings := validateBundleDir(fsys, name)
+	sortFindingLists(findings, warnings)
+	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+}
+
+func sortFindingLists(lists ...[]Finding) {
+	for _, list := range lists {
 		sort.Slice(list, func(i, j int) bool {
 			if list[i].Connector != list[j].Connector {
 				return list[i].Connector < list[j].Connector
@@ -222,10 +234,6 @@ func validateDir(fsys fs.FS) (Report, error) {
 			return list[i].Rule < list[j].Rule
 		})
 	}
-	sortFindings(findings)
-	sortFindings(warnings)
-
-	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}, nil
 }
 
 // bundleDirNames returns the sorted top-level directory names of fsys, the

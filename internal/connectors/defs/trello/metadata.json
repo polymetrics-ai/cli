@@ -1,23 +1,25 @@
 {
   "name": "trello",
   "display_name": "Trello",
-  "description": "Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are blocked (see docs.md Known limits).",
+  "description": "Reads and writes the supportable Trello REST API surface for boards, cards, lists, members, organizations, labels, checklists, actions, webhooks, search, attachments, plugins, notifications, emoji, and saved searches with fixture-backed declarative operations.",
   "integration_type": "api",
   "docs_url": "https://developer.atlassian.com/cloud/trello/rest/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
-    "query": false,
+    "write": true,
+    "query": true,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Trello API read of board/list/checklist data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "External Trello API reads of boards, cards, lists, members, organizations, labels, checklists, actions, notifications, plugins, webhooks, search results, and attachments metadata.",
+    "write": "Typed Trello REST mutations can create, update, move, archive, delete, or otherwise change collaboration data and webhook delivery.",
+    "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive deletes require destructive confirmation."
   }
 }

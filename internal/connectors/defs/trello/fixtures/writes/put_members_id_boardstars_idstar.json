@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "idStar": "trello-fixture-value",
+    "pos": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/members/trello-fixture-value/boardStars/trello-fixture-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

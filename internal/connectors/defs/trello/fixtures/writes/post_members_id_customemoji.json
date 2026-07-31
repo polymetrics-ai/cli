@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "file": "trello-fixture-value",
+    "name": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/members/trello-fixture-value/customEmoji"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

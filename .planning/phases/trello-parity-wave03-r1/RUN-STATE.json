@@ -1,0 +1,37 @@
+{
+  "phase": "trello-parity-wave03-r1",
+  "branch": "fm/cli-trello-parity-wave03-r1",
+  "issues": [3086, 3087, 3088, 3089, 3090, 3091, 3092, 3093],
+  "gsdDoctorPassed": true,
+  "programmingLoopCommandAvailable": false,
+  "manualGsdFallback": "scripts/gsd prompt programming-loop returned unknown command; following .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop manually",
+  "verificationPassed": true,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "firstmate assigned this worker one isolated worktree and the task requires connector-local implementation without spawning more mutating workers"
+    },
+    {
+      "cycle": "implementation",
+      "decision": "direct_read_for_parameterized_gets",
+      "reason": "modeling all 98 supportable GET operations as ETL streams created repeated registry-load timeout pressure; final design keeps high-volume boards/lists/checklists as streams and maps the remaining supportable GETs to fixed JSON direct reads"
+    }
+  ],
+  "postChangeCounts": {
+    "officialOperations": 261,
+    "executable": 219,
+    "streams": 3,
+    "directReads": 95,
+    "writes": 121,
+    "blocked": 42,
+    "coveredByMethod": {"GET": 98, "POST": 43, "PUT": 45, "DELETE": 33},
+    "blockedByMethod": {"GET": 30, "POST": 2, "PUT": 6, "DELETE": 4},
+    "blockedByModel": {"duplicate": 10, "direct_read": 19, "disallowed": 1, "admin_reverse_etl": 12}
+  },
+  "issueAddendum": {
+    "marker": "trello-parity-wave03-r1-addendum",
+    "postedWith": "gh-axi",
+    "issues": [3086, 3087, 3088, 3089, 3090, 3091, 3092, 3093]
+  }
+}

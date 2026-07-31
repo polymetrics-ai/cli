@@ -1097,6 +1097,17 @@ func TestValidate_ExitCodeReflectsFindings(t *testing.T) {
 	}
 }
 
+func TestValidate_AcceptsSingleBundleRoot(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"validate", "testdata/valid/goodconn"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("run(validate single bundle) exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "1 connector(s) checked, 0 findings") {
+		t.Fatalf("single-bundle validate summary mismatch: %s", stdout.String())
+	}
+}
+
 // --- validate --json shape ---------------------------------------------------
 
 func TestValidate_JSONOutputShape(t *testing.T) {

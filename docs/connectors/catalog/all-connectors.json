@@ -143435,7 +143435,7 @@
   {
     "name": "trello",
     "display_name": "Trello",
-    "description": "Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are blocked (see docs.md Known limits).",
+    "description": "Reads and writes the supportable Trello REST API surface for boards, cards, lists, members, organizations, labels, checklists, actions, webhooks, search, attachments, plugins, notifications, emoji, and saved searches with fixture-backed declarative operations.",
     "integration_type": "api",
     "docs_url": "https://developer.atlassian.com/cloud/trello/rest/",
     "release_stage": "ga",
@@ -143443,8 +143443,8 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
-      "query": false
+      "write": true,
+      "query": true
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -143458,63 +143458,938 @@
         "key": {
           "type": "string",
           "x-secret": true,
-          "description": "Trello API key, sent as the 'key' query parameter on every request. Never logged."
+          "description": "Trello API key, sent as the 'key' query parameter on every request. Never log or print this value."
         },
         "token": {
           "type": "string",
           "x-secret": true,
-          "description": "Trello API token, sent as the 'token' query parameter on every request. Never logged."
+          "description": "Trello API token, sent as the 'token' query parameter on every request. Never log or print this value."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://api.trello.com/1",
-          "description": "Trello API base URL override for tests or proxies."
+          "description": "Trello API base URL override for fixture replay, tests, or approved proxies."
+        },
+        "id": {
+          "type": "string",
+          "description": "Trello board id used by the lists and checklists streams; most other parameterized reads use direct-read command flags."
         },
         "board_ids": {
           "type": "string",
-          "description": "Comma-separated list of Trello board IDs to scope the lists/checklists streams to. Required for those two streams (no auto-discovery fallback here; see docs.md Known limits) — the boards stream itself is unaffected and always lists every board the authenticated member can access."
+          "description": "Optional comma-separated Trello board IDs retained for compatibility with earlier Trello connector configurations."
         }
       }
     },
     "streams": [
       {
-        "name": "boards",
-        "primary_key": [
-          "id"
-        ],
+        "name": "checklists",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "lists",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
-        "name": "checklists",
-        "primary_key": [
-          "id"
-        ],
+        "name": "boards",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "put_actions_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/actions/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_actions_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/actions/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_actions_id_text",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/actions/{{ record.id }}/text?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_actions_idaction_reactions",
+        "kind": "create",
+        "method": "POST",
+        "path": "/actions/{{ record.idAction }}/reactions?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_actions_idaction_reactions_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/actions/{{ record.idAction }}/reactions/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_boards_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_boards_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/boards/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_boards_id_labels",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/labels?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards_id_lists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/lists?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_members",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/members?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_members_idmember",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/members/{{ record.idMember }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "boardsidmembersidmember",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/boards/{{ record.id }}/members/{{ record.idMember }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_boards_id_memberships_idmembership",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/memberships/{{ record.idMembership }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_myprefs_emailposition",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/myPrefs/emailPosition?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_myprefs_idemaillist",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/myPrefs/idEmailList?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebar",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/myPrefs/showSidebar?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebaractivity",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/myPrefs/showSidebarActivity?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebarboardactions",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/myPrefs/showSidebarBoardActions?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebarmembers",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/boards/{{ record.id }}/myPrefs/showSidebarMembers?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards_id_calendarkey_generate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/calendarKey/generate?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards_id_emailkey_generate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/emailKey/generate?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards_id_idtags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/idTags?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards_id_markedasviewed",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/markedAsViewed?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_boards_id_boardplugins",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/boardPlugins?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_boards_id_boardplugins",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/boards/{{ record.id }}/boardPlugins/{{ record.idPlugin }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_boards_id_exports",
+        "kind": "create",
+        "method": "POST",
+        "path": "/boards/{{ record.id }}/exports?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_boards_id_exports_idexport",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/boards/{{ record.id }}/exports/{{ record.idExport }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_cards",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_cards_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_cards_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_cards_id_attachments",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/attachments?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "deleted_cards_id_attachments_idattachment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/attachments/{{ record.idAttachment }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_cards_id_checklists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/checklists?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_cards_id_checkitem_idcheckitem",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.id }}/checkItem/{{ record.idCheckItem }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_cards_id_checkitem_idcheckitem",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/checkItem/{{ record.idCheckItem }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "cardsidmembersvoted_1",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/membersVoted?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_cards_id_stickers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/stickers?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_cards_id_stickers_idsticker",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.id }}/stickers/{{ record.idSticker }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_cards_id_stickers_idsticker",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/stickers/{{ record.idSticker }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_cards_id_actions_idaction_comments",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.id }}/actions/{{ record.idAction }}/comments?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_cards_id_actions_id_comments",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/actions/{{ record.idAction }}/comments?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_cards_idcard_customfield_idcustomfield_item",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.idCard }}/customField/{{ record.idCustomField }}/item?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_cards_idcard_customfields",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.idCard }}/customFields?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_cards_id_actions_comments",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/actions/comments?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_cards_id_idlabels",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/idLabels?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_cards_id_idmembers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/idMembers?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_cards_id_labels",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/labels?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_cards_id_markassociatednotificationsread",
+        "kind": "create",
+        "method": "POST",
+        "path": "/cards/{{ record.id }}/markAssociatedNotificationsRead?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_cards_id_idlabels_idlabel",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/idLabels/{{ record.idLabel }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_id_idmembers_idmember",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/idMembers/{{ record.idMember }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_cards_id_membersvoted_idmember",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/membersVoted/{{ record.idMember }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_cards_idcard_checklist_idchecklist_checkitem_idcheckitem",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/cards/{{ record.idCard }}/checklist/{{ record.idChecklist }}/checkItem/{{ record.idCheckItem }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_cards_id_checklists_idchecklist",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/cards/{{ record.id }}/checklists/{{ record.idChecklist }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_checklists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/checklists?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_checlists_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/checklists/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_checklists_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/checklists/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_checklists_id_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/checklists/{{ record.id }}/{{ record.field }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_checklists_id_checkitems",
+        "kind": "create",
+        "method": "POST",
+        "path": "/checklists/{{ record.id }}/checkItems?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_checklists_id_checkitems_idcheckitem",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/checklists/{{ record.id }}/checkItems/{{ record.idCheckItem }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_customfields",
+        "kind": "create",
+        "method": "POST",
+        "path": "/customFields?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_customfields_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customFields/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_customfields_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/customFields/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "get_customfields_id_options",
+        "kind": "create",
+        "method": "POST",
+        "path": "/customFields/{{ record.id }}/options?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_customfields_options_idcustomfieldoption",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/customFields/{{ record.id }}/options/{{ record.idCustomFieldOption }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_labels_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/labels/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_labels_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/labels/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_labels_id_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/labels/{{ record.id }}/{{ record.field }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_labels",
+        "kind": "create",
+        "method": "POST",
+        "path": "/labels?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_lists_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/lists/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_lists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/lists?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_lists_id_archiveallcards",
+        "kind": "create",
+        "method": "POST",
+        "path": "/lists/{{ record.id }}/archiveAllCards?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_lists_id_moveallcards",
+        "kind": "create",
+        "method": "POST",
+        "path": "/lists/{{ record.id }}/moveAllCards?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_lists_id_closed",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/lists/{{ record.id }}/closed?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_id_idboard",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/lists/{{ record.id }}/idBoard?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_lists_id_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/lists/{{ record.id }}/{{ record.field }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_members_id_boardbackgrounds_1",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/boardBackgrounds?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_boardbackgrounds_idbackground",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/boardBackgrounds/{{ record.idBackground }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_members_id_boardbackgrounds_idbackground",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/members/{{ record.id }}/boardBackgrounds/{{ record.idBackground }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_members_id_boardstars",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/boardStars?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_boardstars_idstar",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/boardStars/{{ record.idStar }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_members_id_boardstars_idstar",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/members/{{ record.id }}/boardStars/{{ record.idStar }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "membersidcustomboardbackgrounds_1",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/customBoardBackgrounds?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_customboardbackgrounds_idbackground",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/customBoardBackgrounds/{{ record.idBackground }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_members_id_customboardbackgrounds_idbackground",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/members/{{ record.id }}/customBoardBackgrounds/{{ record.idBackground }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_members_id_customemoji",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/customEmoji?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_members_id_customstickers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/customStickers?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_members_id_customstickers_idsticker",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/members/{{ record.id }}/customStickers/{{ record.idSticker }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_members_id_savedsearches",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/savedSearches?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_savedsearches_idsearch",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/savedSearches/{{ record.idSearch }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_members_id_savedsearches_idsearch",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/members/{{ record.id }}/savedSearches/{{ record.idSearch }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "membersidavatar",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/avatar?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_members_id_onetimemessagesdismissed",
+        "kind": "create",
+        "method": "POST",
+        "path": "/members/{{ record.id }}/oneTimeMessagesDismissed?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_notification_channel_settings_channel_blocked_keys",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/notificationsChannelSettings?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_notification_channel_settings_channel_blocked_keys_2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/notificationsChannelSettings/{{ record.channel }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_members_id_notification_channel_settings_channel_blocked_keys_3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/members/{{ record.id }}/notificationsChannelSettings/{{ record.channel }}/{{ record.blockedKeys }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_notifications_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/notifications/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_notifications_all_read",
+        "kind": "create",
+        "method": "POST",
+        "path": "/notifications/all/read?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_notifications_id_unread",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/notifications/{{ record.id }}/unread?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_organizations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_organizations_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/organizations/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_organizations_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_organizations_id_exports",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.id }}/exports?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_organizations_id_members",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/organizations/{{ record.id }}/members?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_organizations_id_tags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.id }}/tags?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_organizations_id_members_idmember",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/organizations/{{ record.id }}/members/{{ record.idMember }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_organizations_id_members",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}/members/{{ record.idMember }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_organizations_id_members_idmember_deactivated",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/organizations/{{ record.id }}/members/{{ record.idMember }}/deactivated?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_organizations_id_logo",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.id }}/logo?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_organizations_id_logo",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}/logo?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "organizations_id_members_idmember_all",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}/members/{{ record.idMember }}/all?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_organizations_id_prefs_associateddomain",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}/prefs/associatedDomain?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_organizations_id_prefs_orginviterestrict",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}/prefs/orgInviteRestrict?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_organizations_id_tags_idtag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}/tags/{{ record.idTag }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_plugins_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/plugins/{{ record.id }}/?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_plugins_idplugin_listing",
+        "kind": "create",
+        "method": "POST",
+        "path": "/plugins/{{ record.idPlugin }}/listing?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_plugins_idplugin_listings_idlisting",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/plugins/{{ record.idPlugin }}/listings/{{ record.idListing }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "post_webhooks",
+        "kind": "create",
+        "method": "POST",
+        "path": "/webhooks/?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "put_webhooks_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/webhooks/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute."
+      },
+      {
+        "name": "delete_webhooks_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/webhooks/{{ record.id }}?token={{ secrets.token }}",
+        "risk": "Deletes or removes Trello data; requires destructive approval.",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Trello API read of board/list/checklist data",
-      "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+      "read": "External Trello API reads of boards, cards, lists, members, organizations, labels, checklists, actions, notifications, plugins, webhooks, search results, and attachments metadata.",
+      "write": "Typed Trello REST mutations can create, update, move, archive, delete, or otherwise change collaboration data and webhook delivery.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive deletes require destructive confirmation."
     },
     "icon": {
       "id": "trello",

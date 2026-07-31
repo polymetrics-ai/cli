@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "channel": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/members/trello-fixture-value/notificationsChannelSettings/trello-fixture-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

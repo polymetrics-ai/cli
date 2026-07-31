@@ -1,61 +1,56 @@
-# Overview
+# Trello connector docs
 
-Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are
-blocked (see docs.md Known limits).
+## Overview
 
-Readable streams: `boards`, `lists`, `checklists`.
+The Trello connector is generated from Atlassian's official Trello OpenAPI document and covers the supportable REST API surface without live provider calls in conformance. This parity wave audited `https://developer.atlassian.com/cloud/trello/swagger.v3.json` at SHA-256 `b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19` and partitions all 261 official HTTP operations into 219 executable connector operations (3 fixture-backed streams, 95 fixed JSON direct reads, and 121 fixture-backed typed writes) plus 42 blocked operation-ledger rows.
 
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://developer.atlassian.com/cloud/trello/rest/.
+Executable streams cover the high-volume board/list/checklist ETL paths. Parameterized GET endpoints are exposed as fixed direct-read commands with closed path/query flags and `json_redacted` output policy. Executable writes are typed reverse ETL actions using closed record schemas for supportable Trello POST, PUT, and DELETE operations.
 
 ## Auth setup
 
-Connection fields:
+Create a Trello API key and token out of band, then add credentials without placing secret values in prompts or command history. Use environment variables or stdin only:
 
-- `base_url` (optional, string); default `https://api.trello.com/1`; format `uri`; Trello API base
-  URL override for tests or proxies.
-- `board_ids` (optional, string); Comma-separated list of Trello board IDs to scope the
-  lists/checklists streams to. Required for those two streams (no auto-discovery fallback here; see
-  docs.md Known limits) - the boards stream itself is unaffected and always lists every board the
-  authenticated member can access.
-- `key` (required, secret, string); Trello API key, sent as the 'key' query parameter on every
-  request. Never logged.
-- `token` (required, secret, string); Trello API token, sent as the 'token' query parameter on every
-  request. Never logged.
+```bash
+pm credentials add trello-prod --connector trello --from-env key=TRELLO_API_KEY --from-env token=TRELLO_API_TOKEN
+```
 
-Secret fields are redacted in logs and write previews: `key`, `token`.
-
-Default configuration values: `base_url=https://api.trello.com/1`.
-
-Authentication behavior:
-
-- API key authentication in query parameter `key` using `secrets.key`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/members/me` with query `fields`=`id`; `token`=`{{ secrets.token }}`.
+The connector sends `key` as an API-key query authenticator and sends `token` on each declared Trello request. Both fields are marked `x-secret` and are redacted from previews and errors.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+The fixture-backed ETL streams are `boards`, `lists`, and `checklists`. The `boards` stream reads `/members/me/boards`; `lists` and `checklists` read board-scoped endpoints and use `--config id=<board-id>` for the board id. The remaining supportable GET endpoints are fixed direct-read commands under `pm trello read ...` with explicit path/query flags.
 
-- `boards`: GET `/members/me/boards` - records at response root; query `token`=`{{ secrets.token
-  }}`.
-- `lists`: GET `/boards/{{ fanout.id }}/lists` - records at response root; query `token`=`{{
-  secrets.token }}`; fan-out; ids from config field `board_ids`; id inserted into the request path;
-  stamps `idBoard`.
-- `checklists`: GET `/boards/{{ fanout.id }}/checklists` - records at response root; query
-  `token`=`{{ secrets.token }}`; fan-out; ids from config field `board_ids`; id inserted into the
-  request path; stamps `idBoard`.
+```bash
+pm trello read boards --credential trello-prod --json
+pm trello read lists --credential trello-prod --config id=<board-id> --json
+pm trello read get-cards-id --credential trello-prod --id <card-id> --json
+pm trello read get-search --credential trello-prod --query <search-text> --json
+```
+
+Fixture pages under `fixtures/streams/**` are sanitized synthetic pages for local conformance replay only; they are not live Trello captures and contain no real board, member, organization, card, webhook, or token data.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Trello API read of board/list/checklist data.
+All supportable Trello mutations are exposed as reverse ETL write actions, never as raw HTTP. CLI write commands create a plan first, support preview, require explicit approval, and only execute after approval. DELETE actions declare destructive confirmation plus idempotent missing-resource handling for `404`.
+
+Representative examples:
+
+```bash
+pm trello write create-card --credential trello-prod --id-list <list-id> --name "New card" --preview --json
+pm trello write comment-card --credential trello-prod --id <card-id> --text "Fixture-safe comment" --preview --json
+pm trello write delete-webhook --credential trello-prod --id <webhook-id> --preview --json
+```
+
+The declarative engine builds Trello write requests from typed records. Form bodies carry supportable Trello parameters while path parameters and token authentication are interpolated safely. Destructive or notification-producing effects remain gated by reverse ETL plan → preview → approval → execute.
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  non_data_endpoint=1, out_of_scope=3.
+The official operation ledger intentionally blocks 42 endpoints:
+
+- Trello Enterprise administration endpoints remain blocked because they require elevated enterprise authority and mutate organization/member/admin state.
+- Token-management endpoints remain blocked because they expose or mutate credential/token state.
+- Application compliance is blocked as an elevated compliance direct-read surface.
+- `/batch` is blocked because it accepts arbitrary sub-request URLs and would be a raw generic HTTP escape hatch.
+- Field/filter accessor endpoints such as `/cards/{id}/{field}` are tracked as duplicates of covered object or collection endpoints.
+
+No credentialed Trello checks, live provider calls, or provider writes are part of local conformance. Binary response payloads were not found in the audited OpenAPI content types; attachment operations are modeled as JSON/form REST metadata/actions only.

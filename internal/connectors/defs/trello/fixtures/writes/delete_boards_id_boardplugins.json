@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "idPlugin": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/boards/trello-fixture-value/boardPlugins/trello-fixture-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

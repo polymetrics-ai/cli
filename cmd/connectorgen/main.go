@@ -21,6 +21,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -69,10 +70,18 @@ func logf(w io.Writer, format string, a ...any) {
 
 func usage() string {
 	return `usage:
-  connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
+  connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs; dir may be defs root or one bundle)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen gen
   connectorgen new <name>`
+}
+
+func isBundleRoot(dir string) bool {
+	if strings.TrimSpace(dir) == "" {
+		return false
+	}
+	info, err := os.Stat(filepath.Join(dir, "metadata.json"))
+	return err == nil && !info.IsDir()
 }
 
 // runValidate implements `connectorgen validate [dir] [--json]`.
@@ -101,8 +110,14 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	cleanDir := filepath.Clean(dir)
+	var report Report
+	var err error
+	if isBundleRoot(cleanDir) {
+		report, err = validateSingleBundleDir(os.DirFS(filepath.Dir(cleanDir)), filepath.Base(cleanDir))
+	} else {
+		report, err = validateDir(os.DirFS(cleanDir))
+	}
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1

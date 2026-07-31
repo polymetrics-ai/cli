@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "name": "trello-fixture-value",
+    "query": "trello-fixture-value",
+    "pos": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/members/trello-fixture-value/savedSearches"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}
