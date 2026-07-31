@@ -113,7 +113,7 @@
       "intent": "direct_read",
       "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed.",
       "operation": "get_repositories_workspace_repo_slug_downloads_filename",
-      "output_policy": "json_redacted",
+      "output_policy": "binary_file_bounded",
       "path": "downloads get",
       "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
@@ -189,7 +189,7 @@
     },
     {
       "name": "bitbucket-writes",
-      "summary": "Bitbucket mutations are typed reverse-ETL actions with plan, preview, explicit approval, execute, and destructive confirmation for DELETE actions."
+      "summary": "Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked."
     },
     {
       "name": "bitbucket-binary-direct",

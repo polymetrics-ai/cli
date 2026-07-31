@@ -2,7 +2,7 @@
 
 ## Overview
 
-This bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, typed reverse-ETL write actions for JSON/path mutations, and connector-local blocked operation rows for binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.
+This bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, a narrow closed-schema reverse-ETL surface for typed repository creation and path-only deletes, and connector-local blocked operation rows for untyped JSON body mutations, binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.
 
 ## Auth setup
 
@@ -14,9 +14,9 @@ The stream ledger is generated from every official JSON GET operation that has t
 
 ## Write actions & risks
 
-Every generated JSON/path mutation is a named reverse-ETL action with a record schema for path parameters and a schema-permissive typed payload for official request-body fields. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, and `confirm: "destructive"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. File/multipart upload operations are not exposed as raw writes; they are blocked in `api_surface.json`/`operations.json` until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.
+Executable reverse-ETL actions now use closed record schemas. The retained JSON-body write is repository creation, which requires `workspace`, `repo_slug`, and `scm` and accepts only the typed body fields `scm` and optional `is_private`. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, `additionalProperties: false`, and `confirm: "destructive"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. JSON mutations without connector-owned typed body fields are blocked in `api_surface.json`/`operations.json` until the bundle declares closed request-body schemas and redaction evidence. File/multipart upload operations are not exposed as raw writes; they are blocked until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.
 
-Secret-bearing write actions for pipeline variables, webhooks, and repository pipeline SSH key pairs declare `redact_fields` for variable `value`, webhook `secret`, and SSH private key/passphrase fields so reverse-plan samples, previews, and write errors do not display those values while approved execution still submits the original payload.
+Secret-bearing JSON-body writes for pipeline variables, webhooks, deployment variables, and repository pipeline SSH key pairs are blocked until those actions declare closed typed body schemas with required secret fields and matching `redact_fields`.
 
 ## Known limits
 

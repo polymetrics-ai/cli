@@ -9583,7 +9583,7 @@
   {
     "slug": "bitbucket",
     "name": "Bitbucket",
-    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for JSON/path mutations and blocks multipart file-transfer writes until bounded upload support exists.",
+    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; exposes closed-schema repository creation and path-only deletes while blocking untyped JSON-body and multipart writes.",
     "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
     "integration_type": "api",
     "release_stage": "alpha",
@@ -10692,11 +10692,6 @@
         "kind": "delete"
       },
       {
-        "name": "update_addon",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug",
         "method": "DELETE",
         "kind": "delete"
@@ -10707,29 +10702,9 @@
         "kind": "create"
       },
       {
-        "name": "update_repositories_workspace_repo_slug",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_branch_restrictions",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_branch_restrictions_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_branch_restrictions_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_branching_model_settings",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_commit_commit_approve",
@@ -10737,29 +10712,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_commit_commit_approve",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_commit_commit_comments",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
@@ -10767,24 +10722,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_commit_commit_reports_reportid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
@@ -10792,59 +10732,14 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_commit_commit_statuses_build",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_commit_commit_statuses_build_key",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_commits",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_commits_revision",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_default_reviewers_target_username",
         "method": "DELETE",
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_default_reviewers_target_username",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_deploy_keys",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_deploy_keys_key_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_deploy_keys_key_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_d653140a",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_cc6580ca",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214",
@@ -10857,29 +10752,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_environments",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_environments_environment_uuid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_environments_environment_uuid_changes",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_forks",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_hooks",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_hooks_uid",
@@ -10887,29 +10762,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_hooks_uid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_issues",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_issues_export",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_issues_issue_id",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
@@ -10917,24 +10772,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_issues_issue_id_changes",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_issues_issue_id_comments",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id_vote",
@@ -10942,24 +10782,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_issues_issue_id_vote",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id_watch",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_issues_issue_id_watch",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_override_settings",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
@@ -10967,24 +10792,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pipelines",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches",
@@ -10997,44 +10807,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_pipelines_config_runners",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pipelines_pipeline_uuid_stoppipeline",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config_build_number",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pipelines_config_schedules",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
@@ -11042,24 +10817,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
@@ -11067,24 +10827,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_pipelines_config_variables",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_properties_app_key_property_name",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_properties_app_key_property_name",
@@ -11092,29 +10837,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_pullrequests",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pullrequests_pull_request_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
@@ -11122,29 +10847,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_decline",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_merge",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
@@ -11152,29 +10857,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_ac817a14",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b",
@@ -11182,19 +10867,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_refs_branches",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_refs_branches_name",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_refs_tags",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_refs_tags_name",
@@ -11202,29 +10877,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_snippets",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "create_snippets_workspace",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_snippets_workspace_encoded_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_snippets_workspace_encoded_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_snippets_workspace_encoded_id_comments",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_snippets_workspace_encoded_id_comments_comment_id",
@@ -11232,19 +10887,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_snippets_workspace_encoded_id_comments_comment_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_snippets_workspace_encoded_id_watch",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_snippets_workspace_encoded_id_watch",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_snippets_workspace_encoded_id_node_id",
@@ -11252,29 +10897,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_snippets_workspace_encoded_id_node_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_teams_username_pipelines_config_variables",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_teams_username_pipelines_config_variables_variable_uuid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_teams_username_pipelines_config_variables_variable_uuid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_users_selected_user_gpg_keys",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_users_selected_user_gpg_keys_fingerprint",
@@ -11282,24 +10907,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_users_selected_user_pipelines_config_variables",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_users_selected_user_pipelines_config_variables_variable_uuid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_users_selected_user_pipelines_config_variables_variable_uuid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_users_selected_user_properties_app_key_property_name",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_users_selected_user_properties_app_key_property_name",
@@ -11307,24 +10917,9 @@
         "kind": "delete"
       },
       {
-        "name": "create_users_selected_user_ssh_keys",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_users_selected_user_ssh_keys_key_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_users_selected_user_ssh_keys_key_id",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_workspaces_workspace_hooks",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_workspaces_workspace_hooks_uid",
@@ -11332,34 +10927,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_workspaces_workspace_hooks_uid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_workspaces_workspace_pipelines_config_runners",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_workspaces_workspace_pipelines_config_runners_runner_uuid",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_workspaces_workspace_pipelines_config_variables",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_workspaces_workspace_pipelines_config_variables_variable_uuid",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
@@ -11367,39 +10937,14 @@
         "kind": "delete"
       },
       {
-        "name": "create_workspaces_workspace_projects",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_workspaces_workspace_projects_project_key",
         "method": "DELETE",
         "kind": "delete"
       },
       {
-        "name": "update_workspaces_workspace_projects_project_key",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_workspaces_workspace_projects_project_key_branching_model_settings",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_workspaces_workspace_projects_project_key_deploy_keys",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
@@ -11412,19 +10957,9 @@
         "kind": "delete"
       },
       {
-        "name": "update_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "update_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
-        "method": "PUT",
-        "kind": "update"
       }
     ],
     "cli_surface": {
@@ -11640,7 +11175,7 @@
           "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
           "flags": [],
           "examples": [],
-          "output_policy": "json_redacted",
+          "output_policy": "binary_file_bounded",
           "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
           "approval": "blocked pending bounded binary executor",
           "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed."
@@ -11653,7 +11188,7 @@
         },
         {
           "name": "bitbucket-writes",
-          "summary": "Bitbucket mutations are typed reverse-ETL actions with plan, preview, explicit approval, execute, and destructive confirmation for DELETE actions."
+          "summary": "Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked."
         },
         {
           "name": "bitbucket-binary-direct",
@@ -11661,7 +11196,7 @@
         }
       ]
     },
-    "docs_md": "# Bitbucket connector\n\n## Overview\n\nThis bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, typed reverse-ETL write actions for JSON/path mutations, and connector-local blocked operation rows for binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.\n\n## Auth setup\n\nUse credentials from the credential store only. Configure `access_token` as a secret for bearer auth, or configure `username` plus secret `app_password` for Bitbucket app-password basic auth. Do not pass tokens, app passwords, OAuth refresh material, or authorization headers in command text, fixtures, docs examples, issue comments, or logs. `base_url` defaults to `https://api.bitbucket.org/2.0`.\n\n## Streams notes\n\nThe stream ledger is generated from every official JSON GET operation that has typed stream coverage in this bundle. Paginated Bitbucket collection responses use `page` and `pagelen` with a bounded `max_pages` cap; singleton GET responses are modeled as single-object streams. Resource-scoped streams use optional config properties matching Bitbucket path parameter names such as `workspace`, `repo_slug`, `pull_request_id`, `commit`, and `issue_id`; a read of those streams fails closed if the needed config is absent. Repository, workspace, project, account, pipeline, and configuration-resource streams use provider `uuid`, `account_id`, `fingerprint`, `key`, `name`, or `external_id` fields when those keys are present; commit streams use commit `hash` values, and streams without a confirmed top-level provider key do not claim deduped sync. Fixtures are sanitized synthetic Bitbucket-shaped pages and do not come from live credentials.\n\n## Write actions & risks\n\nEvery generated JSON/path mutation is a named reverse-ETL action with a record schema for path parameters and a schema-permissive typed payload for official request-body fields. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, and `confirm: \"destructive\"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. File/multipart upload operations are not exposed as raw writes; they are blocked in `api_surface.json`/`operations.json` until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.\n\nSecret-bearing write actions for pipeline variables, webhooks, and repository pipeline SSH key pairs declare `redact_fields` for variable `value`, webhook `secret`, and SSH private key/passphrase fields so reverse-plan samples, previews, and write errors do not display those values while approved execution still submits the original payload.\n\n## Known limits\n\n- No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.\n- Provider search/query, planned JSON direct reads, and direct/binary command execution are connector-local metadata only here. Provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.\n- CDC/changefeed semantics for webhook delivery are not claimed because CDC truthfulness/state foundations #2986 and #2988 are outside this connector-local scope. Webhook REST resources are ledgered as ordinary REST rows only; no CDC capability is advertised.\n- Generated streams use passthrough projection except for secret-bearing Bitbucket resources. Pipeline variable streams, webhook streams, deployment-environment variable streams, and the repository pipeline SSH key-pair stream use schema projection and omit provider secret fields such as `value`, `secret`, and `private_key` from ordinary read output.\n- The repository operation-count tables in GitHub issues are preserved by the captain-policy addendum and are not rewritten by this connector-local bundle.\n",
+    "docs_md": "# Bitbucket connector\n\n## Overview\n\nThis bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, a narrow closed-schema reverse-ETL surface for typed repository creation and path-only deletes, and connector-local blocked operation rows for untyped JSON body mutations, binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.\n\n## Auth setup\n\nUse credentials from the credential store only. Configure `access_token` as a secret for bearer auth, or configure `username` plus secret `app_password` for Bitbucket app-password basic auth. Do not pass tokens, app passwords, OAuth refresh material, or authorization headers in command text, fixtures, docs examples, issue comments, or logs. `base_url` defaults to `https://api.bitbucket.org/2.0`.\n\n## Streams notes\n\nThe stream ledger is generated from every official JSON GET operation that has typed stream coverage in this bundle. Paginated Bitbucket collection responses use `page` and `pagelen` with a bounded `max_pages` cap; singleton GET responses are modeled as single-object streams. Resource-scoped streams use optional config properties matching Bitbucket path parameter names such as `workspace`, `repo_slug`, `pull_request_id`, `commit`, and `issue_id`; a read of those streams fails closed if the needed config is absent. Repository, workspace, project, account, pipeline, and configuration-resource streams use provider `uuid`, `account_id`, `fingerprint`, `key`, `name`, or `external_id` fields when those keys are present; commit streams use commit `hash` values, and streams without a confirmed top-level provider key do not claim deduped sync. Fixtures are sanitized synthetic Bitbucket-shaped pages and do not come from live credentials.\n\n## Write actions & risks\n\nExecutable reverse-ETL actions now use closed record schemas. The retained JSON-body write is repository creation, which requires `workspace`, `repo_slug`, and `scm` and accepts only the typed body fields `scm` and optional `is_private`. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, `additionalProperties: false`, and `confirm: \"destructive\"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. JSON mutations without connector-owned typed body fields are blocked in `api_surface.json`/`operations.json` until the bundle declares closed request-body schemas and redaction evidence. File/multipart upload operations are not exposed as raw writes; they are blocked until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.\n\nSecret-bearing JSON-body writes for pipeline variables, webhooks, deployment variables, and repository pipeline SSH key pairs are blocked until those actions declare closed typed body schemas with required secret fields and matching `redact_fields`.\n\n## Known limits\n\n- No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.\n- Provider search/query, planned JSON direct reads, and direct/binary command execution are connector-local metadata only here. Provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.\n- CDC/changefeed semantics for webhook delivery are not claimed because CDC truthfulness/state foundations #2986 and #2988 are outside this connector-local scope. Webhook REST resources are ledgered as ordinary REST rows only; no CDC capability is advertised.\n- Generated streams use passthrough projection except for secret-bearing Bitbucket resources. Pipeline variable streams, webhook streams, deployment-environment variable streams, and the repository pipeline SSH key-pair stream use schema projection and omit provider secret fields such as `value`, `secret`, and `private_key` from ordinary read output.\n- The repository operation-count tables in GitHub issues are preserved by the captain-policy addendum and are not rewritten by this connector-local bundle.\n",
     "icon": null
   },
   {
