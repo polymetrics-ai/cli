@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "property_id": "000000000",
+      "date": "20260101",
+      "deviceCategory": "desktop",
+      "operatingSystem": "FixtureOS",
+      "browser": "FixtureBrowser",
+      "activeUsers": 10,
+      "sessions": 12,
+      "screenPageViews": 42
+    }
+  ]
+}

@@ -25,6 +25,8 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 const (
@@ -40,31 +42,112 @@ const (
 	gaFixtureRecordCount = 2
 )
 
-// New returns the GA4 Data API connector as a connectors.Connector.
-func New() connectors.Connector { return Connector{} }
+// New returns the GA4 Data API connector.
+func New() *Connector {
+	bundle := mustLoadBundle()
+	return &Connector{Base: engine.NewBase(bundle), bundle: bundle}
+}
 
 // Connector is the native pm Google Analytics 4 Data API connector.
 type Connector struct {
+	engine.Base
+	bundle engine.Bundle
+
 	// Client overrides the HTTP client used by the underlying connsdk Requester.
 	// Left nil in production; injectable for tests.
 	Client *http.Client
 }
 
-func (Connector) Name() string { return connectorName }
+func mustLoadBundle() engine.Bundle {
+	bundle, err := engine.Load(defs.FS, connectorName)
+	if err != nil {
+		panic("native/" + connectorName + ": failed to load defs/" + connectorName + " bundle: " + err.Error())
+	}
+	return bundle
+}
 
-func (Connector) Metadata() connectors.Metadata {
+func (c *Connector) bundleOrLoad() engine.Bundle {
+	if c != nil && c.bundle.Name != "" {
+		return c.bundle
+	}
+	return mustLoadBundle()
+}
+
+func (c *Connector) Name() string { return connectorName }
+
+func (c *Connector) Metadata() connectors.Metadata {
+	if c != nil && c.bundle.Name != "" {
+		return c.Base.Metadata()
+	}
 	return connectors.Metadata{
 		Name:            connectorName,
 		DisplayName:     "Google Analytics 4 (GA4)",
 		IntegrationType: "api",
-		Description:     "Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.",
+		Description:     "Reads Google Analytics 4 reports and bounded metadata resources from the Analytics Data API. Read-only.",
 		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: false},
+	}
+}
+
+// Manifest exposes the native connector's authored bundle shape to generated
+// help, docs, and skills while reads remain implemented by the native runReport
+// code above. engine.Base intentionally provides Definition()/CommandSurface()
+// only, so this method keeps the GA-specific guide truthful without changing
+// every other native connector.
+func (c *Connector) Manifest() connectors.Manifest {
+	return connectors.Manifest{
+		Metadata: c.Metadata(),
+		ConfigFields: []connectors.ConfigField{
+			{Name: "property_ids", Description: "Comma, space, or newline separated GA4 numeric property IDs; native reads use the first property ID per read call.", Required: true},
+			{Name: "property_id", Description: "Optional single GA4 numeric property ID for direct metadata/audience-export commands; defaults to the first property_ids value."},
+			{Name: "audience_export_id", Description: "Audience export ID used by the get audience export direct command."},
+			{Name: "base_url", Description: "Analytics Data API base URL override for local fixture tests only.", Default: gaDefaultBaseURL},
+			{Name: "date_ranges_start_date", Description: "GA4 report start date, either YYYY-MM-DD or a GA4 relative token such as 30daysAgo.", Default: gaDefaultStartDate},
+			{Name: "date_ranges_end_date", Description: "GA4 report end date, either YYYY-MM-DD or a GA4 relative token such as today or yesterday.", Default: gaDefaultEndDate},
+			{Name: "page_size", Description: "Native runReport page size; must be between 1 and 250000.", Default: strconv.Itoa(gaDefaultPageSize)},
+			{Name: "max_pages", Description: "Native runReport page cap. Use a positive integer, 0, all, or unlimited for unbounded reads."},
+			{Name: "mode", Description: "Set to fixture for credential-free connector-owned tests; do not use for live provider validation."},
+			{Name: "keep_empty_rows", Description: "Legacy compatibility flag retained for credential compatibility; native preset reads currently send false."},
+			{Name: "convert_conversions_event", Description: "Legacy compatibility flag retained for credential compatibility."},
+			{Name: "custom_reports_array", Description: "Legacy custom report JSON string. Custom reports remain outside this documented parity slice."},
+			{Name: "lookback_window", Description: "Legacy lookback-window setting retained for credential compatibility."},
+			{Name: "subscription_tier", Description: "Informational GA4 property tier for quota planning."},
+			{Name: "window_in_days", Description: "Legacy window setting retained for credential compatibility."},
+		},
+		SecretFields: []connectors.SecretField{
+			{Name: "access_token", Description: "OAuth2 bearer access token with Analytics Data API read access; prefer --from-env or --value-stdin."},
+			{Name: "credentials", Description: "Legacy flattened bearer token payload; prefer access_token for new credentials."},
+		},
+		AuthModes: []connectors.AuthModeSpec{
+			{
+				Name:         "oauth2_bearer",
+				Description:  "OAuth2 bearer token with Google Analytics Data API read access.",
+				ConfigFields: []string{"property_ids"},
+				SecretFields: []string{"access_token", "credentials"},
+				Read:         true,
+				Write:        false,
+			},
+		},
+		Streams:         gaStreams(),
+		SyncModes:       []string{"full_refresh_append", "full_refresh_overwrite", "full_refresh_overwrite_deduped", "incremental_append", "incremental_append_deduped"},
+		SourceSyncModes: []string{"full_refresh", "incremental"},
+		Pagination: connectors.PaginationSpec{
+			Type:           "offset_limit",
+			PageSizeField:  "page_size",
+			PageLimitField: "max_pages",
+			DefaultLimit:   strconv.Itoa(gaDefaultPageSize),
+		},
+		Risk: connectors.RiskSpec{
+			Read:     "external Google Analytics Data API reads for configured properties; direct reads are fixed-target, bounded, and JSON-redacted",
+			Write:    "unsupported",
+			Mutation: "none",
+			Approval: "none for read-only operations; future audience-export creation would require plan, preview, explicit approval, and execute before being advertised",
+		},
 	}
 }
 
 // Check verifies the connector is configured well enough to talk to the GA4 Data
 // API. In fixture mode it short-circuits without a network call.
-func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -75,7 +158,7 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 		return err
 	}
 	if strings.TrimSpace(gaSecret(cfg)) == "" {
-		return errors.New("google-analytics-data-api connector requires an OAuth2 access token (secret credentials.access_token)")
+		return errors.New("google-analytics-data-api connector requires an OAuth2 bearer access token (secret access_token or credentials)")
 	}
 	property, err := gaPropertyID(cfg)
 	if err != nil {
@@ -96,7 +179,7 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	return nil
 }
 
-func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
+func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.Catalog{}, err
 	}
@@ -106,21 +189,21 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 // Write satisfies the connectors.Connector interface. The GA4 Data API is a
 // reporting (read) API with no safe reverse-ETL writes, so writes are
 // unsupported and Capabilities.Write is false.
-func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+func (c *Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }
 
 // InitialState satisfies connectors.StatefulReader: a GA4 stream starts with an
 // empty cursor; the supported_sync_modes are full_refresh, but date-dimensioned
 // reports can carry a "date" cursor the start_date config raises at read time.
-func (c Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
+func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
 	return connsdk.WithCursor(map[string]string{"stream": stream}, ""), nil
 }
 
-func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -156,11 +239,105 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	return c.harvest(ctx, r, spec, property, req.Config, pageSize, maxPages, emit)
 }
 
+var implementedDirectOperations = map[string]bool{
+	"google-analytics-data-api.get_metadata":          true,
+	"google-analytics-data-api.list_audience_exports": true,
+	"google-analytics-data-api.get_audience_export":   true,
+}
+
+// OperationDirectRead executes the connector's bounded direct-read operations.
+// Fixture mode returns sanitized local responses; live mode delegates to the
+// declarative operation executor for the reviewed fixed endpoint definitions.
+func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	if err := ctx.Err(); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	if !implementedDirectOperations[req.Operation] {
+		return connectors.DirectReadResult{}, fmt.Errorf("google-analytics-data-api operation %q is not executable in this connector slice: %w", req.Operation, connectors.ErrUnsupportedOperation)
+	}
+	req = normalizeOperationDirectReadRequest(req)
+	if fixtureMode(req.Config) {
+		return operationFixture(ctx, req)
+	}
+	return engine.OperationDirectRead(ctx, c.bundleOrLoad(), req, nil)
+}
+
+func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadRequest) connectors.OperationDirectReadRequest {
+	if req.PathParams == nil {
+		req.PathParams = map[string]string{}
+	}
+	if req.Config.Config == nil {
+		req.Config.Config = map[string]string{}
+	}
+	if req.PathParams["property_id"] == "" {
+		if property := firstNonEmpty(req.Config.Config["property_id"], firstPropertyID(req.Config.Config["property_ids"])); property != "" {
+			req.PathParams["property_id"] = strings.TrimPrefix(property, "properties/")
+		}
+	}
+	if req.PathParams["audience_export_id"] == "" {
+		if id := firstNonEmpty(req.Config.Config["audience_export_id"], req.Config.Config["audienceExportsId"]); id != "" {
+			req.PathParams["audience_export_id"] = strings.TrimPrefix(id, "audienceExports/")
+		}
+	}
+	return req
+}
+
+func operationFixture(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	if err := ctx.Err(); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	property := firstNonEmpty(req.PathParams["property_id"], gaFixturePropertyID)
+	audienceExportID := firstNonEmpty(req.PathParams["audience_export_id"], "audience_export_fixture_1")
+	switch req.Operation {
+	case "google-analytics-data-api.get_metadata":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1beta/properties/%s/metadata", property),
+			Status:    http.StatusOK,
+			Body: map[string]any{
+				"name":       fmt.Sprintf("properties/%s/metadata", property),
+				"dimensions": []any{map[string]any{"apiName": "date", "uiName": "Date"}},
+				"metrics":    []any{map[string]any{"apiName": "activeUsers", "uiName": "Active users", "type": "TYPE_INTEGER"}},
+			},
+		}, nil
+	case "google-analytics-data-api.list_audience_exports":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1beta/properties/%s/audienceExports", property),
+			Status:    http.StatusOK,
+			Body: map[string]any{
+				"audienceExports": []any{map[string]any{
+					"name":        fmt.Sprintf("properties/%s/audienceExports/%s", property, audienceExportID),
+					"displayName": "Fixture audience export",
+					"state":       "ACTIVE",
+				}},
+			},
+		}, nil
+	case "google-analytics-data-api.get_audience_export":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1beta/properties/%s/audienceExports/%s", property, audienceExportID),
+			Status:    http.StatusOK,
+			Body: map[string]any{
+				"name":        fmt.Sprintf("properties/%s/audienceExports/%s", property, audienceExportID),
+				"displayName": "Fixture audience export",
+				"state":       "ACTIVE",
+				"rowCount":    1,
+			},
+		}, nil
+	default:
+		return connectors.DirectReadResult{}, fmt.Errorf("google-analytics-data-api fixture operation %q: %w", req.Operation, connectors.ErrUnsupportedOperation)
+	}
+}
+
 // harvest drives GA4 offset/limit pagination. runReport returns
 // {dimensionHeaders, metricHeaders, rows, rowCount}; each page is requested with
 // offset advanced by limit until offset >= rowCount (or rows run out). The loop
 // lives here because the offset paginator is body-driven and report-specific.
-func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, spec reportSpec, property string, cfg connectors.RuntimeConfig, pageSize, maxPages int, emit func(connectors.Record) error) error {
+func (c *Connector) harvest(ctx context.Context, r *connsdk.Requester, spec reportSpec, property string, cfg connectors.RuntimeConfig, pageSize, maxPages int, emit func(connectors.Record) error) error {
 	path := reportPath(property)
 	offset := 0
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
@@ -198,7 +375,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, spec repor
 // readFixture emits deterministic records without any network access so the
 // conformance harness can exercise the connector credential-free (mirrors
 // stripe's fixture intent).
-func (c Connector) readFixture(ctx context.Context, spec reportSpec, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+func (c *Connector) readFixture(ctx context.Context, spec reportSpec, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	for i := 0; i < gaFixtureRecordCount; i++ {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -232,14 +409,14 @@ func (c Connector) readFixture(ctx context.Context, spec reportSpec, req connect
 // requester builds a connsdk.Requester wired with Bearer auth (the GA4 OAuth2
 // access token), the resolved base URL, and a JSON content type. The secret only
 // ever flows into connsdk.Bearer; it is never logged.
-func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, error) {
+func (c *Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, error) {
 	base, err := gaBaseURL(cfg)
 	if err != nil {
 		return nil, err
 	}
 	secret := gaSecret(cfg)
 	if strings.TrimSpace(secret) == "" {
-		return nil, errors.New("google-analytics-data-api connector requires an OAuth2 access token (secret credentials.access_token)")
+		return nil, errors.New("google-analytics-data-api connector requires an OAuth2 bearer access token (secret access_token or credentials)")
 	}
 	return &connsdk.Requester{
 		Client:    c.Client,
@@ -287,6 +464,7 @@ func gaSecret(cfg connectors.RuntimeConfig) string {
 	for _, key := range []string{
 		"credentials.access_token",
 		"access_token",
+		"credentials",
 		"credentials.api_key",
 		"api_key",
 	} {
@@ -397,6 +575,20 @@ func fixtureMode(cfg connectors.RuntimeConfig) bool {
 		return false
 	}
 	return strings.EqualFold(strings.TrimSpace(cfg.Config["mode"]), "fixture")
+}
+
+func firstPropertyID(raw string) string {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return ""
+	}
+	for _, sep := range []string{",", " ", "\n"} {
+		if i := strings.IndexAny(raw, sep); i >= 0 {
+			raw = raw[:i]
+			break
+		}
+	}
+	return strings.TrimSpace(raw)
 }
 
 func firstNonEmpty(values ...string) string {

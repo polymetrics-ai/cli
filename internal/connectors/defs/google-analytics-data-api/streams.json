@@ -2,9 +2,20 @@
   "base": {
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
     "auth": [
       {
-        "mode": "none"
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.credentials }}",
+        "when": "{{ secrets.credentials }}"
       }
     ],
     "pagination": {
@@ -12,15 +23,28 @@
     },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/v1beta/properties/{{ config.property_id }}/metadata"
     },
-    "error_map": []
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "OAuth2 access token is missing or expired; add credentials from an environment variable or stdin"
+      },
+      {
+        "status": 403,
+        "hint": "token lacks Analytics Data API scope or property access"
+      },
+      {
+        "status": 404,
+        "hint": "GA4 property or audience export was not found"
+      }
+    ]
   },
   "streams": [
     {
       "name": "daily_active_users",
-      "method": "GET",
-      "path": "/__legacy_hook/daily_active_users",
+      "method": "POST",
+      "path": "/v1beta/properties/{{ config.property_id }}:runReport",
       "records": {
         "path": "data"
       },
@@ -28,12 +52,16 @@
       "incremental": {
         "cursor_field": "date",
         "client_filtered": true
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "native runReport hook builds POST bodies and fixture responses; covered by native tests and stream fixtures"
       }
     },
     {
       "name": "website_overview",
-      "method": "GET",
-      "path": "/__legacy_hook/website_overview",
+      "method": "POST",
+      "path": "/v1beta/properties/{{ config.property_id }}:runReport",
       "records": {
         "path": "data"
       },
@@ -41,12 +69,16 @@
       "incremental": {
         "cursor_field": "date",
         "client_filtered": true
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "native runReport hook builds POST bodies and fixture responses; covered by native tests and stream fixtures"
       }
     },
     {
       "name": "traffic_sources",
-      "method": "GET",
-      "path": "/__legacy_hook/traffic_sources",
+      "method": "POST",
+      "path": "/v1beta/properties/{{ config.property_id }}:runReport",
       "records": {
         "path": "data"
       },
@@ -54,12 +86,16 @@
       "incremental": {
         "cursor_field": "date",
         "client_filtered": true
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "native runReport hook builds POST bodies and fixture responses; covered by native tests and stream fixtures"
       }
     },
     {
       "name": "devices",
-      "method": "GET",
-      "path": "/__legacy_hook/devices",
+      "method": "POST",
+      "path": "/v1beta/properties/{{ config.property_id }}:runReport",
       "records": {
         "path": "data"
       },
@@ -67,12 +103,16 @@
       "incremental": {
         "cursor_field": "date",
         "client_filtered": true
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "native runReport hook builds POST bodies and fixture responses; covered by native tests and stream fixtures"
       }
     },
     {
       "name": "pages",
-      "method": "GET",
-      "path": "/__legacy_hook/pages",
+      "method": "POST",
+      "path": "/v1beta/properties/{{ config.property_id }}:runReport",
       "records": {
         "path": "data"
       },
@@ -80,6 +120,10 @@
       "incremental": {
         "cursor_field": "date",
         "client_filtered": true
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "native runReport hook builds POST bodies and fixture responses; covered by native tests and stream fixtures"
       }
     }
   ]

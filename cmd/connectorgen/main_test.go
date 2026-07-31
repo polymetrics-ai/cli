@@ -123,6 +123,19 @@ func TestValidate_AcceptsGoodBundle(t *testing.T) {
 	}
 }
 
+func TestValidate_AcceptsSingleBundleDir(t *testing.T) {
+	report, err := validateDir(os.DirFS("testdata/valid/goodconn"))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for a single bundle dir, got %+v", report.Findings)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+}
+
 // TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
 // S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
 // queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`
@@ -195,6 +208,57 @@ func TestValidate_CLISurfaceValidReferencesPassCleanly(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid cli_surface.json, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_APISurfaceAllowsPOSTBackedReadStreamWhenWriteFalse(t *testing.T) {
+	fsys := cliSurfaceBundleFS(`{
+		"tagline": "Read reports.",
+		"usage": "pm cli-surface reports list [flags]",
+		"commands": [
+			{
+				"path": "reports list",
+				"summary": "List report rows",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets:runReport" }
+				]
+			}
+		]
+	}`)
+	fsys["cli-surface/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "cli-surface",
+		"display_name": "CLI Surface",
+		"description": "test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+	fsys["cli-surface/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/widgets/metadata" }
+		},
+		"streams": [
+			{ "name": "widgets", "method": "POST", "path": "/widgets:runReport", "body": { "limit": 1 }, "records": { "path": "data" }, "schema": "schemas/widgets.json" }
+		]
+	}`)}
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "POST", "path": "/widgets:runReport", "covered_by": { "stream": "widgets" } }
+		]
+	}`)}
+	delete(fsys, "cli-surface/writes.json")
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for POST-backed read stream with write=false, got %+v", report.Findings)
 	}
 }
 
