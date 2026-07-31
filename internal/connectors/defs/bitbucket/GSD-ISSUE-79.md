@@ -35,6 +35,10 @@ Allowed repo edits for this worker stay connector-local under `internal/connecto
 No shared runtime files, hooks, natives, command runners, go.mod/go.sum, live credentials, provider calls, VPS/Thaalam work, merges, or certification claims.
 GitHub issue-body updates use `gh-axi` only and preserve existing issue body counts.
 
+## Review dependency ledger
+
+- Stale reverse-plan sample redaction remains a shared runtime dependency, not a connector-local completion claim. Plans created before `redact_fields` existed, or before a connector manifest adds new `redact_fields`, need shared hydration that unions serialized `ReversePlan.RedactFields` with the current connector manifest action `RedactFields` during `GetReversePlan`, `ListReversePlans`, and output redaction before samples are rendered.
+
 ## Captain policy addendum requirement
 
 Append an idempotent addendum to #79 and #90-#96 stating that destructive/delete operations are in scope when implemented as typed actions with `confirm: "destructive"` and the existing plan -> preview -> explicit approval -> execute path. The addendum must not change existing count tables or fabricate implemented counts.

@@ -21,6 +21,7 @@ Secret-bearing POST/PUT actions for pipeline variables, webhooks, and repository
 ## Known limits
 
 - No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.
+- Legacy or stale reverse plans created before `redact_fields` existed, or before a connector adds new `redact_fields`, still depend on a shared runtime fix that hydrates or unions `ReversePlan.RedactFields` from the current connector manifest during `GetReversePlan`, `ListReversePlans`, and output redaction before plan samples are rendered. This Bitbucket bundle keeps executable write `redact_fields` metadata current but does not claim stale-plan redaction is complete without that shared dependency.
 - Provider search/query and direct/binary command execution are connector-local metadata only here. Provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.
 - Bitbucket `/addon` mutations are blocked because the official API requires Atlassian Connect-app JWT authentication, while this bundle only declares bearer/basic/none credential shapes.
 - Path-only POST/PUT mutations are blocked rather than advertised as runnable reverse ETL until connector-local typed request schemas, fixtures, and conformance request-shape evidence exist.
