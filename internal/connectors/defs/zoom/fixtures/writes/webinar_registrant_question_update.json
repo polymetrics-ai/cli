@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","custom_questions":[{"id":"fixture_item"}],"questions":[{"id":"fixture_item"}]},"expect":{"method":"PATCH","path":"/webinars/fixture_webinar_id/registrants/questions","body":{"custom_questions":[{"id":"fixture_item"}],"questions":[{"id":"fixture_item"}]}},"response":{"status":200,"body":{"ok":true}}}

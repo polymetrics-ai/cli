@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","action":"fixture_action","registrants":[{"id":"fixture_item"}]},"expect":{"method":"PUT","path":"/meetings/fixture_meeting_id/registrants/status","body":{"action":"fixture_action","registrants":[{"id":"fixture_item"}]}},"response":{"status":200,"body":{"ok":true}}}

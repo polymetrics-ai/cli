@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","pollId":"fixture_poll_id","anonymous":true,"poll_type":1,"questions":[{"id":"fixture_item"}]},"expect":{"method":"PUT","path":"/webinars/fixture_webinar_id/polls/fixture_poll_id","body":{"anonymous":true,"poll_type":1,"questions":[{"id":"fixture_item"}]}},"response":{"status":200,"body":{"ok":true}}}

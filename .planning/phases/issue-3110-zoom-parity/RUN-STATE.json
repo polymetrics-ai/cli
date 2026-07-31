@@ -1,0 +1,18 @@
+{
+  "phase": "issue-3110-zoom-parity",
+  "branch": "fm/cli-zoom-parity-wave04-r1",
+  "verificationPassed": true,
+  "terminal": true,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single connector-owned write scope in one isolated worktree; mutating subagents would collide"
+    },
+    {
+      "cycle": "verify",
+      "decision": "shared_performance_unblock",
+      "reason": "cache immutable embedded bundle loading to keep recursive certification tests under the fixed make verify package timeout after Zoom parity expansion"
+    }
+  ]
+}

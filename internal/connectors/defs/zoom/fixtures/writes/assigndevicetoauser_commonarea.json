@@ -1,0 +1,1 @@
+{"record":{"extension_number":"fixture_extension_number","mac_address":"fixture_mac_address","vendor":"fixture_vendor"},"expect":{"method":"POST","path":"/devices/zpa/assignment","body":{"extension_number":"fixture_extension_number","mac_address":"fixture_mac_address","vendor":"fixture_vendor"}},"response":{"status":201,"body":{"ok":true}}}

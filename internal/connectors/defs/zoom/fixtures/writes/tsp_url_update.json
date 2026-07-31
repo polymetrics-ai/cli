@@ -1,0 +1,1 @@
+{"record":{"userId":"fixture_user_id","audio_url":"fixture_audio_url"},"expect":{"method":"PATCH","path":"/users/fixture_user_id/tsp/settings","body":{"audio_url":"fixture_audio_url"}},"response":{"status":200,"body":{"ok":true}}}

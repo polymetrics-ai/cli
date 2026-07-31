@@ -1,0 +1,1 @@
+{"record":{"userId":"fixture_user_id","webinar_id":1,"name":"fixture_name","save_recurrence":true},"expect":{"method":"POST","path":"/users/fixture_user_id/webinar_templates","body":{"webinar_id":1,"name":"fixture_name","save_recurrence":true}},"response":{"status":201,"body":{"ok":true}}}

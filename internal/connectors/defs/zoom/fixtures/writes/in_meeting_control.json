@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","method":"fixture_method","params":{"id":"fixture_object"}},"expect":{"method":"PATCH","path":"/live_meetings/fixture_meeting_id/events","body":{"method":"fixture_method","params":{"id":"fixture_object"}}},"response":{"status":200,"body":{"ok":true}}}

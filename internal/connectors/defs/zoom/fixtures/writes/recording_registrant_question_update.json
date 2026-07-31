@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","custom_questions":[{"id":"fixture_item"}],"questions":[{"id":"fixture_item"}]},"expect":{"method":"PATCH","path":"/meetings/fixture_meeting_id/recordings/registrants/questions","body":{"custom_questions":[{"id":"fixture_item"}],"questions":[{"id":"fixture_item"}]}},"response":{"status":200,"body":{"ok":true}}}

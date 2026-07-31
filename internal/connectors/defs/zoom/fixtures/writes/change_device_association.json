@@ -1,0 +1,1 @@
+{"record":{"deviceId":"fixture_device_id","room_id":"fixture_room_id","app_type":"fixture_app_type"},"expect":{"method":"PATCH","path":"/devices/fixture_device_id/assignment","body":{"room_id":"fixture_room_id","app_type":"fixture_app_type"}},"response":{"status":200,"body":{"ok":true}}}

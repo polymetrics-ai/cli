@@ -1,0 +1,1 @@
+{"record":{"fieldId":"fixture_field_id"},"expect":{"method":"DELETE","path":"/tracking_fields/fixture_field_id"},"response":{"status":200,"body":{"ok":true}}}

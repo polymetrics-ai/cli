@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","page_url":"fixture_page_url","stream_key":"fixture_stream_key","stream_url":"fixture_stream_url"},"expect":{"method":"PATCH","path":"/webinars/fixture_webinar_id/livestream","body":{"page_url":"fixture_page_url","stream_key":"fixture_stream_key","stream_url":"fixture_stream_url"}},"response":{"status":200,"body":{"ok":true}}}

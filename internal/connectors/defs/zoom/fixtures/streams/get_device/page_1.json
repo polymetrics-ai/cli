@@ -1,0 +1,1 @@
+{"request":{"method":"GET","path":"/devices/synthetic-conformance-value","query":{}},"response":{"status":200,"body":{"id":"get_device_fixture_1","uuid":"get_device_uuid_1","name":"get_device fixture 1","topic":"get_device topic 1","email":"get_device1@example.invalid","updated_at":"2026-01-01T00:00:00Z","created_at":"2026-01-01T00:00:00Z","status":"active"}}}

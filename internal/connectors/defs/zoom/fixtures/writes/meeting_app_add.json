@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id"},"expect":{"method":"POST","path":"/meetings/fixture_meeting_id/open_apps"},"response":{"status":201,"body":{"ok":true}}}

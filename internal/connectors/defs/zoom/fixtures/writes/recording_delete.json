@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id"},"expect":{"method":"DELETE","path":"/meetings/fixture_meeting_id/recordings"},"response":{"status":200,"body":{"ok":true}}}

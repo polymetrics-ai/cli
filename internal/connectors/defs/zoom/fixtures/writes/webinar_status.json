@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","action":"fixture_action"},"expect":{"method":"PUT","path":"/webinars/fixture_webinar_id/status","body":{"action":"fixture_action"}},"response":{"status":200,"body":{"ok":true}}}

@@ -1,0 +1,1 @@
+{"record":{"phoneId":"fixture_phone_id","domain":"fixture_domain"},"expect":{"method":"PATCH","path":"/sip_phones/phones/fixture_phone_id","body":{"domain":"fixture_domain"}},"response":{"status":200,"body":{"ok":true}}}

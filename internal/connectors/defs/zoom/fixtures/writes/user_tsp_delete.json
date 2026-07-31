@@ -1,0 +1,1 @@
+{"record":{"userId":"fixture_user_id","tspId":"fixture_tsp_id"},"expect":{"method":"DELETE","path":"/users/fixture_user_id/tsp/fixture_tsp_id"},"response":{"status":200,"body":{"ok":true}}}

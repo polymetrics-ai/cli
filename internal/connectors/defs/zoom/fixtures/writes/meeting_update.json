@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","agenda":"fixture_agenda","duration":1},"expect":{"method":"PATCH","path":"/meetings/fixture_meeting_id","body":{"agenda":"fixture_agenda","duration":1}},"response":{"status":200,"body":{"ok":true}}}

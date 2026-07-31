@@ -1,0 +1,1 @@
+{"record":{"zdm_group_id":"fixture_zdm_group_id","data":{"id":"fixture_object"}},"expect":{"method":"POST","path":"/devices/zpa/upgrade","body":{"zdm_group_id":"fixture_zdm_group_id","data":{"id":"fixture_object"}}},"response":{"status":201,"body":{"ok":true}}}

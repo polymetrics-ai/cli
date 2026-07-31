@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","file":"dynamic.go","default":true,"set_default_for_all_panelists":true},"expect":{"method":"POST","path":"/webinars/fixture_webinar_id/branding/virtual_backgrounds"},"response":{"status":201,"body":{"ok":true}}}

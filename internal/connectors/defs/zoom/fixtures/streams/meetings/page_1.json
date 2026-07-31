@@ -1,13 +1,1 @@
-{
-  "request": { "method": "GET", "path": "/users/synthetic-conformance-value/meetings", "query": { "page_size": "synthetic-conformance-value" } },
-  "response": {
-    "status": 200,
-    "body": {
-      "meetings": [
-        { "id": "meeting_fixture_1", "uuid": "uuid_fixture_1", "topic": "Fixture Meeting One", "updated_at": "2026-01-01T00:00:00Z" },
-        { "id": "meeting_fixture_2", "uuid": "uuid_fixture_2", "topic": "Fixture Meeting Two", "start_time": "2026-01-02T00:00:00Z" }
-      ],
-      "next_page_token": ""
-    }
-  }
-}
+{"request":{"method":"GET","path":"/users/synthetic-conformance-value/meetings","query":{"page_size":"synthetic-conformance-value"}},"response":{"status":200,"body":{"meetings":[{"id":"meetings_fixture_1","uuid":"meetings_uuid_1","name":"meetings fixture 1","topic":"meetings topic 1","email":"meetings1@example.invalid","updated_at":"2026-01-01T00:00:00Z","created_at":"2026-01-01T00:00:00Z","status":"active"}],"next_page_token":""}}}

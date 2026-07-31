@@ -1,0 +1,1 @@
+{"record":{"fileId":"fixture_file_id","auto_delete":true},"expect":{"method":"PATCH","path":"/archive_files/fixture_file_id","body":{"auto_delete":true}},"response":{"status":200,"body":{"ok":true}}}

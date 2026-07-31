@@ -1,0 +1,1 @@
+{"record":{"userId":"fixture_user_id","agenda":"fixture_agenda","duration":1},"expect":{"method":"POST","path":"/users/fixture_user_id/webinars","body":{"agenda":"fixture_agenda","duration":1}},"response":{"status":201,"body":{"ok":true}}}

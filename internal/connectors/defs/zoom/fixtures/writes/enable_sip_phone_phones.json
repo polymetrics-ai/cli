@@ -1,0 +1,1 @@
+{"record":{"domain":"fixture_domain"},"expect":{"method":"POST","path":"/sip_phones/phones","body":{"domain":"fixture_domain"}},"response":{"status":201,"body":{"ok":true}}}

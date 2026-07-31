@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","messageId":"fixture_message_id"},"expect":{"method":"DELETE","path":"/live_meetings/fixture_meeting_id/chat/messages/fixture_message_id"},"response":{"status":200,"body":{"ok":true}}}

@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","auto_approve":true,"registrants":[{"id":"fixture_item"}]},"expect":{"method":"POST","path":"/webinars/fixture_webinar_id/batch_registrants","body":{"auto_approve":true,"registrants":[{"id":"fixture_item"}]}},"response":{"status":201,"body":{"ok":true}}}
