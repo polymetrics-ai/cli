@@ -742,54 +742,10 @@ func TestRootHelpListsDynamicConnectorCommands(t *testing.T) {
 		t.Fatalf("root help code = %d stderr=%s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{"CONNECTOR COMMANDS", "pm aws-cloudtrail <command>", "pm bahmni <command>", "pm github <command>", "pm gong <command>"} {
+	for _, want := range []string{"CONNECTOR COMMANDS", "pm bahmni <command>", "pm github <command>", "pm gong <command>"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("root help missing %q:\n%s", want, out)
 		}
-	}
-}
-
-func TestAWSCloudTrailCommandSurfaceHelpScopes(t *testing.T) {
-	tests := []struct {
-		name string
-		args []string
-		want []string
-	}{
-		{
-			name: "connector root",
-			args: []string{"aws-cloudtrail", "--help"},
-			want: []string{"NAME", "pm aws-cloudtrail - AWS CloudTrail command surface", "COMMAND GROUPS", "read", "query", "events", "sample-queries"},
-		},
-		{
-			name: "read command",
-			args: []string{"aws-cloudtrail", "read", "describe-trails", "--help"},
-			want: []string{"NAME", "pm aws-cloudtrail read describe-trails", "INTENT", "etl", "STREAM", "describe_trails", "fixed CloudTrail JSON-RPC read action"},
-		},
-		{
-			name: "direct read command",
-			args: []string{"aws-cloudtrail", "events", "lookup", "--help"},
-			want: []string{"NAME", "pm aws-cloudtrail events lookup", "INTENT", "direct_read", "OPERATION", "aws-cloudtrail.lookup_events", "OUTPUT", "json_redacted"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var stdout, stderr bytes.Buffer
-			code := cli.Run(tt.args, &stdout, &stderr)
-			if code != 0 {
-				t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", tt.args, code, stderr.String(), stdout.String())
-			}
-			out := stdout.String()
-			for _, want := range tt.want {
-				if !strings.Contains(out, want) {
-					t.Fatalf("help for %v missing %q:\n%s", tt.args, want, out)
-				}
-			}
-			for _, forbidden := range []string{"raw action", "generic SQL", "secret"} {
-				if strings.Contains(strings.ToLower(out), forbidden) {
-					t.Fatalf("help for %v unexpectedly included %q:\n%s", tt.args, forbidden, out)
-				}
-			}
-		})
 	}
 }
 

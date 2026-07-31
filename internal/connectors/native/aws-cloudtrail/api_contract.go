@@ -117,57 +117,8 @@ var cloudTrailPublishedStreams = []string{
 	"list_trails",
 }
 
-var cloudTrailDirectOperations = map[string]string{
-	"aws-cloudtrail.cancel_query":              "CancelQuery",
-	"aws-cloudtrail.describe_query":            "DescribeQuery",
-	"aws-cloudtrail.generate_query":            "GenerateQuery",
-	"aws-cloudtrail.get_query_results":         "GetQueryResults",
-	"aws-cloudtrail.list_insights_data":        "ListInsightsData",
-	"aws-cloudtrail.list_insights_metric_data": "ListInsightsMetricData",
-	"aws-cloudtrail.list_queries":              "ListQueries",
-	"aws-cloudtrail.lookup_events":             "LookupEvents",
-	"aws-cloudtrail.search_sample_queries":     "SearchSampleQueries",
-	"aws-cloudtrail.start_query":               "StartQuery",
-}
+var cloudTrailDirectOperations = map[string]string{}
 
-var cloudTrailWriteActions = map[string]string{
-	"add_tags":                                "AddTags",
-	"create_channel":                          "CreateChannel",
-	"create_dashboard":                        "CreateDashboard",
-	"create_event_data_store":                 "CreateEventDataStore",
-	"create_trail":                            "CreateTrail",
-	"delete_channel":                          "DeleteChannel",
-	"delete_dashboard":                        "DeleteDashboard",
-	"delete_event_data_store":                 "DeleteEventDataStore",
-	"delete_resource_policy":                  "DeleteResourcePolicy",
-	"delete_trail":                            "DeleteTrail",
-	"deregister_organization_delegated_admin": "DeregisterOrganizationDelegatedAdmin",
-	"disable_federation":                      "DisableFederation",
-	"enable_federation":                       "EnableFederation",
-	"put_event_configuration":                 "PutEventConfiguration",
-	"put_event_selectors":                     "PutEventSelectors",
-	"put_insight_selectors":                   "PutInsightSelectors",
-	"put_resource_policy":                     "PutResourcePolicy",
-	"register_organization_delegated_admin":   "RegisterOrganizationDelegatedAdmin",
-	"remove_tags":                             "RemoveTags",
-	"restore_event_data_store":                "RestoreEventDataStore",
-	"start_dashboard_refresh":                 "StartDashboardRefresh",
-	"start_event_data_store_ingestion":        "StartEventDataStoreIngestion",
-	"start_import":                            "StartImport",
-	"start_logging":                           "StartLogging",
-	"stop_event_data_store_ingestion":         "StopEventDataStoreIngestion",
-	"stop_import":                             "StopImport",
-	"stop_logging":                            "StopLogging",
-	"update_channel":                          "UpdateChannel",
-	"update_dashboard":                        "UpdateDashboard",
-	"update_event_data_store":                 "UpdateEventDataStore",
-	"update_trail":                            "UpdateTrail",
-}
+var cloudTrailWriteActions = map[string]string{}
 
-var cloudTrailDeleteActions = map[string]bool{
-	"delete_channel":          true,
-	"delete_dashboard":        true,
-	"delete_event_data_store": true,
-	"delete_resource_policy":  true,
-	"delete_trail":            true,
-}
+var cloudTrailDeleteActions = map[string]bool{}

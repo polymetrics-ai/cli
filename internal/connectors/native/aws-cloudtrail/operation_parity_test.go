@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -24,11 +23,27 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := len(bundle.Streams), 19; got != want {
 		t.Fatalf("streams = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Operations), 10; got != want {
-		t.Fatalf("direct operations = %d, want %d", got, want)
+	if got, want := len(bundle.Operations), 0; got != want {
+		t.Fatalf("implemented direct operations = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Writes), 31; got != want {
-		t.Fatalf("write actions = %d, want %d", got, want)
+	if got, want := len(bundle.Writes), 0; got != want {
+		t.Fatalf("implemented write actions = %d, want %d", got, want)
+	}
+	blocked := 0
+	coveredStreams := 0
+	for _, endpoint := range bundle.Surface.Endpoints {
+		if endpoint.CoveredBy != nil && endpoint.CoveredBy.Stream != "" {
+			coveredStreams++
+		}
+		if endpoint.Operation != nil && endpoint.Operation.Status == "blocked" {
+			blocked++
+		}
+	}
+	if got, want := coveredStreams, 19; got != want {
+		t.Fatalf("stream-covered operations = %d, want %d", got, want)
+	}
+	if got, want := blocked, 41; got != want {
+		t.Fatalf("blocked/planned operations = %d, want %d", got, want)
 	}
 }
 
@@ -37,28 +52,27 @@ func TestOperationLedgerNoRawEscapes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load bundle: %v", err)
 	}
-	for _, op := range bundle.Operations {
-		if op.Kind != "rest_read" {
-			t.Fatalf("operation %s kind = %q, want rest_read", op.ID, op.Kind)
-		}
-		if op.REST == nil || strings.TrimSpace(op.REST.Path) != "/" || strings.ToUpper(op.REST.Method) != http.MethodPost {
-			t.Fatalf("operation %s REST = %+v, want fixed POST /", op.ID, op.REST)
-		}
-		if len(op.REST.BodySchema) == 0 {
-			t.Fatalf("operation %s has no closed body_schema", op.ID)
+	for _, stream := range bundle.Streams {
+		if stream.Path != "/" || stream.Method != http.MethodPost {
+			t.Fatalf("stream %s request = %s %s, want fixed POST /", stream.Name, stream.Method, stream.Path)
 		}
 	}
-	for _, action := range bundle.Writes {
-		if strings.TrimSpace(action.Path) != "/" || strings.ToUpper(action.Method) != http.MethodPost {
-			t.Fatalf("write %s request = %s %s, want fixed POST /", action.Name, action.Method, action.Path)
+	for _, endpoint := range bundle.Surface.Endpoints {
+		if endpoint.CoveredBy != nil && endpoint.CoveredBy.Stream != "" && endpoint.Method != "READ_POST" {
+			t.Fatalf("stream ledger endpoint %s method = %q, want READ_POST logical read-over-POST marker", endpoint.Path, endpoint.Method)
 		}
-		if len(action.RecordSchema) == 0 {
-			t.Fatalf("write %s has no record_schema", action.Name)
+	}
+	for _, endpoint := range bundle.Surface.Endpoints {
+		if endpoint.Operation == nil {
+			continue
+		}
+		if endpoint.Operation.Status != "blocked" || !endpoint.Operation.BlockedByDefault {
+			t.Fatalf("blocked endpoint %+v is not blocked by default", endpoint)
 		}
 	}
 }
 
-func TestNativeCloudTrailJSONRPCDispatchesOperationTarget(t *testing.T) {
+func TestNativeCloudTrailReadDispatchesStreamTarget(t *testing.T) {
 	var gotTarget string
 	var gotBody map[string]any
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -67,78 +81,47 @@ func TestNativeCloudTrailJSONRPCDispatchesOperationTarget(t *testing.T) {
 			t.Fatalf("decode body: %v", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"QueryId":"11111111-1111-1111-1111-111111111111"}`))
+		_, _ = w.Write([]byte(`{"trailList":[{"Name":"trail-fixture"}]}`))
 	}))
 	defer srv.Close()
 
 	c := Connector{Client: srv.Client()}
-	_, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
-		Operation: "aws-cloudtrail.describe_query",
-		Config:    fixtureRuntimeConfig(srv.URL),
-		Body:      map[string]any{"QueryId": "11111111-1111-1111-1111-111111111111"},
+	var records []connectors.Record
+	err := c.Read(context.Background(), connectors.ReadRequest{
+		Stream: "describe_trails",
+		Config: fixtureRuntimeConfig(srv.URL),
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
 	})
 	if err != nil {
-		t.Fatalf("OperationDirectRead: %v", err)
+		t.Fatalf("Read: %v", err)
 	}
-	wantTarget := cloudTrailTarget("DescribeQuery")
+	wantTarget := cloudTrailTarget("DescribeTrails")
 	if gotTarget != wantTarget {
 		t.Fatalf("X-Amz-Target = %q, want %q", gotTarget, wantTarget)
 	}
-	if gotBody["QueryId"] != "11111111-1111-1111-1111-111111111111" {
-		t.Fatalf("body = %#v", gotBody)
+	if len(records) != 1 || records[0]["Name"] != "trail-fixture" {
+		t.Fatalf("records = %#v", records)
+	}
+	if len(gotBody) != 0 {
+		t.Fatalf("body = %#v, want empty DescribeTrails body by default", gotBody)
 	}
 }
 
-func TestNativeCloudTrailOperationDirectReadRedactsSensitiveDefaults(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"Events":[{"EventId":"evt-1","CloudTrailEvent":"sensitive-event-json","AccessKeyId":"sensitive-key"}]}`))
-	}))
-	defer srv.Close()
-
-	c := Connector{Client: srv.Client()}
-	result, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
-		Operation: "aws-cloudtrail.lookup_events",
-		Config:    fixtureRuntimeConfig(srv.URL),
-	})
-	if err != nil {
-		t.Fatalf("OperationDirectRead: %v", err)
+func TestNativeCloudTrailDirectAndWritesAreBlockedInScopeCorrectedSurface(t *testing.T) {
+	c := Connector{}
+	if _, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "aws-cloudtrail.lookup_events"}); err == nil {
+		t.Fatal("OperationDirectRead unexpectedly succeeded for blocked direct operation")
 	}
-	body := result.Body.(map[string]any)
-	events := body["Events"].([]any)
-	first := events[0].(map[string]any)
-	if first["CloudTrailEvent"] != "[REDACTED]" || first["AccessKeyId"] != "[REDACTED]" {
-		t.Fatalf("sensitive fields not redacted: %#v", first)
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil {
+		t.Fatal("ValidateWrite unexpectedly accepted blocked write action")
 	}
-}
-
-func TestNativeCloudTrailWriteDispatchesActionTarget(t *testing.T) {
-	var gotTarget string
-	var gotBody map[string]any
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gotTarget = r.Header.Get("X-Amz-Target")
-		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
-			t.Fatalf("decode body: %v", err)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{}`))
-	}))
-	defer srv.Close()
-
-	c := Connector{Client: srv.Client()}
-	result, err := c.Write(context.Background(), connectors.WriteRequest{Action: "start_logging", Config: fixtureRuntimeConfig(srv.URL)}, []connectors.Record{{"Name": "trail-fixture"}})
-	if err != nil {
-		t.Fatalf("Write: %v", err)
+	if _, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil {
+		t.Fatal("DryRunWrite unexpectedly accepted blocked write action")
 	}
-	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-		t.Fatalf("result = %+v", result)
-	}
-	wantTarget := cloudTrailTarget("StartLogging")
-	if gotTarget != wantTarget {
-		t.Fatalf("X-Amz-Target = %q, want %q", gotTarget, wantTarget)
-	}
-	if gotBody["Name"] != "trail-fixture" {
-		t.Fatalf("body = %#v", gotBody)
+	if got, err := c.Write(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil || got.RecordsFailed != 1 {
+		t.Fatalf("Write result = %+v err = %v, want blocked failure", got, err)
 	}
 }
 

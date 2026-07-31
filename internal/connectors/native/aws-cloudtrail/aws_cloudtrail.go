@@ -50,8 +50,8 @@ func (Connector) Metadata() connectors.Metadata {
 		Name:            connectorName,
 		DisplayName:     "AWS CloudTrail",
 		IntegrationType: "api",
-		Description:     "Reads AWS CloudTrail configuration and event metadata, runs bounded CloudTrail query/lookups, and executes typed approval-gated CloudTrail administration actions through fixed AWS JSON-RPC operations.",
-		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: true, Query: false},
+		Description:     "Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams. Provider query/direct-read and write/admin actions are planned until shared promoted-native forwarding exposes them safely at runtime.",
+		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: false, Query: false},
 	}
 }
 

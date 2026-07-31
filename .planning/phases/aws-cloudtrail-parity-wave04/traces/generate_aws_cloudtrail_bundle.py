@@ -4,6 +4,10 @@ import re
 import shutil
 from pathlib import Path
 
+# Historical generator for the initial 60/19/10/31 implementation. The final
+# scope-corrected commit intentionally post-processes its output to expose only
+# 19 implemented streams and to mark the 10 direct-read plus 31 write/admin
+# actions blocked/planned until shared promoted-native forwarding lands.
 ROOT = Path(__file__).resolve().parents[3]
 # The script is stored under .planning/phases/aws-cloudtrail-parity-wave04/traces.
 if not (ROOT / 'internal/connectors').exists():

@@ -27,8 +27,8 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 	if !caps.Check || !caps.Catalog || !caps.Read {
 		t.Fatalf("capabilities = %+v, want Check, Catalog, and Read", caps)
 	}
-	if !caps.Write {
-		t.Fatalf("%s parity connector must expose typed reverse-ETL writes", wantName)
+	if caps.Write {
+		t.Fatalf("%s scope-corrected connector must not expose write capability until shared promoted-native forwarding is available", wantName)
 	}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
 	if err := c.Check(context.Background(), cfg); err != nil {

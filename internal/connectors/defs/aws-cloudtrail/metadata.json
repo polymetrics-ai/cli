@@ -1,13 +1,13 @@
 {
   "name": "aws-cloudtrail",
   "display_name": "AWS CloudTrail",
-  "description": "Reads AWS CloudTrail configuration and event metadata, runs bounded CloudTrail query/lookups, and executes typed approval-gated CloudTrail administration actions through fixed AWS JSON-RPC operations.",
+  "description": "Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
   "integration_type": "api",
   "release_stage": "alpha",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": true,
+    "write": false,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,8 +18,8 @@
   },
   "risk": {
     "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names and SigV4 authentication",
-    "write": "typed CloudTrail trail, channel, dashboard, event-data-store, import, logging, federation, selector, tagging, and resource-policy actions only",
-    "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation where declared"
+    "write": "blocked/planned: CloudTrail write/admin actions require shared promoted-native manifest, command-surface, validation, and dry-run forwarding before they can be safely exposed.",
+    "approval": "No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute."
   },
   "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html"
 }
