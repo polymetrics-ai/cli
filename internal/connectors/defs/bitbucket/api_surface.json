@@ -3,11 +3,16 @@
   "docs": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
   "endpoints": [
     {
-      "covered_by": {
-        "write": "delete_addon"
-      },
       "method": "DELETE",
-      "path": "/addon"
+      "path": "/addon",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "admin_reverse_etl",
+        "reason": "Bitbucket Connect add-on uninstall is a top-level JWT/admin mutation with no plannable record contract in this connector bundle; it stays blocked until supported auth, typed confirmation, and destructive gating are explicitly authored.",
+        "risk": "critical",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "PUT",

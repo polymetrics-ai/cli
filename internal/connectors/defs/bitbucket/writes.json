@@ -11,28 +11,6 @@
       },
       "kind": "delete",
       "method": "DELETE",
-      "name": "delete_addon",
-      "path": "/addon",
-      "path_fields": [],
-      "record_schema": {
-        "additionalProperties": false,
-        "properties": {},
-        "required": [],
-        "type": "object"
-      },
-      "risk": "Destructive DELETE /addon; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
-    },
-    {
-      "body_type": "none",
-      "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
-      "kind": "delete",
-      "method": "DELETE",
       "name": "delete_repositories_workspace_repo_slug",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}",
       "path_fields": [

@@ -491,9 +491,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 
 ## Reverse ETL Actions
 
-- delete_addon:
-  - endpoint: DELETE /addon
-  - risk: Destructive DELETE /addon; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}
   - required fields: workspace, repo_slug

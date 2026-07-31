@@ -10687,11 +10687,6 @@
     ],
     "write_actions": [
       {
-        "name": "delete_addon",
-        "method": "DELETE",
-        "kind": "delete"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug",
         "method": "DELETE",
         "kind": "delete"

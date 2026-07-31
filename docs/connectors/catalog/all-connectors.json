@@ -14790,14 +14790,6 @@
     ],
     "write_actions": [
       {
-        "name": "delete_addon",
-        "kind": "delete",
-        "method": "DELETE",
-        "path": "/addon",
-        "risk": "Destructive DELETE /addon; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
-        "confirm": "destructive"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug",
         "kind": "delete",
         "method": "DELETE",

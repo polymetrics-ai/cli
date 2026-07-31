@@ -551,6 +551,21 @@
       "summary": "Get the workspace system GPG public key(s)"
     },
     {
+      "approval": "blocked pending supported Connect JWT/admin auth, typed confirmation, and destructive reverse-ETL contract",
+      "description": "Bitbucket Connect add-on uninstall is a top-level admin mutation with no path or body record fields; it is recorded as blocked evidence instead of an empty unplannable write.",
+      "id": "delete_addon",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/addon"
+      },
+      "risk": "critical",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: DELETE /addon"
+    },
+    {
       "approval": "blocked pending closed typed request-body schema and redaction evidence",
       "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
       "id": "put_addon",
