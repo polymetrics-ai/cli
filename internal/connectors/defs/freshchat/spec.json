@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Freshchat Connection Specification",
   "type": "object",
-  "required": ["api_key", "base_url"],
+  "required": [
+    "api_key",
+    "base_url"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -12,7 +15,7 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Freshchat API base URL, e.g. https://<account_name>.freshchat.com/v2. This bundle requires the full base URL directly: legacy derives it from an account_name config value (https://<account_name>.freshchat.com/v2), but that cross-key derivation has no engine mechanism today (see docs.md Known limits) — spec.json's default materialization only supports a fixed literal, never one derived from another config value."
+      "description": "Freshchat API base URL, e.g. https://<account_name>.freshchat.com/v2. This bundle requires the full base URL directly: legacy derives it from an account_name config value (https://<account_name>.freshchat.com/v2), but that cross-key derivation has no engine mechanism today (see docs.md Known limits) \u2014 spec.json's default materialization only supports a fixed literal, never one derived from another config value."
     },
     "user_id": {
       "type": "string",
@@ -73,6 +76,99 @@
     "metrics_summary": {
       "type": "string",
       "description": "Optional instant metrics summary query value."
+    },
+    "agents_is_deactivated": {
+      "type": "string",
+      "enum": [
+        "true",
+        "false"
+      ],
+      "description": "Optional /agents filter for is_deactivated; values true or false."
+    },
+    "agents_groups": {
+      "type": "string",
+      "description": "Optional /agents filter for a Freshchat group id."
+    },
+    "agents_availability_status": {
+      "type": "string",
+      "enum": [
+        "AVAILABLE",
+        "UNAVAILABLE"
+      ],
+      "description": "Optional /agents filter for availability_status."
+    },
+    "agents_sort_order": {
+      "type": "string",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "description": "Optional /agents pagination sort_order value."
+    },
+    "agents_sort_by": {
+      "type": "string",
+      "description": "Optional /agents sort_by value."
+    },
+    "users_first_name": {
+      "type": "string",
+      "description": "Optional /users first_name filter. Freshchat requires at least one user filter for live list responses."
+    },
+    "users_last_name": {
+      "type": "string",
+      "description": "Optional /users last_name filter."
+    },
+    "users_email": {
+      "type": "string",
+      "description": "Optional /users email filter."
+    },
+    "users_reference_id": {
+      "type": "string",
+      "description": "Optional /users reference_id filter."
+    },
+    "users_phone_no": {
+      "type": "string",
+      "description": "Optional /users phone_no filter."
+    },
+    "users_created_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional /users created_from UTC timestamp filter."
+    },
+    "users_created_to": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional /users created_to UTC timestamp filter."
+    },
+    "users_updated_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional /users updated_from UTC timestamp filter."
+    },
+    "users_updated_to": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional /users updated_to UTC timestamp filter."
+    },
+    "conversation_messages_from_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional /conversations/{conversation_id}/messages from_time UTC timestamp filter."
+    },
+    "groups_sort_order": {
+      "type": "string",
+      "enum": [
+        "asc",
+        "desc"
+      ],
+      "description": "Optional /groups sort_order value."
+    },
+    "groups_sort_by": {
+      "type": "string",
+      "description": "Optional /groups sort_by value."
+    },
+    "channels_locale": {
+      "type": "string",
+      "description": "Optional /channels locale filter in ISO-639 format."
     },
     "mode": {
       "type": "string",
