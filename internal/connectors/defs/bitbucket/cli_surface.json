@@ -112,12 +112,11 @@
       "availability": "planned",
       "intent": "direct_read",
       "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed.",
-      "operation": "get_addon_addon_key_client_key",
-      "output_policy": "json_redacted",
+      "operation": "get_repositories_workspace_repo_slug_downloads_filename",
       "path": "downloads get",
-      "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
+      "risk": "planned bounded artifact download; no generic byte-stream command is exposed",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation."
+      "summary": "Planned bounded Bitbucket download artifact command; blocked pending binary transfer foundation."
     }
   ],
   "global_flags": [

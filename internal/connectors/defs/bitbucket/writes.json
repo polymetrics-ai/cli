@@ -47,6 +47,9 @@
       "record_schema": {
         "additionalProperties": false,
         "properties": {
+          "description": {
+            "type": "string"
+          },
           "is_private": {
             "type": "boolean"
           },
@@ -71,7 +74,10 @@
         ],
         "type": "object"
       },
-      "risk": "POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
+      "risk": "POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.",
+      "redact_fields": [
+        "description"
+      ]
     },
     {
       "body_type": "none",

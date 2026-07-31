@@ -30,8 +30,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "disallowed",
+        "reason": "Bitbucket Connect add-on client-key access requires Connect-app JWT authentication, which this bundle does not implement for bearer/basic credentials.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -979,8 +979,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1010,8 +1010,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1289,8 +1289,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1301,8 +1301,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1313,8 +1313,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1581,8 +1581,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1612,8 +1612,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1714,8 +1714,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -1769,8 +1769,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2157,8 +2157,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2625,8 +2625,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
@@ -2637,8 +2637,8 @@
       "method": "GET",
       "operation": {
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+        "model": "direct_read",
+        "reason": "JSON response is tracked as blocked until a connector-local stream or bounded direct-read contract with sanitized fixtures is authored; this is not a binary artifact, log, patch, or file payload.",
         "risk": "medium",
         "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
         "status": "blocked"
