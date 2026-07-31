@@ -18,7 +18,7 @@
     {
       "cycle": "execute",
       "decision": "local_critical_path",
-      "reason": "Implemented connector-local Stripe ledger, destructive delete write, cli_surface, fixtures, and docs without spawning mutating subagents."
+      "reason": "Implemented Stripe ledger, destructive delete write, cli_surface, fixtures, docs, and shared write default materialization without spawning mutating subagents."
     },
     {
       "cycle": "verify",
@@ -77,8 +77,8 @@
     "liveCredentials": false,
     "providerCalls": false,
     "providerWrites": false,
-    "sharedRuntimeEdits": false,
+    "sharedRuntimeEdits": true,
     "newDependencies": false
   },
-  "notes": "verificationPassed remains false because full make verify was not run in this worker turn; targeted gates are green."
+  "notes": "verificationPassed remains false because full make verify was not run in this worker turn; targeted gates are green. sharedRuntimeEdits is true for internal/connectors/engine/write.go default materialization."
 }

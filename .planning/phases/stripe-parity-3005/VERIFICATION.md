@@ -16,7 +16,7 @@ Run credential-free only. Do not call live Stripe APIs.
 
 ## Full local gates (time permitting before handoff)
 
-- [ ] `gofmt -w cmd internal` (only if Go files changed; expected not applicable)
+- [ ] `gofmt -w cmd internal` (Go files changed for shared write-default materialization; formatting owned by the implementation slice)
 - [ ] `go vet ./...`
 - [ ] `go test ./...`
 - [ ] `go build ./cmd/pm`
@@ -26,6 +26,6 @@ Run credential-free only. Do not call live Stripe APIs.
 
 - [x] No live credentials requested, printed, summarized, or stored.
 - [x] No provider writes or live certification run.
-- [x] No shared runtime files edited.
+- [x] Shared engine write-default materialization was edited to preserve defaulted `base_url` behavior; no CLI Go files edited.
 - [x] Any unimplemented operation remains truthfully blocked/planned or fixture-only/uncertified.
 

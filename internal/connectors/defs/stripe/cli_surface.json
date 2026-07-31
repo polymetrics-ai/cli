@@ -28,7 +28,7 @@
     {
       "name": "connection",
       "type": "string",
-      "summary": "Connection name whose Stripe credential/config should be used."
+      "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections."
     },
     {
       "name": "config",

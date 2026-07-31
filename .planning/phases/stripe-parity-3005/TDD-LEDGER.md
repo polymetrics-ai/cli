@@ -62,7 +62,7 @@ official_lanes {'direct_read_query_search': 9, 'reverse_etl_write': 316, 'etl_re
 - Added `delete_customer` write action with `kind: delete`, `body_type: none`, `delete.missing_ok_status: [404]`, and `confirm: "destructive"`.
 - Added `fixtures/writes/delete_customer.json`.
 - Hardened customer create/update/delete write schemas with `additionalProperties: false`, non-empty string patterns for mutable fields, and `^cus_[A-Za-z0-9_]+$` customer ID patterns so empty effective writes/deletes do not validate.
-- Removed optional `base_url` config and hard-coded `https://api.stripe.com/v1` so write preview/execution do not rely on shared write-default materialization.
+- Restored optional defaulted `base_url` config and updated shared write-default materialization so write preview/execution preserve configured test/proxy overrides.
 - `go test ./internal/connectors/conformance -run 'TestConformance/stripe' -count=1` passed, including delete semantics.
 
 ### 2026-07-30 — connector metadata and CLI/help surface green

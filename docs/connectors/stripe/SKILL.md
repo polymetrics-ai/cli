@@ -90,7 +90,7 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
 - Source CLI: Stripe API (OpenAPI spec3 2026-07-29.dahlia)
 - Global flags:
   - --credential (string): Credential name to use for the Stripe request.
-  - --connection (string): Connection name whose Stripe credential/config should be used.
+  - --connection (string): Credential name alias used only when --credential is omitted; does not resolve pm connections.
   - --config (string_array): Connector config override as key=value; never pass secret values here.
   - --json (boolean): Emit machine-readable JSON output.
   - --limit (integer): Maximum records to emit from stream commands.

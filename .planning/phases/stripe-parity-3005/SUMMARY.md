@@ -11,7 +11,7 @@
   - Remaining 581 rows are blocked/planned operation metadata, not silent gaps.
 - Added fixture-backed typed destructive `delete_customer` write action with `confirm: "destructive"` and idempotent 404 handling.
 - Hardened customer create/update/delete schemas to reject additional fields, empty effective mutable fields, and blank/non-`cus_...` customer IDs before planning or execution.
-- Removed Stripe `base_url` config and hard-coded the official API base URL so write preview/execution no longer depend on shared write-default materialization.
+- Restored Stripe `base_url` as a defaulted config override and updated shared write-default materialization so previews/execution preserve test/proxy overrides.
 - Added Stripe-owned `cli_surface.json` for implemented stream commands and customer create/update/delete plan commands.
 - Regenerated Stripe connector manual/skill docs and CLI golden transcripts affected by the new Stripe provider command surface.
 - Updated Stripe docs to record exact blocked dependencies for complex form writes, provider search/query (#2985), CDC (#2986/#2988), and binary/file surfaces.
@@ -19,7 +19,7 @@
 ## Safety
 
 - No live Stripe credentials, provider calls, provider writes, live certification, VPS/Thaalam work, merges, or new dependencies.
-- No shared runtime/engine/CLI Go files edited.
+- Shared engine write-default materialization was updated; no CLI Go files edited.
 - Unimplemented official operations remain truthfully blocked/planned or fixture-only/uncertified.
 
 ## Verification
