@@ -196545,9 +196545,44 @@
           "maps_to": ""
         },
         {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
           "name": "limit",
           "type": "integer",
           "summary": "Maximum records to emit from stream commands.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "plan",
+          "type": "string",
+          "summary": "Execute an approved reverse-ETL plan by id.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
           "values": [],
           "maps_to": ""
         }

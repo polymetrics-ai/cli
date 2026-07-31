@@ -85,7 +85,12 @@ COMMAND SURFACE
     --credential (string): Credential name to use for the Stripe request.
     --connection (string): Connection name whose Stripe credential/config should be used.
     --config (string_array): Connector config override as key=value; never pass secret values here.
+    --json (boolean): Emit machine-readable JSON output.
     --limit (integer): Maximum records to emit from stream commands.
+    --plan (string): Execute an approved reverse-ETL plan by id.
+    --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
+    --approve (string): Approval token required to execute a reverse-ETL plan.
+    --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
   Customers
     customers list - Read Stripe customers through the declared ETL stream. [intent=etl availability=implemented stream=customers]
     customers create - Plan creation of a Stripe customer through reverse ETL. [intent=reverse_etl availability=implemented write=create_customer]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --email, --name, --description, --phone
