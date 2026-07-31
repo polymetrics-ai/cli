@@ -128,6 +128,7 @@
       "flags": [
         { "name": "id", "type": "string", "summary": "Stripe customer ID to delete.", "maps_to": "record.id", "allow_empty": false }
       ],
+      "redact_fields": ["id"],
       "api_surface": [{ "method": "DELETE", "path": "/v1/customers/{customer}" }],
       "risk": "Destructive Stripe customer deletion; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
       "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
