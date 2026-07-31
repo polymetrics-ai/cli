@@ -9779,7 +9779,7 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail configuration and event metadata, runs bounded CloudTrail query/lookups, and executes typed approval-gated CloudTrail administration actions through fixed AWS JSON-RPC operations.",
+    "description": "Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
     "integration_type": "api",
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "release_stage": "alpha",
@@ -9787,7 +9787,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": true,
+      "write": false,
       "query": false
     },
     "spec": {
@@ -10047,244 +10047,10 @@
         ]
       }
     ],
-    "write_actions": [
-      {
-        "name": "add_tags",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail AddTags through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "create_channel",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail CreateChannel through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "create_dashboard",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail CreateDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "create_event_data_store",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail CreateEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "create_trail",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail CreateTrail through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "delete_channel",
-        "kind": "delete",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DeleteChannel through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "delete_dashboard",
-        "kind": "delete",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DeleteDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "delete_event_data_store",
-        "kind": "delete",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DeleteEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "delete_resource_policy",
-        "kind": "delete",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DeleteResourcePolicy through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "delete_trail",
-        "kind": "delete",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DeleteTrail through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "deregister_organization_delegated_admin",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DeregisterOrganizationDelegatedAdmin through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "disable_federation",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail DisableFederation through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "enable_federation",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail EnableFederation through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "put_event_configuration",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail PutEventConfiguration through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "put_event_selectors",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail PutEventSelectors through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "put_insight_selectors",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail PutInsightSelectors through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "put_resource_policy",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail PutResourcePolicy through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "register_organization_delegated_admin",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail RegisterOrganizationDelegatedAdmin through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "remove_tags",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail RemoveTags through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "restore_event_data_store",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail RestoreEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "start_dashboard_refresh",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StartDashboardRefresh through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "start_event_data_store_ingestion",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StartEventDataStoreIngestion through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "start_import",
-        "kind": "create",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StartImport through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "start_logging",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StartLogging through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "stop_event_data_store_ingestion",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StopEventDataStoreIngestion through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "stop_import",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StopImport through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "stop_logging",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail StopLogging through a fixed typed JSON-RPC action; no raw action or path is accepted.",
-        "confirm": "destructive"
-      },
-      {
-        "name": "update_channel",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail UpdateChannel through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "update_dashboard",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail UpdateDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "update_event_data_store",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail UpdateEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      },
-      {
-        "name": "update_trail",
-        "kind": "update",
-        "method": "POST",
-        "path": "/",
-        "risk": "Executes AWS CloudTrail UpdateTrail through a fixed typed JSON-RPC action; no raw action or path is accepted."
-      }
-    ],
     "risk": {
       "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names and SigV4 authentication",
-      "write": "typed CloudTrail trail, channel, dashboard, event-data-store, import, logging, federation, selector, tagging, and resource-policy actions only",
-      "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation where declared"
+      "write": "blocked/planned: CloudTrail write/admin actions require shared promoted-native manifest, command-surface, validation, and dry-run forwarding before they can be safely exposed.",
+      "approval": "No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -\u003e preview -\u003e approval -\u003e execute."
     },
     "icon": {
       "id": "aws-cloudtrail",

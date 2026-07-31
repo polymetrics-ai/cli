@@ -1,9 +1,6 @@
 package nativeset
 
 import (
-	"context"
-	"fmt"
-
 	"polymetrics.ai/internal/connectors"
 	alphavantage "polymetrics.ai/internal/connectors/native/alpha-vantage"
 	apifydataset "polymetrics.ai/internal/connectors/native/apify-dataset"
@@ -49,48 +46,7 @@ func (c definitionConnector) Definition() connectors.Definition {
 	return c.base.Definition()
 }
 
-type cloudTrailDefinitionConnector struct{ definitionConnector }
-
-func (c cloudTrailDefinitionConnector) Manifest() connectors.Manifest {
-	return c.base.Manifest()
-}
-
-func (c cloudTrailDefinitionConnector) CommandSurface() *connectors.CommandSurface {
-	return c.base.CommandSurface()
-}
-
-func (c cloudTrailDefinitionConnector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
-	reader, ok := c.Connector.(connectors.OperationDirectReader)
-	if !ok {
-		return connectors.DirectReadResult{}, fmt.Errorf("connector %s does not support operation direct read", c.Name())
-	}
-	return reader.OperationDirectRead(ctx, req)
-}
-
-func (c cloudTrailDefinitionConnector) ValidateWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) error {
-	validator, ok := c.Connector.(connectors.WriteValidator)
-	if !ok {
-		return nil
-	}
-	return validator.ValidateWrite(ctx, req, records)
-}
-
-func (c cloudTrailDefinitionConnector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
-	if dryRun, ok := c.Connector.(connectors.DryRunWriter); ok {
-		return dryRun.DryRunWrite(ctx, req, records)
-	}
-	return connectors.WritePreview{}, fmt.Errorf("connector %s does not support reverse ETL previews", c.Name())
-}
-
-func (c cloudTrailDefinitionConnector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
-	stateful, ok := c.Connector.(connectors.StatefulReader)
-	if !ok {
-		return nil, nil
-	}
-	return stateful.InitialState(ctx, stream, cfg)
-}
-
-func newDefinitionConnector(name string, c connectors.Connector) definitionConnector {
+func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
 	bundle, err := engine.Load(defs.FS, name)
 	if err != nil {
 		panic("native/" + name + ": failed to load defs/" + name + " bundle: " + err.Error())
@@ -98,18 +54,12 @@ func newDefinitionConnector(name string, c connectors.Connector) definitionConne
 	return definitionConnector{Connector: c, base: engine.NewBase(bundle)}
 }
 
-func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
-	return newDefinitionConnector(name, c)
-}
-
 func promotedFactories() []Factory {
 	return []Factory{
 		{Name: "alpha-vantage", New: func() connectors.Connector { return withBundleDefinition("alpha-vantage", alphavantage.New()) }},
 		{Name: "apify-dataset", New: func() connectors.Connector { return withBundleDefinition("apify-dataset", apifydataset.New()) }},
 		{Name: "ashby", New: func() connectors.Connector { return withBundleDefinition("ashby", ashby.New()) }},
-		{Name: "aws-cloudtrail", New: func() connectors.Connector {
-			return cloudTrailDefinitionConnector{definitionConnector: newDefinitionConnector("aws-cloudtrail", awscloudtrail.New())}
-		}},
+		{Name: "aws-cloudtrail", New: func() connectors.Connector { return withBundleDefinition("aws-cloudtrail", awscloudtrail.New()) }},
 		{Name: "babelforce", New: func() connectors.Connector { return withBundleDefinition("babelforce", babelforce.New()) }},
 		{Name: "basecamp", New: func() connectors.Connector { return withBundleDefinition("basecamp", basecamp.New()) }},
 		{Name: "bunny-inc", New: func() connectors.Connector { return withBundleDefinition("bunny-inc", bunnyinc.New()) }},
