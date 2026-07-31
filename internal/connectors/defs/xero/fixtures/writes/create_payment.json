@@ -1,0 +1,28 @@
+{
+  "record": {
+    "Invoice": {},
+    "CreditNote": {},
+    "Prepayment": {},
+    "Overpayment": {},
+    "InvoiceNumber": "invoice_number_fixture",
+    "CreditNoteNumber": "credit_note_number_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Payments",
+    "body": {
+      "Invoice": {},
+      "CreditNote": {},
+      "Prepayment": {},
+      "Overpayment": {},
+      "InvoiceNumber": "invoice_number_fixture",
+      "CreditNoteNumber": "credit_note_number_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

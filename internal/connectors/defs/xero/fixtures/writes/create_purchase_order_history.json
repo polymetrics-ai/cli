@@ -1,0 +1,15 @@
+{
+  "record": {
+    "purchase_order_id": "purchase_order_id_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/PurchaseOrders/purchase_order_id_fixture_1/History"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "expense_claim_id": "expense_claim_id_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ExpenseClaims/expense_claim_id_fixture_1/History"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

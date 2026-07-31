@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Reports/ProfitAndLoss"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Reports": [
+        {
+          "ReportID": "report_id_fixture_1",
+          "ReportName": "report_name_fixture",
+          "ReportTitle": "report_title_fixture",
+          "ReportType": "STANDARD",
+          "ReportTitles": [
+            "report_title_fixture"
+          ],
+          "ReportDate": "2026-01-01T00:00:00Z",
+          "Rows": [
+            "row_fixture"
+          ],
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "Fields": [
+            "field_fixture"
+          ]
+        }
+      ]
+    }
+  }
+}
