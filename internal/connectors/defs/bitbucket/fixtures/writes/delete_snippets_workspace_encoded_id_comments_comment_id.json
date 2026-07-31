@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/snippets/workspace_fixture/snippet-fixture/comments/comment-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "encoded_id": "snippet-fixture",
+    "comment_id": "comment-fixture"
+  }
+}

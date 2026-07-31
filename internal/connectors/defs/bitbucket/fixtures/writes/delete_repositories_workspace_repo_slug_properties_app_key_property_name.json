@@ -1,0 +1,12 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/properties/app-fixture/property-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture",
+    "app_key": "app-fixture",
+    "property_name": "property-fixture"
+  }
+}

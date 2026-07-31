@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/pipelines_config/ssh/known_hosts/known-host-uuid-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture",
+    "known_host_uuid": "known-host-uuid-fixture"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/teams/team-fixture/pipelines_config/variables/variable-uuid-fixture"
+  },
+  "record": {
+    "username": "team-fixture",
+    "variable_uuid": "variable-uuid-fixture"
+  }
+}

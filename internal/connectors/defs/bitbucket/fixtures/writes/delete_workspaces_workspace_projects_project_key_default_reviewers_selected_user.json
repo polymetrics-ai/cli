@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/workspace_fixture/projects/PROJ/default-reviewers/selected-user-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "project_key": "PROJ",
+    "selected_user": "selected-user-fixture"
+  }
+}

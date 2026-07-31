@@ -1,0 +1,12 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/pullrequests/17/tasks/task-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture",
+    "pull_request_id": "17",
+    "task_id": "task-fixture"
+  }
+}

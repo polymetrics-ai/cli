@@ -1,0 +1,12 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/commit/abcdef1234567890/comments/comment-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture",
+    "commit": "abcdef1234567890",
+    "comment_id": "comment-fixture"
+  }
+}

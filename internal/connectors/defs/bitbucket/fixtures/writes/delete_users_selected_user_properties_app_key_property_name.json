@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/selected-user-fixture/properties/app-fixture/property-fixture"
+  },
+  "record": {
+    "selected_user": "selected-user-fixture",
+    "app_key": "app-fixture",
+    "property_name": "property-fixture"
+  }
+}

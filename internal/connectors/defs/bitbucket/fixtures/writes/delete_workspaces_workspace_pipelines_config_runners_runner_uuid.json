@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/workspace_fixture/pipelines-config/runners/runner-uuid-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "runner_uuid": "runner-uuid-fixture"
+  }
+}

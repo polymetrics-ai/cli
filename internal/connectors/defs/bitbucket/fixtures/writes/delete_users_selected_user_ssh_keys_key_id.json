@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/selected-user-fixture/ssh-keys/key-fixture"
+  },
+  "record": {
+    "selected_user": "selected-user-fixture",
+    "key_id": "key-fixture"
+  }
+}

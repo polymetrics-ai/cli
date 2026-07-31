@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/workspace_fixture/projects/PROJ/permissions-config/groups/developers-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "project_key": "PROJ",
+    "group_slug": "developers-fixture"
+  }
+}
