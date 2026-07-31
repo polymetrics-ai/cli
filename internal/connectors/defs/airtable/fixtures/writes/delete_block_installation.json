@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v0/meta/bases/synthetic-conformance-value/blockInstallations/id_fixture"
+  }
+}

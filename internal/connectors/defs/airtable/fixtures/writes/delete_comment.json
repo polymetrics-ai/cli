@@ -1,10 +1,10 @@
 {
   "record": {
-    "record_id": "rec_fixture_1",
-    "id": "comFixture1"
+    "record_id": "record_id_fixture",
+    "row_comment_id": "row_comment_id_fixture"
   },
   "expect": {
     "method": "DELETE",
-    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1/comments/comFixture1"
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/record_id_fixture/comments/row_comment_id_fixture"
   }
 }

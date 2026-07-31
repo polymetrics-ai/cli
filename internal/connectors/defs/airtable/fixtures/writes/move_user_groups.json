@@ -1,0 +1,19 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "groupIds": [
+      "groupIds_item_fixture"
+    ],
+    "targetEnterpriseAccountId": "targetEnterpriseAccountId_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/moveGroups",
+    "body": {
+      "groupIds": [
+        "groupIds_item_fixture"
+      ],
+      "targetEnterpriseAccountId": "targetEnterpriseAccountId_fixture"
+    }
+  }
+}

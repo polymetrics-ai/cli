@@ -2970,7 +2970,7 @@
   {
     "name": "airtable",
     "display_name": "Airtable",
-    "description": "Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.",
+    "description": "Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, HyperDB direct reads, and executes typed record/schema/admin mutations from fixture-tested declarative definitions.",
     "integration_type": "api",
     "docs_url": "https://airtable.com/developers/web/api/introduction",
     "release_stage": "ga",
@@ -2979,7 +2979,7 @@
       "catalog": true,
       "read": true,
       "write": true,
-      "query": false
+      "query": true
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2999,27 +2999,177 @@
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://api.airtable.com/v0",
-          "description": "Airtable API base URL override for tests or proxies."
+          "default": "https://api.airtable.com",
+          "description": "Airtable API origin override for tests or proxies. Paths in the bundle include /v0 or /scim as required by the official API."
         },
         "base_id": {
           "type": "string",
-          "description": "Airtable base id (required for the 'tables' and 'records' streams)."
+          "description": "Airtable base id for base-scoped streams and write actions."
         },
         "table_id": {
           "type": "string",
-          "description": "Airtable table id or name (required for the 'records' stream)."
+          "description": "Airtable table id or name for record/comment streams and write actions."
         },
         "page_size": {
           "type": "string",
           "default": "100",
-          "description": "Records per page for the 'records' stream (1-100)."
+          "description": "Records per page for list-record style endpoints (1-100)."
+        },
+        "record_id": {
+          "type": "string",
+          "description": "Airtable record id for single-record/detail streams."
+        },
+        "webhook_id": {
+          "type": "string",
+          "description": "Airtable webhook id for webhook payload/detail streams."
+        },
+        "page_bundle_id": {
+          "type": "string",
+          "description": "Airtable interface page bundle id for interface metadata streams."
+        },
+        "view_id": {
+          "type": "string",
+          "description": "Airtable view id for view metadata streams."
+        },
+        "enterprise_account_id": {
+          "type": "string",
+          "description": "Airtable enterprise account id for enterprise/admin/audit/HyperDB streams."
+        },
+        "enterprise_audit_log_task_id": {
+          "type": "string",
+          "description": "Airtable enterprise audit log task id for audit-log request status streams."
+        },
+        "enterprise_task_id": {
+          "type": "string",
+          "description": "Airtable enterprise task id for eDiscovery export status streams."
+        },
+        "group_id": {
+          "type": "string",
+          "description": "Airtable/SCIM group id for group detail streams."
+        },
+        "user_id": {
+          "type": "string",
+          "description": "Airtable/SCIM user id for user detail streams."
+        },
+        "workspace_id": {
+          "type": "string",
+          "description": "Airtable workspace id for workspace collaborator streams."
         }
       }
     },
     "streams": [
       {
+        "name": "scim_groups",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "scim_group",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "scim_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "scim_user",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "webhooks",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "webhook_payloads",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "bases",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "base_collaborators",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "block_installations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interface",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "shares",
         "primary_key": [
           "id"
         ],
@@ -3041,6 +3191,182 @@
         ]
       },
       {
+        "name": "views",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "view_metadata",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "enterprise",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_log_events",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_log_requests",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_log_request",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "change_events",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ediscovery_exports",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ediscovery_export",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "enterprise_packages",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "enterprise_personal_access_tokens",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "enterprise_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "enterprise_user",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_group",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "whoami",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspace_collaborators",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "records",
         "primary_key": [
           "id"
@@ -3052,7 +3378,7 @@
         ]
       },
       {
-        "name": "webhooks",
+        "name": "record",
         "primary_key": [
           "id"
         ],
@@ -3076,93 +3402,527 @@
     ],
     "write_actions": [
       {
-        "name": "create_record",
+        "name": "create_scim_group",
         "kind": "create",
         "method": "POST",
-        "path": "/{{ config.base_id }}/{{ config.table_id }}",
-        "risk": "creates a new record in the configured base/table; low-risk external mutation, no approval required"
+        "path": "/scim/v2/Groups",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
       },
       {
-        "name": "update_record",
-        "kind": "update",
-        "method": "PATCH",
-        "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
-        "risk": "mutates only the field values included in the request (non-destructive PATCH); unincluded cell values are left unchanged"
-      },
-      {
-        "name": "delete_record",
+        "name": "delete_scim_group",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
-        "risk": "permanently removes a record from the base/table; irreversible"
+        "path": "/scim/v2/Groups/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
       },
       {
-        "name": "create_table",
-        "kind": "create",
-        "method": "POST",
-        "path": "/meta/bases/{{ config.base_id }}/tables",
-        "risk": "creates a new table (schema mutation) in the configured base; low-risk but changes the base's structure, visible to every collaborator"
-      },
-      {
-        "name": "update_table",
+        "name": "patch_scim_group",
         "kind": "update",
         "method": "PATCH",
-        "path": "/meta/bases/{{ config.base_id }}/tables/{{ record.id }}",
-        "risk": "renames or redescribes an existing table; a visible schema change for every collaborator on the base"
+        "path": "/scim/v2/Groups/{{ record.id }}",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
       },
       {
-        "name": "create_field",
+        "name": "put_scim_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/scim/v2/Groups/{{ record.id }}",
+        "risk": "replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_scim_user",
         "kind": "create",
         "method": "POST",
-        "path": "/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields",
-        "risk": "creates a new column (schema mutation) in the target table; low-risk but changes the table's structure, visible to every collaborator"
+        "path": "/scim/v2/Users",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
       },
       {
-        "name": "update_field",
-        "kind": "update",
-        "method": "PATCH",
-        "path": "/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.id }}",
-        "risk": "renames or redescribes an existing column; a visible schema change for every collaborator on the base"
-      },
-      {
-        "name": "create_comment",
-        "kind": "create",
-        "method": "POST",
-        "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments",
-        "risk": "adds a visible comment to a record; every base collaborator with record access can see it, no external side effect"
-      },
-      {
-        "name": "update_comment",
-        "kind": "update",
-        "method": "PATCH",
-        "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}",
-        "risk": "edits the text of an existing comment; visible to every base collaborator with record access"
-      },
-      {
-        "name": "delete_comment",
+        "name": "delete_scim_user",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}",
-        "risk": "permanently removes a comment from a record; irreversible"
+        "path": "/scim/v2/Users/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_scim_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/scim/v2/Users/{{ record.id }}",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "put_scim_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/scim/v2/Users/{{ record.id }}",
+        "risk": "replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
         "kind": "create",
         "method": "POST",
-        "path": "/bases/{{ config.base_id }}/webhooks",
-        "risk": "registers a new outbound webhook that will POST live base-change notifications to an external URL of the caller's choosing; verify the target endpoint before enabling"
+        "path": "/v0/bases/{{ config.base_id }}/webhooks",
+        "risk": "Airtable webhook mutation; may start, stop, or change outbound notifications and must be previewed and approved"
       },
       {
         "name": "delete_webhook",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/bases/{{ config.base_id }}/webhooks/{{ record.id }}",
-        "risk": "permanently removes a webhook subscription; notification delivery to its target URL stops immediately"
+        "path": "/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_webhook_notifications",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/enableNotifications",
+        "risk": "Airtable webhook mutation; may start, stop, or change outbound notifications and must be previewed and approved"
+      },
+      {
+        "name": "refresh_webhook",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/refresh",
+        "risk": "Airtable webhook mutation; may start, stop, or change outbound notifications and must be previewed and approved"
+      },
+      {
+        "name": "create_base",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/bases",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_base",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ record.base_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_block_installation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "manage_block_installation",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "add_base_collaborator",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/bases/{{ config.base_id }}/collaborators",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_base_collaborator",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_collaborator_base_permission",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "add_interface_collaborator",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_interface_collaborator",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_interface_collaborator",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_interface_invite",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/invites/{{ record.invite_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_base_invite",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/invites/{{ record.invite_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_share",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "manage_share",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "create_table",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/bases/{{ config.base_id }}/tables",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "update_table",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{{ config.base_id }}/tables/{{ config.table_id }}",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "create_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "update_field",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.column_id }}",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "delete_view",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{{ config.base_id }}/views/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_audit_log_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/auditLogs",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "create_descendant_enterprise",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/descendants",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "create_ediscovery_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/exports",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "move_user_groups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveGroups",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "move_workspaces",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveWorkspaces",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "create_base_from_package_enterprise",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/packages/{{ record.package_id }}/install",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "revoke_enterprise_personal_access_tokens",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/personalAccessTokens/revoke",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_users_by_email",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users?email={{ record.email | urlencode }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "manage_user_batched",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "manage_user_membership",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/claim",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "grant_admin_access",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/grantAdminAccess",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "revoke_admin_access",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/revokeAdminAccess",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_user_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "manage_user",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "logout_user",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/logout",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_user_from_enterprise",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/remove",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_workspace_ai_allowlist",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/workspaceAiAllowlist",
+        "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
+      },
+      {
+        "name": "create_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/workspaces",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_workspace",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_workspace_collaborator",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}/collaborators",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_workspace_collaborator",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_workspace_collaborator",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "delete_workspace_invite",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}/invites/{{ record.invite_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "move_base",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}/moveBase",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "update_workspace_restrictions",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions",
+        "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
+      },
+      {
+        "name": "upload_attachment",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "delete_multiple_records",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}?records[]={{ record.records | join:\u0026records[]= }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_multiple_records",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "create_records",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "update_multiple_records_put",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}",
+        "risk": "replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_record",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_record",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "replace_record",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
+        "risk": "replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_comment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "delete_comment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}",
+        "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_comment",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "update_date_dependency_metadata",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "hyperdb_delete_records_by_primary_keys",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords",
+        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      },
+      {
+        "name": "hyperdb_upsert_records_by_primary_keys",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords",
+        "risk": "replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Airtable API read of base/table/record metadata",
-      "write": "external Airtable API mutation of records, table/field schema, comments, and webhooks; schema mutations (create_table/update_table/create_field/update_field) are visible to every base collaborator, approval required"
+      "read": "external Airtable API reads for base, table, record, comment, webhook, SCIM, collaborator, enterprise, audit, eDiscovery, and change-event metadata",
+      "write": "typed Airtable API mutations for records, schema, comments, webhooks, SCIM, collaborators, enterprise/admin, HyperDB, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute"
     },
     "icon": {
       "id": "airtable",

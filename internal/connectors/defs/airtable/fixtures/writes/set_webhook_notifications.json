@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "enable": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/bases/synthetic-conformance-value/webhooks/id_fixture/enableNotifications",
+    "body": {
+      "enable": true
+    }
+  }
+}

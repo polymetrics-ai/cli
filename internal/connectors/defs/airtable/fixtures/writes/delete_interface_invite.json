@@ -1,0 +1,10 @@
+{
+  "record": {
+    "page_bundle_id": "page_bundle_id_fixture",
+    "invite_id": "invite_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v0/meta/bases/synthetic-conformance-value/interfaces/page_bundle_id_fixture/invites/invite_id_fixture"
+  }
+}
