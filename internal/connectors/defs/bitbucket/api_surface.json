@@ -3,18 +3,28 @@
   "docs": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
   "endpoints": [
     {
-      "covered_by": {
-        "write": "delete_addon"
-      },
       "method": "DELETE",
-      "path": "/addon"
+      "path": "/addon",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "disallowed",
+        "reason": "Bitbucket /addon mutations require Atlassian Connect app JWT authentication; this bundle declares only bearer/basic/none auth, so the operation remains blocked until supported JWT auth exists.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "update_addon"
-      },
       "method": "PUT",
-      "path": "/addon"
+      "path": "/addon",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "disallowed",
+        "reason": "Bitbucket /addon mutations require Atlassian Connect app JWT authentication; this bundle declares only bearer/basic/none auth, so the operation remains blocked until supported JWT auth exists.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -677,11 +687,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/import"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_import"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/import"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/import",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "destructive_action",
+        "reason": "Multipart ZIP issue import deletes/replaces existing issues; block until bounded file-transfer support exists, and require destructive confirmation if this write is later implemented.",
+        "risk": "critical",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -712,18 +727,28 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_issue_id_attachments"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Issue attachment upload uses multipart/form-data; block until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path"
-      },
       "method": "DELETE",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "destructive_action",
+        "reason": "Issue attachment deletion is a file-transfer-family destructive mutation; block until bounded attachment operation evidence and destructive confirmation policy are implemented together.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -1637,11 +1662,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/src"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_src"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/src"
+      "path": "/repositories/{workspace}/{repo_slug}/src",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Repository /src commits use multipart/form-data file payloads; block until a bounded file-transfer foundation can bind file snapshots, byte caps, commit metadata, and approvals.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -1684,11 +1714,16 @@
       "path": "/snippets"
     },
     {
-      "covered_by": {
-        "write": "create_snippets"
-      },
       "method": "POST",
-      "path": "/snippets"
+      "path": "/snippets",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Snippet create carries multipart/file bodies; block until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1698,11 +1733,16 @@
       "path": "/snippets/{workspace}"
     },
     {
-      "covered_by": {
-        "write": "create_snippets_workspace"
-      },
       "method": "POST",
-      "path": "/snippets/{workspace}"
+      "path": "/snippets/{workspace}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Snippet create carries multipart/file bodies; block until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1719,11 +1759,16 @@
       "path": "/snippets/{workspace}/{encoded_id}"
     },
     {
-      "covered_by": {
-        "write": "update_snippets_workspace_encoded_id"
-      },
       "method": "PUT",
-      "path": "/snippets/{workspace}/{encoded_id}"
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Snippet update carries multipart/file bodies; block until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1834,11 +1879,16 @@
       "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
     },
     {
-      "covered_by": {
-        "write": "update_snippets_workspace_encoded_id_node_id"
-      },
       "method": "PUT",
-      "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Snippet file update carries file body content; block until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
