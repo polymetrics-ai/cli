@@ -1,0 +1,16 @@
+{
+  "record": {
+    "account_id": "fixture_account_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/accounts/fixture_account_id/acquisition"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

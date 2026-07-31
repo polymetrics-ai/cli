@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/credit_payments",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "list_credit_payments_fixture_1",
+          "object": "list_credit_payments",
+          "code": "list_credit_payments_code_1",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

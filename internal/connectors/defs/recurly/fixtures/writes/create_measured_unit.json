@@ -1,0 +1,21 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "display_name": "fixture_display_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/measured_units",
+    "body": {
+      "name": "fixture_name",
+      "display_name": "fixture_display_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

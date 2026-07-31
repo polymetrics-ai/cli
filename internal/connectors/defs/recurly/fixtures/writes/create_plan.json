@@ -1,0 +1,31 @@
+{
+  "record": {
+    "code": "fixture_code",
+    "name": "fixture_name",
+    "currencies": [
+      {
+        "currency": "USD"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/plans",
+    "body": {
+      "code": "fixture_code",
+      "name": "fixture_name",
+      "currencies": [
+        {
+          "currency": "USD"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

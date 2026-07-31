@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "add_on_id": "fixture_add_on_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/add_ons/fixture_add_on_id/usage"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "usage_id": "fixture_usage_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/usage/fixture_usage_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

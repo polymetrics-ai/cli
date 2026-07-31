@@ -2,15 +2,48 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "subscriptions",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "account_id": { "type": ["string", "null"] },
-    "plan_id": { "type": ["string", "null"] },
-    "state": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
-  }
+    "id": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "object": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
 }

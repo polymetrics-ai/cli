@@ -1,0 +1,24 @@
+{
+  "record": {
+    "redemption_code": "fixture_redemption_code",
+    "recipient_account": {
+      "code": "fixture_code"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gift_cards/fixture_redemption_code/redeem",
+    "body": {
+      "recipient_account": {
+        "code": "fixture_code"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

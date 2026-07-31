@@ -1,0 +1,71 @@
+{
+  "record": {
+    "currency": "USD",
+    "due_at": "2026-01-01T00:00:00Z",
+    "external_recovery_eligible": true,
+    "account": {
+      "code": "fixture_code",
+      "billing_infos": [
+        {
+          "gateway_code": "fixture_gateway_code",
+          "payment_gateway_references": [
+            {
+              "reference_type": "stripe_confirmation_token"
+            }
+          ],
+          "transactions": [
+            {
+              "gateway_error_code": "fixture_gateway_error_code",
+              "attempted_collection_date": "2026-01-01T00:00:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    "line_items": [
+      {
+        "unit_amount": 12.34
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/recovery",
+    "body": {
+      "currency": "USD",
+      "due_at": "2026-01-01T00:00:00Z",
+      "external_recovery_eligible": true,
+      "account": {
+        "code": "fixture_code",
+        "billing_infos": [
+          {
+            "gateway_code": "fixture_gateway_code",
+            "payment_gateway_references": [
+              {
+                "reference_type": "stripe_confirmation_token"
+              }
+            ],
+            "transactions": [
+              {
+                "gateway_error_code": "fixture_gateway_error_code",
+                "attempted_collection_date": "2026-01-01T00:00:00Z"
+              }
+            ]
+          }
+        ]
+      },
+      "line_items": [
+        {
+          "unit_amount": 12.34
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

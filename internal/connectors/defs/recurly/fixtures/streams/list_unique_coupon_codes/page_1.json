@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coupons/synthetic-conformance-value/unique_coupon_codes",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "list_unique_coupon_codes_fixture_1",
+          "object": "list_unique_coupon_codes",
+          "code": "list_unique_coupon_codes_code_1",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

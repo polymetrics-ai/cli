@@ -1,0 +1,16 @@
+{
+  "record": {
+    "dunning_campaign_id": "fixture_dunning_campaign_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/dunning_campaigns/fixture_dunning_campaign_id/bulk_update"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

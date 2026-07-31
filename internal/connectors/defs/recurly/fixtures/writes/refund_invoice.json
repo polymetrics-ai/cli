@@ -1,0 +1,20 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "type": "amount"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/refund",
+    "body": {
+      "type": "amount"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}
