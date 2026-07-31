@@ -1,0 +1,19 @@
+{
+  "record": {
+    "summary": "Fixture Calendar"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calendars",
+    "body": {
+      "summary": "Fixture Calendar"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-response",
+      "kind": "calendar#fixture"
+    }
+  }
+}

@@ -2,11 +2,15 @@ package googlecalendar
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
-	native "polymetrics.ai/internal/connectors/native/google-calendar"
 )
 
 func TestHooksRegistered(t *testing.T) {
@@ -17,37 +21,284 @@ func TestHooksRegistered(t *testing.T) {
 	if h.ConnectorName() != "google-calendar" {
 		t.Fatalf("ConnectorName() = %q", h.ConnectorName())
 	}
-	if _, ok := h.(engine.CheckHook); !ok {
-		t.Fatal("hooks do not implement CheckHook")
+	if _, ok := h.(engine.AuthHook); !ok {
+		t.Fatal("hooks do not implement AuthHook")
 	}
-	if _, ok := h.(engine.StreamHook); !ok {
-		t.Fatal("hooks do not implement StreamHook")
+	if _, ok := h.(engine.CheckHook); ok {
+		t.Fatal("hooks should not override declarative Check")
+	}
+	if _, ok := h.(engine.StreamHook); ok {
+		t.Fatal("hooks should not override declarative ReadStream")
 	}
 }
 
-func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
-	h := Hooks{Connector: native.New()}
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
-	handled, err := h.Check(context.Background(), cfg, nil)
+func TestAuthenticatorConformanceFixtureNoOps(t *testing.T) {
+	auth, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"}, engine.AuthSpec{})
 	if err != nil {
-		t.Fatalf("Check: %v", err)
+		t.Fatalf("Authenticator: %v", err)
 	}
-	if !handled {
-		t.Fatal("Check handled = false")
+	req := httptest.NewRequest(http.MethodGet, "https://example.test/calendar", nil)
+	if err := auth.Apply(context.Background(), req); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatalf("Authorization = %q, want empty", got)
+	}
+}
+
+func TestAuthenticatorRefreshTokenExchange(t *testing.T) {
+	var sawForm bool
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if r.Form.Get("grant_type") != "refresh_token" {
+			t.Fatalf("grant_type = %q", r.Form.Get("grant_type"))
+		}
+		if r.Form.Get("client_id") != "calendar-client" || r.Form.Get("client_secret") != "calendar-client-secret" || r.Form.Get("refresh_token") != "calendar-refresh" {
+			t.Fatalf("unexpected OAuth form keys")
+		}
+		sawForm = true
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{"access_token": "calendar-access", "expires_in": 3600})
+	}))
+	defer srv.Close()
+
+	auth, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{Config: map[string]string{"mode": "live"}}, engine.AuthSpec{TokenURL: srv.URL, ClientID: "calendar-client", ClientSecret: "calendar-client-secret", Token: "calendar-refresh"})
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := httptest.NewRequest(http.MethodGet, "https://example.test/calendar", nil)
+	if err := auth.Apply(context.Background(), req); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	if !sawForm {
+		t.Fatal("OAuth refresh endpoint was not called")
+	}
+	if got := req.Header.Get("Authorization"); got != "Bearer calendar-access" {
+		t.Fatalf("Authorization = %q", got)
+	}
+}
+
+func TestAuthenticatorLiveSyntheticValuesStillRefreshes(t *testing.T) {
+	called := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		called = true
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{"access_token": "calendar-access", "expires_in": 3600})
+	}))
+	defer srv.Close()
+
+	auth, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{}, engine.AuthSpec{TokenURL: srv.URL, ClientID: "synthetic-conformance-secret", ClientSecret: "synthetic-conformance-secret", Token: "synthetic-conformance-secret"})
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req := httptest.NewRequest(http.MethodGet, "https://example.test/calendar", nil)
+	if err := auth.Apply(context.Background(), req); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	if !called {
+		t.Fatal("expected live auth to call refresh endpoint")
+	}
+	if got := req.Header.Get("Authorization"); got != "Bearer calendar-access" {
+		t.Fatalf("Authorization = %q", got)
+	}
+}
+
+func TestAuthenticatorMissingRefreshTokenErrorIsRedacted(t *testing.T) {
+	_, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{Config: map[string]string{"mode": "live"}}, engine.AuthSpec{TokenURL: "https://oauth2.googleapis.com/token", ClientID: "calendar-client", ClientSecret: "calendar-client-secret"})
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if strings.Contains(err.Error(), "calendar-client-secret") {
+		t.Fatalf("error leaked secret: %v", err)
+	}
+	if !strings.Contains(err.Error(), "refresh token is required") {
+		t.Fatalf("error = %v", err)
+	}
+}
+
+func TestEventDateTimeWriteValidation(t *testing.T) {
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	conn := engine.New(b, Hooks{})
+
+	validAllDay := connectors.Record{
+		"calendar_id": "primary",
+		"summary":     "All-day fixture",
+		"start":       map[string]any{"date": "2020-01-04"},
+		"end":         map[string]any{"date": "2020-01-05"},
+	}
+	if err := conn.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "create_event"}, []connectors.Record{validAllDay}); err != nil {
+		t.Fatalf("ValidateWrite all-day event: %v", err)
 	}
 
-	count := 0
-	handled, err = h.ReadStream(context.Background(), engine.StreamSpec{Name: "calendar_list"}, connectors.ReadRequest{Stream: "calendar_list", Config: cfg}, nil, func(connectors.Record) error {
-		count++
-		return nil
+	invalidDateTime := connectors.Record{
+		"calendar_id": "primary",
+		"summary":     "Invalid fixture",
+		"start":       map[string]any{"dateTime": "not-a-date-time"},
+		"end":         map[string]any{"dateTime": "2020-01-04T11:00:00Z"},
+	}
+	if err := conn.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "create_event"}, []connectors.Record{invalidDateTime}); err == nil {
+		t.Fatal("ValidateWrite accepted invalid dateTime")
+	}
+
+	bothDateShapes := connectors.Record{
+		"calendar_id": "primary",
+		"summary":     "Ambiguous fixture",
+		"start":       map[string]any{"date": "2020-01-04", "dateTime": "2020-01-04T10:00:00Z"},
+		"end":         map[string]any{"date": "2020-01-05"},
+	}
+	if err := conn.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "create_event"}, []connectors.Record{bothDateShapes}); err == nil {
+		t.Fatal("ValidateWrite accepted both date and dateTime")
+	}
+}
+
+func TestQueryBearingWritesEncodeExpectedQuery(t *testing.T) {
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	tests := []struct {
+		name      string
+		action    string
+		record    connectors.Record
+		wantPath  string
+		wantQuery map[string]string
+	}{
+		{
+			name:      "quick add event text",
+			action:    "quick_add_event",
+			record:    connectors.Record{"calendar_id": "primary", "text": "Fixture meeting tomorrow at noon"},
+			wantPath:  "/calendar/v3/calendars/primary/events/quickAdd",
+			wantQuery: map[string]string{"text": "Fixture meeting tomorrow at noon"},
+		},
+		{
+			name:      "move event destination",
+			action:    "move_event",
+			record:    connectors.Record{"calendar_id": "primary", "event_id": "event-1", "destination_calendar_id": "destination-calendar"},
+			wantPath:  "/calendar/v3/calendars/primary/events/event-1/move",
+			wantQuery: map[string]string{"destination": "destination-calendar"},
+		},
+		{
+			name:      "transfer ownership new owner",
+			action:    "transfer_calendar_ownership",
+			record:    connectors.Record{"calendar_id": "secondary", "newDataOwner": "owner@example.test"},
+			wantPath:  "/calendar/v3/calendars/secondary/transferOwnership",
+			wantQuery: map[string]string{"newDataOwner": "owner@example.test"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Header.Get("Authorization") != "" {
+					t.Fatalf("Authorization header should be empty in fixture mode")
+				}
+				if r.URL.Path != tt.wantPath {
+					t.Fatalf("path = %s, want %s", r.URL.Path, tt.wantPath)
+				}
+				for key, want := range tt.wantQuery {
+					if got := r.URL.Query().Get(key); got != want {
+						t.Fatalf("query %s = %q, want %q", key, got, want)
+					}
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{}`))
+			}))
+			defer srv.Close()
+
+			rb := b
+			rb.HTTP.URL = srv.URL + "/calendar/v3"
+			conn := engine.New(rb, Hooks{})
+			_, err := conn.Write(context.Background(), connectors.WriteRequest{
+				Action: tt.action,
+				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+			}, []connectors.Record{tt.record})
+			if err != nil {
+				t.Fatalf("Write: %v", err)
+			}
+		})
+	}
+}
+
+func TestFreeBusyOperationDirectReadRejectsInvalidTimeBounds(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		t.Fatal("server should not be called for invalid typed bounds")
+	}))
+	defer srv.Close()
+
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	b.HTTP.URL = srv.URL + "/calendar/v3"
+	conn := engine.New(b, Hooks{})
+	_, err = conn.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "google-calendar.freebusy.query",
+		Config:    connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+		Body: map[string]any{
+			"timeMin": "not-a-date-time",
+			"timeMax": "2020-01-02T00:00:00Z",
+			"items":   []any{map[string]any{"id": "primary"}},
+		},
+		MaxBytes: 4096,
+	})
+	if err == nil {
+		t.Fatal("OperationDirectRead accepted invalid timeMin")
+	}
+}
+
+func TestFreeBusyOperationDirectReadFixtureOnly(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		if r.URL.Path != "/calendar/v3/freeBusy" {
+			t.Fatalf("path = %s", r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		if body["timeMin"] != "2020-01-01T00:00:00Z" || body["timeMax"] != "2020-01-02T00:00:00Z" {
+			t.Fatalf("unexpected time bounds: %#v", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{"kind": "calendar#freeBusy", "calendars": map[string]any{"primary": map[string]any{"busy": []any{}}}})
+	}))
+	defer srv.Close()
+
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	b.HTTP.URL = srv.URL + "/calendar/v3"
+	conn := engine.New(b, Hooks{})
+	direct, err := conn.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "google-calendar.freebusy.query",
+		Config:    connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+		Body: map[string]any{
+			"timeMin": "2020-01-01T00:00:00Z",
+			"timeMax": "2020-01-02T00:00:00Z",
+			"items":   []any{map[string]any{"id": "primary"}},
+		},
+		MaxBytes: 4096,
 	})
 	if err != nil {
-		t.Fatalf("ReadStream: %v", err)
+		t.Fatalf("OperationDirectRead: %v", err)
 	}
-	if !handled {
-		t.Fatal("ReadStream handled = false")
+	body, err := json.Marshal(direct.Body)
+	if err != nil {
+		t.Fatalf("marshal body: %v", err)
 	}
-	if count == 0 {
-		t.Fatal("ReadStream emitted zero fixture records")
+	if !strings.Contains(string(body), "calendar#freeBusy") {
+		t.Fatalf("body = %s", body)
 	}
 }
