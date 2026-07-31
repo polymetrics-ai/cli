@@ -87,9 +87,10 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   field; accepted fields `description`, `email`, `id`, `name`, `phone`; additional record fields are
   rejected; risk: external mutation; approval required.
 - `delete_customer`: DELETE `/customers/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id` (matching `cus_...`); idempotent missing-status handling
-  for `404`; typed confirmation `destructive`; risk: destructive external mutation; deletes a Stripe
-  customer; reverse ETL approval and typed destructive confirmation required.
+  fields `id`; required record fields `id` (matching `cus_...`); `id` is redacted from
+  operator-visible previews and write errors; idempotent missing-status handling for `404`; typed
+  confirmation `destructive`; risk: destructive external mutation; deletes a Stripe customer;
+  reverse ETL approval and typed destructive confirmation required.
 
 ## Known limits
 

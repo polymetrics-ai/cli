@@ -119,7 +119,7 @@
     },
     {
       "path": "customers delete",
-      "summary": "Plan deletion of a Stripe customer with typed destructive confirmation.",
+      "summary": "Plan deletion of a Stripe customer with typed destructive confirmation and customer ID redaction.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_customer",
@@ -130,7 +130,7 @@
       ],
       "redact_fields": ["id"],
       "api_surface": [{ "method": "DELETE", "path": "/v1/customers/{customer}" }],
-      "risk": "Destructive Stripe customer deletion; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+      "risk": "Destructive Stripe customer deletion; redacts the customer ID from previews and write errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
       "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
       "examples": ["pm stripe customers delete --credential stripe-prod --id cus_fixture_delete_1 --preview --json"]
     },

@@ -275,8 +275,8 @@ pm connectors inspect stripe  # auth modes, streams, sync modes, write actions
 pm connectors inspect stripe --json
 ```
 
-**118 native connectors** are implemented today (a `646`-connector catalog is the
-roadmap). A few notes:
+The generated connector catalog is the source of truth for current connector counts and
+capabilities. A few examples:
 
 - **GitHub** (`github`) — full certification passed for the current connector surface:
   509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and

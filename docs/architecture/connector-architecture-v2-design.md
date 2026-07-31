@@ -619,29 +619,33 @@ write actions.
   "api": "GitHub REST API v3",
   "docs": "https://docs.github.com/en/rest",
   "reviewed_at": "2026-07-01",
+  "operation_ledger_version": 1,
   "scope": "repository-scoped endpoints; org- and enterprise-admin endpoints out of scope",
   "endpoints": [
     { "method": "GET",    "path": "/repos/{owner}/{repo}/issues",           "covered_by": { "stream": "issues" } },
     { "method": "POST",   "path": "/repos/{owner}/{repo}/issues",           "covered_by": { "write": "create_issue" } },
     { "method": "PATCH",  "path": "/repos/{owner}/{repo}/issues/{number}",  "covered_by": { "write": "update_issue" } },
     { "method": "GET",    "path": "/repos/{owner}/{repo}/traffic/views",
-      "excluded": { "category": "requires_elevated_scope", "reason": "push-access-only traffic API; niche analytics" } },
+      "operation": { "model": "direct_read", "status": "blocked", "risk": "medium", "blocked_by_default": true,
+        "reason": "requires a bounded direct-read command, schema-gated query flags, and redaction policy" } },
     { "method": "DELETE", "path": "/repos/{owner}/{repo}",
-      "excluded": { "category": "destructive_admin", "reason": "repository deletion is never a reverse-ETL action" } }
+      "operation": { "model": "destructive_action", "status": "blocked", "risk": "critical", "blocked_by_default": true,
+        "reason": "repository deletion is not exposed without an explicit destructive reverse-ETL action and evidence" } }
   ]
 }
 ```
 
 Rules (enforced by `connectorgen validate` + conformance):
 
-1. Every endpoint entry has exactly one of `covered_by` or `excluded`.
-2. `covered_by.stream`/`covered_by.write` must resolve to a declared stream/action — and vice
-   versa: every stream and write action must appear in the surface.
-3. `excluded.category` from the closed vocabulary: `destructive_admin`,
-   `requires_elevated_scope`, `binary_payload`, `deprecated`, `non_data_endpoint`,
-   `duplicate_of`, `out_of_scope` (with `scope` prose justifying it).
+1. Every endpoint entry has exactly one classifier: executable `covered_by`, blocked
+   `operation` (when `operation_ledger_version: 1` is set), or legacy `excluded`.
+2. `covered_by.stream`/`covered_by.write`/`covered_by.direct_read` must resolve to a declared
+   stream, write action, or implemented direct-read command — and vice versa: every declared
+   stream and write action must appear in the surface.
+3. `operation` rows use closed `model`, `status`, and `risk` vocabularies; legacy
+   `excluded.category` rows use the closed vocabulary in `docs/migration/conventions.md`.
 4. **Fail-first-run**: `capabilities.write == false` is only legal when the surface contains zero
-   non-excluded POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
+   executable POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
 5. Freshness: `reviewed_at` older than 12 months → warning (not failure).
 
 ### E.2 Conformance v2 (`internal/connectors/conformance/`)

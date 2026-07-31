@@ -687,8 +687,9 @@ engine enforces on the declarative read path (a short/empty final page from the 
 cycle-1 item 6, REVIEW-A.md C3 — RESOLVED: previously `default` was accepted-but-only-preserved,
 never read back out anywhere, so EVERY migrated connector hard-errored on a config shape legacy
 accepted, e.g. an unset `base_url` when legacy derived `https://api.github.com`/
-`https://api.monday.com/v2`/etc. in code). `engine.Check`/`engine.Read` both call
-`materializeConfigDefaults` before any template resolution: for every `spec.json` property that
+`https://api.monday.com/v2`/etc. in code). Every engine request path that resolves bundle
+configuration (`engine.Check`, `engine.Read`, direct-read operations, `DryRunWrite`, and `Write`)
+calls `materializeConfigDefaults` before template resolution: for every `spec.json` property that
 declares a `"default"` AND is genuinely ABSENT from the caller's `RuntimeConfig.Config` (a key
 already present — even as an explicit empty string — is NEVER overridden), the default's JSON value
 is stringified and filled in. This is the single, uniform mechanism for every legacy base-URL
@@ -702,7 +703,7 @@ one for base-URL construction — do not invent ad hoc Go for it (Tier-2 escalat
 needed). **Validate rule**: `connectorgen validate`'s `default_type_mismatch` rule hard-fails a
 `spec.json` property whose `"default"` value's JSON type does not match its own declared `"type"`
 (e.g. `"type":"integer","default":"not-a-number"`) — a mismatched default would otherwise silently
-materialize a wrong-shaped config value into every read/check.
+materialize a wrong-shaped config value into every defaulted engine request.
 
 **`metadata.json`'s `rate_limit` is informational-only, NEVER enforced** (F6, REVIEW.md):
 `Metadata.RateLimit.RequestsPerMinute` documents a connector's published rate limit for operator
