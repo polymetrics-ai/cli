@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "customers",
+    "source_credential_defaults": {
+      "page_size": "1000",
+      "max_pages": "1"
+    },
+    "live_unavailable": [
+      {
+        "kind": "auth",
+        "contains": [
+          "quickbooks oauth",
+          "token endpoint",
+          "invalid_grant"
+        ]
+      },
+      {
+        "kind": "scope",
+        "contains": [
+          "lacks access for this realm",
+          "app lacks access"
+        ]
+      },
+      {
+        "kind": "rate_limit",
+        "contains": [
+          "rate limit",
+          "429"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

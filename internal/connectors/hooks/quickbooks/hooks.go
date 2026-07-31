@@ -19,27 +19,14 @@
 //     (docs/migration/quarantine.json's original ENGINE_GAP blocker).
 //
 // Secret values (client_secret, the refresh token, cached access tokens)
-// flow ONLY into the outgoing token-request form or the Authorization
-// header; they are never logged and never appear in an error string
+// flow ONLY into the outgoing token request or the Authorization headers;
+// they are never logged and never appear in an error string
 // (THREAT-MODEL.md Delta 2).
-//
-// Line-count self-report (conventions.md §1's ~300-line soft target): this
-// file runs to ~380 lines, over the soft target but under the 400-line hard
-// ceiling, with exactly 2 hook interfaces (AuthHook + StreamHook, at the
-// cap). The size is accounted for by two genuinely independent, both-
-// mandated shapes: (1) the full OAuth2 refresh-grant Authenticator
-// (identical in shape/size to gmail's ~130-line oauthRefreshAuth), and (2)
-// the 5-entity harvest/mapRecord table ported from legacy quickbooks.go
-// (qbEndpoints + 5 small mapRecord functions + realm_id/page_size/max_pages
-// validation helpers). Neither shape alone would need a hook; QuickBooks
-// needs both simultaneously (real OAuth2 auth AND in-query-string
-// pagination), which is why this bundle carries both interfaces in one
-// package rather than splitting further (no 3rd interface is used, so no
-// Tier-3 escalation is triggered).
 package quickbooks
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -146,8 +133,8 @@ func validateHTTPSURL(raw, field string) error {
 // 2.0 refresh-token grant: exchange the refresh token for a short-lived
 // access token at tokenURL, cache it until 60s before its declared expiry,
 // then set Authorization: Bearer <token> on each request. client_id and
-// client_secret are both always sent (QuickBooks' token endpoint requires
-// both, unlike gmail's optional client_secret).
+// client_secret are sent through HTTP Basic auth, matching Intuit's documented
+// refresh-token flow.
 type oauthRefreshAuth struct {
 	tokenURL     string
 	clientID     string
@@ -208,8 +195,6 @@ func (a *oauthRefreshAuth) accessToken(ctx context.Context) (string, error) {
 	form := url.Values{}
 	form.Set("grant_type", "refresh_token")
 	form.Set("refresh_token", a.refreshToken)
-	form.Set("client_id", a.clientID)
-	form.Set("client_secret", a.clientSecret)
 
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, a.tokenURL, strings.NewReader(form.Encode()))
 	if err != nil {
@@ -217,6 +202,7 @@ func (a *oauthRefreshAuth) accessToken(ctx context.Context) (string, error) {
 	}
 	httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	httpReq.Header.Set("Accept", "application/json")
+	httpReq.Header.Set("Authorization", "Basic "+base64.StdEncoding.EncodeToString([]byte(a.clientID+":"+a.clientSecret)))
 
 	resp, err := a.httpClient().Do(httpReq)
 	if err != nil {
@@ -250,8 +236,6 @@ func (a *oauthRefreshAuth) accessToken(ctx context.Context) (string, error) {
 
 // --- StreamHook -------------------------------------------------------------
 
-// qbEndpoint maps a stream name to its QuickBooks entity name and record
-// mapper (ported verbatim from legacy quickbooks.go's qbEndpoints table).
 type qbEndpoint struct {
 	entity    string
 	mapRecord func(map[string]any) connectors.Record
@@ -299,8 +283,9 @@ func (h *Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req co
 // value; the loop stops when a page returns fewer than pageSize records, or
 // maxPages (if set) is reached.
 func (h *Hooks) harvest(ctx context.Context, r *connsdk.Requester, realmID string, endpoint qbEndpoint, pageSize, maxPages int, emit func(connectors.Record) error) error {
+	safetyCapped := maxPages <= 0
 	limit := maxPages
-	if limit <= 0 {
+	if safetyCapped {
 		limit = safetyMaxPages
 	}
 	start := 1
@@ -312,7 +297,7 @@ func (h *Hooks) harvest(ctx context.Context, r *connsdk.Requester, realmID strin
 		query.Set("query", fmt.Sprintf("SELECT * FROM %s STARTPOSITION %d MAXRESULTS %d", endpoint.entity, start, pageSize))
 		resp, err := r.Do(ctx, http.MethodGet, "v3/company/"+realmID+"/query", query, nil)
 		if err != nil {
-			return fmt.Errorf("read quickbooks %s: %w", endpoint.entity, err)
+			return fmt.Errorf("read quickbooks %s: %w", endpoint.entity, redactRealmError(err, realmID))
 		}
 		records, err := connsdk.RecordsAt(resp.Body, "QueryResponse."+endpoint.entity)
 		if err != nil {
@@ -331,16 +316,32 @@ func (h *Hooks) harvest(ctx context.Context, r *connsdk.Requester, realmID strin
 		}
 		start += pageSize
 	}
+	if safetyCapped {
+		return fmt.Errorf("quickbooks safety page cap reached after %d pages; set config max_pages explicitly or narrow the stream", safetyMaxPages)
+	}
 	return nil
 }
 
-// realmIDFrom resolves and path-safety-validates config.realm_id (mirrors
-// legacy's cleanSegment guard: rejects any value containing "/", "?", "#",
-// or "..", since it is interpolated directly into the request path).
+func redactRealmError(err error, realmID string) error {
+	msg := strings.ReplaceAll(err.Error(), realmID, "[REDACTED_REALM_ID]")
+	return errors.New(msg)
+}
+
+// realmIDFrom resolves and path-safety-validates realm_id. The current spec
+// treats it as non-secret config, but legacy tests/callers may still provide it
+// as a secret; accept either while validating it before path embedding.
 func realmIDFrom(cfg connectors.RuntimeConfig) (string, error) {
 	realmID := strings.TrimSpace(cfg.Config["realm_id"])
-	if realmID == "" || strings.ContainsAny(realmID, "/?#") || strings.Contains(realmID, "..") {
-		return "", errors.New("quickbooks connector requires a path-safe config realm_id")
+	if realmID == "" {
+		realmID = strings.TrimSpace(cfg.Secrets["realm_id"])
+	}
+	if realmID == "" {
+		return "", errors.New("quickbooks connector requires realm_id")
+	}
+	for _, ch := range realmID {
+		if ch < '0' || ch > '9' {
+			return "", errors.New("quickbooks connector requires a numeric realm_id")
+		}
 	}
 	return realmID, nil
 }

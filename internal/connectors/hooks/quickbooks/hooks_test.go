@@ -110,24 +110,33 @@ func TestHooksRegisteredUnderQuickbooks(t *testing.T) {
 	}
 }
 
-// --- AuthHook: refresh-grant form shape -------------------------------------
+// --- AuthHook: refresh-grant request shape ----------------------------------
 
-func TestAuthenticator_RefreshGrantFormShape(t *testing.T) {
+func TestAuthenticator_RefreshGrantUsesBasicAuth(t *testing.T) {
 	var gotForm url.Values
-	srv, client, hits := tokenServer(t, func(form url.Values) (int, map[string]any) {
-		gotForm = form
-		return http.StatusOK, map[string]any{"access_token": "tok_abc", "token_type": "Bearer", "expires_in": 3600}
-	})
+	var gotUser, gotPass string
+	var hits int32
+	srv := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&hits, 1)
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("token server: parse form: %v", err)
+		}
+		gotForm = r.PostForm
+		gotUser, gotPass, _ = r.BasicAuth()
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{"access_token": "tok_abc", "token_type": "Bearer", "expires_in": 3600})
+	}))
+	t.Cleanup(srv.Close)
 
-	h := newClientHooks(client)
+	h := newClientHooks(srv.Client())
 	auth, err := h.Authenticator(context.Background(), baseCfg(srv.URL), baseSpec())
 	if err != nil {
 		t.Fatalf("Authenticator: %v", err)
 	}
 	req := doAuthenticatedRequest(t, auth)
 
-	if *hits != 1 {
-		t.Fatalf("token endpoint hits = %d, want 1", *hits)
+	if hits != 1 {
+		t.Fatalf("token endpoint hits = %d, want 1", hits)
 	}
 	if got := gotForm.Get("grant_type"); got != "refresh_token" {
 		t.Fatalf("grant_type = %q, want %q", got, "refresh_token")
@@ -135,11 +144,14 @@ func TestAuthenticator_RefreshGrantFormShape(t *testing.T) {
 	if got := gotForm.Get("refresh_token"); got != "refresh-token-fixture" {
 		t.Fatalf("refresh_token = %q, want %q", got, "refresh-token-fixture")
 	}
-	if got := gotForm.Get("client_id"); got != "client-id-fixture" {
-		t.Fatalf("client_id = %q, want %q", got, "client-id-fixture")
+	if got := gotForm.Get("client_id"); got != "" {
+		t.Fatalf("client_id form field = %q, want empty; client credentials must use Basic auth", got)
 	}
-	if got := gotForm.Get("client_secret"); got != "client-secret-fixture" {
-		t.Fatalf("client_secret = %q, want %q", got, "client-secret-fixture")
+	if got := gotForm.Get("client_secret"); got != "" {
+		t.Fatalf("client_secret form field = %q, want empty; client credentials must use Basic auth", got)
+	}
+	if gotUser != "client-id-fixture" || gotPass != "client-secret-fixture" {
+		t.Fatalf("Basic auth = (%q, %q), want fixture client id/secret", gotUser, gotPass)
 	}
 	if got := req.Header.Get("Authorization"); got != "Bearer tok_abc" {
 		t.Fatalf("Authorization header = %q, want %q", got, "Bearer tok_abc")
@@ -240,7 +252,7 @@ func TestAuthenticator_NonSuccessTokenResponseIsError(t *testing.T) {
 }
 
 func TestAuthenticator_MissingRefreshTokenIsError(t *testing.T) {
-	cfg := baseCfg("https://oauth2.bearer.token.intuit.com/oauth2/v1/tokens/bearer")
+	cfg := baseCfg("https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer")
 	delete(cfg.Secrets, "refresh_token")
 
 	h := New().(*Hooks)
@@ -254,7 +266,7 @@ func TestAuthenticator_MissingRefreshTokenIsError(t *testing.T) {
 }
 
 func TestAuthenticator_MissingClientSecretIsError(t *testing.T) {
-	cfg := baseCfg("https://oauth2.bearer.token.intuit.com/oauth2/v1/tokens/bearer")
+	cfg := baseCfg("https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer")
 	delete(cfg.Secrets, "client_secret")
 
 	h := New().(*Hooks)
@@ -334,7 +346,7 @@ func TestReadStream_CustomersAuthenticatesPaginatesAndMapsRecords(t *testing.T) 
 	h := Hooks{}
 	req := connectors.ReadRequest{
 		Stream: "customers",
-		Config: connectors.RuntimeConfig{Config: map[string]string{"realm_id": "123", "page_size": "2"}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"page_size": "2"}, Secrets: map[string]string{"realm_id": "123"}},
 	}
 	var got []connectors.Record
 	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "customers"}, req, newRuntime(srv.URL), func(rec connectors.Record) error {
@@ -400,10 +412,32 @@ func TestReadStream_MissingRealmIDIsError(t *testing.T) {
 
 func TestReadStream_PathUnsafeRealmIDIsError(t *testing.T) {
 	h := Hooks{}
-	req := connectors.ReadRequest{Stream: "customers", Config: connectors.RuntimeConfig{Config: map[string]string{"realm_id": "../etc/passwd"}}}
-	_, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "customers"}, req, newRuntime("http://example.invalid"), func(connectors.Record) error { return nil })
+	for _, realmID := range []string{"../etc/passwd", "123%2f456", "123 456"} {
+		req := connectors.ReadRequest{Stream: "customers", Config: connectors.RuntimeConfig{Config: map[string]string{"realm_id": realmID}}}
+		_, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "customers"}, req, newRuntime("http://example.invalid"), func(connectors.Record) error { return nil })
+		if err == nil {
+			t.Fatalf("ReadStream error = nil for realm_id %q, want an error", realmID)
+		}
+	}
+}
+
+func TestReadStream_ErrorRedactsRealmID(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "bad realm 123456", http.StatusBadRequest)
+	}))
+	defer srv.Close()
+
+	h := Hooks{}
+	req := connectors.ReadRequest{Stream: "customers", Config: connectors.RuntimeConfig{Secrets: map[string]string{"realm_id": "123456"}}}
+	_, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "customers"}, req, newRuntime(srv.URL), func(connectors.Record) error { return nil })
 	if err == nil {
-		t.Fatal("ReadStream error = nil, want an error for a path-unsafe realm_id")
+		t.Fatal("ReadStream error = nil, want provider error")
+	}
+	if strings.Contains(err.Error(), "123456") {
+		t.Fatalf("error leaked realm_id: %s", err)
+	}
+	if !strings.Contains(err.Error(), "[REDACTED_REALM_ID]") {
+		t.Fatalf("error did not include redaction marker: %s", err)
 	}
 }
 
