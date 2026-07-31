@@ -13091,7 +13091,7 @@
   {
     "name": "bitbucket",
     "display_name": "Bitbucket",
-    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for documented mutations with destructive confirmation on deletes.",
+    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for JSON/path mutations and blocks multipart file-transfer writes until bounded upload support exists.",
     "integration_type": "api",
     "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
     "release_stage": "alpha",
@@ -15249,13 +15249,6 @@
         "risk": "POST /repositories/{workspace}/{repo_slug}/issues/export Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
       },
       {
-        "name": "create_repositories_workspace_repo_slug_issues_import",
-        "kind": "create",
-        "method": "POST",
-        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/import",
-        "risk": "POST /repositories/{workspace}/{repo_slug}/issues/import Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id",
         "kind": "delete",
         "method": "DELETE",
@@ -15269,13 +15262,6 @@
         "method": "PUT",
         "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}",
         "risk": "PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_issues_issue_id_attachments",
-        "kind": "create",
-        "method": "POST",
-        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/attachments",
-        "risk": "POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
       },
       {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
@@ -15704,13 +15690,6 @@
         "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/tags/{{ record.name }}",
         "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
         "confirm": "destructive"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_src",
-        "kind": "create",
-        "method": "POST",
-        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/src",
-        "risk": "POST /repositories/{workspace}/{repo_slug}/src Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
       },
       {
         "name": "create_snippets",

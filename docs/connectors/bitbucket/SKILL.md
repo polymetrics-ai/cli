@@ -7,7 +7,7 @@ description: Bitbucket connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for documented mutations with destructive confirmation on deletes.
+Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for JSON/path mutations and blocks multipart file-transfer writes until bounded upload support exists.
 
 ## Icon
 
@@ -697,10 +697,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - endpoint: POST /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/export
   - required fields: workspace, repo_slug
   - risk: POST /repositories/{workspace}/{repo_slug}/issues/export Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
-- create_repositories_workspace_repo_slug_issues_import:
-  - endpoint: POST /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/import
-  - required fields: workspace, repo_slug
-  - risk: POST /repositories/{workspace}/{repo_slug}/issues/import Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
 - delete_repositories_workspace_repo_slug_issues_issue_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}
   - required fields: workspace, repo_slug, issue_id
@@ -709,10 +705,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - endpoint: PUT /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}
   - required fields: workspace, repo_slug, issue_id
   - risk: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
-- create_repositories_workspace_repo_slug_issues_issue_id_attachments:
-  - endpoint: POST /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/attachments
-  - required fields: workspace, repo_slug, issue_id
-  - risk: POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
 - delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/attachments/{{ record.path }}
   - required fields: workspace, repo_slug, issue_id, path
@@ -945,10 +937,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/tags/{{ record.name }}
   - required fields: workspace, repo_slug, name
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
-- create_repositories_workspace_repo_slug_src:
-  - endpoint: POST /repositories/{{ record.workspace }}/{{ record.repo_slug }}/src
-  - required fields: workspace, repo_slug
-  - risk: POST /repositories/{workspace}/{repo_slug}/src Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
 - create_snippets:
   - endpoint: POST /snippets
   - risk: POST /snippets Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.

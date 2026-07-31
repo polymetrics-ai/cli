@@ -9583,7 +9583,7 @@
   {
     "slug": "bitbucket",
     "name": "Bitbucket",
-    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for documented mutations with destructive confirmation on deletes.",
+    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for JSON/path mutations and blocks multipart file-transfer writes until bounded upload support exists.",
     "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
     "integration_type": "api",
     "release_stage": "alpha",
@@ -10974,11 +10974,6 @@
         "kind": "create"
       },
       {
-        "name": "create_repositories_workspace_repo_slug_issues_import",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id",
         "method": "DELETE",
         "kind": "delete"
@@ -10987,11 +10982,6 @@
         "name": "update_repositories_workspace_repo_slug_issues_issue_id",
         "method": "PUT",
         "kind": "update"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_issues_issue_id_attachments",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
@@ -11282,11 +11272,6 @@
         "name": "delete_repositories_workspace_repo_slug_refs_tags_name",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "create_repositories_workspace_repo_slug_src",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "create_snippets",

@@ -25,7 +25,7 @@ DESCRIPTION
 
 CATALOG
   The connector catalog is generated from local connector metadata. The current
-  runtime catalog has 553 bare-name entries: 549 declarative bundles plus the
+  runtime catalog has 554 bare-name entries: 550 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.
