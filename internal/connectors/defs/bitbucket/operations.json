@@ -478,6 +478,34 @@
       "summary": "Search for code in a team's repositories"
     },
     {
+      "approval": "blocked pending provider-backed email-address response schema and fixtures; no generic REST read is exposed",
+      "description": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; this connector-local row records the endpoint without exposing a generic user/error stream.",
+      "id": "get_user_emails",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List email addresses for the authenticated user",
+      "rest": {
+        "method": "GET",
+        "path": "/user/emails"
+      }
+    },
+    {
+      "approval": "blocked pending provider-backed email-address response schema and fixtures; no generic REST read is exposed",
+      "description": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; this connector-local row records the endpoint without exposing a generic user/error stream.",
+      "id": "get_user_emails_email",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get one authenticated-user email address",
+      "rest": {
+        "method": "GET",
+        "path": "/user/emails/{email}"
+      }
+    },
+    {
       "approval": "blocked pending #2985 typed provider-query foundation",
       "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
       "id": "get_users_selected_user_search_code",

@@ -2321,18 +2321,28 @@
       "path": "/user"
     },
     {
-      "covered_by": {
-        "stream": "user_emails"
-      },
       "method": "GET",
-      "path": "/user/emails"
+      "path": "/user/emails",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "direct_read",
+        "reason": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; the endpoints stay blocked until a connector-owned email-address schema and fixtures exist.",
+        "risk": "medium",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "stream": "user_emails_email"
-      },
       "method": "GET",
-      "path": "/user/emails/{email}"
+      "path": "/user/emails/{email}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "direct_read",
+        "reason": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; the endpoints stay blocked until a connector-owned email-address schema and fixtures exist.",
+        "risk": "medium",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {

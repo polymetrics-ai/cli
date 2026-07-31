@@ -1565,28 +1565,6 @@
     },
     {
       "method": "GET",
-      "name": "user_emails",
-      "path": "/user/emails",
-      "projection": "passthrough",
-      "records": {
-        "path": ".",
-        "single_object": true
-      },
-      "schema": "schemas/user_emails.json"
-    },
-    {
-      "method": "GET",
-      "name": "user_emails_email",
-      "path": "/user/emails/{{ config.email }}",
-      "projection": "passthrough",
-      "records": {
-        "path": ".",
-        "single_object": true
-      },
-      "schema": "schemas/user_emails_email.json"
-    },
-    {
-      "method": "GET",
       "name": "user_permissions_repositories",
       "pagination": {
         "max_pages": 100,

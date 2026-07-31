@@ -23,6 +23,6 @@
   "risk": {
     "approval": "Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions.",
     "read": "Read-only Bitbucket Cloud REST calls against configured workspaces, repositories, or typed resource identifiers.",
-    "write": "Closed-schema Bitbucket writes only: repository creation and path-only DELETE actions; untyped JSON-body and multipart mutations stay blocked until typed schemas and bounded transfer foundations exist."
+    "write": "Closed-schema Bitbucket writes only: repository creation and path-only DELETE actions; untyped JSON-body and multipart mutations stay blocked until typed schemas and bounded transfer foundations exist. Redaction claims apply to newly created plans that persist redact_fields metadata; stale-plan hydration is a shared runtime dependency outside this connector bundle."
   }
 }

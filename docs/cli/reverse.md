@@ -27,8 +27,8 @@ DESCRIPTION
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
   tokens so an agent cannot silently approve its own external mutation.
-  Sample rows also redact fields declared by the destination write action's
-  redact_fields metadata.
+  Newly created plans persist the destination write action's redact_fields
+  metadata and mask those fields in plan samples.
 
 COMMANDS
   list
@@ -41,8 +41,8 @@ COMMANDS
 
   preview
     Show a stored plan, mapped sample rows, destination connector, action, and
-    record count before execution. Sample rows keep connector-declared
-    redact_fields masked.
+    record count before execution. Plans created with persisted redact_fields
+    metadata keep connector-declared fields masked in sample rows.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
@@ -107,7 +107,7 @@ SECURITY
   Execution requires an approval token created by a prior plan. JSON plan output
   omits the token so agents cannot silently self-approve external writes.
   Reverse ETL never exposes raw secret values and masks connector-declared
-  sensitive record fields in plan samples and preview output.
+  sensitive record fields for plans created with persisted redact_fields metadata.
 
 LEARN MORE
   Run pm reverse --help for this manual.

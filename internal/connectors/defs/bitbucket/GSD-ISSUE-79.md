@@ -62,7 +62,7 @@ Evidence: `gh-axi issue edit` updated #79 and #90-#96 with marker `captain-polic
    - Add sanitized check, read, and write fixtures sufficient for conformance.
    - Document auth setup, streams, write risks, known limits, dependency blockers, and evidence.
 
-Implemented connector-local inventory summary: `api_surface.json` has 331 official rows (GET 179, POST 50, PUT 48, DELETE 54); 145 rows are declarative streams, 55 rows are closed-schema reverse-ETL writes, and 131 rows are blocked connector-local operation metadata for untyped JSON-body, binary/direct-read/provider-query/upload foundations. All 54 DELETE writes carry `confirm: "destructive"`.
+Implemented connector-local inventory summary: `api_surface.json` has 331 official rows (GET 179, POST 50, PUT 48, DELETE 54); 143 rows are declarative streams, 54 rows are closed-schema reverse-ETL writes, and 134 rows are blocked connector-local operation metadata for untyped JSON-body, schema-ambiguous user-email reads, binary/direct-read/provider-query/upload foundations. All executable DELETE writes carry `confirm: "destructive"`.
 
 5. **Verification and commit**
    - Red: focused validation fails before bundle files exist.
@@ -86,12 +86,12 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
 | Conformance | `go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1` | passed |
 | CLI/golden targeted | `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` and `go test ./internal/cli -run 'TestConnectorCatalogCLIJSON|TestGoldenTranscripts|TestGoldenDocsGenerateMatchesTrackedCLIManuals|TestDocsGenerateIncludesConnectorCatalog' -count=1` | passed after generated golden/catalog docs updates |
 | Focused connector packages | `go test ./internal/connectors/engine ./internal/connectors/conformance -count=1` | passed |
-| Runtime help/inspect spot checks | `pm connectors inspect bitbucket --json`, `pm bitbucket --help`, `pm bitbucket repositories delete --help` via `go run ./cmd/pm` | passed; generated metadata now reports 145 streams and 55 write actions, delete help shows destructive confirmation path |
+| Runtime help/inspect spot checks | `pm connectors inspect bitbucket --json`, `pm bitbucket --help`, `pm bitbucket repositories delete --help` via `go run ./cmd/pm` | passed before review follow-up; generated metadata now reports 143 streams and 54 write actions after blocking schema-ambiguous user-email reads, delete help shows destructive confirmation path |
 | Broad package attempts | `go test ./internal/connectors/...` timed out at 300s; `go test ./internal/cli -count=1` timed out at 240s with no failure output before timeout | incomplete broad gates; focused connector/CLI gates above passed |
 | Vet | `go vet ./internal/connectors/... ./internal/cli/...` | passed |
 | Build | `go build ./cmd/pm` | passed |
 | Boundary | `make connector-boundary` | passed with clean outcome |
-| Review finding regression | JSON inspection of Bitbucket metadata | red state confirmed issue import, issue attachment, repository `/src` multipart uploads, and untyped JSON-body mutations were exposed as writes and `downloads get` referenced non-binary/json metadata; fixed state has 55 closed-schema writes, 131 blocked rows, 4 `file_upload` operations, 93 blocked `rest_write` operations, no removed upload writes, and `downloads get` references `get_repositories_workspace_repo_slug_downloads_filename` with `binary_file_bounded` |
+| Review finding regression | JSON inspection of Bitbucket metadata | red state confirmed issue import, issue attachment, repository `/src` multipart uploads, untyped JSON-body mutations, and schema-ambiguous user-email reads were exposed; fixed state has 54 closed-schema writes, 134 blocked rows, 4 `file_upload` operations, 94 blocked `rest_write` operations, blocked user-email `rest_read` evidence, no removed upload writes, and `downloads get` references `get_repositories_workspace_repo_slug_downloads_filename` with `binary_file_bounded` |
 | Focused review validation | copied Bitbucket definition into a single-connector temp root and ran `go run ./cmd/connectorgen validate <temp-root> --json` | passed with `connectors_checked: 1`, no findings, no warnings |
 | Conformance retry | `go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1` | timed out after 120s with no failure output; broader Go test processes were already active in the worktree |
 | Diff hygiene | `git diff --check` | passed |

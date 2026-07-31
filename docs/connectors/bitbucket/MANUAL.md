@@ -378,10 +378,6 @@ ETL STREAMS
   user:
     primary key: uuid
     fields: created_on(), display_name(), links(), name(), slug(), type(), updated_on(), uuid()
-  user_emails:
-    fields: created_on(), error(), links(), name(), slug(), type(), updated_on(), uuid()
-  user_emails_email:
-    fields: created_on(), error(), links(), name(), slug(), type(), updated_on(), uuid()
   user_permissions_repositories:
     fields: created_on(), links(), name(), permission(), repository(), slug(), type(), updated_on(), user(), uuid()
   user_permissions_workspaces:
@@ -706,7 +702,7 @@ REVERSE ETL ACTIONS
 
 SECURITY
   read risk: Read-only Bitbucket Cloud REST calls against configured workspaces, repositories, or typed resource identifiers.
-  write risk: Closed-schema Bitbucket writes only: repository creation and path-only DELETE actions; untyped JSON-body and multipart mutations stay blocked until typed schemas and bounded transfer foundations exist.
+  write risk: Closed-schema Bitbucket writes only: repository creation and path-only DELETE actions; untyped JSON-body and multipart mutations stay blocked until typed schemas and bounded transfer foundations exist. Redaction claims apply to newly created plans that persist redact_fields metadata; stale-plan hydration is a shared runtime dependency outside this connector bundle.
   approval: Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions.
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
