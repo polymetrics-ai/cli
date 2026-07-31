@@ -1,0 +1,19 @@
+{
+  "record": {
+    "account_type": "liability"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/general_ledger_accounts",
+    "body": {
+      "account_type": "liability"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

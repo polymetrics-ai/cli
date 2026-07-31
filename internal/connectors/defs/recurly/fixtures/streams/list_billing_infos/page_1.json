@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accounts/synthetic-conformance-value/billing_infos",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "list_billing_infos_fixture_1",
+          "object": "list_billing_infos",
+          "code": "list_billing_infos_code_1",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

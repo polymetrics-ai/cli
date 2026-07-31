@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/performance_obligations/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": "get_performance_obligation_fixture_1",
+      "object": "get_performance_obligation",
+      "code": "get_performance_obligation_code_1",
+      "state": "active",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z"
+    }
+  }
+}

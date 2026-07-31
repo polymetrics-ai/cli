@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/shipping_methods/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": "get_shipping_method_fixture_1",
+      "object": "get_shipping_method",
+      "code": "get_shipping_method_code_1",
+      "state": "active",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-02T00:00:00Z"
+    }
+  }
+}

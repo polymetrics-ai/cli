@@ -1,0 +1,302 @@
+{
+  "tagline": "Recurly V3 API connector for accounts, subscriptions, invoices, transactions, catalog, previews, exports, and typed reverse ETL.",
+  "usage": "pm recurly <direct-read-command> [flags] --json",
+  "source_cli": {
+    "name": "Recurly API",
+    "docs": "https://recurly.com/developers/api/v2021-02-25/",
+    "reference": "https://recurly.com/developers/api/spec/v2021-02-25.yaml",
+    "source": "official-openapi"
+  },
+  "groups": [
+    {
+      "id": "export",
+      "title": "Export",
+      "commands": [
+        "export dates get",
+        "export files get"
+      ]
+    },
+    {
+      "id": "gift",
+      "title": "Gift",
+      "commands": [
+        "gift cards preview"
+      ]
+    },
+    {
+      "id": "invoice",
+      "title": "Invoice",
+      "commands": [
+        "invoice pdf get"
+      ]
+    },
+    {
+      "id": "invoices",
+      "title": "Invoices",
+      "commands": [
+        "invoices preview"
+      ]
+    },
+    {
+      "id": "purchases",
+      "title": "Purchases",
+      "commands": [
+        "purchases preview"
+      ]
+    },
+    {
+      "id": "subscriptions",
+      "title": "Subscriptions",
+      "commands": [
+        "subscriptions preview renewal",
+        "subscriptions preview change"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "invoices preview",
+      "summary": "Preview new invoice for pending line items",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "preview_invoice",
+      "flags": [
+        {
+          "name": "account-id",
+          "type": "string",
+          "summary": "Path parameter `account_id`.",
+          "maps_to": "path.account_id"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "summary": "3-letter ISO 4217 currency code.",
+          "maps_to": "body.currency"
+        }
+      ],
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "billing_info",
+        "gateway_code",
+        "number",
+        "token"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{account_id}/invoices/preview"
+        }
+      ],
+      "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
+      "examples": [
+        "pm recurly invoices preview --json"
+      ]
+    },
+    {
+      "path": "invoice pdf get",
+      "summary": "Fetch an invoice as a PDF",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "get_invoice_pdf",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{invoice_id}.pdf"
+        }
+      ],
+      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice."
+    },
+    {
+      "path": "subscriptions preview renewal",
+      "summary": "Fetch a preview of a subscription's renewal invoice(s)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_preview_renewal",
+      "flags": [
+        {
+          "name": "subscription-id",
+          "type": "string",
+          "summary": "Path parameter `subscription_id`.",
+          "maps_to": "path.subscription_id"
+        }
+      ],
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "billing_info",
+        "gateway_code",
+        "number",
+        "token"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}/preview_renewal"
+        }
+      ],
+      "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
+      "examples": [
+        "pm recurly subscriptions preview renewal --json"
+      ]
+    },
+    {
+      "path": "subscriptions preview change",
+      "summary": "Preview a new subscription change",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "preview_subscription_change",
+      "flags": [
+        {
+          "name": "subscription-id",
+          "type": "string",
+          "summary": "Path parameter `subscription_id`.",
+          "maps_to": "path.subscription_id"
+        }
+      ],
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "billing_info",
+        "gateway_code",
+        "number",
+        "token"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/change/preview"
+        }
+      ],
+      "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
+      "examples": [
+        "pm recurly subscriptions preview change --json"
+      ]
+    },
+    {
+      "path": "purchases preview",
+      "summary": "Preview a new purchase",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "preview_purchase",
+      "flags": [
+        {
+          "name": "currency",
+          "type": "string",
+          "summary": "3-letter ISO 4217 currency code.",
+          "maps_to": "body.currency"
+        },
+        {
+          "name": "account-code",
+          "type": "string",
+          "summary": "The unique identifier of the account. This cannot be changed once the account is created.",
+          "maps_to": "body.account.code"
+        }
+      ],
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "billing_info",
+        "gateway_code",
+        "number",
+        "token"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/purchases/preview"
+        }
+      ],
+      "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
+      "examples": [
+        "pm recurly purchases preview --json"
+      ]
+    },
+    {
+      "path": "export dates get",
+      "summary": "List the dates that have an available export to download.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "get_export_dates",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export_dates"
+        }
+      ],
+      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice."
+    },
+    {
+      "path": "export files get",
+      "summary": "List of the export files that are available to download.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "get_export_files",
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export_dates/{export_date}/export_files"
+        }
+      ],
+      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice."
+    },
+    {
+      "path": "gift cards preview",
+      "summary": "Preview gift card",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "preview_gift_card",
+      "flags": [
+        {
+          "name": "product-code",
+          "type": "string",
+          "summary": "The product code or SKU of the gift card product.",
+          "maps_to": "body.product_code"
+        },
+        {
+          "name": "unit-amount",
+          "type": "integer",
+          "summary": "The whole-number gift card amount to preview; mapped to Recurly unit_amount.",
+          "maps_to": "body.unit_amount"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "summary": "3-letter ISO 4217 currency code.",
+          "maps_to": "body.currency"
+        }
+      ],
+      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "billing_info",
+        "gateway_code",
+        "number",
+        "token"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/gift_cards/preview"
+        }
+      ],
+      "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
+      "examples": [
+        "pm recurly gift cards preview --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "safety",
+      "summary": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation."
+    },
+    {
+      "name": "parity",
+      "summary": "Operation ledger partitions all 197 Recurly v2021-02-25 OpenAPI operations once."
+    }
+  ]
+}

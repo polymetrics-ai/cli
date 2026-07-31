@@ -1,0 +1,16 @@
+{
+  "record": {
+    "general_ledger_account_id": "fixture_general_ledger_account_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/general_ledger_accounts/fixture_general_ledger_account_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

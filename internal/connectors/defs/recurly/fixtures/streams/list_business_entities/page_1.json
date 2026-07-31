@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/business_entities",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "list_business_entities_fixture_1",
+          "object": "list_business_entities",
+          "code": "list_business_entities_code_1",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

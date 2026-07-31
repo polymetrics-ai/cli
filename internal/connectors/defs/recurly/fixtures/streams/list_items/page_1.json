@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/items",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "list_items_fixture_1",
+          "object": "list_items",
+          "code": "list_items_code_1",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

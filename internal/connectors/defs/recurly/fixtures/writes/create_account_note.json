@@ -1,0 +1,20 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "message": "fixture_message"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/notes",
+    "body": {
+      "message": "fixture_message"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

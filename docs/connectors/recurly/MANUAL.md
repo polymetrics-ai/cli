@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector recurly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.
+  Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, exports, preview resources, and related V3 API data; models typed reverse-ETL mutations for official POST/PUT/DELETE endpoints.
 
 ICON
   id: recurly
@@ -20,45 +20,749 @@ ICON
   review_url: https://developers.recurly.com/api/v2021-02-25/
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  account_id
+  account_note_id
+  add_on_id
   base_url
+  billing_info_id
+  business_entity_id
+  coupon_id
+  coupon_redemption_id
+  credit_payment_id
+  custom_field_definition_id
+  dunning_campaign_id
+  export_date
+  external_account_id
+  external_invoice_id
+  external_payment_phase_id
+  external_product_id
+  external_product_reference_id
+  external_subscription_id
+  general_ledger_account_id
+  gift_card_id
+  invoice_id
+  invoice_template_id
+  item_id
+  line_item_id
+  measured_unit_id
+  performance_obligation_id
+  plan_id
+  price_segment_id
+  redemption_code
+  shipping_address_id
+  shipping_method_id
+  site_id
+  subscription_id
+  transaction_id
+  unique_coupon_code_id
+  usage_id
   api_key (secret)
 
 ETL STREAMS
+  list_sites:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_site:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
   accounts:
     primary key: id
-    cursor: updated_at
-    fields: code(), created_at(), email(), id(), state(), updated_at()
-  subscriptions:
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_account:
     primary key: id
-    cursor: updated_at
-    fields: account_id(), created_at(), id(), plan_id(), state(), updated_at()
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_account_acquisition:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_account_balance:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_billing_info:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_billing_infos:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_a_billing_info:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_coupon_redemptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_active_coupon_redemptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_coupon_redemption:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_credit_payments:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_external_account:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_account_external_account:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_external_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_line_items:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_notes:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_account_note:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_shipping_addresses:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_shipping_address:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_subscriptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_transactions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_child_accounts:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_acquisition:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_coupons:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_coupon:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_unique_coupon_codes:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_credit_payments:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_credit_payment:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_custom_field_definitions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_custom_field_definition:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_general_ledger_accounts:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_general_ledger_account:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_performance_obligation:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_performance_obligations:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_invoice_template_accounts:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_items:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_item:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_measured_unit:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_measured_unit:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_external_products:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_external_product:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_external_product_external_product_references:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_external_product_external_product_reference:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_external_subscriptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_external_subscription:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_external_subscription_external_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
   invoices:
     primary key: id
-    cursor: created_at
-    fields: account_id(), created_at(), id(), state(), total()
-  transactions:
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_invoice:
     primary key: id
-    cursor: created_at
-    fields: account_id(), amount(), created_at(), id(), status()
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_invoice_line_items:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_invoice_coupon_redemptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_related_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_line_items:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_line_item:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
   plans:
     primary key: id
-    cursor: updated_at
-    fields: code(), id(), name(), state(), updated_at()
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_plan:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_plan_add_ons:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_plan_add_on:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_price_segments:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_price_segment:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_add_ons:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_add_on:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_shipping_methods:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_shipping_method:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  subscriptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_subscription:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_subscription_change:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_subscription_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_subscription_line_items:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_subscription_coupon_redemptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_subscription_coupon_redemption:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_usage:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_usage:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  transactions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_transaction:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_unique_coupon_code:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_dunning_campaigns:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_dunning_campaign:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_invoice_templates:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_invoice_template:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_external_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  show_external_invoice:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_external_subscription_external_payment_phases:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_external_subscription_external_payment_phase:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_entitlements:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_account_external_subscriptions:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_business_entity:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_business_entities:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_gift_cards:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  get_gift_card:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
+  list_business_entity_invoices:
+    primary key: id
+    fields: code(), created_at(), id(), object(), state(), updated_at()
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+REVERSE ETL ACTIONS
+  create_account:
+    endpoint: POST /accounts
+    required fields: code
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_account:
+    endpoint: PUT /accounts/{{ record.account_id }}
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_account:
+    endpoint: DELETE /accounts/{{ record.account_id }}
+    required fields: account_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  redact_account:
+    endpoint: PUT /accounts/{{ record.account_id }}/redact
+    required fields: account_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_account_acquisition:
+    endpoint: PUT /accounts/{{ record.account_id }}/acquisition
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_account_acquisition:
+    endpoint: DELETE /accounts/{{ record.account_id }}/acquisition
+    required fields: account_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  reactivate_account:
+    endpoint: PUT /accounts/{{ record.account_id }}/reactivate
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_billing_info:
+    endpoint: PUT /accounts/{{ record.account_id }}/billing_info
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_billing_info:
+    endpoint: DELETE /accounts/{{ record.account_id }}/billing_info
+    required fields: account_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  verify_billing_info:
+    endpoint: POST /accounts/{{ record.account_id }}/billing_info/verify
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  verify_billing_info_cvv:
+    endpoint: POST /accounts/{{ record.account_id }}/billing_info/verify_cvv
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_billing_info:
+    endpoint: POST /accounts/{{ record.account_id }}/billing_infos
+    required fields: account_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_a_billing_info:
+    endpoint: PUT /accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}
+    required fields: account_id, billing_info_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_a_billing_info:
+    endpoint: DELETE /accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}
+    required fields: account_id, billing_info_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  verify_billing_infos:
+    endpoint: POST /accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}/verify
+    required fields: account_id, billing_info_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  verify_billing_infos_cvv:
+    endpoint: POST /accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}/verify_cvv
+    required fields: account_id, billing_info_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_coupon_redemption:
+    endpoint: POST /accounts/{{ record.account_id }}/coupon_redemptions/active
+    required fields: account_id, coupon_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_coupon_redemption:
+    endpoint: DELETE /accounts/{{ record.account_id }}/coupon_redemptions/active
+    required fields: account_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_coupon_redemption_by_id:
+    endpoint: DELETE /accounts/{{ record.account_id }}/coupon_redemptions/{{ record.coupon_redemption_id }}
+    required fields: account_id, coupon_redemption_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_account_external_account:
+    endpoint: POST /accounts/{{ record.account_id }}/external_accounts
+    required fields: account_id, external_account_code, external_connection_type
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_account_external_account:
+    endpoint: PUT /accounts/{{ record.account_id }}/external_accounts/{{ record.external_account_id }}
+    required fields: account_id, external_account_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  delete_account_external_account:
+    endpoint: DELETE /accounts/{{ record.account_id }}/external_accounts/{{ record.external_account_id }}
+    required fields: account_id, external_account_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_invoice:
+    endpoint: POST /accounts/{{ record.account_id }}/invoices
+    required fields: account_id, currency
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_line_item:
+    endpoint: POST /accounts/{{ record.account_id }}/line_items
+    required fields: account_id, currency, unit_amount, type
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_account_note:
+    endpoint: POST /accounts/{{ record.account_id }}/notes
+    required fields: account_id, message
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_account_note:
+    endpoint: DELETE /accounts/{{ record.account_id }}/notes/{{ record.account_note_id }}
+    required fields: account_id, account_note_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_shipping_address:
+    endpoint: POST /accounts/{{ record.account_id }}/shipping_addresses
+    required fields: account_id, first_name, last_name, street1, city, postal_code, country
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_shipping_address:
+    endpoint: PUT /accounts/{{ record.account_id }}/shipping_addresses/{{ record.shipping_address_id }}
+    required fields: account_id, shipping_address_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_shipping_address:
+    endpoint: DELETE /accounts/{{ record.account_id }}/shipping_addresses/{{ record.shipping_address_id }}
+    required fields: account_id, shipping_address_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_coupon:
+    endpoint: POST /coupons
+    required fields: code, discount_type, name
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_coupon:
+    endpoint: PUT /coupons/{{ record.coupon_id }}
+    required fields: coupon_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_coupon:
+    endpoint: DELETE /coupons/{{ record.coupon_id }}
+    required fields: coupon_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  generate_unique_coupon_codes:
+    endpoint: POST /coupons/{{ record.coupon_id }}/generate
+    required fields: coupon_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  generate_unique_coupon_codes_sync:
+    endpoint: POST /coupons/{{ record.coupon_id }}/generate_sync
+    required fields: coupon_id, number_of_unique_codes
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  restore_coupon:
+    endpoint: PUT /coupons/{{ record.coupon_id }}/restore
+    required fields: coupon_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_general_ledger_account:
+    endpoint: POST /general_ledger_accounts
+    required fields: account_type
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_general_ledger_account:
+    endpoint: PUT /general_ledger_accounts/{{ record.general_ledger_account_id }}
+    required fields: general_ledger_account_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_item:
+    endpoint: POST /items
+    required fields: code, name
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_item:
+    endpoint: PUT /items/{{ record.item_id }}
+    required fields: item_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_item:
+    endpoint: DELETE /items/{{ record.item_id }}
+    required fields: item_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  reactivate_item:
+    endpoint: PUT /items/{{ record.item_id }}/reactivate
+    required fields: item_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_measured_unit:
+    endpoint: POST /measured_units
+    required fields: name, display_name
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_measured_unit:
+    endpoint: PUT /measured_units/{{ record.measured_unit_id }}
+    required fields: measured_unit_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_measured_unit:
+    endpoint: DELETE /measured_units/{{ record.measured_unit_id }}
+    required fields: measured_unit_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_external_product:
+    endpoint: POST /external_products
+    required fields: name
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_external_product:
+    endpoint: PUT /external_products/{{ record.external_product_id }}
+    required fields: external_product_id, plan_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_external_products:
+    endpoint: DELETE /external_products/{{ record.external_product_id }}
+    required fields: external_product_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_external_product_external_product_reference:
+    endpoint: POST /external_products/{{ record.external_product_id }}/external_product_references
+    required fields: external_product_id, reference_code, external_connection_type
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_external_product_external_product_reference:
+    endpoint: DELETE /external_products/{{ record.external_product_id }}/external_product_references/{{ record.external_product_reference_id }}
+    required fields: external_product_id, external_product_reference_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_external_subscription:
+    endpoint: POST /external_subscriptions
+    required fields: external_id, quantity, activated_at, expires_at
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  put_external_subscription:
+    endpoint: PUT /external_subscriptions/{{ record.external_subscription_id }}
+    required fields: external_subscription_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_external_invoice:
+    endpoint: POST /external_subscriptions/{{ record.external_subscription_id }}/external_invoices
+    required fields: external_subscription_id, external_id, state, total, currency, purchased_at
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_invoice:
+    endpoint: PUT /invoices/{{ record.invoice_id }}
+    required fields: invoice_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  apply_credit_balance:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/apply_credit_balance
+    required fields: invoice_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  collect_invoice:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/collect
+    required fields: invoice_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  mark_invoice_failed:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/mark_failed
+    required fields: invoice_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  mark_invoice_successful:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/mark_successful
+    required fields: invoice_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  reopen_invoice:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/reopen
+    required fields: invoice_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  void_invoice:
+    endpoint: PUT /invoices/{{ record.invoice_id }}/void
+    required fields: invoice_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  record_external_transaction:
+    endpoint: POST /invoices/{{ record.invoice_id }}/transactions
+    required fields: invoice_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  refund_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/refund
+    required fields: invoice_id, type
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_invoice_retry:
+    endpoint: POST /invoices/recovery
+    required fields: currency, due_at, external_recovery_eligible, account, line_items
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_line_item:
+    endpoint: DELETE /line_items/{{ record.line_item_id }}
+    required fields: line_item_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_plan:
+    endpoint: POST /plans
+    required fields: code, name, currencies
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_plan:
+    endpoint: PUT /plans/{{ record.plan_id }}
+    required fields: plan_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_plan:
+    endpoint: DELETE /plans/{{ record.plan_id }}
+    required fields: plan_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_plan_add_on:
+    endpoint: POST /plans/{{ record.plan_id }}/add_ons
+    required fields: plan_id, code, name
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_plan_add_on:
+    endpoint: PUT /plans/{{ record.plan_id }}/add_ons/{{ record.add_on_id }}
+    required fields: plan_id, add_on_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_plan_add_on:
+    endpoint: DELETE /plans/{{ record.plan_id }}/add_ons/{{ record.add_on_id }}
+    required fields: plan_id, add_on_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_shipping_method:
+    endpoint: POST /shipping_methods
+    required fields: code, name
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_shipping_method:
+    endpoint: PUT /shipping_methods/{{ record.shipping_method_id }}
+    required fields: shipping_method_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_shipping_method:
+    endpoint: DELETE /shipping_methods/{{ record.shipping_method_id }}
+    required fields: shipping_method_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_subscription:
+    endpoint: POST /subscriptions
+    required fields: plan_code, currency, account
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_subscription:
+    endpoint: PUT /subscriptions/{{ record.subscription_id }}
+    required fields: subscription_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  terminate_subscription:
+    endpoint: DELETE /subscriptions/{{ record.subscription_id }}
+    required fields: subscription_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  cancel_subscription:
+    endpoint: PUT /subscriptions/{{ record.subscription_id }}/cancel
+    required fields: subscription_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  reactivate_subscription:
+    endpoint: PUT /subscriptions/{{ record.subscription_id }}/reactivate
+    required fields: subscription_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  pause_subscription:
+    endpoint: PUT /subscriptions/{{ record.subscription_id }}/pause
+    required fields: subscription_id, remaining_pause_cycles
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  resume_subscription:
+    endpoint: PUT /subscriptions/{{ record.subscription_id }}/resume
+    required fields: subscription_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  convert_trial:
+    endpoint: PUT /subscriptions/{{ record.subscription_id }}/convert_trial
+    required fields: subscription_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_subscription_change:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/change
+    required fields: subscription_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_subscription_change:
+    endpoint: DELETE /subscriptions/{{ record.subscription_id }}/change
+    required fields: subscription_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_subscription_coupon_redemption:
+    endpoint: DELETE /subscriptions/{{ record.subscription_id }}/coupon_redemptions/{{ record.coupon_redemption_id }}
+    required fields: subscription_id, coupon_redemption_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_usage:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/add_ons/{{ record.add_on_id }}/usage
+    required fields: subscription_id, add_on_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  update_usage:
+    endpoint: PUT /usage/{{ record.usage_id }}
+    required fields: usage_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  remove_usage:
+    endpoint: DELETE /usage/{{ record.usage_id }}
+    required fields: usage_id
+    risk: critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  deactivate_unique_coupon_code:
+    endpoint: DELETE /unique_coupon_codes/{{ record.unique_coupon_code_id }}
+    required fields: unique_coupon_code_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  reactivate_unique_coupon_code:
+    endpoint: PUT /unique_coupon_codes/{{ record.unique_coupon_code_id }}/restore
+    required fields: unique_coupon_code_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_purchase:
+    endpoint: POST /purchases
+    required fields: currency, account
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_pending_purchase:
+    endpoint: POST /purchases/pending
+    required fields: currency, account
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_authorize_purchase:
+    endpoint: POST /purchases/authorize
+    required fields: currency, account
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_capture_purchase:
+    endpoint: POST /purchases/{{ record.transaction_id }}/capture
+    required fields: transaction_id
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  cancel_purchase:
+    endpoint: POST /purchases/{{ record.transaction_id }}/cancel/
+    required fields: transaction_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  put_dunning_campaign_bulk_update:
+    endpoint: PUT /dunning_campaigns/{{ record.dunning_campaign_id }}/bulk_update
+    required fields: dunning_campaign_id
+    risk: high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  create_gift_card:
+    endpoint: POST /gift_cards
+    required fields: product_code, unit_amount, currency
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+  redeem_gift_card:
+    endpoint: POST /gift_cards/{{ record.redemption_code }}/redeem
+    required fields: redemption_code, recipient_account
+    risk: medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.
+
 SECURITY
-  read risk: external Recurly API read of subscription billing data
-  approval: none; read-only billing API
+  read risk: external Recurly API reads can expose account, billing, invoice, subscription, usage, and transaction data; direct preview reads are fixed-path and redacted
+  write risk: typed Recurly reverse ETL mutations for accounts, billing, subscriptions, invoices, catalog, usage, coupons, exports, and related lifecycle resources
+  approval: reverse ETL writes require plan, preview, explicit approval, execute; destructive lifecycle actions require destructive confirmation; Recurly supports provider idempotency for POST, PUT, PATCH, and DELETE through Idempotency-Key
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Recurly V3 API connector for accounts, subscriptions, invoices, transactions, catalog, previews, exports, and typed reverse ETL.
+  Usage: pm recurly <direct-read-command> [flags] --json
+  Source CLI: Recurly API (https://recurly.com/developers/api/spec/v2021-02-25.yaml)
+  Export
+  Gift
+  Invoice
+  Invoices
+  Purchases
+  Subscriptions
+  Other Commands
+    invoices preview - Preview new invoice for pending line items [intent=direct_read availability=implemented]; notes: Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.; flags: --account-id, --currency
+    invoice pdf get - Fetch an invoice as a PDF [intent=direct_read availability=planned]; notes: Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice.
+    subscriptions preview renewal - Fetch a preview of a subscription's renewal invoice(s) [intent=direct_read availability=implemented]; notes: Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.; flags: --subscription-id
+    subscriptions preview change - Preview a new subscription change [intent=direct_read availability=implemented]; notes: Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.; flags: --subscription-id
+    purchases preview - Preview a new purchase [intent=direct_read availability=implemented]; notes: Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.; flags: --currency, --account-code
+    export dates get - List the dates that have an available export to download. [intent=direct_read availability=planned]; notes: Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice.
+    export files get - List of the export files that are available to download. [intent=direct_read availability=planned]; notes: Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice.
+    gift cards preview - Preview gift card [intent=direct_read availability=implemented]; notes: Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.; flags: --product-code, --unit-amount, --currency
+  Help topics:
+    safety - Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.
+    parity - Operation ledger partitions all 197 Recurly v2021-02-25 OpenAPI operations once.
 
 EXAMPLES
   # Inspect as a manual
@@ -71,6 +775,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect recurly before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

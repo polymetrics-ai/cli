@@ -1,0 +1,22 @@
+{
+  "record": {
+    "external_product_id": "fixture_external_product_id",
+    "reference_code": "fixture_reference_code",
+    "external_connection_type": "fixture_external_connection_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/external_products/fixture_external_product_id/external_product_references",
+    "body": {
+      "reference_code": "fixture_reference_code",
+      "external_connection_type": "fixture_external_connection_type"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}
