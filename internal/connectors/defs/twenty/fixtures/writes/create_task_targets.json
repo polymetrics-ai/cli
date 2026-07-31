@@ -1,0 +1,12 @@
+{
+  "record": {
+    "position": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/taskTargets",
+    "body": {
+      "position": 1
+    }
+  }
+}

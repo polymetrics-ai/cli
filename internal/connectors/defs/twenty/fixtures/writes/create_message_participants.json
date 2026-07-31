@@ -1,0 +1,12 @@
+{
+  "record": {
+    "displayName": "Fixture displayName 1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/messageParticipants",
+    "body": {
+      "displayName": "Fixture displayName 1"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "subject": "Fixture subject 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messageThreads",
+    "body_exact": [
+      {
+        "subject": "Fixture subject 1"
+      }
+    ]
+  }
+}

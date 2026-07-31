@@ -1,0 +1,40 @@
+{
+  "phase": "issue-277-twenty-parity-wave02-r1",
+  "branch": "fm/cli-twenty-parity-wave02-r1",
+  "status": "implementation_complete_commit_pending",
+  "gsdCommandPath": {
+    "doctor": "passed",
+    "list": "passed",
+    "programmingLoopPrompt": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual-gsd"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "This worker owns one connector-local bundle in an isolated disposable worktree; mutating subagent fan-out was unnecessary and would risk shared branch coordination. Read-only research used local tools and gh-axi."
+    }
+  ],
+  "bundleSummary": {
+    "connector": "twenty",
+    "standardObjects": 28,
+    "apiSurfaceRows": 168,
+    "readRows": 56,
+    "writeRows": 112,
+    "deleteRows": 28,
+    "streams": 28,
+    "schemas": 28,
+    "streamFixtures": 29,
+    "writeFixtures": 112
+  },
+  "verificationPassed": true,
+  "verificationSummary": "make verify passed; targeted Twenty conformance/docs/help/inspect/connectorgen gates passed; exact default go test ./... attempted and timed out at 10m in slow internal/cli, while Makefile go test -timeout 20m ./... passed",
+  "humanGates": [
+    "no live provider calls",
+    "no credentials",
+    "no push or PR",
+    "no merge",
+    "no destructive external action",
+    "no shared runtime/foundation production edits"
+  ]
+}

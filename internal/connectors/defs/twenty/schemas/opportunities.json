@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Opportunity",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "amount": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "amountMicros": {},
+        "currencyCode": {}
+      }
+    },
+    "attachments": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "closeDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "company": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string"
+    },
+    "lastContactAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "lastContactItemCalendarEvent": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactItemMessage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "noteTargets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "owner": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "pointOfContact": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stage": {
+      "type": "string"
+    },
+    "taskTargets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timelineActivities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    }
+  }
+}

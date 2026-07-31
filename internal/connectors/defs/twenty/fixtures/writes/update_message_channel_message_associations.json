@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_message_channel_message_associations_fixture_id",
+    "direction": "Fixture direction 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messageChannelMessageAssociations/update_message_channel_message_associations_fixture_id",
+    "body": {
+      "direction": "Fixture direction 1"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "delete_notes_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/notes/delete_notes_fixture_id",
+    "no_body": true
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "bodyV2": "Fixture bodyV2 1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/notes",
+    "body": {
+      "bodyV2": "Fixture bodyV2 1"
+    }
+  }
+}

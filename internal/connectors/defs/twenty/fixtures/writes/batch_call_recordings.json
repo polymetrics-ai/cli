@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "applicationId": "applicationId_fixture_1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/callRecordings",
+    "body_exact": [
+      {
+        "applicationId": "applicationId_fixture_1"
+      }
+    ]
+  }
+}

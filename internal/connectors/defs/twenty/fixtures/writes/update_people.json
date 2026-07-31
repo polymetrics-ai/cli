@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_people_fixture_id",
+    "avatarUrl": "https://example.invalid/avatarUrl/1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/people/update_people_fixture_id",
+    "body": {
+      "avatarUrl": "https://example.invalid/avatarUrl/1"
+    }
+  }
+}

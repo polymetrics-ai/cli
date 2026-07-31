@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_workspace_members_fixture_id",
+    "accountOwnerForCompanies": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/workspaceMembers/update_workspace_members_fixture_id",
+    "body": {
+      "accountOwnerForCompanies": {}
+    }
+  }
+}

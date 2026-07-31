@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_task_targets_fixture_id",
+    "position": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/taskTargets/update_task_targets_fixture_id",
+    "body": {
+      "position": 1
+    }
+  }
+}

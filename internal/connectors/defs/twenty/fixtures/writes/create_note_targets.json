@@ -1,0 +1,12 @@
+{
+  "record": {
+    "position": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/noteTargets",
+    "body": {
+      "position": 1
+    }
+  }
+}

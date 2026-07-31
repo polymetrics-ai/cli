@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "happensAt": "2026-01-01T00:00:01Z"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/timelineActivities",
+    "body_exact": [
+      {
+        "happensAt": "2026-01-01T00:00:01Z"
+      }
+    ]
+  }
+}

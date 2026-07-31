@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Calendar event",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "calendarChannelEventAssociations": {
+      "type": "object"
+    },
+    "calendarEventParticipants": {
+      "type": "object"
+    },
+    "callRecorderPreference": {
+      "type": "string"
+    },
+    "callRecordings": {
+      "type": "object"
+    },
+    "conferenceLink": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "conferenceSolution": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "endsAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "externalCreatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "externalUpdatedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "iCalUid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "isCanceled": {
+      "type": "boolean"
+    },
+    "isFullDay": {
+      "type": "boolean"
+    },
+    "lastContactForCompanies": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactForOpportunities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactForPeople": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastMeetingForPeople": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "startsAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    }
+  }
+}

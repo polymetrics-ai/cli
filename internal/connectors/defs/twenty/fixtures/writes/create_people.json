@@ -1,0 +1,12 @@
+{
+  "record": {
+    "avatarUrl": "https://example.invalid/avatarUrl/1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/people",
+    "body": {
+      "avatarUrl": "https://example.invalid/avatarUrl/1"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "direction": "Fixture direction 1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/messageChannelMessageAssociations",
+    "body": {
+      "direction": "Fixture direction 1"
+    }
+  }
+}

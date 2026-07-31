@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "position": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messageListMembers",
+    "body_exact": [
+      {
+        "position": 1
+      }
+    ]
+  }
+}

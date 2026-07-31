@@ -1,0 +1,12 @@
+{
+  "record": {
+    "applicationId": "applicationId_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/callRecordings",
+    "body": {
+      "applicationId": "applicationId_fixture_1"
+    }
+  }
+}

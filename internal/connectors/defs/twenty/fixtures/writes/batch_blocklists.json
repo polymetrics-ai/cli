@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "handle": "Fixture handle 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/blocklists",
+    "body_exact": [
+      {
+        "handle": "Fixture handle 1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "name": "Fixture name 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/workflowVersions",
+    "body_exact": [
+      {
+        "name": "Fixture name 1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workspace Member",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "accountOwnerForCompanies": {
+      "type": "object"
+    },
+    "assignedTasks": {
+      "type": "object"
+    },
+    "avatarUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "blocklist": {
+      "type": "object"
+    },
+    "calendarEventParticipants": {
+      "type": "object"
+    },
+    "calendarStartDay": {
+      "type": "number"
+    },
+    "colorScheme": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "dateFormat": {
+      "type": "string"
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string"
+    },
+    "jobTitle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastContactForPeople": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "locale": {
+      "type": "string"
+    },
+    "messageParticipants": {
+      "type": "object"
+    },
+    "name": {
+      "type": "object",
+      "properties": {
+        "firstName": {},
+        "lastName": {}
+      }
+    },
+    "numberFormat": {
+      "type": "string"
+    },
+    "ownedOpportunities": {
+      "type": "object"
+    },
+    "position": {
+      "type": "number"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeFormat": {
+      "type": "string"
+    },
+    "timeZone": {
+      "type": "string"
+    },
+    "timelineActivities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "userEmail": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "userId": {
+      "type": "string"
+    }
+  }
+}

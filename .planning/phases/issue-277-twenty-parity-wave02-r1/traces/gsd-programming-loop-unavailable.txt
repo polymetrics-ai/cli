@@ -1,0 +1,14 @@
+Command attempted before production edits:
+
+  scripts/gsd prompt programming-loop init --phase issue-277-twenty-parity-wave02-r1 --dry-run
+
+Result:
+
+  scripts/gsd: unknown GSD command: programming-loop
+
+Adapter health immediately before the attempt:
+
+  scripts/gsd doctor: pass
+  scripts/gsd list: pass; 69 commands available
+
+Manual GSD fallback is active for this phase. This does not weaken TDD, planning, verification, safety gates, issue-first delivery, or the no-push/no-PR stop condition from firstmate.

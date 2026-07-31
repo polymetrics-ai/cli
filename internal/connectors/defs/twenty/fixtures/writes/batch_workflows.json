@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/workflows",
+    "body_exact": [
+      {
+        "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+      }
+    ]
+  }
+}

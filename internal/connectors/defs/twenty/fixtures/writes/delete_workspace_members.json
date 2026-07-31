@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "delete_workspace_members_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/workspaceMembers/delete_workspace_members_fixture_id",
+    "no_body": true
+  }
+}

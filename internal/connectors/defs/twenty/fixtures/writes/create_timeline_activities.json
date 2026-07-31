@@ -1,0 +1,12 @@
+{
+  "record": {
+    "happensAt": "2026-01-01T00:00:01Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/timelineActivities",
+    "body": {
+      "happensAt": "2026-01-01T00:00:01Z"
+    }
+  }
+}
