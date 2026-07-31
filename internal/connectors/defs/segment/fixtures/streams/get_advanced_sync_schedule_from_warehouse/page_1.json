@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/warehouses/synthetic-conformance-value/advanced-sync-schedule",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "schedule": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get advanced sync schedule from warehouse",
+          "slug": "get-advanced-sync-schedule-from-warehouse",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

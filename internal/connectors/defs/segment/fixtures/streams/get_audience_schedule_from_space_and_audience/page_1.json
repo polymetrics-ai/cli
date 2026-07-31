@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/audiences/synthetic-conformance-value/schedules/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "audienceSchedule": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get audience schedule from space and audience",
+          "slug": "get-audience-schedule-from-space-and-audience",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

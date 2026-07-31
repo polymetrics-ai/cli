@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "workspace": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get workspace",
+          "slug": "get-workspace",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

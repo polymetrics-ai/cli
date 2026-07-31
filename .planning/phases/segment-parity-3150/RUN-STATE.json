@@ -1,0 +1,50 @@
+{
+  "phase": "segment-parity-3150",
+  "branch": "fm/cli-segment-parity-wave04-r1",
+  "issues": [3150, 3151, 3152, 3153, 3154, 3155, 3156, 3157],
+  "status": "local-gates-passed-pending-commit",
+  "push_pr_no_mistakes": false,
+  "live_provider_calls": false,
+  "official_segment_openapi": {
+    "version": "73.0.8",
+    "openapi": "3.0.3",
+    "paths": 125,
+    "operations": 197,
+    "sha256": "8ec383035b25880b2fc9e8a6cd7d1fc431f968ee308a612d866c6809e609c6a5"
+  },
+  "segment_surface": {
+    "api_endpoints": 197,
+    "operations": 197,
+    "streams": 80,
+    "writes": 96,
+    "direct_reads": 19,
+    "binary_blocked": 1,
+    "disallowed": 1,
+    "cli_commands": 28
+  },
+  "gates": {
+    "segment_count_test": "pass",
+    "segment_conformance": "pass",
+    "connectorgen_validate": "pass",
+    "focused_cli_docs": "pass",
+    "go_build_cmd_pm": "pass",
+    "connector_boundary": "pass",
+    "make_verify": "pass",
+    "git_diff_check": "pass"
+  },
+  "required_skills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint",
+    "context-mode"
+  ]
+}

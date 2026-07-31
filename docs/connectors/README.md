@@ -420,7 +420,7 @@
 - [scryfall](scryfall/MANUAL.md): Reads cards and sets from the public Scryfall API. Read-only and credential-free.
 - [searxng](searxng/MANUAL.md): Reads web and Reddit search results from a SearXNG metasearch instance's JSON API (format=json). Read-only. Requires base_url; no credentials by default.
 - [secoda](secoda/MANUAL.md): Reads Secoda catalog metadata (tables, documents, collections, questions) through the Secoda API.
-- [segment](segment/MANUAL.md): Reads Segment workspace, source, and destination metadata through the Segment Public API.
+- [segment](segment/MANUAL.md): Definition-owned Segment Public API connector covering the audited OpenAPI 73.0.8 operation ledger with fixture-backed reads, bounded direct reads, and approval-gated reverse ETL actions.
 - [sendgrid](sendgrid/MANUAL.md): Reads SendGrid Marketing Campaigns lists, segments, and contacts, plus suppression bounces, through the SendGrid v3 REST API. Read-only.
 - [sendinblue](sendinblue/MANUAL.md): Reads Sendinblue/Brevo contacts, campaigns, lists, and senders through the Brevo API.
 - [sendowl](sendowl/MANUAL.md): Reads SendOwl orders, products, subscriptions, discounts, bundles, and licenses, and writes product/subscription/discount/bundle lifecycle mutations and order actions (refund, cancel subscription, resend email) through the SendOwl API.

@@ -2,18 +2,153 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Segment Connection Specification",
   "type": "object",
-  "required": ["api_token"],
+  "required": [
+    "api_token"
+  ],
   "properties": {
     "api_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Segment Public API access token, sent as a Bearer token (Authorization: Bearer <api_token>). Never logged."
+      "description": "Segment Public API access token, sent as Authorization: Bearer. Supply through --from-env or --value-stdin; never put token values in chat or shell history."
+    },
+    "audienceId": {
+      "type": "string",
+      "description": "Optional Segment path parameter audienceId used by nested stream/direct-read commands."
+    },
+    "audienceType": {
+      "type": "string",
+      "description": "Optional Segment path parameter audienceType used by nested stream/direct-read commands."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://api.segmentapis.com",
-      "description": "Segment Public API base URL override for tests, proxies, or a region-specific endpoint (e.g. https://api.eu1.segmentapis.com). Takes precedence over any region-based derivation legacy performed in code; see docs.md's Known limits."
+      "description": "Segment Public API base URL override for tests, proxies, or regional endpoints."
+    },
+    "connectionId": {
+      "type": "string",
+      "description": "Optional Segment path parameter connectionId used by nested stream/direct-read commands."
+    },
+    "credentialId": {
+      "type": "string",
+      "description": "Optional Segment path parameter credentialId used by nested stream/direct-read commands."
+    },
+    "destinationId": {
+      "type": "string",
+      "description": "Optional Segment path parameter destinationId used by nested stream/direct-read commands."
+    },
+    "destinationMetadataId": {
+      "type": "string",
+      "description": "Optional Segment path parameter destinationMetadataId used by nested stream/direct-read commands."
+    },
+    "entitySlug": {
+      "type": "string",
+      "description": "Optional Segment path parameter entitySlug used by nested stream/direct-read commands."
+    },
+    "eventName": {
+      "type": "string",
+      "description": "Optional Segment path parameter eventName used by nested stream/direct-read commands."
+    },
+    "filterId": {
+      "type": "string",
+      "description": "Optional Segment path parameter filterId used by nested stream/direct-read commands."
+    },
+    "functionId": {
+      "type": "string",
+      "description": "Optional Segment path parameter functionId used by nested stream/direct-read commands."
+    },
+    "id": {
+      "type": "string",
+      "description": "Optional Segment path parameter id used by nested stream/direct-read commands."
+    },
+    "instanceId": {
+      "type": "string",
+      "description": "Optional Segment path parameter instanceId used by nested stream/direct-read commands."
+    },
+    "key": {
+      "type": "string",
+      "description": "Optional Segment path parameter key used by nested stream/direct-read commands."
+    },
+    "modelId": {
+      "type": "string",
+      "description": "Optional Segment path parameter modelId used by nested stream/direct-read commands."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Optional Segment list page size used as pagination.count for list-shaped streams."
+    },
+    "propertyName": {
+      "type": "string",
+      "description": "Optional Segment path parameter propertyName used by nested stream/direct-read commands."
+    },
+    "regulateId": {
+      "type": "string",
+      "description": "Optional Segment path parameter regulateId used by nested stream/direct-read commands."
+    },
+    "scheduleId": {
+      "type": "string",
+      "description": "Optional Segment path parameter scheduleId used by nested stream/direct-read commands."
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "Optional Segment path parameter sourceId used by nested stream/direct-read commands."
+    },
+    "sourceMetadataId": {
+      "type": "string",
+      "description": "Optional Segment path parameter sourceMetadataId used by nested stream/direct-read commands."
+    },
+    "spaceId": {
+      "type": "string",
+      "description": "Optional Segment path parameter spaceId used by nested stream/direct-read commands."
+    },
+    "subscriptionId": {
+      "type": "string",
+      "description": "Optional Segment path parameter subscriptionId used by nested stream/direct-read commands."
+    },
+    "syncId": {
+      "type": "string",
+      "description": "Optional Segment path parameter syncId used by nested stream/direct-read commands."
+    },
+    "trackingPlanId": {
+      "type": "string",
+      "description": "Optional Segment path parameter trackingPlanId used by nested stream/direct-read commands."
+    },
+    "traitKey": {
+      "type": "string",
+      "description": "Optional Segment path parameter traitKey used by nested stream/direct-read commands."
+    },
+    "transformationId": {
+      "type": "string",
+      "description": "Optional Segment path parameter transformationId used by nested stream/direct-read commands."
+    },
+    "userGroupId": {
+      "type": "string",
+      "description": "Optional Segment path parameter userGroupId used by nested stream/direct-read commands."
+    },
+    "userId": {
+      "type": "string",
+      "description": "Optional Segment path parameter userId used by nested stream/direct-read commands."
+    },
+    "value": {
+      "type": "string",
+      "description": "Optional Segment path parameter value used by nested stream/direct-read commands."
+    },
+    "versionId": {
+      "type": "string",
+      "description": "Optional Segment path parameter versionId used by nested stream/direct-read commands."
+    },
+    "warehouseId": {
+      "type": "string",
+      "description": "Optional Segment path parameter warehouseId used by nested stream/direct-read commands."
+    },
+    "warehouseMetadataId": {
+      "type": "string",
+      "description": "Optional Segment path parameter warehouseMetadataId used by nested stream/direct-read commands."
+    },
+    "writeKey": {
+      "type": "string",
+      "description": "Optional Segment path parameter writeKey used by nested stream/direct-read commands."
     }
   }
 }

@@ -1,0 +1,1598 @@
+{
+  "tagline": "Inspect, read, query, and safely plan typed Segment Public API operations without raw HTTP escapes.",
+  "usage": "pm segment <streams|queries|writes|binary|testing> <command> [flags]",
+  "source_cli": {
+    "name": "Segment Public API",
+    "docs": "https://docs.segmentapis.com/",
+    "reference": "OpenAPI 73.0.8",
+    "source": "docs.segmentapis.com Redocly state"
+  },
+  "groups": [
+    {
+      "id": "streams",
+      "title": "ETL and CDC Streams",
+      "commands": [
+        "streams"
+      ]
+    },
+    {
+      "id": "queries",
+      "title": "Bounded Direct Provider Queries",
+      "commands": [
+        "queries"
+      ]
+    },
+    {
+      "id": "writes",
+      "title": "Reverse ETL Write Plans",
+      "commands": [
+        "writes"
+      ]
+    },
+    {
+      "id": "binary",
+      "title": "Blocked Binary/File Workflows",
+      "commands": [
+        "binary"
+      ]
+    },
+    {
+      "id": "testing",
+      "title": "Excluded Testing Endpoints",
+      "commands": [
+        "testing"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Segment credential name; secrets are resolved from the local vault only."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential when invoking connector commands."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Non-secret config override key=value; never pass api_token here."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records for stream commands."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum response bytes for direct read commands."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "For write commands, include a dry-run reverse ETL preview without executing the provider mutation."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Existing reverse ETL plan id for preview or approved execution."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a stored write plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Destructive confirmation challenge, e.g. destructive for DELETE actions."
+    }
+  ],
+  "commands": [
+    {
+      "path": "queries batch-query-messaging-subscriptions-for-space",
+      "summary": "Batch Query Messaging Subscriptions for Space",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "batch_query_messaging_subscriptions_for_space",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "subscriptions",
+          "type": "string_array",
+          "summary": "Segment request body field subscriptions",
+          "maps_to": "body.subscriptions"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/spaces/{spaceId}/messaging-subscriptions/batch"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries batch-query-messaging-subscriptions-for-space --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries create-audience-preview",
+      "summary": "Create Audience Preview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "create_audience_preview",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "audience-type",
+          "type": "enum",
+          "summary": "Segment request body field audienceType",
+          "maps_to": "body.audienceType",
+          "values": [
+            "ACCOUNTS",
+            "LINKED",
+            "USERS"
+          ]
+        },
+        {
+          "name": "definition",
+          "type": "string",
+          "summary": "Segment request body field definition",
+          "maps_to": "body.definition"
+        },
+        {
+          "name": "options",
+          "type": "string",
+          "summary": "Segment request body field options",
+          "maps_to": "body.options"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/spaces/{spaceId}/audiences/previews"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries create-audience-preview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "binary create-download",
+      "summary": "Create Download",
+      "intent": "direct_read",
+      "availability": "unsupported_local",
+      "operation": "create_download",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer-insights/download"
+        }
+      ],
+      "risk": "binary/file transfer workflow blocked by default",
+      "approval": "not executable in this slice",
+      "notes": "Use provider UI or a separately approved binary executor; no generic file download escape hatch is exposed."
+    },
+    {
+      "path": "writes create-source",
+      "summary": "Create Source",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_source",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sources"
+        }
+      ],
+      "risk": "Segment Create Source (POST /sources) mutates provider state; execute only through reverse ETL approval gates.",
+      "approval": "Use pm reverse plan with --action, then preview and execute only with an explicit approval token.",
+      "notes": "The provider command surface documents this fixed write action; execution uses the shared reverse ETL plan/preview/approval workflow rather than a raw inline body flag.",
+      "examples": [
+        "pm reverse plan segment_create_source --destination segment:segment-prod --action create_source --source-table segment_rows --map id:id --json"
+      ]
+    },
+    {
+      "path": "streams list-sources",
+      "summary": "List Sources",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_sources",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sources"
+        }
+      ],
+      "examples": [
+        "pm segment streams list-sources --credential segment-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "writes update-source",
+      "summary": "Update Source",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_source",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/sources/{sourceId}"
+        }
+      ],
+      "risk": "Segment Update Source (PATCH /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "approval": "Use pm reverse plan with --action, then preview and execute only with an explicit approval token.",
+      "notes": "The provider command surface documents this fixed write action; execution uses the shared reverse ETL plan/preview/approval workflow rather than a raw inline body flag.",
+      "examples": [
+        "pm reverse plan segment_update_source --destination segment:segment-prod --action update_source --source-table segment_rows --map id:id --json"
+      ]
+    },
+    {
+      "path": "testing echo",
+      "summary": "Echo",
+      "intent": "docs_only",
+      "availability": "excluded",
+      "operation": "echo",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/echo"
+        }
+      ],
+      "risk": "non-data testing endpoint",
+      "notes": "Excluded from executable connector surface."
+    },
+    {
+      "path": "queries get-audience-preview",
+      "summary": "Get Audience Preview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_audience_preview",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Segment path parameter id",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/spaces/{spaceId}/audiences/previews/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-audience-preview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-daily-per-source-api-calls-usage",
+      "summary": "Get Daily Per Source API Calls Usage",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_daily_per_source_api_calls_usage",
+      "flags": [
+        {
+          "name": "period",
+          "type": "string",
+          "summary": "The start of the usage month in the ISO-8601 format.",
+          "maps_to": "query.period"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/usage/api-calls/sources/daily"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-daily-per-source-api-calls-usage --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-daily-per-source-mtu-usage",
+      "summary": "Get Daily Per Source MTU Usage",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_daily_per_source_mtu_usage",
+      "flags": [
+        {
+          "name": "period",
+          "type": "string",
+          "summary": "The start of the usage month, in the ISO-8601 format.",
+          "maps_to": "query.period"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/usage/mtu/sources/daily"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-daily-per-source-mtu-usage --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-daily-workspace-api-calls-usage",
+      "summary": "Get Daily Workspace API Calls Usage",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_daily_workspace_api_calls_usage",
+      "flags": [
+        {
+          "name": "period",
+          "type": "string",
+          "summary": "The start of the usage month in the ISO-8601 format.",
+          "maps_to": "query.period"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/usage/api-calls/daily"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-daily-workspace-api-calls-usage --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-daily-workspace-mtu-usage",
+      "summary": "Get Daily Workspace MTU Usage",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_daily_workspace_mtu_usage",
+      "flags": [
+        {
+          "name": "period",
+          "type": "string",
+          "summary": "The start of the usage month, in the ISO-8601 format.",
+          "maps_to": "query.period"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/usage/mtu/daily"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-daily-workspace-mtu-usage --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-egress-failed-metrics-from-delivery-overview",
+      "summary": "Get Egress Failed Metrics from Delivery Overview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_egress_failed_metrics_from_delivery_overview",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "The sourceId for the Workspace.",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "destination-config-id",
+          "type": "string",
+          "summary": "The id tied to a Workspace Destination.",
+          "maps_to": "query.destinationConfigId"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings representing one or more dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "An optional filter for `event Name`, `event Type`, `discard Reason`, `app Version`, `subscription Id`, `activationId`, `audienceId`, and/or `spaceId` that can b",
+          "maps_to": "query.filter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/delivery-overview/failed-delivery"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-egress-failed-metrics-from-delivery-overview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-egress-success-metrics-from-delivery-overview",
+      "summary": "Get Egress Success Metrics from Delivery Overview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_egress_success_metrics_from_delivery_overview",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "The sourceId for the Workspace.",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "destination-config-id",
+          "type": "string",
+          "summary": "The id tied to a Workspace Destination.",
+          "maps_to": "query.destinationConfigId"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings representing one or more dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "An optional filter for `event Name`, `event Type`, `discard Reason`, `appVersion`, `subscription Id`, `activationId`, `audienceId`, or `spaceId` that can be app",
+          "maps_to": "query.filter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/delivery-overview/successful-delivery"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-egress-success-metrics-from-delivery-overview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-events-volume-from-workspace",
+      "summary": "Get Events Volume from Workspace",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_events_volume_from_workspace",
+      "flags": [
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp that corresponds to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp that corresponds to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings that represents the dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "source-id",
+          "type": "string_array",
+          "summary": "A list of strings which filters the results to the given",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "event-name",
+          "type": "string_array",
+          "summary": "A list of strings which filters the results to the given",
+          "maps_to": "query.eventName"
+        },
+        {
+          "name": "event-type",
+          "type": "string_array",
+          "summary": "A list of strings which filters the results to the given",
+          "maps_to": "query.eventType"
+        },
+        {
+          "name": "app-version",
+          "type": "string_array",
+          "summary": "A list of strings which filters the results to the given",
+          "maps_to": "query.appVersion"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/volume"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-events-volume-from-workspace --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-filtered-at-destination-metrics-from-delivery-overview",
+      "summary": "Get Filtered At Destination Metrics from Delivery Overview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_filtered_at_destination_metrics_from_delivery_overview",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "The sourceId for the Workspace.",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "destination-config-id",
+          "type": "string",
+          "summary": "The id tied to a Workspace Destination.",
+          "maps_to": "query.destinationConfigId"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings representing one or more dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "An optional filter for `event Name`, `event Type`, `discard Reason`, `app Version`, `subscription Id`, `activationId`, `audienceId`, and/or `spaceId` that can b",
+          "maps_to": "query.filter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/delivery-overview/filtered-at-destination"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-filtered-at-destination-metrics-from-delivery-overview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-filtered-at-source-metrics-from-delivery-overview",
+      "summary": "Get Filtered At Source Metrics from Delivery Overview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_filtered_at_source_metrics_from_delivery_overview",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "The sourceId for the Workspace.",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings representing one or more dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "An optional filter for `event Name`, `event Type`, `discard Reason`, and/or `app Version` that can be applied in addition to a `group By`.",
+          "maps_to": "query.filter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/delivery-overview/filtered-at-source"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-filtered-at-source-metrics-from-delivery-overview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-ingress-failed-metrics-from-delivery-overview",
+      "summary": "Get Ingress Failed Metrics from Delivery Overview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_ingress_failed_metrics_from_delivery_overview",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "The sourceId for the Workspace.",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings representing one or more dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "An optional filter for `event Name`, `event Type`, `discard Reason`, and/or `app Version` that can be applied in addition to a `group By`.",
+          "maps_to": "query.filter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/delivery-overview/failed-on-ingest"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-ingress-failed-metrics-from-delivery-overview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries get-ingress-success-metrics-from-delivery-overview",
+      "summary": "Get Ingress Success Metrics from Delivery Overview",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_ingress_success_metrics_from_delivery_overview",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "The sourceId for the Workspace.",
+          "maps_to": "query.sourceId"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.startTime",
+          "format": "date-time"
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "The ISO8601 formatted timestamp corresponding to the",
+          "maps_to": "query.endTime",
+          "format": "date-time"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "A comma-delimited list of strings representing one or more dimensions",
+          "maps_to": "query.groupBy"
+        },
+        {
+          "name": "granularity",
+          "type": "enum",
+          "summary": "The size of each bucket in the requested window.",
+          "maps_to": "query.granularity",
+          "values": [
+            "DAY",
+            "HOUR",
+            "MINUTE"
+          ]
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "An optional filter for `event Name`, `event Type`, and/or `app Version` that can be applied in addition to a `group By`.",
+          "maps_to": "query.filter"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/delivery-overview/successfully-received"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries get-ingress-success-metrics-from-delivery-overview --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "streams get-workspace",
+      "summary": "Get Workspace",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_workspace",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/"
+        }
+      ],
+      "examples": [
+        "pm segment streams get-workspace --credential segment-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "streams list-audit-events",
+      "summary": "List Audit Events",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_audit_events",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audit-events"
+        }
+      ],
+      "examples": [
+        "pm segment streams list-audit-events --credential segment-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "queries list-entity-paths",
+      "summary": "List Entity Paths",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "list_entity_paths",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Filter paths by entity name or path name.",
+          "maps_to": "query.search"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/spaces/{spaceId}/entity-paths"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries list-entity-paths --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries list-events",
+      "summary": "List Events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "list_events",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "sort-by",
+          "type": "enum",
+          "summary": "Field to sort by. Defaults to 'lastSeenAt'.",
+          "maps_to": "query.sortBy",
+          "values": [
+            "lastSeenAt",
+            "name"
+          ]
+        },
+        {
+          "name": "sort-dir",
+          "type": "enum",
+          "summary": "Sort direction. Defaults to 'desc'.",
+          "maps_to": "query.sortDir",
+          "values": [
+            "asc",
+            "desc"
+          ]
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Filter events by name substring.",
+          "maps_to": "query.search"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/spaces/{spaceId}/events"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries list-events --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries list-properties-from-entity",
+      "summary": "List Properties from Entity",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "list_properties_from_entity",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "entity-slug",
+          "type": "string",
+          "summary": "Segment path parameter entitySlug",
+          "maps_to": "path.entitySlug"
+        },
+        {
+          "name": "include-sample-values",
+          "type": "boolean",
+          "summary": "When true, include sample values for each property. Defaults to false.",
+          "maps_to": "query.includeSampleValues"
+        },
+        {
+          "name": "samples-count",
+          "type": "integer",
+          "summary": "Max number of sample values to return per property. Defaults to 20, min 1, max 100.",
+          "maps_to": "query.samplesCount"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/spaces/{spaceId}/entities/{entitySlug}/properties"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries list-properties-from-entity --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "queries list-properties-from-event",
+      "summary": "List Properties from Event",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "list_properties_from_event",
+      "flags": [
+        {
+          "name": "space-id",
+          "type": "string",
+          "summary": "Segment path parameter spaceId",
+          "maps_to": "path.spaceId"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Segment path parameter eventName",
+          "maps_to": "path.eventName"
+        },
+        {
+          "name": "sort-by",
+          "type": "enum",
+          "summary": "Field to sort by. Defaults to 'lastSeenAt'.",
+          "maps_to": "query.sortBy",
+          "values": [
+            "lastSeenAt",
+            "name"
+          ]
+        },
+        {
+          "name": "sort-dir",
+          "type": "enum",
+          "summary": "Sort direction. Defaults to 'desc'.",
+          "maps_to": "query.sortDir",
+          "values": [
+            "asc",
+            "desc"
+          ]
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Filter properties by name substring.",
+          "maps_to": "query.search"
+        },
+        {
+          "name": "include-sample-values",
+          "type": "boolean",
+          "summary": "When true, include sample values for each property. Defaults to false.",
+          "maps_to": "query.includeSampleValues"
+        },
+        {
+          "name": "samples-count",
+          "type": "integer",
+          "summary": "Max number of sample values to return per property. Defaults to 20, min 1, max 100.",
+          "maps_to": "query.samplesCount"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/spaces/{spaceId}/events/{eventName}/properties"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries list-properties-from-event --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "streams list-spaces",
+      "summary": "List Spaces",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_spaces",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/spaces"
+        }
+      ],
+      "examples": [
+        "pm segment streams list-spaces --credential segment-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "queries preview-destination-filter",
+      "summary": "Preview Destination Filter",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "preview_destination_filter",
+      "flags": [
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "Segment request body field filter",
+          "maps_to": "body.filter"
+        },
+        {
+          "name": "payload",
+          "type": "string",
+          "summary": "Segment request body field payload",
+          "maps_to": "body.payload"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/destination/filters/preview"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "tokens",
+        "accessToken",
+        "refreshToken",
+        "apiKey",
+        "key",
+        "secret",
+        "password",
+        "authorization",
+        "credentials",
+        "credential",
+        "writeKey",
+        "writeKeys",
+        "settings",
+        "privateKey",
+        "clientSecret",
+        "download",
+        "url",
+        "urls"
+      ],
+      "risk": "bounded Segment provider query/search read; JSON output is redacted and capped",
+      "approval": "not required for read-only direct operations",
+      "examples": [
+        "pm segment queries preview-destination-filter --credential segment-prod --max-bytes 1048576 --json"
+      ]
+    },
+    {
+      "path": "writes remove-write-key-from-source",
+      "summary": "Remove Write Key from Source",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "remove_write_key_from_source",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sources/{sourceId}/writekey/{writeKey}"
+        }
+      ],
+      "risk": "Segment Remove Write Key from Source (DELETE /sources/{sourceId}/writekey/{writeKey}) mutates provider state; execute only through reverse ETL approval gates.",
+      "approval": "Use pm reverse plan with --action, then preview and execute only with an explicit approval token.",
+      "notes": "The provider command surface documents this fixed write action; execution uses the shared reverse ETL plan/preview/approval workflow rather than a raw inline body flag.",
+      "examples": [
+        "pm reverse plan segment_remove_write_key_from_source --destination segment:segment-prod --action remove_write_key_from_source --source-table segment_rows --map id:id --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "auth",
+      "summary": "Store api_token from environment or stdin; connector inspection never reads secrets."
+    },
+    {
+      "name": "parity",
+      "summary": "197 official OpenAPI operations are partitioned across streams, direct reads, writes, binary-blocked, and excluded rows."
+    },
+    {
+      "name": "reverse-etl",
+      "summary": "Segment writes always use plan, preview, approval, execute; JSON plans redact approval tokens."
+    }
+  ]
+}

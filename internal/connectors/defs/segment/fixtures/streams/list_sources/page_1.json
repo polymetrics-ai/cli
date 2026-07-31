@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sources",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "sources": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list sources",
+            "slug": "list-sources",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

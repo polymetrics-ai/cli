@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/destinations/synthetic-conformance-value/delivery-metrics",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "deliveryMetricsSummary": {
+          "metrics": [
+            {
+              "id": "synthetic-conformance-value",
+              "name": "Synthetic Segment list delivery metrics summary from destination",
+              "slug": "list-delivery-metrics-summary-from-destination",
+              "workspaceId": "synthetic-conformance-value",
+              "updatedAt": "2026-01-01T00:00:00Z"
+            }
+          ]
+        },
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/filters",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "filters": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list filters for space",
+            "slug": "list-filters-for-space",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

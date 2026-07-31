@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/insert-function-instances/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "insertFunctionInstance": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get insert function instance",
+          "slug": "get-insert-function-instance",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

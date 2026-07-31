@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/groups/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "userGroup": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get user group",
+          "slug": "get-user-group",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

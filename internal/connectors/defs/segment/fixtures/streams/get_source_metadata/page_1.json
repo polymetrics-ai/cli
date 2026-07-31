@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/sources/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "sourceMetadata": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get source metadata",
+          "slug": "get-source-metadata",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

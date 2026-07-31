@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/warehouses/synthetic-conformance-value/connection-state",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": "synthetic-conformance-value",
+        "name": "Synthetic Segment get connection state from warehouse",
+        "slug": "get-connection-state-from-warehouse",
+        "workspaceId": "synthetic-conformance-value",
+        "updatedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

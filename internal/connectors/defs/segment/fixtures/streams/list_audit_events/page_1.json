@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/audit-events",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "events": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list audit events",
+            "slug": "list-audit-events",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z",
+            "event": "synthetic.audit",
+            "timestamp": "2026-01-01T00:00:00Z",
+            "resourceId": "synthetic-conformance-value"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

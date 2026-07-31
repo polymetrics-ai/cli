@@ -3,42 +3,1464 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_token }}"
+      }
     ],
-    "pagination": {
-      "type": "page_number",
-      "page_param": "page",
-      "size_param": "page_size",
-      "start_page": 1,
-      "page_size": 100
+    "check": {
+      "method": "GET",
+      "path": "/"
     },
-    "check": { "method": "GET", "path": "/workspaces" },
     "error_map": [
-      { "status": 401, "hint": "segment API token is missing or invalid; re-run pm credentials add segment" },
-      { "status": 429, "class": "rate_limited", "hint": "segment rate limit exceeded; the connector will retry with backoff" }
-    ]
+      {
+        "status": 401,
+        "hint": "segment API token is missing or invalid; re-run pm credentials add segment with a token from env or stdin"
+      },
+      {
+        "status": 403,
+        "class": "forbidden",
+        "hint": "segment API token lacks the workspace permission required for this fixed operation"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "segment rate limit exceeded; retry later or lower batch size/page count"
+      }
+    ],
+    "rate_limit": {
+      "requests_per_minute": 120
+    }
   },
   "streams": [
     {
-      "name": "workspaces",
-      "path": "/workspaces",
-      "records": { "path": "workspaces" },
-      "schema": "schemas/workspaces.json",
-      "projection": "passthrough"
+      "name": "list_audience_schedules_from_space_and_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.id }}/schedules",
+      "records": {
+        "path": "data.audienceSchedules"
+      },
+      "schema": "schemas/list_audience_schedules_from_space_and_audience.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
     },
     {
-      "name": "sources",
-      "path": "/sources",
-      "records": { "path": "sources" },
-      "schema": "schemas/sources.json",
-      "projection": "passthrough"
+      "name": "list_destinations_from_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.audienceId }}/destination-connections",
+      "records": {
+        "path": "data.connections"
+      },
+      "schema": "schemas/list_destinations_from_audience.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
     },
     {
-      "name": "destinations",
+      "name": "list_sources_from_tracking_plan",
+      "path": "/tracking-plans/{{ config.trackingPlanId }}/sources",
+      "records": {
+        "path": "data.sources"
+      },
+      "schema": "schemas/list_sources_from_tracking_plan.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_users_from_user_group",
+      "path": "/groups/{{ config.userGroupId }}/users",
+      "records": {
+        "path": "data.users"
+      },
+      "schema": "schemas/list_users_from_user_group.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_audiences",
+      "path": "/spaces/{{ config.spaceId }}/audiences",
+      "records": {
+        "path": "data.audiences"
+      },
+      "schema": "schemas/list_audiences.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_computed_traits",
+      "path": "/spaces/{{ config.spaceId }}/computed-traits",
+      "records": {
+        "path": "data.computedTraits"
+      },
+      "schema": "schemas/list_computed_traits.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_destinations",
       "path": "/destinations",
-      "records": { "path": "destinations" },
-      "schema": "schemas/destinations.json",
-      "projection": "passthrough"
+      "records": {
+        "path": "data.destinations"
+      },
+      "schema": "schemas/list_destinations.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_subscriptions_from_destination",
+      "path": "/destinations/{{ config.destinationId }}/subscriptions",
+      "records": {
+        "path": "data.subscriptions"
+      },
+      "schema": "schemas/list_subscriptions_from_destination.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_filters_from_destination",
+      "path": "/destination/{{ config.destinationId }}/filters",
+      "records": {
+        "path": "data.filters"
+      },
+      "schema": "schemas/list_filters_from_destination.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_filters_for_space",
+      "path": "/filters",
+      "records": {
+        "path": "data.filters"
+      },
+      "schema": "schemas/list_filters_for_space.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_functions",
+      "path": "/functions",
+      "records": {
+        "path": "data.functions"
+      },
+      "schema": "schemas/list_functions.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_insert_function_instances",
+      "path": "/insert-function-instances",
+      "records": {
+        "path": "data.instances"
+      },
+      "schema": "schemas/list_insert_function_instances.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_invites",
+      "path": "/invites",
+      "records": {
+        "path": "data.invites"
+      },
+      "schema": "schemas/list_invites.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_labels",
+      "path": "/labels",
+      "records": {
+        "path": "data.labels"
+      },
+      "schema": "schemas/list_labels.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_profiles_warehouse_in_space",
+      "path": "/spaces/{{ config.spaceId }}/profiles-warehouses",
+      "records": {
+        "path": "data.profilesWarehouses"
+      },
+      "schema": "schemas/list_profiles_warehouse_in_space.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_reverse_etl_models",
+      "path": "/reverse-etl-models",
+      "records": {
+        "path": "data.models"
+      },
+      "schema": "schemas/list_reverse_etl_models.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_sources",
+      "path": "/sources",
+      "records": {
+        "path": "data.sources"
+      },
+      "schema": "schemas/list_sources.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_regulations_from_source",
+      "path": "/regulations/sources/{{ config.sourceId }}",
+      "records": {
+        "path": "data.regulations"
+      },
+      "schema": "schemas/list_regulations_from_source.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_tracking_plans",
+      "path": "/tracking-plans",
+      "records": {
+        "path": "data.trackingPlans"
+      },
+      "schema": "schemas/list_tracking_plans.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_transformations",
+      "path": "/transformations",
+      "records": {
+        "path": "data.transformations"
+      },
+      "schema": "schemas/list_transformations.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_user_groups",
+      "path": "/groups",
+      "records": {
+        "path": "data.userGroups"
+      },
+      "schema": "schemas/list_user_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_warehouses",
+      "path": "/warehouses",
+      "records": {
+        "path": "data.warehouses"
+      },
+      "schema": "schemas/list_warehouses.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_workspace_regulations",
+      "path": "/regulations",
+      "records": {
+        "path": "data.regulations"
+      },
+      "schema": "schemas/list_workspace_regulations.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_destination",
+      "path": "/destinations/{{ config.destinationId }}",
+      "records": {
+        "path": "data.destination",
+        "single_object": true
+      },
+      "schema": "schemas/get_destination.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_filter_by_id",
+      "path": "/filters/{{ config.id }}",
+      "records": {
+        "path": "data.filter",
+        "single_object": true
+      },
+      "schema": "schemas/get_filter_by_id.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_function",
+      "path": "/functions/{{ config.functionId }}",
+      "records": {
+        "path": "data.function",
+        "single_object": true
+      },
+      "schema": "schemas/get_function.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_insert_function_instance",
+      "path": "/insert-function-instances/{{ config.instanceId }}",
+      "records": {
+        "path": "data.insertFunctionInstance",
+        "single_object": true
+      },
+      "schema": "schemas/get_insert_function_instance.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_reverse_etl_model",
+      "path": "/reverse-etl-models/{{ config.modelId }}",
+      "records": {
+        "path": "data.reverseEtlModel",
+        "single_object": true
+      },
+      "schema": "schemas/get_reverse_etl_model.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_source",
+      "path": "/sources/{{ config.sourceId }}",
+      "records": {
+        "path": "data.source",
+        "single_object": true
+      },
+      "schema": "schemas/get_source.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_tracking_plan",
+      "path": "/tracking-plans/{{ config.trackingPlanId }}",
+      "records": {
+        "path": "data.trackingPlan",
+        "single_object": true
+      },
+      "schema": "schemas/get_tracking_plan.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_transformation",
+      "path": "/transformations/{{ config.transformationId }}",
+      "records": {
+        "path": "data.transformation",
+        "single_object": true
+      },
+      "schema": "schemas/get_transformation.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_user_group",
+      "path": "/groups/{{ config.userGroupId }}",
+      "records": {
+        "path": "data.userGroup",
+        "single_object": true
+      },
+      "schema": "schemas/get_user_group.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_users",
+      "path": "/users",
+      "records": {
+        "path": "data.users"
+      },
+      "schema": "schemas/list_users.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "get_warehouse",
+      "path": "/warehouses/{{ config.warehouseId }}",
+      "records": {
+        "path": "data.warehouse",
+        "single_object": true
+      },
+      "schema": "schemas/get_warehouse.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_activation_from_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.audienceId }}/activations/{{ config.id }}",
+      "records": {
+        "path": "data.activation",
+        "single_object": true
+      },
+      "schema": "schemas/get_activation_from_audience.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_advanced_sync_schedule_from_warehouse",
+      "path": "/warehouses/{{ config.warehouseId }}/advanced-sync-schedule",
+      "records": {
+        "path": "data.schedule",
+        "single_object": true
+      },
+      "schema": "schemas/get_advanced_sync_schedule_from_warehouse.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.id }}",
+      "records": {
+        "path": "data.audience",
+        "single_object": true
+      },
+      "schema": "schemas/get_audience.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_audience_schedule_from_space_and_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.id }}/schedules/{{ config.scheduleId }}",
+      "records": {
+        "path": "data.audienceSchedule",
+        "single_object": true
+      },
+      "schema": "schemas/get_audience_schedule_from_space_and_audience.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_computed_trait",
+      "path": "/spaces/{{ config.spaceId }}/computed-traits/{{ config.id }}",
+      "records": {
+        "path": "data.computedTrait",
+        "single_object": true
+      },
+      "schema": "schemas/get_computed_trait.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_connection_state_from_warehouse",
+      "path": "/warehouses/{{ config.warehouseId }}/connection-state",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "schema": "schemas/get_connection_state_from_warehouse.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_destination_metadata",
+      "path": "/catalog/destinations/{{ config.destinationMetadataId }}",
+      "records": {
+        "path": "data.destinationMetadata",
+        "single_object": true
+      },
+      "schema": "schemas/get_destination_metadata.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_destinations_catalog",
+      "path": "/catalog/destinations",
+      "records": {
+        "path": "data.pagination",
+        "single_object": true
+      },
+      "schema": "schemas/get_destinations_catalog.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_filter_in_destination",
+      "path": "/destination/{{ config.destinationId }}/filters/{{ config.filterId }}",
+      "records": {
+        "path": "data.filter",
+        "single_object": true
+      },
+      "schema": "schemas/get_filter_in_destination.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_function_version",
+      "path": "/functions/{{ config.functionId }}/versions/{{ config.versionId }}",
+      "records": {
+        "path": "data.version",
+        "single_object": true
+      },
+      "schema": "schemas/get_function_version.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_latest_from_live_plugins",
+      "path": "/sources/{{ config.sourceId }}/live-plugins/latest",
+      "records": {
+        "path": "data.livePlugin",
+        "single_object": true
+      },
+      "schema": "schemas/get_latest_from_live_plugins.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_regulation",
+      "path": "/regulations/{{ config.regulateId }}",
+      "records": {
+        "path": "data.regulation",
+        "single_object": true
+      },
+      "schema": "schemas/get_regulation.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_reverse_etl_sync_status",
+      "path": "/reverse-etl-models/{{ config.modelId }}/syncs/{{ config.syncId }}",
+      "records": {
+        "path": "data.reverseETLSyncStatus",
+        "single_object": true
+      },
+      "schema": "schemas/get_reverse_etl_sync_status.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_source_metadata",
+      "path": "/catalog/sources/{{ config.sourceMetadataId }}",
+      "records": {
+        "path": "data.sourceMetadata",
+        "single_object": true
+      },
+      "schema": "schemas/get_source_metadata.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_sources_catalog",
+      "path": "/catalog/sources",
+      "records": {
+        "path": "data.pagination",
+        "single_object": true
+      },
+      "schema": "schemas/get_sources_catalog.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_space",
+      "path": "/spaces/{{ config.spaceId }}",
+      "records": {
+        "path": "data.space",
+        "single_object": true
+      },
+      "schema": "schemas/get_space.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_subscription_from_destination",
+      "path": "/destinations/{{ config.destinationId }}/subscriptions/{{ config.id }}",
+      "records": {
+        "path": "data.subscription",
+        "single_object": true
+      },
+      "schema": "schemas/get_subscription_from_destination.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_user",
+      "path": "/users/{{ config.userId }}",
+      "records": {
+        "path": "data.user",
+        "single_object": true
+      },
+      "schema": "schemas/get_user.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_warehouse_metadata",
+      "path": "/catalog/warehouses/{{ config.warehouseMetadataId }}",
+      "records": {
+        "path": "data.warehouseMetadata",
+        "single_object": true
+      },
+      "schema": "schemas/get_warehouse_metadata.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_warehouses_catalog",
+      "path": "/catalog/warehouses",
+      "records": {
+        "path": "data.pagination",
+        "single_object": true
+      },
+      "schema": "schemas/get_warehouses_catalog.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_workspace",
+      "path": "/",
+      "records": {
+        "path": "data.workspace",
+        "single_object": true
+      },
+      "schema": "schemas/get_workspace.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_activations_from_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.audienceId }}/activations",
+      "records": {
+        "path": "data.activations"
+      },
+      "schema": "schemas/list_activations_from_audience.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_audience_consumers_from_space_and_audience",
+      "path": "/spaces/{{ config.spaceId }}/audiences/{{ config.id }}/audience-references",
+      "records": {
+        "path": "data.audiences"
+      },
+      "schema": "schemas/list_audience_consumers_from_space_and_audience.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_audit_events",
+      "path": "/audit-events",
+      "records": {
+        "path": "data.events"
+      },
+      "schema": "schemas/list_audit_events.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      },
+      "incremental": {
+        "cursor_field": "timestamp",
+        "request_param": "startTime",
+        "param_format": "rfc3339"
+      }
+    },
+    {
+      "name": "list_connected_destinations_from_source",
+      "path": "/sources/{{ config.sourceId }}/connected-destinations",
+      "records": {
+        "path": "data.destinations"
+      },
+      "schema": "schemas/list_connected_destinations_from_source.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_connected_sources_from_warehouse",
+      "path": "/warehouses/{{ config.warehouseId }}/connected-sources",
+      "records": {
+        "path": "data.sources"
+      },
+      "schema": "schemas/list_connected_sources_from_warehouse.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_connected_warehouses_from_source",
+      "path": "/sources/{{ config.sourceId }}/connected-warehouses",
+      "records": {
+        "path": "data.warehouses"
+      },
+      "schema": "schemas/list_connected_warehouses_from_source.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_delivery_metrics_summary_from_destination",
+      "path": "/destinations/{{ config.destinationId }}/delivery-metrics",
+      "records": {
+        "path": "data.deliveryMetricsSummary.metrics"
+      },
+      "schema": "schemas/list_delivery_metrics_summary_from_destination.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_function_versions",
+      "path": "/functions/{{ config.functionId }}/versions",
+      "records": {
+        "path": "data.versions"
+      },
+      "schema": "schemas/list_function_versions.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_invites_from_user_group",
+      "path": "/groups/{{ config.userGroupId }}/invites",
+      "records": {
+        "path": "data.emails"
+      },
+      "schema": "schemas/list_invites_from_user_group.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_reverse_etl_sync_statuses_from_model_and_subscription_id",
+      "path": "/reverse-etl-models/{{ config.modelId }}/subscriptionId/{{ config.subscriptionId }}/syncs",
+      "records": {
+        "path": "data.syncStatuses"
+      },
+      "schema": "schemas/list_reverse_etl_sync_statuses_from_model_and_subscription_id.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_roles",
+      "path": "/roles",
+      "records": {
+        "path": "data.roles"
+      },
+      "schema": "schemas/list_roles.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_rules_from_tracking_plan",
+      "path": "/tracking-plans/{{ config.trackingPlanId }}/rules",
+      "records": {
+        "path": "data.rules"
+      },
+      "schema": "schemas/list_rules_from_tracking_plan.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_sample_values_from_entity_property",
+      "path": "/spaces/{{ config.spaceId }}/entities/{{ config.entitySlug }}/properties/{{ config.propertyName }}/sample-values",
+      "records": {
+        "path": "data.sampleValues"
+      },
+      "schema": "schemas/list_sample_values_from_entity_property.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_sample_values_from_event_property",
+      "path": "/spaces/{{ config.spaceId }}/events/{{ config.eventName }}/properties/{{ config.propertyName }}/sample-values",
+      "records": {
+        "path": "data.sampleValues"
+      },
+      "schema": "schemas/list_sample_values_from_event_property.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_sample_values_from_trait",
+      "path": "/spaces/{{ config.spaceId }}/traits/{{ config.traitKey }}/sample-values",
+      "records": {
+        "path": "data.sampleValues"
+      },
+      "schema": "schemas/list_sample_values_from_trait.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_schema_settings_in_source",
+      "path": "/sources/{{ config.sourceId }}/settings",
+      "records": {
+        "path": "data.settings",
+        "single_object": true
+      },
+      "schema": "schemas/list_schema_settings_in_source.json",
+      "projection": "passthrough",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_selective_syncs_from_warehouse_and_source",
+      "path": "/warehouses/{{ config.warehouseId }}/connected-sources/{{ config.sourceId }}/selective-syncs",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/list_selective_syncs_from_warehouse_and_source.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_selective_syncs_from_warehouse_and_space",
+      "path": "/spaces/{{ config.spaceId }}/profiles-warehouses/{{ config.warehouseId }}/selective-syncs",
+      "records": {
+        "path": "data.items"
+      },
+      "schema": "schemas/list_selective_syncs_from_warehouse_and_space.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_spaces",
+      "path": "/spaces",
+      "records": {
+        "path": "data.spaces"
+      },
+      "schema": "schemas/list_spaces.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_supported_destinations_from_audience",
+      "path": "/spaces/{{ config.spaceId }}/audienceType/{{ config.audienceType }}/supported-destinations",
+      "records": {
+        "path": "data.destinations.facebook-custom-audiences.actions"
+      },
+      "schema": "schemas/list_supported_destinations_from_audience.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_suppressions",
+      "path": "/suppressions",
+      "records": {
+        "path": "data.suppressed"
+      },
+      "schema": "schemas/list_suppressions.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_syncs_from_warehouse",
+      "path": "/warehouses/{{ config.warehouseId }}/syncs",
+      "records": {
+        "path": "data.reports"
+      },
+      "schema": "schemas/list_syncs_from_warehouse.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_syncs_from_warehouse_and_source",
+      "path": "/warehouses/{{ config.warehouseId }}/connected-sources/{{ config.sourceId }}/syncs",
+      "records": {
+        "path": "data.reports"
+      },
+      "schema": "schemas/list_syncs_from_warehouse_and_source.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_traits",
+      "path": "/spaces/{{ config.spaceId }}/traits",
+      "records": {
+        "path": "data.traits"
+      },
+      "schema": "schemas/list_traits.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_user_groups_from_user",
+      "path": "/users/{{ config.userId }}/groups",
+      "records": {
+        "path": "data.groups"
+      },
+      "schema": "schemas/list_user_groups_from_user.json",
+      "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
+      }
     }
   ]
 }

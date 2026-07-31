@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/audienceType/synthetic-conformance-value/supported-destinations",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "destinations": {
+          "facebook-custom-audiences": {
+            "actions": [
+              {
+                "id": "synthetic-conformance-value",
+                "name": "Synthetic Segment list supported destinations from audience",
+                "slug": "list-supported-destinations-from-audience",
+                "workspaceId": "synthetic-conformance-value",
+                "updatedAt": "2026-01-01T00:00:00Z"
+              }
+            ]
+          }
+        },
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}
