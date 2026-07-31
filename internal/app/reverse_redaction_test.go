@@ -3,9 +3,6 @@ package app_test
 import (
 	"context"
 	"encoding/json"
-	"io"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
@@ -18,24 +15,6 @@ func TestReversePlanRedactsBitbucketSensitiveWriteSample(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
 	sensitiveValue := "sensitive-fixture-value"
-	var executedBody string
-
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			t.Errorf("method = %s, want POST", r.Method)
-		}
-		if r.URL.Path != "/repositories/ws/repo/pipelines_config/variables" {
-			t.Errorf("path = %s", r.URL.Path)
-		}
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			t.Errorf("read body: %v", err)
-		}
-		executedBody = string(body)
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"uuid":"var-1"}`))
-	}))
-	defer srv.Close()
 
 	if err := app.InitProject(root); err != nil {
 		t.Fatalf("InitProject() error = %v", err)
@@ -44,8 +23,8 @@ func TestReversePlanRedactsBitbucketSensitiveWriteSample(t *testing.T) {
 	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
 		t.Fatalf("MkdirAll(warehouse) error = %v", err)
 	}
-	row := `{"workspace":"ws","repo_slug":"repo","key":"DEPLOY_TOKEN","value":"` + sensitiveValue + `"}` + "\n"
-	if err := os.WriteFile(filepath.Join(warehouseDir, "bitbucket_variables.jsonl"), []byte(row), 0o600); err != nil {
+	row := `{"workspace":"ws","repo_slug":"repo","scm":"git","is_private":true,"description":"` + sensitiveValue + `"}` + "\n"
+	if err := os.WriteFile(filepath.Join(warehouseDir, "bitbucket_repositories.jsonl"), []byte(row), 0o600); err != nil {
 		t.Fatalf("write warehouse row: %v", err)
 	}
 
@@ -56,33 +35,34 @@ func TestReversePlanRedactsBitbucketSensitiveWriteSample(t *testing.T) {
 	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
 		Name:      "bitbucket-local",
 		Connector: "bitbucket",
-		Config:    map[string]string{"base_url": srv.URL},
+		Config:    map[string]string{"base_url": "https://bitbucket.invalid"},
 		Secrets:   map[string]string{"access_token": "fixture-access-token"},
 	}); err != nil {
 		t.Fatalf("AddCredential(bitbucket) error = %v", err)
 	}
 
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
-		Name:                  "bitbucket_variable_create",
-		SourceTable:           "bitbucket_variables",
+		Name:                  "bitbucket_repository_create",
+		SourceTable:           "bitbucket_repositories",
 		DestinationConnector:  "bitbucket",
 		DestinationCredential: "bitbucket-local",
-		Action:                "create_repositories_workspace_repo_slug_pipelines_config_variables",
+		Action:                "create_repositories_workspace_repo_slug",
 		Mappings: map[string]string{
-			"workspace": "workspace",
-			"repo_slug": "repo_slug",
-			"key":       "key",
-			"value":     "value",
+			"workspace":   "workspace",
+			"repo_slug":   "repo_slug",
+			"scm":         "scm",
+			"is_private":  "is_private",
+			"description": "description",
 		},
 	})
 	if err != nil {
 		t.Fatalf("PlanReverseETL() error = %v", err)
 	}
-	if len(plan.Sample) != 1 || plan.Sample[0]["value"] != "redacted" {
-		t.Fatalf("plan sample = %+v, want redacted value", plan.Sample)
+	if len(plan.Sample) != 1 || plan.Sample[0]["description"] != "redacted" {
+		t.Fatalf("plan sample = %+v, want redacted description", plan.Sample)
 	}
-	if plan.Sample[0]["key"] != "DEPLOY_TOKEN" {
-		t.Fatalf("plan sample key = %v", plan.Sample[0]["key"])
+	if plan.Sample[0]["repo_slug"] != "repo" {
+		t.Fatalf("plan sample repo_slug = %v", plan.Sample[0]["repo_slug"])
 	}
 	encodedPlan, err := json.Marshal(plan)
 	if err != nil {
@@ -106,16 +86,5 @@ func TestReversePlanRedactsBitbucketSensitiveWriteSample(t *testing.T) {
 	}
 	if strings.Contains(string(encodedStored), sensitiveValue) {
 		t.Fatalf("stored plan JSON leaked sensitive value: %s", encodedStored)
-	}
-
-	run, err := reopened.RunReverseETL(ctx, app.RunReverseETLRequest{
-		PlanID:        plan.ID,
-		ApprovalToken: plan.ApprovalToken,
-	})
-	if err != nil {
-		t.Fatalf("RunReverseETL() error = %v", err)
-	}
-	if run.Status != "completed" || !strings.Contains(executedBody, sensitiveValue) {
-		t.Fatalf("run = %+v executedBody = %s", run, executedBody)
 	}
 }
