@@ -1,0 +1,83 @@
+{
+  "api_version": "polymetrics.ai/v1",
+  "connector": {
+    "name": "crisp",
+    "display_name": "Crisp",
+    "integration_type": "api",
+    "description": "Connector-local Crisp REST API V1 official operation ledger and planned typed command surface.",
+    "capabilities": {
+      "check": false,
+      "catalog": true,
+      "read": false,
+      "write": false,
+      "query": false
+    },
+    "icon": {
+      "id": "pm-crisp",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  "kind": "Connector",
+  "manifest": {
+    "metadata": {
+      "name": "crisp",
+      "display_name": "Crisp",
+      "integration_type": "api",
+      "description": "Connector-local Crisp REST API V1 official operation ledger and planned typed command surface.",
+      "capabilities": {
+        "check": false,
+        "catalog": true,
+        "read": false,
+        "write": false,
+        "query": false
+      },
+      "icon": {
+        "id": "pm-crisp",
+        "path": "icons/pm-sample.svg",
+        "source": "polymetrics",
+        "review_status": "polymetrics",
+        "review_url": "https://github.com/polymetrics-ai/cli"
+      }
+    },
+    "config_fields": [
+      {
+        "name": "base_url"
+      },
+      {
+        "name": "max_pages"
+      },
+      {
+        "name": "page_size"
+      },
+      {
+        "name": "plugin_id"
+      },
+      {
+        "name": "start_date"
+      },
+      {
+        "name": "tier"
+      },
+      {
+        "name": "website_id"
+      }
+    ],
+    "secret_fields": [
+      {
+        "name": "token_id"
+      },
+      {
+        "name": "token_key"
+      }
+    ],
+    "pagination": {},
+    "risk": {
+      "read": "No Crisp read execution is enabled in this connector-local ledger slice; official read, direct, binary, and changefeed operations are inventoried as blocked/planned rows.",
+      "write": "No Crisp write execution is enabled in this connector-local ledger slice; DELETE/destructive/admin writes are included as typed destructive-confirmation candidates, not exclusions.",
+      "approval": "Future reverse ETL actions must use plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive/admin actions must require typed destructive confirmation."
+    }
+  }
+}

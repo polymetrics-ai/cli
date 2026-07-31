@@ -1,0 +1,28 @@
+{
+  "name": "crisp",
+  "display_name": "Crisp",
+  "description": "Connector-local Crisp REST API V1 official operation ledger and planned typed command surface.",
+  "integration_type": "api",
+  "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+  "release_stage": "planned",
+  "capabilities": {
+    "check": false,
+    "read": false,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 20,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 60
+  },
+  "risk": {
+    "read": "No Crisp read execution is enabled in this connector-local ledger slice; official read, direct, binary, and changefeed operations are inventoried as blocked/planned rows.",
+    "write": "No Crisp write execution is enabled in this connector-local ledger slice; DELETE/destructive/admin writes are included as typed destructive-confirmation candidates, not exclusions.",
+    "approval": "Future reverse ETL actions must use plan -> preview -> explicit approval -> execute; destructive/admin actions must require typed destructive confirmation."
+  }
+}

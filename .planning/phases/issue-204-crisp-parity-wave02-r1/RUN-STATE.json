@@ -1,0 +1,47 @@
+{
+  "phase": "issue-204-crisp-parity-wave02-r1",
+  "parent_issue": 204,
+  "subissues": [205, 206, 207, 208, 209, 210, 211],
+  "branch": "fm/cli-crisp-parity-wave02-r1",
+  "gsd": {
+    "doctor": "passed",
+    "programming_loop_prompt": "unavailable: scripts/gsd prompt programming-loop is not registered in this adapter",
+    "fallback": "manual gsd-universal-runtime-loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Firstmate assigned one isolated worker to the entire Crisp parent/subissue graph; subissue edits collide on internal/connectors/defs/crisp and Crisp-owned artifacts."
+    }
+  ],
+  "counts": {
+    "official_rest_rows": 234,
+    "parent_non_head_rows": 220,
+    "head_rows": 14,
+    "methods": {
+      "DELETE": 26,
+      "GET": 91,
+      "HEAD": 14,
+      "PATCH": 44,
+      "POST": 47,
+      "PUT": 12
+    },
+    "lanes": {
+      "etl_read": 82,
+      "direct_read_query_search": 12,
+      "binary_file": 8,
+      "cdc_changefeed": 4,
+      "reverse_etl_write": 114,
+      "head_check": 14
+    }
+  },
+  "verificationPassed": true,
+  "terminal": true,
+  "stopBefore": ["no-mistakes", "push", "PR"],
+  "notes": [
+    "No live provider calls, credentials, write execution, certification, VPS/Thaalam work, push, PR, or merge.",
+    "All Crisp capabilities remain disabled until future fixture-backed typed execution work.",
+    "Generated docs and website connector catalog data were refreshed for the new Crisp connector."
+  ]
+}

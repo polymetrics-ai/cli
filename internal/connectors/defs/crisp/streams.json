@@ -1,0 +1,40 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json",
+      "X-Crisp-Tier": "{{ config.tier }}"
+    },
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.token_id }}",
+        "password": "{{ secrets.token_key }}",
+        "when": "{{ secrets.token_key }}"
+      },
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "Crisp credential is missing or expired; re-add it without printing token values."
+      },
+      {
+        "status": 403,
+        "hint": "Crisp credential lacks the required tier or scope for this operation."
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Crisp rate limit reached; retry after the provider window resets."
+      }
+    ]
+  },
+  "streams": []
+}

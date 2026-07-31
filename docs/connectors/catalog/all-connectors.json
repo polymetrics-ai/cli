@@ -28617,6 +28617,91 @@
     }
   },
   {
+    "name": "crisp",
+    "display_name": "Crisp",
+    "description": "Connector-local Crisp REST API V1 official operation ledger and planned typed command surface.",
+    "integration_type": "api",
+    "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+    "release_stage": "planned",
+    "capabilities": {
+      "check": false,
+      "catalog": true,
+      "read": false,
+      "write": false,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Crisp Connection Specification",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://api.crisp.chat",
+          "description": "Crisp REST API base URL."
+        },
+        "tier": {
+          "type": "string",
+          "enum": [
+            "website",
+            "plugin",
+            "user"
+          ],
+          "default": "website",
+          "description": "Crisp X-Crisp-Tier header value for future typed operations."
+        },
+        "token_id": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Crisp token identifier supplied through credential storage, environment, or stdin; never inline in docs or issue text."
+        },
+        "token_key": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Crisp token key supplied through credential storage, environment, or stdin; never inline in docs or issue text."
+        },
+        "website_id": {
+          "type": "string",
+          "description": "Optional Crisp website/workspace identifier for future typed commands."
+        },
+        "plugin_id": {
+          "type": "string",
+          "description": "Optional Crisp plugin identifier for future typed plugin commands."
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional RFC3339 lower bound for future incremental streams."
+        },
+        "page_size": {
+          "type": "string",
+          "default": "20",
+          "description": "Optional Crisp page-size request value for future paginated operations; provider docs commonly allow 20-50."
+        },
+        "max_pages": {
+          "type": "string",
+          "default": "0",
+          "description": "Maximum pages for future typed reads; 0 means unbounded under PM output limits."
+        }
+      }
+    },
+    "streams": [],
+    "risk": {
+      "read": "No Crisp read execution is enabled in this connector-local ledger slice; official read, direct, binary, and changefeed operations are inventoried as blocked/planned rows.",
+      "write": "No Crisp write execution is enabled in this connector-local ledger slice; DELETE/destructive/admin writes are included as typed destructive-confirmation candidates, not exclusions.",
+      "approval": "Future reverse ETL actions must use plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive/admin actions must require typed destructive confirmation."
+    },
+    "icon": {
+      "id": "pm-crisp",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "criteo-marketing",
     "display_name": "Criteo Marketing",
     "description": "Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.",

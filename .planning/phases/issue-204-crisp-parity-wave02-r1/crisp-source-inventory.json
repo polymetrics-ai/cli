@@ -1,0 +1,54 @@
+{
+  "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+  "auth_guide": "https://docs.crisp.chat/guides/rest-api/authentication/",
+  "operation_count": 234,
+  "method_counts": {
+    "DELETE": 26,
+    "GET": 91,
+    "HEAD": 14,
+    "PATCH": 44,
+    "POST": 47,
+    "PUT": 12
+  },
+  "lane_counts": {
+    "binary_file": 8,
+    "cdc_changefeed": 4,
+    "direct_read_query_search": 12,
+    "etl_read": 82,
+    "head_check": 14,
+    "reverse_etl_write": 114
+  },
+  "category_counts": {
+    "Analytics in Website": 1,
+    "Animation in Media": 1,
+    "Availability in Website": 2,
+    "Base in Website": 5,
+    "Batch in Website": 11,
+    "Campaign in Website": 12,
+    "Campaigns in Website": 9,
+    "Connect Account in Plugin": 1,
+    "Connect Endpoints in Plugin": 1,
+    "Connect Session in Plugin": 1,
+    "Connect Websites in Plugin": 2,
+    "Connect in Website": 1,
+    "Conversation in Website": 51,
+    "Conversations in Website": 8,
+    "Helpdesk in Website": 54,
+    "Inbox in Website": 7,
+    "Operator in Website": 4,
+    "Operators in Website": 4,
+    "People in Website": 25,
+    "Settings in Website": 2,
+    "Subscription in Plan": 7,
+    "Subscription in Plugin": 13,
+    "URL in Bucket": 1,
+    "Verify in Website": 4,
+    "Visitors in Website": 7
+  },
+  "head_rows_note": "Current official docs expose 14 HEAD existence-check rows in addition to the parent r2 audit's 220 non-HEAD rows.",
+  "shared_foundation_blockers": [
+    "#2985 provider search/query boundary",
+    "#2986 CDC truthfulness",
+    "#2988 CDC state/lab"
+  ]
+}

@@ -1,0 +1,35 @@
+NAME
+  pm crisp direct delete-suggested-conversation-segment - Delete Suggested Conversation Segment
+
+SYNOPSIS
+  pm crisp direct delete-suggested-conversation-segment [flags]
+
+DESCRIPTION
+  Delete Suggested Conversation Segment
+
+INTENT
+  direct_write
+
+AVAILABILITY
+  planned
+
+OPERATION
+  crisp.delete-suggested-conversation-segment
+
+APPROVAL
+  reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required
+
+RISK
+  high
+
+NOTES
+  DELETE /v1/website/{website_id}/conversations/suggest/segment; lane=direct_read_query_search; planned fixed Crisp operation metadata only, not a raw API escape hatch.
+
+FLAGS
+  --website-id (string): The website identifier maps_to=record.website_id
+  --segment (string): Segment to be deleted from suggestions maps_to=record.segment
+
+GLOBAL FLAGS
+  --credential (string): Credential profile name; never pass token values as flags. maps_to=config.credential
+  --limit (integer): Maximum PM records/items to emit when a future typed command supports pagination. maps_to=query.limit
+  --json (boolean): Render machine-readable output for future implemented commands.
