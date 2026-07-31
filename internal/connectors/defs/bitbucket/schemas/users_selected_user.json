@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -67,6 +59,6 @@
   "title": "users_selected_user",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

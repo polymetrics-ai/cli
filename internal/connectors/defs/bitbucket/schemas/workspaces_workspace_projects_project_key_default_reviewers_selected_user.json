@@ -5,11 +5,6 @@
     "account_id": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
@@ -49,14 +44,6 @@
         "boolean",
         "object",
         "array",
-        "null"
-      ]
-    },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
         "null"
       ]
     },
@@ -122,6 +109,6 @@
   "title": "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "account_id"
   ]
 }

@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -76,8 +68,5 @@
     }
   },
   "title": "user_workspaces",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ]
+  "type": "object"
 }

@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -65,8 +57,5 @@
     }
   },
   "title": "user_emails_email",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ]
+  "type": "object"
 }

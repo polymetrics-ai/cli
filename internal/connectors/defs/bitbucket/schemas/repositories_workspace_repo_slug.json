@@ -63,14 +63,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "is_private": {
       "type": [
         "string",
@@ -199,6 +191,6 @@
   "title": "repositories_workspace_repo_slug",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

@@ -33,19 +33,6 @@
     "fingerprint": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
         "null"
       ]
     },
@@ -155,6 +142,6 @@
   "title": "users_selected_user_gpg_keys_fingerprint",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "fingerprint"
   ]
 }

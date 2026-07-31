@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -42,11 +34,6 @@
     "path": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
@@ -89,6 +76,6 @@
   "title": "repositories_workspace_repo_slug_file_conflicts_spec",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "path"
   ]
 }

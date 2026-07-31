@@ -30,14 +30,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "is_private": {
       "type": [
         "string",
@@ -111,6 +103,6 @@
   "title": "workspaces_workspace_projects_project_key",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

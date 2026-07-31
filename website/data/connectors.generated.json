@@ -9599,23 +9599,21 @@
       {
         "name": "repositories",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "hook_events",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "hook_events_subject_type",
         "primary_key": [
-          "id"
+          "event"
         ],
         "cursor": "",
         "incremental": false
@@ -9623,7 +9621,7 @@
       {
         "name": "repositories_workspace",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9631,7 +9629,7 @@
       {
         "name": "repositories_workspace_repo_slug",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9654,24 +9652,20 @@
       },
       {
         "name": "repositories_workspace_repo_slug_branching_model",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_branching_model_settings",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_commit_commit",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "cursor": "",
         "incremental": false
@@ -9694,9 +9688,7 @@
       },
       {
         "name": "repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
@@ -9711,7 +9703,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "cursor": "",
         "incremental": false
@@ -9719,7 +9711,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "cursor": "",
         "incremental": false
@@ -9727,7 +9719,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "cursor": "",
         "incremental": false
@@ -9735,7 +9727,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "cursor": "",
         "incremental": false
@@ -9743,7 +9735,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_statuses",
         "primary_key": [
-          "id"
+          "key"
         ],
         "cursor": "",
         "incremental": false
@@ -9751,7 +9743,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_statuses_build_key",
         "primary_key": [
-          "id"
+          "key"
         ],
         "cursor": "",
         "incremental": false
@@ -9759,7 +9751,7 @@
       {
         "name": "repositories_workspace_repo_slug_commits",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "cursor": "",
         "incremental": false
@@ -9767,7 +9759,7 @@
       {
         "name": "repositories_workspace_repo_slug_commits_revision",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "cursor": "",
         "incremental": false
@@ -9791,7 +9783,7 @@
       {
         "name": "repositories_workspace_repo_slug_default_reviewers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9799,7 +9791,7 @@
       {
         "name": "repositories_workspace_repo_slug_default_reviewers_target_username",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9823,7 +9815,7 @@
       {
         "name": "repositories_workspace_repo_slug_deployments",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9831,7 +9823,7 @@
       {
         "name": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9839,31 +9831,27 @@
       {
         "name": "repositories_workspace_repo_slug_deployments_deployment_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_diffstat_spec",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_effective_branching_model",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_effective_default_reviewers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9871,7 +9859,7 @@
       {
         "name": "repositories_workspace_repo_slug_environments",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9879,7 +9867,7 @@
       {
         "name": "repositories_workspace_repo_slug_environments_environment_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9887,7 +9875,7 @@
       {
         "name": "repositories_workspace_repo_slug_file_conflicts_spec",
         "primary_key": [
-          "id"
+          "path"
         ],
         "cursor": "",
         "incremental": false
@@ -9895,7 +9883,7 @@
       {
         "name": "repositories_workspace_repo_slug_filehistory_commit_path",
         "primary_key": [
-          "id"
+          "path"
         ],
         "cursor": "",
         "incremental": false
@@ -9903,7 +9891,7 @@
       {
         "name": "repositories_workspace_repo_slug_forks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9911,7 +9899,7 @@
       {
         "name": "repositories_workspace_repo_slug_hooks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9919,7 +9907,7 @@
       {
         "name": "repositories_workspace_repo_slug_hooks_uid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9934,9 +9922,7 @@
       },
       {
         "name": "repositories_workspace_repo_slug_issues_import",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
@@ -9951,7 +9937,7 @@
       {
         "name": "repositories_workspace_repo_slug_issues_issue_id_attachments",
         "primary_key": [
-          "id"
+          "name"
         ],
         "cursor": "",
         "incremental": false
@@ -9991,7 +9977,7 @@
       {
         "name": "repositories_workspace_repo_slug_merge_base_revspec",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "cursor": "",
         "incremental": false
@@ -10014,64 +10000,52 @@
       },
       {
         "name": "repositories_workspace_repo_slug_override_settings",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_groups",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_groups_group_slug",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_users",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_caches",
         "primary_key": [
-          "id"
+          "key_hash"
         ],
         "cursor": "",
         "incremental": false
@@ -10079,7 +10053,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
         "primary_key": [
-          "id"
+          "uri"
         ],
         "cursor": "",
         "incremental": false
@@ -10087,7 +10061,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_runners",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10095,7 +10069,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10103,7 +10077,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_schedules",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10111,7 +10085,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10119,23 +10093,21 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10143,7 +10115,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10151,7 +10123,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10159,7 +10131,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10167,7 +10139,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10175,7 +10147,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10183,16 +10155,14 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
@@ -10231,7 +10201,7 @@
       {
         "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses",
         "primary_key": [
-          "id"
+          "key"
         ],
         "cursor": "",
         "incremental": false
@@ -10254,16 +10224,14 @@
       },
       {
         "name": "repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_refs",
         "primary_key": [
-          "id"
+          "name"
         ],
         "cursor": "",
         "incremental": false
@@ -10271,7 +10239,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_branches",
         "primary_key": [
-          "id"
+          "name"
         ],
         "cursor": "",
         "incremental": false
@@ -10279,7 +10247,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_branches_name",
         "primary_key": [
-          "id"
+          "name"
         ],
         "cursor": "",
         "incremental": false
@@ -10287,7 +10255,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_tags",
         "primary_key": [
-          "id"
+          "name"
         ],
         "cursor": "",
         "incremental": false
@@ -10295,16 +10263,14 @@
       {
         "name": "repositories_workspace_repo_slug_refs_tags_name",
         "primary_key": [
-          "id"
+          "name"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "repositories_workspace_repo_slug_src",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
@@ -10327,7 +10293,7 @@
       {
         "name": "repositories_workspace_repo_slug_watchers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10375,7 +10341,7 @@
       {
         "name": "snippets_workspace_encoded_id_commits",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "cursor": "",
         "incremental": false
@@ -10383,7 +10349,7 @@
       {
         "name": "snippets_workspace_encoded_id_commits_revision",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "cursor": "",
         "incremental": false
@@ -10399,7 +10365,7 @@
       {
         "name": "snippets_workspace_encoded_id_watchers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10407,7 +10373,7 @@
       {
         "name": "teams_username_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10415,7 +10381,7 @@
       {
         "name": "teams_username_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10423,71 +10389,57 @@
       {
         "name": "user",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_emails",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_emails_email",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_permissions_repositories",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_permissions_workspaces",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_workspaces",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_workspaces_workspace_permission",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "user_workspaces_workspace_permissions_repositories",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "users_selected_user",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10495,7 +10447,7 @@
       {
         "name": "users_selected_user_gpg_keys",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "cursor": "",
         "incremental": false
@@ -10503,7 +10455,7 @@
       {
         "name": "users_selected_user_gpg_keys_fingerprint",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "cursor": "",
         "incremental": false
@@ -10511,7 +10463,7 @@
       {
         "name": "users_selected_user_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10519,23 +10471,21 @@
       {
         "name": "users_selected_user_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "users_selected_user_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "users_selected_user_ssh_keys",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "cursor": "",
         "incremental": false
@@ -10543,7 +10493,7 @@
       {
         "name": "users_selected_user_ssh_keys_key_id",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "cursor": "",
         "incremental": false
@@ -10551,7 +10501,7 @@
       {
         "name": "workspaces",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10559,7 +10509,7 @@
       {
         "name": "workspaces_workspace",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10567,7 +10517,7 @@
       {
         "name": "workspaces_workspace_hooks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10575,55 +10525,45 @@
       {
         "name": "workspaces_workspace_hooks_uid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_members",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_members_member",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_permissions",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_permissions_repositories",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_permissions_repositories_repo_slug",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_pipelines_config_runners",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10631,7 +10571,7 @@
       {
         "name": "workspaces_workspace_pipelines_config_runners_runner_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10639,7 +10579,7 @@
       {
         "name": "workspaces_workspace_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10647,7 +10587,7 @@
       {
         "name": "workspaces_workspace_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10655,7 +10595,7 @@
       {
         "name": "workspaces_workspace_projects",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10663,31 +10603,27 @@
       {
         "name": "workspaces_workspace_projects_project_key",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_projects_project_key_branching_model",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_projects_project_key_branching_model_settings",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_projects_project_key_default_reviewers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -10695,7 +10631,7 @@
       {
         "name": "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
         "primary_key": [
-          "id"
+          "account_id"
         ],
         "cursor": "",
         "incremental": false
@@ -10718,33 +10654,25 @@
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_groups",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_users",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
@@ -11733,7 +11661,7 @@
         }
       ]
     },
-    "docs_md": "# Bitbucket connector\n\n## Overview\n\nThis bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, typed reverse-ETL write actions for JSON/path mutations, and connector-local blocked operation rows for binary transfer, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.\n\n## Auth setup\n\nUse credentials from the credential store only. Configure `access_token` as a secret for bearer auth, or configure `username` plus secret `app_password` for Bitbucket app-password basic auth. Do not pass tokens, app passwords, OAuth refresh material, or authorization headers in command text, fixtures, docs examples, issue comments, or logs. `base_url` defaults to `https://api.bitbucket.org/2.0`.\n\n## Streams notes\n\nThe stream ledger is generated from every official JSON GET operation not classified as binary transfer or provider search/query. Paginated Bitbucket collection responses use `page` and `pagelen` with a bounded `max_pages` cap; singleton GET responses are modeled as single-object streams. Resource-scoped streams use optional config properties matching Bitbucket path parameter names such as `workspace`, `repo_slug`, `pull_request_id`, `commit`, and `issue_id`; a read of those streams fails closed if the needed config is absent. Fixtures are sanitized synthetic Bitbucket-shaped pages and do not come from live credentials.\n\n## Write actions & risks\n\nEvery generated JSON/path mutation is a named reverse-ETL action with a record schema for path parameters and a schema-permissive typed payload for official request-body fields. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, and `confirm: \"destructive\"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. File/multipart upload operations are not exposed as raw writes; they are blocked in `api_surface.json`/`operations.json` until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.\n\nSecret-bearing write actions for pipeline variables, webhooks, and repository pipeline SSH key pairs declare `redact_fields` for variable `value`, webhook `secret`, and SSH private key/passphrase fields so reverse-plan samples, previews, and write errors do not display those values while approved execution still submits the original payload.\n\n## Known limits\n\n- No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.\n- Provider search/query and direct/binary command execution are connector-local metadata only here. Provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.\n- CDC/changefeed semantics for webhook delivery are not claimed because CDC truthfulness/state foundations #2986 and #2988 are outside this connector-local scope. Webhook REST resources are ledgered as ordinary REST rows only; no CDC capability is advertised.\n- Generated streams use passthrough projection except for secret-bearing Bitbucket resources. Pipeline variable streams, webhook streams, deployment-environment variable streams, and the repository pipeline SSH key-pair stream use schema projection and omit provider secret fields such as `value`, `secret`, and `private_key` from ordinary read output.\n- The repository operation-count tables in GitHub issues are preserved by the captain-policy addendum and are not rewritten by this connector-local bundle.\n",
+    "docs_md": "# Bitbucket connector\n\n## Overview\n\nThis bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, typed reverse-ETL write actions for JSON/path mutations, and connector-local blocked operation rows for binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.\n\n## Auth setup\n\nUse credentials from the credential store only. Configure `access_token` as a secret for bearer auth, or configure `username` plus secret `app_password` for Bitbucket app-password basic auth. Do not pass tokens, app passwords, OAuth refresh material, or authorization headers in command text, fixtures, docs examples, issue comments, or logs. `base_url` defaults to `https://api.bitbucket.org/2.0`.\n\n## Streams notes\n\nThe stream ledger is generated from every official JSON GET operation that has typed stream coverage in this bundle. Paginated Bitbucket collection responses use `page` and `pagelen` with a bounded `max_pages` cap; singleton GET responses are modeled as single-object streams. Resource-scoped streams use optional config properties matching Bitbucket path parameter names such as `workspace`, `repo_slug`, `pull_request_id`, `commit`, and `issue_id`; a read of those streams fails closed if the needed config is absent. Repository, workspace, project, account, pipeline, and configuration-resource streams use provider `uuid`, `account_id`, `fingerprint`, `key`, `name`, or `external_id` fields when those keys are present; commit streams use commit `hash` values, and streams without a confirmed top-level provider key do not claim deduped sync. Fixtures are sanitized synthetic Bitbucket-shaped pages and do not come from live credentials.\n\n## Write actions & risks\n\nEvery generated JSON/path mutation is a named reverse-ETL action with a record schema for path parameters and a schema-permissive typed payload for official request-body fields. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, and `confirm: \"destructive\"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. File/multipart upload operations are not exposed as raw writes; they are blocked in `api_surface.json`/`operations.json` until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.\n\nSecret-bearing write actions for pipeline variables, webhooks, and repository pipeline SSH key pairs declare `redact_fields` for variable `value`, webhook `secret`, and SSH private key/passphrase fields so reverse-plan samples, previews, and write errors do not display those values while approved execution still submits the original payload.\n\n## Known limits\n\n- No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.\n- Provider search/query, planned JSON direct reads, and direct/binary command execution are connector-local metadata only here. Provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.\n- CDC/changefeed semantics for webhook delivery are not claimed because CDC truthfulness/state foundations #2986 and #2988 are outside this connector-local scope. Webhook REST resources are ledgered as ordinary REST rows only; no CDC capability is advertised.\n- Generated streams use passthrough projection except for secret-bearing Bitbucket resources. Pipeline variable streams, webhook streams, deployment-environment variable streams, and the repository pipeline SSH key-pair stream use schema projection and omit provider secret fields such as `value`, `secret`, and `private_key` from ordinary read output.\n- The repository operation-count tables in GitHub issues are preserved by the captain-policy addendum and are not rewritten by this connector-local bundle.\n",
     "icon": null
   },
   {

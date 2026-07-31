@@ -19,22 +19,9 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "key": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
@@ -111,6 +98,6 @@
   "title": "repositories_workspace_repo_slug_commit_commit_statuses",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "key"
   ]
 }

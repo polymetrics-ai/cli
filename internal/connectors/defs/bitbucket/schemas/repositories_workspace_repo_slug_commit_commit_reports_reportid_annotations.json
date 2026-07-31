@@ -33,19 +33,6 @@
     "external_id": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
         "null"
       ]
     },
@@ -155,6 +142,6 @@
   "title": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "external_id"
   ]
 }

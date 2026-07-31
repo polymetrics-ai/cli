@@ -44,19 +44,6 @@
     "hash": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
         "null"
       ]
     },
@@ -133,6 +120,6 @@
   "title": "repositories_workspace_repo_slug_commits_revision",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "hash"
   ]
 }

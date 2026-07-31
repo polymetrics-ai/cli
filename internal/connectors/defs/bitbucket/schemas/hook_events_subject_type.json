@@ -33,19 +33,6 @@
     "event": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
         "null"
       ]
     },
@@ -100,6 +87,6 @@
   "title": "hook_events_subject_type",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "event"
   ]
 }

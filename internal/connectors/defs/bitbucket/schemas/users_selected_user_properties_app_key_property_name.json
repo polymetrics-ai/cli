@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -65,8 +57,5 @@
     }
   },
   "title": "users_selected_user_properties_app_key_property_name",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ]
+  "type": "object"
 }

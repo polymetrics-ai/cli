@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -109,8 +101,5 @@
     }
   },
   "title": "repositories_workspace_repo_slug_issues_import",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ]
+  "type": "object"
 }

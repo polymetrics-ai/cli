@@ -13339,7 +13339,7 @@
       {
         "name": "repositories",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13349,19 +13349,15 @@
       },
       {
         "name": "hook_events",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "hook_events_subject_type",
         "primary_key": [
-          "id"
+          "event"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13372,7 +13368,7 @@
       {
         "name": "repositories_workspace",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13383,7 +13379,7 @@
       {
         "name": "repositories_workspace_repo_slug",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13415,30 +13411,22 @@
       },
       {
         "name": "repositories_workspace_repo_slug_branching_model",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_branching_model_settings",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_commit_commit",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13470,13 +13458,9 @@
       },
       {
         "name": "repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
@@ -13493,7 +13477,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13504,7 +13488,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13515,7 +13499,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13526,7 +13510,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
         "primary_key": [
-          "id"
+          "external_id"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13537,7 +13521,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_statuses",
         "primary_key": [
-          "id"
+          "key"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13548,7 +13532,7 @@
       {
         "name": "repositories_workspace_repo_slug_commit_commit_statuses_build_key",
         "primary_key": [
-          "id"
+          "key"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13559,7 +13543,7 @@
       {
         "name": "repositories_workspace_repo_slug_commits",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13570,7 +13554,7 @@
       {
         "name": "repositories_workspace_repo_slug_commits_revision",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13603,7 +13587,7 @@
       {
         "name": "repositories_workspace_repo_slug_default_reviewers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13614,7 +13598,7 @@
       {
         "name": "repositories_workspace_repo_slug_default_reviewers_target_username",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13647,7 +13631,7 @@
       {
         "name": "repositories_workspace_repo_slug_deployments",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13658,7 +13642,7 @@
       {
         "name": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13669,7 +13653,7 @@
       {
         "name": "repositories_workspace_repo_slug_deployments_deployment_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13679,30 +13663,22 @@
       },
       {
         "name": "repositories_workspace_repo_slug_diffstat_spec",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_effective_branching_model",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_effective_default_reviewers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13713,7 +13689,7 @@
       {
         "name": "repositories_workspace_repo_slug_environments",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13724,7 +13700,7 @@
       {
         "name": "repositories_workspace_repo_slug_environments_environment_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13735,7 +13711,7 @@
       {
         "name": "repositories_workspace_repo_slug_file_conflicts_spec",
         "primary_key": [
-          "id"
+          "path"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13746,7 +13722,7 @@
       {
         "name": "repositories_workspace_repo_slug_filehistory_commit_path",
         "primary_key": [
-          "id"
+          "path"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13757,7 +13733,7 @@
       {
         "name": "repositories_workspace_repo_slug_forks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13768,7 +13744,7 @@
       {
         "name": "repositories_workspace_repo_slug_hooks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13779,7 +13755,7 @@
       {
         "name": "repositories_workspace_repo_slug_hooks_uid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13800,13 +13776,9 @@
       },
       {
         "name": "repositories_workspace_repo_slug_issues_import",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
@@ -13823,7 +13795,7 @@
       {
         "name": "repositories_workspace_repo_slug_issues_issue_id_attachments",
         "primary_key": [
-          "id"
+          "name"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13878,7 +13850,7 @@
       {
         "name": "repositories_workspace_repo_slug_merge_base_revspec",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13910,63 +13882,43 @@
       },
       {
         "name": "repositories_workspace_repo_slug_override_settings",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_groups",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_groups_group_slug",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_users",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13976,19 +13928,15 @@
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_caches",
         "primary_key": [
-          "id"
+          "key_hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -13999,7 +13947,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
         "primary_key": [
-          "id"
+          "uri"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14010,7 +13958,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_runners",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14021,7 +13969,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14032,7 +13980,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_schedules",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14043,7 +13991,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14054,7 +14002,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14064,19 +14012,15 @@
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14087,7 +14031,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14098,7 +14042,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14109,7 +14053,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14120,7 +14064,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14131,7 +14075,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14142,7 +14086,7 @@
       {
         "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14152,13 +14096,9 @@
       },
       {
         "name": "repositories_workspace_repo_slug_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
@@ -14208,7 +14148,7 @@
       {
         "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses",
         "primary_key": [
-          "id"
+          "key"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14240,19 +14180,15 @@
       },
       {
         "name": "repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "repositories_workspace_repo_slug_refs",
         "primary_key": [
-          "id"
+          "name"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14263,7 +14199,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_branches",
         "primary_key": [
-          "id"
+          "name"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14274,7 +14210,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_branches_name",
         "primary_key": [
-          "id"
+          "name"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14285,7 +14221,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_tags",
         "primary_key": [
-          "id"
+          "name"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14296,7 +14232,7 @@
       {
         "name": "repositories_workspace_repo_slug_refs_tags_name",
         "primary_key": [
-          "id"
+          "name"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14306,13 +14242,9 @@
       },
       {
         "name": "repositories_workspace_repo_slug_src",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
@@ -14340,7 +14272,7 @@
       {
         "name": "repositories_workspace_repo_slug_watchers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14406,7 +14338,7 @@
       {
         "name": "snippets_workspace_encoded_id_commits",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14417,7 +14349,7 @@
       {
         "name": "snippets_workspace_encoded_id_commits_revision",
         "primary_key": [
-          "id"
+          "hash"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14439,7 +14371,7 @@
       {
         "name": "snippets_workspace_encoded_id_watchers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14450,7 +14382,7 @@
       {
         "name": "teams_username_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14461,7 +14393,7 @@
       {
         "name": "teams_username_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14472,7 +14404,7 @@
       {
         "name": "user",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14482,85 +14414,57 @@
       },
       {
         "name": "user_emails",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "user_emails_email",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "user_permissions_repositories",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "user_permissions_workspaces",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "user_workspaces",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "user_workspaces_workspace_permission",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "user_workspaces_workspace_permissions_repositories",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "users_selected_user",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14571,7 +14475,7 @@
       {
         "name": "users_selected_user_gpg_keys",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14582,7 +14486,7 @@
       {
         "name": "users_selected_user_gpg_keys_fingerprint",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14593,7 +14497,7 @@
       {
         "name": "users_selected_user_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14604,7 +14508,7 @@
       {
         "name": "users_selected_user_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14614,19 +14518,15 @@
       },
       {
         "name": "users_selected_user_properties_app_key_property_name",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "users_selected_user_ssh_keys",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14637,7 +14537,7 @@
       {
         "name": "users_selected_user_ssh_keys_key_id",
         "primary_key": [
-          "id"
+          "fingerprint"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14648,7 +14548,7 @@
       {
         "name": "workspaces",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14659,7 +14559,7 @@
       {
         "name": "workspaces_workspace",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14670,7 +14570,7 @@
       {
         "name": "workspaces_workspace_hooks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14681,7 +14581,7 @@
       {
         "name": "workspaces_workspace_hooks_uid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14691,63 +14591,43 @@
       },
       {
         "name": "workspaces_workspace_members",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_members_member",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_permissions",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_permissions_repositories",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_permissions_repositories_repo_slug",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_pipelines_config_runners",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14758,7 +14638,7 @@
       {
         "name": "workspaces_workspace_pipelines_config_runners_runner_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14769,7 +14649,7 @@
       {
         "name": "workspaces_workspace_pipelines_config_variables",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14780,7 +14660,7 @@
       {
         "name": "workspaces_workspace_pipelines_config_variables_variable_uuid",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14791,7 +14671,7 @@
       {
         "name": "workspaces_workspace_projects",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14802,7 +14682,7 @@
       {
         "name": "workspaces_workspace_projects_project_key",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14812,30 +14692,22 @@
       },
       {
         "name": "workspaces_workspace_projects_project_key_branching_model",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_projects_project_key_branching_model_settings",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_projects_project_key_default_reviewers",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14846,7 +14718,7 @@
       {
         "name": "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
         "primary_key": [
-          "id"
+          "account_id"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -14878,46 +14750,30 @@
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_groups",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_users",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {

@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -56,6 +48,6 @@
   "title": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "key": {
       "type": [
         "string",
@@ -78,6 +70,6 @@
   "title": "workspaces_workspace_pipelines_config_variables_variable_uuid",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

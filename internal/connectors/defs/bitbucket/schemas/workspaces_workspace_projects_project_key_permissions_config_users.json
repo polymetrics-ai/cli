@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -87,8 +79,5 @@
     }
   },
   "title": "workspaces_workspace_projects_project_key_permissions_config_users",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ]
+  "type": "object"
 }

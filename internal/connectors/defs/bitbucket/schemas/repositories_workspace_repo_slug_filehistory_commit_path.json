@@ -41,14 +41,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -64,11 +56,6 @@
     "path": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
@@ -100,6 +87,6 @@
   "title": "repositories_workspace_repo_slug_filehistory_commit_path",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "path"
   ]
 }

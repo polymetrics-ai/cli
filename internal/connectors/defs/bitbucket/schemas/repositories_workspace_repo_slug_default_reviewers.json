@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -67,6 +59,6 @@
   "title": "repositories_workspace_repo_slug_default_reviewers",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

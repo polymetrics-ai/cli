@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "key": {
       "type": [
         "string",
@@ -78,6 +70,6 @@
   "title": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

@@ -19,22 +19,9 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "key_hash": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
@@ -111,6 +98,6 @@
   "title": "repositories_workspace_repo_slug_pipelines_config_caches",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "key_hash"
   ]
 }

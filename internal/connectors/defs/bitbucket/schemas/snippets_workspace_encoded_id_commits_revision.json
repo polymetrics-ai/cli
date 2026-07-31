@@ -44,19 +44,6 @@
     "hash": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
         "null"
       ]
     },
@@ -144,6 +131,6 @@
   "title": "snippets_workspace_encoded_id_commits_revision",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "hash"
   ]
 }

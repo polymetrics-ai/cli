@@ -52,14 +52,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -144,6 +136,6 @@
   "title": "workspaces_workspace_hooks",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

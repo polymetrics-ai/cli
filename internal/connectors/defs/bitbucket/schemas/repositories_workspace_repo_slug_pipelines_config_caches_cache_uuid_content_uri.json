@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -49,11 +41,6 @@
     "uri": {
       "type": [
         "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
@@ -67,6 +54,6 @@
   "title": "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uri"
   ]
 }

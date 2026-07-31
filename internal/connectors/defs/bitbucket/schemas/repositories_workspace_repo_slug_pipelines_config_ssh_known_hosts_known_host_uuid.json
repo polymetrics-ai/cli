@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -78,6 +70,6 @@
   "title": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "links": {
       "type": [
         "object",
@@ -78,6 +70,6 @@
   "title": "workspaces_workspace_projects_project_key_default_reviewers",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

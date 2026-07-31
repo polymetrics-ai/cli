@@ -8,14 +8,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "lines_added": {
       "type": [
         "string",
@@ -109,8 +101,5 @@
     }
   },
   "title": "repositories_workspace_repo_slug_diffstat_spec",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ]
+  "type": "object"
 }

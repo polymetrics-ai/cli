@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "image": {
       "type": [
         "string",
@@ -122,6 +114,6 @@
   "title": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }

@@ -19,14 +19,6 @@
         "null"
       ]
     },
-    "id": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "null"
-      ]
-    },
     "is_privacy_enforced": {
       "type": [
         "string",
@@ -89,6 +81,6 @@
   "title": "workspaces_workspace",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "uuid"
   ]
 }
