@@ -1,0 +1,24 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "customer_id": "fixture_customer_id",
+    "opt_in_status": true,
+    "company": "fixture_company",
+    "first_name": "fixture_first_name"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/ecommerce/stores/fixture_store_id/customers/fixture_customer_id",
+    "body": {
+      "opt_in_status": true,
+      "company": "fixture_company",
+      "first_name": "fixture_first_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_ecommerce_stores_customers"
+    }
+  }
+}

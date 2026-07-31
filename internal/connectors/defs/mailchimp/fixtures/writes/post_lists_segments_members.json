@@ -1,0 +1,20 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "segment_id": "fixture_segment_id",
+    "email_address": "fixture@example.invalid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id/segments/fixture_segment_id/members",
+    "body": {
+      "email_address": "fixture@example.invalid"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_segments_members"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "campaign_id": "fixture_campaign_id",
+    "schedule_time": "2026-01-01T00:00:00Z",
+    "timewarp": true,
+    "batch_delivery": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns/fixture_campaign_id/actions/schedule"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_schedule_campaigns"
+    }
+  }
+}

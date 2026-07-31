@@ -2,14 +2,76 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "automations",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "create_time",
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "create_time": { "type": ["string", "null"] },
-    "start_time": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] },
-    "emails_sent": { "type": ["integer", "null"] }
-  }
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "create_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emails_sent": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "recipients": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "settings": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tracking": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "trigger_settings": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "report_summary": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "create_time"
 }

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "product_id": "fixture_product_id",
+    "id": "fixture_id",
+    "url": "https://example.invalid/mailchimp-fixture",
+    "variant_ids": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ecommerce/stores/fixture_store_id/products/fixture_product_id/images",
+    "body": {
+      "id": "fixture_id",
+      "url": "https://example.invalid/mailchimp-fixture",
+      "variant_ids": []
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_ecommerce_stores_products_images"
+    }
+  }
+}

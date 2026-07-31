@@ -1,0 +1,16 @@
+{
+  "record": {
+    "campaign_id": "fixture_campaign_id",
+    "feedback_id": "fixture_feedback_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/campaigns/fixture_campaign_id/feedback/fixture_feedback_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_campaigns_feedback"
+    }
+  }
+}

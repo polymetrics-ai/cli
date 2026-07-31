@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_members_goals",
+  "type": "object",
+  "x-primary-key": [
+    "list_id"
+  ],
+  "properties": {
+    "goal_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "event": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_visited_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscriber_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

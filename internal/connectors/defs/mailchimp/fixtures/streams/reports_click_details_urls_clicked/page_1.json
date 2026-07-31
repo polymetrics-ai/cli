@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/click-details",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "urls_clicked": [
+        {
+          "id": "fixture_id",
+          "campaign_id": "fixture_campaign_id",
+          "url": "https://example.invalid/mailchimp-fixture",
+          "total_clicks": 1,
+          "click_percentage": 1,
+          "unique_clicks": 1,
+          "unique_click_percentage": 1,
+          "last_click": "fixture_last_click"
+        }
+      ]
+    }
+  }
+}

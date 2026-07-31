@@ -267,7 +267,7 @@
 | `lokalise` | [`icons/lokalise.svg`](../icons/lokalise.svg) | Lokalise | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.lokalise.com/reference/api-introduction) | bundle definition |
 | `looker` | [`icons/looker.svg`](../icons/looker.svg) | Looker | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://cloud.google.com/looker/docs/reference/looker-api/latest) | bundle definition |
 | `luma` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Luma | `api` | ga | check, catalog, read, write | 25 | 40 | [Documentation](https://docs.luma.com/reference/getting-started-with-your-api) | bundle definition |
-| `mailchimp` | [`icons/mailchimp.svg`](../icons/mailchimp.svg) | Mailchimp | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://mailchimp.com/developer/release-notes/) | bundle definition |
+| `mailchimp` | [`icons/mailchimp.svg`](../icons/mailchimp.svg) | Mailchimp | `api` | ga | check, catalog, read, write | 79 | 148 | [Documentation](https://api.mailchimp.com/schema/3.0/Swagger.json) | bundle definition |
 | `mailerlite` | [`icons/mailerlite.svg`](../icons/mailerlite.svg) | MailerLite | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.mailerlite.com/) | bundle definition |
 | `mailersend` | [`icons/mailersend.svg`](../icons/mailersend.svg) | MailerSend | `api` | ga | check, catalog, read | 16 | 0 | [Documentation](https://developers.mailersend.com/) | bundle definition |
 | `mailgun` | [`icons/mailgun.svg`](../icons/mailgun.svg) | Mailgun | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://documentation.mailgun.com/en/latest/api_reference.html) | bundle definition |

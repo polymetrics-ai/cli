@@ -1,0 +1,15 @@
+{
+  "record": {
+    "workflow_id": "fixture_workflow_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/automations/fixture_workflow_id/actions/pause-all-emails"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_pause_all_emails_automations"
+    }
+  }
+}

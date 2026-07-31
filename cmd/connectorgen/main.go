@@ -101,8 +101,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
@@ -123,6 +122,22 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+// validatePath accepts either the historical root directory containing many
+// connector bundles or a single connector bundle directory. The latter keeps
+// connector-local gates ergonomic for bundles that contain first-level helper
+// subdirectories such as schemas/ and fixtures/.
+func validatePath(dir string) (Report, error) {
+	clean := filepath.Clean(dir)
+	if _, err := os.Stat(filepath.Join(clean, "metadata.json")); err == nil {
+		findings, warnings := validateBundleDir(os.DirFS(filepath.Dir(clean)), filepath.Base(clean))
+		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+	} else if !os.IsNotExist(err) {
+		return Report{}, fmt.Errorf("validate: stat metadata.json: %w", err)
+	}
+
+	return validateDir(os.DirFS(clean))
 }
 
 // renderText renders a Report as human-readable lines: one finding per line

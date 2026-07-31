@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/interest-categories/synthetic-conformance-value/interests",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "interests": [
+        {
+          "id": "fixture_id",
+          "list_id": "fixture_list_id",
+          "interest_category_id": "fixture_interest_category_id",
+          "category_id": "fixture_category_id",
+          "name": "fixture_name",
+          "subscriber_count": "fixture_subscriber_count",
+          "display_order": 1,
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports_sub_reports",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "campaign_title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_is_active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "list_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subject_line": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "preview_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emails_sent": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "abuse_reports": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unsubscribed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "send_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rss_last_send": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bounces": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "forwards": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "opens": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "clicks": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "facebook_likes": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "industry_stats": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "list_stats": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ab_split": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timewarp": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "integer",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "timeseries": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "integer",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null"
+        ]
+      }
+    },
+    "share_report": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ecommerce": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "delivery_status": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "send_time"
+}

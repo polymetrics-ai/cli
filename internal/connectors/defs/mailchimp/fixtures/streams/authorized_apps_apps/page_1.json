@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/authorized-apps",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "apps": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "description": "fixture_description",
+          "users": [],
+          "_links": {}
+        }
+      ]
+    }
+  }
+}
