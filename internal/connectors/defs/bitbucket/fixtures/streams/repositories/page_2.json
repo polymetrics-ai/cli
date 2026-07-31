@@ -16,7 +16,6 @@
         {
           "created_on": "2026-01-01T00:01:41Z",
           "full_name": "fixture-workspace/fixture-repo-101",
-          "id": "repo-101",
           "links": {
             "html": {
               "href": "https://bitbucket.example.invalid/fixture/repo-101"

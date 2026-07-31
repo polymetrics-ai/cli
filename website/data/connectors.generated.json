@@ -9599,7 +9599,7 @@
       {
         "name": "repositories",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9623,7 +9623,7 @@
       {
         "name": "repositories_workspace",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9631,7 +9631,7 @@
       {
         "name": "repositories_workspace_repo_slug",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false
@@ -9911,7 +9911,7 @@
       {
         "name": "repositories_workspace_repo_slug_forks",
         "primary_key": [
-          "id"
+          "uuid"
         ],
         "cursor": "",
         "incremental": false

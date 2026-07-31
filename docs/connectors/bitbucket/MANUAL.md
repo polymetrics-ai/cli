@@ -78,8 +78,8 @@ CONFIGURATION
 
 ETL STREAMS
   repositories:
-    primary key: id
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), id(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    primary key: uuid
+    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
   hook_events:
     primary key: id
     fields: created_on(), id(), links(), name(), repository(), slug(), type(), updated_on(), uuid(), workspace()
@@ -87,11 +87,11 @@ ETL STREAMS
     primary key: id
     fields: category(), created_on(), description(), event(), id(), label(), links(), name(), slug(), type(), updated_on(), uuid()
   repositories_workspace:
-    primary key: id
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), id(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    primary key: uuid
+    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug:
-    primary key: id
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), id(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    primary key: uuid
+    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_branch_restrictions:
     primary key: id
     fields: branch_match_kind(), branch_type(), created_on(), groups(), id(), kind(), links(), name(), pattern(), slug(), type(), updated_on(), users(), uuid(), value()
@@ -195,8 +195,8 @@ ETL STREAMS
     primary key: id
     fields: attributes(), commit(), created_on(), escaped_path(), id(), links(), name(), path(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_forks:
-    primary key: id
-    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), id(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
+    primary key: uuid
+    fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_hooks:
     primary key: id
     fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
