@@ -1,0 +1,20 @@
+{
+  "record": {
+    "collaborators": [
+      {
+        "sample": "value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/bases/synthetic-conformance-value/collaborators",
+    "body": {
+      "collaborators": [
+        {
+          "sample": "value"
+        }
+      ]
+    }
+  }
+}

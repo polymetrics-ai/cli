@@ -1,13 +1,19 @@
 {
   "record": {
-    "id": "rec_fixture_1",
-    "fields": { "Score": 99 }
+    "id": "id_fixture",
+    "fields": {
+      "Name": "Fixture value"
+    },
+    "returnFieldsByFieldId": true
   },
   "expect": {
     "method": "PATCH",
-    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1",
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/id_fixture",
     "body": {
-      "fields": { "Score": 99 }
+      "fields": {
+        "Name": "Fixture value"
+      },
+      "returnFieldsByFieldId": true
     }
   }
 }

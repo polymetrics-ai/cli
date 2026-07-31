@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/exports",
+    "query": {
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "exports": [
+        {
+          "id": "ediscovery_exports_fixture_1",
+          "name": "Fixture Name"
+        }
+      ]
+    }
+  }
+}

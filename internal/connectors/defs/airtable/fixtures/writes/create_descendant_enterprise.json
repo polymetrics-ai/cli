@@ -1,0 +1,13 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/descendants",
+    "body": {
+      "name": "Fixture Name"
+    }
+  }
+}

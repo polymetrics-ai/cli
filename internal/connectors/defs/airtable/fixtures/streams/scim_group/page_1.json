@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/scim/v2/Groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "scim_group_fixture_1",
+      "name": "Fixture Group",
+      "members": [
+        {
+          "id": "usr_fixture_1"
+        }
+      ]
+    }
+  }
+}

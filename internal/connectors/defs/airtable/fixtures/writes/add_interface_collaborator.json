@@ -1,0 +1,21 @@
+{
+  "record": {
+    "page_bundle_id": "page_bundle_id_fixture",
+    "collaborators": [
+      {
+        "sample": "value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/bases/synthetic-conformance-value/interfaces/page_bundle_id_fixture/collaborators",
+    "body": {
+      "collaborators": [
+        {
+          "sample": "value"
+        }
+      ]
+    }
+  }
+}
