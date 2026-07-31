@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/differential_prices/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "differential_price": {
+        "id": "differential_price_fixture_1",
+        "updated_at": 1767225601,
+        "object": "differential_price",
+        "deleted": false
+      }
+    }
+  }
+}

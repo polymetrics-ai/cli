@@ -1,0 +1,10 @@
+{
+  "record": {
+    "authorization_id": "fixture_authorization_id",
+    "ledger_operation_timestamp": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ledger_operations/release_authorization"
+  }
+}

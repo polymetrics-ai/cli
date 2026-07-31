@@ -1,0 +1,9 @@
+{
+  "record": {
+    "alert_id": "fixture_alert_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/alerts/fixture_alert_id/delete"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "vat_number": "fixture_vat_number"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/update_billing_info"
+  }
+}

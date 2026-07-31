@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Chargebee Connection Specification",
   "type": "object",
-  "required": ["site_api_key", "base_url"],
+  "required": [
+    "site_api_key",
+    "base_url"
+  ],
   "properties": {
     "site_api_key": {
       "type": "string",
@@ -32,6 +35,194 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "account_credit_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {account-credit-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "alert_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {alert-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "attached_item_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {attached-item-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "cb_token_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {cb-token-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {comment-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "coupon_code_code": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {coupon-code-code}. Fixture conformance uses a non-secret placeholder."
+    },
+    "coupon_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {coupon-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "coupon_set_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {coupon-set-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "credit_note_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {credit-note-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "cust_payment_source_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {cust-payment-source-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {customer-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "differential_price_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {differential-price-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "export_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {export-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "feature_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {feature-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "gift_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {gift-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "hosted_page_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {hosted-page-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {invoice-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "item_family_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {item-family-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {item-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "item_price_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {item-price-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "ledger_operation_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {ledger-operation-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "offer_fulfillment_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {offer-fulfillment-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "omnichannel_one_time_order_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {omnichannel-one-time-order-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "omnichannel_subscription_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {omnichannel-subscription-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "omnichannel_subscription_item_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {omnichannel-subscription-item-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {order-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "payment_intent_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {payment-intent-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "payment_schedule_scheme_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {payment-schedule-scheme-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "payment_voucher_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {payment-voucher-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "pc2_migration_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {pc2-migration-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "pc2_migration_item_family_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {pc2-migration-item-family-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "pc2_migration_item_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {pc2-migration-item-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "pc2_migration_item_price_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {pc2-migration-item-price-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "portal_session_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {portal-session-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "price_variant_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {price-variant-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {product-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "product_variant_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {product-variant-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "quote_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {quote-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "ramp_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {ramp-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "recorded_purchase_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {recorded-purchase-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {rule-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "site_currency_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {site-currency-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {subscription-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "time_machine_name": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {time-machine-name}. Fixture conformance uses a non-secret placeholder."
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {transaction-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "usage_file_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {usage-file-id}. Fixture conformance uses a non-secret placeholder."
+    },
+    "virtual_bank_account_id": {
+      "type": "string",
+      "description": "Synthetic or live Chargebee path parameter for {virtual-bank-account-id}. Fixture conformance uses a non-secret placeholder."
     }
   }
 }

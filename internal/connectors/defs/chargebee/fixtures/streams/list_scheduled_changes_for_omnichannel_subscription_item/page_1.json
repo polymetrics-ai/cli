@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/omnichannel_subscription_items/synthetic-conformance-value/scheduled_changes",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "omnichannel_subscription_item_scheduled_change": {
+            "id": "omnichannel_subscription_item_scheduled_change_fixture_1",
+            "updated_at": 1767225601,
+            "object": "omnichannel_subscription_item_scheduled_change",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

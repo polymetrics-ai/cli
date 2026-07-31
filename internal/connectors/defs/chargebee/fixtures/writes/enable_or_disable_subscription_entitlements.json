@@ -1,0 +1,10 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "is_enabled": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/subscription_entitlements/set_availability"
+  }
+}

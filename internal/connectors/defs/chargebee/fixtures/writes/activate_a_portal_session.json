@@ -1,0 +1,10 @@
+{
+  "record": {
+    "portal_session_id": "fixture_portal_session_id",
+    "token": "fixture_token"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/portal_sessions/fixture_portal_session_id/activate"
+  }
+}

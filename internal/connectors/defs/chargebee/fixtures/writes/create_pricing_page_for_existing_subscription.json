@@ -1,0 +1,9 @@
+{
+  "record": {
+    "redirect_url": "https://fixture.example.com/chargebee"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pricing_page_sessions/create_for_existing_subscription"
+  }
+}

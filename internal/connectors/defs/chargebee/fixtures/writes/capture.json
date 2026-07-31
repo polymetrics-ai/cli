@@ -1,0 +1,12 @@
+{
+  "record": {
+    "amount": "fixture_amount",
+    "ledger_operation_timestamp": 1,
+    "subscription_id": "fixture_subscription_id",
+    "unit_id": "fixture_unit_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ledger_operations/capture"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "order_id": "fixture_order_id",
+    "shipping_date": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/orders/fixture_order_id/resend"
+  }
+}

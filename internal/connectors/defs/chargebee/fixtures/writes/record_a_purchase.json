@@ -1,0 +1,9 @@
+{
+  "record": {
+    "app_id": "fixture_app_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recorded_purchases"
+  }
+}

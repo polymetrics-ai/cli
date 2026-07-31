@@ -1,0 +1,10 @@
+{
+  "record": {
+    "quote_id": "fixture_quote_id",
+    "po_number": "fixture_po_number"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/quotes/fixture_quote_id/edit_for_charge_items_and_charges"
+  }
+}

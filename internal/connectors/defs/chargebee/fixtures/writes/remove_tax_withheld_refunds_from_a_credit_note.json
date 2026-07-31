@@ -1,0 +1,12 @@
+{
+  "record": {
+    "credit_note_id": "fixture_credit_note_id",
+    "tax_withheld": {
+      "id": "fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/credit_notes/fixture_credit_note_id/remove_tax_withheld_refund"
+  }
+}

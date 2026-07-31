@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/portal_sessions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "portal_session": {
+        "id": "portal_session_fixture_1",
+        "updated_at": 1767225601,
+        "object": "portal_session",
+        "deleted": false
+      }
+    }
+  }
+}

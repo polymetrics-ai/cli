@@ -1,0 +1,9 @@
+{
+  "record": {
+    "site_currency_id": "fixture_site_currency_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/currencies/fixture_site_currency_id/remove_schedule"
+  }
+}

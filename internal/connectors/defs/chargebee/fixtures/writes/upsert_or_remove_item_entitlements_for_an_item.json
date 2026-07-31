@@ -1,0 +1,10 @@
+{
+  "record": {
+    "item_id": "fixture_item_id",
+    "action": "upsert"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/items/fixture_item_id/item_entitlements"
+  }
+}

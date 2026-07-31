@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "status": "future"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/import_for_items"
+  }
+}

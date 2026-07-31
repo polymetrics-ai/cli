@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/gifts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "gift": {
+        "id": "gift_fixture_1",
+        "updated_at": 1767225601,
+        "object": "gift",
+        "deleted": false
+      }
+    }
+  }
+}

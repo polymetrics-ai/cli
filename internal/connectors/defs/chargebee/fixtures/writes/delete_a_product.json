@@ -1,0 +1,9 @@
+{
+  "record": {
+    "product_id": "fixture_product_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/fixture_product_id/delete"
+  }
+}

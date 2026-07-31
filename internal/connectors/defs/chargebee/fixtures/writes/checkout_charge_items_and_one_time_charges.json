@@ -1,0 +1,9 @@
+{
+  "record": {
+    "business_entity_id": "fixture_business_entity_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hosted_pages/checkout_one_time_for_items"
+  }
+}

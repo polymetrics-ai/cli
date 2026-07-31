@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payment_vouchers/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payment_voucher": {
+        "id": "payment_voucher_fixture_1",
+        "updated_at": 1767225601,
+        "object": "payment_voucher",
+        "deleted": false
+      }
+    }
+  }
+}

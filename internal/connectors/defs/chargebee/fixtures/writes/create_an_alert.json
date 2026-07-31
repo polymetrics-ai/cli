@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "type": "usage_exceeded"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/alerts"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "pc2_migration_item_id": "fixture_pc2_migration_item_id",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pc2_migration_items/fixture_pc2_migration_item_id"
+  }
+}

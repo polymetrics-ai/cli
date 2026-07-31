@@ -1,0 +1,9 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/remove_scheduled_changes"
+  }
+}

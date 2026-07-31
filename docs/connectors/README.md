@@ -76,7 +76,7 @@
 - [cart](cart/MANUAL.md): Reads Cart.com orders, customers, products, and inventory through a read-only REST API.
 - [castor-edc](castor-edc/MANUAL.md): Reads Castor EDC studies, users, countries, and audit-trail events through the Castor EDC OAuth2 REST API.
 - [chameleon](chameleon/MANUAL.md): Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Chameleon v3 REST API.
-- [chargebee](chargebee/MANUAL.md): Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans, items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events, and more) through the Chargebee v2 REST API.
+- [chargebee](chargebee/MANUAL.md): Chargebee API v2 Product Catalog 2.0 connector with 125 fixture-backed read streams and 264 reverse-ETL actions; direct/query, binary/file, and CDC/webhook operations are recorded in the operation ledger as blocked/planned.
 - [chargedesk](chargedesk/MANUAL.md): Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.
 - [chargify](chargify/MANUAL.md): Reads and writes Chargify (Maxio Advanced Billing) customers, subscriptions, products, product families, coupons, transactions, invoices, payment profiles, events, and statements through the Chargify REST API.
 - [chartmogul](chartmogul/MANUAL.md): Reads and writes ChartMogul customers, contacts, subscription activities, plans, invoices, tasks, customer-count metrics, and account details through the ChartMogul REST API.

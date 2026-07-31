@@ -1,0 +1,9 @@
+{
+  "record": {
+    "layout": "in_app"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hosted_pages/checkout_new_for_items"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "gift_id": "fixture_gift_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gifts/fixture_gift_id/cancel"
+  }
+}

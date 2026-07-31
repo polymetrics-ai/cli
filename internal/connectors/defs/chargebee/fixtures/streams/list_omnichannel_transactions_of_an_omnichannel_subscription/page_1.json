@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/omnichannel_subscriptions/synthetic-conformance-value/omnichannel_transactions",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "omnichannel_transaction": {
+            "id": "omnichannel_transaction_fixture_1",
+            "updated_at": 1767225601,
+            "object": "omnichannel_transaction",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

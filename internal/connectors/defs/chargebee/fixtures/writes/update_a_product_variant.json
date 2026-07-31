@@ -1,0 +1,10 @@
+{
+  "record": {
+    "product_variant_id": "fixture_product_variant_id",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/variants/fixture_product_variant_id"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resource_migrations/retrieve_latest"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "resource_migration": {
+        "id": "resource_migration_fixture_1",
+        "updated_at": 1767225601,
+        "object": "resource_migration",
+        "deleted": false
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "option_id": "fixture_option_id",
+    "personalized_offer_id": "fixture_personalized_offer_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/offer_fulfillments"
+  }
+}

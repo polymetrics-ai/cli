@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector chargebee [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans, items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events, and more) through the Chargebee v2 REST API.
+  Chargebee API v2 Product Catalog 2.0 connector with 125 fixture-backed read streams and 264 reverse-ETL actions; direct/query, binary/file, and CDC/webhook operations are recorded in the operation ledger as blocked/planned.
 
 ICON
   asset: icons/chargebee.svg
@@ -26,158 +26,1208 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  account_credit_id
+  alert_id
+  attached_item_id
   base_url
+  cb_token_id
+  comment_id
+  coupon_code_code
+  coupon_id
+  coupon_set_id
+  credit_note_id
+  cust_payment_source_id
+  customer_id
+  differential_price_id
+  export_id
+  feature_id
+  gift_id
+  hosted_page_id
+  invoice_id
+  item_family_id
+  item_id
+  item_price_id
+  ledger_operation_id
   max_pages
   mode
+  offer_fulfillment_id
+  omnichannel_one_time_order_id
+  omnichannel_subscription_id
+  omnichannel_subscription_item_id
+  order_id
   page_size
+  payment_intent_id
+  payment_schedule_scheme_id
+  payment_voucher_id
+  pc2_migration_id
+  pc2_migration_item_family_id
+  pc2_migration_item_id
+  pc2_migration_item_price_id
+  portal_session_id
+  price_variant_id
+  product_id
+  product_variant_id
+  quote_id
+  ramp_id
+  recorded_purchase_id
+  rule_id
+  site_currency_id
   start_date
+  subscription_id
+  time_machine_name
+  transaction_id
+  usage_file_id
+  virtual_bank_account_id
   site_api_key (secret)
 
 ETL STREAMS
-  customers:
-    primary key: id
-    cursor: updated_at
-    fields: auto_collection(), company(), created_at(), deleted(), email(), first_name(), id(), last_name(), net_term_days(), phone(), taxability(), updated_at()
   subscriptions:
     primary key: id
     cursor: updated_at
     fields: created_at(), currency_code(), current_term_end(), current_term_start(), customer_id(), deleted(), id(), plan_amount(), plan_id(), plan_quantity(), started_at(), status(), updated_at()
-  invoices:
+  retrieve_advance_invoice:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_with_scheduled_changes:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_discounts_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_contract_terms_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  scheduled_changes_a_subscription_scheduled_change:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  get_hierarchy:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_customer:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_hierarchy_details:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  customers:
     primary key: id
     cursor: updated_at
-    fields: amount_due(), amount_paid(), currency_code(), customer_id(), date(), deleted(), due_date(), id(), paid_at(), status(), subscription_id(), total(), updated_at()
-  plans:
+    fields: auto_collection(), company(), created_at(), deleted(), email(), first_name(), id(), last_name(), net_term_days(), phone(), taxability(), updated_at()
+  list_of_contacts_for_a_customer:
     primary key: id
-    cursor: updated_at
-    fields: created_at(), currency_code(), id(), invoice_name(), name(), period(), period_unit(), price(), status(), updated_at()
-  items:
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_token:
     primary key: id
-    cursor: updated_at
-    fields: created_at(), enabled_for_checkout(), id(), is_shippable(), item_family_id(), name(), status(), type(), updated_at()
-  item_prices:
-    primary key: id
-    cursor: updated_at
-    fields: created_at(), currency_code(), deleted(), free_quantity(), id(), is_taxable(), item_family_id(), item_id(), item_type(), name(), period(), period_unit(), price(), pricing_model(), status(), updated_at()
-  item_families:
-    primary key: id
-    cursor: updated_at
-    fields: created_at(), deleted(), description(), id(), name(), status(), updated_at()
-  coupons:
-    primary key: id
-    fields: apply_on(), created_at(), currency_code(), deleted(), discount_amount(), discount_percentage(), discount_type(), duration_type(), id(), name(), redemptions(), status(), updated_at(), valid_till()
-  coupon_codes:
-    primary key: code
-    fields: code(), coupon_id(), coupon_set_id(), coupon_set_name(), status()
-  coupon_sets:
-    primary key: id
-    fields: archived_count(), coupon_id(), id(), name(), redeemed_count(), total_count()
-  credit_notes:
-    primary key: id
-    cursor: updated_at
-    fields: amount_allocated(), amount_available(), amount_refunded(), currency_code(), customer_id(), date(), deleted(), id(), reference_invoice_id(), status(), subscription_id(), total(), type(), updated_at(), voided_at()
-  transactions:
-    primary key: id
-    cursor: updated_at
-    fields: amount(), currency_code(), customer_id(), date(), deleted(), gateway(), id(), payment_method(), payment_source_id(), status(), subscription_id(), type(), updated_at()
-  orders:
-    primary key: id
-    cursor: updated_at
-    fields: created_at(), currency_code(), customer_id(), deleted(), document_number(), id(), invoice_id(), order_type(), price_type(), status(), subscription_id(), total(), updated_at()
-  quotes:
-    primary key: id
-    cursor: updated_at
-    fields: currency_code(), customer_id(), date(), id(), invoice_id(), name(), operation_type(), price_type(), status(), subscription_id(), total(), updated_at(), valid_till()
+    fields: deleted(), id(), object(), updated_at()
   payment_sources:
     primary key: id
     cursor: updated_at
     fields: created_at(), customer_id(), deleted(), gateway(), gateway_account_id(), id(), reference_id(), status(), type(), updated_at()
-  events:
+  retrieve_a_payment_source:
     primary key: id
-    cursor: occurred_at
-    fields: api_version(), event_type(), id(), occurred_at(), source()
-  hosted_pages:
-    primary key: id
-    cursor: updated_at
-    fields: created_at(), expires_at(), id(), state(), type(), updated_at(), url()
+    fields: deleted(), id(), object(), updated_at()
   virtual_bank_accounts:
     primary key: id
     cursor: updated_at
     fields: account_number(), bank_name(), created_at(), customer_id(), deleted(), email(), gateway(), gateway_account_id(), id(), updated_at()
-  unbilled_charges:
+  retrieve_a_virtual_bank_account:
     primary key: id
-    fields: amount(), currency_code(), customer_id(), date_from(), date_to(), entity_id(), entity_type(), id(), is_voided(), subscription_id()
-  ramps:
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_card_for_a_customer:
     primary key: id
-    cursor: updated_at
-    fields: created_at(), deleted(), description(), effective_from(), id(), status(), subscription_id(), updated_at()
-  gifts:
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_promotional_credit:
     primary key: id
-    fields: auto_claim(), claim_expiry_date(), id(), no_expiry(), scheduled_at(), status(), updated_at()
-  alerts:
-    primary key: id
-    fields: created_at(), description(), id(), metered_feature_id(), name(), status(), subscription_id(), type(), updated_at()
-  comments:
-    primary key: id
-    fields: added_by(), created_at(), entity_id(), entity_type(), id(), notes(), type()
+    fields: deleted(), id(), object(), updated_at()
   promotional_credits:
     primary key: id
     fields: amount(), closing_balance(), created_at(), credit_type(), currency_code(), customer_id(), description(), id(), type()
-  features:
-    primary key: id
-    fields: created_at(), description(), id(), name(), status(), type(), unit(), updated_at()
-  entitlements:
-    primary key: id
-    fields: entity_id(), entity_type(), feature_id(), feature_name(), id(), name(), value()
-  differential_prices:
-    primary key: id
-    fields: created_at(), currency_code(), deleted(), id(), item_price_id(), parent_item_id(), price(), status(), updated_at()
-  price_variants:
+  invoices:
     primary key: id
     cursor: updated_at
-    fields: created_at(), deleted(), description(), id(), name(), status(), updated_at(), variant_group()
+    fields: amount_due(), amount_paid(), currency_code(), customer_id(), date(), deleted(), due_date(), id(), paid_at(), status(), subscription_id(), total(), updated_at()
+  retrieve_an_invoice:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_payment_reference_numbers:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  credit_notes:
+    primary key: id
+    cursor: updated_at
+    fields: amount_allocated(), amount_available(), amount_refunded(), currency_code(), customer_id(), date(), deleted(), id(), reference_invoice_id(), status(), subscription_id(), total(), type(), updated_at(), voided_at()
+  retrieve_a_credit_note:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  unbilled_charges:
+    primary key: id
+    fields: amount(), currency_code(), customer_id(), date_from(), date_to(), entity_id(), entity_type(), id(), is_voided(), subscription_id()
+  orders:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), currency_code(), customer_id(), deleted(), document_number(), id(), invoice_id(), order_type(), price_type(), status(), subscription_id(), total(), updated_at()
+  retrieve_an_order:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  gifts:
+    primary key: id
+    fields: auto_claim(), claim_expiry_date(), id(), no_expiry(), scheduled_at(), status(), updated_at()
+  retrieve_a_gift:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  transactions:
+    primary key: id
+    cursor: updated_at
+    fields: amount(), currency_code(), customer_id(), date(), deleted(), gateway(), id(), payment_method(), payment_source_id(), status(), subscription_id(), type(), updated_at()
+  retrieve_a_transaction:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_payments_for_an_invoice:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  hosted_pages:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), expires_at(), id(), state(), type(), updated_at(), url()
+  retrieve_a_hosted_page:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_quote:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  quotes:
+    primary key: id
+    cursor: updated_at
+    fields: currency_code(), customer_id(), date(), id(), invoice_id(), name(), operation_type(), price_type(), status(), subscription_id(), total(), updated_at(), valid_till()
+  list_quote_line_groups:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  coupons:
+    primary key: id
+    fields: apply_on(), created_at(), currency_code(), deleted(), discount_amount(), discount_percentage(), discount_type(), duration_type(), id(), name(), redemptions(), status(), updated_at(), valid_till()
+  retrieve_a_coupon:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  coupon_sets:
+    primary key: id
+    fields: archived_count(), coupon_id(), id(), name(), redeemed_count(), total_count()
+  retrieve_a_coupon_set:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  coupon_codes:
+    primary key: code
+    fields: code(), coupon_id(), coupon_set_id(), coupon_set_name(), status()
+  retrieve_a_coupon_code:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_address:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_usage:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_usages:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_comment:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  comments:
+    primary key: id
+    fields: added_by(), created_at(), entity_id(), entity_type(), id(), notes(), type()
+  retrieve_a_portal_session:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_site_migration_details:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_latest_migration_details:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_time_machine:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_export:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_full_export_status:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_payment_intent:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_the_meta_data:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_custom_field_configs:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  item_families:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), deleted(), description(), id(), name(), status(), updated_at()
+  retrieve_an_item_family:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_product:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
   products:
     primary key: id
     cursor: updated_at
     fields: created_at(), deleted(), description(), external_name(), has_variant(), id(), name(), shippable(), sku(), status(), updated_at()
-  webhook_endpoints:
+  list_product_variants:
     primary key: id
-    fields: api_version(), disabled(), id(), name(), primary_url(), url()
-  ledger_operations:
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_product_variant:
     primary key: id
-    fields: amount(), created_at(), end_balance(), id(), modified_at(), start_balance(), subscription_id(), type(), unit_id(), unit_type()
+    fields: deleted(), id(), object(), updated_at()
+  items:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), enabled_for_checkout(), id(), is_shippable(), item_family_id(), name(), status(), type(), updated_at()
+  retrieve_an_item:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  price_variants:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), deleted(), description(), id(), name(), status(), updated_at(), variant_group()
+  retrieve_a_price_variant:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_item_price:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_applicable_item_prices_for_a_plan_item_price:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_applicable_items_for_a_plan_item_price:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  item_prices:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), currency_code(), deleted(), free_quantity(), id(), is_taxable(), item_family_id(), item_id(), item_type(), name(), period(), period_unit(), price(), pricing_model(), status(), updated_at()
+  retrieve_an_attached_item:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_attached_items:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  differential_prices:
+    primary key: id
+    fields: created_at(), currency_code(), deleted(), id(), item_price_id(), parent_item_id(), price(), status(), updated_at()
+  retrieve_a_differential_price:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_site_configurations:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  features:
+    primary key: id
+    fields: created_at(), description(), id(), name(), status(), type(), unit(), updated_at()
+  retrieve_a_feature:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_subscription_entitlements:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_customer_entitlements:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_item_entitlements_for_a_feature:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_item_entitlements_for_an_item:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  entitlements:
+    primary key: id
+    fields: entity_id(), entity_type(), feature_id(), feature_name(), id(), name(), value()
+  list_entitlement_overrides_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_the_business_entity_transfers:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_vouchers_for_a_customer:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_vouchers_for_an_invoice:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_voucher_data:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_currency:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_currencies:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_ramp:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  ramps:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), deleted(), description(), effective_from(), id(), status(), subscription_id(), updated_at()
+  retrieve_a_payment_schedule_scheme:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_pc2_migration:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_pc2_migration_item_family:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_pc2_migration_item_families:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_pc2_migration_item:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_pc2_migration_items:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  applicable_items_a_pc2_migration_item:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_pc2_migration_item_prices:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_pc2_migration_item_price:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_site_pc_meta_records:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_omnichannel_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_omnichannel_transactions_of_an_omnichannel_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_omnichannel_subscriptions:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_scheduled_changes_for_omnichannel_subscription_item:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_a_recorded_purchase:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_omnichannel_one_time_orders:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_omnichannel_one_time_order:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_rule_data:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_all_available_meters:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  get_uploaded_file_processing_status:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_offer_fulfillment:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_usage_summary_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_usage_charges_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_applicable_alerts_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  retrieve_an_alert:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  alerts:
+    primary key: id
+    fields: created_at(), description(), id(), metered_feature_id(), name(), status(), subscription_id(), type(), updated_at()
+  list_alert_statuses_for_a_subscription:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_alert_statuses_for_an_alert:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
   ledger_account_balances:
     primary key: subscription_id, unit_id, unit_type
     fields: modified_at(), subscription_id(), unit_id(), unit_type()
+  ledger_operations:
+    primary key: id
+    fields: amount(), created_at(), end_balance(), id(), modified_at(), start_balance(), subscription_id(), type(), unit_id(), unit_type()
+  retrieve_ledger_operation:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
+  list_grant_blocks:
+    primary key: id
+    fields: deleted(), id(), object(), updated_at()
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 REVERSE ETL ACTIONS
-  create_customer:
-    endpoint: POST /customers
-    risk: external mutation; approval required
-  update_customer:
-    endpoint: POST /customers/{{ record.id }}
+  remove_an_advance_invoice_schedules:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/remove_advance_invoice_schedule
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_subscription:
+    endpoint: POST /subscriptions/{{ record.id }}/update_for_items
     required fields: id
-    risk: external mutation; approval required
+    risk: external mutation with billing side effects; approval required
+  remove_coupons:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/remove_coupons
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  resume_a_subscription:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/resume
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  cancel_subscription:
+    endpoint: POST /subscriptions/{{ record.id }}/cancel_for_items
+    required fields: id
+    risk: irreversible external mutation (subscription cancellation) with billing side effects; approval required
+  regenerate_an_invoice:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/regenerate_invoice
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  move_a_subscription:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/move
+    required fields: subscription_id, to_customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  import_subscription_for_items:
+    endpoint: POST /customers/{{ record.customer_id }}/import_for_items
+    required fields: customer_id, status
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_scheduled_cancellation:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/remove_scheduled_cancellation
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  reactivate_a_subscription:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/reactivate
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  charge_future_renewals:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/charge_future_renewals
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_charge_at_term_end:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/add_charge_at_term_end
+    required fields: subscription_id, description
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_scheduled_changes:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/remove_scheduled_changes
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  change_term_end:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/change_term_end
+    required fields: subscription_id, term_ends_at
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_subscription:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/delete
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_subscription:
+    endpoint: POST /customers/{{ record.customer_id }}/subscription_for_items
+    required fields: customer_id
+    risk: external mutation with billing side effects; approval required
+  import_unbilled_charges:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/import_unbilled_charges
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_scheduled_resumption:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/remove_scheduled_resumption
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  import_contract_term:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/import_contract_term
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  override_billing_profile:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/override_billing_profile
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_scheduled_pause:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/remove_scheduled_pause
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  edit_advance_invoice_schedule:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/edit_advance_invoice_schedule
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  pause_a_subscription:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/pause
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_scheduled_changes_a_subscription_scheduled_change:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/update_scheduled_changes
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
   delete_customer:
     endpoint: POST /customers/{{ record.id }}/delete
     required fields: id
     risk: irreversible external deletion; approval required
+  link_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/relationships
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delink_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/delete_relationship
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_contacts_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/delete_contact
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  assign_payment_role:
+    endpoint: POST /customers/{{ record.customer_id }}/assign_payment_role
+    required fields: customer_id, payment_source_id, role
+    risk: external Chargebee mutation; reverse ETL approval required
+  move_a_customer:
+    endpoint: POST /customers/move
+    required fields: from_site, id_at_from_site
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_payment_method_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/update_payment_method
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_customer:
+    endpoint: POST /customers/{{ record.id }}
+    required fields: id
+    risk: external mutation; approval required
+  change_billing_date:
+    endpoint: POST /customers/{{ record.customer_id }}/change_billing_date
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_customer:
+    endpoint: POST /customers
+    risk: external mutation; approval required
+  add_contacts_to_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/add_contact
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  clear_personal_data_of_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/clear_personal_data
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  merge_customers:
+    endpoint: POST /customers/merge
+    required fields: from_customer_id, to_customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  collect_payment_for_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/collect_payment
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_an_excess_payment_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/record_excess_payment
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_contacts_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/update_contact
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_hierarchy_access_settings_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/update_hierarchy_settings
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_billing_info_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/update_billing_info
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_using_vault_temp_token:
+    endpoint: POST /tokens/create_using_temp_token
+    required fields: id_at_vault, payment_method_type
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_card_payment_method_token:
+    endpoint: POST /tokens/create_for_card
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_using_permanent_token:
+    endpoint: POST /payment_sources/create_using_permanent_token
+    required fields: customer_id, type
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_payment_source:
+    endpoint: POST /payment_sources/{{ record.id }}/delete
+    required fields: id
+    risk: irreversible external deletion; approval required
+  create_card_payment_source:
+    endpoint: POST /payment_sources/create_card
+    required fields: customer_id
+    risk: external mutation carrying raw payment-card data; approval required
+  verify_bank_account_payment_source:
+    endpoint: POST /payment_sources/{{ record.cust_payment_source_id }}/verify_bank_account
+    required fields: cust_payment_source_id, amount1, amount2
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_using_payment_intent:
+    endpoint: POST /payment_sources/create_using_payment_intent
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_voucher_payment_method:
+    endpoint: POST /payment_sources/create_voucher_payment_source
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_using_gateway_temporary_token:
+    endpoint: POST /payment_sources/create_using_temp_token
+    required fields: customer_id, tmp_token, type
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_card_payment_source:
+    endpoint: POST /payment_sources/{{ record.cust_payment_source_id }}/update_card
+    required fields: cust_payment_source_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  switch_gateway_account:
+    endpoint: POST /payment_sources/{{ record.cust_payment_source_id }}/switch_gateway_account
+    required fields: cust_payment_source_id, gateway_account_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_using_chargebee_token:
+    endpoint: POST /payment_sources/create_using_token
+    required fields: customer_id, token_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  local_delete_a_payment_source:
+    endpoint: POST /payment_sources/{{ record.cust_payment_source_id }}/delete_local
+    required fields: cust_payment_source_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_bank_account_payment_source:
+    endpoint: POST /payment_sources/create_bank_account
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_bank_account_payment_source:
+    endpoint: POST /payment_sources/{{ record.cust_payment_source_id }}/update_bank_account
+    required fields: cust_payment_source_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  local_delete_a_virtual_bank_account:
+    endpoint: POST /virtual_bank_accounts/{{ record.virtual_bank_account_id }}/delete_local
+    required fields: virtual_bank_account_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_virtual_bank_account:
+    endpoint: POST /virtual_bank_accounts/{{ record.id }}/delete
+    required fields: id
+    risk: irreversible external deletion; approval required
+  create_virtual_bank_account:
+    endpoint: POST /virtual_bank_accounts
+    required fields: customer_id
+    risk: external mutation; approval required
+  create_a_virtual_bank_account_using_permanent_token:
+    endpoint: POST /virtual_bank_accounts/create_using_permanent_token
+    required fields: customer_id, reference_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  copy_card:
+    endpoint: POST /customers/{{ record.customer_id }}/copy_card
+    required fields: customer_id, gateway_account_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  switch_gateway:
+    endpoint: POST /customers/{{ record.customer_id }}/switch_gateway
+    required fields: customer_id, gateway_account_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_card_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/delete_card
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_card_for_a_customer:
+    endpoint: POST /customers/{{ record.customer_id }}/credit_card
+    required fields: customer_id, expiry_month, expiry_year, number
+    risk: external Chargebee mutation; reverse ETL approval required
+  deduct_promotional_credit:
+    endpoint: POST /promotional_credits/deduct
+    required fields: customer_id, description
+    risk: external mutation with a direct billing-credit financial effect; approval required
+  set_promotional_credits:
+    endpoint: POST /promotional_credits/set
+    required fields: customer_id, description
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_promotional_credit:
+    endpoint: POST /promotional_credits/add
+    required fields: customer_id, description
+    risk: external mutation with a direct billing-credit financial effect; approval required
+  delete_line_items:
+    endpoint: POST /invoices/{{ record.invoice_id }}/delete_line_items
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_credit_note_from_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/remove_credit_note
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_payment_from_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/remove_payment
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  stop_dunning_for_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/stop_dunning
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  apply_payments_for_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/apply_payments
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  void_invoice:
+    endpoint: POST /invoices/{{ record.id }}/void
+    required fields: id
+    risk: irreversible external mutation with accounting side effects; approval required
+  add_one_time_charge_to_a_pending_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/add_charge
+    required fields: invoice_id, amount, description
+    risk: external Chargebee mutation; reverse ETL approval required
+  write_off_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/write_off
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_a_charge_item_to_a_pending_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/add_charge_item
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  pause_dunning_for_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/pause_dunning
+    required fields: invoice_id, expected_payment_date
+    risk: external Chargebee mutation; reverse ETL approval required
+  close_a_pending_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/close
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  apply_credits_for_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/apply_credits
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_invoice_for_items_and_one_time_charges:
+    endpoint: POST /invoices/create_for_charge_items_and_charges
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_invoice_details:
+    endpoint: POST /invoices/{{ record.invoice_id }}/update_details
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_an_invoice_payment:
+    endpoint: POST /invoices/{{ record.invoice_id }}/record_payment
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/delete
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  import_invoice:
+    endpoint: POST /invoices/import_invoice
+    required fields: date, id, total
+    risk: external Chargebee mutation; reverse ETL approval required
+  resume_dunning_for_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/resume_dunning
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_tax_withheld_for_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/record_tax_withheld
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_tax_withheld_for_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/remove_tax_withheld
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  collect_payment_for_invoice:
+    endpoint: POST /invoices/{{ record.id }}/collect_payment
+    required fields: id
+    risk: external mutation that attempts to charge a payment method; approval required
+  sync_usages:
+    endpoint: POST /invoices/{{ record.invoice_id }}/sync_usages
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  refund_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/refund
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_refund_for_an_invoice:
+    endpoint: POST /invoices/{{ record.invoice_id }}/record_refund
+    required fields: invoice_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_refund_for_a_credit_note:
+    endpoint: POST /credit_notes/{{ record.credit_note_id }}/record_refund
+    required fields: credit_note_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  import_credit_note:
+    endpoint: POST /credit_notes/import_credit_note
+    required fields: create_reason_code, date, id, reference_invoice_id, type
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_credit_note:
+    endpoint: POST /credit_notes/{{ record.credit_note_id }}/delete
+    required fields: credit_note_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  void_credit_note:
+    endpoint: POST /credit_notes/{{ record.id }}/void
+    required fields: id
+    risk: irreversible external mutation; approval required
+  refund_a_credit_note:
+    endpoint: POST /credit_notes/{{ record.credit_note_id }}/refund
+    required fields: credit_note_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_credit_note:
+    endpoint: POST /credit_notes
+    required fields: type
+    risk: external mutation with accounting/billing side effects; approval required
+  remove_tax_withheld_refunds_from_a_credit_note:
+    endpoint: POST /credit_notes/{{ record.credit_note_id }}/remove_tax_withheld_refund
+    required fields: credit_note_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_an_unbilled_charge:
+    endpoint: POST /unbilled_charges/{{ record.unbilled_charge_id }}/delete
+    required fields: unbilled_charge_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_an_invoice_for_unbilled_charges:
+    endpoint: POST /unbilled_charges/invoice_unbilled_charges
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_unbilled_charges_for_item_subscription:
+    endpoint: POST /unbilled_charges
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_order:
+    endpoint: POST /orders
+    required fields: invoice_id
+    risk: external mutation; approval required
+  import_an_order:
+    endpoint: POST /orders/import_order
+    required fields: created_at, invoice_id, order_date, shipping_date, status
+    risk: external Chargebee mutation; reverse ETL approval required
+  assign_order_number:
+    endpoint: POST /orders/{{ record.order_id }}/assign_order_number
+    required fields: order_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  resend_an_order:
+    endpoint: POST /orders/{{ record.order_id }}/resend
+    required fields: order_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  reopen_a_cancelled_order:
+    endpoint: POST /orders/{{ record.order_id }}/reopen
+    required fields: order_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  cancel_order:
+    endpoint: POST /orders/{{ record.id }}/cancel
+    required fields: id, cancellation_reason
+    risk: irreversible external mutation (order cancellation); approval required
+  update_order:
+    endpoint: POST /orders/{{ record.id }}
+    required fields: id
+    risk: external mutation; approval required
+  delete_an_imported_order:
+    endpoint: POST /orders/{{ record.order_id }}/delete
+    required fields: order_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_refundable_credit_note:
+    endpoint: POST /orders/{{ record.order_id }}/create_refundable_credit_note
+    required fields: order_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_gift_subscription_for_items:
+    endpoint: POST /gifts/create_for_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  cancel_a_gift:
+    endpoint: POST /gifts/{{ record.gift_id }}/cancel
+    required fields: gift_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_gift:
+    endpoint: POST /gifts/{{ record.gift_id }}/update_gift
+    required fields: gift_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  claim_a_gift:
+    endpoint: POST /gifts/{{ record.gift_id }}/claim
+    required fields: gift_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  reconcile_transaction:
+    endpoint: POST /transactions/{{ record.transaction_id }}/reconcile
+    required fields: transaction_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  refund_a_payment:
+    endpoint: POST /transactions/{{ record.transaction_id }}/refund
+    required fields: transaction_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_an_offline_refund:
+    endpoint: POST /transactions/{{ record.transaction_id }}/record_refund
+    required fields: transaction_id, date, payment_method
+    risk: external Chargebee mutation; reverse ETL approval required
+  void_an_authorization_transaction:
+    endpoint: POST /transactions/{{ record.transaction_id }}/void
+    required fields: transaction_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_an_authorization_payment:
+    endpoint: POST /transactions/create_authorization
+    required fields: amount, customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_an_offline_transaction:
+    endpoint: POST /transactions/{{ record.transaction_id }}/delete_offline_transaction
+    required fields: transaction_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  checkout_charge_items_and_one_time_charges:
+    endpoint: POST /hosted_pages/checkout_one_time_for_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  extend_subscription:
+    endpoint: POST /hosted_pages/extend_subscription
+    risk: external Chargebee mutation; reverse ETL approval required
+  checkout_gift_subscription_for_items:
+    endpoint: POST /hosted_pages/checkout_gift_for_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_hosted_page_to_view_boleto_vouchers:
+    endpoint: POST /hosted_pages/view_voucher
+    risk: external Chargebee mutation; reverse ETL approval required
+  collect_now:
+    endpoint: POST /hosted_pages/collect_now
+    risk: external Chargebee mutation; reverse ETL approval required
+  accept_a_quote:
+    endpoint: POST /hosted_pages/accept_quote
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_checkout_for_a_new_subscription:
+    endpoint: POST /hosted_pages/checkout_new_for_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  claim_a_gift_subscription:
+    endpoint: POST /hosted_pages/claim_gift
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_checkout_to_update_a_subscription:
+    endpoint: POST /hosted_pages/checkout_existing_for_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_pre_cancel_hosted_page:
+    endpoint: POST /hosted_pages/pre_cancel
+    risk: external Chargebee mutation; reverse ETL approval required
+  acknowledge_a_hosted_page:
+    endpoint: POST /hosted_pages/{{ record.hosted_page_id }}/acknowledge
+    required fields: hosted_page_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  manage_payment_sources:
+    endpoint: POST /hosted_pages/manage_payment_sources
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_quote_for_a_new_subscription_items:
+    endpoint: POST /customers/{{ record.customer_id }}/create_subscription_quote_for_items
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_quote_status:
+    endpoint: POST /quotes/{{ record.quote_id }}/update_status
+    required fields: quote_id, status
+    risk: external Chargebee mutation; reverse ETL approval required
+  extend_expiry_date:
+    endpoint: POST /quotes/{{ record.quote_id }}/extend_expiry_date
+    required fields: quote_id, valid_till
+    risk: external Chargebee mutation; reverse ETL approval required
+  edit_update_subscription_quote_for_items:
+    endpoint: POST /quotes/{{ record.quote_id }}/edit_update_subscription_quote_for_items
+    required fields: quote_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  convert_a_quote:
+    endpoint: POST /quotes/{{ record.quote_id }}/convert
+    required fields: quote_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_quote:
+    endpoint: POST /quotes/{{ record.quote_id }}/delete
+    required fields: quote_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  edit_create_subscription_quote_for_items:
+    endpoint: POST /quotes/{{ record.quote_id }}/edit_create_subscription_quote_for_items
+    required fields: quote_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_quote_for_update_subscription_items:
+    endpoint: POST /quotes/update_subscription_quote_for_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  edit_quote_for_charge_items_and_charges:
+    endpoint: POST /quotes/{{ record.quote_id }}/edit_for_charge_items_and_charges
+    required fields: quote_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_quote_for_charge_and_charge_items:
+    endpoint: POST /quotes/create_for_charge_items_and_charges
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_coupon:
+    endpoint: POST /coupons/{{ record.id }}/update_for_items
+    required fields: id
+    risk: external mutation with billing/discount side effects; approval required
+  unarchive_a_coupon:
+    endpoint: POST /coupons/{{ record.coupon_id }}/unarchive
+    required fields: coupon_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_coupon:
+    endpoint: POST /coupons/{{ record.id }}/delete
+    required fields: id
+    risk: irreversible external deletion; approval required
+  copy_a_coupon:
+    endpoint: POST /coupons/copy
+    required fields: from_site, id_at_from_site
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_coupon:
+    endpoint: POST /coupons/create_for_items
+    required fields: id, name, apply_on
+    risk: external mutation with billing/discount side effects; approval required
+  create_a_coupon_set:
+    endpoint: POST /coupon_sets
+    required fields: coupon_id, id, name
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_coupon_set:
+    endpoint: POST /coupon_sets/{{ record.coupon_set_id }}/update
+    required fields: coupon_set_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_coupon_codes_to_coupon_set:
+    endpoint: POST /coupon_sets/{{ record.coupon_set_id }}/add_coupon_codes
+    required fields: coupon_set_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_unused_coupon_codes:
+    endpoint: POST /coupon_sets/{{ record.coupon_set_id }}/delete_unused_coupon_codes
+    required fields: coupon_set_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_coupon_set:
+    endpoint: POST /coupon_sets/{{ record.coupon_set_id }}/delete
+    required fields: coupon_set_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  archive_a_coupon_code:
+    endpoint: POST /coupon_codes/{{ record.coupon_code_code }}/archive
+    required fields: coupon_code_code
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_an_address:
+    endpoint: POST /addresses
+    required fields: label, subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_usage:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/usages
+    required fields: subscription_id, item_price_id, quantity, usage_date
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_usage:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/delete_usage
+    required fields: subscription_id, id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_comment:
+    endpoint: POST /comments/{{ record.id }}/delete
+    required fields: id
+    risk: irreversible external deletion; approval required
+  create_comment:
+    endpoint: POST /comments
+    required fields: entity_type, entity_id, notes
+    risk: external mutation; approval required
+  create_a_portal_session:
+    endpoint: POST /portal_sessions
+    risk: external Chargebee mutation; reverse ETL approval required
+  activate_a_portal_session:
+    endpoint: POST /portal_sessions/{{ record.portal_session_id }}/activate
+    required fields: portal_session_id, token
+    risk: external Chargebee mutation; reverse ETL approval required
+  logout_a_portal_session:
+    endpoint: POST /portal_sessions/{{ record.portal_session_id }}/logout
+    required fields: portal_session_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  travel_forward:
+    endpoint: POST /time_machines/{{ record.time_machine_name }}/travel_forward
+    required fields: time_machine_name
+    risk: external Chargebee mutation; reverse ETL approval required
+  start_afresh:
+    endpoint: POST /time_machines/{{ record.time_machine_name }}/start_afresh
+    required fields: time_machine_name
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_attached_items:
+    endpoint: POST /exports/attached_items
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_transactions:
+    endpoint: POST /exports/transactions
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_differential_price:
+    endpoint: POST /exports/differential_prices
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_item_families:
+    endpoint: POST /exports/item_families
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_invoices:
+    endpoint: POST /exports/invoices
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_price_variants:
+    endpoint: POST /exports/price_variants
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_items:
+    endpoint: POST /exports/items
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_deferred_revenue_reports:
+    endpoint: POST /exports/deferred_revenue
+    required fields: report_by, report_from_month, report_from_year, report_to_month, report_to_year
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_revenue_recognition_reports:
+    endpoint: POST /exports/revenue_recognition
+    required fields: report_by, report_from_month, report_from_year, report_to_month, report_to_year
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_credit_notes:
+    endpoint: POST /exports/credit_notes
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_coupons:
+    endpoint: POST /exports/coupons
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_orders:
+    endpoint: POST /exports/orders
+    risk: external Chargebee mutation; reverse ETL approval required
+  export_item_prices:
+    endpoint: POST /exports/item_prices
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_payment_intent:
+    endpoint: POST /payment_intents/{{ record.payment_intent_id }}
+    required fields: payment_intent_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_payment_intent:
+    endpoint: POST /payment_intents
+    required fields: amount, currency_code
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_item_family:
+    endpoint: POST /item_families/{{ record.id }}/delete
+    required fields: id
+    risk: irreversible external deletion; approval required
+  create_item_family:
+    endpoint: POST /item_families
+    required fields: id, name
+    risk: external mutation; approval required
+  update_item_family:
+    endpoint: POST /item_families/{{ record.id }}
+    required fields: id
+    risk: external mutation; approval required
+  update_a_product:
+    endpoint: POST /products/{{ record.product_id }}
+    required fields: product_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_product:
+    endpoint: POST /products/{{ record.product_id }}/delete
+    required fields: product_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_remove_or_update_options_for_the_product:
+    endpoint: POST /products/{{ record.product_id }}/update_options
+    required fields: product_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_product:
+    endpoint: POST /products
+    required fields: external_name, name, status
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_product_variant:
+    endpoint: POST /products/{{ record.product_id }}/variants
+    required fields: product_id, name
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_product_variant:
+    endpoint: POST /variants/{{ record.product_variant_id }}
+    required fields: product_variant_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_product_variant:
+    endpoint: POST /variants/{{ record.product_variant_id }}/delete
+    required fields: product_variant_id
+    risk: external Chargebee mutation; reverse ETL approval required
   create_item:
     endpoint: POST /items
-    risk: external mutation; approval required
-  update_item:
-    endpoint: POST /items/{{ record.id }}
-    required fields: id
+    required fields: id, name, type, item_family_id
     risk: external mutation; approval required
   delete_item:
     endpoint: POST /items/{{ record.id }}/delete
     required fields: id
     risk: irreversible external deletion; approval required
-  create_item_price:
-    endpoint: POST /item_prices
+  update_item:
+    endpoint: POST /items/{{ record.id }}
+    required fields: id
     risk: external mutation; approval required
+  delete_a_price_variant:
+    endpoint: POST /price_variants/{{ record.price_variant_id }}/delete
+    required fields: price_variant_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_price_variant:
+    endpoint: POST /price_variants
+    required fields: id, name
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_price_variant:
+    endpoint: POST /price_variants/{{ record.price_variant_id }}
+    required fields: price_variant_id
+    risk: external Chargebee mutation; reverse ETL approval required
   update_item_price:
     endpoint: POST /item_prices/{{ record.id }}
     required fields: id
@@ -186,104 +1236,270 @@ REVERSE ETL ACTIONS
     endpoint: POST /item_prices/{{ record.id }}/delete
     required fields: id
     risk: irreversible external deletion; approval required
-  create_item_family:
-    endpoint: POST /item_families
+  create_item_price:
+    endpoint: POST /item_prices
+    required fields: id, item_id, name
     risk: external mutation; approval required
-  update_item_family:
-    endpoint: POST /item_families/{{ record.id }}
-    required fields: id
-    risk: external mutation; approval required
-  delete_item_family:
-    endpoint: POST /item_families/{{ record.id }}/delete
-    required fields: id
-    risk: irreversible external deletion; approval required
-  create_subscription:
-    endpoint: POST /customers/{{ record.customer_id }}/subscription_for_items
+  update_an_attached_item:
+    endpoint: POST /attached_items/{{ record.attached_item_id }}
+    required fields: attached_item_id, parent_item_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_an_attached_item:
+    endpoint: POST /items/{{ record.item_id }}/attached_items
+    required fields: item_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_an_attached_item:
+    endpoint: POST /attached_items/{{ record.attached_item_id }}/delete
+    required fields: attached_item_id, parent_item_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_differential_price:
+    endpoint: POST /differential_prices/{{ record.differential_price_id }}/delete
+    required fields: differential_price_id, item_price_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_differential_price:
+    endpoint: POST /item_prices/{{ record.item_price_id }}/differential_prices
+    required fields: item_price_id, parent_item_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_differential_price:
+    endpoint: POST /differential_prices/{{ record.differential_price_id }}
+    required fields: differential_price_id, item_price_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_feature:
+    endpoint: POST /features
+    required fields: name
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_feature:
+    endpoint: POST /features/{{ record.feature_id }}/delete
+    required fields: feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_feature:
+    endpoint: POST /features/{{ record.feature_id }}
+    required fields: feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  archive_a_feature:
+    endpoint: POST /features/{{ record.feature_id }}/archive_command
+    required fields: feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  activate_a_feature:
+    endpoint: POST /features/{{ record.feature_id }}/activate_command
+    required fields: feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  reactivate_a_feature:
+    endpoint: POST /features/{{ record.feature_id }}/reactivate_command
+    required fields: feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  enable_or_disable_subscription_entitlements:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/subscription_entitlements/set_availability
+    required fields: subscription_id, is_enabled
+    risk: external Chargebee mutation; reverse ETL approval required
+  upsert_or_remove_item_entitlements_for_a_feature:
+    endpoint: POST /features/{{ record.feature_id }}/item_entitlements
+    required fields: feature_id, action
+    risk: external Chargebee mutation; reverse ETL approval required
+  upsert_or_remove_item_entitlements_for_an_item:
+    endpoint: POST /items/{{ record.item_id }}/item_entitlements
+    required fields: item_id, action
+    risk: external Chargebee mutation; reverse ETL approval required
+  upsert_or_remove_entitlements_for_a_feature:
+    endpoint: POST /entitlements
+    required fields: action
+    risk: external Chargebee mutation; reverse ETL approval required
+  retrieve_store_subscription:
+    endpoint: POST /in_app_subscriptions/{{ record.in_app_subscription_app_id }}/retrieve
+    required fields: in_app_subscription_app_id, receipt
+    risk: external Chargebee mutation; reverse ETL approval required
+  import_receipt:
+    endpoint: POST /in_app_subscriptions/{{ record.in_app_subscription_app_id }}/import_receipt
+    required fields: in_app_subscription_app_id, receipt
+    risk: external Chargebee mutation; reverse ETL approval required
+  import_subscription_without_receipt:
+    endpoint: POST /in_app_subscriptions/{{ record.in_app_subscription_app_id }}/import_subscription
+    required fields: in_app_subscription_app_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  process_purchase_command:
+    endpoint: POST /in_app_subscriptions/{{ record.in_app_subscription_app_id }}/process_purchase_command
+    required fields: in_app_subscription_app_id, receipt
+    risk: external Chargebee mutation; reverse ETL approval required
+  one_time_purchase:
+    endpoint: POST /non_subscriptions/{{ record.non_subscription_app_id }}/one_time_purchase
+    required fields: non_subscription_app_id, receipt
+    risk: external Chargebee mutation; reverse ETL approval required
+  upsert_or_remove_entitlement_overrides_for_a_subscription:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/entitlement_overrides
+    required fields: subscription_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  transfer_resources_to_another_business_entity:
+    endpoint: POST /business_entities/transfers
+    required fields: active_resource_ids, destination_business_entity_ids, reason_codes
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_purchase:
+    endpoint: POST /purchases
     required fields: customer_id
-    risk: external mutation with billing side effects; approval required
-  update_subscription:
-    endpoint: POST /subscriptions/{{ record.id }}/update_for_items
-    required fields: id
-    risk: external mutation with billing side effects; approval required
-  cancel_subscription:
-    endpoint: POST /subscriptions/{{ record.id }}/cancel_for_items
-    required fields: id
-    risk: irreversible external mutation (subscription cancellation) with billing side effects; approval required
-  create_credit_note:
-    endpoint: POST /credit_notes
-    risk: external mutation with accounting/billing side effects; approval required
-  void_credit_note:
-    endpoint: POST /credit_notes/{{ record.id }}/void
-    required fields: id
-    risk: irreversible external mutation; approval required
-  create_coupon:
-    endpoint: POST /coupons/create_for_items
-    risk: external mutation with billing/discount side effects; approval required
-  update_coupon:
-    endpoint: POST /coupons/{{ record.id }}/update_for_items
-    required fields: id
-    risk: external mutation with billing/discount side effects; approval required
-  delete_coupon:
-    endpoint: POST /coupons/{{ record.id }}/delete
-    required fields: id
-    risk: irreversible external deletion; approval required
-  create_order:
-    endpoint: POST /orders
-    risk: external mutation; approval required
-  update_order:
-    endpoint: POST /orders/{{ record.id }}
-    required fields: id
-    risk: external mutation; approval required
-  cancel_order:
-    endpoint: POST /orders/{{ record.id }}/cancel
-    required fields: id
-    risk: irreversible external mutation (order cancellation); approval required
-  void_invoice:
-    endpoint: POST /invoices/{{ record.id }}/void
-    required fields: id
-    risk: irreversible external mutation with accounting side effects; approval required
-  collect_payment_for_invoice:
-    endpoint: POST /invoices/{{ record.id }}/collect_payment
-    required fields: id
-    risk: external mutation that attempts to charge a payment method; approval required
-  create_webhook_endpoint:
-    endpoint: POST /webhook_endpoints
-    risk: external mutation exposing business data to a third-party URL; approval required
-  update_webhook_endpoint:
-    endpoint: POST /webhook_endpoints/{{ record.id }}
-    required fields: id
-    risk: external mutation exposing business data to a third-party URL; approval required
-  delete_webhook_endpoint:
-    endpoint: POST /webhook_endpoints/{{ record.id }}/delete
-    required fields: id
-    risk: irreversible external deletion; approval required
-  create_comment:
-    endpoint: POST /comments
-    risk: external mutation; approval required
-  delete_comment:
-    endpoint: POST /comments/{{ record.id }}/delete
-    required fields: id
-    risk: irreversible external deletion; approval required
-  add_promotional_credit:
-    endpoint: POST /promotional_credits/add
-    risk: external mutation with a direct billing-credit financial effect; approval required
-  deduct_promotional_credit:
-    endpoint: POST /promotional_credits/deduct
-    risk: external mutation with a direct billing-credit financial effect; approval required
-  create_virtual_bank_account:
-    endpoint: POST /virtual_bank_accounts
-    risk: external mutation; approval required
-  delete_virtual_bank_account:
-    endpoint: POST /virtual_bank_accounts/{{ record.id }}/delete
-    required fields: id
-    risk: irreversible external deletion; approval required
-  create_card_payment_source:
-    endpoint: POST /payment_sources/create_card
-    risk: external mutation carrying raw payment-card data; approval required
-  delete_payment_source:
-    endpoint: POST /payment_sources/{{ record.id }}/delete
-    required fields: id
-    risk: irreversible external deletion; approval required
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_voucher_for_the_customer_to_initiate_payment:
+    endpoint: POST /payment_vouchers
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  taxes_csv_import:
+    endpoint: POST /csv_tax_rules
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_schedule:
+    endpoint: POST /currencies/{{ record.site_currency_id }}/add_schedule
+    required fields: site_currency_id, manual_exchange_rate, schedule_at
+    risk: external Chargebee mutation; reverse ETL approval required
+  add_a_new_currency:
+    endpoint: POST /currencies
+    required fields: currency_code, forex_type
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_currency:
+    endpoint: POST /currencies/{{ record.site_currency_id }}
+    required fields: site_currency_id, forex_type
+    risk: external Chargebee mutation; reverse ETL approval required
+  remove_schedule:
+    endpoint: POST /currencies/{{ record.site_currency_id }}/remove_schedule
+    required fields: site_currency_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_ramp:
+    endpoint: POST /subscriptions/{{ record.subscription_id }}/create_ramp
+    required fields: subscription_id, effective_from
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_subscription_ramp:
+    endpoint: POST /ramps/{{ record.ramp_id }}/update
+    required fields: ramp_id, effective_from
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_ramp:
+    endpoint: POST /ramps/{{ record.ramp_id }}/delete
+    required fields: ramp_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_payment_schedule_scheme:
+    endpoint: POST /payment_schedule_schemes
+    required fields: name, number_of_schedules, period_unit
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_payment_schedule_scheme:
+    endpoint: POST /payment_schedule_schemes/{{ record.payment_schedule_scheme_id }}/delete
+    required fields: payment_schedule_scheme_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  contact_support_a_pc2_migration:
+    endpoint: POST /pc2_migrations/{{ record.pc2_migration_id }}/contact_support
+    required fields: pc2_migration_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_pc2_migration:
+    endpoint: POST /pc2_migrations
+    risk: external Chargebee mutation; reverse ETL approval required
+  initiate_a_pc2_migration:
+    endpoint: POST /pc2_migrations/{{ record.pc2_migration_id }}/initiate
+    required fields: pc2_migration_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_draft_family:
+    endpoint: POST /pc2_migration_item_families/{{ record.pc2_migration_item_family_id }}/delete
+    required fields: pc2_migration_item_family_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_pc2_migration_item_family:
+    endpoint: POST /pc2_migration_item_families/{{ record.pc2_migration_item_family_id }}
+    required fields: pc2_migration_item_family_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_pc2_migration_item_family:
+    endpoint: POST /pc2_migration_item_families
+    required fields: id, name, pc2_migration_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_pc2_migration_item:
+    endpoint: POST /pc2_migration_items/{{ record.pc2_migration_item_id }}
+    required fields: pc2_migration_item_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_draft_item:
+    endpoint: POST /pc2_migration_items/{{ record.pc2_migration_item_id }}/delete
+    required fields: pc2_migration_item_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_pc2_migration_item:
+    endpoint: POST /pc2_migration_items
+    required fields: id, name, pc1_type, pc2_migration_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_draft_item_price:
+    endpoint: POST /pc2_migration_item_prices/{{ record.pc2_migration_item_price_id }}/delete
+    required fields: pc2_migration_item_price_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_a_pc2_migration_item_price:
+    endpoint: POST /pc2_migration_item_prices/{{ record.pc2_migration_item_price_id }}
+    required fields: pc2_migration_item_price_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_pricing_page_for_existing_subscription:
+    endpoint: POST /pricing_page_sessions/create_for_existing_subscription
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_pricing_page_for_new_subscription:
+    endpoint: POST /pricing_page_sessions/create_for_new_subscription
+    risk: external Chargebee mutation; reverse ETL approval required
+  move_an_omnichannel_subscription:
+    endpoint: POST /omnichannel_subscriptions/{{ record.omnichannel_subscription_id }}/move
+    required fields: omnichannel_subscription_id, to_customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  record_a_purchase:
+    endpoint: POST /recorded_purchases
+    required fields: app_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  reactivate_a_metered_feature:
+    endpoint: POST /metered_features/{{ record.metered_feature_id }}/reactivate_command
+    required fields: metered_feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_a_metered_feature:
+    endpoint: POST /metered_features/{{ record.metered_feature_id }}/delete
+    required fields: metered_feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_a_metered_feature:
+    endpoint: POST /metered_features
+    required fields: feature_unit, name, query
+    risk: external Chargebee mutation; reverse ETL approval required
+  archive_a_metered_feature:
+    endpoint: POST /metered_features/{{ record.metered_feature_id }}/archive_command
+    required fields: metered_feature_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  get_usages_file_upload_url:
+    endpoint: POST /usage_files/upload_url
+    required fields: file_name, mime_type
+    risk: external Chargebee mutation; reverse ETL approval required
+  list_personalized_offers:
+    endpoint: POST /personalized_offers
+    required fields: customer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_an_offer_fulfillment:
+    endpoint: POST /offer_fulfillments
+    required fields: option_id, personalized_offer_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_an_offer_fulfillment:
+    endpoint: POST /offer_fulfillments/{{ record.offer_fulfillment_id }}
+    required fields: offer_fulfillment_id, id, status
+    risk: external Chargebee mutation; reverse ETL approval required
+  update_an_alert:
+    endpoint: POST /alerts/{{ record.alert_id }}
+    required fields: alert_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  delete_an_alert:
+    endpoint: POST /alerts/{{ record.alert_id }}/delete
+    required fields: alert_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_an_alert:
+    endpoint: POST /alerts
+    required fields: name, type
+    risk: external Chargebee mutation; reverse ETL approval required
+  release_authorization:
+    endpoint: POST /ledger_operations/release_authorization
+    required fields: authorization_id, ledger_operation_timestamp
+    risk: external Chargebee mutation; reverse ETL approval required
+  capture:
+    endpoint: POST /ledger_operations/capture
+    required fields: amount, ledger_operation_timestamp, subscription_id, unit_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  authorize:
+    endpoint: POST /ledger_operations/authorize
+    required fields: amount, ledger_operation_timestamp, subscription_id, unit_id
+    risk: external Chargebee mutation; reverse ETL approval required
+  capture_authorization:
+    endpoint: POST /ledger_operations/capture_authorization
+    required fields: amount, authorization_id, ledger_operation_timestamp
+    risk: external Chargebee mutation; reverse ETL approval required
+  create_promotional_grant:
+    endpoint: POST /promotional_grants
+    required fields: amount, expires_at, subscription_id, unit_id
+    risk: external Chargebee mutation; reverse ETL approval required
 
 SECURITY
   read risk: external Chargebee API read of customer and billing data

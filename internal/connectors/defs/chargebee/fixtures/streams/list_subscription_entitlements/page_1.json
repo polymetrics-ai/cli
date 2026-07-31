@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions/synthetic-conformance-value/subscription_entitlements",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "subscription_entitlement": {
+            "id": "subscription_entitlement_fixture_1",
+            "updated_at": 1767225601,
+            "object": "subscription_entitlement",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

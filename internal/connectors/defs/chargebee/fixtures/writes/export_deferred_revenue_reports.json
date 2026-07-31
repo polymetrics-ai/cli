@@ -1,0 +1,13 @@
+{
+  "record": {
+    "report_by": "customer",
+    "report_from_month": 1,
+    "report_from_year": 1,
+    "report_to_month": 1,
+    "report_to_year": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/exports/deferred_revenue"
+  }
+}

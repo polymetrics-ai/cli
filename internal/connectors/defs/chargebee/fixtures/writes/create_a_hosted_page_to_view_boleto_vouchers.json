@@ -1,0 +1,11 @@
+{
+  "record": {
+    "payment_voucher": {
+      "id": "fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hosted_pages/view_voucher"
+  }
+}

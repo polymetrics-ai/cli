@@ -1,0 +1,12 @@
+{
+  "record": {
+    "total": {
+      "is": "fixture_is",
+      "is_not": "fixture_is_not"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/exports/orders"
+  }
+}

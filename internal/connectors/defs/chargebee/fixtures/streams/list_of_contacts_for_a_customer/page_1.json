@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers/synthetic-conformance-value/contacts",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "contact": {
+            "id": "contact_fixture_1",
+            "updated_at": 1767225601,
+            "object": "contact",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

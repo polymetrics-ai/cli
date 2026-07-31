@@ -1,0 +1,10 @@
+{
+  "record": {
+    "ramp_id": "fixture_ramp_id",
+    "effective_from": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ramps/fixture_ramp_id/update"
+  }
+}

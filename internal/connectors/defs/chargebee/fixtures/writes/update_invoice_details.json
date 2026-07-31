@@ -1,0 +1,10 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "vat_number": "fixture_vat_number"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/update_details"
+  }
+}

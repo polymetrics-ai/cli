@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/virtual_bank_accounts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "virtual_bank_account": {
+        "id": "virtual_bank_account_fixture_1",
+        "updated_at": 1767225601,
+        "object": "virtual_bank_account",
+        "deleted": false
+      }
+    }
+  }
+}

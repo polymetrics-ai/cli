@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payment_intents/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payment_intent": {
+        "id": "payment_intent_fixture_1",
+        "updated_at": 1767225601,
+        "object": "payment_intent",
+        "deleted": false
+      }
+    }
+  }
+}

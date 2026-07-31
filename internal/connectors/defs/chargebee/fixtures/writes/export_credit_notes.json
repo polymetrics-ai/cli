@@ -1,0 +1,18 @@
+{
+  "record": {
+    "credit_note": {
+      "id": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      },
+      "customer_id": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/exports/credit_notes"
+  }
+}

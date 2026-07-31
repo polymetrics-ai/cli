@@ -1,0 +1,10 @@
+{
+  "record": {
+    "attached_item_id": "fixture_attached_item_id",
+    "parent_item_id": "fixture_parent_item_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/attached_items/fixture_attached_item_id"
+  }
+}

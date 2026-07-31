@@ -1,0 +1,11 @@
+{
+  "record": {
+    "browser_details": {
+      "fixture": "value"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tokens/create_for_card"
+  }
+}

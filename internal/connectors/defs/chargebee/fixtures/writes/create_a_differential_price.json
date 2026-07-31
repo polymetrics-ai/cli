@@ -1,0 +1,10 @@
+{
+  "record": {
+    "item_price_id": "fixture_item_price_id",
+    "parent_item_id": "fixture_parent_item_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/item_prices/fixture_item_price_id/differential_prices"
+  }
+}

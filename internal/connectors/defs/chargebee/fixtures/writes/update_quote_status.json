@@ -1,0 +1,10 @@
+{
+  "record": {
+    "quote_id": "fixture_quote_id",
+    "status": "accepted"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/quotes/fixture_quote_id/update_status"
+  }
+}

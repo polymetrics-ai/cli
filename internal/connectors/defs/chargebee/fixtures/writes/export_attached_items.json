@@ -1,0 +1,12 @@
+{
+  "record": {
+    "item_type": {
+      "is": "plan",
+      "is_not": "plan"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/exports/attached_items"
+  }
+}

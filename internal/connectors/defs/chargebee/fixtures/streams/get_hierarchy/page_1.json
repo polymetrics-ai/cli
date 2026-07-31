@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customers/synthetic-conformance-value/hierarchy"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "hierarchies": [
+        {
+          "id": "hierarchies_fixture_1",
+          "updated_at": 1767225601,
+          "object": "hierarchies",
+          "deleted": false
+        }
+      ]
+    }
+  }
+}

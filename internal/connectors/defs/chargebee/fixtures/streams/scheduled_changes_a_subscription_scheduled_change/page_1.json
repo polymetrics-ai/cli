@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions/synthetic-conformance-value/scheduled_changes"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "subscription_scheduled_change": {
+        "id": "subscription_scheduled_change_fixture_1",
+        "updated_at": 1767225601,
+        "object": "subscription_scheduled_change",
+        "deleted": false
+      }
+    }
+  }
+}

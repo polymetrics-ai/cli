@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payment_schedule_schemes/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payment_schedule_scheme": {
+        "id": "payment_schedule_scheme_fixture_1",
+        "updated_at": 1767225601,
+        "object": "payment_schedule_scheme",
+        "deleted": false
+      }
+    }
+  }
+}

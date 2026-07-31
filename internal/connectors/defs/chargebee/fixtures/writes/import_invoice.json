@@ -1,0 +1,11 @@
+{
+  "record": {
+    "date": 1,
+    "id": "fixture_id",
+    "total": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/import_invoice"
+  }
+}

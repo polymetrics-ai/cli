@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions/synthetic-conformance-value/usages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "usage": {
+        "id": "usage_fixture_1",
+        "updated_at": 1767225601,
+        "object": "usage",
+        "deleted": false
+      }
+    }
+  }
+}

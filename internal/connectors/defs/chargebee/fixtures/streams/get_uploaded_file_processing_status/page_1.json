@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/usage_files/synthetic-conformance-value/processing_status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "usage_file": {
+        "id": "usage_file_fixture_1",
+        "updated_at": 1767225601,
+        "object": "usage_file",
+        "deleted": false
+      }
+    }
+  }
+}

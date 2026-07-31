@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "use_default_hierarchy_settings": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/update_hierarchy_settings"
+  }
+}

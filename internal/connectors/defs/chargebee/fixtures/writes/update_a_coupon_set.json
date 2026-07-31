@@ -1,0 +1,10 @@
+{
+  "record": {
+    "coupon_set_id": "fixture_coupon_set_id",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupon_sets/fixture_coupon_set_id/update"
+  }
+}

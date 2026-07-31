@@ -1,0 +1,11 @@
+{
+  "record": {
+    "offer_fulfillment_id": "fixture_offer_fulfillment_id",
+    "id": "fixture_id",
+    "status": "completed"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/offer_fulfillments/fixture_offer_fulfillment_id"
+  }
+}

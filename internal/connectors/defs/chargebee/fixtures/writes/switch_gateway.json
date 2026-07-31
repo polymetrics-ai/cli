@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "gateway_account_id": "fixture_gateway_account_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/switch_gateway"
+  }
+}

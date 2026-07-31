@@ -1,0 +1,9 @@
+{
+  "record": {
+    "price_variant_id": "fixture_price_variant_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/price_variants/fixture_price_variant_id/delete"
+  }
+}

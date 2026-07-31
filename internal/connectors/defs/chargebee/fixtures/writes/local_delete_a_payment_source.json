@@ -1,0 +1,9 @@
+{
+  "record": {
+    "cust_payment_source_id": "fixture_cust_payment_source_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_sources/fixture_cust_payment_source_id/delete_local"
+  }
+}

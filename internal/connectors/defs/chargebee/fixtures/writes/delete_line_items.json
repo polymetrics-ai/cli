@@ -1,0 +1,14 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "line_items": {
+      "id": [
+        "fixture_id_item"
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/delete_line_items"
+  }
+}

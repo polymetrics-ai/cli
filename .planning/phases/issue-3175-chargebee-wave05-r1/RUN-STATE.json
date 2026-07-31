@@ -1,0 +1,53 @@
+{
+  "phase": "issue-3175-chargebee-wave05-r1",
+  "branch": "fm/cli-chargebee-parity-wave05-r1",
+  "status": "implementation_verified_with_make_verify_timeout_blocker",
+  "verificationPassed": false,
+  "counts": {
+    "officialOperations": 655,
+    "restOperations": 432,
+    "webhookOperations": 223,
+    "streams": 125,
+    "writes": 264,
+    "blockedOperations": 266,
+    "directReadQuerySearchBlocked": 18,
+    "binaryFileBlocked": 14,
+    "cdcChangefeedBlocked": 234,
+    "excluded": 0,
+    "streamFixtures": 125,
+    "writeFixtures": 264,
+    "streamSchemas": 125,
+    "writeSchemasClosed": 264,
+    "destructiveConfirmActions": 64,
+    "deleteIdempotencyActions": 37
+  },
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopPrompt": "missing: scripts/gsd prompt programming-loop init --phase issue-3175-chargebee-wave05-r1 --dry-run returned unknown GSD command",
+    "fallback": "manual GSD programming-loop artifacts with scripts/gsd prompt plan-phase issue-3175-chargebee-wave05-r1 --skip-research evidence"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Firstmate owns parent orchestration/integration; this isolated worker owns the Chargebee implementation branch and cannot spawn mutating sibling workers in the same checkout."
+    }
+  ],
+  "checks": [
+    {"name": "chargebee_api_surface_metrics", "result": "pass"},
+    {"name": "focused_chargebee_connectorgen_validate", "result": "pass"},
+    {"name": "chargebee_conformance", "result": "pass"},
+    {"name": "focused_cli_dynamic_golden", "result": "pass"},
+    {"name": "go_vet_all", "result": "pass"},
+    {"name": "go_build_pm", "result": "pass"},
+    {"name": "docs_validate", "result": "pass"},
+    {"name": "make_connector_boundary", "result": "pass"},
+    {"name": "make_connectorgen_validate", "result": "pass"},
+    {"name": "make_lint", "result": "pass"},
+    {"name": "make_smoke", "result": "pass"},
+    {"name": "make_release_workflow_check", "result": "pass"},
+    {"name": "git_diff_check", "result": "pass"},
+    {"name": "make_verify", "result": "blocked_timeout", "detail": "go test -timeout 20m ./... timed out in internal/connectors/certify; see VERIFICATION.md"},
+    {"name": "fm_ensure_agents_md", "result": "blocked_existing_conflict", "detail": "script reported both AGENTS.md and CLAUDE.md are real files"}
+  ]
+}

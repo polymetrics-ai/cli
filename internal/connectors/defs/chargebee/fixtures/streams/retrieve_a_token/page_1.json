@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tokens/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "token": {
+        "id": "token_fixture_1",
+        "updated_at": 1767225601,
+        "object": "token",
+        "deleted": false
+      }
+    }
+  }
+}

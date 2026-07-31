@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "comment": "fixture_comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/record_excess_payment"
+  }
+}

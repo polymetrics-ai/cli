@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pc2_migration_items/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pc2_migration_item": {
+        "id": "pc2_migration_item_fixture_1",
+        "updated_at": 1767225601,
+        "object": "pc2_migration_item",
+        "deleted": false
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions/synthetic-conformance-value/usage_summary",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "usage_summary": {
+            "id": "usage_summary_fixture_1",
+            "updated_at": 1767225601,
+            "object": "usage_summary",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

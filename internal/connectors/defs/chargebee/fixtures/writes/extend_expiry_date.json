@@ -1,0 +1,10 @@
+{
+  "record": {
+    "quote_id": "fixture_quote_id",
+    "valid_till": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/quotes/fixture_quote_id/extend_expiry_date"
+  }
+}

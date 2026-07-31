@@ -1,0 +1,10 @@
+{
+  "record": {
+    "currency_code": "fixture_currency_code",
+    "forex_type": "manual"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/currencies"
+  }
+}

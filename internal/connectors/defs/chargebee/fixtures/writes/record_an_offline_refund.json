@@ -1,0 +1,11 @@
+{
+  "record": {
+    "transaction_id": "fixture_transaction_id",
+    "date": 1,
+    "payment_method": "cash"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/transactions/fixture_transaction_id/record_refund"
+  }
+}

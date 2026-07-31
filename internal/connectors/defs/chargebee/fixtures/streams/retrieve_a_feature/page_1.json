@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/features/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "feature": {
+        "id": "feature_fixture_1",
+        "updated_at": 1767225601,
+        "object": "feature",
+        "deleted": false
+      }
+    }
+  }
+}

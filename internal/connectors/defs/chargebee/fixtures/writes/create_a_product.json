@@ -1,0 +1,11 @@
+{
+  "record": {
+    "external_name": "fixture_external_name",
+    "name": "fixture_name",
+    "status": "active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products"
+  }
+}

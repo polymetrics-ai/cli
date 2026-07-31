@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/hosted_pages/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "hosted_page": {
+        "id": "hosted_page_fixture_1",
+        "updated_at": 1767225601,
+        "object": "hosted_page",
+        "deleted": false
+      }
+    }
+  }
+}

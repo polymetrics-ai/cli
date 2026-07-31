@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/price_variants/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "price_variant": {
+        "id": "price_variant_fixture_1",
+        "updated_at": 1767225601,
+        "object": "price_variant",
+        "deleted": false
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/item_prices/synthetic-conformance-value/applicable_item_prices",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "item_price": {
+            "id": "item_price_fixture_1",
+            "updated_at": 1767225601,
+            "object": "item_price",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

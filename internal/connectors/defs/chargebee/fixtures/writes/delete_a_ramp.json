@@ -1,0 +1,9 @@
+{
+  "record": {
+    "ramp_id": "fixture_ramp_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ramps/fixture_ramp_id/delete"
+  }
+}
