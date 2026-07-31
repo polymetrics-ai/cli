@@ -13110,10 +13110,6 @@
           "type": "string",
           "x-secret": true
         },
-        "addon_key": {
-          "description": "Bitbucket path parameter `addon_key` used by resource-scoped streams.",
-          "type": "string"
-        },
         "annotationId": {
           "description": "Bitbucket path parameter `annotationId` used by resource-scoped streams.",
           "type": "string"
@@ -13169,10 +13165,6 @@
           "description": "Bitbucket path parameter `environment_uuid` used by resource-scoped streams.",
           "type": "string"
         },
-        "filename": {
-          "description": "Bitbucket path parameter `filename` used by resource-scoped streams.",
-          "type": "string"
-        },
         "fingerprint": {
           "description": "Bitbucket path parameter `fingerprint` used by resource-scoped streams.",
           "type": "string"
@@ -13199,10 +13191,6 @@
         },
         "known_host_uuid": {
           "description": "Bitbucket path parameter `known_host_uuid` used by resource-scoped streams.",
-          "type": "string"
-        },
-        "log_uuid": {
-          "description": "Bitbucket path parameter `log_uuid` used by resource-scoped streams.",
           "type": "string"
         },
         "member": {
@@ -13245,10 +13233,6 @@
           "description": "Bitbucket path parameter `pullrequest_id` used by resource-scoped streams.",
           "type": "string"
         },
-        "repo_name": {
-          "description": "Bitbucket path parameter `repo_name` used by resource-scoped streams.",
-          "type": "string"
-        },
         "repo_slug": {
           "description": "Bitbucket path parameter `repo_slug` used by resource-scoped streams.",
           "type": "string"
@@ -13285,11 +13269,6 @@
           "description": "Bitbucket path parameter `spec` used by resource-scoped streams.",
           "type": "string"
         },
-        "start_date": {
-          "description": "Optional lower bound for future incremental streams.",
-          "format": "date-time",
-          "type": "string"
-        },
         "step_uuid": {
           "description": "Bitbucket path parameter `step_uuid` used by resource-scoped streams.",
           "type": "string"
@@ -13304,10 +13283,6 @@
         },
         "task_id": {
           "description": "Bitbucket path parameter `task_id` used by resource-scoped streams.",
-          "type": "string"
-        },
-        "test_case_uuid": {
-          "description": "Bitbucket path parameter `test_case_uuid` used by resource-scoped streams.",
           "type": "string"
         },
         "uid": {

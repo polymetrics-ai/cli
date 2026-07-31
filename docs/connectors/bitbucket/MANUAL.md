@@ -26,7 +26,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  addon_key
   annotationId
   app_key
   base_url
@@ -39,7 +38,6 @@ CONFIGURATION
   email
   encoded_id
   environment_uuid
-  filename
   fingerprint
   group_slug
   id
@@ -47,7 +45,6 @@ CONFIGURATION
   key
   key_id
   known_host_uuid
-  log_uuid
   member
   milestone_id
   name
@@ -58,7 +55,6 @@ CONFIGURATION
   property_name
   pull_request_id
   pullrequest_id
-  repo_name
   repo_slug
   reportId
   revision
@@ -68,12 +64,10 @@ CONFIGURATION
   selected_user
   selected_user_id
   spec
-  start_date
   step_uuid
   subject_type
   target_username
   task_id
-  test_case_uuid
   uid
   username
   variable_uuid

@@ -27,7 +27,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 
 ## Configuration
 
-- addon_key
 - annotationId
 - app_key
 - base_url
@@ -40,7 +39,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 - email
 - encoded_id
 - environment_uuid
-- filename
 - fingerprint
 - group_slug
 - id
@@ -48,7 +46,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 - key
 - key_id
 - known_host_uuid
-- log_uuid
 - member
 - milestone_id
 - name
@@ -59,7 +56,6 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 - property_name
 - pull_request_id
 - pullrequest_id
-- repo_name
 - repo_slug
 - reportId
 - revision
@@ -69,12 +65,10 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 - selected_user
 - selected_user_id
 - spec
-- start_date
 - step_uuid
 - subject_type
 - target_username
 - task_id
-- test_case_uuid
 - uid
 - username
 - variable_uuid
