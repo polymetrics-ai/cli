@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/scim/v2/Users/id_fixture"
+  }
+}

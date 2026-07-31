@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/packages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "packages": [
+        {
+          "id": "enterprise_packages_fixture_1",
+          "name": "Fixture Name"
+        }
+      ]
+    }
+  }
+}
