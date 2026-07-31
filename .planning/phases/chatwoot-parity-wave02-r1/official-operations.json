@@ -1,0 +1,2644 @@
+{
+  "generated_at": "2026-07-31",
+  "sources": [
+    {
+      "id": "chatwoot_application_openapi",
+      "url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "etag": "\"c591d130a36aafd866557b3445f7a8a01d0fb2025dc8a9d9d4c78e2b7e3485ad\"",
+      "sha256": "67afcaec8107185dc1694ac6a40f5d16215904847375f777641e504aca20f5dd",
+      "bytes": 443962,
+      "openapi": "3.1.0",
+      "version": "1.1.0"
+    },
+    {
+      "id": "chatwoot_platform_openapi",
+      "url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "etag": "\"cec69e44725b9989cd5a586687e46050d4caf8bdf15a08c29e296f26e6342830\"",
+      "sha256": "bd1e3906712794d873ba64570c60cf625cff871b5abbf2812c5f97b7fdddea66",
+      "bytes": 237166,
+      "openapi": "3.1.0",
+      "version": "1.1.0"
+    },
+    {
+      "id": "chatwoot_client_openapi",
+      "url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+      "etag": "\"8c073acb95190ed382c9138bf84445abc81771c9742fcfa41910ef7ca8e691b5\"",
+      "sha256": "c3537cbf25fbbeb9ad6a13aa80fda70fb51a69850a0e765af5bf2e5a0aba6427",
+      "bytes": 233900,
+      "openapi": "3.1.0",
+      "version": "1.1.0"
+    },
+    {
+      "id": "chatwoot_other_openapi",
+      "url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/other_swagger.json",
+      "etag": "\"7c46af26e30ffe7f921611586da45ab34ce609ce78e9dbff062499eaca04b3c8\"",
+      "sha256": "02929ccabd223285b5b807425493c832d98971405558f5b6c417ad2423c4e304",
+      "bytes": 217240,
+      "openapi": "3.1.0",
+      "version": "1.1.0"
+    }
+  ],
+  "operations": [
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}",
+      "operation_id": "get-account-details",
+      "summary": "Get account details",
+      "tags": [
+        "Account"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}",
+      "operation_id": "update-account",
+      "summary": "Update account",
+      "tags": [
+        "Account"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/actions/contact_merge",
+      "operation_id": "contactMerge",
+      "summary": "Merge Contacts",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "operation_id": "list-all-account-agent-bots",
+      "summary": "List all AgentBots",
+      "tags": [
+        "Account AgentBots"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "operation_id": "create-an-account-agent-bot",
+      "summary": "Create an Agent Bot",
+      "tags": [
+        "Account AgentBots"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation_id": "delete-an-account-agent-bot",
+      "summary": "Delete an AgentBot",
+      "tags": [
+        "Account AgentBots"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation_id": "get-details-of-a-single-account-agent-bot",
+      "summary": "Get an agent bot details",
+      "tags": [
+        "Account AgentBots"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation_id": "update-an-account-agent-bot",
+      "summary": "Update an agent bot",
+      "tags": [
+        "Account AgentBots"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agents",
+      "operation_id": "get-account-agents",
+      "summary": "List Agents in Account",
+      "tags": [
+        "Agents"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/agents",
+      "operation_id": "add-new-agent-to-account",
+      "summary": "Add a New Agent",
+      "tags": [
+        "Agents"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/agents/{id}",
+      "operation_id": "delete-agent-from-account",
+      "summary": "Remove an Agent from Account",
+      "tags": [
+        "Agents"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/agents/{id}",
+      "operation_id": "update-agent-in-account",
+      "summary": "Update Agent in Account",
+      "tags": [
+        "Agents"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/audit_logs",
+      "operation_id": "get-account-audit-logs",
+      "summary": "List Audit Logs in Account",
+      "tags": [
+        "Audit Logs"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "operation_id": "get-account-automation-rule",
+      "summary": "List all automation rules in an account",
+      "tags": [
+        "Automation Rule"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "operation_id": "add-new-automation-rule-to-account",
+      "summary": "Add a new automation rule",
+      "tags": [
+        "Automation Rule"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation_id": "delete-automation-rule-from-account",
+      "summary": "Remove a automation rule from account",
+      "tags": [
+        "Automation Rule"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation_id": "get-details-of-a-single-automation-rule",
+      "summary": "Get a automation rule details",
+      "tags": [
+        "Automation Rule"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation_id": "update-automation-rule-in-account",
+      "summary": "Update automation rule in Account",
+      "tags": [
+        "Automation Rule"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+      "operation_id": "getAccountBrandedEmailLayout",
+      "summary": "Get account branded email layout",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+      "operation_id": "updateAccountBrandedEmailLayout",
+      "summary": "Update account branded email layout",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "operation_id": "get-account-canned-response",
+      "summary": "List all Canned Responses in an Account",
+      "tags": [
+        "Canned Responses"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "operation_id": "add-new-canned-response-to-account",
+      "summary": "Add a New Canned Response",
+      "tags": [
+        "Canned Responses"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+      "operation_id": "delete-canned-response-from-account",
+      "summary": "Remove a Canned Response from Account",
+      "tags": [
+        "Canned Responses"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+      "operation_id": "update-canned-response-in-account",
+      "summary": "Update Canned Response in Account",
+      "tags": [
+        "Canned Responses"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts",
+      "operation_id": "contactList",
+      "summary": "List Contacts",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts",
+      "operation_id": "contactCreate",
+      "summary": "Create Contact",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/filter",
+      "operation_id": "contactFilter",
+      "summary": "Contact Filter",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/search",
+      "operation_id": "contactSearch",
+      "summary": "Search Contacts",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "operation_id": "contactDelete",
+      "summary": "Delete Contact",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "operation_id": "contactDetails",
+      "summary": "Show Contact",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PUT",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "operation_id": "contactUpdate",
+      "summary": "Update Contact",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
+      "operation_id": "contactInboxCreation",
+      "summary": "Create contact inbox",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
+      "operation_id": "contactableInboxesGet",
+      "summary": "Get Contactable Inboxes",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
+      "operation_id": "contactConversations",
+      "summary": "Contact Conversations",
+      "tags": [
+        "Contacts"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "operation_id": "list-all-labels-of-a-contact",
+      "summary": "List Labels",
+      "tags": [
+        "Contact Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "operation_id": "contact-add-labels",
+      "summary": "Add Labels",
+      "tags": [
+        "Contact Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations",
+      "operation_id": "conversationList",
+      "summary": "Conversations List",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations",
+      "operation_id": "newConversation",
+      "summary": "Create New Conversation",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/filter",
+      "operation_id": "conversationFilter",
+      "summary": "Conversations Filter",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/meta",
+      "operation_id": "conversationListMeta",
+      "summary": "Get Conversation Counts",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "operation_id": "get-details-of-a-conversation",
+      "summary": "Conversation Details",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "operation_id": "update-conversation",
+      "summary": "Update Conversation",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
+      "operation_id": "assign-a-conversation",
+      "summary": "Assign Conversation",
+      "tags": [
+        "Conversation Assignments"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
+      "operation_id": "update-custom-attributes-of-a-conversation",
+      "summary": "Update Custom Attributes",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes",
+      "operation_id": "destroy-custom-attributes-of-a-conversation",
+      "summary": "Destroy Custom Attributes",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "operation_id": "list-all-labels-of-a-conversation",
+      "summary": "List Labels",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "operation_id": "conversation-add-labels",
+      "summary": "Add Labels",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "operation_id": "list-all-messages",
+      "summary": "Get messages",
+      "tags": [
+        "Messages"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "operation_id": "create-a-new-message-in-a-conversation",
+      "summary": "Create New Message",
+      "tags": [
+        "Messages"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
+      "operation_id": "delete-a-message",
+      "summary": "Delete a message",
+      "tags": [
+        "Messages"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
+      "operation_id": "get-conversation-reporting-events",
+      "summary": "Conversation Reporting Events",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
+      "operation_id": "toggle-priority-of-a-conversation",
+      "summary": "Toggle Priority",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
+      "operation_id": "toggle-status-of-a-conversation",
+      "summary": "Toggle Status",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status",
+      "operation_id": "toggle-typing-status-of-a-conversation",
+      "summary": "Toggle Typing Status",
+      "tags": [
+        "Conversations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        },
+        {
+          "agentBotApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "operation_id": "get-account-custom-attribute",
+      "summary": "List all custom attributes in an account",
+      "tags": [
+        "Custom Attributes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "operation_id": "add-new-custom-attribute-to-account",
+      "summary": "Add a new custom attribute",
+      "tags": [
+        "Custom Attributes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation_id": "delete-custom-attribute-from-account",
+      "summary": "Remove a custom attribute from account",
+      "tags": [
+        "Custom Attributes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation_id": "get-details-of-a-single-custom-attribute",
+      "summary": "Get a custom attribute details",
+      "tags": [
+        "Custom Attributes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation_id": "update-custom-attribute-in-account",
+      "summary": "Update custom attribute in Account",
+      "tags": [
+        "Custom Attributes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "operation_id": "list-all-filters",
+      "summary": "List all custom filters",
+      "tags": [
+        "Custom Filters"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "operation_id": "create-a-custom-filter",
+      "summary": "Create a custom filter",
+      "tags": [
+        "Custom Filters"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation_id": "delete-a-custom-filter",
+      "summary": "Delete a custom filter",
+      "tags": [
+        "Custom Filters"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation_id": "get-details-of-a-single-custom-filter",
+      "summary": "Get a custom filter details",
+      "tags": [
+        "Custom Filters"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation_id": "update-a-custom-filter",
+      "summary": "Update a custom filter",
+      "tags": [
+        "Custom Filters"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "operation_id": "delete-agent-in-inbox",
+      "summary": "Remove an Agent from Inbox",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "operation_id": "update-agents-in-inbox",
+      "summary": "Update Agents in Inbox",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "operation_id": "add-new-agent-to-inbox",
+      "summary": "Add a New Agent",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
+      "operation_id": "get-inbox-members",
+      "summary": "List Agents in Inbox",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes",
+      "operation_id": "listAllInboxes",
+      "summary": "List all inboxes",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inboxes",
+      "operation_id": "inboxCreation",
+      "summary": "Create an inbox",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "operation_id": "GetInbox",
+      "summary": "Get an inbox",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "operation_id": "updateInbox",
+      "summary": "Update Inbox",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
+      "operation_id": "getInboxAgentBot",
+      "summary": "Show Inbox Agent Bot",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
+      "operation_id": "updateAgentBot",
+      "summary": "Add or remove agent bot",
+      "tags": [
+        "Inboxes"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/integrations/apps",
+      "operation_id": "get-details-of-all-integrations",
+      "summary": "List all the Integrations",
+      "tags": [
+        "Integrations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks",
+      "operation_id": "create-an-integration-hook",
+      "summary": "Create an integration hook",
+      "tags": [
+        "Integrations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "operation_id": "delete-an-integration-hook",
+      "summary": "Delete an Integration Hook",
+      "tags": [
+        "Integrations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "operation_id": "update-an-integrations-hook",
+      "summary": "Update an Integration Hook",
+      "tags": [
+        "Integrations"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels",
+      "operation_id": "list-all-labels",
+      "summary": "List all labels",
+      "tags": [
+        "Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/labels",
+      "operation_id": "create-a-label",
+      "summary": "Create a label",
+      "tags": [
+        "Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation_id": "delete-a-label",
+      "summary": "Delete a label",
+      "tags": [
+        "Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation_id": "get-details-of-a-single-label",
+      "summary": "Get a label",
+      "tags": [
+        "Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation_id": "update-a-label",
+      "summary": "Update a label",
+      "tags": [
+        "Labels"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "operation_id": "get-portal",
+      "summary": "List all portals in an account",
+      "tags": [
+        "Help Center"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "operation_id": "add-new-portal-to-account",
+      "summary": "Add a new portal",
+      "tags": [
+        "Help Center"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}",
+      "operation_id": "update-portal-to-account",
+      "summary": "Update a portal",
+      "tags": [
+        "Help Center"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}/articles",
+      "operation_id": "add-new-article-to-account",
+      "summary": "Add a new article",
+      "tags": [
+        "Help Center"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}/categories",
+      "operation_id": "add-new-category-to-account",
+      "summary": "Add a new category",
+      "tags": [
+        "Help Center"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/reporting_events",
+      "operation_id": "get-account-reporting-events",
+      "summary": "Account Reporting Events",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams",
+      "operation_id": "list-all-teams",
+      "summary": "List all teams",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/teams",
+      "operation_id": "create-a-team",
+      "summary": "Create a team",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation_id": "delete-a-team",
+      "summary": "Delete a team",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation_id": "get-details-of-a-single-team",
+      "summary": "Get a team details",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation_id": "update-a-team",
+      "summary": "Update a team",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation_id": "delete-agent-in-team",
+      "summary": "Remove an Agent from Team",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation_id": "get-team-members",
+      "summary": "List Agents in Team",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation_id": "update-agents-in-team",
+      "summary": "Update Agents in Team",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation_id": "add-new-agent-to-team",
+      "summary": "Add a New Agent",
+      "tags": [
+        "Teams"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "operation_id": "list-all-webhooks",
+      "summary": "List all webhooks",
+      "tags": [
+        "Webhooks"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "operation_id": "create-a-webhook",
+      "summary": "Add a webhook",
+      "tags": [
+        "Webhooks"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "operation_id": "delete-a-webhook",
+      "summary": "Delete a webhook",
+      "tags": [
+        "Webhooks"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "operation_id": "update-a-webhook",
+      "summary": "Update a webhook object",
+      "tags": [
+        "Webhooks"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "cdc_changefeed"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v1/profile",
+      "operation_id": "fetchProfile",
+      "summary": "Fetch user profile",
+      "tags": [
+        "Profile"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "PUT",
+      "path": "/api/v1/profile",
+      "operation_id": "updateProfile",
+      "summary": "Update user profile",
+      "tags": [
+        "Profile"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports",
+      "operation_id": "list-all-conversation-statistics",
+      "summary": "Get Account reports",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations",
+      "operation_id": "get-account-conversation-metrics",
+      "summary": "Account Conversation Metrics",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations/",
+      "operation_id": "get-agent-conversation-metrics",
+      "summary": "Agent Conversation Metrics",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution",
+      "operation_id": "get-first-response-time-distribution",
+      "summary": "Get first response time distribution by channel",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix",
+      "operation_id": "get-inbox-label-matrix",
+      "summary": "Get inbox-label matrix report",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count",
+      "operation_id": "get-outgoing-messages-count",
+      "summary": "Get outgoing messages count grouped by entity",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/summary",
+      "operation_id": "list-all-conversation-statistics-summary",
+      "summary": "Get Account reports summary",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/agent",
+      "operation_id": "get-agent-summary-report",
+      "summary": "Get conversation statistics grouped by agent",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/channel",
+      "operation_id": "get-channel-summary-report",
+      "summary": "Get conversation statistics grouped by channel type",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/inbox",
+      "operation_id": "get-inbox-summary-report",
+      "summary": "Get conversation statistics grouped by inbox",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_application_openapi",
+      "group": "application",
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/team",
+      "operation_id": "get-team-summary-report",
+      "summary": "Get conversation statistics grouped by team",
+      "tags": [
+        "Reports"
+      ],
+      "security": [
+        {
+          "userApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "direct_read_query_search"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts",
+      "operation_id": "create-a-contact",
+      "summary": "Create a contact",
+      "tags": [
+        "Contacts API"
+      ],
+      "security": [],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "operation_id": "get-details-of-a-contact",
+      "summary": "Get a contact",
+      "tags": [
+        "Contacts API"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "operation_id": "update-a-contact",
+      "summary": "Update a contact",
+      "tags": [
+        "Contacts API"
+      ],
+      "security": [],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "operation_id": "list-all-contact-conversations",
+      "summary": "List all conversations",
+      "tags": [
+        "Conversations API"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "operation_id": "create-a-conversation",
+      "summary": "Create a conversation",
+      "tags": [
+        "Conversations API"
+      ],
+      "security": [],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}",
+      "operation_id": "get-single-conversation",
+      "summary": "Get a single conversation",
+      "tags": [
+        "Conversations API"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "operation_id": "list-all-conversation-messages",
+      "summary": "List all messages",
+      "tags": [
+        "Messages API"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "operation_id": "create-a-message",
+      "summary": "Create a message",
+      "tags": [
+        "Messages API"
+      ],
+      "security": [],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}",
+      "operation_id": "update-a-message",
+      "summary": "Update a message",
+      "tags": [
+        "Messages API"
+      ],
+      "security": [],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status",
+      "operation_id": "resolve-conversation",
+      "summary": "Resolve a conversation",
+      "tags": [
+        "Conversations API"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_typing",
+      "operation_id": "toggle-typing-status",
+      "summary": "Toggle typing status",
+      "tags": [
+        "Conversations API"
+      ],
+      "security": [],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_client_openapi",
+      "group": "client",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/update_last_seen",
+      "operation_id": "update-last-seen",
+      "summary": "Update last seen",
+      "tags": [
+        "Conversations API"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_other_openapi",
+      "group": "other",
+      "method": "GET",
+      "path": "/survey/responses/{conversation_uuid}",
+      "operation_id": "get-csat-survey-page",
+      "summary": "Get CSAT survey page",
+      "tags": [
+        "CSAT Survey Page"
+      ],
+      "security": [],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "POST",
+      "path": "/platform/api/v1/accounts",
+      "operation_id": "create-an-account",
+      "summary": "Create an Account",
+      "tags": [
+        "Accounts"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation_id": "delete-an-account",
+      "summary": "Delete an Account",
+      "tags": [
+        "Accounts"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation_id": "get-details-of-an-account",
+      "summary": "Get an account details",
+      "tags": [
+        "Accounts"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "PATCH",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation_id": "update-an-account",
+      "summary": "Update an account",
+      "tags": [
+        "Accounts"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation_id": "delete-an-account-user",
+      "summary": "Delete an Account User",
+      "tags": [
+        "Account Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation_id": "list-all-account-users",
+      "summary": "List all Account Users",
+      "tags": [
+        "Account Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "POST",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation_id": "create-an-account-user",
+      "summary": "Create an Account User",
+      "tags": [
+        "Account Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots",
+      "operation_id": "list-all-agent-bots",
+      "summary": "List all AgentBots",
+      "tags": [
+        "AgentBots"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "POST",
+      "path": "/platform/api/v1/agent_bots",
+      "operation_id": "create-an-agent-bot",
+      "summary": "Create an Agent Bot",
+      "tags": [
+        "AgentBots"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "DELETE",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation_id": "delete-an-agent-bot",
+      "summary": "Delete an AgentBot",
+      "tags": [
+        "AgentBots"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation_id": "get-details-of-a-single-agent-bot",
+      "summary": "Get an agent bot details",
+      "tags": [
+        "AgentBots"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "PATCH",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation_id": "update-an-agent-bot",
+      "summary": "Update an agent bot",
+      "tags": [
+        "AgentBots"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "POST",
+      "path": "/platform/api/v1/users",
+      "operation_id": "create-a-user",
+      "summary": "Create a User",
+      "tags": [
+        "Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "DELETE",
+      "path": "/platform/api/v1/users/{id}",
+      "operation_id": "delete-a-user",
+      "summary": "Delete a User",
+      "tags": [
+        "Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}",
+      "operation_id": "get-details-of-a-user",
+      "summary": "Get an user details",
+      "tags": [
+        "Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "PATCH",
+      "path": "/platform/api/v1/users/{id}",
+      "operation_id": "update-a-user",
+      "summary": "Update a user",
+      "tags": [
+        "Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": true,
+      "initial_lane": "reverse_etl_write"
+    },
+    {
+      "source_id": "chatwoot_platform_openapi",
+      "group": "platform",
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}/login",
+      "operation_id": "get-sso-url-of-a-user",
+      "summary": "Get User SSO Link",
+      "tags": [
+        "Users"
+      ],
+      "security": [
+        {
+          "platformAppApiKey": []
+        }
+      ],
+      "has_request_body": false,
+      "initial_lane": "etl_read"
+    }
+  ],
+  "counts": {
+    "total": 145,
+    "by_group": {
+      "application": 115,
+      "client": 12,
+      "other": 1,
+      "platform": 17
+    },
+    "by_method": {
+      "GET": 61,
+      "PATCH": 22,
+      "POST": 42,
+      "DELETE": 18,
+      "PUT": 2
+    },
+    "by_initial_lane": {
+      "etl_read": 42,
+      "reverse_etl_write": 79,
+      "cdc_changefeed": 7,
+      "direct_read_query_search": 17
+    }
+  }
+}

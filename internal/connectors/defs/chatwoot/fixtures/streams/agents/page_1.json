@@ -1,5 +1,8 @@
 {
-  "request": { "method": "GET", "path": "/agents" },
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/accounts/synthetic-conformance-value/agents"
+  },
   "response": {
     "status": 200,
     "body": [

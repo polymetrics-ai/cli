@@ -1,0 +1,27 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "display_name": "fixture-value",
+    "email": "fixture@example.invalid",
+    "password": "fixture-value",
+    "custom_attributes": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/platform/api/v1/users",
+    "body": {
+      "name": "fixture-value",
+      "display_name": "fixture-value",
+      "email": "fixture@example.invalid",
+      "password": "fixture-value",
+      "custom_attributes": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

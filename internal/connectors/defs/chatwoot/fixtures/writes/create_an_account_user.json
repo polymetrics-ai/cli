@@ -1,0 +1,21 @@
+{
+  "record": {
+    "user_id": 1,
+    "role": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/platform/api/v1/accounts/synthetic-conformance-value/account_users",
+    "body": {
+      "user_id": 1,
+      "role": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

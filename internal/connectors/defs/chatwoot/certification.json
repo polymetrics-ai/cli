@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "conversations",
+    "source_credential_defaults": {
+      "base_url": "https://app.chatwoot.com",
+      "account_id": "1"
+    },
+    "live_unavailable": [
+      {
+        "kind": "missing_credentials",
+        "contains": [
+          "api_access_token"
+        ]
+      },
+      {
+        "kind": "not_certified",
+        "contains": [
+          "no live Chatwoot certification was run in wave02-r1"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "hook_id": 1,
+    "status": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/integrations/hooks/1",
+    "body": {
+      "status": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

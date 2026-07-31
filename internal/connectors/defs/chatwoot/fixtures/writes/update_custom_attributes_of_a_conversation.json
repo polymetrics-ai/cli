@@ -1,0 +1,22 @@
+{
+  "record": {
+    "conversation_id": 1,
+    "custom_attributes": {},
+    "merge": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1/custom_attributes",
+    "body": {
+      "custom_attributes": {},
+      "merge": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

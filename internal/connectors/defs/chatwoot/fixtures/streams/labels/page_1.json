@@ -1,5 +1,8 @@
 {
-  "request": { "method": "GET", "path": "/labels" },
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/accounts/synthetic-conformance-value/labels"
+  },
   "response": {
     "status": 200,
     "body": {

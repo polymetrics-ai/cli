@@ -1,0 +1,16 @@
+{
+  "record": {
+    "hook_id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/accounts/synthetic-conformance-value/integrations/hooks/1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

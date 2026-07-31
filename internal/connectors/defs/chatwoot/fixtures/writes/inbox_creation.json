@@ -1,0 +1,55 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "avatar": "fixture-value",
+    "greeting_enabled": true,
+    "greeting_message": "fixture-value",
+    "enable_email_collect": true,
+    "csat_survey_enabled": true,
+    "csat_config": {
+      "display_type": "emoji"
+    },
+    "enable_auto_assignment": true,
+    "working_hours_enabled": true,
+    "out_of_office_message": "fixture-value",
+    "timezone": "fixture-value",
+    "allow_messages_after_resolved": true,
+    "lock_to_single_conversation": true,
+    "portal_id": 1,
+    "sender_name_type": "friendly",
+    "business_name": "fixture-value",
+    "channel": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/inboxes",
+    "body": {
+      "name": "fixture-value",
+      "avatar": "fixture-value",
+      "greeting_enabled": true,
+      "greeting_message": "fixture-value",
+      "enable_email_collect": true,
+      "csat_survey_enabled": true,
+      "csat_config": {
+        "display_type": "emoji"
+      },
+      "enable_auto_assignment": true,
+      "working_hours_enabled": true,
+      "out_of_office_message": "fixture-value",
+      "timezone": "fixture-value",
+      "allow_messages_after_resolved": true,
+      "lock_to_single_conversation": true,
+      "portal_id": 1,
+      "sender_name_type": "friendly",
+      "business_name": "fixture-value",
+      "channel": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

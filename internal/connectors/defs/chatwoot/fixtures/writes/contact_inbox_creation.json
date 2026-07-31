@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture-id",
+    "inbox_id": 1.5,
+    "source_id": "fixture-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/contacts/fixture-id/contact_inboxes",
+    "body": {
+      "inbox_id": 1.5,
+      "source_id": "fixture-id"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

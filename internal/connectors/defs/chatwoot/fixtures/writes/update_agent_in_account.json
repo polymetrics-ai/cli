@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": 1,
+    "role": "agent",
+    "availability": "online"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/agents/1",
+    "body": {
+      "role": "agent",
+      "availability": "online"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

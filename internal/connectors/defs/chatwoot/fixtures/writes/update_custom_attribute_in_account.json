@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 1,
+    "attribute_display_name": "fixture-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/custom_attribute_definitions/1",
+    "body": {
+      "attribute_display_name": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

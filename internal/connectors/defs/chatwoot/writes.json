@@ -1,139 +1,3207 @@
 {
   "actions": [
     {
-      "name": "create_contact",
-      "kind": "create",
-      "method": "POST",
-      "path": "/contacts",
-      "body_type": "json",
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["inbox_id"],
         "properties": {
-          "inbox_id": { "type": "integer" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "phone_number": { "type": "string" },
-          "identifier": { "type": "string" },
-          "blocked": { "type": "boolean" },
-          "avatar_url": { "type": "string" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
-        }
+          "name": {
+            "type": "string",
+            "description": "Name of the account"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the account"
+          },
+          "domain": {
+            "type": "string",
+            "description": "The domain of the account"
+          },
+          "support_email": {
+            "type": "string",
+            "description": "The support email of the account"
+          },
+          "auto_resolve_after": {
+            "type": "integer",
+            "description": "Auto resolve conversations after specified minutes"
+          },
+          "auto_resolve_message": {
+            "type": "string",
+            "description": "Message to send when auto resolving"
+          },
+          "auto_resolve_ignore_waiting": {
+            "type": "boolean",
+            "description": "Whether to ignore waiting conversations for auto resolve"
+          },
+          "industry": {
+            "type": "string",
+            "description": "Industry type"
+          },
+          "company_size": {
+            "type": "string",
+            "description": "Company size"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Account timezone"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
       },
-      "risk": "creates a new Chatwoot contact record; low risk, no customer notification"
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "contact_merge",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/actions/contact_merge",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "base_contact_id": {
+            "type": "integer",
+            "description": "ID of the contact that will remain after the merge and receive all data"
+          },
+          "mergee_contact_id": {
+            "type": "integer",
+            "description": "ID of the contact that will be merged into the base contact and deleted"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "base_contact_id",
+          "mergee_contact_id"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/actions/contact_merge); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "create_an_account_agent_bot",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agent_bots",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the agent bot"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the agent bot"
+          },
+          "outgoing_url": {
+            "type": "string",
+            "description": "The webhook URL for the bot"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the agent bot avatar"
+          },
+          "bot_type": {
+            "type": "integer",
+            "description": "The type of the bot (0 for webhook)"
+          },
+          "bot_config": {
+            "type": "object",
+            "description": "The configuration for the bot",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/agent_bots); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_account_agent_bot",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the agentbot to be updated"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/agent_bots/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_an_account_agent_bot",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the agentbot to be updated"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the agent bot"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the agent bot"
+          },
+          "outgoing_url": {
+            "type": "string",
+            "description": "The webhook URL for the bot"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the agent bot avatar"
+          },
+          "bot_type": {
+            "type": "integer",
+            "description": "The type of the bot (0 for webhook)"
+          },
+          "bot_config": {
+            "type": "object",
+            "description": "The configuration for the bot",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/agent_bots/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_agent_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agents",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full Name of the agent"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the Agent"
+          },
+          "role": {
+            "type": "string",
+            "description": "Whether its administrator or agent",
+            "enum": [
+              "agent",
+              "administrator"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "description": "The configured availability of the agent.",
+            "enum": [
+              "online",
+              "busy",
+              "offline"
+            ]
+          },
+          "auto_offline": {
+            "type": "boolean",
+            "description": "Whether the agent is automatically marked offline when they are away."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "email",
+          "role"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/agents); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_agent_from_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agents/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the agent to be deleted."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/agents/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_agent_in_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agents/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the agent to be updated."
+          },
+          "role": {
+            "type": "string",
+            "description": "Whether its administrator or agent",
+            "enum": [
+              "agent",
+              "administrator"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "description": "The configured availability of the agent.",
+            "enum": [
+              "online",
+              "busy",
+              "offline"
+            ]
+          },
+          "auto_offline": {
+            "type": "boolean",
+            "description": "Whether the agent is automatically marked offline when they are away."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "role"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/agents/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_automation_rule_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/automation_rules",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Rule name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description about the automation and actions"
+          },
+          "event_name": {
+            "type": "string",
+            "description": "The event when you want to execute the automation actions",
+            "enum": [
+              "conversation_created",
+              "conversation_updated",
+              "conversation_resolved",
+              "message_created"
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Enable/disable automation rule"
+          },
+          "actions": {
+            "type": "array",
+            "description": "Array of actions which you want to perform when condition matches, e.g add label support if message contains content help.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Array of conditions on which conversation filter would work, e.g message content contains text help.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/automation_rules); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_automation_rule_from_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/automation_rules/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the automation rule to be deleted"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/automation_rules/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_automation_rule_in_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/automation_rules/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the automation rule to be updated."
+          },
+          "name": {
+            "type": "string",
+            "description": "Rule name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description about the automation and actions"
+          },
+          "event_name": {
+            "type": "string",
+            "description": "The event when you want to execute the automation actions",
+            "enum": [
+              "conversation_created",
+              "conversation_updated",
+              "conversation_resolved",
+              "message_created"
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Enable/disable automation rule"
+          },
+          "actions": {
+            "type": "array",
+            "description": "Array of actions which you want to perform when condition matches, e.g add label support if message contains content help.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Array of conditions on which conversation filter would work, e.g message content contains text help.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/automation_rules/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_account_branded_email_layout",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/branded_email_layout",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "branded_email_layout": {
+            "type": "string",
+            "description": "Account-scoped Liquid HTML layout for branded email replies. Maximum length is 262,144 characters. Blank or null removes the account override."
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/branded_email_layout); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_canned_response_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/canned_responses",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Message content for canned response"
+          },
+          "short_code": {
+            "type": "string",
+            "description": "Short Code for quick access of the canned response"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/canned_responses); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_canned_response_from_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/canned_responses/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the canned response to be deleted"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/canned_responses/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_canned_response_in_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/canned_responses/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the canned response to be updated."
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content for canned response"
+          },
+          "short_code": {
+            "type": "string",
+            "description": "Short Code for quick access of the canned response"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/canned_responses/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "number",
+            "description": "ID of the inbox to which the contact belongs"
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the contact"
+          },
+          "email": {
+            "type": "string",
+            "description": "email of the contact"
+          },
+          "blocked": {
+            "type": "boolean",
+            "description": "whether the contact is blocked or not"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "phone number of the contact"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the contact avatar"
+          },
+          "identifier": {
+            "type": "string",
+            "description": "A unique identifier for the contact in external system"
+          },
+          "additional_attributes": {
+            "type": "object",
+            "description": "An object where you can store additional attributes for contact. example {\"type\":\"customer\", \"age\":30}",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "An object where you can store custom attributes for contact. example {\"type\":\"customer\", \"age\":30}, this should have a valid custom attribute definition.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "inbox_id"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/contacts); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "contact_delete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the contact",
+            "pattern": "^[\\s\\S]+$"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/contacts/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "update_contact",
       "kind": "update",
       "method": "PUT",
-      "path": "/contacts/{{ record.id }}",
-      "path_fields": ["id"],
-      "body_type": "json",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
         "properties": {
-          "id": { "type": "integer" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "phone_number": { "type": "string" },
-          "identifier": { "type": "string" },
-          "blocked": { "type": "boolean" },
-          "avatar_url": { "type": "string" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
-        }
+          "id": {
+            "type": "string",
+            "description": "ID of the contact",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the contact"
+          },
+          "email": {
+            "type": "string",
+            "description": "email of the contact"
+          },
+          "blocked": {
+            "type": "boolean",
+            "description": "whether the contact is blocked or not"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "phone number of the contact"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the contact avatar"
+          },
+          "identifier": {
+            "type": "string",
+            "description": "A unique identifier for the contact in external system"
+          },
+          "additional_attributes": {
+            "type": "object",
+            "description": "An object where you can store additional attributes for contact. example {\"type\":\"customer\", \"age\":30}",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "An object where you can store custom attributes for contact. example {\"type\":\"customer\", \"age\":30}, this should have a valid custom attribute definition.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
       },
-      "risk": "updates an existing Chatwoot contact's profile fields; low risk, no customer notification"
+      "risk": "Chatwoot application API mutation (PUT /api/v1/accounts/{account_id}/contacts/{id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "contact_inbox_creation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}/contact_inboxes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the contact",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "inbox_id": {
+            "type": "number",
+            "description": "The ID of the inbox"
+          },
+          "source_id": {
+            "type": "string",
+            "description": "Contact Inbox Source Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "inbox_id"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "contact_add_labels",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}/labels",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the contact",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "labels": {
+            "type": "array",
+            "description": "Array of labels (comma-separated strings)",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "labels"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/contacts/{id}/labels); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "id"
+      ]
     },
     {
       "name": "create_conversation",
       "kind": "create",
       "method": "POST",
-      "path": "/conversations",
-      "body_type": "json",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["source_id"],
         "properties": {
-          "source_id": { "type": "string" },
-          "inbox_id": { "type": "integer" },
-          "contact_id": { "type": "integer" },
-          "status": { "type": "string", "enum": ["open", "resolved", "pending"] },
-          "assignee_id": { "type": "integer" },
-          "team_id": { "type": "integer" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
-        }
+          "source_id": {
+            "type": "string",
+            "description": "Conversation source id"
+          },
+          "inbox_id": {
+            "type": "integer",
+            "description": "Id of inbox in which the conversation is created <br/> Allowed Inbox Types: Website, Phone, Api, Email"
+          },
+          "contact_id": {
+            "type": "integer",
+            "description": "Contact Id for which conversation is created"
+          },
+          "additional_attributes": {
+            "type": "object",
+            "description": "Lets you specify attributes like browser information",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "The object to save custom attributes for conversation, accepts custom attributes key and value",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string",
+            "description": "Specify the conversation whether it's pending, open, closed",
+            "enum": [
+              "open",
+              "resolved",
+              "pending"
+            ]
+          },
+          "assignee_id": {
+            "type": "integer",
+            "description": "Agent Id for assigning a conversation to an agent"
+          },
+          "team_id": {
+            "type": "integer",
+            "description": "Team Id for assigning a conversation to a team\\"
+          },
+          "snoozed_until": {
+            "type": "string",
+            "description": "Snoozed until date time",
+            "format": "date-time"
+          },
+          "message": {
+            "type": "object",
+            "description": "The initial message to be sent to the conversation",
+            "properties": {
+              "content": {
+                "type": "string",
+                "description": "The content of the message"
+              },
+              "template_params": {
+                "type": "object",
+                "description": "The template params for the message in case of whatsapp Channel",
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "content"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "source_id"
+        ]
       },
-      "risk": "creates a new conversation in the target inbox; customer-visible once the initial message is delivered through a live channel"
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the conversation",
+            "enum": [
+              "urgent",
+              "high",
+              "medium",
+              "low",
+              "none"
+            ]
+          },
+          "sla_policy_id": {
+            "type": "number",
+            "description": "The ID of the SLA policy (Available only in Enterprise edition)"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/conversations/{conversation_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "assign_a_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/assignments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "assignee_id": {
+            "type": "number",
+            "description": "Id of the assignee user"
+          },
+          "team_id": {
+            "type": "number",
+            "description": "Id of the team. If the assignee_id is present, this param would be ignored"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "update_custom_attributes_of_a_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/custom_attributes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "The custom attributes to be set for the conversation",
+            "additionalProperties": true
+          },
+          "merge": {
+            "type": "boolean",
+            "description": "When true, only the keys sent in `custom_attributes` are updated and the remaining keys are kept intact. When false (default), the whole custom attributes hash is replaced. Use the destroy_custom_attributes endpoint to remove keys."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "custom_attributes"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "destroy_custom_attributes_of_a_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/destroy_custom_attributes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "custom_attributes": {
+            "type": "array",
+            "description": "The list of custom attribute keys to remove from the conversation",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "custom_attributes"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "conversation_add_labels",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/labels",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "labels": {
+            "type": "array",
+            "description": "Array of labels (comma-separated strings)",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "labels"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/labels); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
     },
     {
       "name": "send_message",
       "kind": "create",
       "method": "POST",
-      "path": "/conversations/{{ record.conversation_id }}/messages",
-      "path_fields": ["conversation_id"],
-      "body_type": "json",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/messages",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["conversation_id", "content"],
         "properties": {
-          "conversation_id": { "type": "integer" },
-          "content": { "type": "string" },
-          "message_type": { "type": "string", "enum": ["outgoing", "incoming"] },
-          "private": { "type": "boolean" },
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the message"
+          },
+          "message_type": {
+            "type": "string",
+            "description": "The type of the message",
+            "enum": [
+              "outgoing",
+              "incoming"
+            ]
+          },
+          "private": {
+            "type": "boolean",
+            "description": "Flag to identify if it is a private note"
+          },
           "content_type": {
             "type": "string",
-            "enum": ["text", "input_email", "cards", "input_select", "form", "article"]
+            "description": "Content type of the message",
+            "enum": [
+              "text",
+              "input_email",
+              "cards",
+              "input_select",
+              "form",
+              "article"
+            ]
           },
-          "content_attributes": { "type": "object" }
-        }
+          "content_attributes": {
+            "type": "object",
+            "description": "Attributes based on the content type",
+            "additionalProperties": true
+          },
+          "campaign_id": {
+            "type": "integer",
+            "description": "The campaign id to which the message belongs"
+          },
+          "template_params": {
+            "type": "object",
+            "description": "WhatsApp template parameters for sending structured messages",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the WhatsApp template (must be approved in WhatsApp Business Manager)"
+              },
+              "category": {
+                "type": "string",
+                "description": "Category of the template",
+                "enum": [
+                  "UTILITY",
+                  "MARKETING",
+                  "SHIPPING_UPDATE",
+                  "TICKET_UPDATE",
+                  "ISSUE_RESOLUTION"
+                ]
+              },
+              "language": {
+                "type": "string",
+                "description": "Language code of the template (BCP 47 format)"
+              },
+              "processed_params": {
+                "type": "object",
+                "description": "Processed template parameters organized by component type",
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "name",
+              "category",
+              "language",
+              "processed_params"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "content"
+        ]
       },
-      "risk": "sends a message into a conversation; customer-visible unless private is true and may notify the contact through the inbox channel"
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "delete_a_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/messages/{{ record.message_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "message_id": {
+            "type": "integer",
+            "description": "The numeric ID of the message"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "message_id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "conversation_id",
+        "message_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "conversation_id",
+        "message_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "toggle_priority_of_a_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/toggle_priority",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the conversation",
+            "enum": [
+              "urgent",
+              "high",
+              "medium",
+              "low",
+              "none"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "priority"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
     },
     {
       "name": "toggle_conversation_status",
-      "kind": "update",
+      "kind": "create",
       "method": "POST",
-      "path": "/conversations/{{ record.conversation_id }}/toggle_status",
-      "path_fields": ["conversation_id"],
-      "body_type": "json",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/toggle_status",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["conversation_id", "status"],
         "properties": {
-          "conversation_id": { "type": "integer" },
-          "status": { "type": "string", "enum": ["open", "resolved", "pending", "snoozed"] },
-          "snoozed_until": { "type": "integer" }
-        }
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the conversation",
+            "enum": [
+              "open",
+              "resolved",
+              "pending",
+              "snoozed"
+            ]
+          },
+          "snoozed_until": {
+            "type": "number",
+            "description": "When status is `snoozed`, schedule the reopen time as a Unix timestamp in seconds. If not provided, the conversation is snoozed until the next customer reply. The conversation always reopens when the customer replies."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "status"
+        ]
       },
-      "risk": "changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and reporting metrics"
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "toggle_typing_status_of_a_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/toggle_typing_status",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "integer",
+            "description": "The numeric ID of the conversation"
+          },
+          "typing_status": {
+            "type": "string",
+            "description": "Typing status to set.",
+            "enum": [
+              "on",
+              "off"
+            ]
+          },
+          "is_private": {
+            "type": "boolean",
+            "description": "Whether the typing event is for private notes."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "typing_status"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "add_new_custom_attribute_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_attribute_definitions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "attribute_display_name": {
+            "type": "string",
+            "description": "Attribute display name"
+          },
+          "attribute_display_type": {
+            "type": "integer",
+            "description": "Attribute display type (text- 0, number- 1, currency- 2, percent- 3, link- 4, date- 5, list- 6, checkbox- 7)"
+          },
+          "attribute_description": {
+            "type": "string",
+            "description": "Attribute description"
+          },
+          "attribute_key": {
+            "type": "string",
+            "description": "Attribute unique key value"
+          },
+          "attribute_values": {
+            "type": "array",
+            "description": "Attribute values",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attribute_model": {
+            "type": "integer",
+            "description": "Attribute type(conversation_attribute- 0, contact_attribute- 1)"
+          },
+          "regex_pattern": {
+            "type": "string",
+            "description": "Regex pattern (Only applicable for type- text). The regex pattern is used to validate the attribute value(s)."
+          },
+          "regex_cue": {
+            "type": "string",
+            "description": "Regex cue message (Only applicable for type- text). The cue message is shown when the regex pattern is not matched."
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/custom_attribute_definitions); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_attribute_from_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_attribute_definitions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the custom attribute to be deleted"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/custom_attribute_definitions/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_custom_attribute_in_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_attribute_definitions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the custom attribute to be updated."
+          },
+          "attribute_display_name": {
+            "type": "string",
+            "description": "Attribute display name"
+          },
+          "attribute_display_type": {
+            "type": "integer",
+            "description": "Attribute display type (text- 0, number- 1, currency- 2, percent- 3, link- 4, date- 5, list- 6, checkbox- 7)"
+          },
+          "attribute_description": {
+            "type": "string",
+            "description": "Attribute description"
+          },
+          "attribute_key": {
+            "type": "string",
+            "description": "Attribute unique key value"
+          },
+          "attribute_values": {
+            "type": "array",
+            "description": "Attribute values",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attribute_model": {
+            "type": "integer",
+            "description": "Attribute type(conversation_attribute- 0, contact_attribute- 1)"
+          },
+          "regex_pattern": {
+            "type": "string",
+            "description": "Regex pattern (Only applicable for type- text). The regex pattern is used to validate the attribute value(s)."
+          },
+          "regex_cue": {
+            "type": "string",
+            "description": "Regex cue message (Only applicable for type- text). The cue message is shown when the regex pattern is not matched."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/custom_attribute_definitions/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_a_custom_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_filters/{{ record.custom_filter_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_filter_id": {
+            "type": "integer",
+            "description": "The numeric ID of the custom filter"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "custom_filter_id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "custom_filter_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "custom_filter_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_custom_filter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_filters/{{ record.custom_filter_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "custom_filter_id": {
+            "type": "integer",
+            "description": "The numeric ID of the custom filter"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the custom filter"
+          },
+          "type": {
+            "type": "string",
+            "description": "The description about the custom filter",
+            "enum": [
+              "conversation",
+              "contact",
+              "report"
+            ]
+          },
+          "query": {
+            "type": "object",
+            "description": "A query that needs to be saved as a custom filter",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "custom_filter_id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "custom_filter_id"
+      ]
+    },
+    {
+      "name": "delete_agent_in_inbox",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inbox_members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "string",
+            "description": "The ID of the inbox"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be deleted from the inbox",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/inbox_members); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_agents_in_inbox",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inbox_members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "string",
+            "description": "The ID of the inbox"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the inbox",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/inbox_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_agent_to_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inbox_members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "integer",
+            "description": "The ID of the inbox"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the inbox",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/inbox_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "inbox_creation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inboxes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the inbox."
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Image file for avatar."
+          },
+          "greeting_enabled": {
+            "type": "boolean",
+            "description": "Enable greeting message."
+          },
+          "greeting_message": {
+            "type": "string",
+            "description": "Greeting message to send when greeting messages are enabled."
+          },
+          "enable_email_collect": {
+            "type": "boolean",
+            "description": "Enable email collection.\n\nAvailable for: `Website`"
+          },
+          "csat_survey_enabled": {
+            "type": "boolean",
+            "description": "Enable CSAT survey."
+          },
+          "csat_config": {
+            "type": "object",
+            "description": "CSAT survey configuration.",
+            "properties": {
+              "display_type": {
+                "type": "string",
+                "description": "Display style for the CSAT survey.",
+                "enum": [
+                  "emoji",
+                  "star"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "description": "Message shown with the CSAT survey."
+              },
+              "button_text": {
+                "type": "string",
+                "description": "Text shown on the CSAT survey button."
+              },
+              "language": {
+                "type": "string",
+                "description": "Language code for the CSAT survey."
+              },
+              "survey_rules": {
+                "type": "object",
+                "description": "Rules that decide when to show the CSAT survey.",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "enable_auto_assignment": {
+            "type": "boolean",
+            "description": "Enable Auto Assignment."
+          },
+          "working_hours_enabled": {
+            "type": "boolean",
+            "description": "Enable working hours."
+          },
+          "out_of_office_message": {
+            "type": "string",
+            "description": "Out of office message to send outside working hours."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone of the inbox."
+          },
+          "allow_messages_after_resolved": {
+            "type": "boolean",
+            "description": "Allow messages after conversation is resolved.\n\nAvailable for: `Website`"
+          },
+          "lock_to_single_conversation": {
+            "type": "boolean",
+            "description": "Lock contact messages to a single active conversation.\n\nAvailable for: `API` `LINE` `Telegram` `WhatsApp` `SMS`"
+          },
+          "portal_id": {
+            "type": "integer",
+            "description": "Id of the help center portal to attach to the inbox."
+          },
+          "sender_name_type": {
+            "type": "string",
+            "description": "Sender name type for outbound email replies.\n\nAvailable for: `Website` `Email`",
+            "enum": [
+              "friendly",
+              "professional"
+            ]
+          },
+          "business_name": {
+            "type": "string",
+            "description": "Business name for outbound email replies.\n\nAvailable for: `Website` `Email`"
+          },
+          "channel": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/inboxes); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "update_inbox",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inboxes/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the inbox",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the inbox."
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Image file for avatar."
+          },
+          "greeting_enabled": {
+            "type": "boolean",
+            "description": "Enable greeting message."
+          },
+          "greeting_message": {
+            "type": "string",
+            "description": "Greeting message to send when greeting messages are enabled."
+          },
+          "enable_email_collect": {
+            "type": "boolean",
+            "description": "Enable email collection.\n\nAvailable for: `Website`"
+          },
+          "csat_survey_enabled": {
+            "type": "boolean",
+            "description": "Enable CSAT survey."
+          },
+          "csat_config": {
+            "type": "object",
+            "description": "CSAT survey configuration.",
+            "properties": {
+              "display_type": {
+                "type": "string",
+                "description": "Display style for the CSAT survey.",
+                "enum": [
+                  "emoji",
+                  "star"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "description": "Message shown with the CSAT survey."
+              },
+              "button_text": {
+                "type": "string",
+                "description": "Text shown on the CSAT survey button."
+              },
+              "language": {
+                "type": "string",
+                "description": "Language code for the CSAT survey."
+              },
+              "survey_rules": {
+                "type": "object",
+                "description": "Rules that decide when to show the CSAT survey.",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "enable_auto_assignment": {
+            "type": "boolean",
+            "description": "Enable Auto Assignment."
+          },
+          "working_hours_enabled": {
+            "type": "boolean",
+            "description": "Enable working hours."
+          },
+          "out_of_office_message": {
+            "type": "string",
+            "description": "Out of office message to send outside working hours."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone of the inbox."
+          },
+          "allow_messages_after_resolved": {
+            "type": "boolean",
+            "description": "Allow messages after conversation is resolved.\n\nAvailable for: `Website`"
+          },
+          "lock_to_single_conversation": {
+            "type": "boolean",
+            "description": "Lock contact messages to a single active conversation.\n\nAvailable for: `API` `LINE` `Telegram` `WhatsApp` `SMS`"
+          },
+          "portal_id": {
+            "type": "integer",
+            "description": "Id of the help center portal to attach to the inbox."
+          },
+          "sender_name_type": {
+            "type": "string",
+            "description": "Sender name type for outbound email replies.\n\nAvailable for: `Website` `Email`",
+            "enum": [
+              "friendly",
+              "professional"
+            ]
+          },
+          "business_name": {
+            "type": "string",
+            "description": "Business name for outbound email replies.\n\nAvailable for: `Website` `Email`"
+          },
+          "branded_email_layout": {
+            "type": "string",
+            "description": "Liquid HTML layout for outbound email replies. Must include `{{ content_for_layout }}` and be 262,144 characters or shorter.\n\nAvailable for: `Email`"
+          },
+          "channel": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/inboxes/{id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_agent_bot",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inboxes/{{ record.id }}/set_agent_bot",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the inbox",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "agent_bot": {
+            "type": "number",
+            "description": "Agent bot ID"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "agent_bot"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_an_integration_hook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/integrations/hooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "integer",
+            "description": "The ID of app for which integration hook is being created"
+          },
+          "inbox_id": {
+            "type": "integer",
+            "description": "The inbox ID, if the hook is an inbox hook"
+          },
+          "status": {
+            "type": "integer",
+            "description": "The status of the integration (0 for inactive, 1 for active)"
+          },
+          "settings": {
+            "type": "object",
+            "description": "The settings required by the integration",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/integrations/hooks); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "delete_an_integration_hook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/integrations/hooks/{{ record.hook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "hook_id": {
+            "type": "integer",
+            "description": "The numeric ID of the integration hook"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "hook_id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/integrations/hooks/{hook_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "hook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "hook_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_an_integrations_hook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/integrations/hooks/{{ record.hook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "hook_id": {
+            "type": "integer",
+            "description": "The numeric ID of the integration hook"
+          },
+          "status": {
+            "type": "integer",
+            "description": "The status of the integration (0 for inactive, 1 for active)"
+          },
+          "settings": {
+            "type": "object",
+            "description": "The settings required by the integration",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "hook_id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/integrations/hooks/{hook_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "hook_id"
+      ]
     },
     {
       "name": "create_label",
       "kind": "create",
       "method": "POST",
-      "path": "/labels",
-      "body_type": "json",
+      "path": "/api/v1/accounts/{{ config.account_id }}/labels",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["title"],
         "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "color": { "type": "string" },
-          "show_on_sidebar": { "type": "boolean" }
-        }
+          "title": {
+            "type": "string",
+            "description": "The label title"
+          },
+          "description": {
+            "type": "string",
+            "description": "A short description for the label"
+          },
+          "color": {
+            "type": "string",
+            "description": "Hex color code for the label"
+          },
+          "show_on_sidebar": {
+            "type": "boolean",
+            "description": "Whether the label should appear in the sidebar"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
       },
-      "risk": "creates a new account-wide label; low risk, visible to all agents in the sidebar when show_on_sidebar is true"
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/labels); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "delete_a_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/labels/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the label",
+            "pattern": "^[\\s\\S]+$"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/labels/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_label",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/labels/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the label",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "title": {
+            "type": "string",
+            "description": "The label title"
+          },
+          "description": {
+            "type": "string",
+            "description": "A short description for the label"
+          },
+          "color": {
+            "type": "string",
+            "description": "Hex color code for the label"
+          },
+          "show_on_sidebar": {
+            "type": "boolean",
+            "description": "Whether the label should appear in the sidebar"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/labels/{id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "add_new_portal_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "color": {
+            "type": "string",
+            "description": "Header color for help-center in hex format"
+          },
+          "custom_domain": {
+            "type": "string",
+            "description": "Custom domain to display help center."
+          },
+          "header_text": {
+            "type": "string",
+            "description": "Help center header"
+          },
+          "homepage_link": {
+            "type": "string",
+            "description": "link to main dashboard"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for the portal"
+          },
+          "page_title": {
+            "type": "string",
+            "description": "Page title for the portal"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug for the portal to display in link"
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "Status to check if portal is live"
+          },
+          "config": {
+            "type": "object",
+            "description": "Configuration about supporting locales",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/portals); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_portal_to_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The slug identifier of the portal",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "color": {
+            "type": "string",
+            "description": "Header color for help-center in hex format"
+          },
+          "custom_domain": {
+            "type": "string",
+            "description": "Custom domain to display help center."
+          },
+          "header_text": {
+            "type": "string",
+            "description": "Help center header"
+          },
+          "homepage_link": {
+            "type": "string",
+            "description": "link to main dashboard"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name for the portal"
+          },
+          "page_title": {
+            "type": "string",
+            "description": "Page title for the portal"
+          },
+          "slug": {
+            "type": "string",
+            "description": "Slug for the portal to display in link"
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "Status to check if portal is live"
+          },
+          "config": {
+            "type": "object",
+            "description": "Configuration about supporting locales",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/portals/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_article_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals/{{ record.id }}/articles",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The slug identifier of the portal",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the article"
+          },
+          "slug": {
+            "type": "string",
+            "description": "The slug of the article"
+          },
+          "position": {
+            "type": "integer",
+            "description": "article position in category"
+          },
+          "content": {
+            "type": "string",
+            "description": "The text content."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the article"
+          },
+          "category_id": {
+            "type": "integer",
+            "description": "The category id of the article"
+          },
+          "author_id": {
+            "type": "integer",
+            "description": "The author agent id of the article"
+          },
+          "associated_article_id": {
+            "type": "integer",
+            "description": "To associate similar articles to each other, e.g to provide the link for the reference."
+          },
+          "status": {
+            "type": "integer",
+            "description": "The status of the article. 0 for draft, 1 for published, 2 for archived"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the article"
+          },
+          "meta": {
+            "type": "object",
+            "description": "Use for search",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/portals/{id}/articles); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_category_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals/{{ record.id }}/categories",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The slug identifier of the portal",
+            "pattern": "^[\\s\\S]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the category"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description for the category"
+          },
+          "position": {
+            "type": "integer",
+            "description": "Category position in the portal list to sort"
+          },
+          "slug": {
+            "type": "string",
+            "description": "The category slug used in the URL"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the category"
+          },
+          "icon": {
+            "type": "string",
+            "description": "The icon of the category as a string (emoji)"
+          },
+          "parent_category_id": {
+            "type": "integer",
+            "description": "To define parent category, e.g product documentation has multiple level features in sales category or in engineering category."
+          },
+          "associated_category_id": {
+            "type": "integer",
+            "description": "To associate similar categories to each other, e.g same category of product documentation in different languages"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/portals/{id}/categories); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_a_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the team"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team"
+          },
+          "allow_auto_assign": {
+            "type": "boolean",
+            "description": "If this setting is turned on, the system would automatically assign the conversation to an agent in the team while assigning the conversation to a team"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/teams); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "delete_a_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "integer",
+            "description": "The ID of the team to be updated"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "team_id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/teams/{team_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "team_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "integer",
+            "description": "The ID of the team to be updated"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the team"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team"
+          },
+          "allow_auto_assign": {
+            "type": "boolean",
+            "description": "If this setting is turned on, the system would automatically assign the conversation to an agent in the team while assigning the conversation to a team"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "team_id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/teams/{team_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "delete_agent_in_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}/team_members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "integer",
+            "description": "The ID of the team to be updated"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be deleted from the team",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "team_id",
+          "user_ids"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/teams/{team_id}/team_members); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "team_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_agents_in_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}/team_members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "integer",
+            "description": "The ID of the team to be updated"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the team",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "team_id",
+          "user_ids"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/teams/{team_id}/team_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "team_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_agent_to_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}/team_members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "integer",
+            "description": "The ID of the team to be updated"
+          },
+          "user_ids": {
+            "type": "array",
+            "description": "IDs of users to be added to the team",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "team_id",
+          "user_ids"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/teams/{team_id}/team_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "team_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_a_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The url where the events should be sent"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the webhook"
+          },
+          "subscriptions": {
+            "type": "array",
+            "description": "The events you want to subscribe to.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "conversation_created",
+                "conversation_status_changed",
+                "conversation_updated",
+                "message_created",
+                "message_updated",
+                "contact_created",
+                "contact_updated",
+                "webwidget_triggered",
+                "conversation_typing_on",
+                "conversation_typing_off"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/webhooks); reverse ETL plan, preview, explicit approval, and execute are required"
+    },
+    {
+      "name": "delete_a_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": "integer",
+            "description": "The numeric ID of the webhook"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/webhooks/{webhook_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "webhook_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": "integer",
+            "description": "The numeric ID of the webhook"
+          },
+          "url": {
+            "type": "string",
+            "description": "The url where the events should be sent"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the webhook"
+          },
+          "subscriptions": {
+            "type": "array",
+            "description": "The events you want to subscribe to.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "conversation_created",
+                "conversation_status_changed",
+                "conversation_updated",
+                "message_created",
+                "message_updated",
+                "contact_created",
+                "contact_updated",
+                "webwidget_triggered",
+                "conversation_typing_on",
+                "conversation_typing_off"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webhook_id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/webhooks/{webhook_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "path_fields": [
+        "webhook_id"
+      ]
+    },
+    {
+      "name": "update_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/profile",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              },
+              "message_signature": {
+                "type": "string"
+              },
+              "phone_number": {
+                "type": "string"
+              },
+              "current_password": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "password_confirmation": {
+                "type": "string"
+              },
+              "ui_settings": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile"
+        ]
+      },
+      "risk": "Chatwoot application API mutation (PUT /api/v1/profile); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_an_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/accounts",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the account"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the account"
+          },
+          "domain": {
+            "type": "string",
+            "description": "The domain of the account"
+          },
+          "support_email": {
+            "type": "string",
+            "description": "The support email of the account"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the account",
+            "enum": [
+              "active",
+              "suspended"
+            ]
+          },
+          "limits": {
+            "type": "object",
+            "description": "The limits of the account",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "The custom attributes of the account",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/accounts); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{{ config.account_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/accounts/{account_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_an_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/platform/api/v1/accounts/{{ config.account_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the account"
+          },
+          "locale": {
+            "type": "string",
+            "description": "The locale of the account"
+          },
+          "domain": {
+            "type": "string",
+            "description": "The domain of the account"
+          },
+          "support_email": {
+            "type": "string",
+            "description": "The support email of the account"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the account",
+            "enum": [
+              "active",
+              "suspended"
+            ]
+          },
+          "limits": {
+            "type": "object",
+            "description": "The limits of the account",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "The custom attributes of the account",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot platform API mutation (PATCH /platform/api/v1/accounts/{account_id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_account_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{{ config.account_id }}/account_users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/accounts/{account_id}/account_users); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_an_account_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/accounts/{{ config.account_id }}/account_users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "description": "The ID of the user"
+          },
+          "role": {
+            "type": "string",
+            "description": "whether user is an administrator or agent"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id",
+          "role"
+        ]
+      },
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/accounts/{account_id}/account_users); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_an_agent_bot",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/agent_bots",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the agent bot"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the agent bot"
+          },
+          "outgoing_url": {
+            "type": "string",
+            "description": "The webhook URL for the bot"
+          },
+          "account_id": {
+            "type": "integer",
+            "description": "The account ID to associate the agent bot with"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the agent bot avatar"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/agent_bots); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_agent_bot",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the agentbot to be updated"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/agent_bots/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_an_agent_bot",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/platform/api/v1/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ID of the agentbot to be updated"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the agent bot"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the agent bot"
+          },
+          "outgoing_url": {
+            "type": "string",
+            "description": "The webhook URL for the bot"
+          },
+          "account_id": {
+            "type": "integer",
+            "description": "The account ID to associate the agent bot with"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Send the form data with the avatar image binary or use the avatar_url"
+          },
+          "avatar_url": {
+            "type": "string",
+            "description": "The url to a jpeg, png file for the agent bot avatar"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot platform API mutation (PATCH /platform/api/v1/agent_bots/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_a_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the user"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password must contain uppercase, lowercase letters, number and a special character"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "Custom attributes you want to associate with the user",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/users); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_a_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/users/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The numeric ID of the user on the platform"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/users/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/platform/api/v1/users/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The numeric ID of the user on the platform"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the user"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password must contain uppercase, lowercase letters, number and a special character"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "Custom attributes you want to associate with the user",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Chatwoot platform API mutation (PATCH /platform/api/v1/users/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive"
     }
   ]
 }

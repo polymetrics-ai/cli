@@ -1,0 +1,20 @@
+{
+  "record": {
+    "conversation_id": 1,
+    "priority": "urgent"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1",
+    "body": {
+      "priority": "urgent"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "fixture-id",
+    "title": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/portals/fixture-id/articles",
+    "body": {
+      "title": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

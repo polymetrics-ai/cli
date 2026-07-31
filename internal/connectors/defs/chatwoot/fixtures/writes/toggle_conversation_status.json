@@ -1,13 +1,22 @@
 {
   "record": {
-    "conversation_id": 101,
-    "status": "resolved"
+    "conversation_id": 1,
+    "status": "open",
+    "snoozed_until": 1.5
   },
   "expect": {
     "method": "POST",
-    "path": "/conversations/101/toggle_status",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1/toggle_status",
     "body": {
-      "status": "resolved"
+      "status": "open",
+      "snoozed_until": 1.5
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
     }
   }
 }

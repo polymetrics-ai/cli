@@ -1,0 +1,24 @@
+{
+  "record": {
+    "conversation_id": 1,
+    "labels": [
+      "fixture-value"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1/labels",
+    "body": {
+      "labels": [
+        "fixture-value"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

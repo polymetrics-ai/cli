@@ -1,0 +1,25 @@
+{
+  "record": {
+    "app_id": 1,
+    "inbox_id": 1,
+    "status": 1,
+    "settings": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/integrations/hooks",
+    "body": {
+      "app_id": 1,
+      "inbox_id": 1,
+      "status": 1,
+      "settings": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

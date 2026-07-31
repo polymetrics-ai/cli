@@ -1,0 +1,17 @@
+{
+  "official_operations": 145,
+  "write_actions": 73,
+  "destructive_or_admin_confirm_gated": 47,
+  "api_surface": {
+    "blocked": 65,
+    "covered": 80
+  },
+  "blocked_reasons": {
+    "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed": 32,
+    "covered": 80,
+    "planned/blocked: provider search/filter POST needs bounded direct-read command metadata, typed body/query flags, and redacted output before execution": 2,
+    "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed": 18,
+    "planned/blocked: custom filter creation requires a query parameter (`filter_type`) on a write; shared write query-param support is not available in this connector-local slice": 1,
+    "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution": 12
+  }
+}

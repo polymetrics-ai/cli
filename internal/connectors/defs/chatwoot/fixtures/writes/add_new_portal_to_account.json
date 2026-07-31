@@ -1,0 +1,35 @@
+{
+  "record": {
+    "color": "fixture-value",
+    "custom_domain": "fixture-value",
+    "header_text": "fixture-value",
+    "homepage_link": "fixture-value",
+    "name": "fixture-value",
+    "page_title": "fixture-value",
+    "slug": "fixture-value",
+    "archived": true,
+    "config": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/portals",
+    "body": {
+      "color": "fixture-value",
+      "custom_domain": "fixture-value",
+      "header_text": "fixture-value",
+      "homepage_link": "fixture-value",
+      "name": "fixture-value",
+      "page_title": "fixture-value",
+      "slug": "fixture-value",
+      "archived": true,
+      "config": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

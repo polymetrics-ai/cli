@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "fixture-id",
+    "name": "fixture-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/inboxes/fixture-id",
+    "body": {
+      "name": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

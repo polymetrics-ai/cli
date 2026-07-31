@@ -1,0 +1,31 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "locale": "fixture-value",
+    "domain": "fixture-value",
+    "support_email": "fixture@example.invalid",
+    "status": "active",
+    "limits": {},
+    "custom_attributes": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/platform/api/v1/accounts",
+    "body": {
+      "name": "fixture-value",
+      "locale": "fixture-value",
+      "domain": "fixture-value",
+      "support_email": "fixture@example.invalid",
+      "status": "active",
+      "limits": {},
+      "custom_attributes": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

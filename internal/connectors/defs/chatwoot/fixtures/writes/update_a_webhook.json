@@ -1,0 +1,20 @@
+{
+  "record": {
+    "webhook_id": 1,
+    "url": "https://fixture.example.invalid/resource"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/webhooks/1",
+    "body": {
+      "url": "https://fixture.example.invalid/resource"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

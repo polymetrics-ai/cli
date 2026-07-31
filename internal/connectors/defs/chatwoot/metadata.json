@@ -1,7 +1,7 @@
 {
   "name": "chatwoot",
   "display_name": "Chatwoot",
-  "description": "Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, and writes contact/conversation/message/label mutations through the Chatwoot Application API.",
+  "description": "Reads Chatwoot account data and safely plans typed reverse ETL mutations across the official application and platform APIs. Public client/no-auth operations are recorded as planned until a separate safe contract exists.",
   "integration_type": "api",
   "docs_url": "https://developers.chatwoot.com/api-reference",
   "release_stage": "alpha",
@@ -17,7 +17,8 @@
     "read_page_size": 15
   },
   "risk": {
-    "read": "external Chatwoot Application API read of conversation, contact, and message data (account-scoped)",
-    "write": "external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects"
+    "read": "external Chatwoot API reads of account-scoped conversation, contact, inbox, label, team, agent, and message data; additional official reads are ledgered as planned until typed stream/direct-read fixtures exist",
+    "write": "73 named Chatwoot reverse ETL actions; DELETE/destructive/admin actions require typed destructive confirmation plus plan, preview, approval, execute",
+    "approval": "reverse ETL mutations require plan -> preview -> explicit approval token -> execute; destructive/admin actions additionally require --confirm destructive"
   }
 }

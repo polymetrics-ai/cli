@@ -1,17 +1,22 @@
 {
   "record": {
-    "conversation_id": 101,
-    "content": "Fixture reply message",
-    "message_type": "outgoing",
-    "private": false
+    "conversation_id": 1,
+    "content": "fixture-value",
+    "message_type": "outgoing"
   },
   "expect": {
     "method": "POST",
-    "path": "/conversations/101/messages",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1/messages",
     "body": {
-      "content": "Fixture reply message",
-      "message_type": "outgoing",
-      "private": false
+      "content": "fixture-value",
+      "message_type": "outgoing"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/contacts",
+    "path": "/api/v1/accounts/synthetic-conformance-value/contacts",
     "query": {
       "page": "1"
     }

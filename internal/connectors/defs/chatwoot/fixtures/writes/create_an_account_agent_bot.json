@@ -1,0 +1,31 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "description": "fixture-value",
+    "outgoing_url": "https://fixture.example.invalid/resource",
+    "avatar": "fixture-value",
+    "avatar_url": "https://fixture.example.invalid/resource",
+    "bot_type": 1,
+    "bot_config": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/agent_bots",
+    "body": {
+      "name": "fixture-value",
+      "description": "fixture-value",
+      "outgoing_url": "https://fixture.example.invalid/resource",
+      "avatar": "fixture-value",
+      "avatar_url": "https://fixture.example.invalid/resource",
+      "bot_type": 1,
+      "bot_config": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

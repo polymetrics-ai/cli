@@ -1,0 +1,22 @@
+{
+  "record": {
+    "conversation_id": 1,
+    "typing_status": "on",
+    "is_private": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1/toggle_typing_status",
+    "body": {
+      "typing_status": "on",
+      "is_private": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

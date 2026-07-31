@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "fixture-id",
+    "agent_bot": 1.5
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/inboxes/fixture-id/set_agent_bot",
+    "body": {
+      "agent_bot": 1.5
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "team_id": 1,
+    "user_ids": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/teams/1/team_members",
+    "body": {
+      "user_ids": [
+        1
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

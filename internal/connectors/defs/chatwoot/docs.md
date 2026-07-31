@@ -1,108 +1,33 @@
-# Overview
+# Chatwoot connector
 
-Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and
-conversation-scoped messages, and writes contact/conversation/message/label mutations through the
-Chatwoot Application API.
+## Overview
 
-Readable streams: `conversations`, `contacts`, `inboxes`, `agents`, `teams`, `labels`, `messages`.
+The Chatwoot connector reads account-scoped conversations, contacts, inboxes, labels, agents, teams, and messages from the official Chatwoot Application API. This wave also records every operation from the official application, platform, client, and other OpenAPI tag-group sources in `api_surface.json` and `operations.json`.
 
-Write actions: `create_contact`, `update_contact`, `create_conversation`, `send_message`,
-`toggle_conversation_status`, `create_label`.
-
-Service API documentation: https://developers.chatwoot.com/api-reference.
+Official operation ledger counts: 145 total rows; 7 stream-covered rows; 73 reverse-ETL write-covered rows; 65 planned/blocked rows.
 
 ## Auth setup
 
-Connection fields:
+Use `pm credentials add <name> --connector chatwoot` with `--from-env api_access_token=ENV` or `--value-stdin api_access_token`. Do not paste tokens into chat, shell history, docs, fixtures, or JSON examples. `base_url` is the Chatwoot server root URL (default `https://app.chatwoot.com`) and `account_id` scopes application/platform account endpoints.
 
-- `account_id` (required, string); The numeric Chatwoot account ID to scope every request to
-  (visible in the dashboard URL, e.g. app.chatwoot.com/app/accounts/1/...).
-- `api_access_token` (optional, secret, string); Chatwoot API access token (Profile Settings >
-  Access Token for a user token, or an Agent Bot token). Sent as the api_access_token request header
-  on every request.
-- `base_url` (required, string); format `uri`; Your Chatwoot instance root, e.g.
-  https://app.chatwoot.com for the hosted SaaS or your self-hosted install's origin. The engine
-  appends /api/v1/accounts/{account_id} (and, for messages, the conversation-scoped sub-path) to
-  every request; do not include /api/v1 yourself. Also usable as a base URL override for
-  tests/proxies.
-- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for the first incremental
-  sync of conversations, contacts, and messages (e.g. 2026-01-01T00:00:00Z). Ignored once a cursor
-  has been persisted.
-
-Secret fields are redacted in logs and write previews: `api_access_token`.
-
-Authentication behavior:
-
-- API key authentication in `api_access_token` using `secrets.api_access_token`.
-
-Requests use base URL `{{ config.base_url }}/api/v1/accounts/{{ config.account_id }}` after applying
-configuration defaults.
-
-Connection checks call GET `/agents`.
+The public client API documented by Chatwoot does not use the same user/platform token contract; those operations are represented as planned/blocked until a separate no-auth inbox/contact-safe connector contract exists.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Implemented fixture-backed streams remain account-scoped and bounded: `conversations`, `contacts`, `inboxes`, `agents`, `teams`, `labels`, and fan-out `messages`. Additional documented GET/report/search/changefeed operations are present exactly once in the ledger and remain planned/blocked until typed stream/direct-read schemas and fixtures are authored.
 
-Pagination by stream: none: `inboxes`, `agents`, `teams`, `labels`; page_number: `conversations`,
-`contacts`, `messages`.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `conversations`: GET `/conversations` - records path `data.payload`; query `status`=`all`;
-  page-number pagination; page parameter `page`; no page-size parameter; starts at 1; page size 25;
-  incremental cursor `updated_at`; formatted as `rfc3339`; initial lower bound from `start_date`.
-- `contacts`: GET `/contacts` - records path `payload`; page-number pagination; page parameter
-  `page`; no page-size parameter; starts at 1; page size 15; incremental cursor `last_activity_at`;
-  formatted as `rfc3339`.
-- `inboxes`: GET `/inboxes` - records path `payload`.
-- `agents`: GET `/agents` - records path `.`.
-- `teams`: GET `/teams` - records path `.`.
-- `labels`: GET `/labels` - records path `payload`.
-- `messages`: GET `/conversations/{{ fanout.id }}/messages` - records path `payload`; page-number
-  pagination; page parameter `page`; no page-size parameter; starts at 1; page size 25; fan-out; ids
-  from request `/conversations`; id-list records path `data.payload`; id field `id`; id inserted
-  into the request path; stamps `conversation_id`.
+The connector uses bounded page-number pagination for paginated streams and fixture replay only in local conformance. No live provider call is made by this bundle.
 
 ## Write actions & risks
 
-Overall write risk: external mutation of Chatwoot contacts, conversations, messages, and labels;
-agent-visible and customer-visible side effects.
+This bundle declares 73 named reverse-ETL write actions for safely expressible Chatwoot application/platform mutations. Every write must follow plan -> preview -> explicit approval token -> execute. 47 DELETE/destructive/admin/elevated actions carry `confirm: destructive` and require the typed `--confirm destructive` challenge before execution. Delete actions are modeled as idempotent for 404 responses where the resource is already absent.
 
-Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
-
-- `create_contact`: POST `/contacts` - kind `create`; body type `json`; required record fields
-  `inbox_id`; accepted fields `additional_attributes`, `avatar_url`, `blocked`, `custom_attributes`,
-  `email`, `identifier`, `inbox_id`, `name`, `phone_number`; risk: creates a new Chatwoot contact
-  record; low risk, no customer notification.
-- `update_contact`: PUT `/contacts/{{ record.id }}` - kind `update`; body type `json`; path fields
-  `id`; required record fields `id`; accepted fields `additional_attributes`, `avatar_url`,
-  `blocked`, `custom_attributes`, `email`, `id`, `identifier`, `name`, `phone_number`; risk: updates
-  an existing Chatwoot contact's profile fields; low risk, no customer notification.
-- `create_conversation`: POST `/conversations` - kind `create`; body type `json`; required record
-  fields `source_id`; accepted fields `additional_attributes`, `assignee_id`, `contact_id`,
-  `custom_attributes`, `inbox_id`, `source_id`, `status`, `team_id`; risk: creates a new
-  conversation in the target inbox; customer-visible once the initial message is delivered through a
-  live channel.
-- `send_message`: POST `/conversations/{{ record.conversation_id }}/messages` - kind `create`; body
-  type `json`; path fields `conversation_id`; required record fields `conversation_id`, `content`;
-  accepted fields `content`, `content_attributes`, `content_type`, `conversation_id`,
-  `message_type`, `private`; risk: sends a message into a conversation; customer-visible unless
-  private is true and may notify the contact through the inbox channel.
-- `toggle_conversation_status`: POST `/conversations/{{ record.conversation_id }}/toggle_status` -
-  kind `update`; body type `json`; path fields `conversation_id`; required record fields
-  `conversation_id`, `status`; accepted fields `conversation_id`, `snoozed_until`, `status`; risk:
-  changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and
-  reporting metrics.
-- `create_label`: POST `/labels` - kind `create`; body type `json`; required record fields `title`;
-  accepted fields `color`, `description`, `show_on_sidebar`, `title`; risk: creates a new
-  account-wide label; low risk, visible to all agents in the sidebar when show_on_sidebar is true.
+Public client writes and write endpoints requiring query-parameter execution support remain planned/blocked rather than exposed through a raw API escape hatch. There is no generic HTTP method/path/body tool.
 
 ## Known limits
 
-- Batch defaults: read_page_size=15.
-- API coverage includes 7 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=6, duplicate_of=10, non_data_endpoint=2, out_of_scope=36,
-  requires_elevated_scope=4.
+- Live certification is not claimed; no credentials or provider writes were used.
+- Public client API operations need a separate no-auth, inbox/contact-bounded contract before execution.
+- `POST /api/v1/accounts/{account_id}/custom_filters` requires a query parameter on a write path; this connector-local slice records it as blocked because the shared write engine has no query-param write contract.
+- Additional GET/report/changefeed operations beyond the seven fixture-backed streams are operation-ledger rows until typed stream or direct-read fixtures prove safe execution.
+- Generated operation schemas are bounded metadata for planning and validation; provider-specific edge semantics still require live-safe certification before certification claims.
