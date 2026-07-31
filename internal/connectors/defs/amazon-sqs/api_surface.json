@@ -1,7 +1,169 @@
 {
-  "api": "Amazon SQS Query API over signed HTTP(S) POST (AWS SigV4) — not a declarative REST resource surface",
-  "docs": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
-  "reviewed_at": "2026-07-03",
-  "scope": "This is a Tier-3 message-queue connector (capabilities.dynamic_schema: true, no streams.json — see docs.md): it speaks the SQS Query API (Action=ReceiveMessage/GetQueueAttributes form-encoded POST, AWS SigV4-signed, XML response body) via hand-written Go, not a declarative streams.json a covered_by.stream entry could resolve against. Check calls GetQueueAttributes; Read calls ReceiveMessage in a bounded poll loop. Legacy never calls SendMessage/DeleteMessage/ChangeMessageVisibility/PurgeQueue or any other SQS action (read-only source, wave0 parity). This api_surface.json intentionally has zero endpoints entries, matching the Tier-3 minimal-surface pattern for non-REST/no-static-stream connectors (design §B.7, see native/postgres's and native/faker's identical zero-endpoint precedent) — there is nothing for either covered_by or excluded to describe once no streams.json exists to reference.",
-  "endpoints": []
+  "api": "Amazon SQS Query API over signed HTTP(S) POST (AWS SigV4), API version 2012-11-05",
+  "docs": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
+  "reviewed_at": "2026-07-31",
+  "scope": "Complete operation-level ledger for the 23 Amazon SQS operations listed by the AWS-owned Smithy model and AWS API Reference. This Tier-3 native connector executes fixed SQS Query API Action values only; there is no arbitrary AWS action, raw path, raw body, generic HTTP, shell, or passthrough escape hatch. ReceiveMessage remains the bounded messages stream; six read operations are typed operation direct reads; sixteen write/admin/destructive operations are typed reverse ETL actions with closed schemas, redaction, and plan -> preview -> explicit approval -> execute.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "SQS.ReceiveMessage",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.GetQueueAttributes",
+      "covered_by": {
+        "direct_read": "queue attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.GetQueueUrl",
+      "covered_by": {
+        "direct_read": "queue url"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListDeadLetterSourceQueues",
+      "covered_by": {
+        "direct_read": "dead-letter-source-queues list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListMessageMoveTasks",
+      "covered_by": {
+        "direct_read": "message-move-tasks list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListQueues",
+      "covered_by": {
+        "direct_read": "queues list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ListQueueTags",
+      "covered_by": {
+        "direct_read": "queue tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.AddPermission",
+      "covered_by": {
+        "write": "add_permission"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.CancelMessageMoveTask",
+      "covered_by": {
+        "write": "cancel_message_move_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ChangeMessageVisibility",
+      "covered_by": {
+        "write": "change_message_visibility"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.ChangeMessageVisibilityBatch",
+      "covered_by": {
+        "write": "change_message_visibility_batch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.CreateQueue",
+      "covered_by": {
+        "write": "create_queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.DeleteMessage",
+      "covered_by": {
+        "write": "delete_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.DeleteMessageBatch",
+      "covered_by": {
+        "write": "delete_message_batch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.DeleteQueue",
+      "covered_by": {
+        "write": "delete_queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.PurgeQueue",
+      "covered_by": {
+        "write": "purge_queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.RemovePermission",
+      "covered_by": {
+        "write": "remove_permission"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.SendMessage",
+      "covered_by": {
+        "write": "send_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.SendMessageBatch",
+      "covered_by": {
+        "write": "send_message_batch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.SetQueueAttributes",
+      "covered_by": {
+        "write": "set_queue_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.StartMessageMoveTask",
+      "covered_by": {
+        "write": "start_message_move_task"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.TagQueue",
+      "covered_by": {
+        "write": "tag_queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "SQS.UntagQueue",
+      "covered_by": {
+        "write": "untag_queue"
+      }
+    }
+  ]
 }
