@@ -1,0 +1,10 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "payment_source_id": "fixture_payment_source_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/override_billing_profile"
+  }
+}

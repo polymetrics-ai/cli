@@ -1,0 +1,9 @@
+{
+  "record": {
+    "metered_feature_id": "fixture_metered_feature_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metered_features/fixture_metered_feature_id/reactivate_command"
+  }
+}

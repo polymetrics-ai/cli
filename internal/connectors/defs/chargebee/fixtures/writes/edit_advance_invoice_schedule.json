@@ -1,0 +1,10 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "terms_to_charge": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/edit_advance_invoice_schedule"
+  }
+}

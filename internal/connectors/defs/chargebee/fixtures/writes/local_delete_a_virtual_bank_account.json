@@ -1,0 +1,9 @@
+{
+  "record": {
+    "virtual_bank_account_id": "fixture_virtual_bank_account_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/virtual_bank_accounts/fixture_virtual_bank_account_id/delete_local"
+  }
+}

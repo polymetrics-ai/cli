@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "payment_method": {
+      "type": "fixture_type",
+      "gateway_account_id": "fixture_gateway_account_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/update_payment_method"
+  }
+}

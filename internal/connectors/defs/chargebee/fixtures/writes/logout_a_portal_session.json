@@ -1,0 +1,9 @@
+{
+  "record": {
+    "portal_session_id": "fixture_portal_session_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/portal_sessions/fixture_portal_session_id/logout"
+  }
+}

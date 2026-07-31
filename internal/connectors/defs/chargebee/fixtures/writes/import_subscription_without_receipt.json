@@ -1,0 +1,13 @@
+{
+  "record": {
+    "in_app_subscription_app_id": "fixture_in_app_subscription_app_id",
+    "subscription": {
+      "id": "fixture_id",
+      "started_at": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/import_subscription"
+  }
+}

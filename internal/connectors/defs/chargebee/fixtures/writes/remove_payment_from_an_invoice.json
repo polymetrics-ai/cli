@@ -1,0 +1,12 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "transaction": {
+      "id": "fixture_id"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/remove_payment"
+  }
+}

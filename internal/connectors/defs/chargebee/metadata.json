@@ -1,7 +1,7 @@
 {
   "name": "chargebee",
   "display_name": "Chargebee",
-  "description": "Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans, items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events, and more) through the Chargebee v2 REST API.",
+  "description": "Chargebee API v2 Product Catalog 2.0 connector with 125 fixture-backed read streams and 264 reverse-ETL actions; direct/query, binary/file, and CDC/webhook operations are recorded in the operation ledger as blocked/planned.",
   "integration_type": "api",
   "docs_url": "https://apidocs.chargebee.com/docs/api",
   "release_stage": "ga",

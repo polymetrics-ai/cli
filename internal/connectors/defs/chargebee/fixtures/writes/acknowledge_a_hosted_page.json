@@ -1,0 +1,9 @@
+{
+  "record": {
+    "hosted_page_id": "fixture_hosted_page_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hosted_pages/fixture_hosted_page_id/acknowledge"
+  }
+}

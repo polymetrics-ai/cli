@@ -1,0 +1,9 @@
+{
+  "record": {
+    "scheduled_at": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gifts/create_for_items"
+  }
+}

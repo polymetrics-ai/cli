@@ -1,0 +1,12 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "item_price_id": "fixture_item_price_id",
+    "quantity": "fixture_quantity",
+    "usage_date": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/usages"
+  }
+}

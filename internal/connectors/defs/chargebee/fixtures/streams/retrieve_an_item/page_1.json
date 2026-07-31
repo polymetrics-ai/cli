@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/items/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "item": {
+        "id": "item_fixture_1",
+        "updated_at": 1767225601,
+        "object": "item",
+        "deleted": false
+      }
+    }
+  }
+}

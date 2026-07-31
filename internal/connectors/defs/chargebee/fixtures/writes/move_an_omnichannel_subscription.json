@@ -1,0 +1,10 @@
+{
+  "record": {
+    "omnichannel_subscription_id": "fixture_omnichannel_subscription_id",
+    "to_customer_id": "fixture_to_customer_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/omnichannel_subscriptions/fixture_omnichannel_subscription_id/move"
+  }
+}

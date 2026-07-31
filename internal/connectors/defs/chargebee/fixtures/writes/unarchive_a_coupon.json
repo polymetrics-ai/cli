@@ -1,0 +1,9 @@
+{
+  "record": {
+    "coupon_id": "fixture_coupon_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupons/fixture_coupon_id/unarchive"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "amount": 1,
+    "currency_code": "fixture_currency_code"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_intents"
+  }
+}

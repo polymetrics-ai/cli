@@ -1,0 +1,11 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "payment_source_id": "fixture_payment_source_id",
+    "role": "primary"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/assign_payment_role"
+  }
+}

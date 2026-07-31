@@ -1,0 +1,10 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "term_ends_at": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/change_term_end"
+  }
+}

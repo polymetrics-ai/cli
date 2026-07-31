@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coupon_sets/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "coupon_set": {
+        "id": "coupon_set_fixture_1",
+        "updated_at": 1767225601,
+        "object": "coupon_set",
+        "deleted": false
+      }
+    }
+  }
+}

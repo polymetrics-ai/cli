@@ -1,0 +1,13 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "contact": {
+      "id": "fixture_id",
+      "first_name": "fixture_first_name"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/add_contact"
+  }
+}

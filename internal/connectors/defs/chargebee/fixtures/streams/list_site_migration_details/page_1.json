@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/site_migration_details",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "site_migration_detail": {
+            "id": "site_migration_detail_fixture_1",
+            "updated_at": 1767225601,
+            "object": "site_migration_detail",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

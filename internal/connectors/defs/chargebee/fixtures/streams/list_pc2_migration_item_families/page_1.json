@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pc2_migration_item_families",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "pc2_migration_item_family": {
+            "id": "pc2_migration_item_family_fixture_1",
+            "updated_at": 1767225601,
+            "object": "pc2_migration_item_family",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

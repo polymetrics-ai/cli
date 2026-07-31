@@ -1,0 +1,17 @@
+{
+  "record": {
+    "active_resource_ids": [
+      "fixture_active_resource_ids_item"
+    ],
+    "destination_business_entity_ids": [
+      "fixture_destination_business_entity_ids_item"
+    ],
+    "reason_codes": [
+      "fixture_reason_codes_item"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/business_entities/transfers"
+  }
+}

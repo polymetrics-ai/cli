@@ -1,0 +1,9 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/unbilled_charges/invoice_unbilled_charges"
+  }
+}

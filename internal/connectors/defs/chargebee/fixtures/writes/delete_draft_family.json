@@ -1,0 +1,9 @@
+{
+  "record": {
+    "pc2_migration_item_family_id": "fixture_pc2_migration_item_family_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pc2_migration_item_families/fixture_pc2_migration_item_family_id/delete"
+  }
+}

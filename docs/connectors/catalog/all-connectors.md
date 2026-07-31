@@ -73,7 +73,7 @@
 | `cart` | [`icons/cart.svg`](../icons/cart.svg) | Cart.com | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.cart.com) | bundle definition |
 | `castor-edc` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Castor EDC | `api` | ga | check, catalog, read, write | 24 | 6 | [Documentation](https://data.castoredc.com/api) | bundle definition |
 | `chameleon` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Chameleon | `api` | ga | check, catalog, read, write | 11 | 9 | [Documentation](https://developers.chameleon.io/reference/introduction) | bundle definition |
-| `chargebee` | [`icons/chargebee.svg`](../icons/chargebee.svg) | Chargebee | `api` | ga | check, catalog, read, write | 32 | 36 | [Documentation](https://apidocs.chargebee.com/docs/api) | bundle definition |
+| `chargebee` | [`icons/chargebee.svg`](../icons/chargebee.svg) | Chargebee | `api` | ga | check, catalog, read, write | 125 | 264 | [Documentation](https://apidocs.chargebee.com/docs/api) | bundle definition |
 | `chargedesk` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | ChargeDesk | `api` | ga | check, catalog, read, write | 7 | 13 | [Documentation](https://chargedesk.com/api-docs) | bundle definition |
 | `chargify` | [`icons/chargify.svg`](../icons/chargify.svg) | Chargify | `api` | ga | check, catalog, read, write | 10 | 10 | [Documentation](https://developers.maxio.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api) | bundle definition |
 | `chartmogul` | [`icons/chartmogul.svg`](../icons/chartmogul.svg) | ChartMogul | `api` | ga | check, catalog, read, write | 8 | 2 | [Documentation](https://dev.chartmogul.com/reference) | bundle definition |

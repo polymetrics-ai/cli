@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/omnichannel_one_time_orders/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "omnichannel_one_time_order": {
+        "id": "omnichannel_one_time_order_fixture_1",
+        "updated_at": 1767225601,
+        "object": "omnichannel_one_time_order",
+        "deleted": false
+      }
+    }
+  }
+}

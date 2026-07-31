@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recorded_purchases/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "recorded_purchase": {
+        "id": "recorded_purchase_fixture_1",
+        "updated_at": 1767225601,
+        "object": "recorded_purchase",
+        "deleted": false
+      }
+    }
+  }
+}

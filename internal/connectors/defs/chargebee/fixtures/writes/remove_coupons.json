@@ -1,0 +1,12 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "coupon_ids": [
+      "fixture_coupon_ids_item"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/remove_coupons"
+  }
+}

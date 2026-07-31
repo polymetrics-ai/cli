@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/addresses"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "address": {
+        "id": "address_fixture_1",
+        "updated_at": 1767225601,
+        "object": "address",
+        "deleted": false
+      }
+    }
+  }
+}

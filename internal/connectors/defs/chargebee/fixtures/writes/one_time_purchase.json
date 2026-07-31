@@ -1,0 +1,10 @@
+{
+  "record": {
+    "non_subscription_app_id": "fixture_non_subscription_app_id",
+    "receipt": "fixture_receipt"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/non_subscriptions/fixture_non_subscription_app_id/one_time_purchase"
+  }
+}

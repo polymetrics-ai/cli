@@ -1,0 +1,13 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "tax_withheld": {
+      "amount": 1,
+      "reference_number": "fixture_reference_number"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/record_tax_withheld"
+  }
+}

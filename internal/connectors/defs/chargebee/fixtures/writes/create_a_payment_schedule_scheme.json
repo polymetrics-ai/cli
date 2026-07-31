@@ -1,0 +1,11 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "number_of_schedules": 1,
+    "period_unit": "day"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_schedule_schemes"
+  }
+}

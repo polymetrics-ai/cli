@@ -1,0 +1,9 @@
+{
+  "record": {
+    "expiry": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hosted_pages/extend_subscription"
+  }
+}

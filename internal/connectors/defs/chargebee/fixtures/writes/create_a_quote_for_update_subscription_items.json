@@ -1,0 +1,9 @@
+{
+  "record": {
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/quotes/update_subscription_quote_for_items"
+  }
+}

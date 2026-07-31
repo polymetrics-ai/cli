@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "reference_id": "fixture_reference_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/virtual_bank_accounts/create_using_permanent_token"
+  }
+}

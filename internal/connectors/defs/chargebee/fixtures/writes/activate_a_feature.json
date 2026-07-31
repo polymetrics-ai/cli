@@ -1,0 +1,9 @@
+{
+  "record": {
+    "feature_id": "fixture_feature_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/features/fixture_feature_id/activate_command"
+  }
+}

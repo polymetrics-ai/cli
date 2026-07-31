@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "parent_id": "fixture_parent_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/relationships"
+  }
+}

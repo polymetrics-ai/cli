@@ -1,0 +1,12 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "expiry_month": 1,
+    "expiry_year": 1,
+    "number": "fixture_number"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/credit_card"
+  }
+}

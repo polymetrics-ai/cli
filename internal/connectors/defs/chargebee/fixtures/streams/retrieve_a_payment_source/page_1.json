@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payment_sources/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payment_source": {
+        "id": "payment_source_fixture_1",
+        "updated_at": 1767225601,
+        "object": "payment_source",
+        "deleted": false
+      }
+    }
+  }
+}

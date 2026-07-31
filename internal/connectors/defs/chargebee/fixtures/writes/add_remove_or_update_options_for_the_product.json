@@ -1,0 +1,12 @@
+{
+  "record": {
+    "product_id": "fixture_product_id",
+    "remove_options": [
+      "fixture_remove_options_item"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/products/fixture_product_id/update_options"
+  }
+}

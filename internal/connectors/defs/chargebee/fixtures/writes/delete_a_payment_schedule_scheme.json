@@ -1,0 +1,9 @@
+{
+  "record": {
+    "payment_schedule_scheme_id": "fixture_payment_schedule_scheme_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_schedule_schemes/fixture_payment_schedule_scheme_id/delete"
+  }
+}

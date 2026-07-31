@@ -1,0 +1,10 @@
+{
+  "record": {
+    "credit_note_id": "fixture_credit_note_id",
+    "comment": "fixture_comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/credit_notes/fixture_credit_note_id/delete"
+  }
+}

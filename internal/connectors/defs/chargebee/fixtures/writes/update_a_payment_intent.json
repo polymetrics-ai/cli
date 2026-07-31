@@ -1,0 +1,10 @@
+{
+  "record": {
+    "payment_intent_id": "fixture_payment_intent_id",
+    "amount": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_intents/fixture_payment_intent_id"
+  }
+}

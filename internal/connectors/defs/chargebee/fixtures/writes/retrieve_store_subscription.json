@@ -1,0 +1,10 @@
+{
+  "record": {
+    "in_app_subscription_app_id": "fixture_in_app_subscription_app_id",
+    "receipt": "fixture_receipt"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/retrieve"
+  }
+}

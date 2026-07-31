@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/full_exports/status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "full_export": {
+        "id": "full_export_fixture_1",
+        "updated_at": 1767225601,
+        "object": "full_export",
+        "deleted": false
+      }
+    }
+  }
+}

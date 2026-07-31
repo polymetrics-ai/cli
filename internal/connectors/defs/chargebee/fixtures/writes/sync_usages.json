@@ -1,0 +1,9 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/sync_usages"
+  }
+}

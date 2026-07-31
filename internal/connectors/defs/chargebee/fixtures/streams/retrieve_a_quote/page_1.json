@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/quotes/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "quote": {
+        "id": "quote_fixture_1",
+        "updated_at": 1767225601,
+        "object": "quote",
+        "deleted": false
+      }
+    }
+  }
+}

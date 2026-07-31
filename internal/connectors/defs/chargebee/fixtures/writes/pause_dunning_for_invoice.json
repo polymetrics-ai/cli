@@ -1,0 +1,10 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "expected_payment_date": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/pause_dunning"
+  }
+}

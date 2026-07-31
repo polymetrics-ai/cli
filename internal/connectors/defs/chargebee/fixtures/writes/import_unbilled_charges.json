@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "unbilled_charges": {
+      "id": [
+        "fixture_id_item"
+      ],
+      "date_from": [
+        1
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/import_unbilled_charges"
+  }
+}

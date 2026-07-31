@@ -1,0 +1,9 @@
+{
+  "record": {
+    "pass_thru_content": "fixture_pass_thru_content"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/hosted_pages/pre_cancel"
+  }
+}

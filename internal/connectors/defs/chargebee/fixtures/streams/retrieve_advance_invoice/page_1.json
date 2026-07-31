@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscriptions/synthetic-conformance-value/retrieve_advance_invoice_schedule"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "advance_invoice_schedules": [
+        {
+          "id": "advance_invoice_schedules_fixture_1",
+          "updated_at": 1767225601,
+          "object": "advance_invoice_schedules",
+          "deleted": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "cust_payment_source_id": "fixture_cust_payment_source_id",
+    "bank_account": {
+      "first_name": "fixture_first_name",
+      "last_name": "fixture_last_name"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_sources/fixture_cust_payment_source_id/update_bank_account"
+  }
+}

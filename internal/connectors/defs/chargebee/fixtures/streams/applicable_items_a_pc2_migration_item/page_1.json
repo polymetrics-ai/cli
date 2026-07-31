@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pc2_migration_items/applicable_items",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "list": [
+        {
+          "pc2_migration_applicable_item": {
+            "id": "pc2_migration_applicable_item_fixture_1",
+            "updated_at": 1767225601,
+            "object": "pc2_migration_applicable_item",
+            "deleted": false
+          }
+        }
+      ]
+    }
+  }
+}

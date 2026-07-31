@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/configurations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "configurations": [
+        {
+          "id": "configurations_fixture_1",
+          "updated_at": 1767225601,
+          "object": "configurations",
+          "deleted": false
+        }
+      ]
+    }
+  }
+}

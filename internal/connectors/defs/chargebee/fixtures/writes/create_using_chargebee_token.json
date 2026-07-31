@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "token_id": "fixture_token_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payment_sources/create_using_token"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "transaction_id": "fixture_transaction_id",
+    "comment": "fixture_comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/transactions/fixture_transaction_id/delete_offline_transaction"
+  }
+}

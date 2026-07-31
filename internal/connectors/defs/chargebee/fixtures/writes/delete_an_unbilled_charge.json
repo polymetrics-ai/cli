@@ -1,0 +1,9 @@
+{
+  "record": {
+    "unbilled_charge_id": "fixture_unbilled_charge_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/unbilled_charges/fixture_unbilled_charge_id/delete"
+  }
+}

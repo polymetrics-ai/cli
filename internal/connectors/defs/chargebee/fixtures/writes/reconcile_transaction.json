@@ -1,0 +1,10 @@
+{
+  "record": {
+    "transaction_id": "fixture_transaction_id",
+    "id_at_gateway": "fixture_id_at_gateway"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/transactions/fixture_transaction_id/reconcile"
+  }
+}

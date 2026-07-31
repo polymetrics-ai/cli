@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom_field_configs/retrieve"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "custom_field_config": {
+        "id": "custom_field_config_fixture_1",
+        "updated_at": 1767225601,
+        "object": "custom_field_config",
+        "deleted": false
+      }
+    }
+  }
+}

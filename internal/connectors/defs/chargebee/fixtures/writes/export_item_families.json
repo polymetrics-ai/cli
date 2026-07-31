@@ -1,0 +1,12 @@
+{
+  "record": {
+    "business_entity_id": {
+      "is": "fixture_is",
+      "is_present": "true"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/exports/item_families"
+  }
+}

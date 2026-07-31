@@ -1,0 +1,9 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/create_for_charge_items_and_charges"
+  }
+}

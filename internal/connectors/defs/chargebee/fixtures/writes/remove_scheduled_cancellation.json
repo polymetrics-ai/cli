@@ -1,0 +1,10 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "billing_cycles": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/remove_scheduled_cancellation"
+  }
+}

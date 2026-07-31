@@ -1,0 +1,11 @@
+{
+  "record": {
+    "site_currency_id": "fixture_site_currency_id",
+    "manual_exchange_rate": "fixture_manual_exchange_rate",
+    "schedule_at": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/currencies/fixture_site_currency_id/add_schedule"
+  }
+}

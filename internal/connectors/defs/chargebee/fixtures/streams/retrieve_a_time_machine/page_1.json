@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/time_machines/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "time_machine": {
+        "id": "time_machine_fixture_1",
+        "updated_at": 1767225601,
+        "object": "time_machine",
+        "deleted": false
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "site_currency_id": "fixture_site_currency_id",
+    "forex_type": "manual"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/currencies/fixture_site_currency_id"
+  }
+}

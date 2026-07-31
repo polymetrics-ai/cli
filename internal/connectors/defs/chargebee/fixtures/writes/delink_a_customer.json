@@ -1,0 +1,9 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/delete_relationship"
+  }
+}

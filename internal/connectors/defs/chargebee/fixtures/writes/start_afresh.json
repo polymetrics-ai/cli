@@ -1,0 +1,10 @@
+{
+  "record": {
+    "time_machine_name": "fixture_time_machine_name",
+    "genesis_time": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/time_machines/fixture_time_machine_name/start_afresh"
+  }
+}

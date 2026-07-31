@@ -1,0 +1,10 @@
+{
+  "record": {
+    "amount": 1,
+    "customer_id": "fixture_customer_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/transactions/create_authorization"
+  }
+}

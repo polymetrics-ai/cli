@@ -1,0 +1,9 @@
+{
+  "record": {
+    "pc2_migration_id": "fixture_pc2_migration_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pc2_migrations/fixture_pc2_migration_id/initiate"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "from_customer_id": "fixture_from_customer_id",
+    "to_customer_id": "fixture_to_customer_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/merge"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "time_machine_name": "fixture_time_machine_name",
+    "destination_time": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/time_machines/fixture_time_machine_name/travel_forward"
+  }
+}

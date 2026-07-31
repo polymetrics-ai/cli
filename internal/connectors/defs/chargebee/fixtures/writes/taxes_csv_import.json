@@ -1,0 +1,9 @@
+{
+  "record": {
+    "tax_profile_name": "fixture_tax_profile_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/csv_tax_rules"
+  }
+}

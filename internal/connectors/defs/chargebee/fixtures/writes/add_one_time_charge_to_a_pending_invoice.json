@@ -1,0 +1,11 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "amount": 1,
+    "description": "fixture_description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/add_charge"
+  }
+}

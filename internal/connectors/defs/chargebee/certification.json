@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "customers",
+    "live_unavailable": [
+      {
+        "kind": "fixture_only_uncertified",
+        "contains": [
+          "No Chargebee credentials or live provider calls are used by this wave05 parity slice."
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

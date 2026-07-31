@@ -1,0 +1,9 @@
+{
+  "record": {
+    "action": "upsert"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/entitlements"
+  }
+}

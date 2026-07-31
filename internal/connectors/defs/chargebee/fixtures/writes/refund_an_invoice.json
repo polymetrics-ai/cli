@@ -1,0 +1,10 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id",
+    "refund_amount": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/invoices/fixture_invoice_id/refund"
+  }
+}

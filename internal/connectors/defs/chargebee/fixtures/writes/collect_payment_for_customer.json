@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": "fixture_customer_id",
+    "amount": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers/fixture_customer_id/collect_payment"
+  }
+}

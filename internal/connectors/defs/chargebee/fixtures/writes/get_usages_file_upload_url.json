@@ -1,0 +1,10 @@
+{
+  "record": {
+    "file_name": "fixture_file_name",
+    "mime_type": "fixture_mime_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/usage_files/upload_url"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "item_id": "fixture_item_id",
+    "type": "recommended"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/items/fixture_item_id/attached_items"
+  }
+}

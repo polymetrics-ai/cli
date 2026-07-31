@@ -1,0 +1,11 @@
+{
+  "record": {
+    "feature_unit": "fixture_feature_unit",
+    "name": "fixture_name",
+    "query": "fixture_query"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metered_features"
+  }
+}

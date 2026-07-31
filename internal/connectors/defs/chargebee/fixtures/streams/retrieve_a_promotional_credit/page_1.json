@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/promotional_credits/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "promotional_credit": {
+        "id": "promotional_credit_fixture_1",
+        "updated_at": 1767225601,
+        "object": "promotional_credit",
+        "deleted": false
+      }
+    }
+  }
+}
