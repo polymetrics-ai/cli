@@ -2,21 +2,25 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Chatwoot Connection Specification",
   "type": "object",
-  "required": ["base_url", "account_id"],
+  "required": [
+    "base_url",
+    "account_id"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Your Chatwoot instance root, e.g. https://app.chatwoot.com for the hosted SaaS or your self-hosted install's origin. The engine appends /api/v1/accounts/{account_id} (and, for messages, the conversation-scoped sub-path) to every request; do not include /api/v1 yourself. Also usable as a base URL override for tests/proxies."
+      "description": "Chatwoot server root URL, without /api/v1/accounts.",
+      "default": "https://app.chatwoot.com"
     },
     "account_id": {
       "type": "string",
-      "description": "The numeric Chatwoot account ID to scope every request to (visible in the dashboard URL, e.g. app.chatwoot.com/app/accounts/1/...)."
+      "description": "Chatwoot account ID for application and platform account-scoped endpoints."
     },
     "api_access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Chatwoot API access token (Profile Settings > Access Token for a user token, or an Agent Bot token). Sent as the api_access_token request header on every request."
+      "description": "Chatwoot user or platform-app API access token supplied via env/stdin; never inline."
     },
     "start_date": {
       "type": "string",

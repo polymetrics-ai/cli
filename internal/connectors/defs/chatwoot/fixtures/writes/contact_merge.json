@@ -1,0 +1,21 @@
+{
+  "record": {
+    "base_contact_id": 1,
+    "mergee_contact_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/actions/contact_merge",
+    "body": {
+      "base_contact_id": 1,
+      "mergee_contact_id": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

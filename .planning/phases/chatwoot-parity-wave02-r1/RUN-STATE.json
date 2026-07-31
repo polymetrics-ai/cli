@@ -1,0 +1,54 @@
+{
+  "phase": "chatwoot-parity-wave02-r1",
+  "status": "implementation-local-gates-green",
+  "verificationPassed": true,
+  "targetedVerificationPassed": true,
+  "gsd": {
+    "doctor": "passed",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-148-chatwoot-parity --dry-run",
+    "programming_loop_command_result": "unknown GSD command: programming-loop",
+    "fallback": "repo-local Pi prompt .pi/prompts/pm-gsd-loop.md plus gsd-universal-runtime-loop"
+  },
+  "counts": {
+    "officialOperations": 145,
+    "streams": 7,
+    "writes": 73,
+    "destructiveOrAdminConfirm": 47,
+    "blockedOrPlanned": 65,
+    "cliCommands": 98
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single isolated firstmate worker owns one connector-local write scope; no mutating subagents spawned into this checkout"
+    }
+  ],
+  "verification": [
+    "connectorgen validate temp Chatwoot parent: passed",
+    "connectorgen validate internal/connectors/defs: passed",
+    "go test ./internal/connectors/conformance -run TestConformance/chatwoot -count=1: passed",
+    "go test ./internal/connectors/conformance -count=1: passed",
+    "go test ./internal/connectors/engine -count=1: passed",
+    "go run ./cmd/pm docs validate --connectors-dir docs/connectors: passed",
+    "go test ./internal/cli -run Connector|Dynamic|Golden -count=1: passed",
+    "gofmt -w cmd internal: passed",
+    "go vet ./...: passed",
+    "go test ./...: default package timeout hit in internal/cli; rerun with -timeout 30m passed",
+    "go test -timeout 30m ./...: passed",
+    "go build ./cmd/pm: passed",
+    "make verify: passed",
+    "git diff --check: passed"
+  ],
+  "pending": [
+    "implementation commit"
+  ],
+  "humanGates": [
+    "no live provider calls",
+    "no credentials",
+    "no live writes",
+    "no no-mistakes",
+    "no push",
+    "no PR"
+  ]
+}

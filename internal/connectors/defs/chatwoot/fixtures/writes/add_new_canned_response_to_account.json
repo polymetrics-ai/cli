@@ -1,0 +1,21 @@
+{
+  "record": {
+    "content": "fixture-value",
+    "short_code": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/canned_responses",
+    "body": {
+      "content": "fixture-value",
+      "short_code": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

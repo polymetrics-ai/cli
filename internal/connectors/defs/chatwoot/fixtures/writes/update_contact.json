@@ -1,15 +1,20 @@
 {
   "record": {
-    "id": 42,
-    "name": "Fixture Contact Updated",
-    "email": "fixture-contact-updated@example.com"
+    "id": "fixture-id",
+    "name": "fixture-value"
   },
   "expect": {
     "method": "PUT",
-    "path": "/contacts/42",
+    "path": "/api/v1/accounts/synthetic-conformance-value/contacts/fixture-id",
     "body": {
-      "name": "Fixture Contact Updated",
-      "email": "fixture-contact-updated@example.com"
+      "name": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
     }
   }
 }

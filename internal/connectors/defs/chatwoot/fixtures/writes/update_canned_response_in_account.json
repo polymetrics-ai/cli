@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 1,
+    "content": "fixture-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/canned_responses/1",
+    "body": {
+      "content": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

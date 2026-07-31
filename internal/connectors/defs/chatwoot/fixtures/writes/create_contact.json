@@ -1,16 +1,21 @@
 {
   "record": {
-    "inbox_id": 1,
-    "name": "Fixture Contact",
-    "email": "fixture-contact@example.com"
+    "inbox_id": 1.5,
+    "name": "fixture-value"
   },
   "expect": {
     "method": "POST",
-    "path": "/contacts",
+    "path": "/api/v1/accounts/synthetic-conformance-value/contacts",
     "body": {
-      "inbox_id": 1,
-      "name": "Fixture Contact",
-      "email": "fixture-contact@example.com"
+      "inbox_id": 1.5,
+      "name": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
     }
   }
 }

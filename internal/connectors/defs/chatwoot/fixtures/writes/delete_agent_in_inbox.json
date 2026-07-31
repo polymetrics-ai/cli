@@ -1,0 +1,19 @@
+{
+  "record": {
+    "inbox_id": "fixture-id",
+    "user_ids": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/accounts/synthetic-conformance-value/inbox_members"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

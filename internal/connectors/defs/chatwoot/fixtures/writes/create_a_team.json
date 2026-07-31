@@ -1,0 +1,23 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "description": "fixture-value",
+    "allow_auto_assign": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/teams",
+    "body": {
+      "name": "fixture-value",
+      "description": "fixture-value",
+      "allow_auto_assign": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

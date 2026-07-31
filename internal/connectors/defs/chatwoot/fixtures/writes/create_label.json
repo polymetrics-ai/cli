@@ -1,18 +1,25 @@
 {
   "record": {
-    "title": "fixture-label",
-    "description": "A fixture label for conformance testing",
-    "color": "#1f93ff",
+    "title": "fixture-value",
+    "description": "fixture-value",
+    "color": "fixture-value",
     "show_on_sidebar": true
   },
   "expect": {
     "method": "POST",
-    "path": "/labels",
+    "path": "/api/v1/accounts/synthetic-conformance-value/labels",
     "body": {
-      "title": "fixture-label",
-      "description": "A fixture label for conformance testing",
-      "color": "#1f93ff",
+      "title": "fixture-value",
+      "description": "fixture-value",
+      "color": "fixture-value",
       "show_on_sidebar": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
     }
   }
 }

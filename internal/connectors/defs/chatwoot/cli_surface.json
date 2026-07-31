@@ -1,0 +1,2412 @@
+{
+  "tagline": "Inspect, read, and safely plan typed Chatwoot account/platform operations.",
+  "usage": "pm chatwoot <command> [flags]",
+  "source_cli": {
+    "name": "Chatwoot OpenAPI",
+    "docs": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+    "reference": "application/platform/client/other tag groups",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "account_users",
+      "title": "Account Users",
+      "commands": [
+        "account_users delete",
+        "account_users create"
+      ]
+    },
+    {
+      "id": "actions",
+      "title": "Actions",
+      "commands": [
+        "actions create"
+      ]
+    },
+    {
+      "id": "agent_bots",
+      "title": "Agent Bots",
+      "commands": [
+        "agent_bots create",
+        "agent_bots delete",
+        "agent_bots update",
+        "agent_bots create bot",
+        "agent_bots delete bot",
+        "agent_bots update bot"
+      ]
+    },
+    {
+      "id": "agents",
+      "title": "Agents",
+      "commands": [
+        "agents list",
+        "agents create",
+        "agents delete",
+        "agents update"
+      ]
+    },
+    {
+      "id": "automation_rules",
+      "title": "Automation Rules",
+      "commands": [
+        "automation_rules create",
+        "automation_rules delete",
+        "automation_rules update"
+      ]
+    },
+    {
+      "id": "branded_email_layout",
+      "title": "Branded Email Layout",
+      "commands": [
+        "branded_email_layout update"
+      ]
+    },
+    {
+      "id": "canned_responses",
+      "title": "Canned Responses",
+      "commands": [
+        "canned_responses create",
+        "canned_responses delete",
+        "canned_responses update"
+      ]
+    },
+    {
+      "id": "contacts",
+      "title": "Contacts",
+      "commands": [
+        "contacts list",
+        "contacts create",
+        "contacts planned",
+        "contacts delete",
+        "contacts update",
+        "contacts create creation",
+        "contacts create labels"
+      ]
+    },
+    {
+      "id": "conversations",
+      "title": "Conversations",
+      "commands": [
+        "conversations list",
+        "conversations create",
+        "conversations update",
+        "conversations create conversation",
+        "conversations create labels",
+        "conversations delete",
+        "conversations planned",
+        "conversations toggle_priority_of_a_conversation",
+        "conversations toggle_a_conversation",
+        "conversations toggle_typing_status_of_a_conversation"
+      ]
+    },
+    {
+      "id": "custom_attribute_definitions",
+      "title": "Custom Attribute Definitions",
+      "commands": [
+        "custom_attribute_definitions create",
+        "custom_attribute_definitions delete",
+        "custom_attribute_definitions update"
+      ]
+    },
+    {
+      "id": "custom_filters",
+      "title": "Custom Filters",
+      "commands": [
+        "custom_filters planned",
+        "custom_filters delete",
+        "custom_filters update"
+      ]
+    },
+    {
+      "id": "inbox_members",
+      "title": "Inbox Members",
+      "commands": [
+        "inbox_members delete",
+        "inbox_members update",
+        "inbox_members create"
+      ]
+    },
+    {
+      "id": "inboxes",
+      "title": "Inboxes",
+      "commands": [
+        "inboxes list"
+      ]
+    },
+    {
+      "id": "integrations",
+      "title": "Integrations",
+      "commands": [
+        "integrations create",
+        "integrations delete",
+        "integrations update"
+      ]
+    },
+    {
+      "id": "labels",
+      "title": "Labels",
+      "commands": [
+        "labels list",
+        "labels create",
+        "labels delete",
+        "labels update"
+      ]
+    },
+    {
+      "id": "messages",
+      "title": "Messages",
+      "commands": [
+        "messages list"
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Operations",
+      "commands": [
+        "operations update",
+        "operations create",
+        "operations update inbox",
+        "operations create account",
+        "operations delete",
+        "operations update account"
+      ]
+    },
+    {
+      "id": "portals",
+      "title": "Portals",
+      "commands": [
+        "portals create",
+        "portals update",
+        "portals create account"
+      ]
+    },
+    {
+      "id": "profile",
+      "title": "Profile",
+      "commands": [
+        "profile planned",
+        "profile update"
+      ]
+    },
+    {
+      "id": "reporting_events",
+      "title": "Reporting Events",
+      "commands": [
+        "reporting_events planned"
+      ]
+    },
+    {
+      "id": "reports",
+      "title": "Reports",
+      "commands": [
+        "reports planned"
+      ]
+    },
+    {
+      "id": "set_agent_bot",
+      "title": "Set Agent Bot",
+      "commands": [
+        "set_agent_bot create"
+      ]
+    },
+    {
+      "id": "summary_reports",
+      "title": "Summary Reports",
+      "commands": [
+        "summary_reports planned"
+      ]
+    },
+    {
+      "id": "survey",
+      "title": "Survey",
+      "commands": [
+        "survey planned"
+      ]
+    },
+    {
+      "id": "teams",
+      "title": "Teams",
+      "commands": [
+        "teams list",
+        "teams create",
+        "teams delete",
+        "teams update",
+        "teams delete team",
+        "teams update team",
+        "teams create team"
+      ]
+    },
+    {
+      "id": "users",
+      "title": "Users",
+      "commands": [
+        "users create",
+        "users delete",
+        "users update"
+      ]
+    },
+    {
+      "id": "webhooks",
+      "title": "Webhooks",
+      "commands": [
+        "webhooks create",
+        "webhooks delete",
+        "webhooks update"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name for the Chatwoot request."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from stream commands."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive/admin reverse-ETL writes."
+    }
+  ],
+  "commands": [
+    {
+      "path": "conversations list",
+      "summary": "Read Chatwoot conversations through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/conversations",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations"
+        }
+      ],
+      "examples": [
+        "pm chatwoot conversations list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Read Chatwoot contacts through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/contacts",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts"
+        }
+      ],
+      "examples": [
+        "pm chatwoot contacts list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "inboxes list",
+      "summary": "Read Chatwoot inboxes through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inboxes",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/inboxes",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/inboxes"
+        }
+      ],
+      "examples": [
+        "pm chatwoot inboxes list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "agents list",
+      "summary": "Read Chatwoot account agents through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/agents",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/agents"
+        }
+      ],
+      "examples": [
+        "pm chatwoot agents list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Read Chatwoot teams through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/teams",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/teams"
+        }
+      ],
+      "examples": [
+        "pm chatwoot teams list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "labels list",
+      "summary": "Read Chatwoot account labels through the declared ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "labels",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/labels",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/labels"
+        }
+      ],
+      "examples": [
+        "pm chatwoot labels list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "messages list",
+      "summary": "Read Chatwoot conversation messages through the declared fan-out ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages"
+        }
+      ],
+      "examples": [
+        "pm chatwoot messages list --credential chatwoot-prod --limit 25 --json"
+      ]
+    },
+    {
+      "path": "operations update",
+      "summary": "Plan Update account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_account",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot operations update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "actions create",
+      "summary": "Plan Merge Contacts through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "contact_merge",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/actions/contact_merge",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/actions/contact_merge"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/actions/contact_merge); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot actions create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "agent_bots create",
+      "summary": "Plan Create an Agent Bot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_an_account_agent_bot",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/agent_bots",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/agent_bots"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/agent_bots); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agent_bots create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "agent_bots delete",
+      "summary": "Plan Delete an AgentBot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_an_account_agent_bot",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/agent_bots/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/agent_bots/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/agent_bots/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agent_bots delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The ID of the agentbot to be updated",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "agent_bots update",
+      "summary": "Plan Update an agent bot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_an_account_agent_bot",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/agent_bots/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/agent_bots/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/agent_bots/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agent_bots update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "agents create",
+      "summary": "Plan Add a New Agent through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_agent_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/agents",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/agents"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/agents); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agents create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "agents delete",
+      "summary": "Plan Remove an Agent from Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_agent_from_account",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/agents/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/agents/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/agents/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agents delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The ID of the agent to be deleted.",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "agents update",
+      "summary": "Plan Update Agent in Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_agent_in_account",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/agents/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/agents/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/agents/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agents update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "automation_rules create",
+      "summary": "Plan Add a new automation rule through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_automation_rule_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/automation_rules",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/automation_rules"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/automation_rules); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot automation_rules create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "automation_rules delete",
+      "summary": "Plan Remove a automation rule from account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_automation_rule_from_account",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/automation_rules/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/automation_rules/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/automation_rules/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot automation_rules delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The ID of the automation rule to be deleted",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "automation_rules update",
+      "summary": "Plan Update automation rule in Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_automation_rule_in_account",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/automation_rules/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/automation_rules/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/automation_rules/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot automation_rules update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "branded_email_layout update",
+      "summary": "Plan Update account branded email layout through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_account_branded_email_layout",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/branded_email_layout",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/branded_email_layout"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/branded_email_layout); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot branded_email_layout update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "canned_responses create",
+      "summary": "Plan Add a New Canned Response through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_canned_response_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/canned_responses",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/canned_responses"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/canned_responses); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot canned_responses create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "canned_responses delete",
+      "summary": "Plan Remove a Canned Response from Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_canned_response_from_account",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/canned_responses/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/canned_responses/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/canned_responses/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot canned_responses delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The ID of the canned response to be deleted",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "canned_responses update",
+      "summary": "Plan Update Canned Response in Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_canned_response_in_account",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/canned_responses/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/canned_responses/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/canned_responses/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot canned_responses update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "contacts create",
+      "summary": "Plan Create Contact through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/contacts",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/contacts"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/contacts); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot contacts create --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "inbox-id",
+          "type": "integer",
+          "summary": "ID of the inbox to which the contact belongs",
+          "maps_to": "record.inbox_id"
+        }
+      ]
+    },
+    {
+      "path": "contacts planned",
+      "summary": "Planned bounded direct read for Search Contacts.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.contact_search",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/contacts/search",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts/search"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "contacts delete",
+      "summary": "Plan Delete Contact through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "contact_delete",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/contacts/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/contacts/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot contacts delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "ID of the contact",
+          "maps_to": "record.id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "contacts update",
+      "summary": "Plan Update Contact through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_cli_path": "PUT /api/v1/accounts/{account_id}/contacts/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PUT /api/v1/accounts/{account_id}/contacts/{id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot contacts update --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "ID of the contact",
+          "maps_to": "record.id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "contacts create creation",
+      "summary": "Plan Create contact inbox through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "contact_inbox_creation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot contacts create creation --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "contacts create labels",
+      "summary": "Plan Add Labels through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "contact_add_labels",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/contacts/{id}/labels); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot contacts create labels --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations create",
+      "summary": "Plan Create New Conversation through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations create --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "Conversation source id",
+          "maps_to": "record.source_id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "conversations update",
+      "summary": "Plan Update Conversation through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_conversation",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/conversations/{conversation_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations create conversation",
+      "summary": "Plan Assign Conversation through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "assign_a_conversation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations create conversation --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations create conversation",
+      "summary": "Plan Update Custom Attributes through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_custom_attributes_of_a_conversation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations create conversation --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations create conversation",
+      "summary": "Plan Destroy Custom Attributes through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "destroy_custom_attributes_of_a_conversation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations create conversation --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations create labels",
+      "summary": "Plan Add Labels through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "conversation_add_labels",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/labels); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations create labels --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations create conversation",
+      "summary": "Plan Create New Message through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_message",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations create conversation --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "The content of the message",
+          "maps_to": "record.content",
+          "allow_empty": false
+        },
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "The numeric ID of the conversation",
+          "maps_to": "record.conversation_id"
+        }
+      ]
+    },
+    {
+      "path": "conversations delete",
+      "summary": "Plan Delete a message through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_a_message",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot conversations delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "The numeric ID of the conversation",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "message-id",
+          "type": "integer",
+          "summary": "The numeric ID of the message",
+          "maps_to": "record.message_id"
+        }
+      ]
+    },
+    {
+      "path": "conversations planned",
+      "summary": "Planned bounded direct read for Conversation Reporting Events.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_conversation_reporting_events",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "conversations toggle_priority_of_a_conversation",
+      "summary": "Plan Toggle Priority through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "toggle_priority_of_a_conversation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations toggle_priority_of_a_conversation --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "conversations toggle_a_conversation",
+      "summary": "Plan Toggle Status through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "toggle_conversation_status",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations toggle_a_conversation --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "The numeric ID of the conversation",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "The status of the conversation",
+          "maps_to": "record.status",
+          "values": [
+            "open",
+            "resolved",
+            "pending",
+            "snoozed"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "conversations toggle_typing_status_of_a_conversation",
+      "summary": "Plan Toggle Typing Status through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "toggle_typing_status_of_a_conversation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot conversations toggle_typing_status_of_a_conversation --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "custom_attribute_definitions create",
+      "summary": "Plan Add a new custom attribute through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_custom_attribute_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/custom_attribute_definitions); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot custom_attribute_definitions create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "custom_attribute_definitions delete",
+      "summary": "Plan Remove a custom attribute from account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_attribute_from_account",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/custom_attribute_definitions/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot custom_attribute_definitions delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The ID of the custom attribute to be deleted",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "custom_attribute_definitions update",
+      "summary": "Plan Update custom attribute in Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_custom_attribute_in_account",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/custom_attribute_definitions/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot custom_attribute_definitions update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "custom_filters planned",
+      "summary": "Planned bounded direct read for List all custom filters.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.list_all_filters",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/custom_filters",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/custom_filters"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "custom_filters delete",
+      "summary": "Plan Delete a custom filter through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_a_custom_filter",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot custom_filters delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "custom-filter-id",
+          "type": "integer",
+          "summary": "The numeric ID of the custom filter",
+          "maps_to": "record.custom_filter_id"
+        }
+      ]
+    },
+    {
+      "path": "custom_filters planned",
+      "summary": "Planned bounded direct read for Get a custom filter details.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_details_of_a_single_custom_filter",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "custom_filters update",
+      "summary": "Plan Update a custom filter through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_a_custom_filter",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot custom_filters update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "inbox_members delete",
+      "summary": "Plan Remove an Agent from Inbox through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_agent_in_inbox",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/inbox_members",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/inbox_members"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/inbox_members); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot inbox_members delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "inbox-id",
+          "type": "string",
+          "summary": "The ID of the inbox",
+          "maps_to": "record.inbox_id",
+          "allow_empty": false
+        },
+        {
+          "name": "user-ids",
+          "type": "string_array",
+          "summary": "IDs of users to be deleted from the inbox",
+          "maps_to": "record.user_ids"
+        }
+      ]
+    },
+    {
+      "path": "inbox_members update",
+      "summary": "Plan Update Agents in Inbox through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_agents_in_inbox",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/inbox_members",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/inbox_members"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/inbox_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot inbox_members update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "inbox_members create",
+      "summary": "Plan Add a New Agent through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_agent_to_inbox",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/inbox_members",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/inbox_members"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/inbox_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot inbox_members create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "operations create",
+      "summary": "Plan Create an inbox through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "inbox_creation",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/inboxes",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/inboxes"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/inboxes); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot operations create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "operations update inbox",
+      "summary": "Plan Update Inbox through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_inbox",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/inboxes/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/inboxes/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/inboxes/{id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot operations update inbox --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "set_agent_bot create",
+      "summary": "Plan Add or remove agent bot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_agent_bot",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot set_agent_bot create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "integrations create",
+      "summary": "Plan Create an integration hook through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_an_integration_hook",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/integrations/hooks",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/integrations/hooks"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/integrations/hooks); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot integrations create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "integrations delete",
+      "summary": "Plan Delete an Integration Hook through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_an_integration_hook",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/integrations/hooks/{hook_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot integrations delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "summary": "The numeric ID of the integration hook",
+          "maps_to": "record.hook_id"
+        }
+      ]
+    },
+    {
+      "path": "integrations update",
+      "summary": "Plan Update an Integration Hook through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_an_integrations_hook",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/integrations/hooks/{hook_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot integrations update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "labels create",
+      "summary": "Plan Create a label through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_label",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/labels",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/labels"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/labels); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot labels create --credential chatwoot-prod --preview --json"
+      ],
+      "flags": []
+    },
+    {
+      "path": "labels delete",
+      "summary": "Plan Delete a label through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_a_label",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/labels/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/labels/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/labels/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot labels delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "ID of the label",
+          "maps_to": "record.id",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "labels update",
+      "summary": "Plan Update a label through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_a_label",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/labels/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/labels/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/labels/{id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot labels update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "portals create",
+      "summary": "Plan Add a new portal through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_portal_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/portals",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/portals"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/portals); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot portals create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "portals update",
+      "summary": "Plan Update a portal through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_portal_to_account",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/portals/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/portals/{id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/portals/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot portals update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "portals create account",
+      "summary": "Plan Add a new article through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_article_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/portals/{id}/articles",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/portals/{id}/articles"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/portals/{id}/articles); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot portals create account --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "portals create account",
+      "summary": "Plan Add a new category through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_category_to_account",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/portals/{id}/categories",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/portals/{id}/categories"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/portals/{id}/categories); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot portals create account --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "reporting_events planned",
+      "summary": "Planned bounded direct read for Account Reporting Events.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_account_reporting_events",
+      "source_cli_path": "GET /api/v1/accounts/{account_id}/reporting_events",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/reporting_events"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "teams create",
+      "summary": "Plan Create a team through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_a_team",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/teams",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/teams"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/teams); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot teams create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "teams delete",
+      "summary": "Plan Delete a team through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_a_team",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/teams/{team_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/teams/{team_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot teams delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "integer",
+          "summary": "The ID of the team to be updated",
+          "maps_to": "record.team_id"
+        }
+      ]
+    },
+    {
+      "path": "teams update",
+      "summary": "Plan Update a team through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_a_team",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/teams/{team_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/teams/{team_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot teams update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "teams delete team",
+      "summary": "Plan Remove an Agent from Team through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_agent_in_team",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/teams/{team_id}/team_members); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot teams delete team --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "integer",
+          "summary": "The ID of the team to be updated",
+          "maps_to": "record.team_id"
+        },
+        {
+          "name": "user-ids",
+          "type": "string_array",
+          "summary": "IDs of users to be deleted from the team",
+          "maps_to": "record.user_ids"
+        }
+      ]
+    },
+    {
+      "path": "teams update team",
+      "summary": "Plan Update Agents in Team through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_agents_in_team",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/teams/{team_id}/team_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot teams update team --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "teams create team",
+      "summary": "Plan Add a New Agent through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "add_new_agent_to_team",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/teams/{team_id}/team_members); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot teams create team --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "webhooks create",
+      "summary": "Plan Add a webhook through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_a_webhook",
+      "source_cli_path": "POST /api/v1/accounts/{account_id}/webhooks",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/webhooks"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/webhooks); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot webhooks create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "webhooks delete",
+      "summary": "Plan Delete a webhook through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_a_webhook",
+      "source_cli_path": "DELETE /api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /api/v1/accounts/{account_id}/webhooks/{webhook_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot webhooks delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "integer",
+          "summary": "The numeric ID of the webhook",
+          "maps_to": "record.webhook_id"
+        }
+      ]
+    },
+    {
+      "path": "webhooks update",
+      "summary": "Plan Update a webhook object through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_a_webhook",
+      "source_cli_path": "PATCH /api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PATCH /api/v1/accounts/{account_id}/webhooks/{webhook_id}); reverse ETL plan, preview, explicit approval, and execute are required",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "examples": [
+        "pm chatwoot webhooks update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "profile planned",
+      "summary": "Planned bounded direct read for Fetch user profile.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.fetch_profile",
+      "source_cli_path": "GET /api/v1/profile",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/profile"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "profile update",
+      "summary": "Plan Update user profile through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_profile",
+      "source_cli_path": "PUT /api/v1/profile",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/profile"
+        }
+      ],
+      "risk": "Chatwoot application API mutation (PUT /api/v1/profile); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot profile update --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Get Account reports.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.list_all_conversation_statistics",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Account Conversation Metrics.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_account_conversation_metrics",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports/conversations",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/conversations"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Agent Conversation Metrics.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_agent_conversation_metrics",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports/conversations/",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/conversations/"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Get first response time distribution by channel.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_first_response_time_distribution",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports/first_response_time_distribution",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Get inbox-label matrix report.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_inbox_label_matrix",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports/inbox_label_matrix",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Get outgoing messages count grouped by entity.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_outgoing_messages_count",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports/outgoing_messages_count",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "reports planned",
+      "summary": "Planned bounded direct read for Get Account reports summary.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.list_all_conversation_statistics_summary",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/reports/summary",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/summary"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "summary_reports planned",
+      "summary": "Planned bounded direct read for Get conversation statistics grouped by agent.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_agent_summary_report",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/summary_reports/agent",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/agent"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "summary_reports planned",
+      "summary": "Planned bounded direct read for Get conversation statistics grouped by channel type.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_channel_summary_report",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/summary_reports/channel",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/channel"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "summary_reports planned",
+      "summary": "Planned bounded direct read for Get conversation statistics grouped by inbox.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_inbox_summary_report",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/summary_reports/inbox",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/inbox"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "summary_reports planned",
+      "summary": "Planned bounded direct read for Get conversation statistics grouped by team.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_team_summary_report",
+      "source_cli_path": "GET /api/v2/accounts/{account_id}/summary_reports/team",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/team"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "survey planned",
+      "summary": "Planned bounded direct read for Get CSAT survey page.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "chatwoot.get_csat_survey_page",
+      "source_cli_path": "GET /survey/responses/{conversation_uuid}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/other_swagger.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/survey/responses/{conversation_uuid}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "notes": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed"
+    },
+    {
+      "path": "operations create account",
+      "summary": "Plan Create an Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_an_account",
+      "source_cli_path": "POST /platform/api/v1/accounts",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/platform/api/v1/accounts"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/accounts); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot operations create account --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "operations delete",
+      "summary": "Plan Delete an Account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_an_account",
+      "source_cli_path": "DELETE /platform/api/v1/accounts/{account_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/platform/api/v1/accounts/{account_id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/accounts/{account_id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot operations delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": []
+    },
+    {
+      "path": "operations update account",
+      "summary": "Plan Update an account through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_an_account",
+      "source_cli_path": "PATCH /platform/api/v1/accounts/{account_id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/platform/api/v1/accounts/{account_id}"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (PATCH /platform/api/v1/accounts/{account_id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot operations update account --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "account_users delete",
+      "summary": "Plan Delete an Account User through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_an_account_user",
+      "source_cli_path": "DELETE /platform/api/v1/accounts/{account_id}/account_users",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/platform/api/v1/accounts/{account_id}/account_users"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/accounts/{account_id}/account_users); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot account_users delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": []
+    },
+    {
+      "path": "account_users create",
+      "summary": "Plan Create an Account User through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_an_account_user",
+      "source_cli_path": "POST /platform/api/v1/accounts/{account_id}/account_users",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/platform/api/v1/accounts/{account_id}/account_users"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/accounts/{account_id}/account_users); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot account_users create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "agent_bots create bot",
+      "summary": "Plan Create an Agent Bot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_an_agent_bot",
+      "source_cli_path": "POST /platform/api/v1/agent_bots",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/platform/api/v1/agent_bots"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/agent_bots); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agent_bots create bot --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "agent_bots delete bot",
+      "summary": "Plan Delete an AgentBot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_an_agent_bot",
+      "source_cli_path": "DELETE /platform/api/v1/agent_bots/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/platform/api/v1/agent_bots/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/agent_bots/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agent_bots delete bot --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The ID of the agentbot to be updated",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "agent_bots update bot",
+      "summary": "Plan Update an agent bot through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_an_agent_bot",
+      "source_cli_path": "PATCH /platform/api/v1/agent_bots/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/platform/api/v1/agent_bots/{id}"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (PATCH /platform/api/v1/agent_bots/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot agent_bots update bot --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "users create",
+      "summary": "Plan Create a User through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_a_user",
+      "source_cli_path": "POST /platform/api/v1/users",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/platform/api/v1/users"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (POST /platform/api/v1/users); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot users create --credential chatwoot-prod --preview --json"
+      ]
+    },
+    {
+      "path": "users delete",
+      "summary": "Plan Delete a User through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_a_user",
+      "source_cli_path": "DELETE /platform/api/v1/users/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/platform/api/v1/users/{id}"
+        }
+      ],
+      "risk": "destructive Chatwoot mutation (DELETE /platform/api/v1/users/{id}); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot users delete --credential chatwoot-prod --preview --json"
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "The numeric ID of the user on the platform",
+          "maps_to": "record.id"
+        }
+      ]
+    },
+    {
+      "path": "users update",
+      "summary": "Plan Update a user through a named Chatwoot reverse ETL action.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_a_user",
+      "source_cli_path": "PATCH /platform/api/v1/users/{id}",
+      "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/platform/api/v1/users/{id}"
+        }
+      ],
+      "risk": "Chatwoot platform API mutation (PATCH /platform/api/v1/users/{id}); reverse ETL plan, preview, explicit approval, and execute are required; admin/elevated mutation is typed-confirmation gated",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
+      "examples": [
+        "pm chatwoot users update --credential chatwoot-prod --preview --json"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "destructive-confirmation",
+      "summary": "Chatwoot DELETE/destructive/admin operations are represented only as named actions with plan -> preview -> approval -> execute and typed --confirm destructive gates, or as blocked operation rows."
+    },
+    {
+      "name": "public-client-api",
+      "summary": "Public client API operations remain planned/blocked until a separate no-auth inbox/contact contract exists."
+    }
+  ]
+}

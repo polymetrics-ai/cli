@@ -1,0 +1,25 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "email": "fixture@example.invalid",
+    "role": "agent",
+    "availability": "online"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/agents",
+    "body": {
+      "name": "fixture-value",
+      "email": "fixture@example.invalid",
+      "role": "agent",
+      "availability": "online"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

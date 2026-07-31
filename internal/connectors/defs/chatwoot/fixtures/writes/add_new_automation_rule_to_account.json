@@ -1,0 +1,37 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "description": "fixture-value",
+    "event_name": "conversation_created",
+    "active": true,
+    "actions": [
+      {}
+    ],
+    "conditions": [
+      {}
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/automation_rules",
+    "body": {
+      "name": "fixture-value",
+      "description": "fixture-value",
+      "event_name": "conversation_created",
+      "active": true,
+      "actions": [
+        {}
+      ],
+      "conditions": [
+        {}
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

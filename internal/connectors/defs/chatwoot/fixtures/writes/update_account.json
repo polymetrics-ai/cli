@@ -1,0 +1,37 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "locale": "fixture-value",
+    "domain": "fixture-value",
+    "support_email": "fixture@example.invalid",
+    "auto_resolve_after": 1,
+    "auto_resolve_message": "fixture-value",
+    "auto_resolve_ignore_waiting": true,
+    "industry": "fixture-value",
+    "company_size": "fixture-value",
+    "timezone": "fixture-value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value",
+    "body": {
+      "name": "fixture-value",
+      "locale": "fixture-value",
+      "domain": "fixture-value",
+      "support_email": "fixture@example.invalid",
+      "auto_resolve_after": 1,
+      "auto_resolve_message": "fixture-value",
+      "auto_resolve_ignore_waiting": true,
+      "industry": "fixture-value",
+      "company_size": "fixture-value",
+      "timezone": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

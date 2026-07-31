@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/conversations",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations",
     "query": {
       "status": "all",
       "page": "1"

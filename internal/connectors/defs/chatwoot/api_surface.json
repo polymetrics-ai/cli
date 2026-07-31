@@ -1,86 +1,1414 @@
 {
-  "api": "Chatwoot Application API v1 (Platform + Application APIs; account-scoped /api/v1/accounts/{account_id}/...)",
-  "docs": "https://developers.chatwoot.com/api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "Greenfield build: the core support-desk read surface (conversations, contacts, inboxes, agents, teams, labels, conversation-scoped messages) plus the documented mutation set the task specifies (contact create/update, conversation create, message send, conversation status toggle, label create). The remainder of Chatwoot's Application/Platform API (canned responses, automation rules, custom attribute definitions, custom filters, webhooks, integrations, help-center portals, agent bots, teams membership management, reporting/analytics v2 endpoints, account_users platform API) is out of scope for this build.",
+  "api": "Chatwoot official OpenAPI tag groups (application, platform, client, other)",
+  "docs": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json, https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json, https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json, https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/other_swagger.json",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Every operation from the four official Chatwoot OpenAPI tag-group sources is represented exactly once. Application/platform mutations executable in this slice use named reverse ETL write actions; public client/no-auth and query-param write gaps remain blocked until a separate safe contract exists.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations", "covered_by": { "stream": "conversations" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}", "excluded": { "category": "duplicate_of", "reason": "single-conversation detail is a strict subset of the conversations list stream's payload shape; not separately implemented as a stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations", "covered_by": { "write": "create_conversation" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}", "excluded": { "category": "out_of_scope", "reason": "priority/sla_policy_id attribute update; not in the specified write scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status", "covered_by": { "write": "toggle_conversation_status" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority", "excluded": { "category": "out_of_scope", "reason": "priority toggle; not in the specified write scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status", "excluded": { "category": "out_of_scope", "reason": "ephemeral typing-indicator signal, not a syncable data mutation" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments", "excluded": { "category": "out_of_scope", "reason": "agent/team assignment mutation; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels", "excluded": { "category": "duplicate_of", "reason": "conversation labels are already available on each conversations-stream record's labels array" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels", "excluded": { "category": "out_of_scope", "reason": "conversation-label assignment; not in the specified write scope (create_label creates account-wide labels only)" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events", "excluded": { "category": "out_of_scope", "reason": "reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/meta", "excluded": { "category": "non_data_endpoint", "reason": "conversation count summary, not a syncable object stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/filter", "excluded": { "category": "duplicate_of", "reason": "advanced filtered search over the same conversation object already covered by the conversations stream" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-contact detail is a strict subset of the contacts list stream's payload shape; not separately implemented as a stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts", "covered_by": { "write": "create_contact" } },
-    { "method": "PUT", "path": "/api/v1/accounts/{account_id}/contacts/{id}", "covered_by": { "write": "update_contact" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible contact deletion; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/search", "excluded": { "category": "duplicate_of", "reason": "search over the same contact object already covered by the contacts stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts/filter", "excluded": { "category": "duplicate_of", "reason": "advanced filtered search over the same contact object already covered by the contacts stream" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations", "excluded": { "category": "duplicate_of", "reason": "per-contact conversation listing; the conversations stream already syncs every conversation account-wide" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels", "excluded": { "category": "out_of_scope", "reason": "per-contact label listing; not in the specified read scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels", "excluded": { "category": "out_of_scope", "reason": "contact-label assignment; not in the specified write scope (create_label creates account-wide labels only)" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes", "excluded": { "category": "out_of_scope", "reason": "source_id provisioning for a contact/inbox pair; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes", "excluded": { "category": "out_of_scope", "reason": "inbox-eligibility lookup, not a syncable object stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/actions/contact_merge", "excluded": { "category": "destructive_admin", "reason": "irreversible merge of two contact records; not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes", "covered_by": { "stream": "inboxes" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes/{id}", "excluded": { "category": "duplicate_of", "reason": "single-inbox detail is a strict subset of the inboxes stream's payload shape" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/inboxes", "excluded": { "category": "requires_elevated_scope", "reason": "inbox/channel provisioning (web widget, email, SMS, WhatsApp, etc. channel config with per-channel secrets); not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/inboxes/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "inbox/channel configuration update; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot", "excluded": { "category": "out_of_scope", "reason": "not in the specified read scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/agents", "covered_by": { "stream": "agents" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/agents", "excluded": { "category": "requires_elevated_scope", "reason": "provisions a new user/agent account; not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/agents/{id}", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/agents/{id}", "excluded": { "category": "destructive_admin", "reason": "removes an agent from the account; not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams/{team_id}", "excluded": { "category": "duplicate_of", "reason": "single-team detail is a strict subset of the teams stream's payload shape" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/teams", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/teams/{team_id}", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/teams/{team_id}", "excluded": { "category": "destructive_admin", "reason": "not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified read scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/labels", "covered_by": { "stream": "labels" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/labels/{id}", "excluded": { "category": "duplicate_of", "reason": "single-label detail is a strict subset of the labels stream's payload shape" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/labels", "covered_by": { "write": "create_label" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/labels/{id}", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/labels/{id}", "excluded": { "category": "destructive_admin", "reason": "not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages", "covered_by": { "stream": "messages" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages", "covered_by": { "write": "send_message" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}", "excluded": { "category": "destructive_admin", "reason": "irreversible message deletion; not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/agent_bots", "excluded": { "category": "out_of_scope", "reason": "agent-bot management API, not the support-desk core surface" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/agent_bots", "excluded": { "category": "out_of_scope", "reason": "agent-bot management API, not the support-desk core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/canned_responses", "excluded": { "category": "out_of_scope", "reason": "agent-productivity feature, not the specified core surface" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/canned_responses", "excluded": { "category": "out_of_scope", "reason": "agent-productivity feature, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions", "excluded": { "category": "out_of_scope", "reason": "schema-configuration endpoint, not conversation/contact/agent data" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/custom_filters", "excluded": { "category": "out_of_scope", "reason": "saved-search configuration, not conversation/contact data" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/webhooks", "excluded": { "category": "out_of_scope", "reason": "outbound webhook configuration, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/integrations/apps", "excluded": { "category": "out_of_scope", "reason": "installed-integration listing, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/automation_rules", "excluded": { "category": "out_of_scope", "reason": "automation-rule configuration, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/portals", "excluded": { "category": "out_of_scope", "reason": "help-center (knowledge base) surface, not the support-desk core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/audit_logs", "excluded": { "category": "out_of_scope", "reason": "account audit-trail surface, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/reporting_events", "excluded": { "category": "out_of_scope", "reason": "reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/reports", "excluded": { "category": "out_of_scope", "reason": "v2 reporting/analytics surface, distinct from the core object surface" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/reports/summary", "excluded": { "category": "out_of_scope", "reason": "v2 reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/summary_reports/agent", "excluded": { "category": "out_of_scope", "reason": "v2 reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}", "excluded": { "category": "non_data_endpoint", "reason": "account settings snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/platform/api/v1/accounts/{account_id}/account_users", "excluded": { "category": "requires_elevated_scope", "reason": "Platform API super-admin surface for provisioning account/user memberships, distinct auth (platformAppApiKey) from the Application API this bundle targets" } }
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_details"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}",
+      "covered_by": {
+        "write": "update_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/actions/contact_merge",
+      "covered_by": {
+        "write": "contact_merge"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_account_agent_bots"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "covered_by": {
+        "write": "create_an_account_agent_bot"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "covered_by": {
+        "write": "delete_an_account_agent_bot"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_account_agent_bot"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "covered_by": {
+        "write": "update_an_account_agent_bot"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/agents",
+      "covered_by": {
+        "write": "add_new_agent_to_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/agents/{id}",
+      "covered_by": {
+        "write": "delete_agent_from_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/agents/{id}",
+      "covered_by": {
+        "write": "update_agent_in_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/audit_logs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_audit_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_automation_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "covered_by": {
+        "write": "add_new_automation_rule_to_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "covered_by": {
+        "write": "delete_automation_rule_from_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_automation_rule"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "covered_by": {
+        "write": "update_automation_rule_in_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_branded_email_layout"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+      "covered_by": {
+        "write": "update_account_branded_email_layout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_canned_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "covered_by": {
+        "write": "add_new_canned_response_to_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+      "covered_by": {
+        "write": "delete_canned_response_from_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+      "covered_by": {
+        "write": "update_canned_response_in_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/filter",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: provider search/filter POST needs bounded direct-read command metadata, typed body/query flags, and redacted output before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.contact_filter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.contact_search"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "covered_by": {
+        "write": "contact_delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.contact_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
+      "covered_by": {
+        "write": "contact_inbox_creation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.contactable_inboxes_get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.contact_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_labels_of_a_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "covered_by": {
+        "write": "contact_add_labels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations",
+      "covered_by": {
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/filter",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: provider search/filter POST needs bounded direct-read command metadata, typed body/query flags, and redacted output before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.conversation_filter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/meta",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.conversation_list_meta"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "update_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
+      "covered_by": {
+        "write": "assign_a_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
+      "covered_by": {
+        "write": "update_custom_attributes_of_a_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes",
+      "covered_by": {
+        "write": "destroy_custom_attributes_of_a_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_labels_of_a_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "covered_by": {
+        "write": "conversation_add_labels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "write": "send_message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
+      "covered_by": {
+        "write": "delete_a_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_conversation_reporting_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
+      "covered_by": {
+        "write": "toggle_priority_of_a_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
+      "covered_by": {
+        "write": "toggle_conversation_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status",
+      "covered_by": {
+        "write": "toggle_typing_status_of_a_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "covered_by": {
+        "write": "add_new_custom_attribute_to_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "covered_by": {
+        "write": "delete_custom_attribute_from_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_custom_attribute"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "covered_by": {
+        "write": "update_custom_attribute_in_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_filters"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: custom filter creation requires a query parameter (`filter_type`) on a write; shared write query-param support is not available in this connector-local slice",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.create_a_custom_filter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "covered_by": {
+        "write": "delete_a_custom_filter"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_custom_filter"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "covered_by": {
+        "write": "update_a_custom_filter"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "covered_by": {
+        "write": "delete_agent_in_inbox"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "covered_by": {
+        "write": "update_agents_in_inbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "covered_by": {
+        "write": "add_new_agent_to_inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_inbox_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes",
+      "covered_by": {
+        "stream": "inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inboxes",
+      "covered_by": {
+        "write": "inbox_creation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_inbox"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "covered_by": {
+        "write": "update_inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_inbox_agent_bot"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
+      "covered_by": {
+        "write": "update_agent_bot"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/integrations/apps",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_all_integrations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks",
+      "covered_by": {
+        "write": "create_an_integration_hook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "covered_by": {
+        "write": "delete_an_integration_hook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "covered_by": {
+        "write": "update_an_integrations_hook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels",
+      "covered_by": {
+        "stream": "labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/labels",
+      "covered_by": {
+        "write": "create_label"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "covered_by": {
+        "write": "delete_a_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_label"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "covered_by": {
+        "write": "update_a_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_portal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "covered_by": {
+        "write": "add_new_portal_to_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}",
+      "covered_by": {
+        "write": "update_portal_to_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}/articles",
+      "covered_by": {
+        "write": "add_new_article_to_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}/categories",
+      "covered_by": {
+        "write": "add_new_category_to_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/reporting_events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_reporting_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/teams",
+      "covered_by": {
+        "write": "create_a_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "covered_by": {
+        "write": "delete_a_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_team"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "covered_by": {
+        "write": "update_a_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "covered_by": {
+        "write": "delete_agent_in_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_team_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "covered_by": {
+        "write": "update_agents_in_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "covered_by": {
+        "write": "add_new_agent_to_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "covered_by": {
+        "write": "create_a_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "delete_a_webhook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "covered_by": {
+        "write": "update_a_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/profile",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.fetch_profile"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/profile",
+      "covered_by": {
+        "write": "update_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_conversation_statistics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_account_conversation_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations/",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_agent_conversation_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_first_response_time_distribution"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_inbox_label_matrix"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_outgoing_messages_count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_conversation_statistics_summary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/agent",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_agent_summary_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/channel",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_channel_summary_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/inbox",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_inbox_summary_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/team",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/application_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_team_summary_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.create_a_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.update_a_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_contact_conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.create_a_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_single_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_conversation_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.create_a_message"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.update_a_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.resolve_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_typing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.toggle_typing_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/update_last_seen",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: public client API requires inbox/contact identifiers and no userApiKey auth; a separate client-safe no-auth connector contract is required before execution",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/client_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.update_last_seen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/survey/responses/{conversation_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: bounded direct/provider query read is documented but not executable until connector-local command flags and redaction evidence are completed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/other_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_csat_survey_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/accounts",
+      "covered_by": {
+        "write": "create_an_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "covered_by": {
+        "write": "delete_an_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_an_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "covered_by": {
+        "write": "update_an_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "covered_by": {
+        "write": "delete_an_account_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_account_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "covered_by": {
+        "write": "create_an_account_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.list_all_agent_bots"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/agent_bots",
+      "covered_by": {
+        "write": "create_an_agent_bot"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "covered_by": {
+        "write": "delete_an_agent_bot"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_single_agent_bot"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "covered_by": {
+        "write": "update_an_agent_bot"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/users",
+      "covered_by": {
+        "write": "create_a_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/users/{id}",
+      "covered_by": {
+        "write": "delete_a_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_details_of_a_user"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/platform/api/v1/users/{id}",
+      "covered_by": {
+        "write": "update_a_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}/login",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "planned/blocked: ETL stream candidate requires typed schema and fixture evidence before execution can be claimed",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/tag_groups/platform_swagger.json",
+        "notes": "typed operation metadata id: chatwoot.get_sso_url_of_a_user"
+      }
+    }
   ]
 }

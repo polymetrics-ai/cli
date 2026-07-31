@@ -1,0 +1,23 @@
+{
+  "record": {
+    "profile": {
+      "name": "fixture-value"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/profile",
+    "body": {
+      "profile": {
+        "name": "fixture-value"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

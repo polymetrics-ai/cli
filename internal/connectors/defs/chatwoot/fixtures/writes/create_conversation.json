@@ -1,18 +1,21 @@
 {
   "record": {
-    "source_id": "fixture-source-id-1",
-    "inbox_id": 1,
-    "contact_id": 42,
-    "status": "open"
+    "source_id": "fixture-id",
+    "inbox_id": 1
   },
   "expect": {
     "method": "POST",
-    "path": "/conversations",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations",
     "body": {
-      "source_id": "fixture-source-id-1",
-      "inbox_id": 1,
-      "contact_id": 42,
-      "status": "open"
+      "source_id": "fixture-id",
+      "inbox_id": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
     }
   }
 }

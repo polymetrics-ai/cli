@@ -1,0 +1,19 @@
+{
+  "record": {
+    "branded_email_layout": "fixture@example.invalid"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/accounts/synthetic-conformance-value/branded_email_layout",
+    "body": {
+      "branded_email_layout": "fixture@example.invalid"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "record": {
+    "attribute_display_name": "fixture-value",
+    "attribute_display_type": 1,
+    "attribute_description": "fixture-value",
+    "attribute_key": "fixture-value",
+    "attribute_values": [
+      "fixture-value"
+    ],
+    "attribute_model": 1,
+    "regex_pattern": "fixture-value",
+    "regex_cue": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/custom_attribute_definitions",
+    "body": {
+      "attribute_display_name": "fixture-value",
+      "attribute_display_type": 1,
+      "attribute_description": "fixture-value",
+      "attribute_key": "fixture-value",
+      "attribute_values": [
+        "fixture-value"
+      ],
+      "attribute_model": 1,
+      "regex_pattern": "fixture-value",
+      "regex_cue": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

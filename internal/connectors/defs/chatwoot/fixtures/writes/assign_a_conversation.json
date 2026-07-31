@@ -1,0 +1,20 @@
+{
+  "record": {
+    "conversation_id": 1,
+    "assignee_id": 1.5
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/accounts/synthetic-conformance-value/conversations/1/assignments",
+    "body": {
+      "assignee_id": 1.5
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

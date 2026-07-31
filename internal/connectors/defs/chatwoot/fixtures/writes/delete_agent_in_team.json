@@ -1,0 +1,19 @@
+{
+  "record": {
+    "team_id": 1,
+    "user_ids": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/accounts/synthetic-conformance-value/teams/1/team_members"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}

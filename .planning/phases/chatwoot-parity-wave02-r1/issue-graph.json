@@ -1,0 +1,102 @@
+{
+  "parent": {
+    "number": 148,
+    "url": "https://github.com/polymetrics-ai/cli/issues/148",
+    "title": "feat(connectors): Chatwoot official API parity parent"
+  },
+  "subissues": [
+    {
+      "number": 149,
+      "lane": "ledger",
+      "title": "Chatwoot: complete official API and operation ledger",
+      "counts": {
+        "total": 0,
+        "implemented": 0,
+        "fixture_tested": 0,
+        "blocked_planned": 0,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    },
+    {
+      "number": 150,
+      "lane": "etl_cdc",
+      "title": "Chatwoot: ETL/read streams and changefeed parity",
+      "counts": {
+        "total": 49,
+        "implemented": 7,
+        "fixture_tested": 7,
+        "blocked_planned": 42,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    },
+    {
+      "number": 151,
+      "lane": "direct_binary",
+      "title": "Chatwoot: bounded direct/provider-search/query and binary parity",
+      "counts": {
+        "total": 20,
+        "implemented": 0,
+        "fixture_tested": 0,
+        "blocked_planned": 20,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    },
+    {
+      "number": 152,
+      "lane": "reverse",
+      "title": "Chatwoot: reverse ETL typed write parity",
+      "counts": {
+        "total": 76,
+        "implemented": 6,
+        "fixture_tested": 6,
+        "blocked_planned": 70,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    },
+    {
+      "number": 153,
+      "lane": "cli_config",
+      "title": "Chatwoot: provider CLI/config/help parity",
+      "counts": {
+        "total": 0,
+        "implemented": 0,
+        "fixture_tested": 0,
+        "blocked_planned": 0,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    },
+    {
+      "number": 154,
+      "lane": "fixtures_guard",
+      "title": "Chatwoot: fixtures docs conformance and Connector Guard parity",
+      "counts": {
+        "total": 0,
+        "implemented": 0,
+        "fixture_tested": 0,
+        "blocked_planned": 0,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    },
+    {
+      "number": 155,
+      "lane": "cert_release",
+      "title": "Chatwoot: certification and release evidence",
+      "counts": {
+        "total": 0,
+        "implemented": 0,
+        "fixture_tested": 0,
+        "blocked_planned": 0,
+        "excluded_not_applicable": 0,
+        "certified": 0
+      }
+    }
+  ],
+  "captain_policy_addendum_marker": "<!-- captain-policy:addendum:chatwoot-parity-wave02-r1 -->",
+  "github_update": "applied with gh-axi issue edit to parent and all subissues on 2026-07-31; count tables preserved."
+}

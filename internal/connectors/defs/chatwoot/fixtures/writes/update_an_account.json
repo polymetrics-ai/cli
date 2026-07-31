@@ -1,0 +1,31 @@
+{
+  "record": {
+    "name": "fixture-value",
+    "locale": "fixture-value",
+    "domain": "fixture-value",
+    "support_email": "fixture@example.invalid",
+    "status": "active",
+    "limits": {},
+    "custom_attributes": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/platform/api/v1/accounts/synthetic-conformance-value",
+    "body": {
+      "name": "fixture-value",
+      "locale": "fixture-value",
+      "domain": "fixture-value",
+      "support_email": "fixture@example.invalid",
+      "status": "active",
+      "limits": {},
+      "custom_attributes": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "status": "ok"
+    }
+  }
+}
