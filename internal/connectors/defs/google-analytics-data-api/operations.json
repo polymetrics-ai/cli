@@ -1,0 +1,681 @@
+{
+  "operations": [
+    {
+      "id": "google-analytics-data-api.get_metadata",
+      "kind": "rest_read",
+      "summary": "Get property metadata",
+      "description": "Executable bounded GET metadata direct read for GA4 dimensions and metrics.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v1beta/properties/{property_id}/metadata",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google-analytics-data-api.list_audience_exports",
+      "kind": "rest_read",
+      "summary": "List audience exports",
+      "description": "Executable bounded GET list of audience exports for one GA4 property.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v1beta/properties/{property_id}/audienceExports",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google-analytics-data-api.get_audience_export",
+      "kind": "rest_read",
+      "summary": "Get audience export metadata",
+      "description": "Executable bounded GET of one audience export metadata resource.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v1beta/properties/{property_id}/audienceExports/{audience_export_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google-analytics-data-api.run_report",
+      "kind": "rest_read",
+      "summary": "Run report",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}:runReport",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "dateRanges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "startDate": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "startDate",
+                  "endDate"
+                ]
+              }
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            },
+            "keepEmptyRows": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "dimensions",
+            "metrics"
+          ]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.run_realtime_report",
+      "kind": "rest_read",
+      "summary": "Run realtime report",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}:runRealtimeReport",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "dateRanges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "startDate": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "startDate",
+                  "endDate"
+                ]
+              }
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            },
+            "keepEmptyRows": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "dimensions",
+            "metrics"
+          ]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.run_pivot_report",
+      "kind": "rest_read",
+      "summary": "Run pivot report",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}:runPivotReport",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "dateRanges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "startDate": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "startDate",
+                  "endDate"
+                ]
+              }
+            },
+            "limit": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            },
+            "keepEmptyRows": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "dimensions",
+            "metrics"
+          ]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.batch_run_reports",
+      "kind": "rest_read",
+      "summary": "Batch run reports",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}:batchRunReports",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "dimensions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    }
+                  },
+                  "metrics": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    }
+                  },
+                  "dateRanges": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "startDate": {
+                          "type": "string"
+                        },
+                        "endDate": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "startDate",
+                        "endDate"
+                      ]
+                    }
+                  },
+                  "limit": {
+                    "type": "integer"
+                  },
+                  "offset": {
+                    "type": "integer"
+                  },
+                  "keepEmptyRows": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "dimensions",
+                  "metrics"
+                ]
+              }
+            }
+          },
+          "required": [
+            "requests"
+          ]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.batch_run_pivot_reports",
+      "kind": "rest_read",
+      "summary": "Batch run pivot reports",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}:batchRunPivotReports",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "requests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "dimensions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    }
+                  },
+                  "metrics": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    }
+                  },
+                  "dateRanges": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "startDate": {
+                          "type": "string"
+                        },
+                        "endDate": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "startDate",
+                        "endDate"
+                      ]
+                    }
+                  },
+                  "limit": {
+                    "type": "integer"
+                  },
+                  "offset": {
+                    "type": "integer"
+                  },
+                  "keepEmptyRows": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "dimensions",
+                  "metrics"
+                ]
+              }
+            }
+          },
+          "required": [
+            "requests"
+          ]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.check_compatibility",
+      "kind": "rest_read",
+      "summary": "Check dimension/metric compatibility",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}:checkCompatibility",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "compatibilityFilter": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.query_audience_export",
+      "kind": "rest_read",
+      "summary": "Query audience export users",
+      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "high",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}/audienceExports/{audience_export_id}:query",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "offset": {
+              "type": "integer"
+            },
+            "limit": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.create_audience_export",
+      "kind": "rest_write",
+      "summary": "Create audience export",
+      "description": "Typed metadata for creating a provider-side asynchronous audience export. Not executable in this slice; future support must use a named reverse-ETL action with plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence.",
+      "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "risk": "high",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and execute before any live provider-side export creation",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1beta/properties/{property_id}/audienceExports",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "displayName": {
+              "type": "string"
+            },
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            },
+            "dimensionFilter": {
+              "type": "object"
+            },
+            "creationQuotaTokensCharged": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "displayName",
+            "dimensions"
+          ]
+        }
+      }
+    }
+  ]
+}

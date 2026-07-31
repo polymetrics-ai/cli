@@ -1,0 +1,24 @@
+{
+  "request": {
+    "operation": "google-analytics-data-api.get_metadata",
+    "path_params": {
+      "property_id": "000000000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "properties/000000000/metadata",
+      "dimensions": [
+        {
+          "apiName": "date"
+        }
+      ],
+      "metrics": [
+        {
+          "apiName": "activeUsers"
+        }
+      ]
+    }
+  }
+}

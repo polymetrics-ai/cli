@@ -196,7 +196,7 @@
 - [gologin](gologin/MANUAL.md): Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
 - [gong](gong/MANUAL.md): Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
 - [google-ads](google-ads/MANUAL.md): Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.
-- [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.
+- [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 report presets and bounded metadata/audience-export resources from the Google Analytics Data API v1beta. Read-only; POST report/query operations that require a shared provider-query foundation remain planned rather than exposed as raw API calls.
 - [google-calendar](google-calendar/MANUAL.md): Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token.
 - [google-classroom](google-classroom/MANUAL.md): Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token.
 - [google-directory](google-directory/MANUAL.md): Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices via bearer-token OAuth. Read-only.

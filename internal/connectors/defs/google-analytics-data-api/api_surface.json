@@ -1,42 +1,155 @@
 {
-  "api": "Google Analytics 4 (GA4) legacy connector hook surface",
-  "docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog",
-  "reviewed_at": "2026-07-04",
-  "scope": "Tier-2 quarantine migration for the legacy google-analytics-data-api connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-analytics-data-api, which delegates to internal/connectors/google-analytics-data-api until the human-gated wave 6 cutover.",
+  "api": "Google Analytics Data API v1beta",
+  "docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Current official v1beta discovery inventory at revision 20260729 contains 11 operations. Executable official operations in this slice: runReport via five preset ETL streams plus GET metadata/list/get audience export direct reads. POST report/query/check operations and audience export creation are tracked once as blocked/planned where the connector contract or shared provider-query foundation is insufficient; no generic raw API command is exposed.",
   "endpoints": [
     {
-      "method": "HOOK",
-      "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runReport",
       "covered_by": {
         "stream": "daily_active_users"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/google-analytics-data-api website_overview read path",
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runReport",
       "covered_by": {
         "stream": "website_overview"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runReport",
       "covered_by": {
         "stream": "traffic_sources"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/google-analytics-data-api devices read path",
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runReport",
       "covered_by": {
         "stream": "devices"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/google-analytics-data-api pages read path",
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runReport",
       "covered_by": {
         "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/properties/{property_id}/metadata",
+      "covered_by": {
+        "direct_read": "metadata get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/properties/{property_id}/audienceExports",
+      "covered_by": {
+        "direct_read": "audience-exports list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/properties/{property_id}/audienceExports/{audience_export_id}",
+      "covered_by": {
+        "direct_read": "audience-exports get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runRealtimeReport",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked pending shared provider search/query foundation #2985 and connector-owned typed POST-read command evidence; not exposed as a raw API escape hatch",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=runRealtimeReport; request=RunRealtimeReportRequest; response=RunRealtimeReportResponse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:runPivotReport",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked pending shared provider search/query foundation #2985 and connector-owned typed POST-read command evidence; not exposed as a raw API escape hatch",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=runPivotReport; request=RunPivotReportRequest; response=RunPivotReportResponse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:batchRunPivotReports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked pending shared provider search/query foundation #2985 and connector-owned typed POST-read command evidence; not exposed as a raw API escape hatch",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=batchRunPivotReports; request=BatchRunPivotReportsRequest; response=BatchRunPivotReportsResponse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:batchRunReports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked pending shared provider search/query foundation #2985 and connector-owned typed POST-read command evidence; not exposed as a raw API escape hatch",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=batchRunReports; request=BatchRunReportsRequest; response=BatchRunReportsResponse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}:checkCompatibility",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked pending shared provider search/query foundation #2985 and connector-owned typed POST-read command evidence; not exposed as a raw API escape hatch",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=checkCompatibility; request=CheckCompatibilityRequest; response=CheckCompatibilityResponse"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}/audienceExports",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "audience export creation initiates a provider-side asynchronous export and remains blocked until a named reverse-ETL action has a closed schema, redaction, idempotency/operation handling evidence, and plan -> preview -> explicit approval -> execute coverage",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=audienceExports.create; request=AudienceExport; response=Operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/properties/{property_id}/audienceExports/{audience_export_id}:query",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "audience export query can return user-level audience export rows and remains blocked until shared provider-query/redaction foundation #2985 has connector-owned fixtures for this response family",
+        "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+        "notes": "official_operation=audienceExports.query; request=QueryAudienceExportRequest; response=QueryAudienceExportResponse"
       }
     }
   ]

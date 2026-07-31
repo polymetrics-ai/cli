@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1beta/properties/000000000/metadata"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "properties/000000000/metadata"
+    }
+  }
+}
