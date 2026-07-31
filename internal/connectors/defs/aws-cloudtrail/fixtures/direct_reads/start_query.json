@@ -1,0 +1,17 @@
+{
+  "operation": "aws-cloudtrail.start_query",
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "DeliveryS3Uri": "s3://fixture-query-results/prefix"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "operation": "StartQuery",
+      "pm_record_id": "start_query_fixture_1"
+    }
+  }
+}

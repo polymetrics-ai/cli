@@ -1,0 +1,17 @@
+{
+  "operation": "aws-cloudtrail.search_sample_queries",
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "SearchPhrase": "sample"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "operation": "SearchSampleQueries",
+      "pm_record_id": "search_sample_queries_fixture_1"
+    }
+  }
+}

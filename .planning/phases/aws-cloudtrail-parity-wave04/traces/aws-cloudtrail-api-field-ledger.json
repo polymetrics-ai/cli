@@ -1,0 +1,1074 @@
+[
+  {
+    "action": "AddTags",
+    "request": [
+      "ResourceId",
+      "TagsList"
+    ],
+    "required": [
+      "ResourceId",
+      "TagsList"
+    ],
+    "response": [],
+    "summary": "Adds one or more tags to a trail, event data store, dashboard, or channel, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail or event data store that applies to all AWS Regions only from the Region in which the trail or event data store was created (also known as its home Region)."
+  },
+  {
+    "action": "CancelQuery",
+    "request": [
+      "EventDataStore",
+      "EventDataStoreOwnerAccountId",
+      "QueryId"
+    ],
+    "required": [
+      "QueryId"
+    ],
+    "response": [
+      "EventDataStoreOwnerAccountId",
+      "QueryId",
+      "QueryStatus"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "CreateChannel",
+    "request": [
+      "Destinations",
+      "Name",
+      "Source",
+      "Tags"
+    ],
+    "required": [
+      "Destinations",
+      "Name",
+      "Source"
+    ],
+    "response": [
+      "ChannelArn",
+      "Destinations",
+      "Name",
+      "Source",
+      "Tags"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "CreateDashboard",
+    "request": [
+      "Name",
+      "RefreshSchedule",
+      "TagsList",
+      "TerminationProtectionEnabled",
+      "Widgets"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [
+      "DashboardArn",
+      "Name",
+      "RefreshSchedule",
+      "TagsList",
+      "TerminationProtectionEnabled",
+      "Type",
+      "Widgets"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "CreateEventDataStore",
+    "request": [
+      "AdvancedEventSelectors",
+      "BillingMode",
+      "KmsKeyId",
+      "MultiRegionEnabled",
+      "Name",
+      "OrganizationEnabled",
+      "RetentionPeriod",
+      "StartIngestion",
+      "TagsList",
+      "TerminationProtectionEnabled"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [
+      "AdvancedEventSelectors",
+      "BillingMode",
+      "CreatedTimestamp",
+      "EventDataStoreArn",
+      "KmsKeyId",
+      "MultiRegionEnabled",
+      "Name",
+      "OrganizationEnabled",
+      "RetentionPeriod",
+      "Status",
+      "TagsList",
+      "TerminationProtectionEnabled",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "CreateTrail",
+    "request": [
+      "CloudWatchLogsLogGroupArn",
+      "CloudWatchLogsRoleArn",
+      "EnableLogFileValidation",
+      "IncludeGlobalServiceEvents",
+      "IsMultiRegionTrail",
+      "IsOrganizationTrail",
+      "KmsKeyId",
+      "Name",
+      "S3BucketName",
+      "S3KeyPrefix",
+      "SnsTopicName",
+      "TagsList"
+    ],
+    "required": [
+      "Name",
+      "S3BucketName"
+    ],
+    "response": [
+      "CloudWatchLogsLogGroupArn",
+      "CloudWatchLogsRoleArn",
+      "IncludeGlobalServiceEvents",
+      "IsMultiRegionTrail",
+      "IsOrganizationTrail",
+      "KmsKeyId",
+      "LogFileValidationEnabled",
+      "Name",
+      "S3BucketName",
+      "S3KeyPrefix",
+      "SnsTopicARN",
+      "SnsTopicName",
+      "TrailARN"
+    ],
+    "summary": "Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket."
+  },
+  {
+    "action": "DeleteChannel",
+    "request": [
+      "Channel"
+    ],
+    "required": [
+      "Channel"
+    ],
+    "response": [],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "DeleteDashboard",
+    "request": [
+      "DashboardId"
+    ],
+    "required": [
+      "DashboardId"
+    ],
+    "response": [],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "DeleteEventDataStore",
+    "request": [
+      "EventDataStore"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "DeleteResourcePolicy",
+    "request": [
+      "ResourceArn"
+    ],
+    "required": [
+      "ResourceArn"
+    ],
+    "response": [],
+    "summary": "Deletes the resource-based policy attached to the CloudTrail event data store, dashboard, or channel."
+  },
+  {
+    "action": "DeleteTrail",
+    "request": [
+      "Name"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [],
+    "summary": "Deletes a trail. This operation must be called from the Region in which the trail was created. DeleteTrail cannot be called on the shadow trails (replicated trails in other Regions) of a trail that is enabled in all Regions."
+  },
+  {
+    "action": "DeregisterOrganizationDelegatedAdmin",
+    "request": [
+      "DelegatedAdminAccountId"
+    ],
+    "required": [
+      "DelegatedAdminAccountId"
+    ],
+    "response": [],
+    "summary": "Removes CloudTrail delegated administrator permissions from a member account in an organization."
+  },
+  {
+    "action": "DescribeQuery",
+    "request": [
+      "EventDataStore",
+      "EventDataStoreOwnerAccountId",
+      "QueryAlias",
+      "QueryId",
+      "RefreshId"
+    ],
+    "required": [],
+    "response": [
+      "DeliveryS3Uri",
+      "DeliveryStatus",
+      "ErrorMessage",
+      "EventDataStoreOwnerAccountId",
+      "Prompt",
+      "QueryId",
+      "QueryStatistics",
+      "QueryStatus",
+      "QueryString"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "DescribeTrails",
+    "request": [
+      "includeShadowTrails",
+      "trailNameList"
+    ],
+    "required": [],
+    "response": [
+      "trailList"
+    ],
+    "summary": "Retrieves settings for one or more trails associated with the current Region for your account."
+  },
+  {
+    "action": "DisableFederation",
+    "request": [
+      "EventDataStore"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [
+      "EventDataStoreArn",
+      "FederationStatus"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "EnableFederation",
+    "request": [
+      "EventDataStore",
+      "FederationRoleArn"
+    ],
+    "required": [
+      "EventDataStore",
+      "FederationRoleArn"
+    ],
+    "response": [
+      "EventDataStoreArn",
+      "FederationRoleArn",
+      "FederationStatus"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GenerateQuery",
+    "request": [
+      "EventDataStores",
+      "Prompt"
+    ],
+    "required": [
+      "EventDataStores",
+      "Prompt"
+    ],
+    "response": [
+      "EventDataStoreOwnerAccountId",
+      "QueryAlias",
+      "QueryStatement"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GetChannel",
+    "request": [
+      "Channel"
+    ],
+    "required": [
+      "Channel"
+    ],
+    "response": [
+      "ChannelArn",
+      "Destinations",
+      "IngestionStatus",
+      "Name",
+      "Source",
+      "SourceConfig"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GetDashboard",
+    "request": [
+      "DashboardId"
+    ],
+    "required": [
+      "DashboardId"
+    ],
+    "response": [
+      "CreatedTimestamp",
+      "DashboardArn",
+      "LastRefreshFailureReason",
+      "LastRefreshId",
+      "RefreshSchedule",
+      "Status",
+      "TerminationProtectionEnabled",
+      "Type",
+      "UpdatedTimestamp",
+      "Widgets"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GetEventConfiguration",
+    "request": [
+      "EventDataStore",
+      "TrailName"
+    ],
+    "required": [],
+    "response": [
+      "AggregationConfigurations",
+      "ContextKeySelectors",
+      "EventDataStoreArn",
+      "MaxEventSize",
+      "TrailARN"
+    ],
+    "summary": "Retrieves the current event configuration settings for the specified event data store or trail. The response includes maximum event size configuration, the context key selectors configured for the event data store, and any aggregation settings configured for the trail."
+  },
+  {
+    "action": "GetEventDataStore",
+    "request": [
+      "EventDataStore"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [
+      "AdvancedEventSelectors",
+      "BillingMode",
+      "CreatedTimestamp",
+      "EventDataStoreArn",
+      "FederationRoleArn",
+      "FederationStatus",
+      "KmsKeyId",
+      "MultiRegionEnabled",
+      "Name",
+      "OrganizationEnabled",
+      "PartitionKeys",
+      "RetentionPeriod",
+      "Status",
+      "TerminationProtectionEnabled",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GetEventSelectors",
+    "request": [
+      "TrailName"
+    ],
+    "required": [
+      "TrailName"
+    ],
+    "response": [
+      "AdvancedEventSelectors",
+      "EventSelectors",
+      "TrailARN"
+    ],
+    "summary": "Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:"
+  },
+  {
+    "action": "GetImport",
+    "request": [
+      "ImportId"
+    ],
+    "required": [
+      "ImportId"
+    ],
+    "response": [
+      "CreatedTimestamp",
+      "Destinations",
+      "EndEventTime",
+      "ImportId",
+      "ImportSource",
+      "ImportStatistics",
+      "ImportStatus",
+      "StartEventTime",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GetInsightSelectors",
+    "request": [
+      "EventDataStore",
+      "TrailName"
+    ],
+    "required": [],
+    "response": [
+      "EventDataStoreArn",
+      "InsightsDestination",
+      "InsightSelectors",
+      "TrailARN"
+    ],
+    "summary": "Describes the settings for the Insights event selectors that you configured for your trail or event data store. GetInsightSelectors shows if CloudTrail Insights logging is enabled and which Insights types are configured with corresponding event categories. If you run GetInsightSelectors on a trail or event data store that does not have Insights events enabled, the operation throws the exception InsightNotEnabledException"
+  },
+  {
+    "action": "GetQueryResults",
+    "request": [
+      "EventDataStore",
+      "EventDataStoreOwnerAccountId",
+      "MaxQueryResults",
+      "NextToken",
+      "QueryId"
+    ],
+    "required": [
+      "QueryId"
+    ],
+    "response": [
+      "ErrorMessage",
+      "NextToken",
+      "QueryResultRows",
+      "QueryStatistics",
+      "QueryStatus"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "GetResourcePolicy",
+    "request": [
+      "ResourceArn"
+    ],
+    "required": [
+      "ResourceArn"
+    ],
+    "response": [
+      "DelegatedAdminResourcePolicy",
+      "ResourceArn",
+      "ResourcePolicy"
+    ],
+    "summary": "Retrieves the JSON text of the resource-based policy document attached to the CloudTrail event data store, dashboard, or channel."
+  },
+  {
+    "action": "GetTrail",
+    "request": [
+      "Name"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [
+      "Trail"
+    ],
+    "summary": "Returns settings information for a specified trail."
+  },
+  {
+    "action": "GetTrailStatus",
+    "request": [
+      "Name"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [
+      "IsLogging",
+      "LatestCloudWatchLogsDeliveryError",
+      "LatestCloudWatchLogsDeliveryTime",
+      "LatestDeliveryAttemptSucceeded",
+      "LatestDeliveryAttemptTime",
+      "LatestDeliveryError",
+      "LatestDeliveryTime",
+      "LatestDigestDeliveryError",
+      "LatestDigestDeliveryTime",
+      "LatestNotificationAttemptSucceeded",
+      "LatestNotificationAttemptTime",
+      "LatestNotificationError",
+      "LatestNotificationTime",
+      "StartLoggingTime",
+      "StopLoggingTime",
+      "TimeLoggingStarted",
+      "TimeLoggingStopped"
+    ],
+    "summary": "Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single Region. To return trail status from all Regions, you must call the operation on each Region."
+  },
+  {
+    "action": "ListChannels",
+    "request": [
+      "MaxResults",
+      "NextToken"
+    ],
+    "required": [],
+    "response": [
+      "Channels",
+      "NextToken"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "ListDashboards",
+    "request": [
+      "MaxResults",
+      "NamePrefix",
+      "NextToken",
+      "Type"
+    ],
+    "required": [],
+    "response": [
+      "Dashboards",
+      "NextToken"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "ListEventDataStores",
+    "request": [
+      "MaxResults",
+      "NextToken"
+    ],
+    "required": [],
+    "response": [
+      "EventDataStores",
+      "NextToken"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "ListImportFailures",
+    "request": [
+      "ImportId",
+      "MaxResults",
+      "NextToken"
+    ],
+    "required": [
+      "ImportId"
+    ],
+    "response": [
+      "Failures",
+      "NextToken"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "ListImports",
+    "request": [
+      "Destination",
+      "ImportStatus",
+      "MaxResults",
+      "NextToken"
+    ],
+    "required": [],
+    "response": [
+      "Imports",
+      "NextToken"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "ListInsightsData",
+    "request": [
+      "DataType",
+      "Dimensions",
+      "EndTime",
+      "InsightSource",
+      "MaxResults",
+      "NextToken",
+      "StartTime"
+    ],
+    "required": [
+      "DataType",
+      "InsightSource"
+    ],
+    "response": [
+      "Events",
+      "NextToken"
+    ],
+    "summary": "Returns Insights events generated on a trail that logs data events. You can list Insights events that occurred in a Region within the last 90 days."
+  },
+  {
+    "action": "ListInsightsMetricData",
+    "request": [
+      "DataType",
+      "EndTime",
+      "ErrorCode",
+      "EventName",
+      "EventSource",
+      "InsightType",
+      "MaxResults",
+      "NextToken",
+      "Period",
+      "StartTime",
+      "TrailName"
+    ],
+    "required": [
+      "EventName",
+      "EventSource",
+      "InsightType"
+    ],
+    "response": [
+      "ErrorCode",
+      "EventName",
+      "EventSource",
+      "InsightType",
+      "NextToken",
+      "Timestamps",
+      "TrailARN",
+      "Values"
+    ],
+    "summary": "Returns Insights metrics data for trails that have enabled Insights. The request must include the EventSource , EventName , and InsightType parameters."
+  },
+  {
+    "action": "ListPublicKeys",
+    "request": [
+      "EndTime",
+      "NextToken",
+      "StartTime"
+    ],
+    "required": [],
+    "response": [
+      "NextToken",
+      "PublicKeyList"
+    ],
+    "summary": "Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key."
+  },
+  {
+    "action": "ListQueries",
+    "request": [
+      "EndTime",
+      "EventDataStore",
+      "MaxResults",
+      "NextToken",
+      "QueryStatus",
+      "StartTime"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [
+      "NextToken",
+      "Queries"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "ListTags",
+    "request": [
+      "NextToken",
+      "ResourceIdList"
+    ],
+    "required": [
+      "ResourceIdList"
+    ],
+    "response": [
+      "NextToken",
+      "ResourceTagList"
+    ],
+    "summary": "Lists the tags for the specified trails, event data stores, dashboards, or channels in the current Region."
+  },
+  {
+    "action": "ListTrails",
+    "request": [
+      "NextToken"
+    ],
+    "required": [],
+    "response": [
+      "NextToken",
+      "Trails"
+    ],
+    "summary": "Lists trails that are in the current account."
+  },
+  {
+    "action": "LookupEvents",
+    "request": [
+      "EndTime",
+      "EventCategory",
+      "LookupAttributes",
+      "MaxResults",
+      "NextToken",
+      "StartTime"
+    ],
+    "required": [],
+    "response": [
+      "Events",
+      "NextToken"
+    ],
+    "summary": "Looks up management events or CloudTrail Insights events that are captured by CloudTrail. You can look up events that occurred in a Region within the last 90 days."
+  },
+  {
+    "action": "PutEventConfiguration",
+    "request": [
+      "AggregationConfigurations",
+      "ContextKeySelectors",
+      "EventDataStore",
+      "MaxEventSize",
+      "TrailName"
+    ],
+    "required": [],
+    "response": [
+      "AggregationConfigurations",
+      "ContextKeySelectors",
+      "EventDataStoreArn",
+      "MaxEventSize",
+      "TrailARN"
+    ],
+    "summary": "Updates the event configuration settings for the specified event data store or trail. This operation supports updating the maximum event size, adding or modifying context key selectors for event data store, and configuring aggregation settings for the trail."
+  },
+  {
+    "action": "PutEventSelectors",
+    "request": [
+      "AdvancedEventSelectors",
+      "EventSelectors",
+      "TrailName"
+    ],
+    "required": [
+      "TrailName"
+    ],
+    "response": [
+      "AdvancedEventSelectors",
+      "EventSelectors",
+      "TrailARN"
+    ],
+    "summary": "Configures event selectors (also referred to as basic event selectors ) or advanced event selectors for your trail. You can use either AdvancedEventSelectors or EventSelectors , but not both. If you apply AdvancedEventSelectors to a trail, any existing EventSelectors are overwritten."
+  },
+  {
+    "action": "PutInsightSelectors",
+    "request": [
+      "EventDataStore",
+      "InsightsDestination",
+      "InsightSelectors",
+      "TrailName"
+    ],
+    "required": [
+      "InsightSelectors"
+    ],
+    "response": [
+      "EventDataStoreArn",
+      "InsightsDestination",
+      "InsightSelectors",
+      "TrailARN"
+    ],
+    "summary": "Lets you enable Insights event logging on specific event categories by specifying the Insights selectors that you want to enable on an existing trail or event data store. You also use PutInsightSelectors to turn off Insights event logging, by passing an empty list of Insights types. The valid Insights event types are ApiErrorRateInsight and ApiCallRateInsight , and valid EventCategories are Management and Data ."
+  },
+  {
+    "action": "PutResourcePolicy",
+    "request": [
+      "ResourceArn",
+      "ResourcePolicy"
+    ],
+    "required": [
+      "ResourceArn",
+      "ResourcePolicy"
+    ],
+    "response": [
+      "DelegatedAdminResourcePolicy",
+      "ResourceArn",
+      "ResourcePolicy"
+    ],
+    "summary": "Attaches a resource-based permission policy to a CloudTrail event data store, dashboard, or channel. For more information about resource-based policies, see CloudTrail resource-based policy examples in the CloudTrail User Guide ."
+  },
+  {
+    "action": "RegisterOrganizationDelegatedAdmin",
+    "request": [
+      "MemberAccountId"
+    ],
+    "required": [
+      "MemberAccountId"
+    ],
+    "response": [],
+    "summary": "Registers an organization\u2019s member account as the CloudTrail delegated administrator ."
+  },
+  {
+    "action": "RemoveTags",
+    "request": [
+      "ResourceId",
+      "TagsList"
+    ],
+    "required": [
+      "ResourceId",
+      "TagsList"
+    ],
+    "response": [],
+    "summary": "Removes the specified tags from a trail, event data store, dashboard, or channel."
+  },
+  {
+    "action": "RestoreEventDataStore",
+    "request": [
+      "EventDataStore"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [
+      "AdvancedEventSelectors",
+      "BillingMode",
+      "CreatedTimestamp",
+      "EventDataStoreArn",
+      "KmsKeyId",
+      "MultiRegionEnabled",
+      "Name",
+      "OrganizationEnabled",
+      "RetentionPeriod",
+      "Status",
+      "TerminationProtectionEnabled",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "SearchSampleQueries",
+    "request": [
+      "MaxResults",
+      "NextToken",
+      "SearchPhrase"
+    ],
+    "required": [
+      "SearchPhrase"
+    ],
+    "response": [
+      "NextToken",
+      "SearchResults"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StartDashboardRefresh",
+    "request": [
+      "DashboardId",
+      "QueryParameterValues"
+    ],
+    "required": [
+      "DashboardId"
+    ],
+    "response": [
+      "RefreshId"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StartEventDataStoreIngestion",
+    "request": [
+      "EventDataStore"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StartImport",
+    "request": [
+      "Destinations",
+      "EndEventTime",
+      "ImportId",
+      "ImportSource",
+      "StartEventTime"
+    ],
+    "required": [],
+    "response": [
+      "CreatedTimestamp",
+      "Destinations",
+      "EndEventTime",
+      "ImportId",
+      "ImportSource",
+      "ImportStatus",
+      "StartEventTime",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StartLogging",
+    "request": [
+      "Name"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [],
+    "summary": "Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all Regions, this operation must be called from the Region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other Regions) of a trail that is enabled in all Regions."
+  },
+  {
+    "action": "StartQuery",
+    "request": [
+      "DeliveryS3Uri",
+      "EventDataStoreOwnerAccountId",
+      "QueryAlias",
+      "QueryParameters",
+      "QueryStatement"
+    ],
+    "required": [],
+    "response": [
+      "EventDataStoreOwnerAccountId",
+      "QueryId"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StopEventDataStoreIngestion",
+    "request": [
+      "EventDataStore"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StopImport",
+    "request": [
+      "ImportId"
+    ],
+    "required": [
+      "ImportId"
+    ],
+    "response": [
+      "CreatedTimestamp",
+      "Destinations",
+      "EndEventTime",
+      "ImportId",
+      "ImportSource",
+      "ImportStatistics",
+      "ImportStatus",
+      "StartEventTime",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "StopLogging",
+    "request": [
+      "Name"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [],
+    "summary": "Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all Regions, this operation must be called from the Region in which the trail was created, or an InvalidHomeRegionException will occur. This operation cannot be called on the shadow trails (replicated trails in other Regions) of a trail enabled in all Regions."
+  },
+  {
+    "action": "UpdateChannel",
+    "request": [
+      "Channel",
+      "Destinations",
+      "Name"
+    ],
+    "required": [
+      "Channel"
+    ],
+    "response": [
+      "ChannelArn",
+      "Destinations",
+      "Name",
+      "Source"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "UpdateDashboard",
+    "request": [
+      "DashboardId",
+      "RefreshSchedule",
+      "TerminationProtectionEnabled",
+      "Widgets"
+    ],
+    "required": [
+      "DashboardId"
+    ],
+    "response": [
+      "CreatedTimestamp",
+      "DashboardArn",
+      "Name",
+      "RefreshSchedule",
+      "TerminationProtectionEnabled",
+      "Type",
+      "UpdatedTimestamp",
+      "Widgets"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "UpdateEventDataStore",
+    "request": [
+      "AdvancedEventSelectors",
+      "BillingMode",
+      "EventDataStore",
+      "KmsKeyId",
+      "MultiRegionEnabled",
+      "Name",
+      "OrganizationEnabled",
+      "RetentionPeriod",
+      "TerminationProtectionEnabled"
+    ],
+    "required": [
+      "EventDataStore"
+    ],
+    "response": [
+      "AdvancedEventSelectors",
+      "BillingMode",
+      "CreatedTimestamp",
+      "EventDataStoreArn",
+      "FederationRoleArn",
+      "FederationStatus",
+      "KmsKeyId",
+      "MultiRegionEnabled",
+      "Name",
+      "OrganizationEnabled",
+      "RetentionPeriod",
+      "Status",
+      "TerminationProtectionEnabled",
+      "UpdatedTimestamp"
+    ],
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change ."
+  },
+  {
+    "action": "UpdateTrail",
+    "request": [
+      "CloudWatchLogsLogGroupArn",
+      "CloudWatchLogsRoleArn",
+      "EnableLogFileValidation",
+      "IncludeGlobalServiceEvents",
+      "IsMultiRegionTrail",
+      "IsOrganizationTrail",
+      "KmsKeyId",
+      "Name",
+      "S3BucketName",
+      "S3KeyPrefix",
+      "SnsTopicName"
+    ],
+    "required": [
+      "Name"
+    ],
+    "response": [
+      "CloudWatchLogsLogGroupArn",
+      "CloudWatchLogsRoleArn",
+      "IncludeGlobalServiceEvents",
+      "IsMultiRegionTrail",
+      "IsOrganizationTrail",
+      "KmsKeyId",
+      "LogFileValidationEnabled",
+      "Name",
+      "S3BucketName",
+      "S3KeyPrefix",
+      "SnsTopicARN",
+      "SnsTopicName",
+      "TrailARN"
+    ],
+    "summary": "Updates trail settings that control what events you are logging, and how to handle log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. UpdateTrail must be called from the Region in which the trail was created; otherwise, an InvalidHomeRegionException is thrown."
+  }
+]

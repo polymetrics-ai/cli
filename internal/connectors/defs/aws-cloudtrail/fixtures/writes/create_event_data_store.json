@@ -1,0 +1,16 @@
+{
+  "record": {
+    "Name": "trail-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "Name": "trail-fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

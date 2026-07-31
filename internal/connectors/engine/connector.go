@@ -176,6 +176,10 @@ func (b Base) Definition() connectors.Definition {
 	return synthesizeDefinition(b.bundle)
 }
 
+func (b Base) Manifest() connectors.Manifest {
+	return synthesizeManifest(b.bundle)
+}
+
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
 }

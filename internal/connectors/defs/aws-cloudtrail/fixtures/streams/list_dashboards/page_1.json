@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Dashboards": [
+        {
+          "pm_record_id": "list_dashboards_fixture_1",
+          "operation": "ListDashboards",
+          "NextToken": "fixture-next-token"
+        }
+      ]
+    }
+  }
+}

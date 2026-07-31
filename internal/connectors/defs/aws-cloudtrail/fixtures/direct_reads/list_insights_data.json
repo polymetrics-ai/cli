@@ -1,0 +1,18 @@
+{
+  "operation": "aws-cloudtrail.list_insights_data",
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "DataType": "InsightsEvents",
+      "InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "operation": "ListInsightsData",
+      "pm_record_id": "list_insights_data_fixture_1"
+    }
+  }
+}

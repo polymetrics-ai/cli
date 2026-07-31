@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Trails": [
+        {
+          "pm_record_id": "list_trails_fixture_1",
+          "operation": "ListTrails",
+          "NextToken": "fixture-next-token"
+        }
+      ]
+    }
+  }
+}

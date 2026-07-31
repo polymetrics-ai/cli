@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "EventDataStores": [
+        {
+          "pm_record_id": "list_event_data_stores_fixture_1",
+          "operation": "ListEventDataStores",
+          "NextToken": "fixture-next-token"
+        }
+      ]
+    }
+  }
+}

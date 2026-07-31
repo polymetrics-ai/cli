@@ -1,0 +1,17 @@
+{
+  "operation": "aws-cloudtrail.get_query_results",
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "QueryId": "11111111-1111-1111-1111-111111111111"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "operation": "GetQueryResults",
+      "pm_record_id": "get_query_results_fixture_1"
+    }
+  }
+}
