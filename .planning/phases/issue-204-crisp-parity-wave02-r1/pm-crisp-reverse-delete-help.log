@@ -1,0 +1,35 @@
+NAME
+  pm crisp reverse delete-a-website - Delete A Website
+
+SYNOPSIS
+  pm crisp reverse delete-a-website [flags]
+
+DESCRIPTION
+  Delete A Website
+
+INTENT
+  reverse_etl
+
+AVAILABILITY
+  planned
+
+OPERATION
+  crisp.delete-a-website
+
+APPROVAL
+  reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required
+
+RISK
+  critical
+
+NOTES
+  DELETE /v1/website/{website_id}; lane=reverse_etl_write; planned fixed Crisp operation metadata only, not a raw API escape hatch.
+
+FLAGS
+  --website-id (string): The website identifier maps_to=record.website_id
+  --verify (string): User identity verification challenge (used to double-authenticate deletion) maps_to=record.verify
+
+GLOBAL FLAGS
+  --credential (string): Credential profile name; never pass token values as flags. maps_to=config.credential
+  --limit (integer): Maximum PM records/items to emit when a future typed command supports pagination. maps_to=query.limit
+  --json (boolean): Render machine-readable output for future implemented commands.

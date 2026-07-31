@@ -1,0 +1,8 @@
+=== RUN   TestConformance
+=== RUN   TestConformance/crisp
+--- PASS: TestConformance (2.10s)
+    --- PASS: TestConformance/crisp (0.00s)
+=== RUN   TestConformance_EmptyDefsTreePassesTrivially
+--- PASS: TestConformance_EmptyDefsTreePassesTrivially (0.00s)
+PASS
+ok  	polymetrics.ai/internal/connectors/conformance	2.439s

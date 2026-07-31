@@ -1,0 +1,8 @@
+## Red validation before connector bundle
+$ go run ./cmd/connectorgen validate internal/connectors/defs/crisp
+connectorgen validate: validate: read root: open .: no such file or directory
+exit status 1
+exit=1
+$ go test ./internal/connectors/conformance -run 'TestConformance/crisp' -count=1
+ok  	polymetrics.ai/internal/connectors/conformance	2.425s
+exit=0

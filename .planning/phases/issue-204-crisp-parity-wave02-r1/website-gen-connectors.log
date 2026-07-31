@@ -1,0 +1,7 @@
+Wrote 550 connectors to data/connectors.generated.json; 334 icons copied.
+Connectors with write actions: 225
+Wrote 550 connectors to lib/connectors.catalog.generated.ts and lib/connectors.catalog.data.generated.json (10384 KB).
+Categories: {"api":546,"queue":1,"database":2,"accounting":1}
+Capabilities: {"check":548,"read":548,"write":225,"query":0,"cdc":0,"dynamicSchema":4}
+Featured: 43
+Wrote 550 connectors to lib/connectors.generated.ts (72 famous first, 478 alphabetical).

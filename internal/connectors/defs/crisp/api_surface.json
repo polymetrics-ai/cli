@@ -1,0 +1,3051 @@
+{
+  "api": "Crisp REST API V1",
+  "docs": "https://docs.crisp.chat/references/rest-api/v1/",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Complete current Crisp REST API V1 documentation inventory parsed from the official reference. Current docs expose 234 method/path rows: the parent r2 audit allocated 220 non-HEAD rows and this ledger additionally records 14 HEAD existence-check rows as planned/blocked non-data operations. DELETE/destructive/admin operations are included in scope and are not blanket-excluded.",
+  "endpoints": [
+    {
+      "method": "HEAD",
+      "path": "/v1/website",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-website-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-website-exists; title=Check If Website Exists; category=Base in Website; documented_path=/v1/website{?domain}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-website",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.create-website; title=Create Website; category=Base in Website; documented_path=/v1/website"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-website",
+        "notes": "lane=etl_read; operation_id=crisp.get-a-website; title=Get A Website; category=Base in Website; documented_path=/v1/website/{website_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-a-website",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-a-website; title=Delete A Website; category=Base in Website; documented_path=/v1/website/{website_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/expunge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#abort-website-deletion",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.abort-website-deletion; title=Abort Website Deletion; category=Base in Website; documented_path=/v1/website/{website_id}/expunge"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversations",
+        "notes": "lane=etl_read; operation_id=crisp.list-conversations; title=List Conversations; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/{page_number}{?per_page}{&search_query}{&search_type}{&search_operator}{&include_empty}{&filter_inbox_id}{&filter_unread}{&filter_resolved}{&filter_not_resolved}{&filter_mention}{&filter_assigned}{&filter_unassigned}{&filter_date_start}{&filter_date_end}{&order_date_created}{&order_date_updated}{&order_date_waiting}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/suggest/segments/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp bounded provider search/query/direct operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-conversation-segments",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.list-suggested-conversation-segments; title=List Suggested Conversation Segments; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/suggest/segments/{page_number}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversations/suggest/segment",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-conversation-segment",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.delete-suggested-conversation-segment; title=Delete Suggested Conversation Segment; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/suggest/segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/suggest/data/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp bounded provider search/query/direct operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-conversation-data-keys",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.list-suggested-conversation-data-keys; title=List Suggested Conversation Data Keys; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/suggest/data/{page_number}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversations/suggest/data",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-conversation-data-key",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.delete-suggested-conversation-data-key; title=Delete Suggested Conversation Data Key; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/suggest/data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/spams/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-spam-conversations",
+        "notes": "lane=etl_read; operation_id=crisp.list-spam-conversations; title=List Spam Conversations; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/spams/{page_number}{?filter_type}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-spam-conversation-content",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-spam-conversation-content; title=Resolve Spam Conversation Content; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/spam/{spam_id}/content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/decision",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#submit-spam-conversation-decision",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.submit-spam-conversation-decision; title=Submit Spam Conversation Decision; category=Conversations in Website; documented_path=/v1/website/{website_id}/conversations/spam/{spam_id}/decision"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.create-a-new-conversation; title=Create A New Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/conversation/{session_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-conversation-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-conversation-exists; title=Check If Conversation Exists; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-a-conversation; title=Get A Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversation/{session_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.remove-a-conversation; title=Remove A Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/initiate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initiate-a-conversation-with-existing-session",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.initiate-a-conversation-with-existing-session; title=Initiate A Conversation With Existing Session; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/initiate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-messages-in-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-messages-in-conversation; title=Get Messages In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/messages{?timestamp_before}{&timestamp_after}{&timestamp_around}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#send-a-message-in-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.send-a-message-in-conversation; title=Send A Message In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-message-in-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-a-message-in-conversation; title=Get A Message In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-a-message-in-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-a-message-in-conversation; title=Update A Message In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-message-in-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.remove-a-message-in-conversation; title=Remove A Message In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/compose",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#compose-a-message-in-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.compose-a-message-in-conversation; title=Compose A Message In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/compose"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/read",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#mark-messages-as-read-in-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.mark-messages-as-read-in-conversation; title=Mark Messages As Read In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/read"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/unread",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#mark-conversation-as-unread",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.mark-conversation-as-unread; title=Mark Conversation As Unread; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/unread"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/delivered",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#mark-messages-as-delivered-in-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.mark-messages-as-delivered-in-conversation; title=Mark Messages As Delivered In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/delivered"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/open",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-conversation-open-state",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-conversation-open-state; title=Update Conversation Open State; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/open"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/routing",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-routing-assign",
+        "notes": "lane=etl_read; operation_id=crisp.get-conversation-routing-assign; title=Get Conversation Routing Assign; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/routing"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/routing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#assign-conversation-routing",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.assign-conversation-routing; title=Assign Conversation Routing; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/routing"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/inbox",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-conversation-inbox",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-conversation-inbox; title=Update Conversation Inbox; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/meta",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-metas",
+        "notes": "lane=etl_read; operation_id=crisp.get-conversation-metas; title=Get Conversation Metas; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/meta"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/meta",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-conversation-metas",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-conversation-metas; title=Update Conversation Metas; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/meta"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/original/{original_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-an-original-message-in-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-an-original-message-in-conversation; title=Get An Original Message In Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/original/{original_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/pages/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversation-pages",
+        "notes": "lane=etl_read; operation_id=crisp.list-conversation-pages; title=List Conversation Pages; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/pages/{page_number}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/events/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp changefeed/event operation is in scope but blocked pending CDC/changefeed truthfulness foundations #2986/#2988 and connector-owned replay evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversation-events",
+        "notes": "lane=cdc_changefeed; operation_id=crisp.list-conversation-events; title=List Conversation Events; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/events/{page_number}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/files/{page_number}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp binary/file/import/export operation is in scope but blocked until a connector-owned fixed-target binary policy supplies size caps, path safety, redaction, and fixture evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversation-files",
+        "notes": "lane=binary_file; operation_id=crisp.list-conversation-files; title=List Conversation Files; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/files/{page_number}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/state",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-state",
+        "notes": "lane=etl_read; operation_id=crisp.get-conversation-state; title=Get Conversation State; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/state"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/state",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#change-conversation-state",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.change-conversation-state; title=Change Conversation State; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/state"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/relations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-relations",
+        "notes": "lane=etl_read; operation_id=crisp.get-conversation-relations; title=Get Conversation Relations; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/relations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/participants",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-participants",
+        "notes": "lane=etl_read; operation_id=crisp.get-conversation-participants; title=Get Conversation Participants; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/participants"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/participants",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-conversation-participants",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-conversation-participants; title=Save Conversation Participants; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/participants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/block",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-block-status-for-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-block-status-for-conversation; title=Get Block Status For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/block"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/block",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#block-incoming-messages-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.block-incoming-messages-for-conversation; title=Block Incoming Messages For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/block"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-verify-status-for-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-verify-status-for-conversation; title=Get Verify Status For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/verify"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-verify-status-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-verify-status-for-conversation; title=Update Verify Status For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/verify"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify/identity",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-identity-verification-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.request-identity-verification-for-conversation; title=Request Identity Verification For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/verify/identity"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify/identity/link",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#redeem-identity-verification-link-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.redeem-identity-verification-link-for-conversation; title=Redeem Identity Verification Link For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/verify/identity/link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/transcript",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-email-transcript-for-conversation",
+        "notes": "lane=binary_file; operation_id=crisp.request-email-transcript-for-conversation; title=Request Email Transcript For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/transcript"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/purge",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-chatbox-binding-purge-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.request-chatbox-binding-purge-for-conversation; title=Request Chatbox Binding Purge For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/purge"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/feedback",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-user-feedback-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.request-user-feedback-for-conversation; title=Request User Feedback For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-browsing-sessions-for-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.list-browsing-sessions-for-conversation; title=List Browsing Sessions For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/browsing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initiate-browsing-session-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.initiate-browsing-session-for-conversation; title=Initiate Browsing Session For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/browsing"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing/{browsing_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#send-action-to-an-existing-browsing-session",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.send-action-to-an-existing-browsing-session; title=Send Action To An Existing Browsing Session; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/browsing/{browsing_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing/{browsing_id}/assist",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#assist-an-existing-browsing-session",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.assist-an-existing-browsing-session; title=Assist An Existing Browsing Session; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/browsing/{browsing_id}/assist"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initiate-new-call-session-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.initiate-new-call-session-for-conversation; title=Initiate New Call Session For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-ongoing-call-session-for-conversation",
+        "notes": "lane=etl_read; operation_id=crisp.get-ongoing-call-session-for-conversation; title=Get Ongoing Call Session For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/call"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call/{call_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#abort-ongoing-call-session-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.abort-ongoing-call-session-for-conversation; title=Abort Ongoing Call Session For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/call/{call_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call/{call_id}/signaling",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#transmit-signaling-on-ongoing-call-session",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.transmit-signaling-on-ongoing-call-session; title=Transmit Signaling On Ongoing Call Session; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/call/{call_id}/signaling"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/tool",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-tool-call-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.request-tool-call-for-conversation; title=Request Tool Call For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/tool"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/widget/{plugin_id}/button",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#deliver-widget-button-action-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.deliver-widget-button-action-for-conversation; title=Deliver Widget Button Action For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/widget/{plugin_id}/button"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/widget/{plugin_id}/data",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#deliver-widget-data-action-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.deliver-widget-data-action-for-conversation; title=Deliver Widget Data Action For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/widget/{plugin_id}/data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/reminder",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#schedule-a-reminder-for-conversation",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.schedule-a-reminder-for-conversation; title=Schedule A Reminder For Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/reminder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/report",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#report-conversation",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.report-conversation; title=Report Conversation; category=Conversation in Website; documented_path=/v1/website/{website_id}/conversation/{session_id}/report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/stats",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-statistics",
+        "notes": "lane=etl_read; operation_id=crisp.get-people-statistics; title=Get People Statistics; category=People in Website; documented_path=/v1/website/{website_id}/people/stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/suggest/segments/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp bounded provider search/query/direct operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-people-segments",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.list-suggested-people-segments; title=List Suggested People Segments; category=People in Website; documented_path=/v1/website/{website_id}/people/suggest/segments/{page_number}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/suggest/segment",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-people-segment",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.delete-suggested-people-segment; title=Delete Suggested People Segment; category=People in Website; documented_path=/v1/website/{website_id}/people/suggest/segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/suggest/data/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp bounded provider search/query/direct operation is in scope but blocked pending shared provider search/query foundation #2985 and connector-owned typed command evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-people-data-keys",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.list-suggested-people-data-keys; title=List Suggested People Data Keys; category=People in Website; documented_path=/v1/website/{website_id}/people/suggest/data/{page_number}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/suggest/data",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-people-data-key",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.delete-suggested-people-data-key; title=Delete Suggested People Data Key; category=People in Website; documented_path=/v1/website/{website_id}/people/suggest/data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/suggest/events/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp changefeed/event operation is in scope but blocked pending CDC/changefeed truthfulness foundations #2986/#2988 and connector-owned replay evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-people-events",
+        "notes": "lane=cdc_changefeed; operation_id=crisp.list-suggested-people-events; title=List Suggested People Events; category=People in Website; documented_path=/v1/website/{website_id}/people/suggest/events/{page_number}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/suggest/event",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-people-event",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.delete-suggested-people-event; title=Delete Suggested People Event; category=People in Website; documented_path=/v1/website/{website_id}/people/suggest/event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/profiles/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-profiles",
+        "notes": "lane=etl_read; operation_id=crisp.list-people-profiles; title=List People Profiles; category=People in Website; documented_path=/v1/website/{website_id}/people/profiles/{page_number}{?per_page}{&sort_field}{&sort_order}{&search_operator}{&search_filter}{&search_text}{&filter_date_start}{&filter_date_end}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/profile",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-new-people-profile",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.add-new-people-profile; title=Add New People Profile; category=People in Website; documented_path=/v1/website/{website_id}/people/profile"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-people-profile-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-people-profile-exists; title=Check If People Profile Exists; category=People in Website; documented_path=/v1/website/{website_id}/people/profile/{people_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-profile",
+        "notes": "lane=etl_read; operation_id=crisp.get-people-profile; title=Get People Profile; category=People in Website; documented_path=/v1/website/{website_id}/people/profile/{people_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-people-profile",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-people-profile; title=Save People Profile; category=People in Website; documented_path=/v1/website/{website_id}/people/profile/{people_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-people-profile",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-people-profile; title=Update People Profile; category=People in Website; documented_path=/v1/website/{website_id}/people/profile/{people_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-people-profile",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.remove-people-profile; title=Remove People Profile; category=People in Website; documented_path=/v1/website/{website_id}/people/profile/{people_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/conversations/{people_id}/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-conversations",
+        "notes": "lane=etl_read; operation_id=crisp.list-people-conversations; title=List People Conversations; category=People in Website; documented_path=/v1/website/{website_id}/people/conversations/{people_id}/list/{page_number}{?filter_unread}{&filter_resolved}{&filter_not_resolved}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/campaigns/{people_id}/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-campaigns",
+        "notes": "lane=etl_read; operation_id=crisp.list-people-campaigns; title=List People Campaigns; category=People in Website; documented_path=/v1/website/{website_id}/people/campaigns/{people_id}/list/{page_number}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/events/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-a-people-event",
+        "notes": "lane=cdc_changefeed; operation_id=crisp.add-a-people-event; title=Add A People Event; category=People in Website; documented_path=/v1/website/{website_id}/people/events/{people_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/events/{people_id}/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp changefeed/event operation is in scope but blocked pending CDC/changefeed truthfulness foundations #2986/#2988 and connector-owned replay evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-events",
+        "notes": "lane=cdc_changefeed; operation_id=crisp.list-people-events; title=List People Events; category=People in Website; documented_path=/v1/website/{website_id}/people/events/{people_id}/list/{page_number}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/data/{people_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-data",
+        "notes": "lane=etl_read; operation_id=crisp.get-people-data; title=Get People Data; category=People in Website; documented_path=/v1/website/{website_id}/people/data/{people_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/people/data/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-people-data",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-people-data; title=Save People Data; category=People in Website; documented_path=/v1/website/{website_id}/people/data/{people_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/people/data/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-people-data",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-people-data; title=Update People Data; category=People in Website; documented_path=/v1/website/{website_id}/people/data/{people_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/subscription/{people_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-subscription-status",
+        "notes": "lane=etl_read; operation_id=crisp.get-people-subscription-status; title=Get People Subscription Status; category=People in Website; documented_path=/v1/website/{website_id}/people/subscription/{people_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/people/subscription/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-people-subscription-status",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-people-subscription-status; title=Update People Subscription Status; category=People in Website; documented_path=/v1/website/{website_id}/people/subscription/{people_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/export/profiles",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#export-people-profiles",
+        "notes": "lane=binary_file; operation_id=crisp.export-people-profiles; title=Export People Profiles; category=People in Website; documented_path=/v1/website/{website_id}/people/export/profiles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/import/profiles",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#import-people-profiles",
+        "notes": "lane=binary_file; operation_id=crisp.import-people-profiles; title=Import People Profiles; category=People in Website; documented_path=/v1/website/{website_id}/people/import/profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/count",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#count-visitors",
+        "notes": "lane=etl_read; operation_id=crisp.count-visitors; title=Count Visitors; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-visitors",
+        "notes": "lane=etl_read; operation_id=crisp.list-visitors; title=List Visitors; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/list/{page_number}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/map",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#pinpoint-visitors-on-a-map",
+        "notes": "lane=etl_read; operation_id=crisp.pinpoint-visitors-on-a-map; title=Pinpoint Visitors On A Map; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/map{?center_latitude}{&center_longitude}{&center_radius}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/token/{token_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-session-identifier-from-token",
+        "notes": "lane=etl_read; operation_id=crisp.get-session-identifier-from-token; title=Get Session Identifier From Token; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/token/{token_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/blocked",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#count-blocked-visitors",
+        "notes": "lane=etl_read; operation_id=crisp.count-blocked-visitors; title=Count Blocked Visitors; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/blocked"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/blocked/{block_rule}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#count-blocked-visitors-in-rule",
+        "notes": "lane=etl_read; operation_id=crisp.count-blocked-visitors-in-rule; title=Count Blocked Visitors In Rule; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/blocked/{block_rule}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/visitors/blocked/{block_rule}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#clear-blocked-visitors-in-rule",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.clear-blocked-visitors-in-rule; title=Clear Blocked Visitors In Rule; category=Visitors in Website; documented_path=/v1/website/{website_id}/visitors/blocked/{block_rule}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/availability/status",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-availability-status",
+        "notes": "lane=etl_read; operation_id=crisp.get-website-availability-status; title=Get Website Availability Status; category=Availability in Website; documented_path=/v1/website/{website_id}/availability/status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/availability/operators",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-website-operator-availabilities",
+        "notes": "lane=etl_read; operation_id=crisp.list-website-operator-availabilities; title=List Website Operator Availabilities; category=Availability in Website; documented_path=/v1/website/{website_id}/availability/operators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/operators/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-website-operators",
+        "notes": "lane=etl_read; operation_id=crisp.list-website-operators; title=List Website Operators; category=Operators in Website; documented_path=/v1/website/{website_id}/operators/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/operators/active",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-last-active-website-operators",
+        "notes": "lane=etl_read; operation_id=crisp.list-last-active-website-operators; title=List Last Active Website Operators; category=Operators in Website; documented_path=/v1/website/{website_id}/operators/active"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/operators/active",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#flush-last-active-website-operators",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.flush-last-active-website-operators; title=Flush Last Active Website Operators; category=Operators in Website; documented_path=/v1/website/{website_id}/operators/active"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/operators/email",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#send-email-to-website-operators",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.send-email-to-website-operators; title=Send Email To Website Operators; category=Operators in Website; documented_path=/v1/website/{website_id}/operators/email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/operator/{user_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-website-operator",
+        "notes": "lane=etl_read; operation_id=crisp.get-a-website-operator; title=Get A Website Operator; category=Operator in Website; documented_path=/v1/website/{website_id}/operator/{user_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/operator",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#invite-a-website-operator",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.invite-a-website-operator; title=Invite A Website Operator; category=Operator in Website; documented_path=/v1/website/{website_id}/operator"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/operator/{user_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#change-operator-membership",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.change-operator-membership; title=Change Operator Membership; category=Operator in Website; documented_path=/v1/website/{website_id}/operator/{user_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/operator/{user_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unlink-operator-from-website",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.unlink-operator-from-website; title=Unlink Operator From Website; category=Operator in Website; documented_path=/v1/website/{website_id}/operator/{user_id}"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-exists; title=Check If Helpdesk Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk; title=Resolve Helpdesk; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initialize-helpdesk",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.initialize-helpdesk; title=Initialize Helpdesk; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk; title=Delete Helpdesk; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locales/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locales",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-locales; title=List Helpdesk Locales; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locales/{page_number}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-locale",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.add-helpdesk-locale; title=Add Helpdesk Locale; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-locale-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-locale-exists; title=Check If Helpdesk Locale Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale; title=Resolve Helpdesk Locale; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk-locale; title=Delete Helpdesk Locale; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/articles/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-articles",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-locale-articles; title=List Helpdesk Locale Articles; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/articles/{page_number}{?order_visits}{&search_title}{&filter_category_id}{&filter_section_id}{&filter_status_published}{&filter_status_draft}{&filter_visibility_visible}{&filter_visibility_hidden}{&filter_date_start}{&filter_date_end}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-a-new-helpdesk-locale-article",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.add-a-new-helpdesk-locale-article; title=Add A New Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-locale-article-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-locale-article-exists; title=Check If Helpdesk Locale Article Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale-article; title=Resolve Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-article",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-helpdesk-locale-article; title=Save Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-article",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-helpdesk-locale-article; title=Update Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-article",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk-locale-article; title=Delete Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/page",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article-page",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale-article-page; title=Resolve Helpdesk Locale Article Page; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/category",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article-category",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale-article-category; title=Resolve Helpdesk Locale Article Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/category"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/category",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-article-category",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-helpdesk-locale-article-category; title=Update Helpdesk Locale Article Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-article-alternates",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-locale-article-alternates; title=List Helpdesk Locale Article Alternates; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternates"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-locale-article-alternate-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-locale-article-alternate-exists; title=Check If Helpdesk Locale Article Alternate Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article-alternate",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale-article-alternate; title=Resolve Helpdesk Locale Article Alternate; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-article-alternate",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-helpdesk-locale-article-alternate; title=Save Helpdesk Locale Article Alternate; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-article-alternate",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk-locale-article-alternate; title=Delete Helpdesk Locale Article Alternate; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/publish",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#publish-helpdesk-locale-article",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.publish-helpdesk-locale-article; title=Publish Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/publish"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/unpublish",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unpublish-helpdesk-locale-article",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.unpublish-helpdesk-locale-article; title=Unpublish Helpdesk Locale Article; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/unpublish"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/categories/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-categories",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-locale-categories; title=List Helpdesk Locale Categories; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/categories/{page_number}{?search_name}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-locale-category",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.add-helpdesk-locale-category; title=Add Helpdesk Locale Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-locale-category-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-locale-category-exists; title=Check If Helpdesk Locale Category Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-category",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale-category; title=Resolve Helpdesk Locale Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-category",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-helpdesk-locale-category; title=Save Helpdesk Locale Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-category",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-helpdesk-locale-category; title=Update Helpdesk Locale Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-category",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk-locale-category; title=Delete Helpdesk Locale Category; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/sections/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-sections",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-locale-sections; title=List Helpdesk Locale Sections; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/sections/{page_number}{?search_name}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-locale-section",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.add-helpdesk-locale-section; title=Add Helpdesk Locale Section; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-locale-section-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-locale-section-exists; title=Check If Helpdesk Locale Section Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-section",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-locale-section; title=Resolve Helpdesk Locale Section; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-section",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-helpdesk-locale-section; title=Save Helpdesk Locale Section; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-section",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-helpdesk-locale-section; title=Update Helpdesk Locale Section; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-section",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk-locale-section; title=Delete Helpdesk Locale Section; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/feedback/ratings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#map-helpdesk-locale-feedback-ratings",
+        "notes": "lane=etl_read; operation_id=crisp.map-helpdesk-locale-feedback-ratings; title=Map Helpdesk Locale Feedback Ratings; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/feedback/ratings{?filter_date_start}{&filter_date_end}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/feedback/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-feedbacks",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-locale-feedbacks; title=List Helpdesk Locale Feedbacks; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/feedback/list/{page_number}{?filter_date_start}{&filter_date_end}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/import",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#import-external-helpdesk-to-locale",
+        "notes": "lane=binary_file; operation_id=crisp.import-external-helpdesk-to-locale; title=Import External Helpdesk To Locale; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/export",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#export-helpdesk-locale-articles",
+        "notes": "lane=binary_file; operation_id=crisp.export-helpdesk-locale-articles; title=Export Helpdesk Locale Articles; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/locale/{locale}/export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/redirections/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-redirections",
+        "notes": "lane=etl_read; operation_id=crisp.list-helpdesk-redirections; title=List Helpdesk Redirections; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/redirections/{page_number}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/redirection",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-redirection",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.add-helpdesk-redirection; title=Add Helpdesk Redirection; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/redirection"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/helpdesk/redirection/{redirection_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-helpdesk-redirection-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-helpdesk-redirection-exists; title=Check If Helpdesk Redirection Exists; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/redirection/{redirection_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/redirection/{redirection_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-redirection",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-redirection; title=Resolve Helpdesk Redirection; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/redirection/{redirection_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/redirection/{redirection_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-redirection",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-helpdesk-redirection; title=Delete Helpdesk Redirection; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/redirection/{redirection_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-settings",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-settings; title=Resolve Helpdesk Settings; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/settings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-settings",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-helpdesk-settings; title=Save Helpdesk Settings; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/domain",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-domain",
+        "notes": "lane=etl_read; operation_id=crisp.resolve-helpdesk-domain; title=Resolve Helpdesk Domain; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/domain"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/domain",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-helpdesk-domain-change",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.request-helpdesk-domain-change; title=Request Helpdesk Domain Change; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/domain/setup",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#generate-helpdesk-domain-setup-flow",
+        "notes": "lane=etl_read; operation_id=crisp.generate-helpdesk-domain-setup-flow; title=Generate Helpdesk Domain Setup Flow; category=Helpdesk in Website; documented_path=/v1/website/{website_id}/helpdesk/domain/setup{?custom}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaigns",
+        "notes": "lane=etl_read; operation_id=crisp.list-campaigns; title=List Campaigns; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/list/{page_number}{?search_name}{&filter_tag}{&filter_type_one_shot}{&filter_type_automated}{&filter_status_not_configured}{&filter_status_ready}{&filter_status_paused}{&filter_status_sending}{&filter_status_done}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-tags",
+        "notes": "lane=etl_read; operation_id=crisp.list-campaign-tags; title=List Campaign Tags; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/templates/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-templates",
+        "notes": "lane=etl_read; operation_id=crisp.list-campaign-templates; title=List Campaign Templates; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/templates/{page_number}{?search_name}{&filter_type_static}{&filter_type_custom}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaigns/template",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-campaign-template",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.create-a-new-campaign-template; title=Create A New Campaign Template; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/template"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-campaign-template-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-campaign-template-exists; title=Check If Campaign Template Exists; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/template/{template_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-campaign-template",
+        "notes": "lane=etl_read; operation_id=crisp.get-a-campaign-template; title=Get A Campaign Template; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/template/{template_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-a-campaign-template",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-a-campaign-template; title=Save A Campaign Template; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/template/{template_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-a-campaign-template",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-a-campaign-template; title=Update A Campaign Template; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/template/{template_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-campaign-template",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.remove-a-campaign-template; title=Remove A Campaign Template; category=Campaigns in Website; documented_path=/v1/website/{website_id}/campaigns/template/{template_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.create-a-new-campaign; title=Create A New Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-campaign-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-campaign-exists; title=Check If Campaign Exists; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-campaign",
+        "notes": "lane=etl_read; operation_id=crisp.get-a-campaign; title=Get A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-a-campaign; title=Save A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-a-campaign; title=Update A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.remove-a-campaign; title=Remove A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/dispatch",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#dispatch-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.dispatch-a-campaign; title=Dispatch A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}/dispatch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/resume",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resume-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.resume-a-campaign; title=Resume A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}/resume"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/pause",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#pause-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.pause-a-campaign; title=Pause A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}/pause"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/test",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#test-a-campaign",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.test-a-campaign; title=Test A Campaign; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}/test"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/recipients/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-recipients",
+        "notes": "lane=etl_read; operation_id=crisp.list-campaign-recipients; title=List Campaign Recipients; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}/recipients/{page_number}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/statistics/{type}/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-statistics",
+        "notes": "lane=etl_read; operation_id=crisp.list-campaign-statistics; title=List Campaign Statistics; category=Campaign in Website; documented_path=/v1/website/{website_id}/campaign/{campaign_id}/statistics/{type}/{page_number}{?per_page}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/analytics/generate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#generate-analytics",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.generate-analytics; title=Generate Analytics; category=Analytics in Website; documented_path=/v1/website/{website_id}/analytics/generate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/resolve",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-resolve-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-resolve-items; title=Batch Resolve Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/resolve"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/unresolve",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-unresolve-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-unresolve-items; title=Batch Unresolve Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/unresolve"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/read",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-read-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-read-items; title=Batch Read Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/read"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/unread",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-unread-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-unread-items; title=Batch Unread Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/unread"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/batch/report",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-report-items",
+        "notes": "lane=direct_read_query_search; operation_id=crisp.batch-report-items; title=Batch Report Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/report"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/block",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-block-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-block-items; title=Batch Block Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/block"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/routing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-routing-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-routing-items; title=Batch Routing Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/routing"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/inbox",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-inbox-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-inbox-items; title=Batch Inbox Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/inbox"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/segments",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-segments-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-segments-items; title=Batch Segments Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/segments"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/data",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-data-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-data-items; title=Batch Data Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/data"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/remove",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-remove-items",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-remove-items; title=Batch Remove Items; category=Batch in Website; documented_path=/v1/website/{website_id}/batch/remove"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/inboxes/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-website-inboxes",
+        "notes": "lane=etl_read; operation_id=crisp.list-website-inboxes; title=List Website Inboxes; category=Inbox in Website; documented_path=/v1/website/{website_id}/inboxes/list/{page_number}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/inboxes/batch/order",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-order-website-inboxes",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.batch-order-website-inboxes; title=Batch Order Website Inboxes; category=Inbox in Website; documented_path=/v1/website/{website_id}/inboxes/batch/order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/inbox",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-website-inbox",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.create-a-new-website-inbox; title=Create A New Website Inbox; category=Inbox in Website; documented_path=/v1/website/{website_id}/inbox"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-if-website-inbox-exists",
+        "notes": "lane=head_check; operation_id=crisp.check-if-website-inbox-exists; title=Check If Website Inbox Exists; category=Inbox in Website; documented_path=/v1/website/{website_id}/inbox/{inbox_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-inbox",
+        "notes": "lane=etl_read; operation_id=crisp.get-website-inbox; title=Get Website Inbox; category=Inbox in Website; documented_path=/v1/website/{website_id}/inbox/{inbox_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-website-inbox",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-website-inbox; title=Save Website Inbox; category=Inbox in Website; documented_path=/v1/website/{website_id}/inbox/{inbox_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-website-inbox",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.delete-website-inbox; title=Delete Website Inbox; category=Inbox in Website; documented_path=/v1/website/{website_id}/inbox/{inbox_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-settings",
+        "notes": "lane=etl_read; operation_id=crisp.get-website-settings; title=Get Website Settings; category=Settings in Website; documented_path=/v1/website/{website_id}/settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/settings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-website-settings",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-website-settings; title=Update Website Settings; category=Settings in Website; documented_path=/v1/website/{website_id}/settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/verify/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-verify-settings",
+        "notes": "lane=etl_read; operation_id=crisp.get-verify-settings; title=Get Verify Settings; category=Verify in Website; documented_path=/v1/website/{website_id}/verify/settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/verify/settings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-verify-settings",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-verify-settings; title=Update Verify Settings; category=Verify in Website; documented_path=/v1/website/{website_id}/verify/settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/verify/key",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-verify-key",
+        "notes": "lane=etl_read; operation_id=crisp.get-verify-key; title=Get Verify Key; category=Verify in Website; documented_path=/v1/website/{website_id}/verify/key"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/verify/key",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#roll-verify-key",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.roll-verify-key; title=Roll Verify Key; category=Verify in Website; documented_path=/v1/website/{website_id}/verify/key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/connect/endpoints",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-connect-endpoints",
+        "notes": "lane=etl_read; operation_id=crisp.get-website-connect-endpoints; title=Get Website Connect Endpoints; category=Connect in Website; documented_path=/v1/website/{website_id}/connect/endpoints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-all-active-subscriptions",
+        "notes": "lane=etl_read; operation_id=crisp.list-all-active-subscriptions; title=List All Active Subscriptions; category=Subscription in Plugin; documented_path=/v1/plugins/subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-subscriptions-for-a-website",
+        "notes": "lane=etl_read; operation_id=crisp.list-subscriptions-for-a-website; title=List Subscriptions For A Website; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-subscription-details",
+        "notes": "lane=etl_read; operation_id=crisp.get-subscription-details; title=Get Subscription Details; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#subscribe-website-to-plugin",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.subscribe-website-to-plugin; title=Subscribe Website To Plugin; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unsubscribe-plugin-from-website",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.unsubscribe-plugin-from-website; title=Unsubscribe Plugin From Website; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-subscription-settings",
+        "notes": "lane=etl_read; operation_id=crisp.get-subscription-settings; title=Get Subscription Settings; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/settings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-subscription-settings",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.save-subscription-settings; title=Save Subscription Settings; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/settings"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/settings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-subscription-settings",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.update-subscription-settings; title=Update Subscription Settings; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/bill/usage",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-plugin-usage-bills",
+        "notes": "lane=etl_read; operation_id=crisp.get-plugin-usage-bills; title=Get Plugin Usage Bills; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/bill/usage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/bill/usage",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#report-plugin-usage-to-bill",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.report-plugin-usage-to-bill; title=Report Plugin Usage To Bill; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/bill/usage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/attest/provenance",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-plugin-attest-provenance",
+        "notes": "lane=etl_read; operation_id=crisp.get-plugin-attest-provenance; title=Get Plugin Attest Provenance; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/attest/provenance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/channel",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#forward-plugin-payload-to-channel",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.forward-plugin-payload-to-channel; title=Forward Plugin Payload To Channel; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/event",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#dispatch-plugin-event",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.dispatch-plugin-event; title=Dispatch Plugin Event; category=Subscription in Plugin; documented_path=/v1/plugins/subscription/{website_id}/{plugin_id}/event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/account",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-connect-account",
+        "notes": "lane=etl_read; operation_id=crisp.get-connect-account; title=Get Connect Account; category=Connect Account in Plugin; documented_path=/v1/plugin/connect/account"
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v1/plugin/connect/session",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp HEAD existence-check operation is documented in the current REST API but is non-data and blocked until a typed check/direct-read contract exists.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-connect-session-validity",
+        "notes": "lane=head_check; operation_id=crisp.check-connect-session-validity; title=Check Connect Session Validity; category=Connect Session in Plugin; documented_path=/v1/plugin/connect/session"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/websites/all/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-all-connect-websites",
+        "notes": "lane=etl_read; operation_id=crisp.list-all-connect-websites; title=List All Connect Websites; category=Connect Websites in Plugin; documented_path=/v1/plugin/connect/websites/all/{page_number}{?filter_configured}{&include_plan}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/websites/since",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-connect-websites-since",
+        "notes": "lane=etl_read; operation_id=crisp.list-connect-websites-since; title=List Connect Websites Since; category=Connect Websites in Plugin; documented_path=/v1/plugin/connect/websites/since{?date_since}{&filter_configured}{&include_plan}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/endpoints",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-connect-endpoints",
+        "notes": "lane=etl_read; operation_id=crisp.get-connect-endpoints; title=Get Connect Endpoints; category=Connect Endpoints in Plugin; documented_path=/v1/plugin/connect/endpoints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans/subscription",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-all-active-plan-subscriptions",
+        "notes": "lane=etl_read; operation_id=crisp.list-all-active-plan-subscriptions; title=List All Active Plan Subscriptions; category=Subscription in Plan; documented_path=/v1/plans/subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans/subscription/{website_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-plan-subscription-for-a-website",
+        "notes": "lane=etl_read; operation_id=crisp.get-plan-subscription-for-a-website; title=Get Plan Subscription For A Website; category=Subscription in Plan; documented_path=/v1/plans/subscription/{website_id}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plans/subscription/{website_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#subscribe-website-to-plan",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.subscribe-website-to-plan; title=Subscribe Website To Plan; category=Subscription in Plan; documented_path=/v1/plans/subscription/{website_id}"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/plans/subscription/{website_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp DELETE/destructive operation is in scope but blocked until a named reverse-ETL action supplies schema, redaction, idempotency notes, plan -> preview -> explicit approval -> execute, and typed destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unsubscribe-plan-from-website",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.unsubscribe-plan-from-website; title=Unsubscribe Plan From Website; category=Subscription in Plan; documented_path=/v1/plans/subscription/{website_id}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/plans/subscription/{website_id}/bill/period",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#change-bill-period-for-website-plan-subscription",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.change-bill-period-for-website-plan-subscription; title=Change Bill Period For Website Plan Subscription; category=Subscription in Plan; documented_path=/v1/plans/subscription/{website_id}/bill/period"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans/subscription/{website_id}/coupon",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp ETL/read operation is in scope but blocked until a connector-owned fixture-backed stream, schema, pagination/cursor policy, and conformance evidence are added.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-coupon-availability-for-website-plan-subscription",
+        "notes": "lane=etl_read; operation_id=crisp.check-coupon-availability-for-website-plan-subscription; title=Check Coupon Availability For Website Plan Subscription; category=Subscription in Plan; documented_path=/v1/plans/subscription/{website_id}/coupon{?code}"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/plans/subscription/{website_id}/coupon",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#redeem-coupon-for-website-plan-subscription",
+        "notes": "lane=reverse_etl_write; operation_id=crisp.redeem-coupon-for-website-plan-subscription; title=Redeem Coupon For Website Plan Subscription; category=Subscription in Plan; documented_path=/v1/plans/subscription/{website_id}/coupon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/bucket/url/generate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp non-read REST operation is in scope but blocked until a named typed action supplies schema, redaction, risk text, fixture evidence, and plan -> preview -> explicit approval -> execute.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#generate-bucket-url",
+        "notes": "lane=binary_file; operation_id=crisp.generate-bucket-url; title=Generate Bucket URL; category=URL in Bucket; documented_path=/v1/bucket/url/generate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/media/animation/list/{page_number}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp binary/file/import/export operation is in scope but blocked until a connector-owned fixed-target binary policy supplies size caps, path safety, redaction, and fixture evidence.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-animation-medias",
+        "notes": "lane=binary_file; operation_id=crisp.list-animation-medias; title=List Animation Medias; category=Animation in Media; documented_path=/v1/media/animation/list/{page_number}{?per_page}{?search_query}{&list_id}"
+      }
+    }
+  ]
+}

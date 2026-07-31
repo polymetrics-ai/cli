@@ -1,0 +1,1 @@
+wrote /Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/defs/crisp with 234 operations; lanes={'binary_file': 8, 'cdc_changefeed': 4, 'direct_read_query_search': 12, 'etl_read': 82, 'head_check': 14, 'reverse_etl_write': 114}; methods={'DELETE': 26, 'GET': 91, 'HEAD': 14, 'PATCH': 44, 'POST': 47, 'PUT': 12}

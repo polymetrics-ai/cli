@@ -1,0 +1,313 @@
+ok  	polymetrics.ai/build/windowsversion	0.345s
+ok  	polymetrics.ai/cmd/connectorgen	20.211s
+ok  	polymetrics.ai/cmd/iconregistrygen	0.761s
+ok  	polymetrics.ai/cmd/pm	0.737s
+ok  	polymetrics.ai/cmd/prissueguard	0.987s
+ok  	polymetrics.ai/internal/agentmode	1.300s
+ok  	polymetrics.ai/internal/app	67.834s
+redis: 2026/07/31 15:39:46 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:39:47 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:39:47 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:39:48 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:39:50 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/31 15:39:50 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/31 15:39:51 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/31 15:39:51 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:2: connect: connection refused
+redis: 2026/07/31 15:46:56 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:46:56 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:46:56 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+redis: 2026/07/31 15:46:57 pool.go:724: redis: connection pool: failed to dial after 5 attempts: dial tcp 127.0.0.1:1: connect: connection refused
+panic: test timed out after 10m0s
+	running tests:
+		TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked (1m58s)
+		TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked/fhir_patient-read (2s)
+
+goroutine 313 [running]:
+testing.(*M).startAlarm.func1()
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2802 +0x2cc
+created by time.goFunc
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/time/sleep.go:215 +0x38
+
+goroutine 1 [chan receive, 1 minutes]:
+testing.(*T).Run(0x22b93e28c6c8, {0x103ea9f65?, 0x1622987003088860?}, 0x106f7b290)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2109 +0x3bc
+testing.runTests.func1(0x22b93e28c6c8)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2585 +0x40
+testing.tRunner(0x22b93e28c6c8, 0x22b93e31fc18)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2036 +0xc4
+testing.runTests({0x103e0b591, 0xe}, {0x103e324f3, 0x1b}, 0x22b93e213cc8, {0x1071395e0, 0x85, 0x85}, {0x7?, 0x22b93e0ff680?, ...})
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2583 +0x3f0
+testing.(*M).Run(0x22b93e1655e0)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2443 +0x578
+polymetrics.ai/internal/cli_test.TestMain(0x106fb1858?)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/certify_cli_test.go:21 +0x4c
+main.main()
+	_testmain.go:314 +0x88
+
+goroutine 105 [chan receive]:
+testing.(*T).Run(0x22b943a80fc8, {0x22b942cd47b0?, 0x105df3948?}, 0x22b940278cc0)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2109 +0x3bc
+polymetrics.ai/internal/cli_test.TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked(0x22b943a80fc8)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli_test.go:864 +0xe8
+testing.tRunner(0x22b943a80fc8, 0x106f7b290)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2036 +0xc4
+created by testing.(*T).Run in goroutine 1
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2101 +0x3a8
+
+goroutine 275 [runnable]:
+encoding/json.stateInString(0x22b941b8a200, 0x98)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/encoding/json/scanner.go:339
+encoding/json.(*Decoder).readValue(0x22b941b8a140)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/encoding/json/stream.go:105 +0xf0
+encoding/json.(*Decoder).Decode(0x22b941b8a140, {0x106be5160, 0x22b941b85620})
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/encoding/json/stream.go:65 +0x5c
+polymetrics.ai/internal/connectors/engine.mustDecodeAny({0x22b941bc8000, 0x18545, 0x103e0669b?})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:1681 +0xe4
+polymetrics.ai/internal/connectors/engine.loadWrites({0x106f8a160, 0x22b941ac16c0}, {0x103e028fc, 0x8})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:1030 +0x124
+polymetrics.ai/internal/connectors/engine.Load({_, _}, {_, _})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:889 +0x500
+polymetrics.ai/internal/connectors/engine.LoadAll({0x106f8a6e0, 0x106fdf1c0})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:843 +0x328
+polymetrics.ai/internal/connectors/bundleregistry.New()
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/bundleregistry/registry.go:16 +0x34
+polymetrics.ai/internal/cli.appRegistry(...)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli.go:1680
+polymetrics.ai/internal/cli.runMaybeConnectorCommand({0x106fa1c18, 0x107175be0}, {0x105df3958, 0x1}, {0x103dfc307, 0x6}, {0x22b942d87150, 0x3, 0x3}, {0x106f89fc0, ...}, ...)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli.go:632 +0x13c
+polymetrics.ai/internal/cli.newRootCmd.func1(0x22b94303c008?, {0x22b942d87140?, 0x4?, 0x4?})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cobra_router.go:62 +0x1dc
+polymetrics.ai/internal/cli.executeRootCmd(0x22b94303c008, {0x22b942d87140, 0x4, 0x4})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cobra_router.go:78 +0x158
+polymetrics.ai/internal/cli.Run({0x22b941f081e0, 0x4, 0x6}, {0x106f89fc0, 0x22b9431040f0}, {0x106f89fc0, 0x22b943104120})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli.go:41 +0x2e8
+polymetrics.ai/internal/cli_test.TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked.func1(0x22b9403606c8)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli_test.go:878 +0x558
+testing.tRunner(0x22b9403606c8, 0x22b940278cc0)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2036 +0xc4
+created by testing.(*T).Run in goroutine 105
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2101 +0x3a8
+FAIL	polymetrics.ai/internal/cli	602.396s
+ok  	polymetrics.ai/internal/config	2.687s
+ok  	polymetrics.ai/internal/connectors	2.902s
+ok  	polymetrics.ai/internal/connectors/boundary	111.623s
+--- FAIL: TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides (1.97s)
+    registry_test.go:19: bundle count = 550, want 549
+FAIL
+FAIL	polymetrics.ai/internal/connectors/bundleregistry	10.837s
+panic: test timed out after 10m0s
+	running tests:
+		TestWriteStagesSelfTestAgainstOutbox (27s)
+
+goroutine 4 [running]:
+testing.(*M).startAlarm.func1()
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2802 +0x2cc
+created by time.goFunc
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/time/sleep.go:215 +0x38
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0x1b1b5fd0c6c8, {0x1019a1704?, 0x18b9f8a800be4860?}, 0x104aac080)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2109 +0x3bc
+testing.runTests.func1(0x1b1b5fd0c6c8)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2585 +0x40
+testing.tRunner(0x1b1b5fd0c6c8, 0x1b1b5fd9fc18)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2036 +0xc4
+testing.runTests({0x10195016d, 0xe}, {0x1019bb156, 0x2a}, 0x1b1b5fc95cb0, {0x104c6bfa0, 0x6e, 0x6e}, {0x6?, 0x1b1b5fb775b8?, ...})
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2583 +0x3f0
+testing.(*M).Run(0x1b1b5fbe32c0)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2443 +0x578
+polymetrics.ai/internal/connectors/certify_test.TestMain(0x104ae2358?)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/certify_testmain_test.go:20 +0x4c
+main.main()
+	_testmain.go:268 +0x88
+
+goroutine 276 [runnable]:
+polymetrics.ai/internal/connectors/engine.compileNode(0x1b1b64e5f020)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/schema.go:118 +0x1d4
+polymetrics.ai/internal/connectors/engine.compileNode(0x1b1b64e5ef30)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/schema.go:133 +0x474
+polymetrics.ai/internal/connectors/engine.CompileSchema({0x1b1b64e24900, 0x85c, 0x900})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/schema.go:93 +0xd4
+polymetrics.ai/internal/connectors/engine.loadSpec({0x104abab20?, 0x1b1b64d716c0?}, {0x10194cbff, 0xb})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:985 +0x1f0
+polymetrics.ai/internal/connectors/engine.Load({_, _}, {_, _})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:879 +0x40c
+polymetrics.ai/internal/connectors/engine.LoadAll({0x104abaa20, 0x104b0fae0})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/engine/bundle.go:843 +0x328
+polymetrics.ai/internal/connectors/bundleregistry.New()
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/bundleregistry/registry.go:16 +0x34
+polymetrics.ai/internal/app.Open({0x1b1b6397e410?, 0x4e7e77f9177564a6?})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/app/app.go:116 +0x1e0
+polymetrics.ai/internal/cli.withApp({0x1b1b6397e410?, 0x1b1b61f324e0?}, 0x1b1b60aa1c30)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli.go:1653 +0x24
+polymetrics.ai/internal/cli.cobraLegacyCommands.func7({0x104ad25b8?, 0x104ca7580?}, {0x1b1b6397e410?, 0x100f67c98?}, {0x1b1b64d124b0?, 0x10188ffc8?, 0x1b1b5fd99d28?}, {0x104aba9e0?, 0x1b1b64ddbb00?}, 0x96?)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cobra_router.go:111 +0x78
+polymetrics.ai/internal/cli.newLegacyCobraCommand.func1(0x1b1b653cb100?, {0x1b1b64d124b0?, 0x4?, 0x10193efee?})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cobra_router.go:167 +0x214
+github.com/spf13/cobra.(*Command).execute(0x1b1b60e69b08, {0x1b1b64d124b0, 0x3, 0x3})
+	/Users/karthiksivadas/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1015 +0x814
+github.com/spf13/cobra.(*Command).ExecuteC(0x1b1b63f3b808)
+	/Users/karthiksivadas/go/pkg/mod/github.com/spf13/cobra@v1.10.2/command.go:1148 +0x350
+polymetrics.ai/internal/cli.executeRootCmd(0x1b1b63f3b808, {0x1b1b60b73680, 0x4, 0x4?})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cobra_router.go:84 +0x128
+polymetrics.ai/internal/cli.Run({0x1b1b661b7180, 0x7, 0x7}, {0x104aba9e0, 0x1b1b64ddbb00}, {0x104aba9e0, 0x1b1b64ddbb30})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/cli/cli.go:41 +0x2e8
+polymetrics.ai/internal/connectors/certify.(*Harness).Run(0x1b1b63b280c0, {0x1b1b61c0f450, 0x5, 0x5})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/cliharness.go:96 +0x26c
+polymetrics.ai/internal/connectors/certify.(*runContext).run(0x1b1b62e1f400, {0x1b1b61c0f450?, 0x372?, 0x0?})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_source.go:164 +0x48
+polymetrics.ai/internal/connectors/certify.assertNoDuplicatePKs(0x1b1b62e1f400, {0x1b1b6574eac0, 0x20})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_source.go:464 +0xb4
+polymetrics.ai/internal/connectors/certify.stageFullRefreshOverwriteDeduped.func3()
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_source.go:1020 +0x204
+polymetrics.ai/internal/connectors/certify.recordStage(0x1b1b62e1f400?, 0x1b1b62df7b88, {0x101997fe2, 0x22}, 0x1, 0x1b1b6050ed70)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_source.go:317 +0xbc
+polymetrics.ai/internal/connectors/certify.stageFullRefreshOverwriteDeduped(0x1b1b62e1f400, 0x1b1b62df7b88)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_source.go:1015 +0x17c
+polymetrics.ai/internal/connectors/certify.(*Runner).Run(_, {_, _})
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_source.go:278 +0xe10
+polymetrics.ai/internal/connectors/certify_test.TestWriteStagesSelfTestAgainstOutbox(0x1b1b6387db08)
+	/Users/karthiksivadas/.treehouse/cli-83d592/22/cli/internal/connectors/certify/stages_write_test.go:32 +0x150
+testing.tRunner(0x1b1b6387db08, 0x104aac080)
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2036 +0xc4
+created by testing.(*T).Run in goroutine 1
+	/opt/homebrew/Cellar/go/1.26.5/libexec/src/testing/testing.go:2101 +0x3a8
+FAIL	polymetrics.ai/internal/connectors/certify	604.226s
+ok  	polymetrics.ai/internal/connectors/commandrunner	14.856s
+ok  	polymetrics.ai/internal/connectors/conformance	41.879s
+ok  	polymetrics.ai/internal/connectors/connsdk	4.640s
+ok  	polymetrics.ai/internal/connectors/defs	7.244s
+ok  	polymetrics.ai/internal/connectors/engine	6.512s
+ok  	polymetrics.ai/internal/connectors/hooks/akeneo	3.698s
+ok  	polymetrics.ai/internal/connectors/hooks/alpha-vantage	1.467s
+ok  	polymetrics.ai/internal/connectors/hooks/amazon-ads	0.641s
+ok  	polymetrics.ai/internal/connectors/hooks/amazon-seller-partner	0.656s
+ok  	polymetrics.ai/internal/connectors/hooks/apify-dataset	0.640s
+ok  	polymetrics.ai/internal/connectors/hooks/apple-search-ads	0.651s
+ok  	polymetrics.ai/internal/connectors/hooks/appsflyer	0.663s
+ok  	polymetrics.ai/internal/connectors/hooks/ashby	0.652s
+ok  	polymetrics.ai/internal/connectors/hooks/aws-cloudtrail	0.846s
+ok  	polymetrics.ai/internal/connectors/hooks/babelforce	0.980s
+ok  	polymetrics.ai/internal/connectors/hooks/basecamp	0.974s
+ok  	polymetrics.ai/internal/connectors/hooks/blogger	1.029s
+ok  	polymetrics.ai/internal/connectors/hooks/bunny-inc	1.291s
+ok  	polymetrics.ai/internal/connectors/hooks/canny	1.303s
+ok  	polymetrics.ai/internal/connectors/hooks/chift	1.303s
+ok  	polymetrics.ai/internal/connectors/hooks/copper	1.280s
+ok  	polymetrics.ai/internal/connectors/hooks/dixa	1.307s
+ok  	polymetrics.ai/internal/connectors/hooks/ebay-fulfillment	1.291s
+ok  	polymetrics.ai/internal/connectors/hooks/elasticsearch	1.581s
+ok  	polymetrics.ai/internal/connectors/hooks/fastbill	1.609s
+ok  	polymetrics.ai/internal/connectors/hooks/feishu	1.616s
+ok  	polymetrics.ai/internal/connectors/hooks/free-agent-connector	1.612s
+ok  	polymetrics.ai/internal/connectors/hooks/freightview	1.627s
+ok  	polymetrics.ai/internal/connectors/hooks/github	3.567s
+ok  	polymetrics.ai/internal/connectors/hooks/gmail	1.684s
+ok  	polymetrics.ai/internal/connectors/hooks/google-ads	1.651s
+ok  	polymetrics.ai/internal/connectors/hooks/google-analytics-data-api	1.654s
+ok  	polymetrics.ai/internal/connectors/hooks/google-calendar	1.645s
+ok  	polymetrics.ai/internal/connectors/hooks/google-classroom	1.275s
+ok  	polymetrics.ai/internal/connectors/hooks/google-forms	1.330s
+ok  	polymetrics.ai/internal/connectors/hooks/google-pagespeed-insights	1.333s
+ok  	polymetrics.ai/internal/connectors/hooks/google-search-console	1.556s
+ok  	polymetrics.ai/internal/connectors/hooks/hookset	1.644s
+ok  	polymetrics.ai/internal/connectors/hooks/hoorayhr	1.636s
+ok  	polymetrics.ai/internal/connectors/hooks/jamf-pro	1.684s
+ok  	polymetrics.ai/internal/connectors/hooks/keka	1.932s
+ok  	polymetrics.ai/internal/connectors/hooks/less-annoying-crm	1.927s
+ok  	polymetrics.ai/internal/connectors/hooks/lokalise	2.061s
+ok  	polymetrics.ai/internal/connectors/hooks/mendeley	2.276s
+ok  	polymetrics.ai/internal/connectors/hooks/mercado-ads	2.276s
+ok  	polymetrics.ai/internal/connectors/hooks/metabase	2.286s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-dataverse	2.279s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-entra-id	2.295s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-lists	2.298s
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-teams	2.300s
+ok  	polymetrics.ai/internal/connectors/hooks/mixpanel	2.283s
+ok  	polymetrics.ai/internal/connectors/hooks/mode	2.100s
+ok  	polymetrics.ai/internal/connectors/hooks/monday	2.023s
+ok  	polymetrics.ai/internal/connectors/hooks/my-hours	1.945s
+ok  	polymetrics.ai/internal/connectors/hooks/netsuite	1.940s
+ok  	polymetrics.ai/internal/connectors/hooks/nexus-datasets	1.972s
+ok  	polymetrics.ai/internal/connectors/hooks/notion	1.986s
+ok  	polymetrics.ai/internal/connectors/hooks/outlook	1.998s
+ok  	polymetrics.ai/internal/connectors/hooks/paypal-transaction	1.925s
+ok  	polymetrics.ai/internal/connectors/hooks/pinterest	1.932s
+ok  	polymetrics.ai/internal/connectors/hooks/plaid	1.932s
+ok  	polymetrics.ai/internal/connectors/hooks/pocket	2.006s
+ok  	polymetrics.ai/internal/connectors/hooks/prestashop	2.031s
+ok  	polymetrics.ai/internal/connectors/hooks/quickbooks	1.928s
+ok  	polymetrics.ai/internal/connectors/hooks/rootly	1.955s
+ok  	polymetrics.ai/internal/connectors/hooks/rss	16.879s
+ok  	polymetrics.ai/internal/connectors/hooks/safetyculture	1.953s
+ok  	polymetrics.ai/internal/connectors/hooks/salesloft	1.965s
+ok  	polymetrics.ai/internal/connectors/hooks/sentry	1.998s
+ok  	polymetrics.ai/internal/connectors/hooks/serpstat	2.019s
+ok  	polymetrics.ai/internal/connectors/hooks/slack	1.978s
+ok  	polymetrics.ai/internal/connectors/hooks/smartsheets	1.982s
+ok  	polymetrics.ai/internal/connectors/hooks/snapchat-marketing	1.703s
+ok  	polymetrics.ai/internal/connectors/hooks/stigg	9.191s
+ok  	polymetrics.ai/internal/connectors/hooks/strava	1.700s
+ok  	polymetrics.ai/internal/connectors/hooks/twilio	1.417s
+ok  	polymetrics.ai/internal/connectors/hooks/uptick	1.571s
+ok  	polymetrics.ai/internal/connectors/hooks/us-census	1.360s
+ok  	polymetrics.ai/internal/connectors/hooks/wasabi-stats-api	1.638s
+ok  	polymetrics.ai/internal/connectors/hooks/yahoo-finance-price	1.322s
+ok  	polymetrics.ai/internal/connectors/hooks/youtube-analytics	1.290s
+ok  	polymetrics.ai/internal/connectors/hooks/zoho-analytics-metadata-api	1.299s
+ok  	polymetrics.ai/internal/connectors/hooks/zoho-bigin	1.154s
+ok  	polymetrics.ai/internal/connectors/native/alpha-vantage	1.252s
+ok  	polymetrics.ai/internal/connectors/native/amazon-sqs	1.004s
+ok  	polymetrics.ai/internal/connectors/native/apify-dataset	1.306s
+ok  	polymetrics.ai/internal/connectors/native/ashby	1.127s
+ok  	polymetrics.ai/internal/connectors/native/aws-cloudtrail	1.057s
+ok  	polymetrics.ai/internal/connectors/native/babelforce	1.241s
+ok  	polymetrics.ai/internal/connectors/native/basecamp	1.714s
+ok  	polymetrics.ai/internal/connectors/native/bing-ads	1.660s
+ok  	polymetrics.ai/internal/connectors/native/bunny-inc	1.968s
+ok  	polymetrics.ai/internal/connectors/native/canny	1.811s
+ok  	polymetrics.ai/internal/connectors/native/copper	2.050s
+ok  	polymetrics.ai/internal/connectors/native/dixa	1.256s
+ok  	polymetrics.ai/internal/connectors/native/dynamodb	1.103s
+ok  	polymetrics.ai/internal/connectors/native/faker	1.283s
+ok  	polymetrics.ai/internal/connectors/native/fastbill	1.342s
+ok  	polymetrics.ai/internal/connectors/native/feishu	1.098s
+ok  	polymetrics.ai/internal/connectors/native/free-agent-connector	1.381s
+ok  	polymetrics.ai/internal/connectors/native/freightview	1.627s
+ok  	polymetrics.ai/internal/connectors/native/google-analytics-data-api	1.824s
+ok  	polymetrics.ai/internal/connectors/native/google-calendar	1.481s
+ok  	polymetrics.ai/internal/connectors/native/google-classroom	1.471s
+ok  	polymetrics.ai/internal/connectors/native/google-pagespeed-insights	1.482s
+ok  	polymetrics.ai/internal/connectors/native/less-annoying-crm	1.521s
+ok  	polymetrics.ai/internal/connectors/native/lokalise	1.636s
+ok  	polymetrics.ai/internal/connectors/native/mendeley	1.662s
+ok  	polymetrics.ai/internal/connectors/native/mercado-ads	1.658s
+ok  	polymetrics.ai/internal/connectors/native/metabase	1.648s
+ok  	polymetrics.ai/internal/connectors/native/mode	1.669s
+ok  	polymetrics.ai/internal/connectors/native/my-hours	1.539s
+ok  	polymetrics.ai/internal/connectors/native/nativeset	0.965s
+ok  	polymetrics.ai/internal/connectors/native/pocket	1.278s
+ok  	polymetrics.ai/internal/connectors/native/postgres	0.814s
+ok  	polymetrics.ai/internal/connectors/native/prestashop	1.117s
+ok  	polymetrics.ai/internal/connectors/native/rootly	1.406s
+ok  	polymetrics.ai/internal/connectors/native/safetyculture	1.706s
+ok  	polymetrics.ai/internal/connectors/native/tally-prime	1.864s
+ok  	polymetrics.ai/internal/connectors/native/yahoo-finance-price	2.163s
+ok  	polymetrics.ai/internal/coordination	2.574s
+ok  	polymetrics.ai/internal/coordination/issueguard	2.360s
+ok  	polymetrics.ai/internal/flow	1.482s
+ok  	polymetrics.ai/internal/ledger	1.538s
+ok  	polymetrics.ai/internal/perf	4.210s
+ok  	polymetrics.ai/internal/rlm	2.641s
+ok  	polymetrics.ai/internal/rlm/router	0.335s
+ok  	polymetrics.ai/internal/runtime	0.656s
+ok  	polymetrics.ai/internal/runtimecheck	1.948s
+ok  	polymetrics.ai/internal/safety	1.597s
+ok  	polymetrics.ai/internal/schedule	2.924s
+ok  	polymetrics.ai/internal/state	2.629s
+ok  	polymetrics.ai/internal/temporalprobe	2.942s
+ok  	polymetrics.ai/internal/vault	2.925s
+ok  	polymetrics.ai/internal/worker	2.623s
+ok  	polymetrics.ai/packaging/windows	2.294s
+ok  	polymetrics.ai/packaging/windows/winget	1.925s
+FAIL

@@ -7,11 +7,11 @@ import type { ConnectorCapabilities, ConnectorMeta } from './connectors.types';
 
 export const CONNECTOR_CATALOG = catalogData as ConnectorMeta[];
 
-export const CONNECTOR_CATALOG_COUNT = 550;
+export const CONNECTOR_CATALOG_COUNT = 551;
 
-export const CONNECTOR_CATEGORY_COUNTS = {"api":546,"queue":1,"database":2,"accounting":1} as Record<string, number>;
+export const CONNECTOR_CATEGORY_COUNTS = {"api":547,"queue":1,"database":2,"accounting":1} as Record<string, number>;
 
-export const CONNECTOR_RELEASE_STAGE_COUNTS = {"ga":486,"alpha":38,"beta":25,"planned":1} as Record<string, number>;
+export const CONNECTOR_RELEASE_STAGE_COUNTS = {"ga":486,"alpha":38,"beta":25,"planned":2} as Record<string, number>;
 
 export const CONNECTOR_CAPABILITY_COUNTS = {"check":549,"read":549,"write":226,"query":0,"cdc":0,"dynamicSchema":4} as Record<keyof ConnectorCapabilities, number>;
 

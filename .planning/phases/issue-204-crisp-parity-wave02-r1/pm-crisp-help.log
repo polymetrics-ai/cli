@@ -1,0 +1,27 @@
+NAME
+  pm crisp - Crisp command surface
+
+SYNOPSIS
+  pm crisp <command> [flags]
+  pm crisp <group> --help
+  pm crisp <group> <command> --help
+
+DESCRIPTION
+  Review planned typed Crisp REST API operations without exposing a raw API escape hatch.
+
+COMMAND GROUPS
+  etl - ETL/read operations (planned); see pm crisp etl --help
+  direct - Direct/provider search/query operations (planned); see pm crisp direct --help
+  binary - Binary/file/import/export operations (planned); see pm crisp binary --help
+  changefeed - Changefeed/event operations (planned); see pm crisp changefeed --help
+  reverse - Reverse ETL write operations (planned); see pm crisp reverse --help
+  checks - HEAD/existence checks (planned); see pm crisp checks --help
+
+GLOBAL FLAGS
+  --credential (string): Credential profile name; never pass token values as flags. maps_to=config.credential
+  --limit (integer): Maximum PM records/items to emit when a future typed command supports pagination. maps_to=query.limit
+  --json (boolean): Render machine-readable output for future implemented commands.
+
+HELP TOPICS
+  crisp safety - Crisp planned operations require typed fixed-target commands; no raw API escape hatch is available.
+  crisp reverse-etl - Future Crisp writes must use plan -> preview -> explicit approval -> execute, with typed destructive confirmation for destructive/admin actions.

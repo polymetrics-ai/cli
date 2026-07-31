@@ -1,0 +1,1 @@
+PASS: go vet ./internal/connectors/... ./internal/cli/... produced no output.

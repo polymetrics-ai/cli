@@ -1,0 +1,1 @@
+PASS: go build ./cmd/pm produced no output.
