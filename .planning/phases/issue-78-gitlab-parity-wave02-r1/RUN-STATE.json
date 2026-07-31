@@ -1,0 +1,86 @@
+{
+  "phase": "issue-78-gitlab-parity-wave02-r1",
+  "parentIssue": 78,
+  "subissues": [83, 84, 85, 86, 87, 88, 89],
+  "branch": "fm/cli-gitlab-parity-wave02-r1",
+  "state": "locally_verified_ready_to_commit",
+  "verificationPassed": true,
+  "gsdCommandPath": {
+    "doctor": "pass",
+    "list": "pass; 69 commands available",
+    "planPhaseTrace": "traces/gsd-plan-phase-78.prompt.md",
+    "quickTrace": "traces/gsd-quick-full.prompt.md",
+    "programmingLoop": "manual-fallback: scripts/gsd prompt programming-loop init --phase gitlab-parity-wave02-r1 --dry-run returned unknown GSD command"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single isolated worker owns internal/connectors/defs/gitlab; mutating sub-workers would share the connector directory and generated files"
+    }
+  ],
+  "implementation": {
+    "officialOperations": 1146,
+    "pinnedSource": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
+    "laneCounts": {
+      "etl_read": 308,
+      "reverse_etl_write": 498,
+      "direct_read_query_search": 6,
+      "binary_file": 298,
+      "cdc_changefeed": 34,
+      "excluded_not_applicable": 2
+    },
+    "implementedStreamsPreserved": ["projects", "groups", "users", "issues"],
+    "plannedOrBlockedOperations": 1140,
+    "excludedNotApplicable": 2,
+    "destructivePolicy": "included as typed planned/admin/destructive operations; execution requires typed destructive confirmation plus plan -> preview -> explicit approval -> execute"
+  },
+  "safety": {
+    "liveProviderCalls": false,
+    "credentials": false,
+    "writesExecuted": false,
+    "destructiveExternalActions": false,
+    "newDependencies": false,
+    "sharedRuntimeEdits": false,
+    "noMistakesFinalFlow": false,
+    "pushOrPR": false
+  },
+  "verification": [
+    {
+      "command": "python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py",
+      "result": "pass: PASS GitLab inventory parity: 1146 official operations represented"
+    },
+    {
+      "command": "python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py",
+      "result": "pass: lane counts match parent ledger"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs --json",
+      "result": "pass: 0 total findings, 0 GitLab findings"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1 -timeout=10m",
+      "result": "pass"
+    },
+    {
+      "command": "go vet ./internal/connectors/... ./internal/cli/...",
+      "result": "pass"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "pass"
+    },
+    {
+      "command": "make connector-boundary",
+      "result": "pass: no GitLab boundary violation"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ]
+}
