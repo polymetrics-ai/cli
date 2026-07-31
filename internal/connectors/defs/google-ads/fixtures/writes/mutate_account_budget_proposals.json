@@ -1,0 +1,16 @@
+{
+  "record": {
+    "operation": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/accountBudgetProposals:mutate",
+    "body": {
+      "operation": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

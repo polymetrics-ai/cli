@@ -1,0 +1,16 @@
+{
+  "record": {
+    "accessRole": "UNSPECIFIED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value:createCustomerClient",
+    "body": {
+      "accessRole": "UNSPECIFIED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

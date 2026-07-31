@@ -1,0 +1,16 @@
+{
+  "record": {
+    "validateOnly": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/customerSkAdNetworkConversionValueSchemas:mutate",
+    "body": {
+      "validateOnly": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

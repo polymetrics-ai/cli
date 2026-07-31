@@ -1,0 +1,20 @@
+{
+  "record": {
+    "conversations": [
+      {}
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/localServices:appendLeadConversation",
+    "body": {
+      "conversations": [
+        {}
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

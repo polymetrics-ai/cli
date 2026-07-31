@@ -1,0 +1,16 @@
+{
+  "record": {
+    "productLink": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/productLinks:create",
+    "body": {
+      "productLink": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

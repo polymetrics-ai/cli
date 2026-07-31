@@ -101,8 +101,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
@@ -131,6 +130,28 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 // SPEC.md grep for "0 findings") and is deliberately unaffected by
 // Warnings, which render separately (N2, wave0 REVIEW.md carried flag: a
 // warning never blocks the gate or changes the finding count).
+// validatePath validates either a defs root containing connector bundle
+// directories or a single connector bundle directory. The latter keeps
+// connector-local gates easy to run without accidentally treating schemas/ and
+// fixtures/ as sibling connector bundles.
+func validatePath(dir string) (Report, error) {
+	cleanDir := filepath.Clean(dir)
+	if isBundleDir(cleanDir) {
+		absDir, err := filepath.Abs(cleanDir)
+		if err != nil {
+			return Report{}, fmt.Errorf("validate: resolve bundle dir: %w", err)
+		}
+		findings, warnings := validateBundleDir(os.DirFS(filepath.Dir(absDir)), filepath.Base(absDir))
+		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+	}
+	return validateDir(os.DirFS(cleanDir))
+}
+
+func isBundleDir(dir string) bool {
+	info, err := os.Stat(filepath.Join(dir, "metadata.json"))
+	return err == nil && !info.IsDir()
+}
+
 func renderText(w io.Writer, report Report) {
 	for _, f := range report.Findings {
 		logf(w, "%s: %s: [%s] %s\n", f.Connector, f.File, f.Rule, f.Message)

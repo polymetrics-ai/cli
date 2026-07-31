@@ -1,0 +1,16 @@
+{
+  "record": {
+    "enableMatchRateRangePreview": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/offlineUserDataJobs:create",
+    "body": {
+      "enableMatchRateRangePreview": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
