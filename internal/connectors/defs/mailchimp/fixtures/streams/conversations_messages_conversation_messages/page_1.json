@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations/synthetic-conformance-value/messages",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "conversation_messages": [
+        {
+          "id": "fixture_id",
+          "conversation_id": "fixture_conversation_id",
+          "list_id": 1,
+          "from_label": "fixture_from_label",
+          "from_email": "fixture@example.invalid",
+          "subject": "fixture_subject",
+          "message": "fixture_message",
+          "read": true
+        }
+      ]
+    }
+  }
+}

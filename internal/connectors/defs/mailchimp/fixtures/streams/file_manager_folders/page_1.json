@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/file-manager/folders",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "folders": [
+        {
+          "id": 1,
+          "name": "fixture_name",
+          "file_count": 1,
+          "created_at": "fixture_created_at",
+          "created_by": "fixture_created_by",
+          "_links": {}
+        }
+      ]
+    }
+  }
+}

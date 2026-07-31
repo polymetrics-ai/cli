@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/audiences/synthetic-conformance-value/contacts",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "contacts": [
+        {
+          "id": "fixture_id",
+          "audience_id": "fixture_audience_id",
+          "language": "fixture_language",
+          "status": "fixture_status",
+          "email_channel": {},
+          "sms_channel": {},
+          "merge_fields": {},
+          "tags": []
+        }
+      ]
+    }
+  }
+}

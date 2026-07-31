@@ -1,0 +1,17 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "promo_rule_id": "fixture_promo_rule_id",
+    "promo_code_id": "fixture_promo_code_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ecommerce/stores/fixture_store_id/promo-rules/fixture_promo_rule_id/promo-codes/fixture_promo_code_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_ecommerce_stores_promo_rules_promo_codes"
+    }
+  }
+}

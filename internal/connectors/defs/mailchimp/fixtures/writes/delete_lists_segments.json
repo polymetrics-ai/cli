@@ -1,0 +1,16 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "segment_id": "fixture_segment_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/fixture_list_id/segments/fixture_segment_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_lists_segments"
+    }
+  }
+}

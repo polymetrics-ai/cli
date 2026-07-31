@@ -1,0 +1,23 @@
+{
+  "record": {
+    "template_id": "fixture_template_id",
+    "name": "fixture_name",
+    "folder_id": "fixture_folder_id",
+    "html": "fixture_html"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/templates/fixture_template_id",
+    "body": {
+      "name": "fixture_name",
+      "folder_id": "fixture_folder_id",
+      "html": "fixture_html"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_templates"
+    }
+  }
+}

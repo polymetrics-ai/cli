@@ -79611,15 +79611,15 @@
   {
     "name": "mailchimp",
     "display_name": "Mailchimp",
-    "description": "Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.",
+    "description": "Reads Mailchimp Marketing API audiences, members, campaigns, reports, automations, templates, files, batches, webhooks, ecommerce, reporting, and related resources; exposes typed approval-gated Mailchimp mutations where the declarative engine can model the documented operation safely.",
     "integration_type": "api",
-    "docs_url": "https://mailchimp.com/developer/release-notes/",
+    "docs_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -79638,36 +79638,346 @@
         "api_key": {
           "type": "string",
           "x-secret": true,
-          "description": "Mailchimp API key (e.g. abc123-us6). Sent as HTTP Basic auth (username \"anystring\") when access_token is unset; never logged."
+          "description": "Mailchimp API key. Sent as HTTP Basic auth (username \"anystring\") when access_token is unset; never logged."
+        },
+        "app_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {app_id} operations and nested streams."
+        },
+        "audience_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {audience_id} operations and nested streams."
+        },
+        "batch_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {batch_id} operations and nested streams."
+        },
+        "batch_webhook_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {batch_webhook_id} operations and nested streams."
+        },
+        "campaign_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {campaign_id} operations and nested streams."
+        },
+        "cart_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {cart_id} operations and nested streams."
+        },
+        "connected_site_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {connected_site_id} operations and nested streams."
+        },
+        "contact_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {contact_id} operations and nested streams."
+        },
+        "conversation_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {conversation_id} operations and nested streams."
+        },
+        "customer_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {customer_id} operations and nested streams."
         },
         "data_center": {
           "type": "string",
-          "description": "Mailchimp datacenter token (e.g. \"us6\"), used to build the datacenter-scoped base URL https://\u003cdata_center\u003e.api.mailchimp.com/3.0."
+          "description": "Mailchimp datacenter token (for example, us6) used to build https://\u003cdata_center\u003e.api.mailchimp.com/3.0."
         },
-        "start_date": {
+        "domain_name": {
           "type": "string",
-          "format": "date-time",
-          "description": "RFC3339 lower bound; only objects created/sent at or after this time are read (per-stream since_* filter)."
+          "description": "Optional Mailchimp path identifier for {domain_name} operations and nested streams."
+        },
+        "export_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {export_id} operations and nested streams."
+        },
+        "feedback_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {feedback_id} operations and nested streams."
+        },
+        "file_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {file_id} operations and nested streams."
+        },
+        "folder_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {folder_id} operations and nested streams."
+        },
+        "image_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {image_id} operations and nested streams."
+        },
+        "interest_category_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {interest_category_id} operations and nested streams."
+        },
+        "interest_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {interest_id} operations and nested streams."
+        },
+        "journey_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {journey_id} operations and nested streams."
+        },
+        "line_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {line_id} operations and nested streams."
+        },
+        "link_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {link_id} operations and nested streams."
+        },
+        "list_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {list_id} operations and nested streams."
+        },
+        "merge_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {merge_id} operations and nested streams."
+        },
+        "message_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {message_id} operations and nested streams."
         },
         "mode": {
           "type": "string",
           "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+        },
+        "month": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {month} operations and nested streams."
+        },
+        "note_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {note_id} operations and nested streams."
+        },
+        "order_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {order_id} operations and nested streams."
+        },
+        "outreach_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {outreach_id} operations and nested streams."
+        },
+        "page_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {page_id} operations and nested streams."
+        },
+        "product_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {product_id} operations and nested streams."
+        },
+        "promo_code_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {promo_code_id} operations and nested streams."
+        },
+        "promo_rule_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {promo_rule_id} operations and nested streams."
+        },
+        "question_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {question_id} operations and nested streams."
+        },
+        "report_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {report_id} operations and nested streams."
+        },
+        "response_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {response_id} operations and nested streams."
+        },
+        "search_query": {
+          "type": "string",
+          "description": "Optional default search term for typed search direct-read commands."
+        },
+        "segment_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {segment_id} operations and nested streams."
+        },
+        "sms_campaign_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {sms_campaign_id} operations and nested streams."
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional RFC3339 lower bound used by stream definitions that expose Mailchimp since_* filters."
+        },
+        "step_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {step_id} operations and nested streams."
+        },
+        "store_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {store_id} operations and nested streams."
+        },
+        "subscriber_hash": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {subscriber_hash} operations and nested streams."
+        },
+        "survey_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {survey_id} operations and nested streams."
+        },
+        "template_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {template_id} operations and nested streams."
+        },
+        "variant_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {variant_id} operations and nested streams."
+        },
+        "webhook_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {webhook_id} operations and nested streams."
+        },
+        "workflow_email_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {workflow_email_id} operations and nested streams."
+        },
+        "workflow_id": {
+          "type": "string",
+          "description": "Optional Mailchimp path identifier for {workflow_id} operations and nested streams."
         }
       }
     },
     "streams": [
       {
-        "name": "lists",
+        "name": "account_exports_exports",
         "primary_key": [
           "id"
         ],
-        "cursor_field": "date_created",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "activity_feed_chimp_chatter",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audiences",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audiences_contacts",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "authorized_apps_apps",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "automations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "create_time",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped",
           "incremental_append",
           "incremental_append_deduped"
+        ]
+      },
+      {
+        "name": "automations_emails",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "create_time",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "automations_emails_queue",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "automations_removed_subscribers_subscribers",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "batch_webhooks_webhooks",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "batches",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "campaign_folders_folders",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -79685,6 +79995,550 @@
         ]
       },
       {
+        "name": "campaigns_feedback",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "connected_sites_sites",
+        "primary_key": [
+          "store_id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "conversations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "conversations_messages_conversation_messages",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_orders",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_carts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_carts_lines",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_customers",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_orders",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_orders_lines",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_products",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_products_images",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_products_variants",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_promo_rules",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "ecommerce_stores_promo_rules_promo_codes",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "facebook_ads",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "file_manager_files",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "file_manager_folders",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "file_manager_folders_files",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "landing_pages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "date_created",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped",
+          "incremental_append",
+          "incremental_append_deduped"
+        ]
+      },
+      {
+        "name": "lists_abuse_reports",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_activity",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_clients",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_growth_history_history",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_interest_categories_categories",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_interest_categories_interests",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_locations",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_members",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "last_changed",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_members_activity",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_members_events",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_members_goals",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_members_notes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_members_tags",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_merge_fields",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_segments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_segments_members",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "last_changed",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_signup_forms",
+        "primary_key": [
+          "list_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_surveys",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lists_webhooks",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_facebook_ads",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_facebook_ads_ecommerce_product_activity_products",
+        "primary_key": [
+          "outreach_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_landing_pages",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_surveys",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_surveys_questions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_surveys_questions_answers",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reporting_surveys_responses",
+        "primary_key": [
+          "survey_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "reports",
         "primary_key": [
           "id"
@@ -79699,7 +80553,151 @@
         ]
       },
       {
-        "name": "automations",
+        "name": "reports_abuse_reports",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_advice",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_click_details_urls_clicked",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_click_details_members",
+        "primary_key": [
+          "email_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_domain_performance_domains",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_ecommerce_product_activity_products",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_eepurl_referrers",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_email_activity_emails",
+        "primary_key": [
+          "email_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_locations",
+        "primary_key": [
+          "campaign_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_open_details_members",
+        "primary_key": [
+          "email_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_sent_to",
+        "primary_key": [
+          "email_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_sub_reports",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "send_time",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "reports_unsubscribed_unsubscribes",
+        "primary_key": [
+          "email_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sms_campaigns",
         "primary_key": [
           "id"
         ],
@@ -79707,15 +80705,1143 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "template_folders_folders",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "date_created",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "verified_domains_domains",
+        "primary_key": [
+          "domain"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "post_account_exports",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/account-exports",
+        "risk": "Externally visible Mailchimp mutation: Add export. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_audiences_contacts",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/audiences/{{ record.audience_id }}/contacts",
+        "risk": "Externally visible Mailchimp mutation: Add Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "patch_audiences_contacts",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/audiences/{{ record.audience_id }}/contacts/{{ record.contact_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "archive_contacts",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/audiences/{{ record.audience_id }}/contacts/{{ record.contact_id }}/actions/archive",
+        "risk": "Destructive or externally visible Mailchimp mutation: Archive Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "forget_contacts",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/audiences/{{ record.audience_id }}/contacts/{{ record.contact_id }}/actions/forget",
+        "risk": "Destructive or externally visible Mailchimp mutation: Forget Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_automations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations",
+        "risk": "Externally visible Mailchimp mutation: Add automation. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "archive_automations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/actions/archive",
+        "risk": "Destructive or externally visible Mailchimp mutation: Archive automation. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pause_all_emails_automations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/actions/pause-all-emails",
+        "risk": "Destructive or externally visible Mailchimp mutation: Pause automation emails. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "start_all_emails_automations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/actions/start-all-emails",
+        "risk": "Destructive or externally visible Mailchimp mutation: Start automation emails. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_automations_emails",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/automations/{{ record.workflow_id }}/emails/{{ record.workflow_email_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete workflow email. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_automations_emails",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/automations/{{ record.workflow_id }}/emails/{{ record.workflow_email_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update workflow email. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "pause_emails",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/emails/{{ record.workflow_email_id }}/actions/pause",
+        "risk": "Destructive or externally visible Mailchimp mutation: Pause automated email. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "start_emails",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/emails/{{ record.workflow_email_id }}/actions/start",
+        "risk": "Destructive or externally visible Mailchimp mutation: Start automated email. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_automations_emails_queue",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/emails/{{ record.workflow_email_id }}/queue",
+        "risk": "Externally visible Mailchimp mutation: Add subscriber to workflow email. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_automations_removed_subscribers",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/automations/{{ record.workflow_id }}/removed-subscribers",
+        "risk": "Externally visible Mailchimp mutation: Remove subscriber from workflow. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_batch_webhooks",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/batch-webhooks",
+        "risk": "Externally visible Mailchimp mutation: Add batch webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_batch_webhooks",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/batch-webhooks/{{ record.batch_webhook_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete batch webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_batch_webhooks",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/batch-webhooks/{{ record.batch_webhook_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update batch webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_batches",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/batches/{{ record.batch_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete batch request. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_campaign_folders",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaign-folders",
+        "risk": "Externally visible Mailchimp mutation: Add campaign folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_campaign_folders",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/campaign-folders/{{ record.folder_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete campaign folder. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_campaign_folders",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/campaign-folders/{{ record.folder_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update campaign folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns",
+        "risk": "Externally visible Mailchimp mutation: Add campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_campaigns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/campaigns/{{ record.campaign_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_campaigns",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/campaigns/{{ record.campaign_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update campaign settings. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "cancel_send_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/cancel-send",
+        "risk": "Destructive or externally visible Mailchimp mutation: Cancel campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resend_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/create-resend",
+        "risk": "Destructive or externally visible Mailchimp mutation: Resend campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pause_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/pause",
+        "risk": "Destructive or externally visible Mailchimp mutation: Pause rss campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "replicate_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/replicate",
+        "risk": "Externally visible Mailchimp mutation: Replicate campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "resume_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/resume",
+        "risk": "Externally visible Mailchimp mutation: Resume rss campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "schedule_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/schedule",
+        "risk": "Externally visible Mailchimp mutation: Schedule campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "send_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/send",
+        "risk": "Destructive or externally visible Mailchimp mutation: Send campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "test_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/test",
+        "risk": "Destructive or externally visible Mailchimp mutation: Send test email. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unschedule_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/actions/unschedule",
+        "risk": "Externally visible Mailchimp mutation: Unschedule campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "put_campaigns_content",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/campaigns/{{ record.campaign_id }}/content",
+        "risk": "Externally visible Mailchimp mutation: Set campaign content. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_campaigns_feedback",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/campaigns/{{ record.campaign_id }}/feedback",
+        "risk": "Externally visible Mailchimp mutation: Add campaign feedback. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_campaigns_feedback",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/campaigns/{{ record.campaign_id }}/feedback/{{ record.feedback_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete campaign feedback message. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_campaigns_feedback",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/campaigns/{{ record.campaign_id }}/feedback/{{ record.feedback_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update campaign feedback message. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_connected_sites",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/connected-sites",
+        "risk": "Externally visible Mailchimp mutation: Add connected site. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_connected_sites",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/connected-sites/{{ record.connected_site_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete connected site. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "disable_pixel_connected_sites",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/connected-sites/{{ record.connected_site_id }}/actions/disable-pixel",
+        "risk": "Externally visible Mailchimp mutation: Disable pixel for connected site. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "enable_pixel_connected_sites",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/connected-sites/{{ record.connected_site_id }}/actions/enable-pixel",
+        "risk": "Externally visible Mailchimp mutation: Enable pixel for connected site. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "verify_script_installation_connected_sites",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/connected-sites/{{ record.connected_site_id }}/actions/verify-script-installation",
+        "risk": "Destructive or externally visible Mailchimp mutation: Verify connected site script. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "trigger_steps",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/customer-journeys/journeys/{{ record.journey_id }}/steps/{{ record.step_id }}/actions/trigger",
+        "risk": "Destructive or externally visible Mailchimp mutation: Customer Journeys API trigger for a contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_ecommerce_stores",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores",
+        "risk": "Externally visible Mailchimp mutation: Add store. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete store. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update store. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_carts",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/carts",
+        "risk": "Externally visible Mailchimp mutation: Add cart. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_carts",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/carts/{{ record.cart_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete cart. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_carts",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/carts/{{ record.cart_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update cart. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_carts_lines",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/carts/{{ record.cart_id }}/lines",
+        "risk": "Externally visible Mailchimp mutation: Add cart line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_carts_lines",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/carts/{{ record.cart_id }}/lines/{{ record.line_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete cart line item. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_carts_lines",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/carts/{{ record.cart_id }}/lines/{{ record.line_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update cart line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_customers",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/customers",
+        "risk": "Externally visible Mailchimp mutation: Add customer. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_customers",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/customers/{{ record.customer_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete customer. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_customers",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/customers/{{ record.customer_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update customer. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "put_ecommerce_stores_customers",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{{ record.store_id }}/customers/{{ record.customer_id }}",
+        "risk": "Externally visible Mailchimp mutation: Add or update customer. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_orders",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders",
+        "risk": "Externally visible Mailchimp mutation: Add order. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_orders",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete order. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_orders",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update order. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "put_ecommerce_stores_orders",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}",
+        "risk": "Externally visible Mailchimp mutation: Add or update order. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_orders_lines",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}/lines",
+        "risk": "Externally visible Mailchimp mutation: Add order line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_orders_lines",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}/lines/{{ record.line_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete order line item. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_orders_lines",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/orders/{{ record.order_id }}/lines/{{ record.line_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update order line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_products",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products",
+        "risk": "Externally visible Mailchimp mutation: Add product. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_products",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete product. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_products",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update product. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "put_ecommerce_stores_products",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}",
+        "risk": "Externally visible Mailchimp mutation: Create or update product. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_products_images",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/images",
+        "risk": "Externally visible Mailchimp mutation: Add product image. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_products_images",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/images/{{ record.image_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete product image. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_products_images",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/images/{{ record.image_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update product image. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_products_variants",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/variants",
+        "risk": "Externally visible Mailchimp mutation: Add product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_products_variants",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/variants/{{ record.variant_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_products_variants",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/variants/{{ record.variant_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "put_ecommerce_stores_products_variants",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/ecommerce/stores/{{ record.store_id }}/products/{{ record.product_id }}/variants/{{ record.variant_id }}",
+        "risk": "Externally visible Mailchimp mutation: Add or update product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_promo_rules",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/promo-rules",
+        "risk": "Externally visible Mailchimp mutation: Add promo rule. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_promo_rules",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/promo-rules/{{ record.promo_rule_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete promo rule. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_promo_rules",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/promo-rules/{{ record.promo_rule_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update promo rule. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_ecommerce_stores_promo_rules_promo_codes",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/ecommerce/stores/{{ record.store_id }}/promo-rules/{{ record.promo_rule_id }}/promo-codes",
+        "risk": "Externally visible Mailchimp mutation: Add promo code. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_ecommerce_stores_promo_rules_promo_codes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ecommerce/stores/{{ record.store_id }}/promo-rules/{{ record.promo_rule_id }}/promo-codes/{{ record.promo_code_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete promo code. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_ecommerce_stores_promo_rules_promo_codes",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/ecommerce/stores/{{ record.store_id }}/promo-rules/{{ record.promo_rule_id }}/promo-codes/{{ record.promo_code_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update promo code. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_file_manager_files",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/file-manager/files",
+        "risk": "Externally visible Mailchimp mutation: Add file. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_file_manager_files",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/file-manager/files/{{ record.file_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete file. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_file_manager_files",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/file-manager/files/{{ record.file_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update file. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_file_manager_folders",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/file-manager/folders",
+        "risk": "Externally visible Mailchimp mutation: Add folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_file_manager_folders",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/file-manager/folders/{{ record.folder_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete folder. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_file_manager_folders",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/file-manager/folders/{{ record.folder_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_landing_pages",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/landing-pages",
+        "risk": "Externally visible Mailchimp mutation: Add landing page. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_landing_pages",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/landing-pages/{{ record.page_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete landing page. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_landing_pages",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/landing-pages/{{ record.page_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update landing page. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "publish_landing_pages",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/landing-pages/{{ record.page_id }}/actions/publish",
+        "risk": "Destructive or externally visible Mailchimp mutation: Publish landing page. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unpublish_landing_pages",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/landing-pages/{{ record.page_id }}/actions/unpublish",
+        "risk": "Destructive or externally visible Mailchimp mutation: Unpublish landing page. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_lists",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists",
+        "risk": "Externally visible Mailchimp mutation: Add list. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete list. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update lists. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_2",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}",
+        "risk": "Externally visible Mailchimp mutation: Batch subscribe or unsubscribe. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_interest_categories",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/interest-categories",
+        "risk": "Externally visible Mailchimp mutation: Add interest category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_interest_categories",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/interest-categories/{{ record.interest_category_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete interest category. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_interest_categories",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/interest-categories/{{ record.interest_category_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update interest category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_interest_categories_interests",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/interest-categories/{{ record.interest_category_id }}/interests",
+        "risk": "Externally visible Mailchimp mutation: Add interest in category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_interest_categories_interests",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/interest-categories/{{ record.interest_category_id }}/interests/{{ record.interest_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete interest in category. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_interest_categories_interests",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/interest-categories/{{ record.interest_category_id }}/interests/{{ record.interest_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update interest in category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_members",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/members",
+        "risk": "Externally visible Mailchimp mutation: Add member to list. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_members",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Archive list member. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_members",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}",
+        "risk": "Externally visible Mailchimp mutation: Update list member. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "put_lists_members",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}",
+        "risk": "Externally visible Mailchimp mutation: Add or update list member. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_permanent_members",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}/actions/delete-permanent",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete list member. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_lists_members_events",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}/events",
+        "risk": "Externally visible Mailchimp mutation: Add event. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_members_notes",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}/notes",
+        "risk": "Externally visible Mailchimp mutation: Add member note. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_members_notes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}/notes/{{ record.note_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete note. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_members_notes",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}/notes/{{ record.note_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update note. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_members_tags",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/members/{{ record.subscriber_hash }}/tags",
+        "risk": "Externally visible Mailchimp mutation: Add or remove member tags. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_merge_fields",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/merge-fields",
+        "risk": "Externally visible Mailchimp mutation: Add merge field. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_merge_fields",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/merge-fields/{{ record.merge_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete merge field. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_merge_fields",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/merge-fields/{{ record.merge_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update merge field. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_segments",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/segments",
+        "risk": "Externally visible Mailchimp mutation: Add segment. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_segments",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/segments/{{ record.segment_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete segment. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_segments",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/segments/{{ record.segment_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update segment. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_segments_2",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/segments/{{ record.segment_id }}",
+        "risk": "Externally visible Mailchimp mutation: Batch add or remove members. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_segments_members",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/segments/{{ record.segment_id }}/members",
+        "risk": "Externally visible Mailchimp mutation: Add member to segment. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_segments_members",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/segments/{{ record.segment_id }}/members/{{ record.subscriber_hash }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Remove list member from segment. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_lists_signup_forms",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/signup-forms",
+        "risk": "Externally visible Mailchimp mutation: Customize signup form. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_lists_surveys",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/surveys",
+        "risk": "Externally visible Mailchimp mutation: Create survey. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_surveys",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/surveys/{{ record.survey_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete survey. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_surveys",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/surveys/{{ record.survey_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update survey. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "create_email_surveys",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/surveys/{{ record.survey_id }}/actions/create-email",
+        "risk": "Externally visible Mailchimp mutation: Create a Survey Campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "publish_surveys",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/surveys/{{ record.survey_id }}/actions/publish",
+        "risk": "Destructive or externally visible Mailchimp mutation: Publish a Survey. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "replicate_surveys",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/surveys/{{ record.survey_id }}/actions/replicate",
+        "risk": "Externally visible Mailchimp mutation: Replicate survey. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "unpublish_surveys",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/surveys/{{ record.survey_id }}/actions/unpublish",
+        "risk": "Destructive or externally visible Mailchimp mutation: Unpublish a Survey. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "post_lists_webhooks",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/lists/{{ record.list_id }}/webhooks",
+        "risk": "Externally visible Mailchimp mutation: Add webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_lists_webhooks",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/lists/{{ record.list_id }}/webhooks/{{ record.webhook_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_lists_webhooks",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/lists/{{ record.list_id }}/webhooks/{{ record.webhook_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_sms_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/sms-campaigns",
+        "risk": "Externally visible Mailchimp mutation: Add SMS campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_sms_campaigns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/sms-campaigns/{{ record.sms_campaign_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete SMS campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_sms_campaigns",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/sms-campaigns/{{ record.sms_campaign_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update SMS campaign settings. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "cancel_send_sms_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/sms-campaigns/{{ record.sms_campaign_id }}/actions/cancel-send",
+        "risk": "Destructive or externally visible Mailchimp mutation: Cancel SMS campaign send. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "schedule_sms_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/sms-campaigns/{{ record.sms_campaign_id }}/actions/schedule",
+        "risk": "Externally visible Mailchimp mutation: Schedule SMS campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "send_sms_campaigns",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/sms-campaigns/{{ record.sms_campaign_id }}/actions/send",
+        "risk": "Destructive or externally visible Mailchimp mutation: Send SMS campaign. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_sms_campaigns_content",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/sms-campaigns/{{ record.sms_campaign_id }}/content",
+        "risk": "Externally visible Mailchimp mutation: Set SMS campaign content. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_template_folders",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/template-folders",
+        "risk": "Externally visible Mailchimp mutation: Add template folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_template_folders",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/template-folders/{{ record.folder_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete template folder. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_template_folders",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/template-folders/{{ record.folder_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update template folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_templates",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/templates",
+        "risk": "Externally visible Mailchimp mutation: Add template. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_templates",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/templates/{{ record.template_id }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete template. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_templates",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/templates/{{ record.template_id }}",
+        "risk": "Externally visible Mailchimp mutation: Update template. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "post_verified_domains",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/verified-domains",
+        "risk": "Externally visible Mailchimp mutation: Add domain to account. Reverse ETL must plan, preview, receive explicit approval, and then execute."
+      },
+      {
+        "name": "delete_verified_domains",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/verified-domains/{{ record.domain_name }}",
+        "risk": "Destructive or externally visible Mailchimp mutation: Delete domain. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "verify_verified_domains",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/verified-domains/{{ record.domain_name }}/actions/verify",
+        "risk": "Destructive or externally visible Mailchimp mutation: Verify domain. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Mailchimp API read of audience, campaign, report, and automation data",
-      "approval": "none; read-only"
+      "read": "external Mailchimp Marketing API reads using configured datacenter credentials; nested streams may require operation-specific identifier config",
+      "write": "approval-gated Mailchimp mutations against audiences, campaigns, automations, templates, files, webhooks, ecommerce, and related resources",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation where declared"
     },
     "icon": {
       "id": "mailchimp",

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "id": "fixture_id",
+    "customer": {},
+    "campaign_id": "fixture_campaign_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ecommerce/stores/fixture_store_id/carts",
+    "body": {
+      "id": "fixture_id",
+      "customer": {},
+      "campaign_id": "fixture_campaign_id"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_ecommerce_stores_carts"
+    }
+  }
+}
