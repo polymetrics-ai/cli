@@ -541,7 +541,7 @@
 - [you-need-a-budget-ynab](you-need-a-budget-ynab/MANUAL.md): Reads YNAB budgets, accounts, categories, payees, months, transactions, and scheduled transactions, and writes transaction/account/category/payee/scheduled-transaction mutations through the YNAB REST API.
 - [younium](younium/MANUAL.md): Reads and writes Younium accounts, subscriptions, invoices, products, payment terms, currencies, and webhooks through the Younium REST API.
 - [yousign](yousign/MANUAL.md): Reads and writes Yousign signature requests, contacts, documents, webhooks, templates, users, and workflow sessions through the Yousign REST API.
-- [youtube-analytics](youtube-analytics/MANUAL.md): Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.
+- [youtube-analytics](youtube-analytics/MANUAL.md): Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analytics groups and group items, and safely plans documented job/group mutations via the Google OAuth 2.0 refresh-token grant.
 - [youtube-data](youtube-data/MANUAL.md): Reads channels, videos, playlists, playlist items, comment threads, search results, video categories, and i18n region/language reference data through the YouTube Data API.
 - [zapier-supported-storage](zapier-supported-storage/MANUAL.md): Reads and writes Zapier Storage key/value records.
 - [zapsign](zapsign/MANUAL.md): Reads and writes ZapSign documents, signers, templates, and webhooks.

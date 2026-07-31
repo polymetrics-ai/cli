@@ -1,14 +1,14 @@
 {
   "name": "youtube-analytics",
   "display_name": "YouTube Analytics",
-  "description": "Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.",
+  "description": "Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analytics groups and group items, and safely plans documented job/group mutations via the Google OAuth 2.0 refresh-token grant.",
   "integration_type": "api",
   "docs_url": "https://developers.google.com/youtube/reporting/v1/reports",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,11 +17,11 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external YouTube Reporting API read of reporting-job/report-type/report metadata",
-    "approval": "none; read-only, no reverse-ETL write surface"
+    "read": "external YouTube Reporting and YouTube Analytics API reads of reporting jobs, report types, report metadata, groups, and group items",
+    "approval": "reverse ETL mutations are available only through plan, preview, explicit approval, and destructive confirmation where required"
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for youtube-analytics (the AuthHook's real OAuth2 refresh-grant path) -- conformance's synthetic config has no real token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively (gmail precedent, docs/migration/conventions.md §4)."
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for youtube-analytics (the AuthHook's real OAuth2 refresh-grant path) -- conformance's synthetic config has no real HTTPS token_url and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check (read or write) would otherwise fail identically and uninformatively (gmail precedent, docs/migration/conventions.md §4). Static api-surface, schema, fixture-shape, and hook tests remain active."
   }
 }

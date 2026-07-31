@@ -154405,7 +154405,7 @@
   {
     "name": "youtube-analytics",
     "display_name": "YouTube Analytics",
-    "description": "Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.",
+    "description": "Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analytics groups and group items, and safely plans documented job/group mutations via the Google OAuth 2.0 refresh-token grant.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/youtube/reporting/v1/reports",
     "release_stage": "ga",
@@ -154413,7 +154413,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -154444,7 +154444,13 @@
           "type": "string",
           "format": "uri",
           "default": "https://youtubereporting.googleapis.com/v1",
-          "description": "YouTube Reporting API base URL override for tests or proxies."
+          "description": "YouTube Reporting API base URL override for tests or proxies. Reporting streams and job write actions use this host."
+        },
+        "analytics_base_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://youtubeanalytics.googleapis.com/v2",
+          "description": "YouTube Analytics API base URL override for tests or proxies. Groups, group items, and the blocked reports.query operation use this host."
         },
         "token_url": {
           "type": "string",
@@ -154455,20 +154461,60 @@
         "scopes": {
           "type": "string",
           "default": "https://www.googleapis.com/auth/yt-analytics.readonly",
-          "description": "OAuth scope requested on the token-refresh grant."
+          "description": "OAuth scope requested on the token-refresh grant. Use a caller-controlled value only when the selected Google account and operation require a different documented YouTube Analytics/Reporting scope."
         },
         "content_owner_id": {
           "type": "string",
-          "description": "Optional content-owner ID; sent as the onBehalfOfContentOwner query parameter for content-owner-scoped accounts."
+          "description": "Optional content-owner ID; sent as the onBehalfOfContentOwner query parameter for content-owner-scoped read streams. Declarative write actions omit this optional query parameter until write-action query templates are supported."
         },
         "job_id": {
           "type": "string",
-          "description": "Reporting job ID the 'reports' stream is scoped to (required only when reading the reports stream)."
+          "description": "Reporting job ID. Required when reading the reports stream, the single job stream, or the single report stream."
+        },
+        "report_id": {
+          "type": "string",
+          "description": "Reporting report ID. Required when reading the single report stream."
+        },
+        "group_id": {
+          "type": "string",
+          "description": "YouTube Analytics group ID. Required when reading the group_items stream."
+        },
+        "group_ids": {
+          "type": "string",
+          "description": "Optional comma-separated group IDs for the groups stream's documented id query parameter."
+        },
+        "mine": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "description": "Optional groups.list mine query value. Use true to retrieve groups owned by the authenticated user."
+        },
+        "include_system_managed": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "description": "Optional includeSystemManaged value for Reporting jobs and report types."
+        },
+        "created_after": {
+          "type": "string",
+          "description": "Optional Reporting reports.list createdAfter filter, expressed as an RFC3339/Google datetime string."
+        },
+        "start_time_at_or_after": {
+          "type": "string",
+          "description": "Optional Reporting reports.list startTimeAtOrAfter filter, expressed as an RFC3339/Google datetime string."
+        },
+        "start_time_before": {
+          "type": "string",
+          "description": "Optional Reporting reports.list startTimeBefore filter, expressed as an RFC3339/Google datetime string."
         },
         "page_size": {
           "type": "string",
           "default": "100",
-          "description": "Records per page (1-100)."
+          "description": "Records per page (1-100 for Reporting list operations)."
         },
         "max_pages": {
           "type": "string",
@@ -154484,6 +154530,17 @@
     "streams": [
       {
         "name": "jobs",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job",
         "primary_key": [
           "id"
         ],
@@ -154514,11 +154571,98 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "report",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "groups",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "group_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_job",
+        "kind": "create",
+        "method": "POST",
+        "path": "/jobs",
+        "risk": "creates a YouTube Reporting job that schedules future report generation; requires reverse ETL plan, preview, and explicit approval"
+      },
+      {
+        "name": "delete_job",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/jobs/{{ record.job_id }}",
+        "risk": "deletes a scheduled YouTube Reporting job and stops future report generation; destructive, redacts job_id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "{{ config.analytics_base_url }}/groups",
+        "risk": "creates a YouTube Analytics group; requires reverse ETL plan, preview, and explicit approval"
+      },
+      {
+        "name": "update_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "{{ config.analytics_base_url }}/groups",
+        "risk": "updates a YouTube Analytics group's metadata (for example title); redacts group id in write errors and requires reverse ETL plan, preview, and explicit approval"
+      },
+      {
+        "name": "delete_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "{{ config.analytics_base_url }}/groups?id={{ record.id | urlencode }}",
+        "risk": "deletes a YouTube Analytics group; destructive, redacts group id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_group_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "{{ config.analytics_base_url }}/groupItems",
+        "risk": "adds a channel, playlist, video, or asset to a YouTube Analytics group; redacts group/resource identifiers in write errors and requires reverse ETL plan, preview, and explicit approval"
+      },
+      {
+        "name": "delete_group_item",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "{{ config.analytics_base_url }}/groupItems?id={{ record.id | urlencode }}",
+        "risk": "removes an item from a YouTube Analytics group; destructive, redacts group-item id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external YouTube Reporting API read of reporting-job/report-type/report metadata",
-      "approval": "none; read-only, no reverse-ETL write surface"
+      "read": "external YouTube Reporting and YouTube Analytics API reads of reporting jobs, report types, report metadata, groups, and group items",
+      "approval": "reverse ETL mutations are available only through plan, preview, explicit approval, and destructive confirmation where required"
     },
     "icon": {
       "id": "youtube-analytics",
