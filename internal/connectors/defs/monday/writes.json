@@ -1,0 +1,3593 @@
+{
+  "actions": [
+    {
+      "name": "activate_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_activate_form($formToken: String!) { activate_form(formToken: $formToken) }",
+        "operation_name": "Monday_activate_form",
+        "variables": {
+          "formToken": "{{ record.formToken }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "formToken": {
+            "type": "string",
+            "description": "formToken argument for activate_form"
+          }
+        },
+        "required": [
+          "formToken"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation activate_form; reverse ETL approval required"
+    },
+    {
+      "name": "activate_managed_column",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_activate_managed_column($id: String!) { activate_managed_column(id: $id) {\n    status\n    title\n  } }",
+        "operation_name": "Monday_activate_managed_column",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for activate_managed_column"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation activate_managed_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_content_to_doc_from_markdown",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_add_content_to_doc_from_markdown($docId: ID!, $markdown: String!) { add_content_to_doc_from_markdown(docId: $docId, markdown: $markdown) {\n    success\n    block_ids\n    error\n  } }",
+        "operation_name": "Monday_add_content_to_doc_from_markdown",
+        "variables": {
+          "docId": "{{ record.docId }}",
+          "markdown": "{{ record.markdown }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "docId": {
+            "type": "string",
+            "description": "docId argument for add_content_to_doc_from_markdown"
+          },
+          "markdown": {
+            "type": "string",
+            "description": "markdown argument for add_content_to_doc_from_markdown"
+          }
+        },
+        "required": [
+          "docId",
+          "markdown"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation add_content_to_doc_from_markdown; reverse ETL approval required"
+    },
+    {
+      "name": "add_required_column",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_add_required_column($id: ID!, $column_id: String!) { add_required_column(id: $id, column_id: $column_id, type: board) {\n    required_column_ids\n  } }",
+        "operation_name": "Monday_add_required_column",
+        "variables": {
+          "id": "{{ record.id }}",
+          "column_id": "{{ record.column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for add_required_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for add_required_column"
+          }
+        },
+        "required": [
+          "id",
+          "column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation add_required_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "archive_board",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_archive_board($board_id: ID!) { archive_board(board_id: $board_id) {\n    id\n  } }",
+        "operation_name": "Monday_archive_board",
+        "variables": {
+          "board_id": "{{ record.board_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for archive_board"
+          }
+        },
+        "required": [
+          "board_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation archive_board; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "archive_group",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_archive_group($board_id: ID!, $group_id: String!) { archive_group(board_id: $board_id, group_id: $group_id) {\n    id\n    archived\n  } }",
+        "operation_name": "Monday_archive_group",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "group_id": "{{ record.group_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for archive_group"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "group_id argument for archive_group"
+          }
+        },
+        "required": [
+          "board_id",
+          "group_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation archive_group; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "archive_item",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_archive_item($item_id: ID!) { archive_item(item_id: $item_id) {\n    id\n  } }",
+        "operation_name": "Monday_archive_item",
+        "variables": {
+          "item_id": "{{ record.item_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for archive_item"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation archive_item; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "archive_object",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_archive_object($id: ID!) { archive_object(id: $id) {\n    state\n    name\n  } }",
+        "operation_name": "Monday_archive_object",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for archive_object"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation archive_object; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "assign_department_owner",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_assign_department_owner($department_id: ID!, $user_id: ID!) { assign_department_owner(department_id: $department_id, user_id: $user_id) {\n    owner {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_assign_department_owner",
+        "variables": {
+          "department_id": "{{ record.department_id }}",
+          "user_id": "{{ record.user_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": "string",
+            "description": "department_id argument for assign_department_owner"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "user_id argument for assign_department_owner"
+          }
+        },
+        "required": [
+          "department_id",
+          "user_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation assign_department_owner; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "attach_status_managed_column",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_attach_status_managed_column($board_id: ID!, $managed_column_id: String!, $title: String!, $description: String!) { attach_status_managed_column(board_id: $board_id, managed_column_id: $managed_column_id, title: $title, description: $description) {\n    id\n    title\n    type\n  } }",
+        "operation_name": "Monday_attach_status_managed_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "managed_column_id": "{{ record.managed_column_id }}",
+          "title": "{{ record.title }}",
+          "description": "{{ record.description }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for attach_status_managed_column"
+          },
+          "managed_column_id": {
+            "type": "string",
+            "description": "managed_column_id argument for attach_status_managed_column"
+          },
+          "title": {
+            "type": "string",
+            "description": "title argument for attach_status_managed_column"
+          },
+          "description": {
+            "type": "string",
+            "description": "description argument for attach_status_managed_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "managed_column_id",
+          "title",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation attach_status_managed_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "backfill_items",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_backfill_items($board_id: String!, $group_id: String!) { backfill_items(board_id: $board_id, group_id: $group_id) {\n    job_id\n    upload_url\n  } }",
+        "operation_name": "Monday_backfill_items",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "group_id": "{{ record.group_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for backfill_items"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "group_id argument for backfill_items"
+          }
+        },
+        "required": [
+          "board_id",
+          "group_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation backfill_items; reverse ETL approval required"
+    },
+    {
+      "name": "change_column_metadata",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_change_column_metadata($board_id: ID!, $column_id: String!, $value: String!) { change_column_metadata(board_id: $board_id, column_id: $column_id, column_property: description, value: $value) {\n    id\n    title\n    description\n  } }",
+        "operation_name": "Monday_change_column_metadata",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "value": "{{ record.value }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for change_column_metadata"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for change_column_metadata"
+          },
+          "value": {
+            "type": "string",
+            "description": "value argument for change_column_metadata"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation change_column_metadata; reverse ETL approval required"
+    },
+    {
+      "name": "change_column_title",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_change_column_title($board_id: ID!, $column_id: String!, $title: String!) { change_column_title(board_id: $board_id, column_id: $column_id, title: $title) {\n    id\n  } }",
+        "operation_name": "Monday_change_column_title",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "title": "{{ record.title }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for change_column_title"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for change_column_title"
+          },
+          "title": {
+            "type": "string",
+            "description": "title argument for change_column_title"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "title"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation change_column_title; reverse ETL approval required"
+    },
+    {
+      "name": "change_column_value",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_change_column_value($board_id: ID!, $item_id: ID!, $column_id: String!, $value: String!) { change_column_value(board_id: $board_id, item_id: $item_id, column_id: $column_id, value: $value) {\n    id\n  } }",
+        "operation_name": "Monday_change_column_value",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "item_id": "{{ record.item_id }}",
+          "column_id": "{{ record.column_id }}",
+          "value": "{{ record.value }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for change_column_value"
+          },
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for change_column_value"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for change_column_value"
+          },
+          "value": {
+            "type": "string",
+            "description": "value argument for change_column_value"
+          }
+        },
+        "required": [
+          "board_id",
+          "item_id",
+          "column_id",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation change_column_value; reverse ETL approval required"
+    },
+    {
+      "name": "change_item_position",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_change_item_position($item_id: ID!, $relative_to: Int!) { change_item_position(item_id: $item_id, relative_to: $relative_to, position_relative_method: after_at) {\n  id\n  group {\n   id\n  }\n } }",
+        "operation_name": "Monday_change_item_position",
+        "variables": {
+          "item_id": "{{ record.item_id }}",
+          "relative_to": {
+            "template": "{{ record.relative_to }}",
+            "type": "integer"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for change_item_position"
+          },
+          "relative_to": {
+            "type": "integer",
+            "description": "relative_to argument for change_item_position"
+          }
+        },
+        "required": [
+          "item_id",
+          "relative_to"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation change_item_position; reverse ETL approval required"
+    },
+    {
+      "name": "change_multiple_column_values",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_change_multiple_column_values($item_id: ID!, $board_id: ID!, $column_values: String!) { change_multiple_column_values(item_id: $item_id, board_id: $board_id, column_values: $column_values) {\n    id\n    name\n  } }",
+        "operation_name": "Monday_change_multiple_column_values",
+        "variables": {
+          "item_id": "{{ record.item_id }}",
+          "board_id": "{{ record.board_id }}",
+          "column_values": "{{ record.column_values }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for change_multiple_column_values"
+          },
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for change_multiple_column_values"
+          },
+          "column_values": {
+            "type": "string",
+            "description": "column_values argument for change_multiple_column_values"
+          }
+        },
+        "required": [
+          "item_id",
+          "board_id",
+          "column_values"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation change_multiple_column_values; reverse ETL approval required"
+    },
+    {
+      "name": "change_simple_column_value",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_change_simple_column_value($item_id: ID!, $board_id: ID!, $column_id: String!, $value: String!) { change_simple_column_value(item_id: $item_id, board_id: $board_id, column_id: $column_id, value: $value) {\n    id\n  } }",
+        "operation_name": "Monday_change_simple_column_value",
+        "variables": {
+          "item_id": "{{ record.item_id }}",
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "value": "{{ record.value }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for change_simple_column_value"
+          },
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for change_simple_column_value"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for change_simple_column_value"
+          },
+          "value": {
+            "type": "string",
+            "description": "value argument for change_simple_column_value"
+          }
+        },
+        "required": [
+          "item_id",
+          "board_id",
+          "column_id",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation change_simple_column_value; reverse ETL approval required"
+    },
+    {
+      "name": "clear_item_updates",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_clear_item_updates($item_id: ID!) { clear_item_updates(item_id: $item_id) {\n    id\n  } }",
+        "operation_name": "Monday_clear_item_updates",
+        "variables": {
+          "item_id": "{{ record.item_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for clear_item_updates"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation clear_item_updates; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "configure_extract_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_extract_ai_column($board_id: String!, $column_id: String!, $source_column_id: String!) { configure_extract_ai_column(board_id: $board_id, column_id: $column_id, source_type: column, source_column_id: $source_column_id, entity_type: email_address) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_extract_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "source_column_id": "{{ record.source_column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_extract_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_extract_ai_column"
+          },
+          "source_column_id": {
+            "type": "string",
+            "description": "source_column_id argument for configure_extract_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "source_column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_extract_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "configure_improve_text_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_improve_text_ai_column($board_id: String!, $column_id: String!, $source_column_id: String!) { configure_improve_text_ai_column(board_id: $board_id, column_id: $column_id, source_type: column, source_column_id: $source_column_id, tone: professional, length: shorter, refinement_type: minimal_changes) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_improve_text_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "source_column_id": "{{ record.source_column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_improve_text_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_improve_text_ai_column"
+          },
+          "source_column_id": {
+            "type": "string",
+            "description": "source_column_id argument for configure_improve_text_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "source_column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_improve_text_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "configure_open_block_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_open_block_ai_column($board_id: String!, $column_id: String!, $ai_query: String!) { configure_open_block_ai_column(board_id: $board_id, column_id: $column_id, ai_query: $ai_query) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_open_block_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "ai_query": "{{ record.ai_query }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_open_block_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_open_block_ai_column"
+          },
+          "ai_query": {
+            "type": "string",
+            "description": "ai_query argument for configure_open_block_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "ai_query"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_open_block_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "configure_person_assignment_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_person_assignment_ai_column($board_id: String!, $column_id: String!, $groups: String!) { configure_person_assignment_ai_column(board_id: $board_id, column_id: $column_id, source_type: thread, groups: $groups) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_person_assignment_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "groups": "{{ record.groups }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_person_assignment_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_person_assignment_ai_column"
+          },
+          "groups": {
+            "type": "string",
+            "description": "groups argument for configure_person_assignment_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "groups"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_person_assignment_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "configure_summarize_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_summarize_ai_column($board_id: String!, $column_id: String!, $additional_instructions: String!) { configure_summarize_ai_column(board_id: $board_id, column_id: $column_id, source_type: thread, additional_instructions: $additional_instructions) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_summarize_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "additional_instructions": "{{ record.additional_instructions }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_summarize_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_summarize_ai_column"
+          },
+          "additional_instructions": {
+            "type": "string",
+            "description": "additional_instructions argument for configure_summarize_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "additional_instructions"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_summarize_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "configure_translate_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_translate_ai_column($board_id: String!, $column_id: String!) { configure_translate_ai_column(board_id: $board_id, column_id: $column_id, source_type: item_name, target_language: spanish) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_translate_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_translate_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_translate_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_translate_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "configure_write_me_ai_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_configure_write_me_ai_column($board_id: String!, $column_id: String!, $ai_query: String!) { configure_write_me_ai_column(board_id: $board_id, column_id: $column_id, ai_query: $ai_query, tone: professional, length: paragraph) {\n    column_id\n  } }",
+        "operation_name": "Monday_configure_write_me_ai_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}",
+          "ai_query": "{{ record.ai_query }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for configure_write_me_ai_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for configure_write_me_ai_column"
+          },
+          "ai_query": {
+            "type": "string",
+            "description": "ai_query argument for configure_write_me_ai_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id",
+          "ai_query"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation configure_write_me_ai_column; reverse ETL approval required"
+    },
+    {
+      "name": "connect_board_to_object_schema",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_connect_board_to_object_schema($board_id: String!, $object_schema_id: String!) { connect_board_to_object_schema(board_id: $board_id, object_schema_id: $object_schema_id) {\n    id\n    object_schema_id\n  } }",
+        "operation_name": "Monday_connect_board_to_object_schema",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "object_schema_id": "{{ record.object_schema_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for connect_board_to_object_schema"
+          },
+          "object_schema_id": {
+            "type": "string",
+            "description": "object_schema_id argument for connect_board_to_object_schema"
+          }
+        },
+        "required": [
+          "board_id",
+          "object_schema_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation connect_board_to_object_schema; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "connect_project_to_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_connect_project_to_portfolio($projectBoardId: ID!, $portfolioBoardId: ID!) { connect_project_to_portfolio(projectBoardId: $projectBoardId, portfolioBoardId: $portfolioBoardId) {\n    portfolio_item_id\n    process_id\n    message\n    success\n  } }",
+        "operation_name": "Monday_connect_project_to_portfolio",
+        "variables": {
+          "projectBoardId": "{{ record.projectBoardId }}",
+          "portfolioBoardId": "{{ record.portfolioBoardId }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "projectBoardId": {
+            "type": "string",
+            "description": "projectBoardId argument for connect_project_to_portfolio"
+          },
+          "portfolioBoardId": {
+            "type": "string",
+            "description": "portfolioBoardId argument for connect_project_to_portfolio"
+          }
+        },
+        "required": [
+          "projectBoardId",
+          "portfolioBoardId"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation connect_project_to_portfolio; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_app_feature",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_app_feature($slug: String!, $app_id: ID!) { create_app_feature(slug: $slug, app_id: $app_id, type: ITEM_VIEW) {\n    id\n    name\n  } }",
+        "operation_name": "Monday_create_app_feature",
+        "variables": {
+          "slug": "{{ record.slug }}",
+          "app_id": "{{ record.app_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "slug argument for create_app_feature"
+          },
+          "app_id": {
+            "type": "string",
+            "description": "app_id argument for create_app_feature"
+          }
+        },
+        "required": [
+          "slug",
+          "app_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation create_app_feature; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_article($name: String!, $workspace_id: String!, $folder_id: String!) { create_article(name: $name, workspace_id: $workspace_id, folder_id: $folder_id) {\n    object_id\n    name\n    workspace_id\n  } }",
+        "operation_name": "Monday_create_article",
+        "variables": {
+          "name": "{{ record.name }}",
+          "workspace_id": "{{ record.workspace_id }}",
+          "folder_id": "{{ record.folder_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name argument for create_article"
+          },
+          "workspace_id": {
+            "type": "string",
+            "description": "workspace_id argument for create_article"
+          },
+          "folder_id": {
+            "type": "string",
+            "description": "folder_id argument for create_article"
+          }
+        },
+        "required": [
+          "name",
+          "workspace_id",
+          "folder_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_article; reverse ETL approval required"
+    },
+    {
+      "name": "create_column",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_column($board_id: ID!, $title: String!, $defaults: String!) { create_column(board_id: $board_id, title: $title, column_type: auto_number, defaults: $defaults) {\n    id\n    title\n    settings\n  } }",
+        "operation_name": "Monday_create_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "title": "{{ record.title }}",
+          "defaults": "{{ record.defaults }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for create_column"
+          },
+          "title": {
+            "type": "string",
+            "description": "title argument for create_column"
+          },
+          "defaults": {
+            "type": "string",
+            "description": "defaults argument for create_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "title",
+          "defaults"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_column; reverse ETL approval required"
+    },
+    {
+      "name": "create_custom_activity",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_custom_activity($name: String!) { create_custom_activity(color: SLATE_BLUE, icon_id: TRIPOD, name: $name) {\n    id\n  } }",
+        "operation_name": "Monday_create_custom_activity",
+        "variables": {
+          "name": "{{ record.name }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name argument for create_custom_activity"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_custom_activity; reverse ETL approval required"
+    },
+    {
+      "name": "create_doc_block",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_doc_block($doc_id: ID!, $after_block_id: String!, $content: String!) { create_doc_block(type: normal_text, doc_id: $doc_id, after_block_id: $after_block_id, content: $content) {\n    id\n  } }",
+        "operation_name": "Monday_create_doc_block",
+        "variables": {
+          "doc_id": "{{ record.doc_id }}",
+          "after_block_id": "{{ record.after_block_id }}",
+          "content": "{{ record.content }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "description": "doc_id argument for create_doc_block"
+          },
+          "after_block_id": {
+            "type": "string",
+            "description": "after_block_id argument for create_doc_block"
+          },
+          "content": {
+            "type": "string",
+            "description": "content argument for create_doc_block"
+          }
+        },
+        "required": [
+          "doc_id",
+          "after_block_id",
+          "content"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation create_doc_block; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_folder($name: String!, $workspace_id: ID!) { create_folder(name: $name, workspace_id: $workspace_id) {\n    id\n  } }",
+        "operation_name": "Monday_create_folder",
+        "variables": {
+          "name": "{{ record.name }}",
+          "workspace_id": "{{ record.workspace_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name argument for create_folder"
+          },
+          "workspace_id": {
+            "type": "string",
+            "description": "workspace_id argument for create_folder"
+          }
+        },
+        "required": [
+          "name",
+          "workspace_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_folder; reverse ETL approval required"
+    },
+    {
+      "name": "create_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_form($destination_folder_id: ID!, $destination_folder_name: String!, $destination_name: String!, $destination_workspace_id: ID!) { create_form(board_kind: public, destination_folder_id: $destination_folder_id, destination_folder_name: $destination_folder_name, destination_name: $destination_name, destination_workspace_id: $destination_workspace_id) {\n    boardId\n\t\ttoken\n  } }",
+        "operation_name": "Monday_create_form",
+        "variables": {
+          "destination_folder_id": "{{ record.destination_folder_id }}",
+          "destination_folder_name": "{{ record.destination_folder_name }}",
+          "destination_name": "{{ record.destination_name }}",
+          "destination_workspace_id": "{{ record.destination_workspace_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "destination_folder_id": {
+            "type": "string",
+            "description": "destination_folder_id argument for create_form"
+          },
+          "destination_folder_name": {
+            "type": "string",
+            "description": "destination_folder_name argument for create_form"
+          },
+          "destination_name": {
+            "type": "string",
+            "description": "destination_name argument for create_form"
+          },
+          "destination_workspace_id": {
+            "type": "string",
+            "description": "destination_workspace_id argument for create_form"
+          }
+        },
+        "required": [
+          "destination_folder_id",
+          "destination_folder_name",
+          "destination_name",
+          "destination_workspace_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_form; reverse ETL approval required"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_group($board_id: ID!, $group_name: String!, $relative_to: String!, $group_color: String!) { create_group(board_id: $board_id, group_name: $group_name, relative_to: $relative_to, group_color: $group_color, position_relative_method: before_at) {\n    id\n  } }",
+        "operation_name": "Monday_create_group",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "group_name": "{{ record.group_name }}",
+          "relative_to": "{{ record.relative_to }}",
+          "group_color": "{{ record.group_color }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for create_group"
+          },
+          "group_name": {
+            "type": "string",
+            "description": "group_name argument for create_group"
+          },
+          "relative_to": {
+            "type": "string",
+            "description": "relative_to argument for create_group"
+          },
+          "group_color": {
+            "type": "string",
+            "description": "group_color argument for create_group"
+          }
+        },
+        "required": [
+          "board_id",
+          "group_name",
+          "relative_to",
+          "group_color"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_group; reverse ETL approval required"
+    },
+    {
+      "name": "create_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_item($board_id: ID!, $item_name: String!, $column_values: String!) { create_item(board_id: $board_id, item_name: $item_name, column_values: $column_values) {\n    id\n    name\n  } }",
+        "operation_name": "Monday_create_item",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "item_name": "{{ record.item_name }}",
+          "column_values": "{{ record.column_values }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for create_item"
+          },
+          "item_name": {
+            "type": "string",
+            "description": "item_name argument for create_item"
+          },
+          "column_values": {
+            "type": "string",
+            "description": "column_values argument for create_item"
+          }
+        },
+        "required": [
+          "board_id",
+          "item_name",
+          "column_values"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_item; reverse ETL approval required"
+    },
+    {
+      "name": "create_notification",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_notification($user_id: ID!, $target_id: ID!, $text: String!) { create_notification(user_id: $user_id, target_id: $target_id, text: $text, target_type: Project) {\n    text\n  } }",
+        "operation_name": "Monday_create_notification",
+        "variables": {
+          "user_id": "{{ record.user_id }}",
+          "target_id": "{{ record.target_id }}",
+          "text": "{{ record.text }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "user_id argument for create_notification"
+          },
+          "target_id": {
+            "type": "string",
+            "description": "target_id argument for create_notification"
+          },
+          "text": {
+            "type": "string",
+            "description": "text argument for create_notification"
+          }
+        },
+        "required": [
+          "user_id",
+          "target_id",
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation create_notification; reverse ETL approval required"
+    },
+    {
+      "name": "create_object_schema",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_object_schema($name: String!, $description: String!) { create_object_schema(name: $name, description: $description) {\n    id\n    name\n    description\n    revision\n  } }",
+        "operation_name": "Monday_create_object_schema",
+        "variables": {
+          "name": "{{ record.name }}",
+          "description": "{{ record.description }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name argument for create_object_schema"
+          },
+          "description": {
+            "type": "string",
+            "description": "description argument for create_object_schema"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation create_object_schema; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_or_get_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_or_get_tag($tag_name: String!) { create_or_get_tag(tag_name: $tag_name) {\n    id\n    name\n    color\n  } }",
+        "operation_name": "Monday_create_or_get_tag",
+        "variables": {
+          "tag_name": "{{ record.tag_name }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_name": {
+            "type": "string",
+            "description": "tag_name argument for create_or_get_tag"
+          }
+        },
+        "required": [
+          "tag_name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_or_get_tag; reverse ETL approval required"
+    },
+    {
+      "name": "create_portfolio",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_portfolio($boardName: String!, $boardPrivacy: String!, $destinationWorkspaceId: ID!, $callback_url: String!) { create_portfolio(boardName: $boardName, boardPrivacy: $boardPrivacy, destinationWorkspaceId: $destinationWorkspaceId, callback_url: $callback_url) {\n    success\n    message\n    process_id\n  } }",
+        "operation_name": "Monday_create_portfolio",
+        "variables": {
+          "boardName": "{{ record.boardName }}",
+          "boardPrivacy": "{{ record.boardPrivacy }}",
+          "destinationWorkspaceId": "{{ record.destinationWorkspaceId }}",
+          "callback_url": "{{ record.callback_url }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "boardName": {
+            "type": "string",
+            "description": "boardName argument for create_portfolio"
+          },
+          "boardPrivacy": {
+            "type": "string",
+            "description": "boardPrivacy argument for create_portfolio"
+          },
+          "destinationWorkspaceId": {
+            "type": "string",
+            "description": "destinationWorkspaceId argument for create_portfolio"
+          },
+          "callback_url": {
+            "type": "string",
+            "description": "callback_url argument for create_portfolio"
+          }
+        },
+        "required": [
+          "boardName",
+          "boardPrivacy",
+          "destinationWorkspaceId",
+          "callback_url"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation create_portfolio; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_subitem",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_subitem($parent_item_id: ID!, $item_name: String!) { create_subitem(parent_item_id: $parent_item_id, item_name: $item_name) {\n    id\n    name\n    board {\n      id\n    }\n  } }",
+        "operation_name": "Monday_create_subitem",
+        "variables": {
+          "parent_item_id": "{{ record.parent_item_id }}",
+          "item_name": "{{ record.item_name }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "parent_item_id": {
+            "type": "string",
+            "description": "parent_item_id argument for create_subitem"
+          },
+          "item_name": {
+            "type": "string",
+            "description": "item_name argument for create_subitem"
+          }
+        },
+        "required": [
+          "parent_item_id",
+          "item_name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_subitem; reverse ETL approval required"
+    },
+    {
+      "name": "create_view_table",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_view_table($board_id: ID!, $name: String!) { create_view_table(board_id: $board_id, name: $name) {\n    id\n    name\n  } }",
+        "operation_name": "Monday_create_view_table",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "name": "{{ record.name }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for create_view_table"
+          },
+          "name": {
+            "type": "string",
+            "description": "name argument for create_view_table"
+          }
+        },
+        "required": [
+          "board_id",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation create_view_table; reverse ETL approval required"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_webhook($board_id: ID!, $url: String!, $config: String!) { create_webhook(board_id: $board_id, url: $url, event: change_status_column_value, config: $config) {\n    id\n    board_id\n  } }",
+        "operation_name": "Monday_create_webhook",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "url": "{{ record.url }}",
+          "config": "{{ record.config }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for create_webhook"
+          },
+          "url": {
+            "type": "string",
+            "description": "url argument for create_webhook"
+          },
+          "config": {
+            "type": "string",
+            "description": "config argument for create_webhook"
+          }
+        },
+        "required": [
+          "board_id",
+          "url",
+          "config"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation create_webhook; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_create_workspace($name: String!, $description: String!, $account_product_id: ID!) { create_workspace(name: $name, kind: open, description: $description, account_product_id: $account_product_id) {\n    id\n    description\n  } }",
+        "operation_name": "Monday_create_workspace",
+        "variables": {
+          "name": "{{ record.name }}",
+          "description": "{{ record.description }}",
+          "account_product_id": "{{ record.account_product_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name argument for create_workspace"
+          },
+          "description": {
+            "type": "string",
+            "description": "description argument for create_workspace"
+          },
+          "account_product_id": {
+            "type": "string",
+            "description": "account_product_id argument for create_workspace"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "account_product_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation create_workspace; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "deactivate_form",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_deactivate_form($formToken: String!) { deactivate_form(formToken: $formToken) }",
+        "operation_name": "Monday_deactivate_form",
+        "variables": {
+          "formToken": "{{ record.formToken }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "formToken": {
+            "type": "string",
+            "description": "formToken argument for deactivate_form"
+          }
+        },
+        "required": [
+          "formToken"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation deactivate_form; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "deactivate_managed_column",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_deactivate_managed_column($id: String!) { deactivate_managed_column(id: $id) {\n    state\n    title\n  } }",
+        "operation_name": "Monday_deactivate_managed_column",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for deactivate_managed_column"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation deactivate_managed_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_app_lifecycle_subscription",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_app_lifecycle_subscription($entity_identifier: String!, $entity_type: String!) { delete_app_lifecycle_subscription(entity_identifier: $entity_identifier, entity_type: $entity_type) }",
+        "operation_name": "Monday_delete_app_lifecycle_subscription",
+        "variables": {
+          "entity_identifier": "{{ record.entity_identifier }}",
+          "entity_type": "{{ record.entity_type }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entity_identifier": {
+            "type": "string",
+            "description": "entity_identifier argument for delete_app_lifecycle_subscription"
+          },
+          "entity_type": {
+            "type": "string",
+            "description": "entity_type argument for delete_app_lifecycle_subscription"
+          }
+        },
+        "required": [
+          "entity_identifier",
+          "entity_type"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_app_lifecycle_subscription; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_article",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_article($object_id: String!) { delete_article(object_id: $object_id) {\n    object_id\n    state\n  } }",
+        "operation_name": "Monday_delete_article",
+        "variables": {
+          "object_id": "{{ record.object_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object_id": {
+            "type": "string",
+            "description": "object_id argument for delete_article"
+          }
+        },
+        "required": [
+          "object_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_article; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_board",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_board($board_id: ID!) { delete_board(board_id: $board_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_board",
+        "variables": {
+          "board_id": "{{ record.board_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for delete_board"
+          }
+        },
+        "required": [
+          "board_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_board; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_column",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_column($board_id: ID!, $column_id: String!) { delete_column(board_id: $board_id, column_id: $column_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for delete_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for delete_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_activity",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_custom_activity($id: String!) { delete_custom_activity(id: $id) {\n    name\n  } }",
+        "operation_name": "Monday_delete_custom_activity",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_custom_activity"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_custom_activity; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_dashboard",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_dashboard($id: ID!) { delete_dashboard(id: $id) }",
+        "operation_name": "Monday_delete_dashboard",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_dashboard"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_dashboard; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_department",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_department($department_id: ID!) { delete_department(department_id: $department_id) {\n    id\n    name\n    members {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_delete_department",
+        "variables": {
+          "department_id": "{{ record.department_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "department_id": {
+            "type": "string",
+            "description": "department_id argument for delete_department"
+          }
+        },
+        "required": [
+          "department_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_department; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_doc",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_doc($docId: ID!) { delete_doc(docId: $docId) }",
+        "operation_name": "Monday_delete_doc",
+        "variables": {
+          "docId": "{{ record.docId }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "docId": {
+            "type": "string",
+            "description": "docId argument for delete_doc"
+          }
+        },
+        "required": [
+          "docId"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_doc; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_doc_block",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_doc_block($block_id: String!) { delete_doc_block(block_id: $block_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_doc_block",
+        "variables": {
+          "block_id": "{{ record.block_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "type": "string",
+            "description": "block_id argument for delete_doc_block"
+          }
+        },
+        "required": [
+          "block_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_doc_block; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_folder",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_folder($folder_id: ID!) { delete_folder(folder_id: $folder_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_folder",
+        "variables": {
+          "folder_id": "{{ record.folder_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folder_id": {
+            "type": "string",
+            "description": "folder_id argument for delete_folder"
+          }
+        },
+        "required": [
+          "folder_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_folder; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_group($board_id: ID!, $group_id: String!) { delete_group(board_id: $board_id, group_id: $group_id) {\n    id\n    deleted\n  } }",
+        "operation_name": "Monday_delete_group",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "group_id": "{{ record.group_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for delete_group"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "group_id argument for delete_group"
+          }
+        },
+        "required": [
+          "board_id",
+          "group_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_group; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_item",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_item($item_id: ID!) { delete_item(item_id: $item_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_item",
+        "variables": {
+          "item_id": "{{ record.item_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for delete_item"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_item; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_managed_column",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_managed_column($id: String!) { delete_managed_column(id: $id) {\n    state\n    title\n  } }",
+        "operation_name": "Monday_delete_managed_column",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_managed_column"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_managed_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_marketplace_app_discount",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_marketplace_app_discount($account_slug: String!, $app_id: ID!) { delete_marketplace_app_discount(account_slug: $account_slug, app_id: $app_id) {\n    deleted_discount {\n      account_slug\n      app_id\n    }\n  } }",
+        "operation_name": "Monday_delete_marketplace_app_discount",
+        "variables": {
+          "account_slug": "{{ record.account_slug }}",
+          "app_id": "{{ record.app_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_slug": {
+            "type": "string",
+            "description": "account_slug argument for delete_marketplace_app_discount"
+          },
+          "app_id": {
+            "type": "string",
+            "description": "app_id argument for delete_marketplace_app_discount"
+          }
+        },
+        "required": [
+          "account_slug",
+          "app_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_marketplace_app_discount; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_object",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_object($id: ID!) { delete_object(id: $id) {\n    state\n    name\n  } }",
+        "operation_name": "Monday_delete_object",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_object"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_object; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_object_relation",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_object_relation($source_object_id: String!, $relation_id: String!) { delete_object_relation(source_object_id: $source_object_id, relation_id: $relation_id) }",
+        "operation_name": "Monday_delete_object_relation",
+        "variables": {
+          "source_object_id": "{{ record.source_object_id }}",
+          "relation_id": "{{ record.relation_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "source_object_id": {
+            "type": "string",
+            "description": "source_object_id argument for delete_object_relation"
+          },
+          "relation_id": {
+            "type": "string",
+            "description": "relation_id argument for delete_object_relation"
+          }
+        },
+        "required": [
+          "source_object_id",
+          "relation_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_object_relation; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_object_schema",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_object_schema($id: String!) { delete_object_schema(id: $id) {\n    id\n    name\n  } }",
+        "operation_name": "Monday_delete_object_schema",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_object_schema"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_object_schema; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_question",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_question($formToken: String!, $questionId: String!) { delete_question(formToken: $formToken, questionId: $questionId) }",
+        "operation_name": "Monday_delete_question",
+        "variables": {
+          "formToken": "{{ record.formToken }}",
+          "questionId": "{{ record.questionId }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "formToken": {
+            "type": "string",
+            "description": "formToken argument for delete_question"
+          },
+          "questionId": {
+            "type": "string",
+            "description": "questionId argument for delete_question"
+          }
+        },
+        "required": [
+          "formToken",
+          "questionId"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_question; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_team($team_id: ID!) { delete_team(team_id: $team_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_team",
+        "variables": {
+          "team_id": "{{ record.team_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string",
+            "description": "team_id argument for delete_team"
+          }
+        },
+        "required": [
+          "team_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_team; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_timeline_item",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_timeline_item($id: String!) { delete_timeline_item(id: $id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_timeline_item",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_timeline_item"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_timeline_item; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_update",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_update($id: ID!) { delete_update(id: $id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_update",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_update"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_update; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_validation_rule",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_validation_rule($id: ID!, $rule_id: String!) { delete_validation_rule(id: $id, type: board, rule_id: $rule_id) {\n    id\n    if\n    then\n  } }",
+        "operation_name": "Monday_delete_validation_rule",
+        "variables": {
+          "id": "{{ record.id }}",
+          "rule_id": "{{ record.rule_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_validation_rule"
+          },
+          "rule_id": {
+            "type": "string",
+            "description": "rule_id argument for delete_validation_rule"
+          }
+        },
+        "required": [
+          "id",
+          "rule_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_validation_rule; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_view",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_view($board_id: ID!, $view_id: ID!) { delete_view(board_id: $board_id, view_id: $view_id) {\n    name\n  } }",
+        "operation_name": "Monday_delete_view",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "view_id": "{{ record.view_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for delete_view"
+          },
+          "view_id": {
+            "type": "string",
+            "description": "view_id argument for delete_view"
+          }
+        },
+        "required": [
+          "board_id",
+          "view_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_view; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_webhook($id: ID!) { delete_webhook(id: $id) {\n    id\n    board_id\n  } }",
+        "operation_name": "Monday_delete_webhook",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_webhook"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_webhook; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_widget",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_widget($id: ID!) { delete_widget(id: $id) }",
+        "operation_name": "Monday_delete_widget",
+        "variables": {
+          "id": "{{ record.id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for delete_widget"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_widget; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_workspace",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_delete_workspace($workspace_id: ID!) { delete_workspace(workspace_id: $workspace_id) {\n    id\n  } }",
+        "operation_name": "Monday_delete_workspace",
+        "variables": {
+          "workspace_id": "{{ record.workspace_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "description": "workspace_id argument for delete_workspace"
+          }
+        },
+        "required": [
+          "workspace_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation delete_workspace; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "duplicate_board",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_duplicate_board($board_id: ID!) { duplicate_board(board_id: $board_id, duplicate_type: duplicate_board_with_structure) {\n    board {\n      id\n    }\n  } }",
+        "operation_name": "Monday_duplicate_board",
+        "variables": {
+          "board_id": "{{ record.board_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for duplicate_board"
+          }
+        },
+        "required": [
+          "board_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation duplicate_board; reverse ETL approval required"
+    },
+    {
+      "name": "duplicate_doc",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_duplicate_doc($docId: ID!) { duplicate_doc(docId: $docId, duplicateType: duplicate_doc_with_content_and_updates) }",
+        "operation_name": "Monday_duplicate_doc",
+        "variables": {
+          "docId": "{{ record.docId }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "docId": {
+            "type": "string",
+            "description": "docId argument for duplicate_doc"
+          }
+        },
+        "required": [
+          "docId"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation duplicate_doc; reverse ETL approval required"
+    },
+    {
+      "name": "duplicate_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_duplicate_group($board_id: ID!, $group_id: String!, $add_to_top: Boolean!) { duplicate_group(board_id: $board_id, group_id: $group_id, add_to_top: $add_to_top) {\n    id\n  } }",
+        "operation_name": "Monday_duplicate_group",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "group_id": "{{ record.group_id }}",
+          "add_to_top": {
+            "template": "{{ record.add_to_top }}",
+            "type": "boolean"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for duplicate_group"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "group_id argument for duplicate_group"
+          },
+          "add_to_top": {
+            "type": "boolean",
+            "description": "add_to_top argument for duplicate_group"
+          }
+        },
+        "required": [
+          "board_id",
+          "group_id",
+          "add_to_top"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation duplicate_group; reverse ETL approval required"
+    },
+    {
+      "name": "duplicate_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_duplicate_item($board_id: ID!, $item_id: ID!, $with_updates: Boolean!) { duplicate_item(board_id: $board_id, item_id: $item_id, with_updates: $with_updates) {\n    id\n  } }",
+        "operation_name": "Monday_duplicate_item",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "item_id": "{{ record.item_id }}",
+          "with_updates": {
+            "template": "{{ record.with_updates }}",
+            "type": "boolean"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for duplicate_item"
+          },
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for duplicate_item"
+          },
+          "with_updates": {
+            "type": "boolean",
+            "description": "with_updates argument for duplicate_item"
+          }
+        },
+        "required": [
+          "board_id",
+          "item_id",
+          "with_updates"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation duplicate_item; reverse ETL approval required"
+    },
+    {
+      "name": "edit_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_edit_update($id: ID!, $body: String!) { edit_update(id: $id, body: $body) {\n    creator_id\n    item_id\n  } }",
+        "operation_name": "Monday_edit_update",
+        "variables": {
+          "id": "{{ record.id }}",
+          "body": "{{ record.body }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for edit_update"
+          },
+          "body": {
+            "type": "string",
+            "description": "body argument for edit_update"
+          }
+        },
+        "required": [
+          "id",
+          "body"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation edit_update; reverse ETL approval required"
+    },
+    {
+      "name": "import_doc_from_html",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_import_doc_from_html($html: String!, $workspaceId: ID!, $title: String!, $folderId: ID!) { import_doc_from_html(html: $html, workspaceId: $workspaceId, title: $title, folderId: $folderId) {\n    error\n    success\n    doc_id\n  } }",
+        "operation_name": "Monday_import_doc_from_html",
+        "variables": {
+          "html": "{{ record.html }}",
+          "workspaceId": "{{ record.workspaceId }}",
+          "title": "{{ record.title }}",
+          "folderId": "{{ record.folderId }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "html argument for import_doc_from_html"
+          },
+          "workspaceId": {
+            "type": "string",
+            "description": "workspaceId argument for import_doc_from_html"
+          },
+          "title": {
+            "type": "string",
+            "description": "title argument for import_doc_from_html"
+          },
+          "folderId": {
+            "type": "string",
+            "description": "folderId argument for import_doc_from_html"
+          }
+        },
+        "required": [
+          "html",
+          "workspaceId",
+          "title",
+          "folderId"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation import_doc_from_html; reverse ETL approval required"
+    },
+    {
+      "name": "increase_app_subscription_operations",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_increase_app_subscription_operations($kind: String!, $increment_by: Int!) { increase_app_subscription_operations(kind: $kind, increment_by: $increment_by) {\n\tcounter_value\n   } }",
+        "operation_name": "Monday_increase_app_subscription_operations",
+        "variables": {
+          "kind": "{{ record.kind }}",
+          "increment_by": {
+            "template": "{{ record.increment_by }}",
+            "type": "integer"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "kind argument for increase_app_subscription_operations"
+          },
+          "increment_by": {
+            "type": "integer",
+            "description": "increment_by argument for increase_app_subscription_operations"
+          }
+        },
+        "required": [
+          "kind",
+          "increment_by"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation increase_app_subscription_operations; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "like_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_like_update($update_id: ID!) { like_update(update_id: $update_id) {\n    id\n  } }",
+        "operation_name": "Monday_like_update",
+        "variables": {
+          "update_id": "{{ record.update_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "update_id": {
+            "type": "string",
+            "description": "update_id argument for like_update"
+          }
+        },
+        "required": [
+          "update_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation like_update; reverse ETL approval required"
+    },
+    {
+      "name": "move_item_to_group",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_move_item_to_group($item_id: ID!, $group_id: String!) { move_item_to_group(item_id: $item_id, group_id: $group_id) {\n    id\n  } }",
+        "operation_name": "Monday_move_item_to_group",
+        "variables": {
+          "item_id": "{{ record.item_id }}",
+          "group_id": "{{ record.group_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for move_item_to_group"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "group_id argument for move_item_to_group"
+          }
+        },
+        "required": [
+          "item_id",
+          "group_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation move_item_to_group; reverse ETL approval required"
+    },
+    {
+      "name": "pin_to_top",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_pin_to_top($id: ID!, $item_id: ID!) { pin_to_top(id: $id, item_id: $item_id) {\n    creator_id\n    body\n  } }",
+        "operation_name": "Monday_pin_to_top",
+        "variables": {
+          "id": "{{ record.id }}",
+          "item_id": "{{ record.item_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for pin_to_top"
+          },
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for pin_to_top"
+          }
+        },
+        "required": [
+          "id",
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation pin_to_top; reverse ETL approval required"
+    },
+    {
+      "name": "promote_app",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_promote_app($app_id: String!) { promote_app(app_id: $app_id) {\n    id\n    status\n  } }",
+        "operation_name": "Monday_promote_app",
+        "variables": {
+          "app_id": "{{ record.app_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string",
+            "description": "app_id argument for promote_app"
+          }
+        },
+        "required": [
+          "app_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation promote_app; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_ai_from_column",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_remove_ai_from_column($board_id: String!, $column_id: String!) { remove_ai_from_column(board_id: $board_id, column_id: $column_id) {\n    column_id\n    success\n  } }",
+        "operation_name": "Monday_remove_ai_from_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "column_id": "{{ record.column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for remove_ai_from_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for remove_ai_from_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation remove_ai_from_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_mock_app_subscription",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_remove_mock_app_subscription($app_id: ID!, $partial_signing_secret: String!) { remove_mock_app_subscription(app_id: $app_id, partial_signing_secret: $partial_signing_secret) {\n    billing_period\n    days_left\n    is_trial\n  } }",
+        "operation_name": "Monday_remove_mock_app_subscription",
+        "variables": {
+          "app_id": "{{ record.app_id }}",
+          "partial_signing_secret": "{{ record.partial_signing_secret }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string",
+            "description": "app_id argument for remove_mock_app_subscription"
+          },
+          "partial_signing_secret": {
+            "type": "string",
+            "description": "partial_signing_secret argument for remove_mock_app_subscription"
+          }
+        },
+        "required": [
+          "app_id",
+          "partial_signing_secret"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation remove_mock_app_subscription; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_required_column",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_remove_required_column($id: ID!, $column_id: String!) { remove_required_column(id: $id, column_id: $column_id, type: board) {\n    required_column_ids\n  } }",
+        "operation_name": "Monday_remove_required_column",
+        "variables": {
+          "id": "{{ record.id }}",
+          "column_id": "{{ record.column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for remove_required_column"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for remove_required_column"
+          }
+        },
+        "required": [
+          "id",
+          "column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation remove_required_column; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_board_permission",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_set_board_permission($board_id: ID!) { set_board_permission(board_id: $board_id, basic_role_name: viewer) {\n    edit_permissions\n    failed_actions\n  } }",
+        "operation_name": "Monday_set_board_permission",
+        "variables": {
+          "board_id": "{{ record.board_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for set_board_permission"
+          }
+        },
+        "required": [
+          "board_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation set_board_permission; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_item_description_content",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_set_item_description_content($item_id: ID!, $markdown: String!) { set_item_description_content(item_id: $item_id, markdown: $markdown) {\n    success\n    error\n    block_ids\n  } }",
+        "operation_name": "Monday_set_item_description_content",
+        "variables": {
+          "item_id": "{{ record.item_id }}",
+          "markdown": "{{ record.markdown }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for set_item_description_content"
+          },
+          "markdown": {
+            "type": "string",
+            "description": "markdown argument for set_item_description_content"
+          }
+        },
+        "required": [
+          "item_id",
+          "markdown"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation set_item_description_content; reverse ETL approval required"
+    },
+    {
+      "name": "set_mock_app_subscription",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_set_mock_app_subscription($app_id: ID!, $partial_signing_secret: String!, $is_trial: Boolean!, $plan_id: String!, $max_units: Int!) { set_mock_app_subscription(app_id: $app_id, partial_signing_secret: $partial_signing_secret, is_trial: $is_trial, plan_id: $plan_id, max_units: $max_units) {\n    plan_id\n  } }",
+        "operation_name": "Monday_set_mock_app_subscription",
+        "variables": {
+          "app_id": "{{ record.app_id }}",
+          "partial_signing_secret": "{{ record.partial_signing_secret }}",
+          "is_trial": {
+            "template": "{{ record.is_trial }}",
+            "type": "boolean"
+          },
+          "plan_id": "{{ record.plan_id }}",
+          "max_units": {
+            "template": "{{ record.max_units }}",
+            "type": "integer"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string",
+            "description": "app_id argument for set_mock_app_subscription"
+          },
+          "partial_signing_secret": {
+            "type": "string",
+            "description": "partial_signing_secret argument for set_mock_app_subscription"
+          },
+          "is_trial": {
+            "type": "boolean",
+            "description": "is_trial argument for set_mock_app_subscription"
+          },
+          "plan_id": {
+            "type": "string",
+            "description": "plan_id argument for set_mock_app_subscription"
+          },
+          "max_units": {
+            "type": "integer",
+            "description": "max_units argument for set_mock_app_subscription"
+          }
+        },
+        "required": [
+          "app_id",
+          "partial_signing_secret",
+          "is_trial",
+          "plan_id",
+          "max_units"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation set_mock_app_subscription; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "set_object_schema_column_active_state",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_set_object_schema_column_active_state($object_schema_id: String!, $column_id: String!) { set_object_schema_column_active_state(object_schema_id: $object_schema_id, column_id: $column_id, action: DEACTIVATE) {\n    id\n    columns {\n      id\n      title\n      tags {\n        deprecated\n      }\n    }\n  } }",
+        "operation_name": "Monday_set_object_schema_column_active_state",
+        "variables": {
+          "object_schema_id": "{{ record.object_schema_id }}",
+          "column_id": "{{ record.column_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object_schema_id": {
+            "type": "string",
+            "description": "object_schema_id argument for set_object_schema_column_active_state"
+          },
+          "column_id": {
+            "type": "string",
+            "description": "column_id argument for set_object_schema_column_active_state"
+          }
+        },
+        "required": [
+          "object_schema_id",
+          "column_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation set_object_schema_column_active_state; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "shorten_form_url",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_shorten_form_url($formToken: String!) { shorten_form_url(formToken: $formToken) {\n    enabled\n    url\n  } }",
+        "operation_name": "Monday_shorten_form_url",
+        "variables": {
+          "formToken": "{{ record.formToken }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "formToken": {
+            "type": "string",
+            "description": "formToken argument for shorten_form_url"
+          }
+        },
+        "required": [
+          "formToken"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation shorten_form_url; reverse ETL approval required"
+    },
+    {
+      "name": "unlike_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_unlike_update($update_id: ID!) { unlike_update(update_id: $update_id) {\n    creator_id\n    item_id\n  } }",
+        "operation_name": "Monday_unlike_update",
+        "variables": {
+          "update_id": "{{ record.update_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "update_id": {
+            "type": "string",
+            "description": "update_id argument for unlike_update"
+          }
+        },
+        "required": [
+          "update_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation unlike_update; reverse ETL approval required"
+    },
+    {
+      "name": "unpin_from_top",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_unpin_from_top($id: ID!, $item_id: ID!) { unpin_from_top(id: $id, item_id: $item_id) {\n    creator_id\n    body\n  } }",
+        "operation_name": "Monday_unpin_from_top",
+        "variables": {
+          "id": "{{ record.id }}",
+          "item_id": "{{ record.item_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for unpin_from_top"
+          },
+          "item_id": {
+            "type": "string",
+            "description": "item_id argument for unpin_from_top"
+          }
+        },
+        "required": [
+          "id",
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation unpin_from_top; reverse ETL approval required"
+    },
+    {
+      "name": "update_board",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_board($board_id: ID!, $new_value: String!) { update_board(board_id: $board_id, board_attribute: item_nickname, new_value: $new_value) }",
+        "operation_name": "Monday_update_board",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "new_value": "{{ record.new_value }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for update_board"
+          },
+          "new_value": {
+            "type": "string",
+            "description": "new_value argument for update_board"
+          }
+        },
+        "required": [
+          "board_id",
+          "new_value"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation update_board; reverse ETL approval required"
+    },
+    {
+      "name": "update_column",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_column($board_id: ID!, $id: String!, $title: String!, $description: String!, $width: Int!, $revision: String!) { update_column(board_id: $board_id, id: $id, title: $title, description: $description, column_type: status, width: $width, revision: $revision) {\n    id\n    title\n    description\n  } }",
+        "operation_name": "Monday_update_column",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "id": "{{ record.id }}",
+          "title": "{{ record.title }}",
+          "description": "{{ record.description }}",
+          "width": {
+            "template": "{{ record.width }}",
+            "type": "integer"
+          },
+          "revision": "{{ record.revision }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for update_column"
+          },
+          "id": {
+            "type": "string",
+            "description": "id argument for update_column"
+          },
+          "title": {
+            "type": "string",
+            "description": "title argument for update_column"
+          },
+          "description": {
+            "type": "string",
+            "description": "description argument for update_column"
+          },
+          "width": {
+            "type": "integer",
+            "description": "width argument for update_column"
+          },
+          "revision": {
+            "type": "string",
+            "description": "revision argument for update_column"
+          }
+        },
+        "required": [
+          "board_id",
+          "id",
+          "title",
+          "description",
+          "width",
+          "revision"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation update_column; reverse ETL approval required"
+    },
+    {
+      "name": "update_dashboard",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_dashboard($id: ID!, $board_folder_id: ID!, $name: String!, $workspace_id: ID!) { update_dashboard(id: $id, board_folder_id: $board_folder_id, kind: PUBLIC, name: $name, workspace_id: $workspace_id) {\n\t\tid\n    name\n    kind\n    workspace_id\n  } }",
+        "operation_name": "Monday_update_dashboard",
+        "variables": {
+          "id": "{{ record.id }}",
+          "board_folder_id": "{{ record.board_folder_id }}",
+          "name": "{{ record.name }}",
+          "workspace_id": "{{ record.workspace_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for update_dashboard"
+          },
+          "board_folder_id": {
+            "type": "string",
+            "description": "board_folder_id argument for update_dashboard"
+          },
+          "name": {
+            "type": "string",
+            "description": "name argument for update_dashboard"
+          },
+          "workspace_id": {
+            "type": "string",
+            "description": "workspace_id argument for update_dashboard"
+          }
+        },
+        "required": [
+          "id",
+          "board_folder_id",
+          "name",
+          "workspace_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation update_dashboard; reverse ETL approval required"
+    },
+    {
+      "name": "update_doc_block",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_doc_block($block_id: String!, $content: String!) { update_doc_block(block_id: $block_id, content: $content) {\n    id\n  } }",
+        "operation_name": "Monday_update_doc_block",
+        "variables": {
+          "block_id": "{{ record.block_id }}",
+          "content": "{{ record.content }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "block_id": {
+            "type": "string",
+            "description": "block_id argument for update_doc_block"
+          },
+          "content": {
+            "type": "string",
+            "description": "content argument for update_doc_block"
+          }
+        },
+        "required": [
+          "block_id",
+          "content"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: runs Monday mutation update_doc_block; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_doc_name",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_doc_name($docId: ID!, $name: String!) { update_doc_name(docId: $docId, name: $name) }",
+        "operation_name": "Monday_update_doc_name",
+        "variables": {
+          "docId": "{{ record.docId }}",
+          "name": "{{ record.name }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "docId": {
+            "type": "string",
+            "description": "docId argument for update_doc_name"
+          },
+          "name": {
+            "type": "string",
+            "description": "name argument for update_doc_name"
+          }
+        },
+        "required": [
+          "docId",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation update_doc_name; reverse ETL approval required"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_group($board_id: ID!, $group_id: String!, $new_value: String!) { update_group(board_id: $board_id, group_id: $group_id, group_attribute: relative_position_before, new_value: $new_value) { \n    id\n  } }",
+        "operation_name": "Monday_update_group",
+        "variables": {
+          "board_id": "{{ record.board_id }}",
+          "group_id": "{{ record.group_id }}",
+          "new_value": "{{ record.new_value }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for update_group"
+          },
+          "group_id": {
+            "type": "string",
+            "description": "group_id argument for update_group"
+          },
+          "new_value": {
+            "type": "string",
+            "description": "new_value argument for update_group"
+          }
+        },
+        "required": [
+          "board_id",
+          "group_id",
+          "new_value"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation update_group; reverse ETL approval required"
+    },
+    {
+      "name": "update_mute_board_settings",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_mute_board_settings($board_id: String!) { update_mute_board_settings(board_id: $board_id, enabled: IM_ASSIGNED, mute_state: CUSTOM_SETTINGS) {\n    enabled\n    mute_state\n    board_id\n  } }",
+        "operation_name": "Monday_update_mute_board_settings",
+        "variables": {
+          "board_id": "{{ record.board_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "description": "board_id argument for update_mute_board_settings"
+          }
+        },
+        "required": [
+          "board_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation update_mute_board_settings; reverse ETL approval required"
+    },
+    {
+      "name": "update_object_schema",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_update_object_schema($id: String!, $revision: Int!, $description: String!) { update_object_schema(id: $id, revision: $revision, description: $description) {\n    id\n    name\n    description\n    revision\n  } }",
+        "operation_name": "Monday_update_object_schema",
+        "variables": {
+          "id": "{{ record.id }}",
+          "revision": {
+            "template": "{{ record.revision }}",
+            "type": "integer"
+          },
+          "description": "{{ record.description }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "id argument for update_object_schema"
+          },
+          "revision": {
+            "type": "integer",
+            "description": "revision argument for update_object_schema"
+          },
+          "description": {
+            "type": "string",
+            "description": "description argument for update_object_schema"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: runs Monday mutation update_object_schema; reverse ETL approval required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "use_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "graphql": {
+        "document": "mutation Monday_use_template($template_id: ID!, $destination_workspace_id: ID!) { use_template(template_id: $template_id, destination_workspace_id: $destination_workspace_id) {\n    process_id\n  } }",
+        "operation_name": "Monday_use_template",
+        "variables": {
+          "template_id": "{{ record.template_id }}",
+          "destination_workspace_id": "{{ record.destination_workspace_id }}"
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "description": "template_id argument for use_template"
+          },
+          "destination_workspace_id": {
+            "type": "string",
+            "description": "destination_workspace_id argument for use_template"
+          }
+        },
+        "required": [
+          "template_id",
+          "destination_workspace_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium: runs Monday mutation use_template; reverse ETL approval required"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+set -eu; \
+SMOKE_DIR=$(mktemp -d); \
+export PM_SAMPLE_TOKEN=sample-token; \
+./pm init --root "$SMOKE_DIR" --json >/dev/null; \
+./pm credentials add sample-local --connector sample --from-env token=PM_SAMPLE_TOKEN --root "$SMOKE_DIR" --json >/dev/null; \
+./pm credentials add warehouse-local --connector warehouse --config path="$SMOKE_DIR/.polymetrics/warehouse" --root "$SMOKE_DIR" --json >/dev/null; \
+./pm credentials add outbox-local --connector outbox --config path="$SMOKE_DIR/.polymetrics/outbox" --root "$SMOKE_DIR" --json >/dev/null; \
+./pm connections create sample_to_warehouse --source sample:sample-local --destination warehouse:warehouse-local --stream customers --primary-key id --cursor updated_at --table sample_customers --root "$SMOKE_DIR" --json >/dev/null; \
+./pm catalog refresh --connection sample_to_warehouse --root "$SMOKE_DIR" --json >/dev/null; \
+./pm etl run --connection sample_to_warehouse --stream customers --root "$SMOKE_DIR" --json >/dev/null; \
+PLAN_OUTPUT=$(./pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map name:full_name --map email:email --root "$SMOKE_DIR"); \
+PLAN_ID=$(printf '%s\n' "$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $4}'); \
+./pm reverse preview "$PLAN_ID" --root "$SMOKE_DIR" --json >/dev/null; \
+APPROVAL=$(printf '%s\n' "$PLAN_OUTPUT" | awk '/Approval token:/ {print $3}'); \
+./pm reverse run "$PLAN_ID" --approve "$APPROVAL" --root "$SMOKE_DIR" --json >/dev/null; \
+test -s "$SMOKE_DIR/.polymetrics/warehouse/sample_customers.jsonl"; \
+test -s "$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
+printf 'smoke ok: %s\n' "$SMOKE_DIR"
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.kMQ2xoOAYj

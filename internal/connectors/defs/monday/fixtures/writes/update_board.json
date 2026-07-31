@@ -1,0 +1,27 @@
+{
+  "record": {
+    "board_id": "1234567890",
+    "new_value": "fixture board description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "Monday_update_board",
+      "variables": {
+        "board_id": "1234567890",
+        "new_value": "fixture board description"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "update_board": {
+          "id": "fixture_result"
+        }
+      }
+    }
+  }
+}

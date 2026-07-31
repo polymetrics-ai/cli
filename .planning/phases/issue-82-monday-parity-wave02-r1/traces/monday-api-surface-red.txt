@@ -1,0 +1,5 @@
+--- FAIL: TestMondayAPISurfaceOperationLedger (0.00s)
+    monday_api_surface_test.go:21: metadata capabilities.write = false, want true for typed Monday reverse ETL actions
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.348s
+FAIL

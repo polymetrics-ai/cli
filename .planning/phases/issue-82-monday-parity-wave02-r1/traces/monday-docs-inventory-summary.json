@@ -1,0 +1,15 @@
+{
+  "source": "developer.monday.com sitemap/reference pages",
+  "operation_count": 254,
+  "query_count": 66,
+  "mutation_count": 188,
+  "implemented_direct": 51,
+  "blocked_queries": 10,
+  "implemented_writes": 102,
+  "blocked_mutations": 86,
+  "live_schema_not_fetched": true,
+  "binary_file_mutations_blocked": [
+    "add_file_to_column",
+    "add_file_to_update"
+  ]
+}

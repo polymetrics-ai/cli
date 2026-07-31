@@ -1,23 +1,25 @@
 {
   "name": "monday",
   "display_name": "Monday",
-  "description": "Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.",
+  "description": "Reads monday.com GraphQL streams and bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.",
   "integration_type": "api",
   "docs_url": "https://developer.monday.com/api-reference/docs",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external monday.com GraphQL API read of boards/items/users/teams/tags",
-    "approval": "none; read-only source connector"
+    "read": "external monday.com GraphQL API reads; direct query commands use fixed documents, bounded response bytes, and redacted JSON output",
+    "write": "typed monday.com GraphQL mutations through named reverse-ETL actions only; complex-input mutations remain planned/blocked instead of raw GraphQL",
+    "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive/admin actions require typed destructive confirmation"
   }
 }
