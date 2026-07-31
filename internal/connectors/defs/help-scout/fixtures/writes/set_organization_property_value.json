@@ -1,0 +1,18 @@
+{
+  "record": {
+    "organization_id": 123,
+    "property_slug": "fixture-value",
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/organizations/123/properties/fixture-value",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

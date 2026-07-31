@@ -1,0 +1,14 @@
+{
+  "record": {
+    "mailbox_id": 123,
+    "saved_reply_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/mailboxes/123/saved-replies/123"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

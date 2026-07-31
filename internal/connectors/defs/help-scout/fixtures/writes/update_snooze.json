@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversation_id": 123,
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/conversations/123/snooze",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

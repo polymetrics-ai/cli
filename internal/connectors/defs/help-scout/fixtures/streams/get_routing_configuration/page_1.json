@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/mailboxes/{{ config.mailbox_id }}/routing",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_get_routing_configuration_1",
+      "name": "Fixture Get Routing configuration",
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

@@ -1,8 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "path": "/users",
-    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "1", "size": "50" }
+    "path": "/v2/users",
+    "query": {
+      "sortField": "modifiedAt",
+      "sortOrder": "asc",
+      "page": "1",
+      "size": "50"
+    }
   },
   "response": {
     "status": 200,
@@ -23,7 +28,12 @@
           }
         ]
       },
-      "page": { "number": 1, "size": 50, "totalElements": 1, "totalPages": 1 }
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 1,
+        "totalPages": 1
+      }
     }
   }
 }

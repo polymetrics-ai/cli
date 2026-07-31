@@ -1,27 +1,29 @@
 {
   "name": "help-scout",
   "display_name": "Help Scout",
-  "description": "Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.",
+  "description": "Reads Help Scout Inbox API resources and exposes typed reverse-ETL actions for documented mutations through approval and destructive-confirmation gates.",
   "integration_type": "api",
-  "docs_url": "https://developer.helpscout.com/",
+  "docs_url": "https://developer.helpscout.com/mailbox-api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Help Scout API read of conversation, customer, mailbox, and user data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Help Scout Inbox API reads of conversations, customers, inbox metadata, users, teams, tags, organizations, webhooks, and related configuration resources",
+    "write": "external Help Scout Inbox API mutations; every action is available only through reverse ETL plan, preview, explicit approval, and typed destructive confirmation",
+    "approval": "reverse ETL writes require plan -> preview -> approval token -> execute, and this bundle marks every Help Scout write confirm=destructive for captain-policy safety"
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/help-scout (this bundle has no Tier-2 hook, so there is no paritytest package for this wave). Matches sendpulse's and dwolla's identical documented precedent."
+    "reason": "oauth2_client_credentials auth requires a real token_url and client credentials; conformance synthetic config cannot perform the token exchange, so auth-dependent fixture replay is skipped. Static checks, operation-ledger validation, write-schema validation, sanitized fixtures, and connector-local Help Scout full-surface tests are the substitute evidence; no live provider call or certification claim is made."
   }
 }

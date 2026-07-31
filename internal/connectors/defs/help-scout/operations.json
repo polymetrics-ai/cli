@@ -1,0 +1,518 @@
+{
+  "operations": [
+    {
+      "id": "help-scout.chat_report",
+      "kind": "rest_read",
+      "summary": "Chat Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/chat",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.company_customers_helped",
+      "kind": "rest_read",
+      "summary": "Company Customers Helped",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/company/customers-helped",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.company_drilldown",
+      "kind": "rest_read",
+      "summary": "Company Drilldown",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/company/drilldown",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.company_overall_report",
+      "kind": "rest_read",
+      "summary": "Company Overall Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/company",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_busiest_time_of_day",
+      "kind": "rest_read",
+      "summary": "Conversations - Busiest Time of Day",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/busy-times",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_drilldown",
+      "kind": "rest_read",
+      "summary": "Conversations - Drilldown",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/drilldown",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_drilldown_by_field",
+      "kind": "rest_read",
+      "summary": "Conversations - Drilldown by Field",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/fields-drilldown",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_new_conversations_drilldown",
+      "kind": "rest_read",
+      "summary": "Conversations - New Conversations Drilldown",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/new-drilldown",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_new_conversations",
+      "kind": "rest_read",
+      "summary": "Conversations - New Conversations",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/new",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_overall_report",
+      "kind": "rest_read",
+      "summary": "Conversations - Overall Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.conversations_received_messages_statistics",
+      "kind": "rest_read",
+      "summary": "Conversations - Received Messages Statistics",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/received-messages",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.all_channels_volumes_by_channel",
+      "kind": "rest_read",
+      "summary": "All Channels - Volumes by Channel",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/volume-by-channel",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.docs_overall_report",
+      "kind": "rest_read",
+      "summary": "Docs Overall Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/docs",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.email_report",
+      "kind": "rest_read",
+      "summary": "Email Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/email",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.happiness_overall_report",
+      "kind": "rest_read",
+      "summary": "Happiness Overall Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/happiness",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.happiness_ratings_report",
+      "kind": "rest_read",
+      "summary": "Happiness Ratings Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/happiness/ratings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.phone_report",
+      "kind": "rest_read",
+      "summary": "Phone Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/phone",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.productivity_first_response_time",
+      "kind": "rest_read",
+      "summary": "Productivity - First Response Time",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/first-response-time",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.productivity_overall_report",
+      "kind": "rest_read",
+      "summary": "Productivity Overall Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.productivity_replies_sent",
+      "kind": "rest_read",
+      "summary": "Productivity - Replies Sent",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/replies-sent",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.productivity_resolution_time",
+      "kind": "rest_read",
+      "summary": "Productivity - Resolution Time",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/resolution-time",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.productivity_resolved",
+      "kind": "rest_read",
+      "summary": "Productivity - Resolved",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/resolved",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.productivity_response_time",
+      "kind": "rest_read",
+      "summary": "Productivity - Response Time",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/response-time",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_team_chat_report",
+      "kind": "rest_read",
+      "summary": "User/Team Chat Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/chat",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_conversation_history",
+      "kind": "rest_read",
+      "summary": "User Conversation History",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/conversation-history",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_customers_helped",
+      "kind": "rest_read",
+      "summary": "User Customers Helped",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/customers-helped",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_drill_down",
+      "kind": "rest_read",
+      "summary": "User Drill-down",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/drilldown",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_happiness_drilldown",
+      "kind": "rest_read",
+      "summary": "User Happiness drilldown",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/ratings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_happiness",
+      "kind": "rest_read",
+      "summary": "User Happiness",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/happiness",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_replies",
+      "kind": "rest_read",
+      "summary": "User Replies",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/replies",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_resolutions",
+      "kind": "rest_read",
+      "summary": "User Resolutions",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/resolutions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.user_team_overall_report",
+      "kind": "rest_read",
+      "summary": "User/Team Overall Report",
+      "description": "Blocked/planned Help Scout report/provider query read; requires the provider-search/query foundation before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/",
+      "risk": "medium",
+      "approval": "none for read-only semantics once #2985 provides typed bounded provider-query execution; currently blocked/planned",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "help-scout.download_attachment_file",
+      "kind": "binary_download",
+      "summary": "Download Attachment File",
+      "description": "Blocked/planned Help Scout attachment binary download; requires bounded binary/file output contract before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "risk": "high",
+      "approval": "blocked/planned until binary download foundation defines destination path, max bytes, overwrite, and redaction policy",
+      "output_policy": "blocked_binary_download",
+      "binary": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/file",
+        "max_bytes": 26214400,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "help-scout.get_attachment_data",
+      "kind": "binary_download",
+      "summary": "Get Attachment Data",
+      "description": "Blocked/planned Help Scout attachment binary download; requires bounded binary/file output contract before execution.",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/",
+      "risk": "high",
+      "approval": "blocked/planned until binary download foundation defines destination path, max bytes, overwrite, and redaction policy",
+      "output_policy": "blocked_binary_download",
+      "binary": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/data",
+        "max_bytes": 26214400,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    }
+  ]
+}

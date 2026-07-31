@@ -1,0 +1,38 @@
+{
+  "phase": "help-scout-parity-wave02-r1",
+  "parentIssue": 212,
+  "branch": "fm/cli-help-scout-parity-wave02-r1",
+  "gsdMode": "manual-fallback",
+  "gsdCommandAttempted": "scripts/gsd prompt programming-loop init --phase issue-212-help-scout-parity --dry-run",
+  "gsdFallbackReason": "repo-local adapter returned unknown GSD command: programming-loop",
+  "verificationPassed": false,
+  "verificationNote": "Focused Help Scout gates and broader vet/build/smoke/docs/lint/boundary gates passed; full go test ./... and go test ./internal/connectors/... timed out at 10 minutes without failing package output.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single worker owns one connector bundle and issue-body addendum; mutating subagents would collide in the same Help Scout files"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "implementation is connector-local generation plus Help Scout-owned test/planning artifacts; no independent write scope remained for a mutating worker"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "verification commands run inline; no reviewer/no-mistakes/PR route is allowed before firstmate resumes"
+    }
+  ],
+  "surfaceCounts": {
+    "apiEndpoints": 144,
+    "streams": 45,
+    "writes": 65,
+    "blockedOperations": 34,
+    "cliCommands": 144,
+    "schemas": 45,
+    "streamFixtureDirs": 45,
+    "writeFixtures": 64
+  },
+  "status": "implementation-complete-focused-gates-green"
+}

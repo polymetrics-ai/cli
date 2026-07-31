@@ -1,0 +1,1894 @@
+{
+  "failed": [],
+  "link_count": 146,
+  "operations": [
+    {
+      "link": "/mailbox-api/endpoints/conversations/attachments/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations/100/threads/1000/attachments"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations/100/threads/1000/attachments",
+      "title": "Upload Attachment",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/attachments/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/conversations/100/attachments/5000"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/conversations/100/attachments/5000",
+      "title": "Delete Attachment",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "matches": [
+        [
+          "GET",
+          "/v2/conversations/100/attachments/5000/file"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/conversations/100/attachments/5000/file",
+      "title": "Download Attachment File",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/attachments/get-data/",
+      "matches": [
+        [
+          "GET",
+          "/v2/conversations/100/attachments/5000/data"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/conversations/100/attachments/5000/data",
+      "title": "Get Attachment Data",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations",
+      "title": "Create Conversation",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/custom_fields/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/conversations/99/fields"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/conversations/99/fields",
+      "title": "Update Custom Fields",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/custom_fields/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/conversations/123"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/conversations/123",
+      "title": "Delete Conversation",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/get-v3/",
+      "matches": [
+        [
+          "GET",
+          "/v3/conversations/123"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v3/conversations/123",
+      "title": "Get Conversation (v3)",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/conversations/123"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/conversations/123",
+      "title": "Get Conversation",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/conversations"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/conversations",
+      "title": "List Conversations",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/snooze/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/conversations/99/snooze"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/conversations/99/snooze",
+      "title": "Delete Snooze",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/snooze/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/conversations/99/snooze"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/conversations/99/snooze",
+      "title": "Update Snooze",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/tags/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/conversations/99/tags"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/conversations/99/tags",
+      "title": "Update Tags",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/tags/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/chat/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations/123/chats"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations/123/chats",
+      "title": "Create Chat Thread",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/chat/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/customer/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations/123/customer"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations/123/customer",
+      "title": "Create Customer Thread",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/customer/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/list-v3/",
+      "matches": [
+        [
+          "GET",
+          "/v3/conversations/123/threads"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v3/conversations/123/threads",
+      "title": "List Threads (v3)",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/conversations/123/threads"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/conversations/123/threads",
+      "title": "List Threads",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/note/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations/123/notes"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations/123/notes",
+      "title": "Create Note",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/phone/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations/123/phones"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations/123/phones",
+      "title": "Create Phone Thread",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/phone/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/reply/",
+      "matches": [
+        [
+          "POST",
+          "/v2/conversations/123/reply"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/conversations/123/reply",
+      "title": "Create Reply Thread",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/schedule/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/conversations/99/threads/500/schedule"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/conversations/99/threads/500/schedule",
+      "title": "Delete Thread Schedule",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/schedule/publish/",
+      "matches": [
+        [
+          "PATCH",
+          "/v2/conversations/99/threads/500/schedule"
+        ]
+      ],
+      "method": "PATCH",
+      "raw_path": "/v2/conversations/99/threads/500/schedule",
+      "title": "Publish Thread Schedule",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/publish/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/schedule/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/conversations/99/threads/500/schedule"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/conversations/99/threads/500/schedule",
+      "title": "Update Thread Schedule",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/thread-source-json/",
+      "matches": [
+        [
+          "GET",
+          "/v2/conversations/123/threads/456/original-source"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/conversations/123/threads/456/original-source",
+      "title": "Get Thread Original Source",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/threads/update/",
+      "matches": [
+        [
+          "PATCH",
+          "/v2/conversations/123/threads/567"
+        ]
+      ],
+      "method": "PATCH",
+      "raw_path": "/v2/conversations/123/threads/567",
+      "title": "Update Thread",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/conversations/update/",
+      "matches": [
+        [
+          "PATCH",
+          "/v2/conversations/123"
+        ]
+      ],
+      "method": "PATCH",
+      "raw_path": "/v2/conversations/123",
+      "title": "Update Conversation",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/address/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers/100/address"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers/100/address",
+      "title": "Create Address",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/address/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100/address"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100/address",
+      "title": "Delete Address",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/address/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100/address"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100/address",
+      "title": "Get Address",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/address/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/100/address"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/100/address",
+      "title": "Update Address",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/chat_handles/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers/100/chats"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers/100/chats",
+      "title": "Create Chat Handle",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/chat_handles/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100/chats/1008"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100/chats/1008",
+      "title": "Delete Chat Handle",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/chat_handles/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100/chats"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100/chats",
+      "title": "List Chats Handles",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/chat_handles/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/100/chats/1008"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/100/chats/1008",
+      "title": "Update Chat Handles",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers",
+      "title": "Create Customer",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/delete-async/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100?async=true"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100?async=true",
+      "title": "Delete Customer Asynchronously",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete-async/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100",
+      "title": "Delete Customer",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/emails/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers/100/emails"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers/100/emails",
+      "title": "Create Email",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/emails/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100/emails/1006"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100/emails/1006",
+      "title": "Delete Email",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/emails/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100/emails"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100/emails",
+      "title": "List Emails",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/emails/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/100/emails/1006"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/100/emails/1006",
+      "title": "Update Email",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100",
+      "title": "Get Customer",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/list-v3/",
+      "matches": [
+        [
+          "GET",
+          "/v3/customers"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v3/customers",
+      "title": "List Customers (v3)",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers",
+      "title": "List Customers",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/overwrite/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/101"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/101",
+      "title": "Overwrite Customer",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/overwrite/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/phones/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers/100/phones"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers/100/phones",
+      "title": "Create Phone",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/phones/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100/phones/1006"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100/phones/1006",
+      "title": "Delete Phone",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/phones/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100/phones"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100/phones",
+      "title": "List Phones",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/phones/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/100/phones/1006"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/100/phones/1006",
+      "title": "Update Phone",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/social_profiles/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers/100/social-profiles"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers/100/social-profiles",
+      "title": "Create Social Profile",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/social_profiles/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100/social-profiles/1007"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100/social-profiles/1007",
+      "title": "Delete Social Profile",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/social_profiles/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100/social-profiles"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100/social-profiles",
+      "title": "List Social Profiles",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/social_profiles/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/100/social-profiles/1007"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/100/social-profiles/1007",
+      "title": "Update Social Profile",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/update/",
+      "matches": [
+        [
+          "PATCH",
+          "/v2/customers/100"
+        ]
+      ],
+      "method": "PATCH",
+      "raw_path": "/v2/customers/100",
+      "title": "Update Customer",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/websites/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customers/100/websites"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customers/100/websites",
+      "title": "Create Website",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/websites/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customers/100/websites/1005"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customers/100/websites/1005",
+      "title": "Delete Website",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/websites/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customers/100/websites"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customers/100/websites",
+      "title": "List Websites",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/customers/websites/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/customers/100/websites/1005"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/customers/100/websites/1005",
+      "title": "Update Website",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes/1"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes/1",
+      "title": "Get Inbox",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/inbox-fields/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes/1/fields"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes/1/fields",
+      "title": "List Inbox Custom Fields",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/inbox-folders/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes/1/folders"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes/1/folders",
+      "title": "List Inbox Folders",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes",
+      "title": "List Inboxes",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes/10/routing"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes/10/routing",
+      "title": "Get Routing configuration",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/mailboxes/10/routing"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/mailboxes/10/routing",
+      "title": "Update Routing configuration",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/mailboxes/100/saved-replies"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/mailboxes/100/saved-replies",
+      "title": "Create Saved Reply",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/mailboxes/100/saved-replies/1000"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/mailboxes/100/saved-replies/1000",
+      "title": "Delete Saved Reply",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes/100/saved-replies/1000"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes/100/saved-replies/1000",
+      "title": "Get Saved Reply",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/mailboxes/100/saved-replies"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/mailboxes/100/saved-replies",
+      "title": "List Saved Replies",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/mailboxes/100/saved-replies/15"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/mailboxes/100/saved-replies/15",
+      "title": "Update Saved Reply",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/organizations"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/organizations",
+      "title": "Create Organization",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/organizations/10"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/organizations/10",
+      "title": "Delete Organization by ID",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/get-conversations/",
+      "matches": [
+        [
+          "GET",
+          "/v2/organizations/10/conversations?page=1"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/organizations/10/conversations?page=1",
+      "title": "Get Organization Conversations",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/get-customers/",
+      "matches": [
+        [
+          "GET",
+          "/v2/organizations/10/customers?page=1"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/organizations/10/customers?page=1",
+      "title": "Get Organization Customers",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/organizations/10?includeCounts=true&includeProperties=true"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/organizations/10?includeCounts=true&includeProperties=true",
+      "title": "Get Organization by ID",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/organizations?page=1&sort=name%2Casc"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/organizations?page=1&sort=name%2Casc",
+      "title": "List Organizations",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/organizations/properties"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/organizations/properties",
+      "title": "Create Organization Property Definition",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/organizations/properties/customer-tier"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/organizations/properties/customer-tier",
+      "title": "Delete Organization Property Definition",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/organizations/properties/industry"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/organizations/properties/industry",
+      "title": "Get Organization Property Definition",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/organizations/properties"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/organizations/properties",
+      "title": "List Organization Property Definitions",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/remove-value/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/organizations/123/properties/customer-tier"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/organizations/123/properties/customer-tier",
+      "title": "Remove Organization Property Value",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/remove-value/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/set-value/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/organizations/123/properties/customer-tier"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/organizations/123/properties/customer-tier",
+      "title": "Set Organization Property Value",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/set-value/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/properties/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/organizations/properties/industry"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/organizations/properties/industry",
+      "title": "Update Organization Property Definition",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/organizations/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/organizations/10"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/organizations/10",
+      "title": "Update Organization",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/properties/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/customer-properties"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/customer-properties",
+      "title": "Create Customer Property Definition",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/properties/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/customer-properties/property-slug"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/customer-properties/property-slug",
+      "title": "Delete Customer Property Definition",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/properties/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/customer-properties"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/customer-properties",
+      "title": "List Customer Property Definitions",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/properties/update/",
+      "matches": [
+        [
+          "PATCH",
+          "/v2/customers/100/properties"
+        ]
+      ],
+      "method": "PATCH",
+      "raw_path": "/v2/customers/100/properties",
+      "title": "Update Customer Properties",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/ratings/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/ratings/1"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/ratings/1",
+      "title": "Get Satisfaction Rating",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/chat/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/chat"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/chat",
+      "title": "Chat Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/company/customers-helped"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/company/customers-helped",
+      "title": "Company Customers Helped",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/company/drilldown"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/company/drilldown",
+      "title": "Company Drilldown",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/company/reports-company-overall/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/company"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/company",
+      "title": "Company Overall Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/busy-times"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/busy-times",
+      "title": "Conversations - Busiest Time of Day",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/drilldown"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/drilldown",
+      "title": "Conversations - Drilldown",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/fields-drilldown"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/fields-drilldown",
+      "title": "Conversations - Drilldown by Field",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/new-drilldown"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/new-drilldown",
+      "title": "Conversations - New Conversations Drilldown",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/new"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/new",
+      "title": "Conversations - New Conversations",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations",
+      "title": "Conversations - Overall Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/received-messages"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/received-messages",
+      "title": "Conversations - Received Messages Statistics",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/conversations/volume-by-channel"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/conversations/volume-by-channel",
+      "title": "All Channels - Volumes by Channel",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/docs"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/docs",
+      "title": "Docs Overall Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/email/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/email"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/email",
+      "title": "Email Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/happiness"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/happiness",
+      "title": "Happiness Overall Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/happiness/ratings"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/happiness/ratings",
+      "title": "Happiness Ratings Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/phone/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/phone"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/phone",
+      "title": "Phone Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/productivity/first-response-time"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/productivity/first-response-time",
+      "title": "Productivity - First Response Time",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/productivity"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/productivity",
+      "title": "Productivity Overall Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/productivity/replies-sent"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/productivity/replies-sent",
+      "title": "Productivity - Replies Sent",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/productivity/resolution-time"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/productivity/resolution-time",
+      "title": "Productivity - Resolution Time",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/productivity/resolved"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/productivity/resolved",
+      "title": "Productivity - Resolved",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/productivity/response-time"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/productivity/response-time",
+      "title": "Productivity - Response Time",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-chat/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/chat"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/chat",
+      "title": "User/Team Chat Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/conversation-history"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/conversation-history",
+      "title": "User Conversation History",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/customers-helped"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/customers-helped",
+      "title": "User Customers Helped",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/drilldown"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/drilldown",
+      "title": "User Drill-down",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/ratings"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/ratings",
+      "title": "User Happiness drilldown",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-happiness/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/happiness"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/happiness",
+      "title": "User Happiness",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-replies/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/replies"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/replies",
+      "title": "User Replies",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user/resolutions"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user/resolutions",
+      "title": "User Resolutions",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/reports/user/reports-user/",
+      "matches": [
+        [
+          "GET",
+          "/v2/reports/user"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/reports/user",
+      "title": "User/Team Overall Report",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/system-users/get-system-user/",
+      "matches": [
+        [
+          "GET",
+          "/v3/system-users/155250"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v3/system-users/155250",
+      "title": "Get System User",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/system-users/list-system-users/",
+      "matches": [
+        [
+          "GET",
+          "/v3/system-users"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v3/system-users",
+      "title": "List System Users",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/tags/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/tags/123456793"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/tags/123456793",
+      "title": "Get Tag by ID",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/tags/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/tags"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/tags",
+      "title": "List Tags",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/teams/list-team-members/",
+      "matches": [
+        [
+          "GET",
+          "/v2/teams/10/members"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/teams/10/members",
+      "title": "List Team Members",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/teams/list-teams/",
+      "matches": [
+        [
+          "GET",
+          "/v2/teams"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/teams",
+      "title": "List Teams",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/teams/update-team-members/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/teams/10/members"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/teams/10/members",
+      "title": "Update Team Members",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/update-team-members/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/conversation reassignment/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/users/4/conversation-reassignment"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/users/4/conversation-reassignment",
+      "title": "Get Conversation Reassignment configuration",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/conversation reassignment/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/users/4/conversation-reassignment"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/users/4/conversation-reassignment",
+      "title": "Update Conversation Reassignment configuration",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/users"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/users",
+      "title": "Create User",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/users/4"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/users/4",
+      "title": "Delete User",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/users/4"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/users/4",
+      "title": "Get User",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/users"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/users",
+      "title": "List Users",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/me/",
+      "matches": [
+        [
+          "GET",
+          "/v2/users/me"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/users/me",
+      "title": "Get Resource Owner",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/status/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/users/4/status"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/users/4/status",
+      "title": "Get user status",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/status/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/users/status?page=1"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/users/status?page=1",
+      "title": "List users statuses",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/users/status/set/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/users/4/status"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/users/4/status",
+      "title": "Set user status",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/set/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/webhooks/create/",
+      "matches": [
+        [
+          "POST",
+          "/v2/webhooks"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/webhooks",
+      "title": "Create Webhook",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/webhooks/delete/",
+      "matches": [
+        [
+          "DELETE",
+          "/v2/webhooks/10"
+        ]
+      ],
+      "method": "DELETE",
+      "raw_path": "/v2/webhooks/10",
+      "title": "Delete Webhook",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/delete/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/webhooks/get/",
+      "matches": [
+        [
+          "GET",
+          "/v2/webhooks/10"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/webhooks/10",
+      "title": "Get Webhook",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/webhooks/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/webhooks"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/webhooks",
+      "title": "List Webhooks",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/webhooks/update/",
+      "matches": [
+        [
+          "PUT",
+          "/v2/webhooks/10"
+        ]
+      ],
+      "method": "PUT",
+      "raw_path": "/v2/webhooks/10",
+      "title": "Update Webhook",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/update/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/workflows/list/",
+      "matches": [
+        [
+          "GET",
+          "/v2/workflows"
+        ]
+      ],
+      "method": "GET",
+      "raw_path": "/v2/workflows",
+      "title": "List Workflows",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/workflows/run/",
+      "matches": [
+        [
+          "POST",
+          "/v2/workflows/20/run"
+        ]
+      ],
+      "method": "POST",
+      "raw_path": "/v2/workflows/20/run",
+      "title": "Run Manual Workflows",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/"
+    },
+    {
+      "link": "/mailbox-api/endpoints/workflows/update/",
+      "matches": [
+        [
+          "PATCH",
+          "/v2/workflows/20"
+        ]
+      ],
+      "method": "PATCH",
+      "raw_path": "/v2/workflows/20",
+      "title": "Update workflow status",
+      "url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/update/"
+    }
+  ],
+  "parsed_pages": 146,
+  "source_root": "https://developer.helpscout.com/mailbox-api/",
+  "unique_operations": 145
+}
