@@ -1,0 +1,20 @@
+{
+  "record": {
+    "type": "discussion",
+    "subject": "fixture_subject"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations",
+    "body": {
+      "type": "discussion",
+      "subject": "fixture_subject"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

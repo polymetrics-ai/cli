@@ -1,0 +1,5496 @@
+{
+  "actions": [
+    {
+      "name": "remove_contact_from_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/contacts",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "account_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "account_id",
+          "contact_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /accounts/{account_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_contact_to_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/contacts",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "account_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "account_id",
+          "contact_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /accounts/{account_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "account_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "account_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /accounts/{account_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/accounts/{{ record.account_id }}",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "account_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "account_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /accounts/{account_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "high: fixed Front POST /accounts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "trigger_app_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.application_uid }}/events",
+      "path_fields": [
+        "application_uid"
+      ],
+      "redact_fields": [
+        "application_uid"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "application_uid": {
+            "type": "string"
+          },
+          "event_type": {
+            "type": "string"
+          },
+          "app_object": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "ext_link": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "application_uid",
+          "event_type"
+        ]
+      },
+      "risk": "critical: fixed Front POST /applications/{application_uid}/events mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_draft",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/drafts",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "quote_body": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "private",
+              "shared"
+            ]
+          },
+          "signature_id": {
+            "type": "string"
+          },
+          "should_add_default_signature": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "receive_custom_messages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/incoming_messages",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "handle": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "handle"
+            ],
+            "additionalProperties": true
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "body_format": {
+            "type": "string",
+            "enum": [
+              "html",
+              "markdown"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "thread_ref": {
+                "type": "string"
+              },
+              "headers": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "sender",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/incoming_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/messages",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sender_name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "tag_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "archive": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": true
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "signature_id": {
+            "type": "string"
+          },
+          "should_add_default_signature": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "to",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "validate_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/validate",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "channel_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/validate mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_channel",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/channels/{{ record.channel_id }}",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "inbox_id": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "undo_send_time": {
+                "type": "integer"
+              },
+              "all_teammates_can_reply": {
+                "type": "boolean"
+              },
+              "webhook_url": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "channel_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /channels/{channel_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/comments/{{ record.comment_id }}/",
+      "path_fields": [
+        "comment_id"
+      ],
+      "redact_fields": [
+        "comment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "is_pinned": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "comment_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /comments/{comment_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_comment_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/comments/{{ record.comment_id }}/replies",
+      "path_fields": [
+        "comment_id"
+      ],
+      "redact_fields": [
+        "comment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "is_pinned": {
+            "type": "boolean"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "comment_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /comments/{comment_id}/replies mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_company_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/company/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "highlight": {
+            "type": "string",
+            "enum": [
+              "grey",
+              "pink",
+              "red",
+              "orange",
+              "yellow",
+              "green",
+              "light-blue",
+              "blue",
+              "purple"
+            ]
+          },
+          "is_visible_in_conversation_lists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /company/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_contacts_from_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_groups/{{ record.contact_group_id }}/contacts",
+      "path_fields": [
+        "contact_group_id"
+      ],
+      "redact_fields": [
+        "contact_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_group_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_group_id",
+          "contact_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_contacts_to_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_groups/{{ record.contact_group_id }}/contacts",
+      "path_fields": [
+        "contact_group_id"
+      ],
+      "redact_fields": [
+        "contact_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_group_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_group_id",
+          "contact_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_groups/{{ record.contact_group_id }}",
+      "path_fields": [
+        "contact_group_id"
+      ],
+      "redact_fields": [
+        "contact_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_group_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_group_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /contact_groups/{contact_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_contacts_from_contact_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_lists/{{ record.contact_list_id }}/contacts",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "redact_fields": [
+        "contact_list_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_list_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_list_id",
+          "contact_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_contacts_to_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_lists/{{ record.contact_list_id }}/contacts",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "redact_fields": [
+        "contact_list_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_list_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_list_id",
+          "contact_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contact_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_lists/{{ record.contact_list_id }}",
+      "path_fields": [
+        "contact_list_id"
+      ],
+      "redact_fields": [
+        "contact_list_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_list_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_list_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /contact_lists/{contact_list_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contact_lists",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contact_handle",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}/handles",
+      "path_fields": [
+        "contact_id"
+      ],
+      "redact_fields": [
+        "contact_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          },
+          "handle": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "twitter",
+              "email",
+              "phone",
+              "facebook",
+              "intercom",
+              "front_chat",
+              "custom"
+            ]
+          },
+          "force": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_id",
+          "handle",
+          "source"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /contacts/{contact_id}/handles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_contact_handle",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/handles",
+      "path_fields": [
+        "contact_id"
+      ],
+      "redact_fields": [
+        "contact_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          },
+          "handle": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "twitter",
+              "email",
+              "phone",
+              "facebook",
+              "intercom",
+              "front_chat",
+              "custom"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_id",
+          "handle",
+          "source"
+        ]
+      },
+      "risk": "high: fixed Front POST /contacts/{contact_id}/handles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/{{ record.contact_id }}/notes",
+      "path_fields": [
+        "contact_id"
+      ],
+      "redact_fields": [
+        "contact_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_id",
+          "author_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /contacts/{contact_id}/notes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_a_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.contact_id }}",
+      "path_fields": [
+        "contact_id"
+      ],
+      "redact_fields": [
+        "contact_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /contacts/{contact_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/contacts/{{ record.contact_id }}",
+      "path_fields": [
+        "contact_id"
+      ],
+      "redact_fields": [
+        "contact_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contact_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "list_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /contacts/{contact_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "merge_contacts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts/merge",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "target_contact_id": {
+            "type": "string"
+          },
+          "contact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contact_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /contacts/merge mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "list_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "handles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "handle": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "twitter",
+                    "email",
+                    "phone",
+                    "facebook",
+                    "intercom",
+                    "front_chat",
+                    "custom"
+                  ]
+                }
+              },
+              "required": [
+                "handle",
+                "source"
+              ],
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "high: fixed Front POST /contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_conversation_assignee",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/conversations/{{ record.conversation_id }}/assignee",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "assignee_id"
+        ]
+      },
+      "risk": "high: fixed Front PUT /conversations/{conversation_id}/assignee mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/comments",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "is_pinned": {
+            "type": "boolean"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/comments mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_draft_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/drafts",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "quote_body": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "private",
+              "shared"
+            ]
+          },
+          "signature_id": {
+            "type": "string"
+          },
+          "should_add_default_signature": {
+            "type": "boolean"
+          },
+          "channel_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_conversation_followers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/followers",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "teammate_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_conversation_followers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/followers",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_conversation_links",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/links",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "link_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "link_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_conversation_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/links",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "link_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "link_external_urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_message_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/messages",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sender_name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "channel_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "quote_body": {
+            "type": "string"
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "tag_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "archive": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": true
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "signature_id": {
+            "type": "string"
+          },
+          "should_add_default_signature": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_conversation_reminders",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}/reminders",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "teammate_id": {
+            "type": "string"
+          },
+          "scheduled_at": {
+            "type": "number"
+          },
+          "status_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "teammate_id",
+          "scheduled_at"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /conversations/{conversation_id}/reminders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_conversation_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}/tags",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "tag_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_conversation_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations/{{ record.conversation_id }}/tags",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "tag_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/conversations/{{ record.conversation_id }}",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "inbox_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "archived",
+              "open",
+              "deleted",
+              "spam"
+            ]
+          },
+          "status_id": {
+            "type": "string"
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "due_at": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/conversations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "discussion",
+              "task"
+            ]
+          },
+          "inbox_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "object",
+            "properties": {
+              "author_id": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "attachments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "body"
+            ],
+            "additionalProperties": true
+          },
+          "description": {
+            "type": "string"
+          },
+          "due_at": {
+            "type": "number"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type",
+          "subject"
+        ]
+      },
+      "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_draft",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/drafts/{{ record.draft_id }}",
+      "path_fields": [
+        "draft_id"
+      ],
+      "redact_fields": [
+        "draft_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "draft_id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "draft_id",
+          "version"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /drafts/{draft_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "edit_draft",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/drafts/{{ record.message_id }}/",
+      "path_fields": [
+        "message_id"
+      ],
+      "redact_fields": [
+        "message_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "quote_body": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "shared"
+            ]
+          },
+          "signature_id": {
+            "type": "string"
+          },
+          "should_add_default_signature": {
+            "type": "boolean"
+          },
+          "channel_id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_id",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /drafts/{message_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_a_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inboxes/{{ record.inbox_id }}/channels",
+      "path_fields": [
+        "inbox_id"
+      ],
+      "redact_fields": [
+        "inbox_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "undo_send_time": {
+                "type": "integer"
+              },
+              "all_teammates_can_reply": {
+                "type": "boolean"
+              },
+              "webhook_url": {
+                "type": "string"
+              },
+              "sid": {
+                "type": "string"
+              },
+              "auth_token": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "custom",
+              "smtp",
+              "twilio"
+            ]
+          },
+          "send_as": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "inbox_id",
+          "type"
+        ]
+      },
+      "risk": "high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "import_inbox_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inboxes/{{ record.inbox_id }}/imported_messages",
+      "path_fields": [
+        "inbox_id"
+      ],
+      "redact_fields": [
+        "inbox_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "object",
+            "properties": {
+              "author_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "handle": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "handle"
+            ],
+            "additionalProperties": true
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bcc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "body_format": {
+            "type": "string",
+            "enum": [
+              "html",
+              "markdown"
+            ]
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "email",
+              "sms",
+              "intercom",
+              "custom"
+            ]
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "conversation_id": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "thread_ref": {
+                "type": "string"
+              },
+              "is_inbound": {
+                "type": "boolean"
+              },
+              "is_archived": {
+                "type": "boolean"
+              },
+              "should_skip_rules": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "is_inbound"
+            ],
+            "additionalProperties": true
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "inbox_id",
+          "sender",
+          "to",
+          "body",
+          "external_id",
+          "created_at",
+          "metadata"
+        ]
+      },
+      "risk": "high: fixed Front POST /inboxes/{inbox_id}/imported_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "removes_inbox_access",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/inboxes/{{ record.inbox_id }}/teammates",
+      "path_fields": [
+        "inbox_id"
+      ],
+      "redact_fields": [
+        "inbox_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "inbox_id",
+          "teammate_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_inbox_access",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inboxes/{{ record.inbox_id }}/teammates",
+      "path_fields": [
+        "inbox_id"
+      ],
+      "redact_fields": [
+        "inbox_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inbox_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "inbox_id",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/inboxes",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_public": {
+            "type": "boolean"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_article_content_in_default_locale",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge_base_articles/{{ record.article_id }}/content",
+      "path_fields": [
+        "article_id"
+      ],
+      "redact_fields": [
+        "article_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /knowledge_base_articles/{article_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_article_content_in_specified_locale",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge_base_articles/{{ record.article_id }}/locales/{{ record.locale }}/content",
+      "path_fields": [
+        "article_id",
+        "locale"
+      ],
+      "redact_fields": [
+        "article_id",
+        "locale"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id",
+          "locale"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /knowledge_base_articles/{article_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_an_article",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/knowledge_base_articles/{{ record.article_id }}",
+      "path_fields": [
+        "article_id"
+      ],
+      "redact_fields": [
+        "article_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "article_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /knowledge_base_articles/{article_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_knowledge_base_category_in_default_locale",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge_base_categories/{{ record.category_id }}/content",
+      "path_fields": [
+        "category_id"
+      ],
+      "redact_fields": [
+        "category_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /knowledge_base_categories/{category_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_knowledge_base_category_in_specified_locale",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge_base_categories/{{ record.category_id }}/locales/{{ record.locale }}/content",
+      "path_fields": [
+        "category_id",
+        "locale"
+      ],
+      "redact_fields": [
+        "category_id",
+        "locale"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id",
+          "locale"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /knowledge_base_categories/{category_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_a_knowledge_base_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/knowledge_base_categories/{{ record.category_id }}",
+      "path_fields": [
+        "category_id"
+      ],
+      "redact_fields": [
+        "category_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "category_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /knowledge_base_categories/{category_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_article_in_a_knowledge_base_in_default_locale",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge_bases/{{ record.knowledge_base_id }}/articles",
+      "path_fields": [
+        "knowledge_base_id"
+      ],
+      "redact_fields": [
+        "knowledge_base_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "knowledge_base_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_knowledge_base_category_in_default_locale",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge_bases/{{ record.knowledge_base_id }}/categories",
+      "path_fields": [
+        "knowledge_base_id"
+      ],
+      "redact_fields": [
+        "knowledge_base_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "parent_category_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "knowledge_base_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/categories mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_knowledge_base_in_default_locale",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge_bases/{{ record.knowledge_base_id }}/content",
+      "path_fields": [
+        "knowledge_base_id"
+      ],
+      "redact_fields": [
+        "knowledge_base_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "knowledge_base_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_article_in_a_knowledge_base_in_specified_locale",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/articles",
+      "path_fields": [
+        "knowledge_base_id",
+        "locale"
+      ],
+      "redact_fields": [
+        "knowledge_base_id",
+        "locale"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "knowledge_base_id",
+          "locale"
+        ]
+      },
+      "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_knowledge_base_category_in_specified_locale",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/categories",
+      "path_fields": [
+        "knowledge_base_id",
+        "locale"
+      ],
+      "redact_fields": [
+        "knowledge_base_id",
+        "locale"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "parent_category_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "knowledge_base_id",
+          "locale",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/categories mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_knowledge_base_in_specified_locale",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/content",
+      "path_fields": [
+        "knowledge_base_id",
+        "locale"
+      ],
+      "redact_fields": [
+        "knowledge_base_id",
+        "locale"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "knowledge_base_id": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "knowledge_base_id",
+          "locale"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_a_knowledge_base",
+      "kind": "create",
+      "method": "POST",
+      "path": "/knowledge_bases",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /knowledge_bases mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_link",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/links/{{ record.link_id }}",
+      "path_fields": [
+        "link_id"
+      ],
+      "redact_fields": [
+        "link_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "link_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "link_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /links/{link_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_link",
+      "kind": "create",
+      "method": "POST",
+      "path": "/links",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "external_url": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "high: fixed Front POST /links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_child_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/message_template_folders/{{ record.message_template_folder_id }}/message_template_folders",
+      "path_fields": [
+        "message_template_folder_id"
+      ],
+      "redact_fields": [
+        "message_template_folder_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_template_folder_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_template_folder_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_child_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/message_template_folders/{{ record.message_template_folder_id }}/message_templates",
+      "path_fields": [
+        "message_template_folder_id"
+      ],
+      "redact_fields": [
+        "message_template_folder_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_template_folder_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_template_folder_id",
+          "name",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_folder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/message_template_folders/{{ record.message_template_folder_id }}",
+      "path_fields": [
+        "message_template_folder_id"
+      ],
+      "redact_fields": [
+        "message_template_folder_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_template_folder_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_template_folder_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_folder",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/message_template_folders/{{ record.message_template_folder_id }}",
+      "path_fields": [
+        "message_template_folder_id"
+      ],
+      "redact_fields": [
+        "message_template_folder_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_template_folder_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parent_folder_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_template_folder_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/message_template_folders",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "parent_folder_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/message_templates/{{ record.message_template_id }}",
+      "path_fields": [
+        "message_template_id"
+      ],
+      "redact_fields": [
+        "message_template_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_template_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_template_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /message_templates/{message_template_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_message_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/message_templates/{{ record.message_template_id }}",
+      "path_fields": [
+        "message_template_id"
+      ],
+      "redact_fields": [
+        "message_template_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_template_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_template_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /message_templates/{message_template_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_message_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/message_templates",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "folder_id": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "mark_message_seen",
+      "kind": "create",
+      "method": "POST",
+      "path": "/messages/{{ record.message_id }}/seen",
+      "path_fields": [
+        "message_id"
+      ],
+      "redact_fields": [
+        "message_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "message_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_teammates_from_shift",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/shifts/{{ record.shift_id }}/teammates",
+      "path_fields": [
+        "shift_id"
+      ],
+      "redact_fields": [
+        "shift_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shift_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shift_id",
+          "teammate_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_teammates_to_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shifts/{{ record.shift_id }}/teammates",
+      "path_fields": [
+        "shift_id"
+      ],
+      "redact_fields": [
+        "shift_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shift_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shift_id",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_shift",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/shifts/{{ record.shift_id }}",
+      "path_fields": [
+        "shift_id"
+      ],
+      "redact_fields": [
+        "shift_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shift_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "black",
+              "grey",
+              "pink",
+              "purple",
+              "blue",
+              "teal",
+              "green",
+              "yellow",
+              "orange",
+              "red"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "times": {
+            "type": "object",
+            "properties": {
+              "mon": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "tue": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "wed": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "thu": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "fri": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "sat": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "sun": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "shift_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /shifts/{shift_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shifts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "black",
+              "grey",
+              "pink",
+              "purple",
+              "blue",
+              "teal",
+              "green",
+              "yellow",
+              "orange",
+              "red"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "times": {
+            "type": "object",
+            "properties": {
+              "mon": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "tue": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "wed": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "thu": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "fri": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "sat": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "sun": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "color",
+          "timezone",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_signature",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/signatures/{{ record.signature_id }}",
+      "path_fields": [
+        "signature_id"
+      ],
+      "redact_fields": [
+        "signature_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "signature_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "signature_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /signatures/{signature_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_signature",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/signatures/{{ record.signature_id }}",
+      "path_fields": [
+        "signature_id"
+      ],
+      "redact_fields": [
+        "signature_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "signature_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sender_info": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "is_visible_for_all_teammate_channels": {
+            "type": "boolean"
+          },
+          "is_default": {
+            "type": "boolean"
+          },
+          "channel_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "signature_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /signatures/{signature_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_child_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags/{{ record.tag_id }}/children",
+      "path_fields": [
+        "tag_id"
+      ],
+      "redact_fields": [
+        "tag_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "highlight": {
+            "type": "string",
+            "enum": [
+              "grey",
+              "pink",
+              "red",
+              "orange",
+              "yellow",
+              "green",
+              "light-blue",
+              "blue",
+              "purple"
+            ]
+          },
+          "is_visible_in_conversation_lists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /tags/{tag_id}/children mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.tag_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "redact_fields": [
+        "tag_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /tags/{tag_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_tag",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tags/{{ record.tag_id }}",
+      "path_fields": [
+        "tag_id"
+      ],
+      "redact_fields": [
+        "tag_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "highlight": {
+            "type": "string",
+            "enum": [
+              "grey",
+              "pink",
+              "red",
+              "orange",
+              "yellow",
+              "green",
+              "light-blue",
+              "blue",
+              "purple"
+            ]
+          },
+          "parent_tag_id": {
+            "type": "string"
+          },
+          "is_visible_in_conversation_lists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "tag_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /tags/{tag_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "highlight": {
+            "type": "string",
+            "enum": [
+              "grey",
+              "pink",
+              "red",
+              "orange",
+              "yellow",
+              "green",
+              "light-blue",
+              "blue",
+              "purple"
+            ]
+          },
+          "is_visible_in_conversation_lists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_company_teammate_group_team_inboxes",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}/inboxes",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id",
+          "inbox_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_company_teammate_group_team_inboxes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}/inboxes",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id",
+          "inbox_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_company_teammate_group_teammates",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}/teammates",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id",
+          "teammate_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_company_teammate_group_teammates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}/teammates",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_company_teammate_group_teams",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}/teams",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "team_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id",
+          "team_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_company_teammate_group_teams",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}/teams",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "team_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id",
+          "team_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_company_teammate_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_a_company_teammate_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teammate_groups/{{ record.teammate_group_id }}",
+      "path_fields": [
+        "teammate_group_id"
+      ],
+      "redact_fields": [
+        "teammate_group_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_group_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "contacts": {
+                "type": "object",
+                "properties": {
+                  "access": {
+                    "type": "string"
+                  },
+                  "contact_group_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "contact_list_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_group_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_company_teammate_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammate_groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "contacts": {
+                "type": "object",
+                "properties": {
+                  "access": {
+                    "type": "string"
+                  },
+                  "contact_group_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "contact_list_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "access"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammate_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/contact_groups",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/contact_lists",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/contacts",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "list_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "handles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "handle": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "twitter",
+                    "email",
+                    "phone",
+                    "facebook",
+                    "intercom",
+                    "front_chat",
+                    "custom"
+                  ]
+                }
+              },
+              "required": [
+                "handle",
+                "source"
+              ],
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/message_template_folders",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parent_folder_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_message_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/message_templates",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "folder_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_private_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/private_inboxes",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/private_inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_signature",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/signatures",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sender_info": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "is_default": {
+            "type": "boolean"
+          },
+          "channel_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/signatures mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_teammate_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/tags",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "highlight": {
+            "type": "string",
+            "enum": [
+              "grey",
+              "pink",
+              "red",
+              "orange",
+              "yellow",
+              "green",
+              "light-blue",
+              "blue",
+              "purple"
+            ]
+          },
+          "is_visible_in_conversation_lists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_time_off",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teammates/{{ record.teammate_id }}/time_offs",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "start_at": {
+            "type": "number"
+          },
+          "end_at": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "auto_responder": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "type": "string"
+              },
+              "is_enabled": {
+                "type": "boolean"
+              },
+              "is_contacts_only": {
+                "type": "boolean"
+              },
+              "channel_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id",
+          "name",
+          "start_at"
+        ]
+      },
+      "risk": "high: fixed Front POST /teammates/{teammate_id}/time_offs mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_teammate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/teammates/{{ record.teammate_id }}",
+      "path_fields": [
+        "teammate_id"
+      ],
+      "redact_fields": [
+        "teammate_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teammate_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "is_available": {
+            "type": "boolean"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "teammate_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /teammates/{teammate_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/contact_groups",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_contact_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/contact_lists",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/contacts",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "list_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          },
+          "handles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "handle": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "twitter",
+                    "email",
+                    "phone",
+                    "facebook",
+                    "intercom",
+                    "front_chat",
+                    "custom"
+                  ]
+                }
+              },
+              "required": [
+                "handle",
+                "source"
+              ],
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/inboxes",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_public": {
+            "type": "boolean"
+          },
+          "custom_fields": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_folder",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/message_template_folders",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parent_folder_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_message_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/message_templates",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "folder_id": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_shift",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/shifts",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "black",
+              "grey",
+              "pink",
+              "purple",
+              "blue",
+              "teal",
+              "green",
+              "yellow",
+              "orange",
+              "red"
+            ]
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "times": {
+            "type": "object",
+            "properties": {
+              "mon": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "tue": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "wed": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "thu": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "fri": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "sat": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              },
+              "sun": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "string"
+                  },
+                  "end": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name",
+          "color",
+          "timezone",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_signature",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/signatures",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sender_info": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "is_visible_for_all_teammate_channels": {
+            "type": "boolean"
+          },
+          "is_default": {
+            "type": "boolean"
+          },
+          "channel_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name",
+          "body"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/signatures mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/tags",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "highlight": {
+            "type": "string",
+            "enum": [
+              "grey",
+              "pink",
+              "red",
+              "orange",
+              "yellow",
+              "green",
+              "light-blue",
+              "blue",
+              "purple"
+            ]
+          },
+          "is_visible_in_conversation_lists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_teammates_from_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.team_id }}/teammates",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "teammate_ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /teams/{team_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_teammates_to_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/teammates",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_team_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams/{{ record.team_id }}/views",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "not_tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "no_tags": {
+            "type": "boolean"
+          },
+          "assignee_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "not_assignee_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "highlight": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id",
+          "name",
+          "inbox_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /teams/{team_id}/views mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_time_off",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/time_offs/{{ record.time_off_id }}",
+      "path_fields": [
+        "time_off_id"
+      ],
+      "redact_fields": [
+        "time_off_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "time_off_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "time_off_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "critical: fixed Front DELETE /time_offs/{time_off_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_time_off",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/time_offs/{{ record.time_off_id }}",
+      "path_fields": [
+        "time_off_id"
+      ],
+      "redact_fields": [
+        "time_off_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "time_off_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "start_at": {
+            "type": "number"
+          },
+          "end_at": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "auto_responder": {
+            "type": "object",
+            "properties": {
+              "body": {
+                "type": "string"
+              },
+              "is_enabled": {
+                "type": "boolean"
+              },
+              "is_contacts_only": {
+                "type": "boolean"
+              },
+              "channel_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "time_off_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /time_offs/{time_off_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_view_teammates",
+      "kind": "create",
+      "method": "POST",
+      "path": "/views/{{ record.view_id }}/teammates",
+      "path_fields": [
+        "view_id"
+      ],
+      "redact_fields": [
+        "view_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "view_id": {
+            "type": "string"
+          },
+          "teammate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "view_id",
+          "teammate_ids"
+        ]
+      },
+      "risk": "high: fixed Front POST /views/{view_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_view",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/views/{{ record.view_id }}",
+      "path_fields": [
+        "view_id"
+      ],
+      "redact_fields": [
+        "view_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "view_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "inbox_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "not_tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "no_tags": {
+            "type": "boolean"
+          },
+          "assignee_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "not_assignee_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "highlight": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "view_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /views/{view_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    }
+  ]
+}

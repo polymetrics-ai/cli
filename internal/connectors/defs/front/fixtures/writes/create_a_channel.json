@@ -1,0 +1,19 @@
+{
+  "record": {
+    "inbox_id": "fixture_inbox_id",
+    "type": "custom"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/inboxes/fixture_inbox_id/channels",
+    "body": {
+      "type": "custom"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

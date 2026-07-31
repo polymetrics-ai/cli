@@ -1,0 +1,19 @@
+{
+  "record": {
+    "draft_id": "fixture_draft_id",
+    "version": "fixture_version"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/drafts/fixture_draft_id",
+    "body": {
+      "version": "fixture_version"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

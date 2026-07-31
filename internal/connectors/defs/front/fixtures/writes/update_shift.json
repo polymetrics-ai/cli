@@ -1,0 +1,15 @@
+{
+  "record": {
+    "shift_id": "fixture_shift_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/shifts/fixture_shift_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

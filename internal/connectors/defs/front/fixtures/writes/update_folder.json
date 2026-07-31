@@ -1,0 +1,15 @@
+{
+  "record": {
+    "message_template_folder_id": "fixture_message_template_folder_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/message_template_folders/fixture_message_template_folder_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/channels/fixture_channel_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

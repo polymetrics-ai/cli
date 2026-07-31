@@ -1,0 +1,21 @@
+{
+  "record": {
+    "teammate_id": "fixture_teammate_id",
+    "name": "fixture_name",
+    "start_at": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teammates/fixture_teammate_id/time_offs",
+    "body": {
+      "name": "fixture_name",
+      "start_at": 1
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "message_template_id": "fixture_message_template_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/message_templates/fixture_message_template_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}
