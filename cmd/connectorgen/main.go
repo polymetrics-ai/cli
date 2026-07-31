@@ -101,8 +101,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
@@ -123,6 +122,31 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+// validatePath validates either a defs root (containing connector bundle
+// directories) or a single connector bundle directory. Supporting the single
+// bundle form keeps focused gates such as
+// `connectorgen validate internal/connectors/defs/notion` equivalent to a
+// one-connector run instead of treating `schemas/` and `fixtures/` as sibling
+// bundles.
+func validatePath(dir string) (Report, error) {
+	if looksLikeBundleDir(dir) {
+		parent := filepath.Dir(dir)
+		name := filepath.Base(filepath.Clean(dir))
+		findings, warnings := validateBundleDir(os.DirFS(parent), name)
+		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+	}
+	return validateDir(os.DirFS(dir))
+}
+
+func looksLikeBundleDir(dir string) bool {
+	for _, marker := range []string{"metadata.json", "spec.json", "streams.json", "writes.json", "operations.json", "api_surface.json", "cli_surface.json", "docs.md"} {
+		if _, err := os.Stat(filepath.Join(dir, marker)); err == nil {
+			return true
+		}
+	}
+	return false
 }
 
 // renderText renders a Report as human-readable lines: one finding per line

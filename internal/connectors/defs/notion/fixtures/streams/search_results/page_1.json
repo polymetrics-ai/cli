@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/search"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "page",
+          "id": "search_fixture_1",
+          "last_edited_time": "2026-01-02T00:00:00.000Z"
+        },
+        {
+          "object": "database",
+          "id": "search_fixture_2",
+          "last_edited_time": "2026-01-03T00:00:00.000Z"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

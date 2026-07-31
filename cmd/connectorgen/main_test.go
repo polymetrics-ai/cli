@@ -123,6 +123,44 @@ func TestValidate_AcceptsGoodBundle(t *testing.T) {
 	}
 }
 
+func TestValidatePath_AcceptsSingleBundleDirectory(t *testing.T) {
+	report, err := validatePath(filepath.Join("testdata", "valid", "goodconn"))
+	if err != nil {
+		t.Fatalf("validatePath: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for the good bundle, got %+v", report.Findings)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+}
+
+func TestValidatePath_SingleMalformedBundleMissingMetadataReportsOneConnector(t *testing.T) {
+	root := t.TempDir()
+	bundle := filepath.Join(root, "badconn")
+	if err := os.Mkdir(bundle, 0o755); err != nil {
+		t.Fatalf("mkdir bundle: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(bundle, "spec.json"), []byte(`{}`), 0o644); err != nil {
+		t.Fatalf("write spec: %v", err)
+	}
+
+	report, err := validatePath(bundle)
+	if err != nil {
+		t.Fatalf("validatePath: %v", err)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+	if len(report.Findings) != 1 {
+		t.Fatalf("findings = %+v, want one missing metadata finding", report.Findings)
+	}
+	if got := report.Findings[0]; got.Connector != "badconn" || got.File != "metadata.json" {
+		t.Fatalf("finding = %+v, want badconn metadata.json", got)
+	}
+}
+
 // TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
 // S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
 // queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`

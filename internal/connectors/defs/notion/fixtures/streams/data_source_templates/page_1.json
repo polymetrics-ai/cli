@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data_sources/synthetic-conformance-value/templates",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "templates": [
+        {
+          "object": "template",
+          "id": "template_fixture_1",
+          "name": "Fixture template"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "view_id": "view_fixture_1",
+    "name": "Renamed fixture view"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/views/view_fixture_1",
+    "body": {
+      "name": "Renamed fixture view"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "phase": "issue-3062-notion-parity-wave03-r1",
+  "branch": "fm/cli-notion-parity-wave03-r1",
+  "gsdCommandAttempted": "scripts/gsd prompt programming-loop init --phase issue-3062-notion-parity-wave03-r1 --dry-run",
+  "gsdFallback": "manual-gsd-command-missing",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single Notion connector bundle/hook/generated-doc surface; mutating subagents would collide on the same files"
+    },
+    {
+      "cycle": "implementation",
+      "decision": "fixture_only_no_live_certification",
+      "reason": "task explicitly forbids live provider calls, credentials, certification, VPS, Thaalam, push, PR, merge, and /no-mistakes"
+    }
+  ],
+  "notionOfficialInventory": {
+    "sourceUrl": "https://developers.notion.com/openapi.json",
+    "openapi": "3.1.0",
+    "sha256": "4170a025f155ab721aa2e30451d1143ae79ad069b784b98d4fa420855f5d9d86",
+    "lastModified": "Thu, 30 Jul 2026 23:41:58 GMT",
+    "totalOfficialOperations": 49,
+    "implemented": 45,
+    "fixtureTested": 45,
+    "blockedPlanned": 1,
+    "excludedNotApplicable": 3,
+    "certified": 0,
+    "connectorSurfaceRows": 51,
+    "connectorExecutableSurfaces": 47
+  },
+  "verificationPassed": true,
+  "verification": [
+    "go run ./cmd/connectorgen validate internal/connectors/defs/notion",
+    "go test ./internal/connectors/conformance -run 'TestConformance/notion' -count=1",
+    "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+    "go build ./cmd/pm",
+    "make connector-boundary",
+    "git diff --check",
+    "go test ./internal/connectors/hooks/notion -count=1",
+    "go test ./cmd/connectorgen -run 'TestValidatePath|TestValidate_AcceptsGoodBundle' -count=1",
+    "./pm docs validate --connectors-dir docs/connectors",
+    "make verify"
+  ],
+  "humanGatesTriggered": [],
+  "liveProviderCalls": false,
+  "credentialsRequested": false,
+  "issuesUpdatedViaGhAxi": [3062, 3063, 3064, 3065, 3066, 3067, 3068, 3069],
+  "pushPerformed": false,
+  "prPerformed": false,
+  "noMistakesPerformed": false
+}

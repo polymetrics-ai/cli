@@ -1,0 +1,29 @@
+{
+  "record": {
+    "parent": {
+      "type": "workspace",
+      "workspace": true
+    },
+    "properties": {},
+    "children": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pages",
+    "body": {
+      "parent": {
+        "type": "workspace",
+        "workspace": true
+      },
+      "properties": {},
+      "children": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "page",
+      "id": "page_created_fixture_1"
+    }
+  }
+}

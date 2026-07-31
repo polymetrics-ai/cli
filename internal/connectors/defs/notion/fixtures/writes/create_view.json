@@ -1,0 +1,16 @@
+{
+  "record": {
+    "data_source_id": "data_source_fixture_1",
+    "name": "Fixture view",
+    "type": "table"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/views",
+    "body": {
+      "data_source_id": "data_source_fixture_1",
+      "name": "Fixture view",
+      "type": "table"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "record": {
+    "database_id": "database_fixture_1",
+    "title": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Fixture"
+        }
+      }
+    ],
+    "properties": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/databases/database_fixture_1",
+    "body": {
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Fixture"
+          }
+        }
+      ],
+      "properties": {}
+    }
+  }
+}

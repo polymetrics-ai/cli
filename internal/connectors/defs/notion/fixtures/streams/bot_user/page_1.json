@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/me"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "user",
+      "id": "bot_fixture_1",
+      "name": "Fixture Bot",
+      "type": "bot",
+      "bot": {}
+    }
+  }
+}

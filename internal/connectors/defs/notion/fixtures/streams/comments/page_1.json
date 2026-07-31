@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/comments",
+    "query": {
+      "block_id": "synthetic-conformance-value",
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "comment",
+          "id": "comment_fixture_1",
+          "discussion_id": "discussion_fixture_1",
+          "rich_text": [],
+          "parent": {
+            "type": "block_id",
+            "block_id": "synthetic-conformance-value"
+          }
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

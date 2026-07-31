@@ -28,6 +28,10 @@
         "hint": "notion integration lacks access to this resource; share the database/page with the integration"
       },
       {
+        "status": 404,
+        "hint": "notion resource not found or not shared with the integration"
+      },
+      {
         "status": 429,
         "class": "rate_limited",
         "hint": "notion rate limit exceeded; the connector will retry with backoff"
@@ -37,44 +41,292 @@
   "streams": [
     {
       "name": "databases",
+      "method": "POST",
       "path": "/search",
       "records": {
         "path": "results"
       },
       "schema": "schemas/databases.json",
+      "projection": "passthrough",
+      "body": {
+        "filter": {
+          "property": "object",
+          "value": "database"
+        }
+      },
       "incremental": {
         "cursor_field": "last_edited_time"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (POST /search body-carried start_cursor/filter pagination the declarative read path cannot express -- engine/read.go always issues a nil request body; see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
       }
     },
     {
       "name": "pages",
+      "method": "POST",
       "path": "/search",
       "records": {
         "path": "results"
       },
       "schema": "schemas/pages.json",
+      "projection": "passthrough",
+      "body": {
+        "filter": {
+          "property": "object",
+          "value": "page"
+        }
+      },
       "incremental": {
         "cursor_field": "last_edited_time"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (POST /search body-carried start_cursor/filter pagination the declarative read path cannot express -- engine/read.go always issues a nil request body; see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
       }
     },
     {
+      "name": "search_results",
+      "method": "POST",
+      "path": "/search",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/search_results.json",
+      "projection": "passthrough",
+      "body": {}
+    },
+    {
       "name": "users",
+      "method": "GET",
       "path": "/users",
       "records": {
         "path": "results"
       },
       "schema": "schemas/users.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Routed through the same StreamHook as databases/pages for a single consistent dispatch path across the bundle, even though GET /users' query-param start_cursor pagination is independently declarative-expressible (docs.md Known limits); hook-covered, proven live by archived parity evidence for notion (TestParityNotion_UsersQueryCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
+      "projection": "passthrough"
+    },
+    {
+      "name": "bot_user",
+      "method": "GET",
+      "path": "/users/me",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user",
+      "method": "GET",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "page",
+      "method": "GET",
+      "path": "/pages/{{ config.page_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/pages.json",
+      "projection": "passthrough",
+      "incremental": {
+        "cursor_field": "last_edited_time"
+      }
+    },
+    {
+      "name": "page_property_items",
+      "method": "GET",
+      "path": "/pages/{{ config.page_id }}/properties/{{ config.property_id }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/page_property_items.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "page_markdown",
+      "method": "GET",
+      "path": "/pages/{{ config.page_id }}/markdown",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/page_markdown.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "async_task",
+      "method": "GET",
+      "path": "/async_tasks/{{ config.task_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/async_tasks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "block",
+      "method": "GET",
+      "path": "/blocks/{{ config.block_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/blocks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "block_children",
+      "method": "GET",
+      "path": "/blocks/{{ config.block_id }}/children",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/blocks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "data_source",
+      "method": "GET",
+      "path": "/data_sources/{{ config.data_source_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/data_sources.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "data_source_query",
+      "method": "POST",
+      "path": "/data_sources/{{ config.data_source_id }}/query",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/pages.json",
+      "projection": "passthrough",
+      "body": {}
+    },
+    {
+      "name": "data_source_templates",
+      "method": "GET",
+      "path": "/data_sources/{{ config.data_source_id }}/templates",
+      "records": {
+        "path": "templates"
+      },
+      "schema": "schemas/data_source_templates.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "database",
+      "method": "GET",
+      "path": "/databases/{{ config.database_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/databases.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "comments",
+      "method": "GET",
+      "path": "/comments",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/comments.json",
+      "projection": "passthrough",
+      "query": {
+        "block_id": "{{ config.block_id }}"
+      }
+    },
+    {
+      "name": "comment",
+      "method": "GET",
+      "path": "/comments/{{ config.comment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/comments.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "file_uploads",
+      "method": "GET",
+      "path": "/file_uploads",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/file_uploads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "file_upload",
+      "method": "GET",
+      "path": "/file_uploads/{{ config.file_upload_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/file_uploads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "custom_emojis",
+      "method": "GET",
+      "path": "/custom_emojis",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/custom_emojis.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "views",
+      "method": "GET",
+      "path": "/views",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/views.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "view",
+      "method": "GET",
+      "path": "/views/{{ config.view_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/views.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "view_query_results",
+      "method": "GET",
+      "path": "/views/{{ config.view_id }}/queries/{{ config.query_id }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/pages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "meeting_notes_query",
+      "method": "POST",
+      "path": "/blocks/meeting_notes/query",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/blocks.json",
+      "projection": "passthrough",
+      "body": {
+        "limit": "{{ config.page_size }}"
       }
     }
   ]

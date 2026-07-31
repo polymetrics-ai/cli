@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom_emojis",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "custom_emoji",
+          "id": "emoji_fixture_1",
+          "name": "fixture_emoji",
+          "emoji": "🙂"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

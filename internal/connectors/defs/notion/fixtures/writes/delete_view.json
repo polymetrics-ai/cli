@@ -1,0 +1,9 @@
+{
+  "record": {
+    "view_id": "view_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/views/view_fixture_1"
+  }
+}

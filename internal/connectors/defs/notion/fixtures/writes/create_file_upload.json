@@ -1,0 +1,24 @@
+{
+  "record": {
+    "mode": "single_part",
+    "filename": "upload_fixture.txt",
+    "content_type": "text/plain"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/file_uploads",
+    "body": {
+      "mode": "single_part",
+      "filename": "upload_fixture.txt",
+      "content_type": "text/plain"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "file_upload",
+      "id": "file_upload_fixture_1",
+      "status": "pending"
+    }
+  }
+}

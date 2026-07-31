@@ -1,0 +1,29 @@
+{
+  "record": {
+    "data_source_id": "data_source_fixture_1",
+    "properties": {},
+    "title": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Fixture"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/data_sources/data_source_fixture_1",
+    "body": {
+      "properties": {},
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Fixture"
+          }
+        }
+      ]
+    }
+  }
+}

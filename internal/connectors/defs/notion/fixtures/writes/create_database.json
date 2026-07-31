@@ -1,0 +1,40 @@
+{
+  "record": {
+    "parent": {
+      "type": "workspace",
+      "workspace": true
+    },
+    "title": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Fixture"
+        }
+      }
+    ],
+    "initial_data_source": {
+      "properties": {}
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/databases",
+    "body": {
+      "parent": {
+        "type": "workspace",
+        "workspace": true
+      },
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Fixture"
+          }
+        }
+      ],
+      "initial_data_source": {
+        "properties": {}
+      }
+    }
+  }
+}

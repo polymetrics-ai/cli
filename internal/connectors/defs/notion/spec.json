@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Notion Connection Specification",
   "type": "object",
-  "required": [],
+  "required": [
+    "token"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
@@ -13,16 +15,60 @@
     "token": {
       "type": "string",
       "x-secret": true,
-      "description": "Notion integration token, sent as Bearer auth. Never logged."
+      "description": "Notion integration token, sent as Bearer auth. Never log or pass in prompt text."
     },
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-100)."
+      "description": "Records per page for Notion cursor-paginated reads (1-100)."
     },
     "max_pages": {
       "type": "string",
-      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/notion/hooks.go's StreamHook -- NOT a declarative streams.json field (pagination is entirely hook-driven since POST /search's body cursor has no declarative equivalent; see docs.md Known limits). Permissive parse: empty, \"all\", \"unlimited\", or any non-positive-integer string means unbounded."
+      "description": "Optional hard cap on pages read per stream. Empty, all, unlimited, malformed, or non-positive values mean unbounded."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User ID for the retrieve_user stream."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Page ID for page, page property, markdown, move, and update operations."
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Page property ID for the page_property_items stream."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Async task ID for the async_task stream."
+    },
+    "block_id": {
+      "type": "string",
+      "description": "Block ID for block, block children, comments, and block mutation operations."
+    },
+    "data_source_id": {
+      "type": "string",
+      "description": "Data source ID for data-source retrieve/query/template/update operations."
+    },
+    "database_id": {
+      "type": "string",
+      "description": "Database ID for database/view operations."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Comment ID for retrieve/update/delete comment operations."
+    },
+    "view_id": {
+      "type": "string",
+      "description": "View ID for view query operations."
+    },
+    "query_id": {
+      "type": "string",
+      "description": "View query ID for result/delete operations."
+    },
+    "file_upload_id": {
+      "type": "string",
+      "description": "File upload ID for retrieve/upload/complete operations."
     }
   }
 }

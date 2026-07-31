@@ -1,0 +1,14 @@
+{
+  "record": {
+    "title": "Fixture meeting note",
+    "content": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/blocks/meeting_notes",
+    "body": {
+      "title": "Fixture meeting note",
+      "content": []
+    }
+  }
+}

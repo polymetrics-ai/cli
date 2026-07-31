@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "view",
+      "id": "synthetic-conformance-value",
+      "name": "Fixture view",
+      "data_source_id": "data_source_fixture_1"
+    }
+  }
+}

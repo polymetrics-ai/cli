@@ -1,0 +1,9 @@
+{
+  "record": {
+    "file_upload_id": "file_upload_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/file_uploads/file_upload_fixture_1/complete"
+  }
+}

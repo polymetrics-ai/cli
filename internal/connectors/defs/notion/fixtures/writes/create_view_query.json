@@ -1,0 +1,23 @@
+{
+  "record": {
+    "view_id": "view_fixture_1",
+    "page_size": 100
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/views/view_fixture_1/queries",
+    "body": {
+      "page_size": 100
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "view_query",
+      "id": "query_fixture_1",
+      "view_id": "view_fixture_1",
+      "results": [],
+      "has_more": false
+    }
+  }
+}

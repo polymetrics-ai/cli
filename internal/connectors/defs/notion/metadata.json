@@ -1,27 +1,25 @@
 {
   "name": "notion",
   "display_name": "Notion",
-  "description": "Reads Notion databases, pages, and users through the Notion REST API. Read-only.",
+  "description": "Reads and writes Notion users, pages, blocks, data sources, databases, comments, views, meeting notes, search results, and file-upload metadata through the official Notion API.",
   "integration_type": "api",
   "docs_url": "https://developers.notion.com/reference/intro",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Notion API read of workspace databases/pages/users",
-    "approval": "none; read-only source connector"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "The databases/pages streams are StreamHook-handled (hooks/notion/hooks.go ports legacy's POST /search body-cursor pagination verbatim; the engine's declarative read path always issues a nil request body -- StreamSpec.Body is declared but never read by engine/read.go -- so a body-carried start_cursor/filter cannot be expressed declaratively at all, see docs.md's Streams notes and docs/migration/quarantine.json's notion ENGINE_GAP entry). The users stream's GET /users query-cursor pagination IS declarative-expressible, but is also routed through the same StreamHook for a single consistent dispatch path across the bundle (docs.md Known limits). hook-covered; proven live by archived parity evidence for notion (TestParityNotion_DatabasesSearchBodyCursorPagination) and internal/connectors/hooks/notion/hooks_test.go."
+    "read": "external Notion API reads for workspace users, pages, blocks, data sources, databases, comments, views, meeting notes, search results, and file-upload metadata",
+    "write": "typed reverse-ETL actions create or update Notion pages, blocks, data sources, databases, comments, views, meeting notes, view queries, and file-upload lifecycle resources; archive/delete-like actions require destructive confirmation",
+    "approval": "reverse ETL writes require plan preview and explicit approval before execution; fixture-only conformance is not live certification"
   }
 }

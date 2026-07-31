@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/data_sources/synthetic-conformance-value/query"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "page",
+          "id": "data_source_query_page_fixture_1",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "last_edited_time": "2026-01-02T00:00:00.000Z",
+          "properties": {}
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

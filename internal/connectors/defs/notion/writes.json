@@ -1,0 +1,875 @@
+{
+  "actions": [
+    {
+      "name": "create_page",
+      "kind": "create",
+      "method": "POST",
+      "path": "/pages",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "parent"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "parent": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "icon": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "cover": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "markdown": {
+            "type": "string"
+          },
+          "allow_async": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates a Notion page under the supplied parent; may create visible workspace content"
+    },
+    {
+      "name": "update_page",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/pages/{{ record.page_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "page_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "icon": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "cover": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "in_trash": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "updates mutable fields on an existing Notion page or archives/restores it",
+      "path_fields": [
+        "page_id"
+      ],
+      "redact_fields": [
+        "page_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "move_page",
+      "kind": "update",
+      "method": "POST",
+      "path": "/pages/{{ record.page_id }}/move",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "page_id",
+          "parent"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "parent": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "moves an existing Notion page to another parent",
+      "path_fields": [
+        "page_id"
+      ],
+      "redact_fields": [
+        "page_id"
+      ]
+    },
+    {
+      "name": "update_page_markdown",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/pages/{{ record.page_id }}/markdown",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "page_id",
+          "markdown"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "page_id": {
+            "type": "string"
+          },
+          "markdown": {
+            "type": "string"
+          },
+          "allow_async": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "replaces or updates a page content body from typed markdown",
+      "path_fields": [
+        "page_id"
+      ],
+      "redact_fields": [
+        "page_id"
+      ]
+    },
+    {
+      "name": "update_block",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/blocks/{{ record.block_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "block_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "block_id": {
+            "type": "string"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "in_trash": {
+            "type": "boolean"
+          },
+          "paragraph": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "heading_1": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "heading_2": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "heading_3": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "bulleted_list_item": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "numbered_list_item": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "to_do": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "toggle": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "code": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "quote": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "callout": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "bookmark": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "embed": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "image": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "video": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "file": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "pdf": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "table": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "table_row": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "updates a Notion block or archives/restores it",
+      "path_fields": [
+        "block_id"
+      ],
+      "redact_fields": [
+        "block_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_block",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/blocks/{{ record.block_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "block_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "block_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "archives/deletes a block by ID; destructive confirmation required",
+      "path_fields": [
+        "block_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "block_id"
+      ]
+    },
+    {
+      "name": "append_block_children",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/blocks/{{ record.block_id }}/children",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "block_id",
+          "children"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "block_id": {
+            "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "after": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "appends children blocks under an existing block",
+      "path_fields": [
+        "block_id"
+      ],
+      "redact_fields": [
+        "block_id"
+      ]
+    },
+    {
+      "name": "create_data_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/data_sources",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "parent",
+          "properties"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "parent": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "title": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "icon": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "cover": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "creates a Notion data source under the supplied parent"
+    },
+    {
+      "name": "update_data_source",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/data_sources/{{ record.data_source_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "data_source_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "data_source_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "icon": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "cover": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "in_trash": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "updates a Notion data source schema or metadata; may archive or trash existing Notion content when archived/in_trash is supplied",
+      "path_fields": [
+        "data_source_id"
+      ],
+      "redact_fields": [
+        "data_source_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_database",
+      "kind": "create",
+      "method": "POST",
+      "path": "/databases",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "parent"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "parent": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "title": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "is_inline": {
+            "type": "boolean"
+          },
+          "initial_data_source": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "icon": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "cover": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "creates a legacy Notion database object as documented by the official API"
+    },
+    {
+      "name": "update_database",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/databases/{{ record.database_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "database_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "database_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "updates a legacy Notion database object as documented by the official API",
+      "path_fields": [
+        "database_id"
+      ],
+      "redact_fields": [
+        "database_id"
+      ]
+    },
+    {
+      "name": "create_comment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/comments",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "rich_text"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "parent": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "discussion_id": {
+            "type": "string"
+          },
+          "rich_text": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "creates a Notion comment on a page/block/discussion"
+    },
+    {
+      "name": "update_comment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "comment_id",
+          "rich_text"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          },
+          "rich_text": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "updates a Notion comment rich_text body",
+      "path_fields": [
+        "comment_id"
+      ],
+      "redact_fields": [
+        "comment_id"
+      ]
+    },
+    {
+      "name": "delete_comment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/comments/{{ record.comment_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "comment_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a Notion comment by ID; destructive confirmation required",
+      "path_fields": [
+        "comment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "comment_id"
+      ]
+    },
+    {
+      "name": "create_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/views",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "data_source_id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "data_source_id": {
+            "type": "string"
+          },
+          "database_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "format": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "creates a Notion view for a data source or database"
+    },
+    {
+      "name": "update_view",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/views/{{ record.view_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "view_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "view_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "format": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "updates a Notion view",
+      "path_fields": [
+        "view_id"
+      ],
+      "redact_fields": [
+        "view_id"
+      ]
+    },
+    {
+      "name": "delete_view",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/views/{{ record.view_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "view_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "view_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a Notion view; destructive confirmation required",
+      "path_fields": [
+        "view_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "view_id"
+      ]
+    },
+    {
+      "name": "create_view_query",
+      "kind": "create",
+      "method": "POST",
+      "path": "/views/{{ record.view_id }}/queries",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "view_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "view_id": {
+            "type": "string"
+          },
+          "page_size": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "creates a bounded Notion view query resource for later result retrieval",
+      "path_fields": [
+        "view_id"
+      ],
+      "redact_fields": [
+        "view_id"
+      ]
+    },
+    {
+      "name": "delete_view_query",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/views/{{ record.view_id }}/queries/{{ record.query_id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "view_id",
+          "query_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "view_id": {
+            "type": "string"
+          },
+          "query_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a Notion view query resource; destructive confirmation required",
+      "path_fields": [
+        "view_id",
+        "query_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "redact_fields": [
+        "view_id",
+        "query_id"
+      ]
+    },
+    {
+      "name": "create_meeting_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/blocks/meeting_notes",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "template": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "parent": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "creates a Notion meeting note block"
+    },
+    {
+      "name": "create_file_upload",
+      "kind": "create",
+      "method": "POST",
+      "path": "/file_uploads",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "mode",
+          "filename"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string"
+          },
+          "number_of_parts": {
+            "type": "integer"
+          },
+          "external_url": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a bounded Notion file-upload resource before upload or external import"
+    },
+    {
+      "name": "complete_file_upload",
+      "kind": "update",
+      "method": "POST",
+      "path": "/file_uploads/{{ record.file_upload_id }}/complete",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "file_upload_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "file_upload_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "completes a Notion multi-part file upload after all approved parts are sent",
+      "path_fields": [
+        "file_upload_id"
+      ],
+      "body_type": "none",
+      "redact_fields": [
+        "file_upload_id"
+      ]
+    }
+  ]
+}

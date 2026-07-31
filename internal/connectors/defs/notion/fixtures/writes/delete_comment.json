@@ -1,0 +1,9 @@
+{
+  "record": {
+    "comment_id": "comment_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/comments/comment_fixture_1"
+  }
+}

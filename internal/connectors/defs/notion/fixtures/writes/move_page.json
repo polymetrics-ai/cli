@@ -1,0 +1,19 @@
+{
+  "record": {
+    "page_id": "page_fixture_1",
+    "parent": {
+      "type": "workspace",
+      "workspace": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/pages/page_fixture_1/move",
+    "body": {
+      "parent": {
+        "type": "workspace",
+        "workspace": true
+      }
+    }
+  }
+}

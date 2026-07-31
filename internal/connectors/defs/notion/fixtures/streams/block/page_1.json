@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/blocks/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "block",
+      "id": "synthetic-conformance-value",
+      "type": "paragraph",
+      "created_time": "2026-01-01T00:00:00.000Z",
+      "last_edited_time": "2026-01-02T00:00:00.000Z",
+      "archived": false,
+      "in_trash": false,
+      "has_children": false,
+      "paragraph": {
+        "rich_text": []
+      }
+    }
+  }
+}

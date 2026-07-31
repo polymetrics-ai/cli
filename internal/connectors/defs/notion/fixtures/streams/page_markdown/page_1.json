@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pages/synthetic-conformance-value/markdown"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "page_markdown",
+      "id": "synthetic-conformance-value",
+      "markdown": "# Fixture page\n\nSanitized markdown fixture.",
+      "truncated": false,
+      "unknown_block_ids": []
+    }
+  }
+}

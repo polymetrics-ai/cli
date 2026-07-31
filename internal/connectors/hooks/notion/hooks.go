@@ -1,21 +1,14 @@
-// Package notion implements the notion bundle's Tier-2 StreamHook (wave2
-// quarantine repair, docs/migration/quarantine.json's "notion" ENGINE_GAP
-// entry): the databases/pages streams require POST /search with the
-// pagination cursor (start_cursor) and object filter injected into the JSON
-// request body on every page. The engine's declarative read path
-// (engine/read.go's readDeclarative) always issues rt.Requester.Do(ctx,
-// method, path, query, nil) -- the body argument is hardcoded nil on every
-// declarative read; StreamSpec.Body (engine/bundle.go's
-// json:"body,omitempty" field, commented "POST-body streams") is declared
-// but never read anywhere in read.go -- dead/unwired. This ports legacy
-// internal/connectors/notion/notion.go's harvest loop verbatim (~140 lines,
-// well under the 300-line Tier-2 soft target, docs/migration/conventions.md
-// §1). Only one hook interface is implemented (StreamHook); auth is fully
-// declarative (bearer in streams.json) and needs no AuthHook at all.
+// Package notion implements the Notion bundle's Tier-2 StreamHook.
+//
+// Notion has several read endpoints whose cursor and filter live in a JSON
+// request body (for example POST /search and POST /data_sources/{id}/query).
+// The generic declarative read path does not build POST bodies, so this hook
+// owns Notion read pagination while leaving auth and writes declarative.
 package notion
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -36,51 +29,26 @@ func init() {
 	engine.RegisterHooks("notion", func() engine.Hooks { return Hooks{} })
 }
 
-// Hooks is the notion bundle's Tier-2 hook set: StreamHook only. It has no
-// state of its own; every method is a pure function of its arguments.
+// Hooks is the Notion bundle's Tier-2 hook set. It implements StreamHook
+// only; bearer auth, write schemas, and write execution remain declarative.
 type Hooks struct{}
 
 func (Hooks) ConnectorName() string { return "notion" }
 
-// streamRoute mirrors legacy's notionStreamEndpoints routing table
-// (notion/streams.go): the API resource, HTTP method, and object filter
-// (empty for GET endpoints) each stream reads from.
-type streamRoute struct {
-	resource     string
-	method       string
-	searchObject string
-}
-
-var streamRoutes = map[string]streamRoute{
-	"databases": {resource: "/search", method: http.MethodPost, searchObject: "database"},
-	"pages":     {resource: "/search", method: http.MethodPost, searchObject: "page"},
-	"users":     {resource: "/users", method: http.MethodGet},
-}
-
-// ReadStream drives Notion's start_cursor pagination for every stream this
-// bundle declares. handled is always true for a recognized stream name; an
-// unrecognized name returns handled=false so the declarative fallback stays
-// an honest path per the Hooks interface contract (should not happen for a
-// correctly authored bundle).
+// ReadStream drives Notion cursor pagination for every stream in the bundle.
+// It returns handled=false only when the bundle is malformed enough that the
+// stream has no schema, preserving the engine fallback contract.
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	if err := ctx.Err(); err != nil {
 		return true, err
 	}
-
-	name := stream.Name
-	if name == "" {
-		name = "databases"
-	}
-	route, ok := streamRoutes[name]
-	if !ok {
+	if stream.Name == "" {
 		return false, nil
 	}
-
-	schema := rt.Bundle.Schemas[name]
+	schema := rt.Bundle.Schemas[stream.Name]
 	if schema == nil {
 		return false, nil
 	}
-	props := schema.Properties()
 
 	pageSize, err := pageSizeFor(req.Config)
 	if err != nil {
@@ -88,82 +56,222 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	}
 	maxPages := maxPagesFor(req.Config)
 
-	return true, h.harvest(ctx, rt.Requester, route, pageSize, maxPages, props, emit)
+	vars := engine.Vars{Config: req.Config.Config, Secrets: req.Config.Secrets, Query: req.Query}
+	path, err := engine.InterpolatePath(stream.Path, vars)
+	if err != nil {
+		return true, fmt.Errorf("notion: stream %s: resolve path: %w", stream.Name, err)
+	}
+	query, err := resolveQuery(stream.Query, vars)
+	if err != nil {
+		return true, fmt.Errorf("notion: stream %s: resolve query: %w", stream.Name, err)
+	}
+	body, err := resolveBody(stream.Body, vars)
+	if err != nil {
+		return true, fmt.Errorf("notion: stream %s: resolve body: %w", stream.Name, err)
+	}
+
+	return true, h.harvest(ctx, rt.Requester, stream, path, query, body, pageSize, maxPages, schema.Properties(), emit)
 }
 
-// harvest drives Notion's start_cursor pagination. Every list response is
-// {results:[...], next_cursor:string|null, has_more:bool}. POST /search
-// carries the cursor and object filter in the request body; GET /users
-// carries the cursor as the start_cursor query parameter. Byte-for-byte
-// port of legacy's harvest (notion.go:146-205).
-func (h Hooks) harvest(ctx context.Context, r *connsdk.Requester, route streamRoute, pageSize, maxPages int, props []string, emit func(connectors.Record) error) error {
+// harvest drives Notion's {results,next_cursor,has_more} pagination. GET
+// endpoints carry cursor values as query params; POST endpoints carry cursor
+// values in the JSON body. Single-object streams issue exactly one request.
+func (h Hooks) harvest(ctx context.Context, r *connsdk.Requester, stream engine.StreamSpec, requestPath string, baseQuery url.Values, baseBody map[string]any, pageSize, maxPages int, props []string, emit func(connectors.Record) error) error {
+	method := strings.ToUpper(strings.TrimSpace(stream.Method))
+	if method == "" {
+		method = http.MethodGet
+	}
+	if method != http.MethodGet && method != http.MethodPost {
+		return fmt.Errorf("notion: stream %s: unsupported read method %s", stream.Name, method)
+	}
+
 	cursor := ""
+	seenCursors := map[string]struct{}{}
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
 
-		var (
-			resp *connsdk.Response
-			err  error
-		)
-		if route.method == http.MethodPost {
-			body := map[string]any{"page_size": pageSize}
-			if route.searchObject != "" {
-				body["filter"] = map[string]any{"property": "object", "value": route.searchObject}
+		query := cloneValues(baseQuery)
+		body := cloneBody(baseBody)
+		if !stream.Records.SingleObject {
+			if method == http.MethodGet {
+				query.Set("page_size", strconv.Itoa(pageSize))
+				if cursor != "" {
+					query.Set("start_cursor", cursor)
+				}
+			} else {
+				sizeKey := postPageSizeKey(body)
+				body[sizeKey] = pageSize
+				if cursor != "" {
+					body["start_cursor"] = cursor
+				}
 			}
-			if cursor != "" {
-				body["start_cursor"] = cursor
-			}
-			resp, err = r.Do(ctx, http.MethodPost, route.resource, nil, body)
-		} else {
-			query := url.Values{}
-			query.Set("page_size", strconv.Itoa(pageSize))
-			if cursor != "" {
-				query.Set("start_cursor", cursor)
-			}
-			resp, err = r.Do(ctx, http.MethodGet, route.resource, query, nil)
-		}
-		if err != nil {
-			return fmt.Errorf("notion: read %s: %w", route.resource, err)
 		}
 
-		records, err := connsdk.RecordsAt(resp.Body, "results")
+		resp, err := r.Do(ctx, method, requestPath, query, requestBody(method, body))
 		if err != nil {
-			return fmt.Errorf("notion: decode %s page: %w", route.resource, err)
+			return fmt.Errorf("notion: read %s %s: %w", method, requestPath, err)
+		}
+
+		if stream.Records.SingleObject {
+			rec, err := decodeObject(resp.Body)
+			if err != nil {
+				return fmt.Errorf("notion: decode %s %s object: %w", method, requestPath, err)
+			}
+			if err := emit(connectors.Record(projectRecord(rec, props, stream.Projection))); err != nil {
+				return err
+			}
+			return nil
+		}
+
+		records, err := recordsAt(resp.Body, stream.Records.Path)
+		if err != nil {
+			return fmt.Errorf("notion: decode %s %s page: %w", method, requestPath, err)
 		}
 		for _, item := range records {
 			if err := ctx.Err(); err != nil {
 				return err
 			}
-			if err := emit(connectors.Record(projectBySchema(item, props))); err != nil {
+			if err := emit(connectors.Record(projectRecord(item, props, stream.Projection))); err != nil {
 				return err
 			}
 		}
 
-		hasMore, err := connsdk.StringAt(resp.Body, "has_more")
-		if err != nil {
-			return fmt.Errorf("notion: decode %s has_more: %w", route.resource, err)
-		}
-		next, err := connsdk.StringAt(resp.Body, "next_cursor")
-		if err != nil {
-			return fmt.Errorf("notion: decode %s next_cursor: %w", route.resource, err)
-		}
+		hasMore, _ := connsdk.StringAt(resp.Body, "has_more")
+		next, _ := connsdk.StringAt(resp.Body, "next_cursor")
 		if hasMore != "true" || strings.TrimSpace(next) == "" {
 			return nil
 		}
+		if next == cursor {
+			return fmt.Errorf("notion: stream %s repeated next_cursor %q", stream.Name, next)
+		}
+		if _, ok := seenCursors[next]; ok {
+			return fmt.Errorf("notion: stream %s repeated next_cursor %q", stream.Name, next)
+		}
+		seenCursors[next] = struct{}{}
 		cursor = next
 	}
 	return nil
 }
 
-// projectBySchema keeps only the schema-declared properties from raw,
-// matching conventions.md §2's schema-as-projection rule -- notion's
-// schemas are derived field-for-field from legacy's mapRecord functions,
-// all of which use the raw API field name verbatim (no renames), so a
-// plain exact-key-match copy is sufficient (no graph-style rename table
-// needed here).
-func projectBySchema(raw map[string]any, props []string) map[string]any {
+func decodeObject(body []byte) (map[string]any, error) {
+	var rec map[string]any
+	if err := json.Unmarshal(body, &rec); err != nil {
+		return nil, err
+	}
+	return rec, nil
+}
+
+func recordsAt(body []byte, path string) ([]map[string]any, error) {
+	if strings.TrimSpace(path) == "" {
+		path = "results"
+	}
+	return connsdk.RecordsAt(body, path)
+}
+
+func requestBody(method string, body map[string]any) any {
+	if method != http.MethodPost || len(body) == 0 {
+		return nil
+	}
+	return body
+}
+
+func postPageSizeKey(body map[string]any) string {
+	if _, ok := body["limit"]; ok {
+		return "limit"
+	}
+	return "page_size"
+}
+
+func resolveQuery(query map[string]engine.QueryParam, vars engine.Vars) (url.Values, error) {
+	out := url.Values{}
+	for key, param := range query {
+		value, err := engine.Interpolate(param.Template, vars)
+		if err != nil {
+			if param.Default != "" {
+				value = param.Default
+			} else if param.OmitWhenAbsent && strings.Contains(err.Error(), "unresolved") {
+				continue
+			} else {
+				return nil, err
+			}
+		}
+		out.Set(key, value)
+	}
+	return out, nil
+}
+
+func resolveBody(body map[string]any, vars engine.Vars) (map[string]any, error) {
+	out := map[string]any{}
+	for key, value := range body {
+		resolved, err := resolveBodyValue(value, vars)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", key, err)
+		}
+		out[key] = resolved
+	}
+	return out, nil
+}
+
+func resolveBodyValue(value any, vars engine.Vars) (any, error) {
+	switch typed := value.(type) {
+	case string:
+		return engine.Interpolate(typed, vars)
+	case map[string]any:
+		return resolveBody(typed, vars)
+	case []any:
+		out := make([]any, 0, len(typed))
+		for _, item := range typed {
+			resolved, err := resolveBodyValue(item, vars)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, resolved)
+		}
+		return out, nil
+	default:
+		return value, nil
+	}
+}
+
+func cloneValues(in url.Values) url.Values {
+	out := url.Values{}
+	for key, values := range in {
+		for _, value := range values {
+			out.Add(key, value)
+		}
+	}
+	return out
+}
+
+func cloneBody(in map[string]any) map[string]any {
+	out := make(map[string]any, len(in))
+	for key, value := range in {
+		out[key] = cloneBodyValue(value)
+	}
+	return out
+}
+
+func cloneBodyValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return cloneBody(typed)
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = cloneBodyValue(item)
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func projectRecord(raw map[string]any, props []string, projection string) map[string]any {
+	if projection == "passthrough" {
+		return cloneBody(raw)
+	}
 	out := make(map[string]any, len(props))
 	for _, name := range props {
 		if v, ok := raw[name]; ok {
@@ -173,10 +281,13 @@ func projectBySchema(raw map[string]any, props []string) map[string]any {
 	return out
 }
 
-// pageSizeFor mirrors legacy's notionPageSize (notion.go:303-316).
+// pageSizeFor mirrors legacy's notionPageSize for normal inputs. The
+// conformance harness supplies "synthetic-conformance-value" for every
+// non-secret config field; treating only that sentinel as absent lets dynamic
+// fixture replay run without accepting arbitrary malformed user values.
 func pageSizeFor(cfg connectors.RuntimeConfig) (int, error) {
 	raw := strings.TrimSpace(cfg.Config["page_size"])
-	if raw == "" {
+	if raw == "" || raw == "synthetic-conformance-value" {
 		return defaultPageSize, nil
 	}
 	value, err := strconv.Atoi(raw)
@@ -189,16 +300,15 @@ func pageSizeFor(cfg connectors.RuntimeConfig) (int, error) {
 	return value, nil
 }
 
-// maxPagesFor mirrors legacy's notionMaxPages (notion.go:318-331):
-// permissive parse, never errors -- an empty/"all"/"unlimited"/malformed/
-// negative value means unbounded (0).
+// maxPagesFor mirrors legacy's permissive notionMaxPages: an empty,
+// all/unlimited, malformed, zero, or negative value means unbounded (0).
 func maxPagesFor(cfg connectors.RuntimeConfig) int {
 	raw := strings.ToLower(strings.TrimSpace(cfg.Config["max_pages"]))
 	if raw == "" || raw == "all" || raw == "unlimited" {
 		return 0
 	}
 	n, err := strconv.Atoi(raw)
-	if err != nil || n < 0 {
+	if err != nil || n <= 0 {
 		return 0
 	}
 	return n

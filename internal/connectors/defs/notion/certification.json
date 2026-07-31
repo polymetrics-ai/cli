@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "users",
+    "live_unavailable": [
+      {
+        "kind": "fixture_only",
+        "contains": [
+          "Notion parity is validated only with sanitized fixtures in this wave; no live workspace credentials or certification artifacts are present."
+        ]
+      }
+    ]
+  },
+  "write_pairings": []
+}

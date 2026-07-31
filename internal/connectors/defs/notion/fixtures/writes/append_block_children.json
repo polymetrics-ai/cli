@@ -1,0 +1,43 @@
+{
+  "record": {
+    "block_id": "block_fixture_1",
+    "children": [
+      {
+        "object": "block",
+        "type": "paragraph",
+        "paragraph": {
+          "rich_text": [
+            {
+              "type": "text",
+              "text": {
+                "content": "Fixture"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/blocks/block_fixture_1/children",
+    "body": {
+      "children": [
+        {
+          "object": "block",
+          "type": "paragraph",
+          "paragraph": {
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "Fixture"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

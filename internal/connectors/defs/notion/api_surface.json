@@ -1,21 +1,36 @@
 {
-  "api": "Notion API (https://developers.notion.com/reference/intro)",
+  "api": "Notion API OpenAPI 3.1 (developers.notion.com/openapi.json)",
   "docs": "https://developers.notion.com/reference/intro",
-  "reviewed_at": "2026-07-03",
-  "scope": "AUTH_COMPLEX-quarantine migration: the 3 legacy-parity read streams only (databases, pages, users); the full Notion API surface (blocks, comments, block children mutation, search-by-title, etc.) is out of scope until Pass B. The databases/pages endpoint entries below are declared method GET (not the literal wire HTTP verb, which is always POST for Notion's /search) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design §E.1 rule 4), matching the monday.com GraphQL golden's identical convention -- Notion's /search is a read-only query endpoint despite its POST wire verb.",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Complete official Notion OpenAPI inventory re-audited from developers.notion.com/openapi.json (49 official HTTP operations, last-modified Thu, 30 Jul 2026 23:41:58 GMT, sha256 4170a025f155ab721aa2e30451d1143ae79ad069b784b98d4fa420855f5d9d86). The two object-filtered /search rows preserve existing fixture-tested databases/pages streams as connector surface variants of the single official POST /search operation; official operation counts in planning artifacts count POST /search once. OAuth token lifecycle endpoints are disallowed/not-applicable, not live-certified.",
   "endpoints": [
     {
-      "method": "GET",
+      "method": "POST",
       "path": "/search (object=database)",
       "covered_by": {
         "stream": "databases"
       }
     },
     {
-      "method": "GET",
+      "method": "POST",
       "path": "/search (object=page)",
       "covered_by": {
         "stream": "pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "covered_by": {
+        "stream": "bot_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "covered_by": {
+        "stream": "user"
       }
     },
     {
@@ -26,27 +41,349 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/blocks/{block_id}/children",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/blocks/{block_id}/children is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "method": "POST",
+      "path": "/pages",
+      "covered_by": {
+        "write": "create_page"
       }
     },
     {
       "method": "GET",
-      "path": "/comments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/comments is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/pages/{page_id}",
+      "covered_by": {
+        "stream": "page"
       }
     },
     {
       "method": "PATCH",
       "path": "/pages/{page_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "(legacy notion connector is read-only; no write actions exist to port)"
+      "covered_by": {
+        "write": "update_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pages/{page_id}/move",
+      "covered_by": {
+        "write": "move_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/properties/{property_id}",
+      "covered_by": {
+        "stream": "page_property_items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pages/{page_id}/markdown",
+      "covered_by": {
+        "stream": "page_markdown"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pages/{page_id}/markdown",
+      "covered_by": {
+        "write": "update_page_markdown"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/async_tasks/{task_id}",
+      "covered_by": {
+        "stream": "async_task"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocks/{block_id}",
+      "covered_by": {
+        "stream": "block"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/blocks/{block_id}",
+      "covered_by": {
+        "write": "update_block"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/blocks/{block_id}",
+      "covered_by": {
+        "write": "delete_block"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/blocks/{block_id}/children",
+      "covered_by": {
+        "stream": "block_children"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/blocks/{block_id}/children",
+      "covered_by": {
+        "write": "append_block_children"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_sources/{data_source_id}",
+      "covered_by": {
+        "stream": "data_source"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/data_sources/{data_source_id}",
+      "covered_by": {
+        "write": "update_data_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_sources/{data_source_id}/query",
+      "covered_by": {
+        "stream": "data_source_query"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_sources",
+      "covered_by": {
+        "write": "create_data_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_sources/{data_source_id}/templates",
+      "covered_by": {
+        "stream": "data_source_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/databases/{database_id}",
+      "covered_by": {
+        "stream": "database"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/databases/{database_id}",
+      "covered_by": {
+        "write": "update_database"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/databases",
+      "covered_by": {
+        "write": "create_database"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/search",
+      "covered_by": {
+        "stream": "search_results"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/comments",
+      "covered_by": {
+        "write": "create_comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments",
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}",
+      "covered_by": {
+        "stream": "comment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/comments/{comment_id}",
+      "covered_by": {
+        "write": "update_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/comments/{comment_id}",
+      "covered_by": {
+        "write": "delete_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file_uploads",
+      "covered_by": {
+        "write": "create_file_upload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_uploads",
+      "covered_by": {
+        "stream": "file_uploads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file_uploads/{file_upload_id}/send",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official Notion binary upload sends multipart file bytes and remains blocked/planned until the shared binary payload approval/conformance runner can provide approved digests and live-safe redacted artifacts without broad local file exposure",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "official_lane=binary_file; operation_id=upload-file; summary=Upload a file; exact blocker=shared binary payload approval/conformance runner for multipart file bytes; fixture-only wave; certified=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/file_uploads/{file_upload_id}/complete",
+      "covered_by": {
+        "write": "complete_file_upload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/file_uploads/{file_upload_id}",
+      "covered_by": {
+        "stream": "file_upload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_emojis",
+      "covered_by": {
+        "stream": "custom_emojis"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views",
+      "covered_by": {
+        "stream": "views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views",
+      "covered_by": {
+        "write": "create_view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/{view_id}",
+      "covered_by": {
+        "stream": "view"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/views/{view_id}",
+      "covered_by": {
+        "write": "update_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/views/{view_id}",
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views/{view_id}/queries",
+      "covered_by": {
+        "write": "create_view_query"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/{view_id}/queries/{query_id}",
+      "covered_by": {
+        "stream": "view_query_results"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/views/{view_id}/queries/{query_id}",
+      "covered_by": {
+        "write": "delete_view_query"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocks/meeting_notes",
+      "covered_by": {
+        "write": "create_meeting_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/blocks/meeting_notes/query",
+      "covered_by": {
+        "stream": "meeting_notes_query"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/token",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official Notion OAuth token lifecycle endpoint is not a connector data operation and is excluded/not-applicable without an approved auth-flow foundation or auth-scope change",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "official_lane=excluded_not_applicable; operation_id=create-a-token; summary=Exchange an authorization code for an access and refresh token; source=https://developers.notion.com/openapi.json; fixture-only wave; certified=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/revoke",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official Notion OAuth token lifecycle endpoint is not a connector data operation and is excluded/not-applicable without an approved auth-flow foundation or auth-scope change",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "official_lane=excluded_not_applicable; operation_id=revoke-token; summary=Revoke a token; source=https://developers.notion.com/openapi.json; fixture-only wave; certified=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/introspect",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official Notion OAuth token lifecycle endpoint is not a connector data operation and is excluded/not-applicable without an approved auth-flow foundation or auth-scope change",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "notes": "official_lane=excluded_not_applicable; operation_id=introspect-token; summary=Introspect a token; source=https://developers.notion.com/openapi.json; fixture-only wave; certified=false"
       }
     }
   ]

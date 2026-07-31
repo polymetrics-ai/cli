@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/pages/synthetic-conformance-value/properties/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "property_item",
+          "id": "property_item_fixture_1",
+          "type": "title",
+          "title": {}
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

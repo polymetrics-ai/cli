@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/comments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "comment",
+      "id": "synthetic-conformance-value",
+      "discussion_id": "discussion_fixture_1",
+      "rich_text": [],
+      "parent": {
+        "type": "block_id",
+        "block_id": "block_fixture_1"
+      }
+    }
+  }
+}

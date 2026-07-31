@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/file_uploads/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "file_upload",
+      "id": "synthetic-conformance-value",
+      "status": "uploaded",
+      "filename": "fixture.txt",
+      "content_type": "text/plain"
+    }
+  }
+}

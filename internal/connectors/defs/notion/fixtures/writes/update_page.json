@@ -1,0 +1,15 @@
+{
+  "record": {
+    "page_id": "page_fixture_1",
+    "properties": {},
+    "archived": false
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/pages/page_fixture_1",
+    "body": {
+      "properties": {},
+      "archived": false
+    }
+  }
+}

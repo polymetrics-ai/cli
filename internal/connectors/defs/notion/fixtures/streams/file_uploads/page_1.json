@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/file_uploads",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "file_upload",
+          "id": "file_upload_fixture_1",
+          "status": "uploaded",
+          "filename": "fixture.txt",
+          "content_type": "text/plain"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "record": {
+    "block_id": "block_fixture_1",
+    "paragraph": {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Fixture"
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/blocks/block_fixture_1",
+    "body": {
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "text": {
+              "content": "Fixture"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

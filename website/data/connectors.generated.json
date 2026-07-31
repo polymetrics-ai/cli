@@ -165898,14 +165898,14 @@
   {
     "slug": "notion",
     "name": "Notion",
-    "description": "Reads Notion databases, pages, and users through the Notion REST API. Read-only.",
+    "description": "Reads and writes Notion users, pages, blocks, data sources, databases, comments, views, meeting notes, search results, and file-upload metadata through the official Notion API.",
     "docs_url": "https://developers.notion.com/reference/intro",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -165928,17 +165928,304 @@
         "incremental": true
       },
       {
+        "name": "search_results",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
         "name": "users",
         "primary_key": [
           "id"
         ],
         "cursor": "",
         "incremental": false
+      },
+      {
+        "name": "bot_user",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "page",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": true
+      },
+      {
+        "name": "page_property_items",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "page_markdown",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "async_task",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "block",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
+        "name": "block_children",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
+        "name": "data_source",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
+        "name": "data_source_query",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
+        "name": "data_source_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "database",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
+        "name": "comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "comment",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "file_uploads",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "file_upload",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "custom_emojis",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "views",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "view",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "view_query_results",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
+      },
+      {
+        "name": "meeting_notes_query",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_edited_time",
+        "incremental": false
       }
     ],
-    "write_actions": [],
+    "write_actions": [
+      {
+        "name": "create_page",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_page",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "move_page",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_page_markdown",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "update_block",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_block",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "append_block_children",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "create_data_source",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_data_source",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "create_database",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_database",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "create_comment",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_comment",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_comment",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_view",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_view",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_view",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_view_query",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_view_query",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_meeting_note",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_file_upload",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "complete_file_upload",
+        "method": "POST",
+        "kind": "update"
+      }
+    ],
     "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Notion databases, pages, and users through the Notion REST API. Read-only.\n\nReadable streams: `databases`, `pages`, `users`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developers.notion.com/reference/intro.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://api.notion.com/v1`; format `uri`; Notion API base\n  URL override for tests or proxies. Defaults to https://api.notion.com/v1.\n- `max_pages` (optional, string); Permissive parse: empty, \"all\", \"unlimited\", or any\n  non-positive-integer string means unbounded.\n- `page_size` (optional, string); default `100`; Records per page (1-100).\n- `token` (optional, secret, string); Notion integration token, sent as Bearer auth. Never logged.\n\nSecret fields are redacted in logs and write previews: `token`.\n\nDefault configuration values: `base_url=https://api.notion.com/v1`, `page_size=100`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users`.\n\n## Streams notes\n\nDefault pagination: single request; no pagination.\n\nIncremental streams use their declared cursor fields and send lower-bound parameters only when a\nlower bound is available.\n\n- `databases`: GET `/search` - records path `results`; incremental cursor `last_edited_time`;\n  formatted as `rfc3339`.\n- `pages`: GET `/search` - records path `results`; incremental cursor `last_edited_time`; formatted\n  as `rfc3339`.\n- `users`: GET `/users` - records path `results`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Notion API read of workspace\ndatabases/pages/users.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 3 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=3.\n",
+    "docs_md": "# Overview\n\nNotion connector for the official Notion API. The bundle reads users, pages, blocks, data sources,\ndatabases, comments, views, meeting-note query results, search results, page markdown, async tasks,\ncustom emojis, and file-upload metadata. It also declares typed reverse-ETL actions for supportable\nNotion page, block, data-source, database, comment, view, view-query, meeting-note, and file-upload\nlifecycle mutations.\n\nOfficial source audited for this wave: `https://developers.notion.com/openapi.json` (OpenAPI 3.1,\n49 official HTTP operations, last-modified `Thu, 30 Jul 2026 23:41:58 GMT`, sha256\n`4170a025f155ab721aa2e30451d1143ae79ad069b784b98d4fa420855f5d9d86`). OAuth token lifecycle\nendpoints are classified as excluded/not-applicable; they are not connector data operations and no\nauth-scope change is approved in this wave.\n\n## Auth setup\n\nConnection fields:\n\n- `token` (required secret string): Notion integration token. Add it from an environment variable or\n  stdin; never paste secret values into chat, docs, shell history, or JSON fixtures.\n- `base_url` (optional URI): defaults to `https://api.notion.com/v1`.\n- `page_size` (optional string): Notion cursor page size, 1-100, default `100`.\n- `max_pages` (optional string): hard cap for hook-driven reads. Empty, `all`, `unlimited`, malformed,\n  or non-positive values mean unbounded.\n- Identifier fields such as `page_id`, `block_id`, `data_source_id`, `database_id`, `comment_id`,\n  `view_id`, `query_id`, `file_upload_id`, `user_id`, `property_id`, and `task_id` scope the\n  corresponding typed streams or write actions.\n\nRequests send `Authorization: Bearer <token>` through the engine auth layer and `Notion-Version:\n2022-06-28`. Connection checks call `GET /users`.\n\n## Streams notes\n\nNotion list responses use `{ results, next_cursor, has_more }`. The Notion StreamHook handles both\nquery-cursor GET endpoints and JSON-body cursor POST endpoints (notably `/search`, data-source\nqueries, and meeting-note queries), because Notion carries `start_cursor` and filters in request\nbodies for several read operations.\n\nExecutable fixture-backed streams:\n\n- Search variants: `databases`, `pages`, `search_results`.\n- Users: `users`, `bot_user`, `user`.\n- Pages: `page`, `page_property_items`, `page_markdown`.\n- Async/block data: `async_task`, `block`, `block_children`.\n- Data sources/databases: `data_source`, `data_source_query`, `data_source_templates`, `database`.\n- Comments: `comments`, `comment`.\n- Files/custom UI: `file_uploads`, `file_upload`, `custom_emojis`, `views`, `view`,\n  `view_query_results`, `meeting_notes_query`.\n\nThe schemas allow Notion's polymorphic property/block payloads while retaining typed IDs and cursor\nfields where the API exposes them. Fixture pages are sanitized and do not require live credentials.\n\n## Write actions & risks\n\nReverse ETL actions are typed, schema-closed at the top level, and executed only through the existing\nplan → preview → explicit approval → execute path. Destructive/archive/delete-like actions declare\n`confirm: \"destructive\"`, path ID redaction, and idempotent 404 handling for fixture-backed replay.\n\nExecutable fixture-backed actions:\n\n- Pages: `create_page`, `update_page`, `move_page`, `update_page_markdown`.\n- Blocks: `update_block`, `delete_block`, `append_block_children`.\n- Data sources/databases: `create_data_source`, `update_data_source`, `create_database`,\n  `update_database`.\n- Comments: `create_comment`, `update_comment`, `delete_comment`.\n- Views/query resources: `create_view`, `update_view`, `delete_view`, `create_view_query`,\n  `delete_view_query`.\n- Meeting notes: `create_meeting_note`.\n- File upload lifecycle: `create_file_upload`, `complete_file_upload`.\n\nThe official multipart `upload_file` byte-transfer endpoint remains blocked/planned in the operation\nledger until the shared binary payload approval/conformance runner can provide approved digests and\nlive-safe redacted artifacts without broad local file exposure. No live upload is performed by\nconformance.\n\n## Known limits\n\n- This wave is fixture-only and uncertified. `certification.json` records that no live-safe Notion\n  certification artifacts are present.\n- The official multipart file byte-transfer endpoint is blocked/planned behind the shared binary\n  payload approval/conformance runner. The JSON file-upload create/list/retrieve/complete lifecycle\n  surfaces are fixture-backed.\n- The official OAuth token, revoke, and introspection endpoints are classified as\n  excluded/not-applicable (`disallowed` operation rows) because they are auth lifecycle operations,\n  not connector data operations, and would require an approved auth-flow/scope foundation.\n- The API surface has 49 official OpenAPI operations plus two connector-surface rows preserving the\n  existing `databases` and `pages` object-filtered `/search` streams. Planning/count artifacts count\n  official operations once; connector conformance covers both legacy stream variants with fixtures.\n- Identifier-scoped streams require the corresponding config ID. Missing IDs fail closed during path\n  interpolation rather than issuing broad or generic API calls.\n",
     "icon": {
       "id": "notion",
       "path": "icons/notion.svg",

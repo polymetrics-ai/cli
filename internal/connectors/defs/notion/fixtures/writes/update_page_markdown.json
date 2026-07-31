@@ -1,0 +1,13 @@
+{
+  "record": {
+    "page_id": "page_fixture_1",
+    "markdown": "# Fixture markdown"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/pages/page_fixture_1/markdown",
+    "body": {
+      "markdown": "# Fixture markdown"
+    }
+  }
+}

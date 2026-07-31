@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views",
+    "query": {
+      "page_size": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "list",
+      "results": [
+        {
+          "object": "view",
+          "id": "view_fixture_1",
+          "name": "Fixture view",
+          "data_source_id": "data_source_fixture_1"
+        }
+      ],
+      "next_cursor": null,
+      "has_more": false
+    }
+  }
+}
