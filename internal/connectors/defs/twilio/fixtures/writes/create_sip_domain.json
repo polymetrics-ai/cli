@@ -1,0 +1,14 @@
+{
+  "record": {
+    "DomainName": "fixture_value",
+    "FriendlyName": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/Domains.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

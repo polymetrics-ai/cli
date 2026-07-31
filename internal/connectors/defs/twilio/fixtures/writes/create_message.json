@@ -1,0 +1,14 @@
+{
+  "record": {
+    "To": "+15550100000",
+    "StatusCallback": "active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Messages.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

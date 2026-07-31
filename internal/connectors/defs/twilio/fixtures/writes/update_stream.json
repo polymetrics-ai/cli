@@ -1,0 +1,15 @@
+{
+  "record": {
+    "call_sid": "fixture_sid",
+    "sid": "fixture_sid",
+    "Status": "active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls/fixture_sid/Streams/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

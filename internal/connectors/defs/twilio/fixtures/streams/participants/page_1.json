@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Conferences/synthetic-conformance-value/Participants.json",
+    "query": {
+      "Page": "0",
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 1,
+      "participants": [
+        {
+          "account_sid": "fixture_sid"
+        }
+      ]
+    }
+  }
+}

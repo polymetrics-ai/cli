@@ -1,0 +1,14 @@
+{
+  "record": {
+    "PhoneNumber": "+15550100000",
+    "ApiVersion": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/IncomingPhoneNumbers/TollFree.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

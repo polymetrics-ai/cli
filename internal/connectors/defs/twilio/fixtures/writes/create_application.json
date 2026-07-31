@@ -1,0 +1,13 @@
+{
+  "record": {
+    "ApiVersion": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Applications.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

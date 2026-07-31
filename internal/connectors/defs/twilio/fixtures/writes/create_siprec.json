@@ -1,0 +1,14 @@
+{
+  "record": {
+    "call_sid": "fixture_sid",
+    "Name": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls/fixture_sid/Siprec.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -974,4 +974,14 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=50, write_batch_size=1.
-- API coverage includes 103 stream-backed endpoint group(s), 94 write-backed endpoint group(s).
+- Official v2010 operation ledger is complete for the provider-owned `twilio_api_v2010.json` source:
+  197 method/path operations partition to 96 ordinary ETL reads, 5 event/notification changefeed
+  reads, 3 media/binary operations, 93 reverse-ETL writes, 0 direct/provider-query reads, and 0
+  exclusions. TaskRouter and other separate Twilio product APIs are outside this slug.
+- API coverage includes 103 stream-backed endpoint group(s), 94 write-backed endpoint group(s), 103
+  sanitized stream fixtures, and 94 sanitized write request-shape fixtures.
+- Media/binary endpoints are represented as JSON media metadata streams (`medias`, `media`) and the
+  typed destructive `delete_media` action; no raw binary download/upload or generic API escape hatch
+  is exposed.
+- Fixture-only evidence is not live certification; certification remains 0 until a separately
+  approved live-safe Twilio certification run records redacted artifacts.

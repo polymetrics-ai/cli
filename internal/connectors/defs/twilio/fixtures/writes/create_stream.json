@@ -1,0 +1,15 @@
+{
+  "record": {
+    "call_sid": "fixture_sid",
+    "Url": "https://example.invalid/twilio/fixture",
+    "Name": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls/fixture_sid/Streams.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

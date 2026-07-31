@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ip_access_control_list_sid": "fixture_sid",
+    "FriendlyName": "fixture_value",
+    "IpAddress": "fixture_value",
+    "CidrPrefixLength": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/IpAccessControlLists/fixture_sid/IpAddresses.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "To": "+15550100000",
+    "From": "+15550100000",
+    "Method": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

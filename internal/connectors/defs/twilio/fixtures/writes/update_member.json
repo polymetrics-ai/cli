@@ -1,0 +1,16 @@
+{
+  "record": {
+    "queue_sid": "fixture_sid",
+    "call_sid": "fixture_sid",
+    "Url": "https://example.invalid/twilio/fixture",
+    "Method": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Queues/fixture_sid/Members/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

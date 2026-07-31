@@ -1,0 +1,14 @@
+{
+  "record": {
+    "resource_sid": "fixture_sid",
+    "InstalledAddOnSid": "fixture_sid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/IncomingPhoneNumbers/fixture_sid/AssignedAddOns.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

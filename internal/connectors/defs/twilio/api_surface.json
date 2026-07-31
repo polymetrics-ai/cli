@@ -1,8 +1,9 @@
 {
   "api": "Twilio REST API 2010-04-01 (api.twilio.com)",
   "docs": "https://www.twilio.com/docs/usage/api",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion for the official Twilio public REST API v2010 OpenAPI file (twilio_api_v2010.json) plus the legacy Twilio streams. All documented v2010 GET endpoints are covered as streams; all documented v2010 POST and DELETE endpoints are covered as typed write actions. Separate Twilio product APIs with distinct hosts/versions are outside this connector bundle because metadata and legacy code scope this connector to api.twilio.com/2010-04-01.",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Full official Twilio public REST API v2010 operation ledger from provider-owned twilio/twilio-oai twilio_api_v2010.json (sha256 a6753266b8b05a201e8658734e332ee51d07a0913f2d419335d87bdb287643a2, info.version 1.0.0), cross-checked against https://www.twilio.com/docs/usage/api. Every one of the 197 documented v2010 REST method/path operations is partitioned exactly once: 96 ordinary GET ETL reads, 5 event/notification changefeed GET reads, 3 media/binary-file operations (ListMedia, FetchMedia, DeleteMedia) represented as media metadata streams plus typed delete_media, 93 remaining POST/DELETE reverse-ETL writes, 0 provider query/search direct reads, and 0 exclusions. Separate Twilio product APIs such as TaskRouter are intentionally outside this slug.",
   "endpoints": [
     {
       "method": "GET",

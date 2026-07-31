@@ -1,0 +1,14 @@
+{
+  "record": {
+    "sid": "fixture_sid",
+    "FriendlyName": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Applications/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

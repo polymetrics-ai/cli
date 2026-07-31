@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Recordings/synthetic-conformance-value/AddOnResults/synthetic-conformance-value/Payloads/synthetic-conformance-value/Data.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reference_sid": "fixture_sid"
+    }
+  }
+}

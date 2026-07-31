@@ -1,0 +1,14 @@
+{
+  "record": {
+    "FriendlyName": "fixture_value",
+    "MaxSize": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Queues.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

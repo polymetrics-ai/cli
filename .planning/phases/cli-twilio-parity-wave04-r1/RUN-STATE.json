@@ -1,0 +1,59 @@
+{
+  "phase": "cli-twilio-parity-wave04-r1",
+  "status": "implementation_complete_with_verification_caveat",
+  "gsdCommand": "scripts/gsd prompt gsd-plan-phase cli-twilio-parity-wave04-r1 --skip-research",
+  "programmingLoopFallback": "scripts/gsd prompt programming-loop init --phase cli-twilio-parity-wave04-r1 --dry-run returned unknown GSD command: programming-loop; manual universal programming loop recorded here",
+  "verificationPassed": false,
+  "blockingGate": "make verify aggregate go test phase timed out locally; focused Twilio gates and required focused build/boundary/diff checks passed",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "firstmate owns parent orchestration and this worker has one connector-local write scope; subissue lanes collide on internal/connectors/defs/twilio"
+    },
+    {
+      "cycle": "execute",
+      "decision": "fixture_only_parity",
+      "reason": "No live Twilio credentials/provider calls/certification are allowed; complete evidence is fixture-backed and certified remains 0"
+    },
+    {
+      "cycle": "verification",
+      "decision": "record_make_verify_timeout_caveat",
+      "reason": "make verify attempts reached aggregate go test timeouts in slow pre-existing packages, while focused Twilio validation/conformance/CLI/build/boundary/diff gates passed"
+    }
+  ],
+  "counts": {
+    "official": {
+      "total": 197,
+      "etl_read": 96,
+      "reverse_etl_write": 93,
+      "direct_read_query_search": 0,
+      "binary_file": 3,
+      "cdc_changefeed": 5,
+      "excluded_not_applicable": 0
+    },
+    "baselineLocal": {
+      "streams": 103,
+      "write_actions": 94,
+      "operation_rows": 197,
+      "stream_fixture_files": 7,
+      "write_fixture_files": 0,
+      "certified": 0
+    },
+    "finalLocal": {
+      "streams": 103,
+      "write_actions": 94,
+      "operation_rows": 197,
+      "operation_ledger_version": 1,
+      "stream_fixture_files": 103,
+      "write_fixture_files": 94,
+      "fixture_tested_operations": 197,
+      "certified": 0
+    }
+  },
+  "githubIssueAddendum": {
+    "issues": [3167, 3168, 3169, 3170, 3171, 3172, 3173, 3174],
+    "marker": "captain-policy-twilio-destructive-confirmation-r1",
+    "updated": true
+  }
+}

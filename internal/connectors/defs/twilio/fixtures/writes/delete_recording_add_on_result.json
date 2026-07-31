@@ -1,0 +1,14 @@
+{
+  "record": {
+    "reference_sid": "fixture_sid",
+    "sid": "fixture_sid"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/Accounts/synthetic-conformance-secret/Recordings/fixture_sid/AddOnResults/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

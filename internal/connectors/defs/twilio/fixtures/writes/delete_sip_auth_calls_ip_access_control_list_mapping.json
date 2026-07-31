@@ -1,0 +1,14 @@
+{
+  "record": {
+    "domain_sid": "fixture_sid",
+    "sid": "fixture_sid"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/Domains/fixture_sid/Auth/Calls/IpAccessControlListMappings/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
