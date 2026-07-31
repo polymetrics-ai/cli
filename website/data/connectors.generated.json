@@ -22310,19 +22310,187 @@
   {
     "slug": "dynamodb",
     "name": "DynamoDB",
-    "description": "Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated with hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.",
+    "description": "Reads, changes, and writes Amazon DynamoDB tables through the AWS JSON API with connector-local SigV4 signing, typed operation schemas, bounded reads, DynamoDB Streams changefeed support, and reverse-ETL write gates.",
     "docs_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/",
     "integration_type": "database",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
-      "cdc": false,
+      "cdc": true,
       "dynamic_schema": false
     },
     "streams": [
+      {
+        "name": "describe_backup",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_continuous_backups",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_contributor_insights",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_endpoints",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_export",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_global_table",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_global_table_settings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_import",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_kinesis_streaming_destination",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_limits",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_table",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_table_replica_auto_scaling",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "describe_time_to_live",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_resource_policy",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_backups",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_contributor_insights",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_exports",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_global_tables",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_imports",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_tables",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_tags_of_resource",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
       {
         "name": "items",
         "primary_key": [
@@ -22330,11 +22498,394 @@
         ],
         "cursor": "",
         "incremental": false
+      },
+      {
+        "name": "query_items",
+        "primary_key": [
+          "pk"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "streams_describe_stream",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "streams_get_records",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "streams_get_shard_iterator",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "streams_list_streams",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated\nwith hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.\n\nReadable streams: `items`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_key_id` (required, secret, string); AWS access key id used to derive the AWS Signature\n  Version 4 (SigV4) Authorization header. Never logged.\n- `base_url` (optional, string); format `uri`; Ignored when endpoint is set.\n- `endpoint` (optional, string); format `uri`; DynamoDB JSON HTTP API endpoint, e.g.\n  https://dynamodb.us-east-1.amazonaws.com. One of endpoint/base_url is required for live mode --\n  enforced by native/dynamodb's own Go config resolution (connection.go's resolveEndpoint), not this\n  schema's required[] (JSON Schema's required[] cannot express an either-or pair).\n- `max_pages` (optional, string); default `100`; Maximum Scan pages to request (a positive integer).\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; Scan Limit per page (a positive integer).\n- `region` (required, string); AWS region used in the SigV4 credential scope (e.g. us-east-1) and,\n  conventionally, the endpoint's own region.\n- `secret_access_key` (required, secret, string); AWS secret access key used to derive the SigV4\n  signing key HMAC chain. Never placed in a header or logged.\n- `table` (optional, string); Ignored when table_name is set.\n- `table_name` (optional, string); DynamoDB table name to Scan. One of table_name/table is required\n  for live mode -- enforced by native/dynamodb's own Go config resolution (reader.go's tableName),\n  not this schema's required[].\n\nSecret fields are redacted in logs and write previews: `access_key_id`, `secret_access_key`.\n\nDefault configuration values: `max_pages=100`, `page_size=100`.\n\nProvide the secret fields listed above. Authentication is applied by the connector-specific\nimplementation for this service.\n\nRequests use the configured `endpoint` value after applying defaults.\n\nConnection checks call POST `/`.\n\n## Streams notes\n\nDefault pagination: single request; no pagination.\n\n- `items`: POST `/` - records path `Items`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external AWS DynamoDB Scan of table items.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 1 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  destructive_admin=1, out_of_scope=7.\n",
+    "write_actions": [
+      {
+        "name": "batch_write_item",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_backup",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_global_table",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_table",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_backup",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_item",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_resource_policy",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_table",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "disable_kinesis_streaming_destination",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "enable_kinesis_streaming_destination",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_item",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_resource_policy",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "restore_table_from_backup",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "restore_table_to_point_in_time",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "tag_resource",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "transact_write_items",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "untag_resource",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "update_continuous_backups",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_contributor_insights",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_global_table",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_global_table_settings",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_item",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_kinesis_streaming_destination",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_table",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_table_replica_auto_scaling",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_time_to_live",
+        "method": "POST",
+        "kind": "update"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Typed, bounded DynamoDB provider commands",
+      "usage": "pm connectors run dynamodb <command> [flags]",
+      "source_cli": {
+        "name": "AWS CLI dynamodb",
+        "docs": "https://docs.aws.amazon.com/cli/latest/reference/dynamodb/",
+        "reference": "AWS CLI DynamoDB command reference",
+        "source": ""
+      },
+      "groups": [
+        {
+          "id": "direct",
+          "title": "Direct reads",
+          "commands": [
+            "get-item",
+            "batch-get-item",
+            "transact-get-items"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum response bytes for direct reads; capped by the CLI runtime",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "get-item",
+          "summary": "Get one DynamoDB item by a typed scalar key",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "table-name",
+              "type": "string",
+              "summary": "DynamoDB table name",
+              "values": [],
+              "maps_to": "body.table_name",
+              "allow_empty": false
+            },
+            {
+              "name": "key-name",
+              "type": "string",
+              "summary": "Partition/full key attribute name for the typed command helper",
+              "values": [],
+              "maps_to": "body.key_name",
+              "allow_empty": false
+            },
+            {
+              "name": "key-type",
+              "type": "enum",
+              "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+              "values": [
+                "S",
+                "N",
+                "B"
+              ],
+              "maps_to": "body.key_type"
+            },
+            {
+              "name": "consistent-read",
+              "type": "boolean",
+              "summary": "Request strongly consistent reads where DynamoDB supports it",
+              "values": [],
+              "maps_to": "body.consistent_read"
+            },
+            {
+              "name": "key-value",
+              "type": "string",
+              "summary": "Key attribute value",
+              "values": [],
+              "maps_to": "body.key_value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Reads one item; key values are redacted from errors/output surfaces.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "batch-get-item",
+          "summary": "Read multiple DynamoDB items by a typed scalar key list",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "table-name",
+              "type": "string",
+              "summary": "DynamoDB table name",
+              "values": [],
+              "maps_to": "body.table_name",
+              "allow_empty": false
+            },
+            {
+              "name": "key-name",
+              "type": "string",
+              "summary": "Partition/full key attribute name for the typed command helper",
+              "values": [],
+              "maps_to": "body.key_name",
+              "allow_empty": false
+            },
+            {
+              "name": "key-type",
+              "type": "enum",
+              "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+              "values": [
+                "S",
+                "N",
+                "B"
+              ],
+              "maps_to": "body.key_type"
+            },
+            {
+              "name": "consistent-read",
+              "type": "boolean",
+              "summary": "Request strongly consistent reads where DynamoDB supports it",
+              "values": [],
+              "maps_to": "body.consistent_read"
+            },
+            {
+              "name": "key-values",
+              "type": "string_array",
+              "summary": "Comma-separated/repeated key attribute values",
+              "values": [],
+              "maps_to": "body.key_values"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "transact-get-items",
+          "summary": "Read multiple DynamoDB items by a typed scalar key list",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "table-name",
+              "type": "string",
+              "summary": "DynamoDB table name",
+              "values": [],
+              "maps_to": "body.table_name",
+              "allow_empty": false
+            },
+            {
+              "name": "key-name",
+              "type": "string",
+              "summary": "Partition/full key attribute name for the typed command helper",
+              "values": [],
+              "maps_to": "body.key_name",
+              "allow_empty": false
+            },
+            {
+              "name": "key-type",
+              "type": "enum",
+              "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+              "values": [
+                "S",
+                "N",
+                "B"
+              ],
+              "maps_to": "body.key_type"
+            },
+            {
+              "name": "consistent-read",
+              "type": "boolean",
+              "summary": "Request strongly consistent reads where DynamoDB supports it",
+              "values": [],
+              "maps_to": "body.consistent_read"
+            },
+            {
+              "name": "key-values",
+              "type": "string_array",
+              "summary": "Comma-separated/repeated key attribute values",
+              "values": [],
+              "maps_to": "body.key_values"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces.",
+          "approval": "",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "dynamodb-safety",
+          "summary": "DynamoDB connector commands are typed and do not expose raw PartiQL, expressions, or generic HTTP bodies."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nDynamoDB is a Tier-3 native connector because the official AWS JSON APIs are not ordinary REST resources: every operation is a `POST /` request with an `X-Amz-Target` operation name and AWS Signature Version 4 signing. The connector keeps that protocol in `internal/connectors/native/dynamodb` while the definition bundle owns the reviewed API ledger, schemas, CLI metadata, docs, fixtures, and write-action contracts.\n\nOfficially reviewed scope: DynamoDB `DynamoDB_20120810` plus DynamoDB Streams `DynamoDBStreams_20120810`, API version 2012-08-10. DAX is a separate AWS service and is not counted.\n\nImplemented fixture-backed surface counts:\n\n| surface | count |\n| --- | ---: |\n| ETL/read + DynamoDB Streams changefeed streams | 27 |\n| Bounded direct/keyed reads | 3 |\n| Reverse-ETL write actions | 26 |\n| Binary/import-export operations blocked on shared runtime | 2 |\n| Raw PartiQL statement operations disallowed | 3 |\n| Certified live operations | 0 |\n\n## Auth setup\n\nRequired secret fields:\n\n- `access_key_id` — AWS access key id used in the SigV4 credential scope.\n- `secret_access_key` — AWS secret access key used only to derive SigV4 HMAC signing keys.\n\nRequired live config:\n\n- `region` — AWS region in the SigV4 scope.\n- `endpoint` or `base_url` — DynamoDB JSON API endpoint, for example `https://dynamodb.us-east-1.amazonaws.com`.\n\nCommon optional config:\n\n- `streams_endpoint` — DynamoDB Streams endpoint when it differs from `endpoint`.\n- `table_name` / `table` — default table for table-scoped streams and writes.\n- `table_arn`, `resource_arn`, `stream_arn`, `shard_id`, and operation-specific ARN/name fields for metadata or Streams operations.\n- `page_size` (default `100`) and `max_pages` (default `100`) bound read/changefeed loops.\n- `mode=fixture` runs deterministic credential-free tests and never contacts AWS.\n\nNever put secret values in prompt text or docs. Load credentials from environment variables, stdin, or the credential store.\n\n## Streams notes\n\nThe connector declares 27 read/changefeed stream surfaces. Native code builds closed JSON-RPC bodies for each stream; there is no raw target/body escape hatch.\n\nDynamoDB read streams:\n\n- `items` (`Scan`) and `query_items` (`Query`) are bounded by `page_size`/`max_pages` and stop on `LastEvaluatedKey`.\n- Metadata/list streams cover `Describe*`, `GetResourcePolicy`, and `List*` operations from the official Smithy model.\n- `query_items` uses typed `KeyConditions` from `query_key_name`, `query_key_type`, and `query_key_value`; it does not expose raw key-condition expressions.\n\nDynamoDB Streams/changefeed surfaces:\n\n- `streams_list_streams`, `streams_describe_stream`, `streams_get_shard_iterator`, and `streams_get_records` track the official Streams operations.\n- `ReadCDC` uses `GetShardIterator` then bounded `GetRecords`, emits `INSERT`/`MODIFY`/`REMOVE` events, and stores the next shard iterator in event state.\n\n## Write actions & risks\n\n`writes.json` declares 26 named reverse-ETL actions. Each action has a closed top-level schema, risk text, dry-run preview support, and connector-local request construction. Reverse ETL remains plan -> preview -> explicit approval -> execute.\n\nDestructive or high-risk actions declare `confirm: destructive`, including table/resource deletion, restore operations, transaction writes, and table/global-table updates. `delete_item` is provider-idempotent when no condition is supplied: deleting a missing item succeeds according to DynamoDB semantics.\n\nThe connector intentionally does not expose raw HTTP, raw AWS JSON bodies, raw PartiQL, unrestricted scans, arbitrary expression strings, generic shell/file operations, or generic SQL/query surfaces. `UpdateItem` uses typed `AttributeUpdates`; `Query` uses typed `KeyConditions`; PartiQL statement operations are disallowed in the ledger.\n\n## Known limits\n\n- Fixture-only verification is not live certification. `certified=0` until a separately approved live executor supplies redacted artifacts.\n- `ExportTableToPointInTime` and `ImportTable` are tracked but blocked because the current shared connector-command runtime has no approved AWS S3 binary/import-export executor for these workflows.\n- `BatchExecuteStatement`, `ExecuteStatement`, and `ExecuteTransaction` are blocked/disallowed because they are raw PartiQL statement surfaces, and this task forbids raw PartiQL/query or arbitrary expressions/bodies.\n- DynamoDB item attributes are table-specific, so item streams expose generic `pk`/operation fields and preserve additional flattened item attributes at runtime.\n",
     "icon": {
       "id": "dynamodb",
       "path": "icons/dynamodb.svg",

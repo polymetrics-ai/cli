@@ -1,0 +1,22 @@
+{
+  "record": {
+    "global_table_name": "fixture_name",
+    "replica_updates": [
+      {}
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "global_table_name": "fixture_name",
+      "replica_updates": [
+        {}
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

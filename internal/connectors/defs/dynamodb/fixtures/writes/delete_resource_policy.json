@@ -1,0 +1,16 @@
+{
+  "record": {
+    "resource_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "resource_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

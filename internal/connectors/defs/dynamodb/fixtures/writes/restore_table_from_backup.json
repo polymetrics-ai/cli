@@ -1,0 +1,18 @@
+{
+  "record": {
+    "target_table_name": "fixture_table",
+    "backup_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "target_table_name": "fixture_table",
+      "backup_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "operations": [
+    {
+      "id": "batch_get_item",
+      "kind": "rest_read",
+      "summary": "Bounded typed DynamoDB BatchGetItem direct read",
+      "description": "Executed by native/dynamodb OperationDirectRead with a closed typed command body, not raw HTTP/PartiQL.",
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html",
+      "risk": "medium",
+      "approval": "read-only direct provider operation; no write approval required",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object"
+        }
+      }
+    },
+    {
+      "id": "get_item",
+      "kind": "rest_read",
+      "summary": "Bounded typed DynamoDB GetItem direct read",
+      "description": "Executed by native/dynamodb OperationDirectRead with a closed typed command body, not raw HTTP/PartiQL.",
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html",
+      "risk": "medium",
+      "approval": "read-only direct provider operation; no write approval required",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object"
+        }
+      }
+    },
+    {
+      "id": "transact_get_items",
+      "kind": "rest_read",
+      "summary": "Bounded typed DynamoDB TransactGetItems direct read",
+      "description": "Executed by native/dynamodb OperationDirectRead with a closed typed command body, not raw HTTP/PartiQL.",
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html",
+      "risk": "medium",
+      "approval": "read-only direct provider operation; no write approval required",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object"
+        }
+      }
+    }
+  ]
+}

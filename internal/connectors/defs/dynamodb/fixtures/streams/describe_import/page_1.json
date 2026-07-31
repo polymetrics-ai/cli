@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "id": "describe_import-fixture-1",
+        "operation": "DescribeImport",
+        "response": {
+          "fixture": true
+        }
+      }
+    }
+  }
+}

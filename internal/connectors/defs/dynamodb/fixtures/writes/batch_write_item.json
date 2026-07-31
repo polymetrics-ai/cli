@@ -1,0 +1,34 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "operation": "put",
+    "item": {
+      "pk": {
+        "S": "fixture#1"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "RequestItems": {
+        "fixture_table": [
+          {
+            "PutRequest": {
+              "Item": {
+                "pk": {
+                  "S": "fixture#1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

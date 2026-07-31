@@ -1,0 +1,18 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "point_in_time_recovery_specification": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table",
+      "point_in_time_recovery_specification": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

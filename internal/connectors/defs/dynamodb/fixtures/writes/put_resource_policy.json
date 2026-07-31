@@ -1,0 +1,18 @@
+{
+  "record": {
+    "resource_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture",
+    "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[]}"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "resource_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture",
+      "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[]}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

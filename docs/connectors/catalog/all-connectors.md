@@ -127,7 +127,7 @@
 | `drip` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Drip | `api` | ga | check, catalog, read, write | 7 | 13 | [Documentation](https://developer.drip.com/) | bundle definition |
 | `dropbox-sign` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Dropbox Sign | `api` | ga | check, catalog, read, write | 4 | 13 | [Documentation](https://developers.hellosign.com/api/reference/) | bundle definition |
 | `dwolla` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Dwolla | `api` | ga | check, catalog, read, write | 4 | 15 | [Documentation](https://developers.dwolla.com/api-reference) | bundle definition |
-| `dynamodb` | [`icons/dynamodb.svg`](../icons/dynamodb.svg) | DynamoDB | `database` | ga | check, catalog, read | 1 | 0 | [Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/) | bundle definition |
+| `dynamodb` | [`icons/dynamodb.svg`](../icons/dynamodb.svg) | DynamoDB | `database` | ga | check, catalog, read, write | 27 | 26 | [Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/) | bundle definition |
 | `e-conomic` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | e-conomic | `api` | ga | check, catalog, read, write | 14 | 12 | [Documentation](https://restdocs.e-conomic.com/) | bundle definition |
 | `easypost` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | EasyPost | `api` | ga | check, catalog, read, write | 18 | 41 | [Documentation](https://docs.easypost.com/docs/shipments) | bundle definition |
 | `easypromos` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Easypromos | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://developers.easypromos.com/) | bundle definition |

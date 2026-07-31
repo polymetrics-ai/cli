@@ -1,0 +1,17 @@
+{
+  "record": {
+    "global_table_name": "fixture_name",
+    "global_table_billing_mode": "PAY_PER_REQUEST"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "global_table_name": "fixture_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

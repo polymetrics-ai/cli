@@ -1,17 +1,461 @@
 {
-  "api": "AWS DynamoDB JSON HTTP API (DynamoDB_20120810 protocol, X-Amz-Target header dispatch) -- not a REST API",
+  "api": "AWS DynamoDB JSON HTTP API (DynamoDB_20120810) and DynamoDB Streams JSON HTTP API (DynamoDBStreams_20120810), API version 2012-08-10",
   "docs": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Migration of legacy's single implemented operation (DynamoDB_20120810.Scan, paginated via LastEvaluatedKey/ExclusiveStartKey), matching internal/connectors/dynamodb exactly. Other DynamoDB operations require SigV4-signed AWS JSON-RPC request construction, table-key inputs, or DynamoDB Streams CDC that this read-only native bundle does not expose. Every covered/excluded read entry below is declared method GET (not the literal wire HTTP verb, which is always POST with an X-Amz-Target header for every DynamoDB JSON-protocol operation) to correctly signal READ semantics to connectorgen validate's capabilities.write/read cross-check (design SS E.1 rule 4) -- matching bing-ads's and monday's identical convention for their POST-only wire protocols. Genuine mutation/administrative operations keep their real semantics annotated in the reason text since they are excluded, not covered.",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "AWS-owned Smithy models for DynamoDB and DynamoDB Streams. DAX is a separate AWS service and is not counted. Rows use operation targets rather than REST paths because AWS JSON-RPC dispatches every operation via POST / plus X-Amz-Target. GET method rows signal connector read/changefeed semantics to the connector surface checker; mutation/direct POST rows reflect typed command/write execution.",
   "endpoints": [
-    { "method": "GET", "path": "DynamoDB_20120810.Scan", "covered_by": { "stream": "items" } },
-    { "method": "GET", "path": "DynamoDB_20120810.Query", "excluded": { "category": "out_of_scope", "reason": "Query requires caller-supplied key-condition expressions/index choices and the same SigV4 JSON-RPC body construction as Scan; legacy never exposed a query stream or config contract for these inputs" } },
-    { "method": "GET", "path": "DynamoDB_20120810.GetItem", "excluded": { "category": "out_of_scope", "reason": "GetItem is a point lookup requiring table key attributes rather than a collection stream; legacy never exposed key-input config or a detail stream" } },
-    { "method": "GET", "path": "DynamoDB_20120810.BatchGetItem", "excluded": { "category": "out_of_scope", "reason": "BatchGetItem is a keyed lookup batch requiring caller-supplied keys rather than a discoverable collection stream; legacy never exposed that input contract" } },
-    { "method": "GET", "path": "DynamoDB_20120810.DescribeTable", "excluded": { "category": "out_of_scope", "reason": "DescribeTable is table metadata discovery; legacy Catalog is a static single-stream constant and never issued a live DescribeTable call" } },
-    { "method": "POST", "path": "DynamoDB_20120810.PutItem", "excluded": { "category": "out_of_scope", "reason": "PutItem requires SigV4 JSON-RPC mutation body construction and a reviewed AttributeValue write schema; this migration is read-only and legacy Write returns ErrUnsupportedOperation" } },
-    { "method": "POST", "path": "DynamoDB_20120810.UpdateItem", "excluded": { "category": "out_of_scope", "reason": "UpdateItem requires expression/update semantics and SigV4 JSON-RPC mutation body construction; this migration is read-only and legacy Write returns ErrUnsupportedOperation" } },
-    { "method": "POST", "path": "DynamoDB_20120810.DeleteItem", "excluded": { "category": "destructive_admin", "reason": "destructive mutation; out of scope, dynamodb is read-only in this migration" } },
-    { "method": "GET", "path": "DynamoDB Streams GetRecords (change data capture)", "excluded": { "category": "out_of_scope", "reason": "DynamoDB Streams is a distinct CDC API with shard iterator lifecycle semantics; legacy never touched it and this bundle advertises no cdc capability or CDC stub" } }
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeBackup",
+      "covered_by": {
+        "stream": "describe_backup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeContinuousBackups",
+      "covered_by": {
+        "stream": "describe_continuous_backups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeContributorInsights",
+      "covered_by": {
+        "stream": "describe_contributor_insights"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeEndpoints",
+      "covered_by": {
+        "stream": "describe_endpoints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeExport",
+      "covered_by": {
+        "stream": "describe_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeGlobalTable",
+      "covered_by": {
+        "stream": "describe_global_table"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeGlobalTableSettings",
+      "covered_by": {
+        "stream": "describe_global_table_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeImport",
+      "covered_by": {
+        "stream": "describe_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeKinesisStreamingDestination",
+      "covered_by": {
+        "stream": "describe_kinesis_streaming_destination"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeLimits",
+      "covered_by": {
+        "stream": "describe_limits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeTable",
+      "covered_by": {
+        "stream": "describe_table"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeTableReplicaAutoScaling",
+      "covered_by": {
+        "stream": "describe_table_replica_auto_scaling"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.DescribeTimeToLive",
+      "covered_by": {
+        "stream": "describe_time_to_live"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.GetResourcePolicy",
+      "covered_by": {
+        "stream": "get_resource_policy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListBackups",
+      "covered_by": {
+        "stream": "list_backups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListContributorInsights",
+      "covered_by": {
+        "stream": "list_contributor_insights"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListExports",
+      "covered_by": {
+        "stream": "list_exports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListGlobalTables",
+      "covered_by": {
+        "stream": "list_global_tables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListImports",
+      "covered_by": {
+        "stream": "list_imports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListTables",
+      "covered_by": {
+        "stream": "list_tables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.ListTagsOfResource",
+      "covered_by": {
+        "stream": "list_tags_of_resource"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.Scan",
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDB_20120810.Query",
+      "covered_by": {
+        "stream": "query_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.BatchGetItem",
+      "covered_by": {
+        "direct_read": "batch-get-item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.GetItem",
+      "covered_by": {
+        "direct_read": "get-item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.TransactGetItems",
+      "covered_by": {
+        "direct_read": "transact-get-items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.BatchWriteItem",
+      "covered_by": {
+        "write": "batch_write_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.CreateBackup",
+      "covered_by": {
+        "write": "create_backup"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.CreateGlobalTable",
+      "covered_by": {
+        "write": "create_global_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.CreateTable",
+      "covered_by": {
+        "write": "create_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.DeleteBackup",
+      "covered_by": {
+        "write": "delete_backup"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.DeleteItem",
+      "covered_by": {
+        "write": "delete_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.DeleteResourcePolicy",
+      "covered_by": {
+        "write": "delete_resource_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.DeleteTable",
+      "covered_by": {
+        "write": "delete_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.DisableKinesisStreamingDestination",
+      "covered_by": {
+        "write": "disable_kinesis_streaming_destination"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.EnableKinesisStreamingDestination",
+      "covered_by": {
+        "write": "enable_kinesis_streaming_destination"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.PutItem",
+      "covered_by": {
+        "write": "put_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.PutResourcePolicy",
+      "covered_by": {
+        "write": "put_resource_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.RestoreTableFromBackup",
+      "covered_by": {
+        "write": "restore_table_from_backup"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.RestoreTableToPointInTime",
+      "covered_by": {
+        "write": "restore_table_to_point_in_time"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.TagResource",
+      "covered_by": {
+        "write": "tag_resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.TransactWriteItems",
+      "covered_by": {
+        "write": "transact_write_items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UntagResource",
+      "covered_by": {
+        "write": "untag_resource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateContinuousBackups",
+      "covered_by": {
+        "write": "update_continuous_backups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateContributorInsights",
+      "covered_by": {
+        "write": "update_contributor_insights"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateGlobalTable",
+      "covered_by": {
+        "write": "update_global_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateGlobalTableSettings",
+      "covered_by": {
+        "write": "update_global_table_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateItem",
+      "covered_by": {
+        "write": "update_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateKinesisStreamingDestination",
+      "covered_by": {
+        "write": "update_kinesis_streaming_destination"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateTable",
+      "covered_by": {
+        "write": "update_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateTableReplicaAutoScaling",
+      "covered_by": {
+        "write": "update_table_replica_auto_scaling"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.UpdateTimeToLive",
+      "covered_by": {
+        "write": "update_time_to_live"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDBStreams_20120810.DescribeStream",
+      "covered_by": {
+        "stream": "streams_describe_stream"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDBStreams_20120810.GetRecords",
+      "covered_by": {
+        "stream": "streams_get_records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDBStreams_20120810.GetShardIterator",
+      "covered_by": {
+        "stream": "streams_get_shard_iterator"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "DynamoDBStreams_20120810.ListStreams",
+      "covered_by": {
+        "stream": "streams_list_streams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.ExportTableToPointInTime",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "DynamoDB import/export is an S3-backed binary/import-export workflow; the current connector command runner has no approved native AWS binary/import-export executor, so this connector records the official operation but keeps it blocked.",
+        "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExportTableToPointInTime.html"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.ImportTable",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "DynamoDB import/export is an S3-backed binary/import-export workflow; the current connector command runner has no approved native AWS binary/import-export executor, so this connector records the official operation but keeps it blocked.",
+        "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ImportTable.html"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.BatchExecuteStatement",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Raw PartiQL statement execution is intentionally not exposed: this task forbids raw PartiQL/query and arbitrary expressions/bodies. Use typed streams/direct reads/write actions instead.",
+        "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchExecuteStatement.html"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.ExecuteStatement",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Raw PartiQL statement execution is intentionally not exposed: this task forbids raw PartiQL/query and arbitrary expressions/bodies. Use typed streams/direct reads/write actions instead.",
+        "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteStatement.html"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "DynamoDB_20120810.ExecuteTransaction",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Raw PartiQL statement execution is intentionally not exposed: this task forbids raw PartiQL/query and arbitrary expressions/bodies. Use typed streams/direct reads/write actions instead.",
+        "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ExecuteTransaction.html"
+      }
+    }
   ]
 }

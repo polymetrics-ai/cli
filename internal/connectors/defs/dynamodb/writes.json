@@ -1,0 +1,873 @@
+{
+  "actions": [
+    {
+      "name": "batch_write_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "operation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "put",
+              "delete"
+            ]
+          },
+          "item": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "key": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "return_consumed_capacity": {
+            "type": "string"
+          },
+          "return_item_collection_metrics": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB BatchWriteItem mutation built from one typed put/delete request per record; no raw RequestItems body passthrough is accepted.",
+      "redact_fields": [
+        "item",
+        "key"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_backup",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "backup_name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "backup_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB CreateBackup mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "create_global_table",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "global_table_name",
+          "replication_group"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "global_table_name": {
+            "type": "string"
+          },
+          "replication_group": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB CreateGlobalTable mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "create_table",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "attribute_definitions",
+          "key_schema",
+          "billing_mode"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "attribute_definitions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "key_schema": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "billing_mode": {
+            "type": "string",
+            "enum": [
+              "PAY_PER_REQUEST",
+              "PROVISIONED"
+            ]
+          },
+          "provisioned_throughput": {
+            "type": "object"
+          },
+          "global_secondary_indexes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "local_secondary_indexes": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "stream_specification": {
+            "type": "object"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB CreateTable mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "delete_backup",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "backup_arn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "backup_arn": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB DeleteBackup mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_item",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "key"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "return_values": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB DeleteItem mutation/admin operation with typed top-level schema.",
+      "redact_fields": [
+        "key"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          200
+        ]
+      }
+    },
+    {
+      "name": "delete_resource_policy",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_arn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "resource_arn": {
+            "type": "string"
+          },
+          "expected_revision_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB DeleteResourcePolicy mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_table",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB DeleteTable mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "disable_kinesis_streaming_destination",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "stream_arn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "stream_arn": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB DisableKinesisStreamingDestination mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "enable_kinesis_streaming_destination",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "stream_arn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "stream_arn": {
+            "type": "string"
+          },
+          "enable_kinesis_streaming_configuration": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB EnableKinesisStreamingDestination mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "put_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "item"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "item": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "return_values": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB PutItem mutation/admin operation with typed top-level schema.",
+      "redact_fields": [
+        "item"
+      ]
+    },
+    {
+      "name": "put_resource_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_arn",
+          "policy"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "resource_arn": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string"
+          },
+          "expected_revision_id": {
+            "type": "string"
+          },
+          "confirm_remove_self_resource_access": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB PutResourcePolicy mutation/admin operation with typed top-level schema.",
+      "redact_fields": [
+        "policy"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "restore_table_from_backup",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "target_table_name",
+          "backup_arn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "target_table_name": {
+            "type": "string"
+          },
+          "backup_arn": {
+            "type": "string"
+          },
+          "billing_mode_override": {
+            "type": "string"
+          },
+          "global_secondary_index_override": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "local_secondary_index_override": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "provisioned_throughput_override": {
+            "type": "object"
+          },
+          "sse_specification_override": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB RestoreTableFromBackup mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "restore_table_to_point_in_time",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "source_table_name",
+          "target_table_name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "source_table_name": {
+            "type": "string"
+          },
+          "target_table_name": {
+            "type": "string"
+          },
+          "restore_date_time": {
+            "type": "string"
+          },
+          "use_latest_restorable_time": {
+            "type": "boolean"
+          },
+          "billing_mode_override": {
+            "type": "string"
+          },
+          "global_secondary_index_override": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "local_secondary_index_override": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "provisioned_throughput_override": {
+            "type": "object"
+          },
+          "sse_specification_override": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB RestoreTableToPointInTime mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "tag_resource",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_arn",
+          "tags"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "resource_arn": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB TagResource mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "transact_write_items",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "operation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "put",
+              "delete"
+            ]
+          },
+          "item": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "key": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "client_request_token": {
+            "type": "string"
+          },
+          "return_consumed_capacity": {
+            "type": "string"
+          },
+          "return_item_collection_metrics": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB TransactWriteItems mutation built from one typed put/delete transaction item per record; no raw TransactItems body passthrough is accepted.",
+      "redact_fields": [
+        "item",
+        "key"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "untag_resource",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource_arn",
+          "tag_keys"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "resource_arn": {
+            "type": "string"
+          },
+          "tag_keys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UntagResource mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_continuous_backups",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "point_in_time_recovery_specification"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "point_in_time_recovery_specification": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UpdateContinuousBackups mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "update_contributor_insights",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "contributor_insights_action"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "contributor_insights_action": {
+            "type": "string",
+            "enum": [
+              "ENABLE",
+              "DISABLE"
+            ]
+          },
+          "index_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UpdateContributorInsights mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "update_global_table",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "global_table_name",
+          "replica_updates"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "global_table_name": {
+            "type": "string"
+          },
+          "replica_updates": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UpdateGlobalTable mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_global_table_settings",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "global_table_name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "global_table_name": {
+            "type": "string"
+          },
+          "global_table_billing_mode": {
+            "type": "string"
+          },
+          "global_table_provisioned_write_capacity_units": {
+            "type": "integer"
+          },
+          "global_table_provisioned_write_capacity_auto_scaling_settings_update": {
+            "type": "object"
+          },
+          "global_table_global_secondary_index_settings_update": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "replica_settings_update": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "SigV4-signed DynamoDB UpdateGlobalTableSettings mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_item",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "key",
+          "attribute_updates"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "object",
+            "description": "DynamoDB AttributeValue map; attribute names are caller data and values use DynamoDB typed envelopes."
+          },
+          "attribute_updates": {
+            "type": "object"
+          },
+          "return_values": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UpdateItem mutation/admin operation with typed top-level schema.",
+      "redact_fields": [
+        "key",
+        "attribute_updates"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_kinesis_streaming_destination",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "stream_arn",
+          "update_kinesis_streaming_configuration"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "stream_arn": {
+            "type": "string"
+          },
+          "update_kinesis_streaming_configuration": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UpdateKinesisStreamingDestination mutation/admin operation with typed top-level schema."
+    },
+    {
+      "name": "update_table",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "attribute_definitions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "billing_mode": {
+            "type": "string"
+          },
+          "provisioned_throughput": {
+            "type": "object"
+          },
+          "global_secondary_index_updates": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "stream_specification": {
+            "type": "object"
+          },
+          "sse_specification": {
+            "type": "object"
+          },
+          "replica_updates": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "deletion_protection_enabled": {
+            "type": "boolean"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "SigV4-signed DynamoDB UpdateTable mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_table_replica_auto_scaling",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "global_secondary_index_updates": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "provisioned_write_capacity_auto_scaling_update": {
+            "type": "object"
+          },
+          "replica_updates": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "SigV4-signed DynamoDB UpdateTableReplicaAutoScaling mutation/admin operation with typed top-level schema.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_time_to_live",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "table_name",
+          "time_to_live_specification"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "table_name": {
+            "type": "string"
+          },
+          "time_to_live_specification": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "SigV4-signed DynamoDB UpdateTimeToLive mutation/admin operation with typed top-level schema."
+    }
+  ]
+}

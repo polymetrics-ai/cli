@@ -1,0 +1,18 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "contributor_insights_action": "ENABLE"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table",
+      "contributor_insights_action": "ENABLE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

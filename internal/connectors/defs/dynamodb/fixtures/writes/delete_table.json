@@ -1,0 +1,16 @@
+{
+  "record": {
+    "table_name": "fixture_table"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

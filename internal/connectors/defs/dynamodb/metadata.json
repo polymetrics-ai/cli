@@ -1,28 +1,29 @@
 {
   "name": "dynamodb",
   "display_name": "DynamoDB",
-  "description": "Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated with hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.",
+  "description": "Reads, changes, and writes Amazon DynamoDB tables through the AWS JSON API with connector-local SigV4 signing, typed operation schemas, bounded reads, DynamoDB Streams changefeed support, and reverse-ETL write gates.",
   "integration_type": "database",
   "docs_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
-    "cdc": false,
+    "cdc": true,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external AWS DynamoDB Scan of table items",
-    "write": "n/a (read-only source)",
-    "approval": "none required for read-only sync"
+    "read": "bounded SigV4-signed DynamoDB and DynamoDB Streams JSON-RPC reads against configured table, resource, or stream identifiers",
+    "write": "typed SigV4-signed DynamoDB mutations/admin actions declared in writes.json; destructive actions require confirmation",
+    "approval": "reverse ETL writes require plan, preview, approval token, and destructive confirmation where declared"
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "Tier-3 native package (internal/connectors/native/dynamodb): Check/Catalog/Read are hand-written Go (SigV4 request signing, AttributeValue-envelope flattening), never routed through engine.Check/engine.Read, so this bundle's streams.json/spec.json exist only to keep identity/spec/docs/schema uniform with every other connector -- conformance's dynamic (fixture-replay) checks exercise the DECLARATIVE engine read path, which this connector never uses. Proven live by internal/connectors/native/dynamodb's own unit tests (dynamodb_test.go), ported rule-for-rule from legacy internal/connectors/dynamodb's test suite."
+    "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
   }
 }
