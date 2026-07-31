@@ -1,0 +1,24 @@
+{
+  "covered_writes": {
+    "DELETE": "delete_row",
+    "INSERT": "insert_row",
+    "MERGE": "upsert_row",
+    "TRUNCATE": "truncate_table",
+    "UPDATE": "update_row"
+  },
+  "lanes": {
+    "binary_file": 9,
+    "cdc_changefeed": 29,
+    "direct_read_query_search": 22,
+    "etl_read": 1,
+    "excluded_not_applicable": 53,
+    "reverse_etl_write": 149
+  },
+  "surfaces": {
+    "frontend_backend_protocol_messages": 52,
+    "logical_replication_messages": 20,
+    "sql_commands": 183,
+    "streaming_replication_commands": 8
+  },
+  "total": 263
+}

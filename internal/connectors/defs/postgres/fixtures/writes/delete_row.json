@@ -1,0 +1,13 @@
+{
+  "record": {
+    "schema": "public",
+    "table": "customers",
+    "keys": [
+      { "name": "id", "value_int": 42 }
+    ]
+  },
+  "expect": {
+    "sql_template": "DELETE FROM \"public\".\"customers\" WHERE \"id\" = $1",
+    "args_redacted": true
+  }
+}

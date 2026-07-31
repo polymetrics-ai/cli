@@ -1,46 +1,67 @@
 # Overview
 
-Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a
-documented stub pending the gated pglogrepl dependency.
+PostgreSQL is a Tier-3 native database connector. It discovers schemas/columns from
+`information_schema`, snapshots tables with bounded `SELECT` reads, supports cursor-incremental
+reads on a configured cursor column, and exposes five bounded reverse-ETL row/table actions.
 
-This connector discovers available streams and schemas from the configured service at runtime.
-
-This connector is read-only; no write actions are declared.
+The connector is intentionally **not** a raw SQL interface. It does not expose arbitrary SQL reads,
+arbitrary SQL writes, COPY streams, extension APIs, shell/file escapes, or protocol passthrough.
+CDC remains a documented stub pending the gated `pglogrepl` dependency; fixture decoder tests do
+not certify live logical replication.
 
 ## Auth setup
 
 Connection fields:
 
-- `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
-  cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
-- `database` (required, string); Database name to connect to.
-- `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
-  credentials - a URL-shaped value is rejected).
-- `mode` (optional, string); allowed values `fixture`.
-- `password` (optional, secret, string); Database role password. Never logged.
-- `port` (optional, string); TCP port, 1-65535. Defaults to 5432 when omitted.
-- `read_limit` (optional, string); Maximum rows returned per Read snapshot SELECT. Defaults to
-  10000; set to 0, all, or unlimited to disable the bound.
-- `schema` (optional, string); PostgreSQL schema to discover tables from. Defaults to public.
-- `sslmode` (optional, string); allowed values `disable`, `allow`, `prefer`, `require`, `verify-ca`,
-  `verify-full`; libpq sslmode. Defaults to disable when omitted.
-- `username` (required, string); Database role used to authenticate.
+- `host` (required, string): bare hostname or IP; URL-shaped values, paths, credentials, and
+  connection-string fragments are rejected.
+- `port` (optional, string): TCP port, defaults to `5432`.
+- `database` (required, string): database name.
+- `username` (required, string): database role.
+- `password` (required, secret, string): database role password; never logged.
+- `sslmode` (optional, enum): `disable`, `allow`, `prefer`, `require`, `verify-ca`, or
+  `verify-full`; defaults to `disable`.
+- `schema` (optional, string): default schema for discovery/read/write actions; defaults to
+  `public`.
+- `cursor_field` (optional, string): column used for incremental reads.
+- `read_limit` (optional, string): maximum rows returned per snapshot `SELECT`; defaults to
+  `10000`. Set `0`, `all`, or `unlimited` to disable the configured bound. A smaller request/CLI
+  limit is applied before this bound.
+- `mode=fixture` (test/conformance only): validates config but short-circuits network access.
 
 Secret fields are redacted in logs and write previews: `password`.
-
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
 
 ## Streams notes
 
 The connector discovers catalogs and records directly from the configured service instead of using
-fixed stream declarations.
+fixed stream declarations. Stream names are runtime `schema.table` identifiers. Reads validate and
+quote schema/table/cursor identifiers and bind cursor values as parameters.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: low.
+Reverse ETL writes follow plan → preview → explicit approval → execute. Preview output includes SQL
+templates with placeholders only; bound values are not printed.
+
+Declared actions:
+
+- `insert_row`: `INSERT INTO <schema>.<table> (<columns...>) VALUES ($1, ...)`.
+- `update_row`: `UPDATE <schema>.<table> SET ... WHERE <key columns...>`; key columns are required.
+- `upsert_row`: bounded single-row `MERGE` using typed source values; conflict keys must also be
+  present in `values` (or provided through the closed CLI shortcut fields).
+- `delete_row`: `DELETE FROM <schema>.<table> WHERE <key columns...>`; destructive confirmation is
+  required by the reverse-ETL plan/approval path.
+- `truncate_table`: `TRUNCATE TABLE ONLY <schema>.<table>`; `confirm_phrase` must equal
+  `truncate`. `CASCADE` and `RESTART IDENTITY` are not exposed.
+
+Every write record uses a closed schema. Programmatic writes use `schema`, `table`, `values`,
+`keys`, and `confirm_phrase`; CLI convenience flags map to closed shortcut fields such as
+`value_column`, `value_string`, `key_column`, and `key_int`. Column/table/schema identifiers must be
+plain PostgreSQL identifiers, and values must be typed through one of `value_string`, `value_int`,
+`value_float`, `value_bool`, `value_null`, or `value_json`.
 
 ## Known limits
 
-- Schemas and stream availability depend on the configured service at runtime.
+- No generic SQL/query/write command is available.
+- No COPY/binary/file transfer surface is available.
+- CDC/changefeed operations are blocked until a separately gated pglogrepl implementation lands.
+- Fixture behavior is not live certification.

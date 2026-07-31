@@ -1,7 +1,3140 @@
 {
-  "api": "PostgreSQL wire protocol (libpq via pgx) — not a REST API",
-  "docs": "https://www.postgresql.org/docs/current/protocol.html",
-  "reviewed_at": "2026-07-02",
-  "scope": "This is a database connector: it speaks the PostgreSQL wire protocol over a pgx connection, not HTTP/REST. There is no REST endpoint surface to enumerate — Check/Catalog/Read are implemented as SQL queries (information_schema discovery, snapshot SELECT) against whatever tables/columns the target database exposes, which are discovered dynamically at runtime (capabilities.dynamic_schema: true) rather than declared as a fixed set of streams/endpoints. This api_surface.json intentionally has zero endpoints entries: there is nothing REST-shaped for either covered_by or excluded to describe, per the minimal-db surface pattern for Tier-3 SQL/CDC connectors (design §B.7).",
-  "endpoints": []
+  "api": "PostgreSQL 18 SQL commands and wire/replication protocol surfaces",
+  "docs": "https://www.postgresql.org/docs/current/",
+  "reviewed_at": "2026-08-01",
+  "operation_ledger_version": 1,
+  "scope": "PostgreSQL 18 official docs bounded to the SQL Commands index, frontend/backend protocol message formats, streaming replication protocol commands, and logical replication message formats. Generic SQL functions, extension APIs, system catalogs, and local decoder/interface stubs are not counted. This connector exposes dynamic catalog/read plus five bounded row/table reverse-ETL actions only; all other official operations are blocked or evidence-backed not applicable.",
+  "endpoints": [
+    {
+      "method": "SQL",
+      "path": "ABORT",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-abort.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER AGGREGATE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alteraggregate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER COLLATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altercollation.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER CONVERSION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterconversion.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER DATABASE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterdatabase.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER DEFAULT PRIVILEGES",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterdefaultprivileges.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER DOMAIN",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterdomain.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER EVENT TRIGGER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altereventtrigger.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER EXTENSION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterextension.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER FOREIGN DATA WRAPPER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterforeigndatawrapper.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER FOREIGN TABLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterforeigntable.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER FUNCTION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterfunction.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER GROUP",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altergroup.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER INDEX",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterindex.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER LANGUAGE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterlanguage.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER LARGE OBJECT",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterlargeobject.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER MATERIALIZED VIEW",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altermaterializedview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER OPERATOR",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alteroperator.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER OPERATOR CLASS",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alteropclass.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER OPERATOR FAMILY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alteropfamily.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER POLICY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterpolicy.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER PROCEDURE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterprocedure.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER PUBLICATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterpublication.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER ROLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterrole.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER ROUTINE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterroutine.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER RULE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterrule.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER SCHEMA",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterschema.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER SEQUENCE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altersequence.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER SERVER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterserver.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER STATISTICS",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterstatistics.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER SUBSCRIPTION",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication subscriptions require live CDC orchestration and are blocked in the fixture-only connector.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altersubscription.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER SYSTEM",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altersystem.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TABLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertable.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TABLESPACE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertablespace.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TEXT SEARCH CONFIGURATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertsconfig.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TEXT SEARCH DICTIONARY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertsdictionary.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TEXT SEARCH PARSER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertsparser.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TEXT SEARCH TEMPLATE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertstemplate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TRIGGER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertrigger.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER TYPE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-altertype.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER USER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alteruser.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER USER MAPPING",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterusermapping.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ALTER VIEW",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-alterview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ANALYZE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-analyze.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "BEGIN",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-begin.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CALL",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-call.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CHECKPOINT",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-checkpoint.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CLOSE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-close.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CLUSTER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-cluster.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "COMMENT",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-comment.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "COMMIT",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-commit.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "COMMIT PREPARED",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-commit-prepared.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "COPY",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY can stream arbitrary binary/text payloads and requires a separate bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-copy.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE ACCESS METHOD",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-create-access-method.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE AGGREGATE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createaggregate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE CAST",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createcast.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE COLLATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createcollation.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE CONVERSION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createconversion.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE DATABASE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createdatabase.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE DOMAIN",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createdomain.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE EVENT TRIGGER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createeventtrigger.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE EXTENSION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createextension.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE FOREIGN DATA WRAPPER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createforeigndatawrapper.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE FOREIGN TABLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createforeigntable.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE FUNCTION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createfunction.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE GROUP",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-creategroup.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE INDEX",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createindex.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE LANGUAGE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createlanguage.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE MATERIALIZED VIEW",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-creatematerializedview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE OPERATOR",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createoperator.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE OPERATOR CLASS",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createopclass.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE OPERATOR FAMILY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createopfamily.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE POLICY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createpolicy.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE PROCEDURE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createprocedure.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE PUBLICATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createpublication.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE ROLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createrole.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE RULE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createrule.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE SCHEMA",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createschema.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE SEQUENCE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createsequence.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE SERVER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createserver.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE STATISTICS",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createstatistics.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE SUBSCRIPTION",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication subscriptions require live CDC orchestration and are blocked in the fixture-only connector.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createsubscription.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TABLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtable.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TABLE AS",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtableas.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TABLESPACE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtablespace.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TEXT SEARCH CONFIGURATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtsconfig.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TEXT SEARCH DICTIONARY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtsdictionary.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TEXT SEARCH PARSER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtsparser.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TEXT SEARCH TEMPLATE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtstemplate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TRANSFORM",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtransform.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TRIGGER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtrigger.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE TYPE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createtype.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE USER",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createuser.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE USER MAPPING",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createusermapping.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "CREATE VIEW",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-createview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DEALLOCATE",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-deallocate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DECLARE",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DECLARE is a cursor primitive; pm exposes bounded table Read instead of raw cursor SQL.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-declare.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DELETE",
+      "covered_by": {
+        "write": "delete_row"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DISCARD",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-discard.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DO",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-do.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP ACCESS METHOD",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-drop-access-method.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP AGGREGATE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropaggregate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP CAST",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropcast.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP COLLATION",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropcollation.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP CONVERSION",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropconversion.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP DATABASE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropdatabase.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP DOMAIN",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropdomain.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP EVENT TRIGGER",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropeventtrigger.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP EXTENSION",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropextension.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP FOREIGN DATA WRAPPER",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropforeigndatawrapper.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP FOREIGN TABLE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropforeigntable.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP FUNCTION",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropfunction.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP GROUP",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropgroup.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP INDEX",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropindex.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP LANGUAGE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droplanguage.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP MATERIALIZED VIEW",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropmaterializedview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP OPERATOR",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropoperator.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP OPERATOR CLASS",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropopclass.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP OPERATOR FAMILY",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropopfamily.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP OWNED",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-drop-owned.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP POLICY",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droppolicy.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP PROCEDURE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropprocedure.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP PUBLICATION",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droppublication.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP ROLE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droprole.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP ROUTINE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droproutine.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP RULE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droprule.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP SCHEMA",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropschema.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP SEQUENCE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropsequence.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP SERVER",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropserver.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP STATISTICS",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropstatistics.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP SUBSCRIPTION",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication subscriptions require live CDC orchestration and are blocked in the fixture-only connector.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropsubscription.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TABLE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptable.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TABLESPACE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptablespace.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TEXT SEARCH CONFIGURATION",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptsconfig.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TEXT SEARCH DICTIONARY",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptsdictionary.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TEXT SEARCH PARSER",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptsparser.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TEXT SEARCH TEMPLATE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptstemplate.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TRANSFORM",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptransform.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TRIGGER",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptrigger.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP TYPE",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-droptype.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP USER",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropuser.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP USER MAPPING",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropusermapping.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "DROP VIEW",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-dropview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "END",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-end.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "EXECUTE",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-execute.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "EXPLAIN",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw SQL read/query text is not exposed; use catalog/read with bounded streams.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-explain.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "FETCH",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw SQL read/query text is not exposed; use catalog/read with bounded streams.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-fetch.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "GRANT",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-grant.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "IMPORT FOREIGN SCHEMA",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-importforeignschema.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "INSERT",
+      "covered_by": {
+        "write": "insert_row"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "LISTEN",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-listen.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "LOAD",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-load.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "LOCK",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-lock.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "MERGE",
+      "covered_by": {
+        "write": "upsert_row"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "MOVE",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-move.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "NOTIFY",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-notify.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "PREPARE",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-prepare.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "PREPARE TRANSACTION",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-prepare-transaction.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "REASSIGN OWNED",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-reassign-owned.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "REFRESH MATERIALIZED VIEW",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-refreshmaterializedview.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "REINDEX",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-reindex.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "RELEASE SAVEPOINT",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-release-savepoint.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "RESET",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-reset.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "REVOKE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-revoke.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ROLLBACK",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-rollback.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ROLLBACK PREPARED",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-rollback-prepared.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "ROLLBACK TO SAVEPOINT",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-rollback-to.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SAVEPOINT",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-savepoint.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SECURITY LABEL",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-security-label.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SELECT",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw SQL read/query text is not exposed; use catalog/read with bounded streams.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-select.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SELECT INTO",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw SQL read/query text is not exposed; use catalog/read with bounded streams.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-selectinto.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SET",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-set.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SET CONSTRAINTS",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-set-constraints.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SET ROLE",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-set-role.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SET SESSION AUTHORIZATION",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-set-session-authorization.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SET TRANSACTION",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-set-transaction.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "SHOW",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw SQL read/query text is not exposed; use catalog/read with bounded streams.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-show.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "START TRANSACTION",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Transaction/session/control SQL is not a connector data operation and is counted as not applicable.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-start-transaction.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "TRUNCATE",
+      "covered_by": {
+        "write": "truncate_table"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "UNLISTEN",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-unlisten.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "UPDATE",
+      "covered_by": {
+        "write": "update_row"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "VACUUM",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official SQL command is not exposed because raw/admin SQL write variants need command-specific closed schemas; generic SQL writes are forbidden.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-vacuum.html"
+      }
+    },
+    {
+      "method": "SQL",
+      "path": "VALUES",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw SQL read/query text is not exposed; use catalog/read with bounded streams.",
+        "source_url": "https://www.postgresql.org/docs/current/sql-values.html"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationOk",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONOK"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationKerberosV5",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONKERBEROSV5"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationCleartextPassword",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONCLEARTEXTPASSWORD"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationMD5Password",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONMD5PASSWORD"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationGSS",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONGSS"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationGSSContinue",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONGSSCONTINUE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationSSPI",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONSSPI"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationSASL",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONSASL"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationSASLContinue",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONSASLCONTINUE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "AuthenticationSASLFinal",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-AUTHENTICATIONSASLFINAL"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "BackendKeyData",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-BACKENDKEYDATA"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Bind",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-BIND"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "BindComplete",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-BINDCOMPLETE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CancelRequest",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-CANCELREQUEST"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Close",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-CLOSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CloseComplete",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-CLOSECOMPLETE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CommandComplete",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COMMANDCOMPLETE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CopyData",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COPYDATA"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CopyDone",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COPYDONE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CopyFail",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COPYFAIL"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CopyInResponse",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COPYINRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CopyOutResponse",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COPYOUTRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "CopyBothResponse",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-COPYBOTHRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "DataRow",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-DATAROW"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Describe",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-DESCRIBE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "EmptyQueryResponse",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-EMPTYQUERYRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "ErrorResponse",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-ERRORRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Execute",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-EXECUTE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Flush",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-FLUSH"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "FunctionCall",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-FUNCTIONCALL"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "FunctionCallResponse",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "COPY/function binary payload messages are not exposed without a bounded binary contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-FUNCTIONCALLRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "GSSENCRequest",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-GSSENCREQUEST"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "GSSResponse",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-GSSRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "NegotiateProtocolVersion",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-NEGOTIATEPROTOCOLVERSION"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "NoData",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-NODATA"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "NoticeResponse",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-NOTICERESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "NotificationResponse",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "LISTEN/NOTIFY-style change notifications are not exposed as a CDC surface in this fixture-only connector.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-NOTIFICATIONRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "ParameterDescription",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-PARAMETERDESCRIPTION"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "ParameterStatus",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-PARAMETERSTATUS"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Parse",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-PARSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "ParseComplete",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-PARSECOMPLETE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "PasswordMessage",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-PASSWORDMESSAGE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "PortalSuspended",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-PORTALSUSPENDED"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Query",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-QUERY"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "ReadyForQuery",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-READYFORQUERY"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "RowDescription",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Frontend/backend protocol message is handled internally by pgx or blocked; pm does not expose raw protocol messages.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-ROWDESCRIPTION"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "SASLInitialResponse",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-SASLINITIALRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "SASLResponse",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-SASLRESPONSE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "SSLRequest",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-SSLREQUEST"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "StartupMessage",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-STARTUPMESSAGE"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Sync",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-SYNC"
+      }
+    },
+    {
+      "method": "PROTOCOL_MESSAGE",
+      "path": "Terminate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Authentication, startup, error, sync, and lifecycle protocol messages are internal connector mechanics, not user-facing operations.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-TERMINATE"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "IDENTIFY_SYSTEM",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "TIMELINE_HISTORY",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "CREATE_REPLICATION_SLOT",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "ALTER_REPLICATION_SLOT",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "READ_REPLICATION_SLOT",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "START_REPLICATION",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "DROP_REPLICATION_SLOT",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Streaming replication commands require live replication privileges and pglogrepl orchestration; blocked pending a separate CDC gate.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "REPLICATION_COMMAND",
+      "path": "BASE_BACKUP",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Base backups stream database files and are outside the bounded connector read contract.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-replication.html"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Begin",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-BEGIN"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Message",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-MESSAGE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Commit",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-COMMIT"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Origin",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-ORIGIN"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Relation",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-RELATION"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Type",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Logical type/tuple metadata is a message component rather than a standalone connector operation.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-TYPE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Insert",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-INSERT"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Update",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-UPDATE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Delete",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-DELETE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Truncate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-TRUNCATE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Stream Start",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-STREAM-START"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Stream Stop",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-STREAM-STOP"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Stream Commit",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-STREAM-COMMIT"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Stream Abort",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-STREAM-ABORT"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Begin Prepare",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-BEGIN-PREPARE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Prepare",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-PREPARE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Commit Prepared",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-COMMIT-PREPARED"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Rollback Prepared",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-ROLLBACK-PREPARED"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "Stream Prepare",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Logical replication messages are decoder/CDC protocol events only; live CDC is blocked pending the gated pglogrepl dependency.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-STREAM-PREPARE"
+      }
+    },
+    {
+      "method": "LOGICAL_REPLICATION_MESSAGE",
+      "path": "TupleData",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Logical type/tuple metadata is a message component rather than a standalone connector operation.",
+        "source_url": "https://www.postgresql.org/docs/current/protocol-logicalrep-message-formats.html#PROTOCOL-LOGICALREP-MESSAGE-FORMATS-TUPLEDATA"
+      }
+    }
+  ]
 }

@@ -1,0 +1,11 @@
+{
+  "record": {
+    "schema": "public",
+    "table": "staging_customers",
+    "confirm_phrase": "truncate"
+  },
+  "expect": {
+    "sql_template": "TRUNCATE TABLE ONLY \"public\".\"staging_customers\"",
+    "args_redacted": true
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "tagline": "Inspect PostgreSQL schemas and run bounded reverse-ETL row actions without raw SQL.",
+  "usage": "pm postgres <command> [flags]",
+  "source_cli": {
+    "name": "psql",
+    "docs": "https://www.postgresql.org/docs/current/app-psql.html",
+    "reference": "https://www.postgresql.org/docs/current/sql-commands.html",
+    "source": "https://www.postgresql.org/"
+  },
+  "groups": [
+    {
+      "id": "rows",
+      "title": "Bounded row writes",
+      "commands": [
+        "row",
+        "table"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved PostgreSQL connector credential.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "row insert",
+      "summary": "Insert one row with typed string or integer column flags.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "insert_row",
+      "source_cli_path": "psql INSERT",
+      "source_url": "https://www.postgresql.org/docs/current/sql-insert.html",
+      "risk": "Inserts a row into the configured table using typed fields only; no SQL text is accepted.",
+      "approval": "Reverse ETL writes require plan -> preview -> approval -> execute.",
+      "flags": [
+        {
+          "name": "schema",
+          "type": "string",
+          "summary": "Optional schema override.",
+          "maps_to": "record.schema"
+        },
+        {
+          "name": "table",
+          "type": "string",
+          "summary": "Table identifier.",
+          "maps_to": "record.table"
+        },
+        {
+          "name": "column",
+          "type": "string",
+          "summary": "Column name.",
+          "maps_to": "record.value_column"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "String column value.",
+          "maps_to": "record.value_string",
+          "allow_empty": true
+        },
+        {
+          "name": "value-int",
+          "type": "integer",
+          "summary": "Integer column value; use instead of --value.",
+          "maps_to": "record.value_int"
+        }
+      ],
+      "examples": [
+        "pm postgres row insert --table customers --column email --value customer@example.invalid --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "SQL",
+          "path": "INSERT"
+        }
+      ]
+    },
+    {
+      "path": "row update",
+      "summary": "Update row values selected by an explicit key column.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_row",
+      "source_cli_path": "psql UPDATE",
+      "source_url": "https://www.postgresql.org/docs/current/sql-update.html",
+      "risk": "Updates rows matching explicit key fields. Missing keys are rejected.",
+      "approval": "Reverse ETL writes require plan -> preview -> approval -> execute.",
+      "flags": [
+        {
+          "name": "schema",
+          "type": "string",
+          "summary": "Optional schema override.",
+          "maps_to": "record.schema"
+        },
+        {
+          "name": "table",
+          "type": "string",
+          "summary": "Table identifier.",
+          "maps_to": "record.table"
+        },
+        {
+          "name": "column",
+          "type": "string",
+          "summary": "Column to update.",
+          "maps_to": "record.value_column"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "New string value.",
+          "maps_to": "record.value_string",
+          "allow_empty": true
+        },
+        {
+          "name": "value-int",
+          "type": "integer",
+          "summary": "New integer value; use instead of --value.",
+          "maps_to": "record.value_int"
+        },
+        {
+          "name": "key-column",
+          "type": "string",
+          "summary": "Key column name.",
+          "maps_to": "record.key_column"
+        },
+        {
+          "name": "key-value",
+          "type": "string",
+          "summary": "Key string value.",
+          "maps_to": "record.key_string",
+          "allow_empty": true
+        },
+        {
+          "name": "key-value-int",
+          "type": "integer",
+          "summary": "Key integer value; use instead of --key-value.",
+          "maps_to": "record.key_int"
+        }
+      ],
+      "examples": [
+        "pm postgres row update --table customers --key-column id --key-value 42 --column status --value active --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "SQL",
+          "path": "UPDATE"
+        }
+      ]
+    },
+    {
+      "path": "row upsert",
+      "summary": "Insert or update one row through a declared conflict key.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_row",
+      "source_cli_path": "psql MERGE",
+      "source_url": "https://www.postgresql.org/docs/current/sql-insert.html",
+      "risk": "Performs a bounded row upsert; it does not expose arbitrary MERGE or INSERT text.",
+      "approval": "Reverse ETL writes require plan -> preview -> approval -> execute.",
+      "flags": [
+        {
+          "name": "schema",
+          "type": "string",
+          "summary": "Optional schema override.",
+          "maps_to": "record.schema"
+        },
+        {
+          "name": "table",
+          "type": "string",
+          "summary": "Table identifier.",
+          "maps_to": "record.table"
+        },
+        {
+          "name": "key-column",
+          "type": "string",
+          "summary": "Conflict key column name.",
+          "maps_to": "record.key_column"
+        },
+        {
+          "name": "key-value",
+          "type": "string",
+          "summary": "Conflict key string value.",
+          "maps_to": "record.key_string",
+          "allow_empty": true
+        },
+        {
+          "name": "key-value-int",
+          "type": "integer",
+          "summary": "Conflict key integer value; use instead of --key-value.",
+          "maps_to": "record.key_int"
+        },
+        {
+          "name": "column",
+          "type": "string",
+          "summary": "Optional non-key column name.",
+          "maps_to": "record.value_column"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Optional non-key string value.",
+          "maps_to": "record.value_string",
+          "allow_empty": true
+        },
+        {
+          "name": "value-int",
+          "type": "integer",
+          "summary": "Optional non-key integer value; use instead of --value.",
+          "maps_to": "record.value_int"
+        }
+      ],
+      "examples": [
+        "pm postgres row upsert --table customers --key-column id --key-value-int 42 --column status --value active --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "SQL",
+          "path": "MERGE"
+        }
+      ]
+    },
+    {
+      "path": "row delete",
+      "summary": "Delete rows selected by explicit key columns.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_row",
+      "source_cli_path": "psql DELETE",
+      "source_url": "https://www.postgresql.org/docs/current/sql-delete.html",
+      "risk": "Destructive: deletes rows matching the supplied key values. Missing keys are rejected.",
+      "approval": "Requires destructive approval through plan -> preview -> approval -> execute.",
+      "flags": [
+        {
+          "name": "schema",
+          "type": "string",
+          "summary": "Optional schema override.",
+          "maps_to": "record.schema"
+        },
+        {
+          "name": "table",
+          "type": "string",
+          "summary": "Table identifier.",
+          "maps_to": "record.table"
+        },
+        {
+          "name": "key-column",
+          "type": "string",
+          "summary": "Key column name.",
+          "maps_to": "record.key_column"
+        },
+        {
+          "name": "key-value",
+          "type": "string",
+          "summary": "Key string value.",
+          "maps_to": "record.key_string",
+          "allow_empty": true
+        },
+        {
+          "name": "key-value-int",
+          "type": "integer",
+          "summary": "Key integer value; use instead of --key-value.",
+          "maps_to": "record.key_int"
+        }
+      ],
+      "examples": [
+        "pm postgres row delete --table customers --key-column id --key-value 42 --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "SQL",
+          "path": "DELETE"
+        }
+      ]
+    },
+    {
+      "path": "table truncate",
+      "summary": "Truncate one table with typed confirmation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "truncate_table",
+      "source_cli_path": "psql TRUNCATE",
+      "source_url": "https://www.postgresql.org/docs/current/sql-truncate.html",
+      "risk": "Destructive: truncates only the named table. CASCADE and RESTART IDENTITY are not exposed.",
+      "approval": "Requires destructive approval and confirm-phrase truncate through plan -> preview -> approval -> execute.",
+      "flags": [
+        {
+          "name": "schema",
+          "type": "string",
+          "summary": "Optional schema override.",
+          "maps_to": "record.schema"
+        },
+        {
+          "name": "table",
+          "type": "string",
+          "summary": "Table identifier.",
+          "maps_to": "record.table"
+        },
+        {
+          "name": "confirm-phrase",
+          "type": "enum",
+          "values": [
+            "truncate"
+          ],
+          "summary": "Typed confirmation phrase required by the connector.",
+          "maps_to": "record.confirm_phrase"
+        }
+      ],
+      "examples": [
+        "pm postgres table truncate --table staging_customers --confirm-phrase truncate --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "SQL",
+          "path": "TRUNCATE"
+        }
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "safety",
+      "summary": "PostgreSQL commands intentionally do not expose raw SQL, COPY streams, shell escapes, extension APIs, or arbitrary protocol messages. Use catalog/read for ETL and bounded row/table write actions for reverse ETL."
+    }
+  ]
+}

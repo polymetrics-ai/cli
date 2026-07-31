@@ -1,4 +1,4 @@
-// Package postgres implements the Tier-3 native PostgreSQL source connector
+// Package postgres implements the Tier-3 native PostgreSQL connector
 // (architecture v2 design §B.7 Tier 3, PLAN.md T-17/B-17 — the golden
 // migration reference for every future database/file/native connector). It
 // is a database connector (family: db) built on github.com/jackc/pgx/v5
@@ -30,9 +30,9 @@
 //   - Read:    snapshot SELECT over a stream, with optional
 //     cursor-incremental filtering on a configurable cursor column
 //     (reader.go; see StatefulReader below).
-//   - Write:   not implemented; this is a read-only source for wave0 parity
-//     with the legacy package. Capabilities.Write is false and Write
-//     returns ErrUnsupportedOperation.
+//   - Write:   bounded reverse-ETL row/table actions (insert_row,
+//     update_row, upsert_row, delete_row, truncate_table) with identifier
+//     validation, parameter binding, fixture dry-runs, and no raw SQL escape.
 //
 // CDC (change data capture) is a documented STUB (cdc.go): ReadCDC returns
 // ErrUnsupportedOperation because full logical-replication CDC requires the
@@ -41,7 +41,7 @@
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
 // network access so the conformance harness and unit tests can run with no
 // live DB: in fixture mode Check succeeds, Catalog returns canned streams,
-// and Read emits canned rows.
+// and Read/Write use deterministic canned behavior.
 //
 // NO init()/RegisterFactory call exists in this package
 // in wave0 (enforced by a grep-guard test, postgres_test.go
@@ -51,8 +51,6 @@
 package postgres
 
 import (
-	"context"
-
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
@@ -83,19 +81,10 @@ func New() Connector {
 }
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the
-// legacy-shaped description text, matching the pre-migration
-// connectors.Metadata field-for-field (parity target); Capabilities are
-// still whatever the bundle's metadata.json declares (single source of
-// truth for capability flags), so this override only refines
-// Description/DisplayName wording, never capability semantics.
+// legacy-shaped description text while leaving capability flags as the
+// defs/postgres bundle's single source of truth.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency."
+	m.Description = "Reads PostgreSQL tables by discovering schemas/columns from information_schema, snapshots tables with bounded cursor-incremental reads, and supports fixture-safe bounded row DML/truncate reverse ETL actions. CDC is a documented stub pending the gated pglogrepl dependency."
 	return m
-}
-
-// Write is unsupported: this is a read-only source connector (wave0 parity
-// with the legacy package; capabilities.write is false).
-func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
-	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }

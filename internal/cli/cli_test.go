@@ -711,6 +711,59 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	}
 }
 
+func TestPostgresCommandSurfaceHelpAndWritePlan(t *testing.T) {
+	var helpOut, helpErr bytes.Buffer
+	if code := cli.Run([]string{"postgres", "row", "delete", "--help"}, &helpOut, &helpErr); code != 0 {
+		t.Fatalf("postgres row delete help code = %d stderr=%s stdout=%s", code, helpErr.String(), helpOut.String())
+	}
+	for _, want := range []string{"pm postgres row delete", "reverse_etl", "implemented", "--table", "--key-column", "--key-value", "plan -> preview -> approval -> execute"} {
+		if !strings.Contains(helpOut.String(), want) {
+			t.Fatalf("postgres row delete help missing %q:\n%s", want, helpOut.String())
+		}
+	}
+
+	root := t.TempDir()
+	t.Setenv("PM_TEST_POSTGRES_PASSWORD", "fixture-password")
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "postgres-local",
+		"--connector", "postgres",
+		"--config", "mode=fixture",
+		"--config", "host=db.internal",
+		"--config", "database=analytics",
+		"--config", "username=writer",
+		"--config", "sslmode=require",
+		"--from-env", "password=PM_TEST_POSTGRES_PASSWORD",
+		"--root", root,
+		"--json",
+	})
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"postgres", "row", "delete",
+		"--credential", "postgres-local",
+		"--table", "customers",
+		"--key-column", "id",
+		"--key-value", "42",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("postgres row delete plan code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "ConnectorCommandWritePlan"`, `"connector_command": "row delete"`, `"action": "delete_row"`, `"approval_required": true`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("planned postgres command output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+	for _, forbidden := range []string{"fixture-password", "ConnectorCommandWriteExecute", "DROP TABLE", "DELETE FROM"} {
+		if strings.Contains(out, forbidden) || strings.Contains(stderr.String(), forbidden) {
+			t.Fatalf("postgres plan leaked or executed forbidden content %q:\nstdout=%s\nstderr=%s", forbidden, out, stderr.String())
+		}
+	}
+}
+
 func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})

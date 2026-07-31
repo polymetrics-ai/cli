@@ -181785,22 +181785,397 @@
   {
     "slug": "postgres",
     "name": "PostgreSQL",
-    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.",
+    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables with bounded cursor-incremental reads, and supports fixture-safe bounded row DML/truncate reverse ETL actions. CDC is a documented stub pending the gated pglogrepl dependency.",
     "docs_url": "",
     "integration_type": "database",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": true
     },
     "streams": [],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and\nsupports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a\ndocumented stub pending the gated pglogrepl dependency.\n\nThis connector discovers available streams and schemas from the configured service at runtime.\n\nThis connector is read-only; no write actions are declared.\n\n## Auth setup\n\nConnection fields:\n\n- `cursor_field` (optional, string); Optional column name used for incremental reads (rows with\n  cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).\n- `database` (required, string); Database name to connect to.\n- `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or\n  credentials - a URL-shaped value is rejected).\n- `mode` (optional, string); allowed values `fixture`.\n- `password` (optional, secret, string); Database role password. Never logged.\n- `port` (optional, string); TCP port, 1-65535. Defaults to 5432 when omitted.\n- `read_limit` (optional, string); Maximum rows returned per Read snapshot SELECT. Defaults to\n  10000; set to 0, all, or unlimited to disable the bound.\n- `schema` (optional, string); PostgreSQL schema to discover tables from. Defaults to public.\n- `sslmode` (optional, string); allowed values `disable`, `allow`, `prefer`, `require`, `verify-ca`,\n  `verify-full`; libpq sslmode. Defaults to disable when omitted.\n- `username` (required, string); Database role used to authenticate.\n\nSecret fields are redacted in logs and write previews: `password`.\n\nProvide the secret fields listed above. Authentication is applied by the connector-specific\nimplementation for this service.\n\n## Streams notes\n\nThe connector discovers catalogs and records directly from the configured service instead of using\nfixed stream declarations.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: low.\n\n## Known limits\n\n- Schemas and stream availability depend on the configured service at runtime.\n",
+    "write_actions": [
+      {
+        "name": "insert_row",
+        "method": "SQL",
+        "kind": "create"
+      },
+      {
+        "name": "update_row",
+        "method": "SQL",
+        "kind": "update"
+      },
+      {
+        "name": "upsert_row",
+        "method": "SQL",
+        "kind": "upsert"
+      },
+      {
+        "name": "delete_row",
+        "method": "SQL",
+        "kind": "delete"
+      },
+      {
+        "name": "truncate_table",
+        "method": "SQL",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect PostgreSQL schemas and run bounded reverse-ETL row actions without raw SQL.",
+      "usage": "pm postgres <command> [flags]",
+      "source_cli": {
+        "name": "psql",
+        "docs": "https://www.postgresql.org/docs/current/app-psql.html",
+        "reference": "https://www.postgresql.org/docs/current/sql-commands.html",
+        "source": "https://www.postgresql.org/"
+      },
+      "groups": [
+        {
+          "id": "rows",
+          "title": "Bounded row writes",
+          "commands": [
+            "row",
+            "table"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Write machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Use a saved PostgreSQL connector credential.",
+          "values": [],
+          "maps_to": "connection"
+        }
+      ],
+      "commands": [
+        {
+          "path": "row insert",
+          "summary": "Insert one row with typed string or integer column flags.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "insert_row",
+          "source_cli_path": "psql INSERT",
+          "source_url": "https://www.postgresql.org/docs/current/sql-insert.html",
+          "flags": [
+            {
+              "name": "schema",
+              "type": "string",
+              "summary": "Optional schema override.",
+              "values": [],
+              "maps_to": "record.schema"
+            },
+            {
+              "name": "table",
+              "type": "string",
+              "summary": "Table identifier.",
+              "values": [],
+              "maps_to": "record.table"
+            },
+            {
+              "name": "column",
+              "type": "string",
+              "summary": "Column name.",
+              "values": [],
+              "maps_to": "record.value_column"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "String column value.",
+              "values": [],
+              "maps_to": "record.value_string",
+              "allow_empty": true
+            },
+            {
+              "name": "value-int",
+              "type": "integer",
+              "summary": "Integer column value; use instead of --value.",
+              "values": [],
+              "maps_to": "record.value_int"
+            }
+          ],
+          "examples": [
+            "pm postgres row insert --table customers --column email --value customer@example.invalid --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Inserts a row into the configured table using typed fields only; no SQL text is accepted.",
+          "approval": "Reverse ETL writes require plan -> preview -> approval -> execute.",
+          "notes": ""
+        },
+        {
+          "path": "row update",
+          "summary": "Update row values selected by an explicit key column.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_row",
+          "source_cli_path": "psql UPDATE",
+          "source_url": "https://www.postgresql.org/docs/current/sql-update.html",
+          "flags": [
+            {
+              "name": "schema",
+              "type": "string",
+              "summary": "Optional schema override.",
+              "values": [],
+              "maps_to": "record.schema"
+            },
+            {
+              "name": "table",
+              "type": "string",
+              "summary": "Table identifier.",
+              "values": [],
+              "maps_to": "record.table"
+            },
+            {
+              "name": "column",
+              "type": "string",
+              "summary": "Column to update.",
+              "values": [],
+              "maps_to": "record.value_column"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "New string value.",
+              "values": [],
+              "maps_to": "record.value_string",
+              "allow_empty": true
+            },
+            {
+              "name": "value-int",
+              "type": "integer",
+              "summary": "New integer value; use instead of --value.",
+              "values": [],
+              "maps_to": "record.value_int"
+            },
+            {
+              "name": "key-column",
+              "type": "string",
+              "summary": "Key column name.",
+              "values": [],
+              "maps_to": "record.key_column"
+            },
+            {
+              "name": "key-value",
+              "type": "string",
+              "summary": "Key string value.",
+              "values": [],
+              "maps_to": "record.key_string",
+              "allow_empty": true
+            },
+            {
+              "name": "key-value-int",
+              "type": "integer",
+              "summary": "Key integer value; use instead of --key-value.",
+              "values": [],
+              "maps_to": "record.key_int"
+            }
+          ],
+          "examples": [
+            "pm postgres row update --table customers --key-column id --key-value 42 --column status --value active --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Updates rows matching explicit key fields. Missing keys are rejected.",
+          "approval": "Reverse ETL writes require plan -> preview -> approval -> execute.",
+          "notes": ""
+        },
+        {
+          "path": "row upsert",
+          "summary": "Insert or update one row through a declared conflict key.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "upsert_row",
+          "source_cli_path": "psql MERGE",
+          "source_url": "https://www.postgresql.org/docs/current/sql-insert.html",
+          "flags": [
+            {
+              "name": "schema",
+              "type": "string",
+              "summary": "Optional schema override.",
+              "values": [],
+              "maps_to": "record.schema"
+            },
+            {
+              "name": "table",
+              "type": "string",
+              "summary": "Table identifier.",
+              "values": [],
+              "maps_to": "record.table"
+            },
+            {
+              "name": "key-column",
+              "type": "string",
+              "summary": "Conflict key column name.",
+              "values": [],
+              "maps_to": "record.key_column"
+            },
+            {
+              "name": "key-value",
+              "type": "string",
+              "summary": "Conflict key string value.",
+              "values": [],
+              "maps_to": "record.key_string",
+              "allow_empty": true
+            },
+            {
+              "name": "key-value-int",
+              "type": "integer",
+              "summary": "Conflict key integer value; use instead of --key-value.",
+              "values": [],
+              "maps_to": "record.key_int"
+            },
+            {
+              "name": "column",
+              "type": "string",
+              "summary": "Optional non-key column name.",
+              "values": [],
+              "maps_to": "record.value_column"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Optional non-key string value.",
+              "values": [],
+              "maps_to": "record.value_string",
+              "allow_empty": true
+            },
+            {
+              "name": "value-int",
+              "type": "integer",
+              "summary": "Optional non-key integer value; use instead of --value.",
+              "values": [],
+              "maps_to": "record.value_int"
+            }
+          ],
+          "examples": [
+            "pm postgres row upsert --table customers --key-column id --key-value-int 42 --column status --value active --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Performs a bounded row upsert; it does not expose arbitrary MERGE or INSERT text.",
+          "approval": "Reverse ETL writes require plan -> preview -> approval -> execute.",
+          "notes": ""
+        },
+        {
+          "path": "row delete",
+          "summary": "Delete rows selected by explicit key columns.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_row",
+          "source_cli_path": "psql DELETE",
+          "source_url": "https://www.postgresql.org/docs/current/sql-delete.html",
+          "flags": [
+            {
+              "name": "schema",
+              "type": "string",
+              "summary": "Optional schema override.",
+              "values": [],
+              "maps_to": "record.schema"
+            },
+            {
+              "name": "table",
+              "type": "string",
+              "summary": "Table identifier.",
+              "values": [],
+              "maps_to": "record.table"
+            },
+            {
+              "name": "key-column",
+              "type": "string",
+              "summary": "Key column name.",
+              "values": [],
+              "maps_to": "record.key_column"
+            },
+            {
+              "name": "key-value",
+              "type": "string",
+              "summary": "Key string value.",
+              "values": [],
+              "maps_to": "record.key_string",
+              "allow_empty": true
+            },
+            {
+              "name": "key-value-int",
+              "type": "integer",
+              "summary": "Key integer value; use instead of --key-value.",
+              "values": [],
+              "maps_to": "record.key_int"
+            }
+          ],
+          "examples": [
+            "pm postgres row delete --table customers --key-column id --key-value 42 --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Destructive: deletes rows matching the supplied key values. Missing keys are rejected.",
+          "approval": "Requires destructive approval through plan -> preview -> approval -> execute.",
+          "notes": ""
+        },
+        {
+          "path": "table truncate",
+          "summary": "Truncate one table with typed confirmation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "truncate_table",
+          "source_cli_path": "psql TRUNCATE",
+          "source_url": "https://www.postgresql.org/docs/current/sql-truncate.html",
+          "flags": [
+            {
+              "name": "schema",
+              "type": "string",
+              "summary": "Optional schema override.",
+              "values": [],
+              "maps_to": "record.schema"
+            },
+            {
+              "name": "table",
+              "type": "string",
+              "summary": "Table identifier.",
+              "values": [],
+              "maps_to": "record.table"
+            },
+            {
+              "name": "confirm-phrase",
+              "type": "enum",
+              "summary": "Typed confirmation phrase required by the connector.",
+              "values": [
+                "truncate"
+              ],
+              "maps_to": "record.confirm_phrase"
+            }
+          ],
+          "examples": [
+            "pm postgres table truncate --table staging_customers --confirm-phrase truncate --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Destructive: truncates only the named table. CASCADE and RESTART IDENTITY are not exposed.",
+          "approval": "Requires destructive approval and confirm-phrase truncate through plan -> preview -> approval -> execute.",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "safety",
+          "summary": "PostgreSQL commands intentionally do not expose raw SQL, COPY streams, shell escapes, extension APIs, or arbitrary protocol messages. Use catalog/read for ETL and bounded row/table write actions for reverse ETL."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nPostgreSQL is a Tier-3 native database connector. It discovers schemas/columns from\n`information_schema`, snapshots tables with bounded `SELECT` reads, supports cursor-incremental\nreads on a configured cursor column, and exposes five bounded reverse-ETL row/table actions.\n\nThe connector is intentionally **not** a raw SQL interface. It does not expose arbitrary SQL reads,\narbitrary SQL writes, COPY streams, extension APIs, shell/file escapes, or protocol passthrough.\nCDC remains a documented stub pending the gated `pglogrepl` dependency; fixture decoder tests do\nnot certify live logical replication.\n\n## Auth setup\n\nConnection fields:\n\n- `host` (required, string): bare hostname or IP; URL-shaped values, paths, credentials, and\n  connection-string fragments are rejected.\n- `port` (optional, string): TCP port, defaults to `5432`.\n- `database` (required, string): database name.\n- `username` (required, string): database role.\n- `password` (required, secret, string): database role password; never logged.\n- `sslmode` (optional, enum): `disable`, `allow`, `prefer`, `require`, `verify-ca`, or\n  `verify-full`; defaults to `disable`.\n- `schema` (optional, string): default schema for discovery/read/write actions; defaults to\n  `public`.\n- `cursor_field` (optional, string): column used for incremental reads.\n- `read_limit` (optional, string): maximum rows returned per snapshot `SELECT`; defaults to\n  `10000`. Set `0`, `all`, or `unlimited` to disable the configured bound. A smaller request/CLI\n  limit is applied before this bound.\n- `mode=fixture` (test/conformance only): validates config but short-circuits network access.\n\nSecret fields are redacted in logs and write previews: `password`.\n\n## Streams notes\n\nThe connector discovers catalogs and records directly from the configured service instead of using\nfixed stream declarations. Stream names are runtime `schema.table` identifiers. Reads validate and\nquote schema/table/cursor identifiers and bind cursor values as parameters.\n\n## Write actions & risks\n\nReverse ETL writes follow plan → preview → explicit approval → execute. Preview output includes SQL\ntemplates with placeholders only; bound values are not printed.\n\nDeclared actions:\n\n- `insert_row`: `INSERT INTO <schema>.<table> (<columns...>) VALUES ($1, ...)`.\n- `update_row`: `UPDATE <schema>.<table> SET ... WHERE <key columns...>`; key columns are required.\n- `upsert_row`: bounded single-row `MERGE` using typed source values; conflict keys must also be\n  present in `values` (or provided through the closed CLI shortcut fields).\n- `delete_row`: `DELETE FROM <schema>.<table> WHERE <key columns...>`; destructive confirmation is\n  required by the reverse-ETL plan/approval path.\n- `truncate_table`: `TRUNCATE TABLE ONLY <schema>.<table>`; `confirm_phrase` must equal\n  `truncate`. `CASCADE` and `RESTART IDENTITY` are not exposed.\n\nEvery write record uses a closed schema. Programmatic writes use `schema`, `table`, `values`,\n`keys`, and `confirm_phrase`; CLI convenience flags map to closed shortcut fields such as\n`value_column`, `value_string`, `key_column`, and `key_int`. Column/table/schema identifiers must be\nplain PostgreSQL identifiers, and values must be typed through one of `value_string`, `value_int`,\n`value_float`, `value_bool`, `value_null`, or `value_json`.\n\n## Known limits\n\n- No generic SQL/query/write command is available.\n- No COPY/binary/file transfer surface is available.\n- CDC/changefeed operations are blocked until a separately gated pglogrepl implementation lands.\n- Fixture behavior is not live certification.\n",
     "icon": {
       "id": "postgresql",
       "path": "icons/postgresql.svg",
