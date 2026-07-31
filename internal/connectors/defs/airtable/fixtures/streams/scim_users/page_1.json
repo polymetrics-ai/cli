@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/scim/v2/Users",
+    "query": {
+      "count": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Resources": [
+        {
+          "id": "scim_users_fixture_1",
+          "email": "user.fixture@example.invalid",
+          "name": "Fixture User"
+        }
+      ]
+    }
+  }
+}

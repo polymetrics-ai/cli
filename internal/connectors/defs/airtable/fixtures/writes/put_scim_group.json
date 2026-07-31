@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "schemas": [
+      "urn:ietf:params:scim:schemas:core:2.0:User"
+    ],
+    "displayName": "Fixture Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/scim/v2/Groups/id_fixture",
+    "body": {
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:User"
+      ],
+      "displayName": "Fixture Name"
+    }
+  }
+}

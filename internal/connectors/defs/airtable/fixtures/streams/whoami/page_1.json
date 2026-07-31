@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/whoami"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "whoami_fixture_1",
+      "email": "user.fixture@example.invalid",
+      "scopes": [
+        "data.records:read"
+      ]
+    }
+  }
+}

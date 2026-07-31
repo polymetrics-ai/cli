@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value/shares"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shares": [
+        {
+          "id": "shares_fixture_1",
+          "name": "Fixture Name"
+        }
+      ]
+    }
+  }
+}

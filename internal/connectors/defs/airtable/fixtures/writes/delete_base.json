@@ -1,0 +1,9 @@
+{
+  "record": {
+    "base_id": "base_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v0/meta/bases/base_id_fixture"
+  }
+}
