@@ -1,0 +1,2424 @@
+[
+  {
+    "action": "AddTags",
+    "summary": "Adds one or more tags to a trail, event data store, dashboard, or channel, up to a limit of 50. Overwrites an existing tag's value when a new value is specified for an existing tag key. Tag key names must be unique; you cannot have two keys with the same name but different values. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail or event data store that applies to all AWS Regions only from the Region in which the trail or event data store was created (also known as its home Region).",
+    "request_fields": [
+      {
+        "name": "ResourceId",
+        "aws_type": "String",
+        "required": true
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items.",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "CancelQuery",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+        "required": false
+      },
+      {
+        "name": "QueryId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+"
+      },
+      {
+        "name": "QueryId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$"
+      },
+      {
+        "name": "QueryStatus",
+        "aws_type": "String Valid Values: QUEUED | RUNNING | FINISHED | FAILED | CANCELLED | TIMED_OUT"
+      }
+    ]
+  },
+  {
+    "action": "CreateChannel",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Destinations",
+        "aws_type": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items.",
+        "required": true
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+        "required": true
+      },
+      {
+        "name": "Source",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*",
+        "required": true
+      },
+      {
+        "name": "Tags",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items.",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "ChannelArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items."
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "Source",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*"
+      },
+      {
+        "name": "Tags",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items."
+      }
+    ]
+  },
+  {
+    "action": "CreateDashboard",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9_\\-]+$",
+        "required": true
+      },
+      {
+        "name": "RefreshSchedule",
+        "aws_type": "RefreshSchedule object",
+        "required": false
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items.",
+        "required": false
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "Widgets",
+        "aws_type": "Array of RequestWidget objects",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "DashboardArn",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9_\\-]+$"
+      },
+      {
+        "name": "RefreshSchedule",
+        "aws_type": "RefreshSchedule object"
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items."
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Type",
+        "aws_type": "String Valid Values: MANAGED | CUSTOM"
+      },
+      {
+        "name": "Widgets",
+        "aws_type": "Array of Widget objects"
+      }
+    ]
+  },
+  {
+    "action": "CreateEventDataStore",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects",
+        "required": false
+      },
+      {
+        "name": "BillingMode",
+        "aws_type": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING",
+        "required": false
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+        "required": true
+      },
+      {
+        "name": "OrganizationEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "RetentionPeriod",
+        "aws_type": "Integer Valid Range: Minimum value of 7. Maximum value of 3653.",
+        "required": false
+      },
+      {
+        "name": "StartIngestion",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items.",
+        "required": false
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects"
+      },
+      {
+        "name": "BillingMode",
+        "aws_type": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING"
+      },
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "OrganizationEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "RetentionPeriod",
+        "aws_type": "Integer Valid Range: Minimum value of 7. Maximum value of 3653."
+      },
+      {
+        "name": "Status",
+        "aws_type": "String Valid Values: CREATED | ENABLED | PENDING_DELETION | STARTING_INGESTION | STOPPING_INGESTION | STOPPED_INGESTION"
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items."
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "CreateTrail",
+    "summary": "Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket.",
+    "request_fields": [
+      {
+        "name": "CloudWatchLogsLogGroupArn",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "CloudWatchLogsRoleArn",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "EnableLogFileValidation",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "IncludeGlobalServiceEvents",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "IsMultiRegionTrail",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "IsOrganizationTrail",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      },
+      {
+        "name": "S3BucketName",
+        "aws_type": "String",
+        "required": true
+      },
+      {
+        "name": "S3KeyPrefix",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "SnsTopicName",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items.",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CloudWatchLogsLogGroupArn",
+        "aws_type": "String"
+      },
+      {
+        "name": "CloudWatchLogsRoleArn",
+        "aws_type": "String"
+      },
+      {
+        "name": "IncludeGlobalServiceEvents",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "IsMultiRegionTrail",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "IsOrganizationTrail",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String"
+      },
+      {
+        "name": "LogFileValidationEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String"
+      },
+      {
+        "name": "S3BucketName",
+        "aws_type": "String"
+      },
+      {
+        "name": "S3KeyPrefix",
+        "aws_type": "String"
+      },
+      {
+        "name": "SnsTopicARN",
+        "aws_type": "String"
+      },
+      {
+        "name": "SnsTopicName",
+        "aws_type": "String"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "DeleteChannel",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Channel",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "DeleteDashboard",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "DashboardId",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "DeleteEventDataStore",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "DeleteResourcePolicy",
+    "summary": "Deletes the resource-based policy attached to the CloudTrail event data store, dashboard, or channel.",
+    "request_fields": [
+      {
+        "name": "ResourceArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "DeleteTrail",
+    "summary": "Deletes a trail. This operation must be called from the Region in which the trail was created. DeleteTrail cannot be called on the shadow trails (replicated trails in other Regions) of a trail that is enabled in all Regions.",
+    "request_fields": [
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "DeregisterOrganizationDelegatedAdmin",
+    "summary": "Removes CloudTrail delegated administrator permissions from a member account in an organization.",
+    "request_fields": [
+      {
+        "name": "DelegatedAdminAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "DescribeQuery",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+        "required": false
+      },
+      {
+        "name": "QueryAlias",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: ^[a-zA-Z][a-zA-Z0-9._\\-]*$",
+        "required": false
+      },
+      {
+        "name": "QueryId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": false
+      },
+      {
+        "name": "RefreshId",
+        "aws_type": "String Length Constraints: Minimum length of 10. Maximum length of 20. Pattern: \\d+",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "DeliveryS3Uri",
+        "aws_type": "String Length Constraints: Maximum length of 1024. Pattern: s3://[a-z0-9][\\.\\-a-z0-9] { 1,61}[a-z0-9](/.*)?"
+      },
+      {
+        "name": "DeliveryStatus",
+        "aws_type": "String Valid Values: SUCCESS | FAILED | FAILED_SIGNING_FILE | PENDING | RESOURCE_NOT_FOUND | ACCESS_DENIED | ACCESS_DENIED_SIGNING_FILE | CANCELLED | UNKNOWN"
+      },
+      {
+        "name": "ErrorMessage",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      },
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+"
+      },
+      {
+        "name": "Prompt",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 500. Pattern: ^[ -~\\n]*$"
+      },
+      {
+        "name": "QueryId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$"
+      },
+      {
+        "name": "QueryStatistics",
+        "aws_type": "QueryStatisticsForDescribeQuery object"
+      },
+      {
+        "name": "QueryStatus",
+        "aws_type": "String Valid Values: QUEUED | RUNNING | FINISHED | FAILED | CANCELLED | TIMED_OUT"
+      },
+      {
+        "name": "QueryString",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 10000. Pattern: (?s).*"
+      }
+    ]
+  },
+  {
+    "action": "DescribeTrails",
+    "summary": "Retrieves settings for one or more trails associated with the current Region for your account.",
+    "request_fields": [
+      {
+        "name": "includeShadowTrails",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "trailNameList",
+        "aws_type": "Array of strings",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "trailList",
+        "aws_type": "Array of Trail objects"
+      }
+    ]
+  },
+  {
+    "action": "DisableFederation",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "FederationStatus",
+        "aws_type": "String Valid Values: ENABLING | ENABLED | DISABLING | DISABLED"
+      }
+    ]
+  },
+  {
+    "action": "EnableFederation",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "FederationRoleArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 125. Pattern: ^[a-zA-Z0-9._/\\-:@=\\+,\\.]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "FederationRoleArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 125. Pattern: ^[a-zA-Z0-9._/\\-:@=\\+,\\.]+$"
+      },
+      {
+        "name": "FederationStatus",
+        "aws_type": "String Valid Values: ENABLING | ENABLED | DISABLING | DISABLED"
+      }
+    ]
+  },
+  {
+    "action": "GenerateQuery",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStores",
+        "aws_type": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "Prompt",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 500. Pattern: ^[ -~\\n]*$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+"
+      },
+      {
+        "name": "QueryAlias",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: ^[a-zA-Z][a-zA-Z0-9._\\-]*$"
+      },
+      {
+        "name": "QueryStatement",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 10000. Pattern: (?s).*"
+      }
+    ]
+  },
+  {
+    "action": "GetChannel",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Channel",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "ChannelArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items."
+      },
+      {
+        "name": "IngestionStatus",
+        "aws_type": "IngestionStatus object"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "Source",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*"
+      },
+      {
+        "name": "SourceConfig",
+        "aws_type": "SourceConfig object"
+      }
+    ]
+  },
+  {
+    "action": "GetDashboard",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "DashboardId",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "DashboardArn",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "LastRefreshFailureReason",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      },
+      {
+        "name": "LastRefreshId",
+        "aws_type": "String Length Constraints: Minimum length of 10. Maximum length of 20. Pattern: \\d+"
+      },
+      {
+        "name": "RefreshSchedule",
+        "aws_type": "RefreshSchedule object"
+      },
+      {
+        "name": "Status",
+        "aws_type": "String Valid Values: CREATING | CREATED | UPDATING | UPDATED | DELETING"
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Type",
+        "aws_type": "String Valid Values: MANAGED | CUSTOM"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "Widgets",
+        "aws_type": "Array of Widget objects"
+      }
+    ]
+  },
+  {
+    "action": "GetEventConfiguration",
+    "summary": "Retrieves the current event configuration settings for the specified event data store or trail. The response includes maximum event size configuration, the context key selectors configured for the event data store, and any aggregation settings configured for the trail.",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AggregationConfigurations",
+        "aws_type": "Array of AggregationConfiguration objects Array Members: Maximum number of 1 item."
+      },
+      {
+        "name": "ContextKeySelectors",
+        "aws_type": "Array of ContextKeySelector objects Array Members: Maximum number of 2 items."
+      },
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "MaxEventSize",
+        "aws_type": "String Valid Values: Standard | Large"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "GetEventDataStore",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects"
+      },
+      {
+        "name": "BillingMode",
+        "aws_type": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING"
+      },
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "FederationRoleArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 125. Pattern: ^[a-zA-Z0-9._/\\-:@=\\+,\\.]+$"
+      },
+      {
+        "name": "FederationStatus",
+        "aws_type": "String Valid Values: ENABLING | ENABLED | DISABLING | DISABLED"
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "OrganizationEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "PartitionKeys",
+        "aws_type": "Array of PartitionKey objects Array Members: Maximum number of 2 items."
+      },
+      {
+        "name": "RetentionPeriod",
+        "aws_type": "Integer Valid Range: Minimum value of 7. Maximum value of 3653."
+      },
+      {
+        "name": "Status",
+        "aws_type": "String Valid Values: CREATED | ENABLED | PENDING_DELETION | STARTING_INGESTION | STOPPING_INGESTION | STOPPED_INGESTION"
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "GetEventSelectors",
+    "summary": "Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:",
+    "request_fields": [
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects"
+      },
+      {
+        "name": "EventSelectors",
+        "aws_type": "Array of EventSelector objects"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "GetImport",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "EndEventTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$"
+      },
+      {
+        "name": "ImportSource",
+        "aws_type": "ImportSource object"
+      },
+      {
+        "name": "ImportStatistics",
+        "aws_type": "ImportStatistics object"
+      },
+      {
+        "name": "ImportStatus",
+        "aws_type": "String Valid Values: INITIALIZING | IN_PROGRESS | FAILED | STOPPED | COMPLETED"
+      },
+      {
+        "name": "StartEventTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "GetInsightSelectors",
+    "summary": "Describes the settings for the Insights event selectors that you configured for your trail or event data store. GetInsightSelectors shows if CloudTrail Insights logging is enabled and which Insights types are configured with corresponding event categories. If you run GetInsightSelectors on a trail or event data store that does not have Insights events enabled, the operation throws the exception InsightNotEnabledException",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "InsightsDestination",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "InsightSelectors",
+        "aws_type": "Array of InsightSelector objects"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "GetQueryResults",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+        "required": false
+      },
+      {
+        "name": "MaxQueryResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      },
+      {
+        "name": "QueryId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "ErrorMessage",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      },
+      {
+        "name": "QueryResultRows",
+        "aws_type": "Array of arrays of string to string maps"
+      },
+      {
+        "name": "QueryStatistics",
+        "aws_type": "QueryStatistics object"
+      },
+      {
+        "name": "QueryStatus",
+        "aws_type": "String Valid Values: QUEUED | RUNNING | FINISHED | FAILED | CANCELLED | TIMED_OUT"
+      }
+    ]
+  },
+  {
+    "action": "GetResourcePolicy",
+    "summary": "Retrieves the JSON text of the resource-based policy document attached to the CloudTrail event data store, dashboard, or channel.",
+    "request_fields": [
+      {
+        "name": "ResourceArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "DelegatedAdminResourcePolicy",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 8192."
+      },
+      {
+        "name": "ResourceArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "ResourcePolicy",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 8192."
+      }
+    ]
+  },
+  {
+    "action": "GetTrail",
+    "summary": "Returns settings information for a specified trail.",
+    "request_fields": [
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Trail",
+        "aws_type": "Trail object"
+      }
+    ]
+  },
+  {
+    "action": "GetTrailStatus",
+    "summary": "Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single Region. To return trail status from all Regions, you must call the operation on each Region.",
+    "request_fields": [
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "IsLogging",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "LatestCloudWatchLogsDeliveryError",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestCloudWatchLogsDeliveryTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "LatestDeliveryAttemptSucceeded",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestDeliveryAttemptTime",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestDeliveryError",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestDeliveryTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "LatestDigestDeliveryError",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestDigestDeliveryTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "LatestNotificationAttemptSucceeded",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestNotificationAttemptTime",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestNotificationError",
+        "aws_type": "String"
+      },
+      {
+        "name": "LatestNotificationTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "StartLoggingTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "StopLoggingTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "TimeLoggingStarted",
+        "aws_type": "String"
+      },
+      {
+        "name": "TimeLoggingStopped",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "ListChannels",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Channels",
+        "aws_type": "Array of Channel objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "ListDashboards",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NamePrefix",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9_\\-]+$",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      },
+      {
+        "name": "Type",
+        "aws_type": "String Valid Values: MANAGED | CUSTOM",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Dashboards",
+        "aws_type": "Array of DashboardDetail objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "ListEventDataStores",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStores",
+        "aws_type": "Array of EventDataStore objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "ListImportFailures",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": true
+      },
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Failures",
+        "aws_type": "Array of ImportFailureListItem objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "ListImports",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Destination",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "ImportStatus",
+        "aws_type": "String Valid Values: INITIALIZING | IN_PROGRESS | FAILED | STOPPED | COMPLETED",
+        "required": false
+      },
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Imports",
+        "aws_type": "Array of ImportsListItem objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "ListInsightsData",
+    "summary": "Returns Insights events generated on a trail that logs data events. You can list Insights events that occurred in a Region within the last 90 days.",
+    "request_fields": [
+      {
+        "name": "DataType",
+        "aws_type": "String Valid Values: InsightsEvents",
+        "required": true
+      },
+      {
+        "name": "Dimensions",
+        "aws_type": "String to string map Map Entries: Maximum number of 1 item. Valid Keys: EventId | EventName | EventSource Value Length Constraints: Minimum length of 1. Maximum length of 2000.",
+        "required": false
+      },
+      {
+        "name": "EndTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "InsightSource",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      },
+      {
+        "name": "StartTime",
+        "aws_type": "Timestamp",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Events",
+        "aws_type": "Array of Event objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "ListInsightsMetricData",
+    "summary": "Returns Insights metrics data for trails that have enabled Insights. The request must include the EventSource , EventName , and InsightType parameters.",
+    "request_fields": [
+      {
+        "name": "DataType",
+        "aws_type": "String Valid Values: FillWithZeros | NonZeroData",
+        "required": false
+      },
+      {
+        "name": "EndTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "ErrorCode",
+        "aws_type": "String Length Constraints: Maximum length of 128. Pattern: ^[\\w\\d\\s_.,\\-:\\[\\]]+$",
+        "required": false
+      },
+      {
+        "name": "EventName",
+        "aws_type": "String Length Constraints: Maximum length of 128. Pattern: ^[A-Za-z0-9_]+$",
+        "required": true
+      },
+      {
+        "name": "EventSource",
+        "aws_type": "String Length Constraints: Maximum length of 256. Pattern: ^[a-z0-9_-]+\\.amazonaws\\.com$",
+        "required": true
+      },
+      {
+        "name": "InsightType",
+        "aws_type": "String Valid Values: ApiCallRateInsight | ApiErrorRateInsight",
+        "required": true
+      },
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 21600.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 5000.",
+        "required": false
+      },
+      {
+        "name": "Period",
+        "aws_type": "Integer Valid Range: Minimum value of 60. Maximum value of 3600.",
+        "required": false
+      },
+      {
+        "name": "StartTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "ErrorCode",
+        "aws_type": "String Length Constraints: Maximum length of 128. Pattern: ^[\\w\\d\\s_.,\\-:\\[\\]]+$"
+      },
+      {
+        "name": "EventName",
+        "aws_type": "String Length Constraints: Maximum length of 128. Pattern: ^[A-Za-z0-9_]+$"
+      },
+      {
+        "name": "EventSource",
+        "aws_type": "String Length Constraints: Maximum length of 256. Pattern: ^[a-z0-9_-]+\\.amazonaws\\.com$"
+      },
+      {
+        "name": "InsightType",
+        "aws_type": "String Valid Values: ApiCallRateInsight | ApiErrorRateInsight"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 5000."
+      },
+      {
+        "name": "Timestamps",
+        "aws_type": "Array of timestamps"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      },
+      {
+        "name": "Values",
+        "aws_type": "Array of doubles"
+      }
+    ]
+  },
+  {
+    "action": "ListPublicKeys",
+    "summary": "Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.",
+    "request_fields": [
+      {
+        "name": "EndTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "StartTime",
+        "aws_type": "Timestamp",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String"
+      },
+      {
+        "name": "PublicKeyList",
+        "aws_type": "Array of PublicKey objects"
+      }
+    ]
+  },
+  {
+    "action": "ListQueries",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EndTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      },
+      {
+        "name": "QueryStatus",
+        "aws_type": "String Valid Values: QUEUED | RUNNING | FINISHED | FAILED | CANCELLED | TIMED_OUT",
+        "required": false
+      },
+      {
+        "name": "StartTime",
+        "aws_type": "Timestamp",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      },
+      {
+        "name": "Queries",
+        "aws_type": "Array of Query objects"
+      }
+    ]
+  },
+  {
+    "action": "ListTags",
+    "summary": "Lists the tags for the specified trails, event data stores, dashboards, or channels in the current Region.",
+    "request_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "ResourceIdList",
+        "aws_type": "Array of strings",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String"
+      },
+      {
+        "name": "ResourceTagList",
+        "aws_type": "Array of ResourceTag objects"
+      }
+    ]
+  },
+  {
+    "action": "ListTrails",
+    "summary": "Lists trails that are in the current account.",
+    "request_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String"
+      },
+      {
+        "name": "Trails",
+        "aws_type": "Array of TrailInfo objects"
+      }
+    ]
+  },
+  {
+    "action": "LookupEvents",
+    "summary": "Looks up management events or CloudTrail Insights events that are captured by CloudTrail. You can look up events that occurred in a Region within the last 90 days.",
+    "request_fields": [
+      {
+        "name": "EndTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "EventCategory",
+        "aws_type": "String Valid Values: insight",
+        "required": false
+      },
+      {
+        "name": "LookupAttributes",
+        "aws_type": "Array of LookupAttribute objects",
+        "required": false
+      },
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "StartTime",
+        "aws_type": "Timestamp",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "Events",
+        "aws_type": "Array of Event objects"
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "PutEventConfiguration",
+    "summary": "Updates the event configuration settings for the specified event data store or trail. This operation supports updating the maximum event size, adding or modifying context key selectors for event data store, and configuring aggregation settings for the trail.",
+    "request_fields": [
+      {
+        "name": "AggregationConfigurations",
+        "aws_type": "Array of AggregationConfiguration objects Array Members: Maximum number of 1 item.",
+        "required": false
+      },
+      {
+        "name": "ContextKeySelectors",
+        "aws_type": "Array of ContextKeySelector objects Array Members: Maximum number of 2 items.",
+        "required": false
+      },
+      {
+        "name": "EventDataStore",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "MaxEventSize",
+        "aws_type": "String Valid Values: Standard | Large",
+        "required": false
+      },
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AggregationConfigurations",
+        "aws_type": "Array of AggregationConfiguration objects Array Members: Maximum number of 1 item."
+      },
+      {
+        "name": "ContextKeySelectors",
+        "aws_type": "Array of ContextKeySelector objects Array Members: Maximum number of 2 items."
+      },
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "MaxEventSize",
+        "aws_type": "String Valid Values: Standard | Large"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "PutEventSelectors",
+    "summary": "Configures event selectors (also referred to as basic event selectors ) or advanced event selectors for your trail. You can use either AdvancedEventSelectors or EventSelectors , but not both. If you apply AdvancedEventSelectors to a trail, any existing EventSelectors are overwritten.",
+    "request_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects",
+        "required": false
+      },
+      {
+        "name": "EventSelectors",
+        "aws_type": "Array of EventSelector objects",
+        "required": false
+      },
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects"
+      },
+      {
+        "name": "EventSelectors",
+        "aws_type": "Array of EventSelector objects"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "PutInsightSelectors",
+    "summary": "Lets you enable Insights event logging on specific event categories by specifying the Insights selectors that you want to enable on an existing trail or event data store. You also use PutInsightSelectors to turn off Insights event logging, by passing an empty list of Insights types. The valid Insights event types are ApiErrorRateInsight and ApiCallRateInsight , and valid EventCategories are Management and Data .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "InsightsDestination",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "InsightSelectors",
+        "aws_type": "Array of InsightSelector objects",
+        "required": true
+      },
+      {
+        "name": "TrailName",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "InsightsDestination",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "InsightSelectors",
+        "aws_type": "Array of InsightSelector objects"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  },
+  {
+    "action": "PutResourcePolicy",
+    "summary": "Attaches a resource-based permission policy to a CloudTrail event data store, dashboard, or channel. For more information about resource-based policies, see CloudTrail resource-based policy examples in the CloudTrail User Guide .",
+    "request_fields": [
+      {
+        "name": "ResourceArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "ResourcePolicy",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 8192.",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "DelegatedAdminResourcePolicy",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 8192."
+      },
+      {
+        "name": "ResourceArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "ResourcePolicy",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 8192."
+      }
+    ]
+  },
+  {
+    "action": "RegisterOrganizationDelegatedAdmin",
+    "summary": "Registers an organization\u2019s member account as the CloudTrail delegated administrator .",
+    "request_fields": [
+      {
+        "name": "MemberAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "RemoveTags",
+    "summary": "Removes the specified tags from a trail, event data store, dashboard, or channel.",
+    "request_fields": [
+      {
+        "name": "ResourceId",
+        "aws_type": "String",
+        "required": true
+      },
+      {
+        "name": "TagsList",
+        "aws_type": "Array of Tag objects Array Members: Maximum number of 200 items.",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "RestoreEventDataStore",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects"
+      },
+      {
+        "name": "BillingMode",
+        "aws_type": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING"
+      },
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "OrganizationEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "RetentionPeriod",
+        "aws_type": "Integer Valid Range: Minimum value of 7. Maximum value of 3653."
+      },
+      {
+        "name": "Status",
+        "aws_type": "String Valid Values: CREATED | ENABLED | PENDING_DELETION | STARTING_INGESTION | STOPPING_INGESTION | STOPPED_INGESTION"
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "SearchSampleQueries",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "MaxResults",
+        "aws_type": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
+        "required": false
+      },
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+        "required": false
+      },
+      {
+        "name": "SearchPhrase",
+        "aws_type": "String Length Constraints: Minimum length of 2. Maximum length of 1000. Pattern: ^[ -~\\n]*$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "NextToken",
+        "aws_type": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*"
+      },
+      {
+        "name": "SearchResults",
+        "aws_type": "Array of SearchSampleQueriesSearchResult objects"
+      }
+    ]
+  },
+  {
+    "action": "StartDashboardRefresh",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "DashboardId",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "QueryParameterValues",
+        "aws_type": "String to string map Key Length Constraints: Minimum length of 3. Maximum length of 128. Key Pattern: ^[a-zA-Z0-9._/\\-:$]+$ Value Length Constraints: Minimum length of 1. Maximum length of 128. Value Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "RefreshId",
+        "aws_type": "String Length Constraints: Minimum length of 10. Maximum length of 20. Pattern: \\d+"
+      }
+    ]
+  },
+  {
+    "action": "StartEventDataStoreIngestion",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "StartImport",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Destinations",
+        "aws_type": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "EndEventTime",
+        "aws_type": "Timestamp",
+        "required": false
+      },
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": false
+      },
+      {
+        "name": "ImportSource",
+        "aws_type": "ImportSource object",
+        "required": false
+      },
+      {
+        "name": "StartEventTime",
+        "aws_type": "Timestamp",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "EndEventTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$"
+      },
+      {
+        "name": "ImportSource",
+        "aws_type": "ImportSource object"
+      },
+      {
+        "name": "ImportStatus",
+        "aws_type": "String Valid Values: INITIALIZING | IN_PROGRESS | FAILED | STOPPED | COMPLETED"
+      },
+      {
+        "name": "StartEventTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "StartLogging",
+    "summary": "Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all Regions, this operation must be called from the Region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other Regions) of a trail that is enabled in all Regions.",
+    "request_fields": [
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "StartQuery",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "DeliveryS3Uri",
+        "aws_type": "String Length Constraints: Maximum length of 1024. Pattern: s3://[a-z0-9][\\.\\-a-z0-9] { 1,61}[a-z0-9](/.*)?",
+        "required": false
+      },
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+        "required": false
+      },
+      {
+        "name": "QueryAlias",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: ^[a-zA-Z][a-zA-Z0-9._\\-]*$",
+        "required": false
+      },
+      {
+        "name": "QueryParameters",
+        "aws_type": "Array of strings Array Members: Minimum number of 1 item. Maximum number of 10 items. Length Constraints: Minimum length of 1. Maximum length of 1024. Pattern: .*",
+        "required": false
+      },
+      {
+        "name": "QueryStatement",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 10000. Pattern: (?s).*",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "EventDataStoreOwnerAccountId",
+        "aws_type": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+"
+      },
+      {
+        "name": "QueryId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$"
+      }
+    ]
+  },
+  {
+    "action": "StopEventDataStoreIngestion",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "StopImport",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+        "required": true
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "EndEventTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "ImportId",
+        "aws_type": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$"
+      },
+      {
+        "name": "ImportSource",
+        "aws_type": "ImportSource object"
+      },
+      {
+        "name": "ImportStatistics",
+        "aws_type": "ImportStatistics object"
+      },
+      {
+        "name": "ImportStatus",
+        "aws_type": "String Valid Values: INITIALIZING | IN_PROGRESS | FAILED | STOPPED | COMPLETED"
+      },
+      {
+        "name": "StartEventTime",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "StopLogging",
+    "summary": "Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all Regions, this operation must be called from the Region in which the trail was created, or an InvalidHomeRegionException will occur. This operation cannot be called on the shadow trails (replicated trails in other Regions) of a trail enabled in all Regions.",
+    "request_fields": [
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      }
+    ],
+    "response_fields": []
+  },
+  {
+    "action": "UpdateChannel",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "Channel",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items.",
+        "required": false
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "ChannelArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "Destinations",
+        "aws_type": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items."
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "Source",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*"
+      }
+    ]
+  },
+  {
+    "action": "UpdateDashboard",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "DashboardId",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "RefreshSchedule",
+        "aws_type": "RefreshSchedule object",
+        "required": false
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "Widgets",
+        "aws_type": "Array of RequestWidget objects",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "DashboardArn",
+        "aws_type": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9_\\-]+$"
+      },
+      {
+        "name": "RefreshSchedule",
+        "aws_type": "RefreshSchedule object"
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Type",
+        "aws_type": "String Valid Values: MANAGED | CUSTOM"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "Widgets",
+        "aws_type": "Array of Widget objects"
+      }
+    ]
+  },
+  {
+    "action": "UpdateEventDataStore",
+    "summary": "CloudTrail Lake will no longer be open to new customers starting May 31, 2026. If you would like to use CloudTrail Lake, sign up prior to that date. Existing customers can continue to use the service as normal. For more information, see CloudTrail Lake availability change .",
+    "request_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects",
+        "required": false
+      },
+      {
+        "name": "BillingMode",
+        "aws_type": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING",
+        "required": false
+      },
+      {
+        "name": "EventDataStore",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": true
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+        "required": false
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+        "required": false
+      },
+      {
+        "name": "OrganizationEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "RetentionPeriod",
+        "aws_type": "Integer Valid Range: Minimum value of 7. Maximum value of 3653.",
+        "required": false
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "AdvancedEventSelectors",
+        "aws_type": "Array of AdvancedEventSelector objects"
+      },
+      {
+        "name": "BillingMode",
+        "aws_type": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING"
+      },
+      {
+        "name": "CreatedTimestamp",
+        "aws_type": "Timestamp"
+      },
+      {
+        "name": "EventDataStoreArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "FederationRoleArn",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 125. Pattern: ^[a-zA-Z0-9._/\\-:@=\\+,\\.]+$"
+      },
+      {
+        "name": "FederationStatus",
+        "aws_type": "String Valid Values: ENABLING | ENABLED | DISABLING | DISABLED"
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$"
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$"
+      },
+      {
+        "name": "OrganizationEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "RetentionPeriod",
+        "aws_type": "Integer Valid Range: Minimum value of 7. Maximum value of 3653."
+      },
+      {
+        "name": "Status",
+        "aws_type": "String Valid Values: CREATED | ENABLED | PENDING_DELETION | STARTING_INGESTION | STOPPING_INGESTION | STOPPED_INGESTION"
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "aws_type": "Timestamp"
+      }
+    ]
+  },
+  {
+    "action": "UpdateTrail",
+    "summary": "Updates trail settings that control what events you are logging, and how to handle log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. UpdateTrail must be called from the Region in which the trail was created; otherwise, an InvalidHomeRegionException is thrown.",
+    "request_fields": [
+      {
+        "name": "CloudWatchLogsLogGroupArn",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "CloudWatchLogsRoleArn",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "EnableLogFileValidation",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "IncludeGlobalServiceEvents",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "IsMultiRegionTrail",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "IsOrganizationTrail",
+        "aws_type": "Boolean",
+        "required": false
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "Name",
+        "aws_type": "String",
+        "required": true
+      },
+      {
+        "name": "S3BucketName",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "S3KeyPrefix",
+        "aws_type": "String",
+        "required": false
+      },
+      {
+        "name": "SnsTopicName",
+        "aws_type": "String",
+        "required": false
+      }
+    ],
+    "response_fields": [
+      {
+        "name": "CloudWatchLogsLogGroupArn",
+        "aws_type": "String"
+      },
+      {
+        "name": "CloudWatchLogsRoleArn",
+        "aws_type": "String"
+      },
+      {
+        "name": "IncludeGlobalServiceEvents",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "IsMultiRegionTrail",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "IsOrganizationTrail",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "KmsKeyId",
+        "aws_type": "String"
+      },
+      {
+        "name": "LogFileValidationEnabled",
+        "aws_type": "Boolean"
+      },
+      {
+        "name": "Name",
+        "aws_type": "String"
+      },
+      {
+        "name": "S3BucketName",
+        "aws_type": "String"
+      },
+      {
+        "name": "S3KeyPrefix",
+        "aws_type": "String"
+      },
+      {
+        "name": "SnsTopicARN",
+        "aws_type": "String"
+      },
+      {
+        "name": "SnsTopicName",
+        "aws_type": "String"
+      },
+      {
+        "name": "TrailARN",
+        "aws_type": "String"
+      }
+    ]
+  }
+]

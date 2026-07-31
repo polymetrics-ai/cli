@@ -1,0 +1,17 @@
+{
+  "operation": "aws-cloudtrail.lookup_events",
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "EndTime": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "operation": "LookupEvents",
+      "pm_record_id": "lookup_events_fixture_1"
+    }
+  }
+}

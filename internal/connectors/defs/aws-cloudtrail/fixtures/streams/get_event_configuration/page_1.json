@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pm_record_id": "get_event_configuration_fixture_1",
+      "operation": "GetEventConfiguration",
+      "AggregationConfigurations": [
+        {
+          "Name": "fixture"
+        }
+      ],
+      "ContextKeySelectors": [
+        {
+          "Name": "fixture"
+        }
+      ],
+      "EventDataStoreArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+      "MaxEventSize": "fixture-max-event-size",
+      "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"
+    }
+  }
+}

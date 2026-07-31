@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pm_record_id": "get_event_selectors_fixture_1",
+      "operation": "GetEventSelectors",
+      "AdvancedEventSelectors": [
+        {
+          "Name": "fixture"
+        }
+      ],
+      "EventSelectors": [
+        {
+          "Name": "fixture"
+        }
+      ],
+      "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"
+    }
+  },
+  "read_query": {
+    "TrailName": "trail-fixture"
+  }
+}

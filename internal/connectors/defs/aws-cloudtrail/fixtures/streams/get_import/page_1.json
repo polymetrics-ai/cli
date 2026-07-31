@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pm_record_id": "get_import_fixture_1",
+      "operation": "GetImport",
+      "CreatedTimestamp": "2026-01-01T00:00:00Z",
+      "Destinations": [
+        "fixture-destinations"
+      ],
+      "EndEventTime": "2026-01-01T00:00:00Z",
+      "ImportId": "22222222-2222-2222-2222-222222222222",
+      "ImportSource": {
+        "Name": "fixture"
+      },
+      "ImportStatistics": {
+        "Name": "fixture"
+      },
+      "ImportStatus": "fixture-import-status",
+      "StartEventTime": "2026-01-01T00:00:00Z",
+      "UpdatedTimestamp": "2026-01-01T00:00:00Z"
+    }
+  },
+  "read_query": {
+    "ImportId": "22222222-2222-2222-2222-222222222222"
+  }
+}

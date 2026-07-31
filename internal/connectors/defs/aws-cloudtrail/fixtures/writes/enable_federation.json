@@ -1,0 +1,18 @@
+{
+  "record": {
+    "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+    "FederationRoleArn": "arn:aws:iam::123456789012:role/fixture-cloudtrail-federation"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+      "FederationRoleArn": "arn:aws:iam::123456789012:role/fixture-cloudtrail-federation"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

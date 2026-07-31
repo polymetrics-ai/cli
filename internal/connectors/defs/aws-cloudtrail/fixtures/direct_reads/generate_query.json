@@ -1,0 +1,20 @@
+{
+  "operation": "aws-cloudtrail.generate_query",
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "EventDataStores": [
+        "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+      ],
+      "Prompt": "show console logins"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "operation": "GenerateQuery",
+      "pm_record_id": "generate_query_fixture_1"
+    }
+  }
+}

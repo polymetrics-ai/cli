@@ -1,0 +1,24 @@
+{
+  "record": {
+    "AggregationConfigurations": [
+      {
+        "Name": "fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "AggregationConfigurations": [
+        {
+          "Name": "fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

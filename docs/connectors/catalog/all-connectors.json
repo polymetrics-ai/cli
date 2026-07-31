@@ -9779,15 +9779,15 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads AWS CloudTrail configuration and event metadata, runs bounded CloudTrail query/lookups, and executes typed approval-gated CloudTrail administration actions through fixed AWS JSON-RPC operations.",
     "integration_type": "api",
-    "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+    "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -9803,97 +9803,488 @@
         "aws_key_id": {
           "type": "string",
           "x-secret": true,
-          "description": "manual intervention needed"
+          "description": "AWS access key ID. Provide with --from-env or stdin; never paste the value into chat or logs."
         },
         "aws_region_name": {
           "type": "string",
-          "description": "The default AWS Region to use, for example, us-west-1 or us-west-2. When specifying a Region inline during client initialization, this property is named region_name."
+          "description": "AWS region for CloudTrail, for example us-east-1."
         },
         "aws_secret_key": {
           "type": "string",
           "x-secret": true,
-          "description": "manual intervention needed"
-        },
-        "lookup_attributes_filter": {
-          "type": "string"
-        },
-        "start_date": {
-          "type": "string",
-          "description": "The date you would like to replicate data. Data in AWS CloudTrail is available for last 90 days only. Format: YYYY-MM-DD."
+          "description": "AWS secret access key. Provide with --from-env or stdin; never paste the value into chat or logs."
         },
         "base_url": {
           "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+          "description": "Optional CloudTrail endpoint override for fixture/local testing. Production defaults to https://cloudtrail.\u003cregion\u003e.amazonaws.com."
+        },
+        "page_size": {
+          "type": "string",
+          "description": "Optional bounded MaxResults value for paginated read/query actions."
+        },
+        "max_pages": {
+          "type": "string",
+          "description": "Optional maximum page count for paginated read/query actions; use a positive integer."
+        },
+        "start_date": {
+          "type": "string",
+          "description": "Optional lower bound for LookupEvents-style reads; YYYY-MM-DD or RFC3339."
         },
         "mode": {
           "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "description": "Set to fixture for credential-free native fixture tests."
         }
       }
     },
     "streams": [
       {
-        "name": "management_events",
+        "name": "describe_trails",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
-        "name": "read_only_events",
+        "name": "get_channel",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
-        "name": "write_only_events",
+        "name": "get_dashboard",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
-        "name": "console_logins",
+        "name": "get_event_configuration",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_event_data_store",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_event_selectors",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_import",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_insight_selectors",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_resource_policy",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_trail",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_trail_status",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_channels",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_dashboards",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_event_data_stores",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_import_failures",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_imports",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_public_keys",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_tags",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_trails",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "add_tags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail AddTags through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "create_channel",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail CreateChannel through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "create_dashboard",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail CreateDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "create_event_data_store",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail CreateEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "create_trail",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail CreateTrail through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "delete_channel",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DeleteChannel through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_dashboard",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DeleteDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_event_data_store",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DeleteEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_resource_policy",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DeleteResourcePolicy through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_trail",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DeleteTrail through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deregister_organization_delegated_admin",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DeregisterOrganizationDelegatedAdmin through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "disable_federation",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail DisableFederation through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enable_federation",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail EnableFederation through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "put_event_configuration",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail PutEventConfiguration through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "put_event_selectors",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail PutEventSelectors through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "put_insight_selectors",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail PutInsightSelectors through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "put_resource_policy",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail PutResourcePolicy through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "register_organization_delegated_admin",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail RegisterOrganizationDelegatedAdmin through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_tags",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail RemoveTags through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_event_data_store",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail RestoreEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "start_dashboard_refresh",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StartDashboardRefresh through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "start_event_data_store_ingestion",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StartEventDataStoreIngestion through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "start_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StartImport through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "start_logging",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StartLogging through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "stop_event_data_store_ingestion",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StopEventDataStoreIngestion through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "stop_import",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StopImport through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "stop_logging",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail StopLogging through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_channel",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail UpdateChannel through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "update_dashboard",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail UpdateDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "update_event_data_store",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail UpdateEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      },
+      {
+        "name": "update_trail",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "Executes AWS CloudTrail UpdateTrail through a fixed typed JSON-RPC action; no raw action or path is accepted."
+      }
+    ],
     "risk": {
-      "read": "external AWS CloudTrail API reads performed by the legacy connector via a Tier-2 hook",
-      "write": "unsupported",
-      "approval": "none; read-only"
+      "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names and SigV4 authentication",
+      "write": "typed CloudTrail trail, channel, dashboard, event-data-store, import, logging, federation, selector, tagging, and resource-policy actions only",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation where declared"
     },
     "icon": {
       "id": "aws-cloudtrail",

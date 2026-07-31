@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Failures": [
+        {
+          "pm_record_id": "list_import_failures_fixture_1",
+          "operation": "ListImportFailures",
+          "NextToken": "fixture-next-token"
+        }
+      ]
+    }
+  },
+  "read_query": {
+    "ImportId": "22222222-2222-2222-2222-222222222222"
+  }
+}

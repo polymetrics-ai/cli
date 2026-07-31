@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "describe_trails",
+    "live_unavailable": [
+      {
+        "kind": "no_credentials",
+        "contains": [
+          "aws-cloudtrail connector requires secrets aws_key_id and aws_secret_key"
+        ]
+      }
+    ]
+  }
+}
