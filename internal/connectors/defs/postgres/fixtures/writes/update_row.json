@@ -1,0 +1,16 @@
+{
+  "record": {
+    "schema": "public",
+    "table": "customers",
+    "values": [
+      { "name": "active", "value_bool": false }
+    ],
+    "keys": [
+      { "name": "id", "value_int": 42 }
+    ]
+  },
+  "expect": {
+    "sql_template": "UPDATE \"public\".\"customers\" SET \"active\" = $1 WHERE \"id\" = $2",
+    "args_redacted": true
+  }
+}

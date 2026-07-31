@@ -38,8 +38,8 @@ func TestNameAndMetadata(t *testing.T) {
 	if !caps.Check || !caps.Catalog || !caps.Read {
 		t.Fatalf("capabilities = %+v, want Check && Catalog && Read", caps)
 	}
-	if caps.Write {
-		t.Fatalf("postgres source connector must be read-only, got Write=true")
+	if !caps.Write {
+		t.Fatalf("capabilities = %+v, want bounded Write support", caps)
 	}
 }
 
@@ -95,8 +95,8 @@ func TestNoInitRegistration(t *testing.T) {
 
 // TestConnectorSatisfiesCoreInterfaces compile/runtime-asserts the shape
 // required by API-CONTRACT.md / design §B.7 Tier-3: Connector, CDCReader,
-// StatefulReader, DefinitionProvider. Writer interfaces are deliberately NOT
-// asserted since Write is unsupported (read-only source, wave0 parity).
+// StatefulReader, DefinitionProvider, and the bounded write preview/validation
+// interfaces.
 func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	c := native.New()
 	var _ connectors.Connector = c
@@ -108,6 +108,12 @@ func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	}
 	if _, ok := any(c).(connectors.DefinitionProvider); !ok {
 		t.Fatal("native postgres connector must implement connectors.DefinitionProvider (engine.Base)")
+	}
+	if _, ok := any(c).(connectors.WriteValidator); !ok {
+		t.Fatal("native postgres connector must implement connectors.WriteValidator")
+	}
+	if _, ok := any(c).(connectors.DryRunWriter); !ok {
+		t.Fatal("native postgres connector must implement connectors.DryRunWriter")
 	}
 }
 
@@ -255,11 +261,30 @@ func TestCDCUnsupportedStub(t *testing.T) {
 	}
 }
 
-func TestWriteUnsupported(t *testing.T) {
+func TestPostgresDefinitionIncludesBoundedWriteActions(t *testing.T) {
 	c := native.New()
-	_, err := c.Write(context.Background(), connectors.WriteRequest{Stream: "public.users", Config: fixtureConfig()}, []connectors.Record{{"id": 1}})
-	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("Write = %v, want ErrUnsupportedOperation", err)
+	manifest := connectors.ManifestOf(c)
+	if !manifest.Metadata.Capabilities.Write {
+		t.Fatalf("manifest write capability = false, want true")
+	}
+	want := map[string]string{
+		"insert_row":     "SQL",
+		"update_row":     "SQL",
+		"upsert_row":     "SQL",
+		"delete_row":     "SQL",
+		"truncate_table": "SQL",
+	}
+	got := make(map[string]string, len(manifest.WriteActions))
+	for _, action := range manifest.WriteActions {
+		got[action.Name] = action.Method
+		if action.Name == "truncate_table" && action.Confirm != "destructive" {
+			t.Fatalf("truncate_table confirm = %q, want destructive", action.Confirm)
+		}
+	}
+	for name, method := range want {
+		if got[name] != method {
+			t.Fatalf("write action %q method = %q, want %q (all actions: %+v)", name, got[name], method, manifest.WriteActions)
+		}
 	}
 }
 

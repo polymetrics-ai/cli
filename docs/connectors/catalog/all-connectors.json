@@ -111251,51 +111251,71 @@
     }
   },
   {
-    "name": "postgres",
-    "display_name": "PostgreSQL",
-    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.",
-    "integration_type": "database",
-    "release_stage": "ga",
     "capabilities": {
-      "check": true,
       "catalog": true,
+      "check": true,
+      "query": false,
       "read": true,
-      "write": false,
-      "query": false
+      "write": true
+    },
+    "description": "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables with bounded cursor-incremental reads, and supports fixture-safe bounded row DML/truncate reverse ETL actions. CDC is a documented stub pending the gated pglogrepl dependency.",
+    "display_name": "PostgreSQL",
+    "icon": {
+      "id": "postgresql",
+      "path": "icons/postgresql.svg",
+      "review_status": "upstream_seeded",
+      "review_url": "https://www.postgresql.org/docs/",
+      "source": "upstream_registry"
+    },
+    "integration_type": "database",
+    "name": "postgres",
+    "release_stage": "ga",
+    "risk": {
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e approval -\u003e execute; truncate_table is destructive and requires confirm_phrase=truncate",
+      "read": "low",
+      "write": "high: bounded reverse ETL row DML/truncate only; no arbitrary SQL; requires plan, preview, explicit approval, and typed fields"
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "PostgreSQL connection config",
-      "type": "object",
-      "required": [
-        "host",
-        "database",
-        "username"
-      ],
       "properties": {
-        "host": {
-          "type": "string",
-          "description": "Bare hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected)."
-        },
-        "port": {
-          "type": "string",
-          "description": "TCP port, 1-65535. Defaults to 5432 when omitted."
+        "cursor_field": {
+          "description": "Optional column name used for incremental reads (rows with cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).",
+          "type": "string"
         },
         "database": {
-          "type": "string",
-          "description": "Database name to connect to."
+          "description": "Database name to connect to.",
+          "type": "string"
         },
-        "username": {
-          "type": "string",
-          "description": "Database role used to authenticate."
+        "host": {
+          "description": "Bare hostname or IP of the PostgreSQL server (no scheme, path, or credentials — a URL-shaped value is rejected).",
+          "type": "string"
+        },
+        "mode": {
+          "description": "Set to fixture to short-circuit all network access and use canned catalog/rows (test/conformance harness use only; never set in production config).",
+          "enum": [
+            "fixture"
+          ],
+          "type": "string"
         },
         "password": {
+          "description": "Database role password. Never logged.",
           "type": "string",
-          "x-secret": true,
-          "description": "Database role password. Never logged."
+          "x-secret": true
+        },
+        "port": {
+          "description": "TCP port, 1-65535. Defaults to 5432 when omitted.",
+          "type": "string"
+        },
+        "read_limit": {
+          "description": "Maximum rows returned per Read snapshot SELECT. Defaults to 10000; set to 0, all, or unlimited to disable the configured bound. A smaller CLI/request limit is applied before this bound.",
+          "type": "string"
+        },
+        "schema": {
+          "description": "PostgreSQL schema to discover tables from. Defaults to public.",
+          "type": "string"
         },
         "sslmode": {
-          "type": "string",
+          "description": "libpq sslmode. Defaults to disable when omitted.",
           "enum": [
             "disable",
             "allow",
@@ -111304,42 +111324,62 @@
             "verify-ca",
             "verify-full"
           ],
-          "description": "libpq sslmode. Defaults to disable when omitted."
+          "type": "string"
         },
-        "schema": {
-          "type": "string",
-          "description": "PostgreSQL schema to discover tables from. Defaults to public."
-        },
-        "cursor_field": {
-          "type": "string",
-          "description": "Optional column name used for incremental reads (rows with cursor_field greater than the stored cursor are read, ordered by cursor_field ascending)."
-        },
-        "read_limit": {
-          "type": "string",
-          "description": "Maximum rows returned per Read snapshot SELECT. Defaults to 10000; set to 0, all, or unlimited to disable the bound."
-        },
-        "mode": {
-          "type": "string",
-          "enum": [
-            "fixture"
-          ],
-          "description": "Set to fixture to short-circuit all network access and use canned catalog/rows (test/conformance harness use only; never set in production config)."
+        "username": {
+          "description": "Database role used to authenticate.",
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "host",
+        "database",
+        "username",
+        "password"
+      ],
+      "title": "PostgreSQL connection config",
+      "type": "object"
     },
     "streams": [],
-    "risk": {
-      "read": "low",
-      "write": "n/a (read-only source)",
-      "approval": "none required for read-only sync"
-    },
-    "icon": {
-      "id": "postgresql",
-      "path": "icons/postgresql.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://www.postgresql.org/docs/"
-    }
+    "write_actions": [
+      {
+        "kind": "create",
+        "method": "SQL",
+        "name": "insert_row",
+        "path": "INSERT",
+        "risk": "high: inserts a row into a configured table using typed column values only"
+      },
+      {
+        "kind": "update",
+        "method": "SQL",
+        "name": "update_row",
+        "path": "UPDATE",
+        "risk": "high: updates matching rows by explicit key columns using parameterized values"
+      },
+      {
+        "kind": "upsert",
+        "method": "SQL",
+        "name": "upsert_row",
+        "path": "MERGE",
+        "risk": "high: inserts or updates a row through a declared conflict key; no arbitrary MERGE text"
+      },
+      {
+        "confirm": "destructive",
+        "kind": "delete",
+        "method": "SQL",
+        "name": "delete_row",
+        "path": "DELETE",
+        "risk": "critical: deletes rows matching explicit key columns; missing keys are rejected"
+      },
+      {
+        "confirm": "destructive",
+        "kind": "delete",
+        "method": "SQL",
+        "name": "truncate_table",
+        "path": "TRUNCATE",
+        "risk": "critical: truncates a table only when confirm_phrase=truncate is supplied; cascade and restart identity are not exposed"
+      }
+    ]
   },
   {
     "name": "posthog",

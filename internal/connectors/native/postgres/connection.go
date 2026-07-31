@@ -210,6 +210,20 @@ func readLimit(cfg connectors.RuntimeConfig) (int, error) {
 	return value, nil
 }
 
+func effectiveReadLimit(cfg connectors.RuntimeConfig, requestLimit int) (int, error) {
+	configured, err := readLimit(cfg)
+	if err != nil {
+		return 0, err
+	}
+	if requestLimit <= 0 {
+		return configured, nil
+	}
+	if configured <= 0 || requestLimit < configured {
+		return requestLimit, nil
+	}
+	return configured, nil
+}
+
 // Check verifies connection config and, outside fixture mode, opens a pgx
 // pool and pings. Fixture mode validates config shape only (no network).
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {

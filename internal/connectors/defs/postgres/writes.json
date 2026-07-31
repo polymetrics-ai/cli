@@ -1,0 +1,484 @@
+{
+  "actions": [
+    {
+      "name": "insert_row",
+      "kind": "create",
+      "method": "SQL",
+      "path": "INSERT",
+      "body_type": "json",
+      "redact_fields": [
+        "values"
+      ],
+      "risk": "high: inserts a row into a configured table using typed column values only",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "table"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "table": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+                },
+                "value_string": {
+                  "type": "string"
+                },
+                "value_int": {
+                  "type": "integer"
+                },
+                "value_float": {
+                  "type": "number"
+                },
+                "value_bool": {
+                  "type": "boolean"
+                },
+                "value_null": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                },
+                "value_json": {}
+              }
+            }
+          },
+          "value_column": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "value_string": {
+            "type": "string"
+          },
+          "value_int": {
+            "type": "integer"
+          },
+          "value_float": {
+            "type": "number"
+          },
+          "value_bool": {
+            "type": "boolean"
+          },
+          "value_null": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "value_json": {}
+        }
+      }
+    },
+    {
+      "name": "update_row",
+      "kind": "update",
+      "method": "SQL",
+      "path": "UPDATE",
+      "body_type": "json",
+      "redact_fields": [
+        "values",
+        "keys"
+      ],
+      "risk": "high: updates matching rows by explicit key columns using parameterized values",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "table"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "table": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+                },
+                "value_string": {
+                  "type": "string"
+                },
+                "value_int": {
+                  "type": "integer"
+                },
+                "value_float": {
+                  "type": "number"
+                },
+                "value_bool": {
+                  "type": "boolean"
+                },
+                "value_null": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                },
+                "value_json": {}
+              }
+            }
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+                },
+                "value_string": {
+                  "type": "string"
+                },
+                "value_int": {
+                  "type": "integer"
+                },
+                "value_float": {
+                  "type": "number"
+                },
+                "value_bool": {
+                  "type": "boolean"
+                },
+                "value_null": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                },
+                "value_json": {}
+              }
+            }
+          },
+          "value_column": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "value_string": {
+            "type": "string"
+          },
+          "value_int": {
+            "type": "integer"
+          },
+          "value_float": {
+            "type": "number"
+          },
+          "value_bool": {
+            "type": "boolean"
+          },
+          "value_null": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "value_json": {},
+          "key_column": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "key_string": {
+            "type": "string"
+          },
+          "key_int": {
+            "type": "integer"
+          },
+          "key_float": {
+            "type": "number"
+          },
+          "key_bool": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "name": "upsert_row",
+      "kind": "upsert",
+      "method": "SQL",
+      "path": "MERGE",
+      "body_type": "json",
+      "redact_fields": [
+        "values",
+        "keys"
+      ],
+      "risk": "high: inserts or updates a row through a declared conflict key; no arbitrary MERGE text",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "table"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "table": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+                },
+                "value_string": {
+                  "type": "string"
+                },
+                "value_int": {
+                  "type": "integer"
+                },
+                "value_float": {
+                  "type": "number"
+                },
+                "value_bool": {
+                  "type": "boolean"
+                },
+                "value_null": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                },
+                "value_json": {}
+              }
+            }
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+                },
+                "value_string": {
+                  "type": "string"
+                },
+                "value_int": {
+                  "type": "integer"
+                },
+                "value_float": {
+                  "type": "number"
+                },
+                "value_bool": {
+                  "type": "boolean"
+                },
+                "value_null": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                },
+                "value_json": {}
+              }
+            }
+          },
+          "value_column": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "value_string": {
+            "type": "string"
+          },
+          "value_int": {
+            "type": "integer"
+          },
+          "value_float": {
+            "type": "number"
+          },
+          "value_bool": {
+            "type": "boolean"
+          },
+          "value_null": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "value_json": {},
+          "key_column": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "key_string": {
+            "type": "string"
+          },
+          "key_int": {
+            "type": "integer"
+          },
+          "key_float": {
+            "type": "number"
+          },
+          "key_bool": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "name": "delete_row",
+      "kind": "delete",
+      "method": "SQL",
+      "path": "DELETE",
+      "body_type": "json",
+      "redact_fields": [
+        "keys"
+      ],
+      "risk": "critical: deletes rows matching explicit key columns; missing keys are rejected",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "table"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "table": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+                },
+                "value_string": {
+                  "type": "string"
+                },
+                "value_int": {
+                  "type": "integer"
+                },
+                "value_float": {
+                  "type": "number"
+                },
+                "value_bool": {
+                  "type": "boolean"
+                },
+                "value_null": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ]
+                },
+                "value_json": {}
+              }
+            }
+          },
+          "key_column": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "key_string": {
+            "type": "string"
+          },
+          "key_int": {
+            "type": "integer"
+          },
+          "key_float": {
+            "type": "number"
+          },
+          "key_bool": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "name": "truncate_table",
+      "kind": "delete",
+      "method": "SQL",
+      "path": "TRUNCATE",
+      "body_type": "json",
+      "risk": "critical: truncates a table only when confirm_phrase=truncate is supplied; cascade and restart identity are not exposed",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "table",
+          "confirm_phrase"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "table": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_$]{0,62}$"
+          },
+          "confirm_phrase": {
+            "type": "string",
+            "enum": [
+              "truncate"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

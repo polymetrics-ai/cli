@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "PostgreSQL connection config",
   "type": "object",
-  "required": ["host", "database", "username"],
+  "required": ["host", "database", "username", "password"],
   "properties": {
     "host": {
       "type": "string",
@@ -40,7 +40,7 @@
     },
     "read_limit": {
       "type": "string",
-      "description": "Maximum rows returned per Read snapshot SELECT. Defaults to 10000; set to 0, all, or unlimited to disable the bound."
+      "description": "Maximum rows returned per Read snapshot SELECT. Defaults to 10000; set to 0, all, or unlimited to disable the configured bound. A smaller CLI/request limit is applied before this bound."
     },
     "mode": {
       "type": "string",

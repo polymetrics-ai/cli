@@ -1,0 +1,14 @@
+{
+  "record": {
+    "schema": "public",
+    "table": "customers",
+    "values": [
+      { "name": "email", "value_string": "customer@example.invalid" },
+      { "name": "active", "value_bool": true }
+    ]
+  },
+  "expect": {
+    "sql_template": "INSERT INTO \"public\".\"customers\" (\"email\", \"active\") VALUES ($1, $2)",
+    "args_redacted": true
+  }
+}

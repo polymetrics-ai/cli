@@ -45,7 +45,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 
 	cursorColumn := strings.TrimSpace(req.Config.Config["cursor_field"])
 	lowerBound := connsdk.Cursor(req.State)
-	limit, err := readLimit(req.Config)
+	limit, err := effectiveReadLimit(req.Config, req.Limit)
 	if err != nil {
 		return err
 	}
@@ -121,6 +121,11 @@ func (c Connector) readFixture(ctx context.Context, req connectors.ReadRequest, 
 	if !ok {
 		return fmt.Errorf("postgres fixture stream %q not found", req.Stream)
 	}
+	limit, err := effectiveReadLimit(req.Config, req.Limit)
+	if err != nil {
+		return err
+	}
+	emitted := 0
 	var lower int64 = -1
 	if cur := connsdk.Cursor(req.State); cur != "" {
 		if n, err := strconv.ParseInt(cur, 10, 64); err == nil {
@@ -134,9 +139,13 @@ func (c Connector) readFixture(ctx context.Context, req connectors.ReadRequest, 
 		if lower >= 0 && row.cursor <= lower {
 			continue
 		}
+		if limit > 0 && emitted >= limit {
+			return nil
+		}
 		if err := emit(copyRecord(row.record)); err != nil {
 			return err
 		}
+		emitted++
 	}
 	return nil
 }
