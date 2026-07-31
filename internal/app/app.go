@@ -648,7 +648,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	mapped := mapReverseRecords(records, req.Mappings, "")
+	mapped := mapReverseRecords(records, req.Mappings)
 	dest := EndpointConfig{Connector: req.DestinationConnector, Credential: req.DestinationCredential, Config: req.DestinationConfig}
 	destination, runtime, err := a.resolveEndpoint(ctx, dest)
 	if err != nil {
@@ -917,7 +917,7 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	mappedForHash := mapReverseRecords(records, plan.Mappings, "")
+	mappedForHash := mapReverseRecords(records, plan.Mappings)
 	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
 	writer, runtime, err := a.resolveEndpoint(ctx, dest)
 	if err != nil {
@@ -939,7 +939,7 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		return ReverseRun{}, errors.New("reverse plan source rows or payload files changed since approval")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
-	mapped := mapReverseRecords(records, plan.Mappings, plan.ID)
+	mapped := mapReverseRecords(records, plan.Mappings)
 	runID, err := prefixedID("rrun")
 	if err != nil {
 		return ReverseRun{}, err

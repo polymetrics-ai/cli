@@ -94,7 +94,11 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -175,7 +179,11 @@
         "additionalProperties": false,
         "properties": {
           "comment_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "commit": {
             "type": "string"
@@ -404,7 +412,11 @@
         "additionalProperties": false,
         "properties": {
           "key_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -609,7 +621,11 @@
         "additionalProperties": false,
         "properties": {
           "issue_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -650,7 +666,11 @@
         "additionalProperties": false,
         "properties": {
           "issue_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "path": {
             "type": "string"
@@ -695,10 +715,18 @@
         "additionalProperties": false,
         "properties": {
           "comment_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "issue_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -739,7 +767,11 @@
         "additionalProperties": false,
         "properties": {
           "issue_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -779,7 +811,11 @@
         "additionalProperties": false,
         "properties": {
           "issue_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -1214,7 +1250,11 @@
         "additionalProperties": false,
         "properties": {
           "pull_request_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -1255,10 +1295,18 @@
         "additionalProperties": false,
         "properties": {
           "comment_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "pull_request_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -1300,10 +1348,18 @@
         "additionalProperties": false,
         "properties": {
           "comment_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "pull_request_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -1344,7 +1400,11 @@
         "additionalProperties": false,
         "properties": {
           "pull_request_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -1385,13 +1445,21 @@
         "additionalProperties": false,
         "properties": {
           "pull_request_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
           },
           "task_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "workspace": {
             "type": "string"
@@ -1437,7 +1505,11 @@
             "type": "string"
           },
           "pullrequest_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "repo_slug": {
             "type": "string"
@@ -1594,7 +1666,11 @@
         "additionalProperties": false,
         "properties": {
           "comment_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "encoded_id": {
             "type": "string"
@@ -1853,7 +1929,11 @@
         "additionalProperties": false,
         "properties": {
           "key_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "selected_user": {
             "type": "string"
@@ -2069,7 +2149,11 @@
         "additionalProperties": false,
         "properties": {
           "key_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "integer",
+              "number"
+            ]
           },
           "project_key": {
             "type": "string"
