@@ -1,0 +1,1116 @@
+{
+  "source": "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest",
+  "revision": "20260727",
+  "discovery_version": "v1",
+  "fetched_for": "issue-3046 Gmail parity wave03 fixture-only audit",
+  "operation_count": 79,
+  "operations": [
+    {
+      "id": "gmail.users.drafts.create",
+      "resource": "users.drafts",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/drafts",
+      "flat_path": "/gmail/v1/users/{userId}/drafts",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Creates a draft with the `DRAFT` label. For more information, see [Create and send draft emails](https://developers.google.com/workspace/gmail/api/guides/drafts)."
+    },
+    {
+      "id": "gmail.users.drafts.delete",
+      "resource": "users.drafts",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Immediately and permanently deletes the specified draft. Does not simply trash it. For more information, see [Create and send draft emails](https://developers.google.com/workspace/gmail/api/guides/drafts)."
+    },
+    {
+      "id": "gmail.users.drafts.get",
+      "resource": "users.drafts",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Gets the specified draft. For more information, see [Create and send draft emails](https://developers.google.com/workspace/gmail/api/guides/drafts)."
+    },
+    {
+      "id": "gmail.users.drafts.list",
+      "resource": "users.drafts",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/drafts",
+      "flat_path": "/gmail/v1/users/{userId}/drafts",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Lists the drafts in the user's mailbox. For more information, see [Create and send draft emails](https://developers.google.com/workspace/gmail/api/guides/drafts)."
+    },
+    {
+      "id": "gmail.users.drafts.send",
+      "resource": "users.drafts",
+      "method_key": "send",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/drafts/send",
+      "flat_path": "/gmail/v1/users/{userId}/drafts/send",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Sends the specified, existing draft to the recipients in the `To`, `Cc`, and `Bcc` headers. For more information, see [Create and send draft emails](https://developers.google.com/workspace/gmail/api/guides/drafts)."
+    },
+    {
+      "id": "gmail.users.drafts.update",
+      "resource": "users.drafts",
+      "method_key": "update",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/drafts/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Replaces a draft's content. For more information, see [Create and send draft emails](https://developers.google.com/workspace/gmail/api/guides/drafts)."
+    },
+    {
+      "id": "gmail.users.getProfile",
+      "resource": "users",
+      "method_key": "getProfile",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/profile",
+      "flat_path": "/gmail/v1/users/{userId}/profile",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Gets the current user's Gmail profile."
+    },
+    {
+      "id": "gmail.users.history.list",
+      "resource": "users.history",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/history",
+      "flat_path": "/gmail/v1/users/{userId}/history",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Lists the history of all changes to the given mailbox. History results are returned in chronological order (increasing `historyId`). For more information, see [Synchronize clients with Gmail](https://developers.google.com/workspace/gmail/api/guides/sync)."
+    },
+    {
+      "id": "gmail.users.labels.create",
+      "resource": "users.labels",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/labels",
+      "flat_path": "/gmail/v1/users/{userId}/labels",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.labels",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Creates a label. For more information, see [Manage labels](https://developers.google.com/workspace/gmail/api/guides/labels)."
+    },
+    {
+      "id": "gmail.users.labels.delete",
+      "resource": "users.labels",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/labels/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.labels",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Immediately and permanently deletes the specified label and removes it from any messages and threads that it's applied to. For more information, see [Manage labels](https://developers.google.com/workspace/gmail/api/guides/labels)."
+    },
+    {
+      "id": "gmail.users.labels.get",
+      "resource": "users.labels",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/labels/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.labels",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Gets the specified label. For more information, see [Manage labels](https://developers.google.com/workspace/gmail/api/guides/labels)."
+    },
+    {
+      "id": "gmail.users.labels.list",
+      "resource": "users.labels",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/labels",
+      "flat_path": "/gmail/v1/users/{userId}/labels",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.labels",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Lists all labels in the user's mailbox. For more information, see [Manage labels](https://developers.google.com/workspace/gmail/api/guides/labels)."
+    },
+    {
+      "id": "gmail.users.labels.patch",
+      "resource": "users.labels",
+      "method_key": "patch",
+      "http_method": "PATCH",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/labels/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.labels",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Patch the specified label. For more information, see [Manage labels](https://developers.google.com/workspace/gmail/api/guides/labels)."
+    },
+    {
+      "id": "gmail.users.labels.update",
+      "resource": "users.labels",
+      "method_key": "update",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/labels/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/labels/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.labels",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Updates the specified label. For more information, see [Manage labels](https://developers.google.com/workspace/gmail/api/guides/labels)."
+    },
+    {
+      "id": "gmail.users.messages.attachments.get",
+      "resource": "users.messages.attachments",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/messages/{messageId}/attachments/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/messages/{messageId}/attachments/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.action",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Gets the specified message attachment."
+    },
+    {
+      "id": "gmail.users.messages.batchDelete",
+      "resource": "users.messages",
+      "method_key": "batchDelete",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/batchDelete",
+      "flat_path": "/gmail/v1/users/{userId}/messages/batchDelete",
+      "scopes": [
+        "https://mail.google.com/"
+      ],
+      "description": "Deletes many messages by message ID. Provides no guarantees that messages were not already deleted or even existed at all."
+    },
+    {
+      "id": "gmail.users.messages.batchModify",
+      "resource": "users.messages",
+      "method_key": "batchModify",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/batchModify",
+      "flat_path": "/gmail/v1/users/{userId}/messages/batchModify",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Modifies the labels and the Classification Label values on the specified messages. For administrators modifying messages for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.modify.restricted` scope."
+    },
+    {
+      "id": "gmail.users.messages.delete",
+      "resource": "users.messages",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/messages/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/messages/{id}",
+      "scopes": [
+        "https://mail.google.com/"
+      ],
+      "description": "Immediately and permanently deletes the specified message. This operation cannot be undone. Prefer `messages.trash` instead."
+    },
+    {
+      "id": "gmail.users.messages.get",
+      "resource": "users.messages",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/messages/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/messages/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.action",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Gets the specified message."
+    },
+    {
+      "id": "gmail.users.messages.import",
+      "resource": "users.messages",
+      "method_key": "import",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/import",
+      "flat_path": "/gmail/v1/users/{userId}/messages/import",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.insert",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Imports a message into only this user's mailbox, with standard email delivery scanning and classification similar to receiving via SMTP. This method doesn't perform SPF checks, so it might not work for some spam messages, such as those attempting to perform domain spoofing. This method does not send a message. Note that the maximum size of the message is 150 MB."
+    },
+    {
+      "id": "gmail.users.messages.insert",
+      "resource": "users.messages",
+      "method_key": "insert",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages",
+      "flat_path": "/gmail/v1/users/{userId}/messages",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.insert",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Directly inserts a message into only this user's mailbox similar to `IMAP APPEND`, bypassing most scanning and classification. Does not send a message. For more information, see [Create and send email messages](https://developers.google.com/workspace/gmail/api/guides/sending)."
+    },
+    {
+      "id": "gmail.users.messages.list",
+      "resource": "users.messages",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/messages",
+      "flat_path": "/gmail/v1/users/{userId}/messages",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Lists the messages in the user's mailbox. For more information, see [List Gmail messages](https://developers.google.com/workspace/gmail/api/guides/list-messages)."
+    },
+    {
+      "id": "gmail.users.messages.modify",
+      "resource": "users.messages",
+      "method_key": "modify",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/{id}/modify",
+      "flat_path": "/gmail/v1/users/{userId}/messages/{id}/modify",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Modifies the labels and the Classification Label values on the specified message. For administrators modifying message for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.modify.restricted` scope."
+    },
+    {
+      "id": "gmail.users.messages.send",
+      "resource": "users.messages",
+      "method_key": "send",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/send",
+      "flat_path": "/gmail/v1/users/{userId}/messages/send",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.send"
+      ],
+      "description": "Sends the specified message to the recipients in the `To`, `Cc`, and `Bcc` headers. For more information, see [Create and send email messages](https://developers.google.com/workspace/gmail/api/guides/sending)."
+    },
+    {
+      "id": "gmail.users.messages.trash",
+      "resource": "users.messages",
+      "method_key": "trash",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/{id}/trash",
+      "flat_path": "/gmail/v1/users/{userId}/messages/{id}/trash",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Moves the specified message to the trash."
+    },
+    {
+      "id": "gmail.users.messages.untrash",
+      "resource": "users.messages",
+      "method_key": "untrash",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/messages/{id}/untrash",
+      "flat_path": "/gmail/v1/users/{userId}/messages/{id}/untrash",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Removes the specified message from the trash."
+    },
+    {
+      "id": "gmail.users.settings.cse.identities.create",
+      "resource": "users.settings.cse.identities",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/identities",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Creates and configures a client-side encryption identity that's authorized to send mail from the user account. Google publishes the S/MIME certificate to a shared domain-wide directory so that people within a Google Workspace organization can encrypt and send mail to the identity. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.identities.delete",
+      "resource": "users.settings.cse.identities",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Deletes a client-side encryption identity. The authenticated user can no longer use the identity to send encrypted messages. You cannot restore the identity after you delete it. Instead, use the CreateCseIdentity method to create another identity with the same configuration. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.identities.get",
+      "resource": "users.settings.cse.identities",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Retrieves a client-side encryption identity configuration. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.identities.list",
+      "resource": "users.settings.cse.identities",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/identities",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Lists the client-side encrypted identities for an authenticated user. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.identities.patch",
+      "resource": "users.settings.cse.identities",
+      "method_key": "patch",
+      "http_method": "PATCH",
+      "path": "/gmail/v1/users/{userId}/settings/cse/identities/{emailAddress}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/identities/{emailAddress}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Associates a different key pair with an existing client-side encryption identity. The updated key pair must validate against Google's [S/MIME certificate profiles](https://support.google.com/a/answer/7300887). For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.keypairs.create",
+      "resource": "users.settings.cse.keypairs",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/keypairs",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Creates and uploads a client-side encryption S/MIME public key certificate chain and private key metadata for the authenticated user. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.keypairs.disable",
+      "resource": "users.settings.cse.keypairs",
+      "method_key": "disable",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Turns off a client-side encryption key pair. The authenticated user can no longer use the key pair to decrypt incoming CSE message texts or sign outgoing CSE mail. To regain access, use the EnableCseKeyPair to turn on the key pair. After 30 days, you can permanently delete the key pair by using the ObliterateCseKeyPair method. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.keypairs.enable",
+      "resource": "users.settings.cse.keypairs",
+      "method_key": "enable",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Turns on a client-side encryption key pair that was turned off. The key pair becomes active again for any associated client-side encryption identities. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.keypairs.get",
+      "resource": "users.settings.cse.keypairs",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Retrieves an existing client-side encryption key pair. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.keypairs.list",
+      "resource": "users.settings.cse.keypairs",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/keypairs",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Lists client-side encryption key pairs for an authenticated user. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.cse.keypairs.obliterate",
+      "resource": "users.settings.cse.keypairs",
+      "method_key": "obliterate",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+      "flat_path": "/gmail/v1/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Deletes a client-side encryption key pair permanently and immediately. You can only permanently delete key pairs that have been turned off for more than 30 days. To turn off a key pair, use the DisableCseKeyPair method. Gmail can't restore or decrypt any messages that were encrypted by an obliterated key. Authenticated users and Google Workspace administrators lose access to reading the encrypted messages. For administrators managing identities and keypairs for users in their organization, requests require authorization with a [service account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) that has [domain-wide delegation authority](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#delegatingauthority) to impersonate users with the `https://www.googleapis.com/auth/gmail.settings.basic` scope. For users managing their own identities and keypairs, requests require [hardware key encryption](https://support.google.com/a/answer/14153163) turned on and configured."
+    },
+    {
+      "id": "gmail.users.settings.delegates.create",
+      "resource": "users.settings.delegates",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/delegates",
+      "flat_path": "/gmail/v1/users/{userId}/settings/delegates",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Adds a delegate with its verification status set directly to `accepted`, without sending any verification email. The delegate user must be a member of the same Google Workspace organization as the delegator user. For more information, see [Manage delegates](https://developers.google.com/workspace/gmail/api/guides/delegate_settings). Gmail imposes limitations on the number of delegates and delegators each user in a Google Workspace organization can have. These limits depend on your organization, but in general each user can have up to 25 delegates and up to 10 delegators. A delegate user must be referred to by their primary email address, and not an email alias. When a new delegate is created, there may be up to a one minute delay before the new delegate is available for use. This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.delegates.delete",
+      "resource": "users.settings.delegates",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/delegates/{delegateEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/delegates/{delegateEmail}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Removes the specified delegate (which can be of any verification status), and revokes any verification that may have been required for using it. For more information, see [Manage delegates](https://developers.google.com/workspace/gmail/api/guides/delegate_settings). A delegate user must be referred to by their primary email address, and not an email alias. This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.delegates.get",
+      "resource": "users.settings.delegates",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/delegates/{delegateEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/delegates/{delegateEmail}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets the specified delegate. For more information, see [Manage delegates](https://developers.google.com/workspace/gmail/api/guides/delegate_settings). A delegate user must be referred to by their primary email address, and not an email alias. This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.delegates.list",
+      "resource": "users.settings.delegates",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/delegates",
+      "flat_path": "/gmail/v1/users/{userId}/settings/delegates",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Lists the delegates for the specified account. For more information, see [Manage delegates](https://developers.google.com/workspace/gmail/api/guides/delegate_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.filters.create",
+      "resource": "users.settings.filters",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/filters",
+      "flat_path": "/gmail/v1/users/{userId}/settings/filters",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Creates a filter. Note: you can only create a maximum of 1,000 filters. For more information, see [Manage Gmail filters](https://developers.google.com/workspace/gmail/api/guides/filter_settings)."
+    },
+    {
+      "id": "gmail.users.settings.filters.delete",
+      "resource": "users.settings.filters",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/filters/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/filters/{id}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Immediately and permanently deletes the specified filter. For more information, see [Manage Gmail filters](https://developers.google.com/workspace/gmail/api/guides/filter_settings)."
+    },
+    {
+      "id": "gmail.users.settings.filters.get",
+      "resource": "users.settings.filters",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/filters/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/filters/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets a filter. For more information, see [Manage Gmail filters](https://developers.google.com/workspace/gmail/api/guides/filter_settings)."
+    },
+    {
+      "id": "gmail.users.settings.filters.list",
+      "resource": "users.settings.filters",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/filters",
+      "flat_path": "/gmail/v1/users/{userId}/settings/filters",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Lists the message filters of a Gmail user. For more information, see [Manage Gmail filters](https://developers.google.com/workspace/gmail/api/guides/filter_settings)."
+    },
+    {
+      "id": "gmail.users.settings.forwardingAddresses.create",
+      "resource": "users.settings.forwardingAddresses",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses",
+      "flat_path": "/gmail/v1/users/{userId}/settings/forwardingAddresses",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Creates a forwarding address. If ownership verification is required, a message will be sent to the recipient and the resource's verification status will be set to `pending`; otherwise, the resource will be created with verification status set to `accepted`. For more information, see [Manage email forwarding](https://developers.google.com/workspace/gmail/api/guides/forwarding_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.forwardingAddresses.delete",
+      "resource": "users.settings.forwardingAddresses",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Deletes the specified forwarding address and revokes any verification that may have been required. For more information, see [Manage email forwarding](https://developers.google.com/workspace/gmail/api/guides/forwarding_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.forwardingAddresses.get",
+      "resource": "users.settings.forwardingAddresses",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets the specified forwarding address. For more information, see [Manage email forwarding](https://developers.google.com/workspace/gmail/api/guides/forwarding_settings)."
+    },
+    {
+      "id": "gmail.users.settings.forwardingAddresses.list",
+      "resource": "users.settings.forwardingAddresses",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/forwardingAddresses",
+      "flat_path": "/gmail/v1/users/{userId}/settings/forwardingAddresses",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Lists the forwarding addresses for the specified account. For more information, see [Manage email forwarding](https://developers.google.com/workspace/gmail/api/guides/forwarding_settings)."
+    },
+    {
+      "id": "gmail.users.settings.getAutoForwarding",
+      "resource": "users.settings",
+      "method_key": "getAutoForwarding",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/autoForwarding",
+      "flat_path": "/gmail/v1/users/{userId}/settings/autoForwarding",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets the auto-forwarding setting for the specified account. For more information, see [Manage email forwarding](https://developers.google.com/workspace/gmail/api/guides/forwarding_settings)."
+    },
+    {
+      "id": "gmail.users.settings.getImap",
+      "resource": "users.settings",
+      "method_key": "getImap",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/imap",
+      "flat_path": "/gmail/v1/users/{userId}/settings/imap",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets IMAP settings. For more information, see [Configure POP and IMAP settings with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/pop_imap_settings)."
+    },
+    {
+      "id": "gmail.users.settings.getLanguage",
+      "resource": "users.settings",
+      "method_key": "getLanguage",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/language",
+      "flat_path": "/gmail/v1/users/{userId}/settings/language",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets language settings. For more information, see [Manage language settings](https://developers.google.com/workspace/gmail/api/guides/language-settings)."
+    },
+    {
+      "id": "gmail.users.settings.getPop",
+      "resource": "users.settings",
+      "method_key": "getPop",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/pop",
+      "flat_path": "/gmail/v1/users/{userId}/settings/pop",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets POP settings. For more information, see [Configure POP and IMAP settings with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/pop_imap_settings)."
+    },
+    {
+      "id": "gmail.users.settings.getVacation",
+      "resource": "users.settings",
+      "method_key": "getVacation",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/vacation",
+      "flat_path": "/gmail/v1/users/{userId}/settings/vacation",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets vacation responder settings. For more information, see [Manage vacation settings with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/vacation_settings)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.create",
+      "resource": "users.settings.sendAs",
+      "method_key": "create",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Creates a custom \"from\" send-as alias. If an SMTP MSA is specified, Gmail will attempt to connect to the SMTP service to validate the configuration before creating the alias. If ownership verification is required for the alias, a message will be sent to the email address and the resource's verification status will be set to `pending`; otherwise, the resource will be created with verification status set to `accepted`. If a signature is provided, Gmail will sanitize the HTML before saving it with the alias. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.delete",
+      "resource": "users.settings.sendAs",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Deletes the specified send-as alias. Revokes any verification that may have been required for using it. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.get",
+      "resource": "users.settings.sendAs",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Gets the specified send-as alias. Fails with an HTTP 404 error if the specified address is not a member of the collection. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.list",
+      "resource": "users.settings.sendAs",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Lists the send-as aliases for the specified account. The result includes the primary send-as address associated with the account as well as any custom \"from\" aliases. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.patch",
+      "resource": "users.settings.sendAs",
+      "method_key": "patch",
+      "http_method": "PATCH",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Patch the specified send-as alias. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.smimeInfo.delete",
+      "resource": "users.settings.sendAs.smimeInfo",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Deletes the specified S/MIME config for the specified send-as alias. For more information, see [Manage S/MIME certificates with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/smime_certs)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.smimeInfo.get",
+      "resource": "users.settings.sendAs.smimeInfo",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Gets the specified S/MIME config for the specified send-as alias. For more information, see [Manage S/MIME certificates with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/smime_certs)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.smimeInfo.insert",
+      "resource": "users.settings.sendAs.smimeInfo",
+      "method_key": "insert",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Insert (upload) the given S/MIME config for the specified send-as alias. Note that `pkcs12` format is required for the key. For more information, see [Manage S/MIME certificates with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/smime_certs)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.smimeInfo.list",
+      "resource": "users.settings.sendAs.smimeInfo",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Lists S/MIME configs for the specified send-as alias. For more information, see [Manage S/MIME certificates with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/smime_certs)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.smimeInfo.setDefault",
+      "resource": "users.settings.sendAs.smimeInfo",
+      "method_key": "setDefault",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Sets the default S/MIME config for the specified send-as alias. For more information, see [Manage S/MIME certificates with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/smime_certs)."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.update",
+      "resource": "users.settings.sendAs",
+      "method_key": "update",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic",
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Updates a send-as alias. If a signature is provided, Gmail will sanitize the HTML before saving it with the alias. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings). Addresses other than the primary address for the account can only be updated by service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.sendAs.verify",
+      "resource": "users.settings.sendAs",
+      "method_key": "verify",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/verify",
+      "flat_path": "/gmail/v1/users/{userId}/settings/sendAs/{sendAsEmail}/verify",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Sends a verification email to the specified send-as alias address. The verification status must be `pending`. For more information, see [Manage aliases and signatures with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/alias_and_signature_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.updateAutoForwarding",
+      "resource": "users.settings",
+      "method_key": "updateAutoForwarding",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/autoForwarding",
+      "flat_path": "/gmail/v1/users/{userId}/settings/autoForwarding",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.sharing"
+      ],
+      "description": "Updates the auto-forwarding setting for the specified account. A verified forwarding address must be specified when auto-forwarding is enabled. For more information, see [Manage email forwarding](https://developers.google.com/workspace/gmail/api/guides/forwarding_settings). This method is only available to service account clients that have been delegated domain-wide authority."
+    },
+    {
+      "id": "gmail.users.settings.updateImap",
+      "resource": "users.settings",
+      "method_key": "updateImap",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/imap",
+      "flat_path": "/gmail/v1/users/{userId}/settings/imap",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Updates IMAP settings. For more information, see [Configure POP and IMAP settings with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/pop_imap_settings)."
+    },
+    {
+      "id": "gmail.users.settings.updateLanguage",
+      "resource": "users.settings",
+      "method_key": "updateLanguage",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/language",
+      "flat_path": "/gmail/v1/users/{userId}/settings/language",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Updates language settings. For more information, see [Manage language settings](https://developers.google.com/workspace/gmail/api/guides/language-settings). If successful, the return object contains the `displayLanguage` that was saved for the user, which may differ from the value passed into the request. This is because the requested `displayLanguage` may not be directly supported by Gmail but have a close variant that is, and so the variant may be chosen and saved instead."
+    },
+    {
+      "id": "gmail.users.settings.updatePop",
+      "resource": "users.settings",
+      "method_key": "updatePop",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/pop",
+      "flat_path": "/gmail/v1/users/{userId}/settings/pop",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Updates POP settings. For more information, see [Configure POP and IMAP settings with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/pop_imap_settings)."
+    },
+    {
+      "id": "gmail.users.settings.updateVacation",
+      "resource": "users.settings",
+      "method_key": "updateVacation",
+      "http_method": "PUT",
+      "path": "/gmail/v1/users/{userId}/settings/vacation",
+      "flat_path": "/gmail/v1/users/{userId}/settings/vacation",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.settings.basic"
+      ],
+      "description": "Updates vacation responder settings. For more information, see [Manage vacation settings with the Gmail API](https://developers.google.com/workspace/gmail/api/guides/vacation_settings)."
+    },
+    {
+      "id": "gmail.users.stop",
+      "resource": "users",
+      "method_key": "stop",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/stop",
+      "flat_path": "/gmail/v1/users/{userId}/stop",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Turn off push notification delivery for the given user mailbox. For more information, see [Configure push notifications in Gmail API](https://developers.google.com/workspace/gmail/api/guides/push)."
+    },
+    {
+      "id": "gmail.users.threads.delete",
+      "resource": "users.threads",
+      "method_key": "delete",
+      "http_method": "DELETE",
+      "path": "/gmail/v1/users/{userId}/threads/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/threads/{id}",
+      "scopes": [
+        "https://mail.google.com/"
+      ],
+      "description": "Immediately and permanently deletes the specified thread. Any messages that belong to the thread are also deleted. This operation cannot be undone. Prefer `threads.trash` instead. For more information, see [Manage threads](https://developers.google.com/workspace/gmail/api/guides/threads)."
+    },
+    {
+      "id": "gmail.users.threads.get",
+      "resource": "users.threads",
+      "method_key": "get",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/threads/{id}",
+      "flat_path": "/gmail/v1/users/{userId}/threads/{id}",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.action",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",
+        "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Gets the specified thread. For more information, see [Manage threads](https://developers.google.com/workspace/gmail/api/guides/threads)."
+    },
+    {
+      "id": "gmail.users.threads.list",
+      "resource": "users.threads",
+      "method_key": "list",
+      "http_method": "GET",
+      "path": "/gmail/v1/users/{userId}/threads",
+      "flat_path": "/gmail/v1/users/{userId}/threads",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Lists the threads in the user's mailbox. For more information, see [Manage threads](https://developers.google.com/workspace/gmail/api/guides/threads)."
+    },
+    {
+      "id": "gmail.users.threads.modify",
+      "resource": "users.threads",
+      "method_key": "modify",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/threads/{id}/modify",
+      "flat_path": "/gmail/v1/users/{userId}/threads/{id}/modify",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Modifies the labels applied to the thread. This applies to all messages in the thread. For more information, see [Manage threads](https://developers.google.com/workspace/gmail/api/guides/threads)."
+    },
+    {
+      "id": "gmail.users.threads.trash",
+      "resource": "users.threads",
+      "method_key": "trash",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/threads/{id}/trash",
+      "flat_path": "/gmail/v1/users/{userId}/threads/{id}/trash",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Moves the specified thread to the trash. Any messages that belong to the thread are also moved to the trash. For more information, see [Manage threads](https://developers.google.com/workspace/gmail/api/guides/threads)."
+    },
+    {
+      "id": "gmail.users.threads.untrash",
+      "resource": "users.threads",
+      "method_key": "untrash",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/threads/{id}/untrash",
+      "flat_path": "/gmail/v1/users/{userId}/threads/{id}/untrash",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.modify"
+      ],
+      "description": "Removes the specified thread from the trash. Any messages that belong to the thread are also removed from the trash. For more information, see [Manage threads](https://developers.google.com/workspace/gmail/api/guides/threads)."
+    },
+    {
+      "id": "gmail.users.watch",
+      "resource": "users",
+      "method_key": "watch",
+      "http_method": "POST",
+      "path": "/gmail/v1/users/{userId}/watch",
+      "flat_path": "/gmail/v1/users/{userId}/watch",
+      "scopes": [
+        "https://mail.google.com/",
+        "https://www.googleapis.com/auth/gmail.metadata",
+        "https://www.googleapis.com/auth/gmail.modify",
+        "https://www.googleapis.com/auth/gmail.readonly"
+      ],
+      "description": "Set up or update a push notification watch on the given user mailbox. For more information, see [Configure push notifications in Gmail API](https://developers.google.com/workspace/gmail/api/guides/push)."
+    }
+  ]
+}

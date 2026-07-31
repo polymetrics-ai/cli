@@ -9,13 +9,24 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["raw"],
+        "required": [
+          "raw"
+        ],
         "properties": {
-          "raw": { "type": "string", "description": "Entire RFC 2822 message, base64url-encoded, including headers and MIME body." },
-          "threadId": { "type": "string", "description": "Existing thread to append this message to; the References/In-Reply-To headers and Subject inside raw must already satisfy Gmail's threading rules." }
+          "raw": {
+            "type": "string",
+            "description": "Entire RFC 2822 message, base64url-encoded, including headers and MIME body."
+          },
+          "threadId": {
+            "type": "string",
+            "description": "Existing thread to append this message to; the References/In-Reply-To headers and Subject inside raw must already satisfy Gmail's threading rules."
+          }
         }
       },
-      "risk": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered"
+      "risk": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered",
+      "redact_fields": [
+        "raw"
+      ]
     },
     {
       "name": "insert_message",
@@ -26,14 +37,29 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["raw"],
+        "required": [
+          "raw"
+        ],
         "properties": {
-          "raw": { "type": "string", "description": "Entire RFC 2822 message, base64url-encoded." },
-          "threadId": { "type": "string" },
-          "labelIds": { "type": "array", "items": { "type": "string" } }
+          "raw": {
+            "type": "string",
+            "description": "Entire RFC 2822 message, base64url-encoded."
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "labelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       },
-      "risk": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation"
+      "risk": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation",
+      "redact_fields": [
+        "raw"
+      ]
     },
     {
       "name": "import_message",
@@ -44,148 +70,360 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["raw"],
+        "required": [
+          "raw"
+        ],
         "properties": {
-          "raw": { "type": "string", "description": "Entire RFC 2822 message, base64url-encoded." },
-          "threadId": { "type": "string" },
-          "labelIds": { "type": "array", "items": { "type": "string" } }
+          "raw": {
+            "type": "string",
+            "description": "Entire RFC 2822 message, base64url-encoded."
+          },
+          "threadId": {
+            "type": "string"
+          },
+          "labelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       },
-      "risk": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default"
+      "risk": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default",
+      "redact_fields": [
+        "raw"
+      ]
     },
     {
       "name": "modify_message",
       "kind": "update",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/messages/{{ record.id }}/modify",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "minProperties": 2,
         "properties": {
-          "id": { "type": "string" },
-          "addLabelIds": { "type": "array", "items": { "type": "string" } },
-          "removeLabelIds": { "type": "array", "items": { "type": "string" } }
+          "id": {
+            "type": "string"
+          },
+          "addLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "removeLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       },
-      "risk": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner"
+      "risk": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "trash_message",
       "kind": "update",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/messages/{{ record.id }}/trash",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "moves a message to Trash; auto-purged by Gmail after 30 days"
+      "risk": "moves a message to Trash; auto-purged by Gmail after 30 days",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "untrash_message",
       "kind": "update",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/messages/{{ record.id }}/untrash",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "restores a trashed message back to its prior labels"
+      "risk": "restores a trashed message back to its prior labels",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "delete_message",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/messages/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
       "risk": "permanently deletes a message immediately, bypassing Trash; irreversible",
+      "confirm": "destructive",
+      "redact_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "batch_delete_messages",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/users/{{ config.user_id }}/messages/batchDelete",
+      "redact_fields": [
+        "ids"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Message IDs to permanently delete in one Gmail batchDelete request."
+          }
+        }
+      },
+      "risk": "permanently deletes every message ID in ids[] immediately, bypassing Trash; Gmail documents no per-ID existence guarantees",
       "confirm": "destructive"
+    },
+    {
+      "name": "batch_modify_messages",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ config.user_id }}/messages/batchModify",
+      "redact_fields": [
+        "ids"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Message IDs to modify; Gmail documents a limit of 1000 IDs per request."
+          },
+          "addLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Label IDs to add to every listed message."
+          },
+          "removeLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Label IDs to remove from every listed message."
+          },
+          "addClassificationLabels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Classification Label values to add or update."
+          },
+          "removeClassificationLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Classification Label IDs to remove from every listed message."
+          }
+        }
+      },
+      "risk": "changes labels and Classification Label values across a bounded ids[] set in one Gmail batchModify request; validate the staged IDs before approval"
     },
     {
       "name": "modify_thread",
       "kind": "update",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/threads/{{ record.id }}/modify",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "minProperties": 2,
         "properties": {
-          "id": { "type": "string" },
-          "addLabelIds": { "type": "array", "items": { "type": "string" } },
-          "removeLabelIds": { "type": "array", "items": { "type": "string" } }
+          "id": {
+            "type": "string"
+          },
+          "addLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "removeLabelIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       },
-      "risk": "changes label state on every message in an existing thread"
+      "risk": "changes label state on every message in an existing thread",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "trash_thread",
       "kind": "update",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/threads/{{ record.id }}/trash",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "moves an entire thread to Trash; auto-purged by Gmail after 30 days"
+      "risk": "moves an entire thread to Trash; auto-purged by Gmail after 30 days",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "untrash_thread",
       "kind": "update",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/threads/{{ record.id }}/untrash",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "restores a trashed thread back to its prior labels"
+      "risk": "restores a trashed thread back to its prior labels",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "delete_thread",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/threads/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
       "risk": "permanently deletes every message in a thread immediately, bypassing Trash; irreversible",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "create_draft",
@@ -196,44 +434,73 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "properties": {
           "message": {
             "type": "object",
-            "required": ["raw"],
+            "required": [
+              "raw"
+            ],
             "properties": {
-              "raw": { "type": "string", "description": "Entire RFC 2822 draft message, base64url-encoded." },
-              "threadId": { "type": "string" }
+              "raw": {
+                "type": "string",
+                "description": "Entire RFC 2822 draft message, base64url-encoded."
+              },
+              "threadId": {
+                "type": "string"
+              }
             }
           }
         }
       },
-      "risk": "creates a new unsent draft, visible to the mailbox owner"
+      "risk": "creates a new unsent draft, visible to the mailbox owner",
+      "redact_fields": [
+        "message.raw"
+      ]
     },
     {
       "name": "update_draft",
       "kind": "update",
       "method": "PUT",
       "path": "/users/{{ config.user_id }}/drafts/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id", "message"],
+        "required": [
+          "id",
+          "message"
+        ],
         "properties": {
-          "id": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
           "message": {
             "type": "object",
-            "required": ["raw"],
+            "required": [
+              "raw"
+            ],
             "properties": {
-              "raw": { "type": "string" },
-              "threadId": { "type": "string" }
+              "raw": {
+                "type": "string"
+              },
+              "threadId": {
+                "type": "string"
+              }
             }
           }
         }
       },
-      "risk": "replaces the entire content of an existing draft"
+      "risk": "replaces the entire content of an existing draft",
+      "redact_fields": [
+        "id",
+        "message.raw"
+      ]
     },
     {
       "name": "send_draft",
@@ -244,28 +511,52 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "string", "description": "The draft ID to send (Gmail's drafts.send accepts { \"id\": \"<draftId>\" } as its full request body)." }
+          "id": {
+            "type": "string",
+            "description": "The draft ID to send (Gmail's drafts.send accepts { \"id\": \"<draftId>\" } as its full request body)."
+          }
         }
       },
-      "risk": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered"
+      "risk": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "delete_draft",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/drafts/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "permanently deletes a draft; irreversible"
+      "risk": "permanently deletes a draft; irreversible",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "create_label",
@@ -276,12 +567,31 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "labelListVisibility": { "type": "string", "enum": ["labelShow", "labelShowIfUnread", "labelHide"] },
-          "messageListVisibility": { "type": "string", "enum": ["show", "hide"] },
-          "color": { "type": "object" }
+          "name": {
+            "type": "string"
+          },
+          "labelListVisibility": {
+            "type": "string",
+            "enum": [
+              "labelShow",
+              "labelShowIfUnread",
+              "labelHide"
+            ]
+          },
+          "messageListVisibility": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide"
+            ]
+          },
+          "color": {
+            "type": "object"
+          }
         }
       },
       "risk": "creates a new custom label visible in the mailbox owner's label list"
@@ -291,18 +601,42 @@
       "kind": "update",
       "method": "PUT",
       "path": "/users/{{ config.user_id }}/labels/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id", "name"],
+        "required": [
+          "id",
+          "name"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "labelListVisibility": { "type": "string", "enum": ["labelShow", "labelShowIfUnread", "labelHide"] },
-          "messageListVisibility": { "type": "string", "enum": ["show", "hide"] },
-          "color": { "type": "object" }
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "labelListVisibility": {
+            "type": "string",
+            "enum": [
+              "labelShow",
+              "labelShowIfUnread",
+              "labelHide"
+            ]
+          },
+          "messageListVisibility": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide"
+            ]
+          },
+          "color": {
+            "type": "object"
+          }
         }
       },
       "risk": "replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is accepted"
@@ -312,19 +646,42 @@
       "kind": "update",
       "method": "PATCH",
       "path": "/users/{{ config.user_id }}/labels/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "minProperties": 2,
         "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "labelListVisibility": { "type": "string", "enum": ["labelShow", "labelShowIfUnread", "labelHide"] },
-          "messageListVisibility": { "type": "string", "enum": ["show", "hide"] },
-          "color": { "type": "object" }
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "labelListVisibility": {
+            "type": "string",
+            "enum": [
+              "labelShow",
+              "labelShowIfUnread",
+              "labelHide"
+            ]
+          },
+          "messageListVisibility": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide"
+            ]
+          },
+          "color": {
+            "type": "object"
+          }
         }
       },
       "risk": "partially updates an existing label's fields, leaving unset fields unchanged"
@@ -334,16 +691,32 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/labels/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error"
+      "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
+      "redact_fields": [
+        "id"
+      ]
     },
     {
       "name": "create_filter",
@@ -354,47 +727,104 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["criteria"],
+        "required": [
+          "criteria"
+        ],
         "properties": {
           "criteria": {
             "type": "object",
             "properties": {
-              "from": { "type": "string" },
-              "to": { "type": "string" },
-              "subject": { "type": "string" },
-              "query": { "type": "string" },
-              "negatedQuery": { "type": "string" },
-              "hasAttachment": { "type": "boolean" },
-              "excludeChats": { "type": "boolean" },
-              "size": { "type": "integer" },
-              "sizeComparison": { "type": "string", "enum": ["unspecified", "smaller", "larger"] }
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              },
+              "negatedQuery": {
+                "type": "string"
+              },
+              "hasAttachment": {
+                "type": "boolean"
+              },
+              "excludeChats": {
+                "type": "boolean"
+              },
+              "size": {
+                "type": "integer"
+              },
+              "sizeComparison": {
+                "type": "string",
+                "enum": [
+                  "unspecified",
+                  "smaller",
+                  "larger"
+                ]
+              }
             }
           },
           "action": {
             "type": "object",
             "properties": {
-              "addLabelIds": { "type": "array", "items": { "type": "string" } },
-              "removeLabelIds": { "type": "array", "items": { "type": "string" } },
-              "forward": { "type": "string" }
+              "addLabelIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "removeLabelIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "forward": {
+                "type": "string"
+              }
             }
           }
         }
       },
-      "risk": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)"
+      "risk": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
+      "redact_fields": [
+        "criteria.from",
+        "criteria.to",
+        "criteria.subject",
+        "criteria.query",
+        "action.forward"
+      ]
     },
     {
       "name": "delete_filter",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/settings/filters/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
-        "properties": { "id": { "type": "string" } }
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
       },
       "risk": "removes an existing mail filter; future messages stop being auto-actioned by it"
     },
@@ -407,95 +837,306 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["sendAsEmail"],
+        "required": [
+          "sendAsEmail"
+        ],
         "properties": {
-          "sendAsEmail": { "type": "string" },
-          "displayName": { "type": "string" },
-          "replyToAddress": { "type": "string" },
-          "signature": { "type": "string" },
-          "treatAsAlias": { "type": "boolean" },
-          "smtpMsa": { "type": "object" }
+          "sendAsEmail": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "replyToAddress": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "treatAsAlias": {
+            "type": "boolean"
+          },
+          "smtpMsa": {
+            "type": "object"
+          }
         }
       },
-      "risk": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail"
+      "risk": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail",
+      "redact_fields": [
+        "sendAsEmail",
+        "replyToAddress",
+        "signature",
+        "smtpMsa.password"
+      ]
     },
     {
       "name": "update_send_as",
       "kind": "update",
       "method": "PUT",
       "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}",
-      "path_fields": ["sendAsEmail"],
+      "path_fields": [
+        "sendAsEmail"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["sendAsEmail"],
+        "required": [
+          "sendAsEmail"
+        ],
         "properties": {
-          "sendAsEmail": { "type": "string" },
-          "displayName": { "type": "string" },
-          "replyToAddress": { "type": "string" },
-          "signature": { "type": "string" },
-          "treatAsAlias": { "type": "boolean" },
-          "isDefault": { "type": "boolean" },
-          "smtpMsa": { "type": "object" }
+          "sendAsEmail": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "replyToAddress": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "treatAsAlias": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "smtpMsa": {
+            "type": "object"
+          }
         }
       },
-      "risk": "replaces the full send-as alias configuration, including which alias is the account default"
+      "risk": "replaces the full send-as alias configuration, including which alias is the account default",
+      "redact_fields": [
+        "sendAsEmail",
+        "replyToAddress",
+        "signature",
+        "smtpMsa.password"
+      ]
     },
     {
       "name": "patch_send_as",
       "kind": "update",
       "method": "PATCH",
       "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}",
-      "path_fields": ["sendAsEmail"],
+      "path_fields": [
+        "sendAsEmail"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["sendAsEmail"],
+        "required": [
+          "sendAsEmail"
+        ],
         "minProperties": 2,
         "properties": {
-          "sendAsEmail": { "type": "string" },
-          "displayName": { "type": "string" },
-          "replyToAddress": { "type": "string" },
-          "signature": { "type": "string" },
-          "treatAsAlias": { "type": "boolean" },
-          "isDefault": { "type": "boolean" },
-          "smtpMsa": { "type": "object" }
+          "sendAsEmail": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "replyToAddress": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "treatAsAlias": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "smtpMsa": {
+            "type": "object"
+          }
         }
       },
-      "risk": "partially updates an existing send-as alias, leaving unset fields unchanged"
+      "risk": "partially updates an existing send-as alias, leaving unset fields unchanged",
+      "redact_fields": [
+        "sendAsEmail",
+        "replyToAddress",
+        "signature",
+        "smtpMsa.password"
+      ]
     },
     {
       "name": "delete_send_as",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}",
-      "path_fields": ["sendAsEmail"],
+      "path_fields": [
+        "sendAsEmail"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["sendAsEmail"],
-        "properties": { "sendAsEmail": { "type": "string" } }
+        "required": [
+          "sendAsEmail"
+        ],
+        "properties": {
+          "sendAsEmail": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)"
+      "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
+      "redact_fields": [
+        "sendAsEmail"
+      ]
     },
     {
       "name": "verify_send_as",
       "kind": "custom",
       "method": "POST",
       "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/verify",
-      "path_fields": ["sendAsEmail"],
+      "path_fields": [
+        "sendAsEmail"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["sendAsEmail"],
-        "properties": { "sendAsEmail": { "type": "string" } }
+        "required": [
+          "sendAsEmail"
+        ],
+        "properties": {
+          "sendAsEmail": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "re-sends the verification email for a pending custom From: alias"
+      "risk": "re-sends the verification email for a pending custom From: alias",
+      "redact_fields": [
+        "sendAsEmail"
+      ]
+    },
+    {
+      "name": "insert_smime_info",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo",
+      "path_fields": [
+        "sendAsEmail"
+      ],
+      "redact_fields": [
+        "sendAsEmail",
+        "pkcs12",
+        "encryptedKeyPassword"
+      ],
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sendAsEmail",
+          "pkcs12"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "sendAsEmail": {
+            "type": "string",
+            "description": "Send-as alias email whose S/MIME config receives the certificate."
+          },
+          "pkcs12": {
+            "type": "string",
+            "description": "Base64-encoded PKCS#12 private/public key pair and certificate chain; redacted from previews and errors."
+          },
+          "encryptedKeyPassword": {
+            "type": "string",
+            "description": "Password for encrypted PKCS#12 material, when needed; redacted from previews and errors."
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether Gmail should make this S/MIME config the default after insertion."
+          }
+        }
+      },
+      "risk": "uploads PKCS#12 S/MIME certificate material for a send-as alias; certificate bytes and password are redacted and require approved reverse ETL execution"
+    },
+    {
+      "name": "set_default_smime_info",
+      "kind": "update",
+      "method": "POST",
+      "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo/{{ record.id }}/setDefault",
+      "path_fields": [
+        "sendAsEmail",
+        "id"
+      ],
+      "redact_fields": [
+        "sendAsEmail",
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sendAsEmail",
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "sendAsEmail": {
+            "type": "string",
+            "description": "Send-as alias email whose default S/MIME certificate changes."
+          },
+          "id": {
+            "type": "string",
+            "description": "S/MIME config ID to make default."
+          }
+        }
+      },
+      "risk": "changes which S/MIME certificate Gmail uses by default for the send-as alias"
+    },
+    {
+      "name": "delete_smime_info",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo/{{ record.id }}",
+      "path_fields": [
+        "sendAsEmail",
+        "id"
+      ],
+      "redact_fields": [
+        "sendAsEmail",
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "sendAsEmail",
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "sendAsEmail": {
+            "type": "string",
+            "description": "Send-as alias email whose S/MIME config is deleted."
+          },
+          "id": {
+            "type": "string",
+            "description": "S/MIME config ID to delete."
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "deletes an S/MIME certificate configuration from the send-as alias; future encrypted sending may fail until another cert is configured",
+      "confirm": "destructive"
     },
     {
       "name": "create_delegate",
@@ -506,26 +1147,51 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["delegateEmail"],
-        "properties": { "delegateEmail": { "type": "string" } }
+        "required": [
+          "delegateEmail"
+        ],
+        "properties": {
+          "delegateEmail": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change"
+      "risk": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change",
+      "redact_fields": [
+        "delegateEmail"
+      ]
     },
     {
       "name": "delete_delegate",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/settings/delegates/{{ record.delegateEmail }}",
-      "path_fields": ["delegateEmail"],
+      "path_fields": [
+        "delegateEmail"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["delegateEmail"],
-        "properties": { "delegateEmail": { "type": "string" } }
+        "required": [
+          "delegateEmail"
+        ],
+        "properties": {
+          "delegateEmail": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "revokes another account's delegated access to this mailbox"
+      "risk": "revokes another account's delegated access to this mailbox",
+      "redact_fields": [
+        "delegateEmail"
+      ]
     },
     {
       "name": "create_forwarding_address",
@@ -536,26 +1202,51 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["forwardingEmail"],
-        "properties": { "forwardingEmail": { "type": "string" } }
+        "required": [
+          "forwardingEmail"
+        ],
+        "properties": {
+          "forwardingEmail": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding"
+      "risk": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding",
+      "redact_fields": [
+        "forwardingEmail"
+      ]
     },
     {
       "name": "delete_forwarding_address",
       "kind": "delete",
       "method": "DELETE",
       "path": "/users/{{ config.user_id }}/settings/forwardingAddresses/{{ record.forwardingEmail }}",
-      "path_fields": ["forwardingEmail"],
+      "path_fields": [
+        "forwardingEmail"
+      ],
       "body_type": "none",
-      "delete": { "idempotent": true, "missing_ok_status": [404] },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["forwardingEmail"],
-        "properties": { "forwardingEmail": { "type": "string" } }
+        "required": [
+          "forwardingEmail"
+        ],
+        "properties": {
+          "forwardingEmail": {
+            "type": "string"
+          }
+        }
       },
-      "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops"
+      "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
+      "redact_fields": [
+        "forwardingEmail"
+      ]
     },
     {
       "name": "update_auto_forwarding",
@@ -566,14 +1257,33 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["enabled"],
+        "required": [
+          "enabled"
+        ],
         "properties": {
-          "enabled": { "type": "boolean" },
-          "emailAddress": { "type": "string", "description": "Must already be a verified forwarding address (see create_forwarding_address) when enabled is true." },
-          "disposition": { "type": "string", "enum": ["dispositionUnspecified", "leaveInInbox", "archive", "trash", "markRead"] }
+          "enabled": {
+            "type": "boolean"
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Must already be a verified forwarding address (see create_forwarding_address) when enabled is true."
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "dispositionUnspecified",
+              "leaveInInbox",
+              "archive",
+              "trash",
+              "markRead"
+            ]
+          }
         }
       },
-      "risk": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address"
+      "risk": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address",
+      "redact_fields": [
+        "emailAddress"
+      ]
     },
     {
       "name": "update_vacation",
@@ -585,17 +1295,40 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
-          "enableAutoReply": { "type": "boolean" },
-          "responseSubject": { "type": "string" },
-          "responseBodyPlainText": { "type": "string" },
-          "responseBodyHtml": { "type": "string" },
-          "restrictToContacts": { "type": "boolean" },
-          "restrictToDomain": { "type": "boolean" },
-          "startTime": { "type": "string", "description": "Epoch milliseconds, as a string (Gmail's int64 wire format)." },
-          "endTime": { "type": "string", "description": "Epoch milliseconds, as a string (Gmail's int64 wire format)." }
+          "enableAutoReply": {
+            "type": "boolean"
+          },
+          "responseSubject": {
+            "type": "string"
+          },
+          "responseBodyPlainText": {
+            "type": "string"
+          },
+          "responseBodyHtml": {
+            "type": "string"
+          },
+          "restrictToContacts": {
+            "type": "boolean"
+          },
+          "restrictToDomain": {
+            "type": "boolean"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "Epoch milliseconds, as a string (Gmail's int64 wire format)."
+          },
+          "endTime": {
+            "type": "string",
+            "description": "Epoch milliseconds, as a string (Gmail's int64 wire format)."
+          }
         }
       },
-      "risk": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message"
+      "risk": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message",
+      "redact_fields": [
+        "responseBodyHtml",
+        "responseBodyPlainText",
+        "responseSubject"
+      ]
     },
     {
       "name": "update_language",
@@ -606,8 +1339,14 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["displayLanguage"],
-        "properties": { "displayLanguage": { "type": "string" } }
+        "required": [
+          "displayLanguage"
+        ],
+        "properties": {
+          "displayLanguage": {
+            "type": "string"
+          }
+        }
       },
       "risk": "changes the Gmail web interface display language for the account"
     },
@@ -621,10 +1360,24 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
-          "enabled": { "type": "boolean" },
-          "autoExpunge": { "type": "boolean" },
-          "expungeBehavior": { "type": "string", "enum": ["expungeBehaviorUnspecified", "archive", "trash", "deleteForever"] },
-          "maxFolderSize": { "type": "integer" }
+          "enabled": {
+            "type": "boolean"
+          },
+          "autoExpunge": {
+            "type": "boolean"
+          },
+          "expungeBehavior": {
+            "type": "string",
+            "enum": [
+              "expungeBehaviorUnspecified",
+              "archive",
+              "trash",
+              "deleteForever"
+            ]
+          },
+          "maxFolderSize": {
+            "type": "integer"
+          }
         }
       },
       "risk": "changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected"
@@ -639,8 +1392,25 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
-          "accessWindow": { "type": "string", "enum": ["accessWindowUnspecified", "disabled", "fromNowOn", "allMail"] },
-          "disposition": { "type": "string", "enum": ["dispositionUnspecified", "leaveInInbox", "archive", "trash", "markRead"] }
+          "accessWindow": {
+            "type": "string",
+            "enum": [
+              "accessWindowUnspecified",
+              "disabled",
+              "fromNowOn",
+              "allMail"
+            ]
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "dispositionUnspecified",
+              "leaveInInbox",
+              "archive",
+              "trash",
+              "markRead"
+            ]
+          }
         }
       },
       "risk": "changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP"

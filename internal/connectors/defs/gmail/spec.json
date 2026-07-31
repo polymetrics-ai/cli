@@ -2,7 +2,10 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Gmail Connection Specification",
   "type": "object",
-  "required": ["client_id", "client_refresh_token"],
+  "required": [
+    "client_id",
+    "client_refresh_token"
+  ],
   "properties": {
     "client_id": {
       "type": "string",
@@ -58,6 +61,11 @@
     "start_history_id": {
       "type": "string",
       "description": "Gmail historyId lower bound for the history stream's incremental sync (users.history.list's required startHistoryId). Unlike messages/threads/drafts, history genuinely publishes a server-recognized, monotonically-increasing cursor (historyId) -- see Streams notes in docs.md. Obtain an initial value from any message/thread/label/profile record's historyId field."
+    },
+    "userId": {
+      "type": "string",
+      "default": "me",
+      "description": "Gmail user ID path segment used by provider-style direct-read commands. Defaults to 'me'. The ETL/reverse-ETL surfaces keep using user_id for legacy compatibility."
     }
   }
 }

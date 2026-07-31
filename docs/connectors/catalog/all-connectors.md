@@ -185,7 +185,7 @@
 | `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 231 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
 | `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
-| `gmail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 35 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
+| `gmail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 40 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
 | `gnews` | [`icons/gnews.svg`](../icons/gnews.svg) | GNews | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://gnews.io/docs/) | bundle definition |
 | `gocardless` | [`icons/gocardless.svg`](../icons/gocardless.svg) | GoCardless | `api` | ga | check, catalog, read, write | 63 | 76 | [Documentation](https://developer.gocardless.com/api-reference/) | bundle definition |
 | `goldcast` | [`icons/goldcast.svg`](../icons/goldcast.svg) | Goldcast | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.goldcast.io/api-docs) | bundle definition |

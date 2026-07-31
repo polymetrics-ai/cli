@@ -1,0 +1,22 @@
+{
+  "record": {
+    "ids": [
+      "msg_fixture_delete_1",
+      "msg_fixture_delete_2"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/messages/batchDelete",
+    "body": {
+      "ids": [
+        "msg_fixture_delete_1",
+        "msg_fixture_delete_2"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

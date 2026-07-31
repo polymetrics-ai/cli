@@ -1,0 +1,237 @@
+{
+  "operations": [
+    {
+      "id": "gmail.users.messages.get",
+      "kind": "rest_read",
+      "summary": "Gets one Gmail message by ID as a redacted JSON direct read.",
+      "description": "Gets one Gmail message by ID as a redacted JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/get",
+      "risk": "medium",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/messages/{id}",
+        "max_bytes": 4194304
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "payload.body.data",
+          "raw"
+        ]
+      }
+    },
+    {
+      "id": "gmail.users.threads.get",
+      "kind": "rest_read",
+      "summary": "Gets one Gmail thread by ID as a redacted JSON direct read.",
+      "description": "Gets one Gmail thread by ID as a redacted JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.threads/get",
+      "risk": "medium",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/threads/{id}",
+        "max_bytes": 4194304
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "messages.payload.body.data",
+          "messages.raw"
+        ]
+      }
+    },
+    {
+      "id": "gmail.users.drafts.get",
+      "kind": "rest_read",
+      "summary": "Gets one Gmail draft by ID as a redacted JSON direct read.",
+      "description": "Gets one Gmail draft by ID as a redacted JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.drafts/get",
+      "risk": "medium",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/drafts/{id}",
+        "max_bytes": 4194304
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "message.payload.body.data",
+          "message.raw"
+        ]
+      }
+    },
+    {
+      "id": "gmail.users.labels.get",
+      "kind": "rest_read",
+      "summary": "Gets one Gmail label by ID as a JSON direct read.",
+      "description": "Gets one Gmail label by ID as a JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.labels/get",
+      "risk": "low",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/labels/{id}",
+        "max_bytes": 262144
+      }
+    },
+    {
+      "id": "gmail.users.settings.filters.get",
+      "kind": "rest_read",
+      "summary": "Gets one Gmail settings filter by ID as a JSON direct read.",
+      "description": "Gets one Gmail settings filter by ID as a JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings.filters/get",
+      "risk": "low",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/filters/{id}",
+        "max_bytes": 262144
+      }
+    },
+    {
+      "id": "gmail.users.settings.getautoforwarding",
+      "kind": "rest_read",
+      "summary": "Gets the Gmail auto-forwarding singleton as a redacted JSON direct read.",
+      "description": "Gets the Gmail auto-forwarding singleton as a redacted JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings/getAutoForwarding",
+      "risk": "medium",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/autoForwarding",
+        "max_bytes": 262144
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "emailAddress"
+        ]
+      }
+    },
+    {
+      "id": "gmail.users.settings.getvacation",
+      "kind": "rest_read",
+      "summary": "Gets the Gmail vacation responder singleton as a redacted JSON direct read.",
+      "description": "Gets the Gmail vacation responder singleton as a redacted JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings/getVacation",
+      "risk": "medium",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/vacation",
+        "max_bytes": 524288
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "responseBodyHtml",
+          "responseBodyPlainText",
+          "responseSubject"
+        ]
+      }
+    },
+    {
+      "id": "gmail.users.settings.getlanguage",
+      "kind": "rest_read",
+      "summary": "Gets the Gmail display-language singleton as a JSON direct read.",
+      "description": "Gets the Gmail display-language singleton as a JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings/getLanguage",
+      "risk": "low",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/language",
+        "max_bytes": 131072
+      }
+    },
+    {
+      "id": "gmail.users.settings.getimap",
+      "kind": "rest_read",
+      "summary": "Gets the Gmail IMAP settings singleton as a JSON direct read.",
+      "description": "Gets the Gmail IMAP settings singleton as a JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings/getImap",
+      "risk": "low",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/imap",
+        "max_bytes": 131072
+      }
+    },
+    {
+      "id": "gmail.users.settings.getpop",
+      "kind": "rest_read",
+      "summary": "Gets the Gmail POP settings singleton as a JSON direct read.",
+      "description": "Gets the Gmail POP settings singleton as a JSON direct read. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.settings/getPop",
+      "risk": "low",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/settings/pop",
+        "max_bytes": 131072
+      }
+    },
+    {
+      "id": "gmail.users.messages.attachments.get",
+      "kind": "rest_read",
+      "summary": "Gets one Gmail message attachment resource with base64url data redacted.",
+      "description": "Gets one Gmail message attachment resource with base64url data redacted. Uses a fixed Gmail API endpoint and the shared bounded direct-read executor.",
+      "source_url": "https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages.attachments/get",
+      "risk": "high",
+      "approval": "read-only bounded direct read; no reverse-ETL approval token is required",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://mail.google.com/"
+      ],
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "data"
+        ]
+      }
+    }
+  ]
+}
