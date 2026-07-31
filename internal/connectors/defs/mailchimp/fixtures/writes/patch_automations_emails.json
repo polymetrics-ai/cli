@@ -1,0 +1,22 @@
+{
+  "record": {
+    "workflow_id": "fixture_workflow_id",
+    "workflow_email_id": "fixture_workflow_email_id",
+    "settings": {},
+    "delay": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/automations/fixture_workflow_id/emails/fixture_workflow_email_id",
+    "body": {
+      "settings": {},
+      "delay": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_automations_emails"
+    }
+  }
+}

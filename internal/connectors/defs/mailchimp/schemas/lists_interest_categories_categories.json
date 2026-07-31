@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_interest_categories_categories",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "display_order": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

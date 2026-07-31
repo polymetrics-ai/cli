@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/locations",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "locations": [
+        {
+          "list_id": "fixture_list_id",
+          "country": "fixture_country",
+          "cc": "fixture_cc",
+          "percent": 1,
+          "total": 1
+        }
+      ]
+    }
+  }
+}

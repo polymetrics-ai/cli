@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/stores/synthetic-conformance-value/promo-rules/synthetic-conformance-value/promo-codes",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "promo_codes": [
+        {
+          "id": "fixture_id",
+          "store_id": "fixture_store_id",
+          "promo_rule_id": "fixture_promo_rule_id",
+          "code": "fixture_code",
+          "redemption_url": "https://example.invalid/mailchimp-fixture",
+          "usage_count": 1,
+          "enabled": true,
+          "created_at_foreign": "fixture_created_at_foreign"
+        }
+      ]
+    }
+  }
+}

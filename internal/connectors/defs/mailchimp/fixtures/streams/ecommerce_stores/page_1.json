@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/stores",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "stores": [
+        {
+          "id": "fixture_id",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "list_id": "fixture_list_id",
+          "name": "fixture_name",
+          "platform": "fixture_platform",
+          "domain": "fixture_domain",
+          "is_syncing": true,
+          "email_address": "fixture@example.invalid"
+        }
+      ]
+    }
+  }
+}

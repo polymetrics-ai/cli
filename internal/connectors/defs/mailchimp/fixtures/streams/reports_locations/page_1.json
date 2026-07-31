@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/locations",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "locations": [
+        {
+          "campaign_id": "fixture_campaign_id",
+          "country_code": "fixture_country_code",
+          "region": "fixture_region",
+          "region_name": "fixture_region_name",
+          "opens": 1,
+          "proxy_excluded_opens": 1
+        }
+      ]
+    }
+  }
+}

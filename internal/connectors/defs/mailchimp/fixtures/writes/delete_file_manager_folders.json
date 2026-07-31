@@ -1,0 +1,15 @@
+{
+  "record": {
+    "folder_id": "fixture_folder_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/file-manager/folders/fixture_folder_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_file_manager_folders"
+    }
+  }
+}

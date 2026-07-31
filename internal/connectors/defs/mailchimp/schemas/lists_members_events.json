@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_members_events",
+  "type": "object",
+  "x-primary-key": [
+    "list_id"
+  ],
+  "properties": {
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "properties": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscriber_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

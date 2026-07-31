@@ -1,0 +1,17 @@
+{
+  "record": {
+    "journey_id": "fixture_journey_id",
+    "step_id": "fixture_step_id",
+    "email_address": "fixture@example.invalid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customer-journeys/journeys/fixture_journey_id/steps/fixture_step_id/actions/trigger"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_trigger_steps"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "api_version": "polymetrics.ai/v1",
+  "dir": "docs/connectors",
+  "kind": "SkillGeneration",
+  "skills": [
+    "pm-connectors",
+    "pm-etl",
+    "pm-file",
+    "pm-github",
+    "pm-outbox",
+    "pm-reverse-etl",
+    "pm-runtime",
+    "pm-sample",
+    "pm-shared",
+    "pm-warehouse",
+    "recipe-github-prs-to-warehouse",
+    "recipe-preview-approve-reverse-etl"
+  ]
+}
+real 13.17
+user 6.65
+sys 1.59

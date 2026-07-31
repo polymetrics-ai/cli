@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports_domain_performance_domains",
+  "type": "object",
+  "x-primary-key": [
+    "campaign_id"
+  ],
+  "properties": {
+    "domain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emails_sent": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bounces": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "opens": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "clicks": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unsubs": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "delivered": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "emails_pct": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "bounces_pct": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "opens_pct": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "clicks_pct": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "unsubs_pct": {
+      "type": [
+        "number",
+        "integer",
+        "null"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,266 @@
+gofmt -w cmd internal
+go mod tidy
+git diff --exit-code -- go.mod go.sum
+go vet ./...
+go test -timeout 20m ./...
+ok  	polymetrics.ai/build/windowsversion	(cached)
+ok  	polymetrics.ai/cmd/connectorgen	26.581s
+ok  	polymetrics.ai/cmd/iconregistrygen	(cached)
+ok  	polymetrics.ai/cmd/pm	7.657s
+ok  	polymetrics.ai/cmd/prissueguard	(cached)
+ok  	polymetrics.ai/internal/agentmode	(cached)
+ok  	polymetrics.ai/internal/app	11.879s
+ok  	polymetrics.ai/internal/cli	59.639s
+ok  	polymetrics.ai/internal/config	4.149s
+ok  	polymetrics.ai/internal/connectors	4.003s
+ok  	polymetrics.ai/internal/connectors/boundary	157.493s
+ok  	polymetrics.ai/internal/connectors/bundleregistry	11.087s
+ok  	polymetrics.ai/internal/connectors/certify	48.111s
+ok  	polymetrics.ai/internal/connectors/commandrunner	10.448s
+ok  	polymetrics.ai/internal/connectors/conformance	51.941s
+ok  	polymetrics.ai/internal/connectors/connsdk	3.836s
+ok  	polymetrics.ai/internal/connectors/defs	7.485s
+ok  	polymetrics.ai/internal/connectors/engine	9.979s
+ok  	polymetrics.ai/internal/connectors/hooks/akeneo	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/alpha-vantage	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/amazon-ads	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/amazon-seller-partner	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/apify-dataset	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/apple-search-ads	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/appsflyer	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/ashby	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/aws-cloudtrail	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/babelforce	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/basecamp	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/blogger	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/bunny-inc	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/canny	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/chift	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/copper	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/dixa	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/ebay-fulfillment	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/elasticsearch	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/fastbill	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/feishu	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/free-agent-connector	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/freightview	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/github	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/gmail	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-ads	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-analytics-data-api	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-calendar	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-classroom	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-forms	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-pagespeed-insights	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/google-search-console	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/hookset	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/hoorayhr	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/jamf-pro	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/keka	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/less-annoying-crm	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/lokalise	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/mendeley	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/mercado-ads	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/metabase	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-dataverse	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-entra-id	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-lists	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/microsoft-teams	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/mixpanel	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/mode	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/monday	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/my-hours	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/netsuite	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/nexus-datasets	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/notion	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/outlook	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/paypal-transaction	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/pinterest	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/plaid	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/pocket	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/prestashop	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/quickbooks	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/rootly	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/rss	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/safetyculture	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/salesloft	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/sentry	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/serpstat	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/slack	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/smartsheets	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/snapchat-marketing	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/stigg	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/strava	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/twilio	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/uptick	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/us-census	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/wasabi-stats-api	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/yahoo-finance-price	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/youtube-analytics	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/zoho-analytics-metadata-api	(cached)
+ok  	polymetrics.ai/internal/connectors/hooks/zoho-bigin	(cached)
+ok  	polymetrics.ai/internal/connectors/native/alpha-vantage	(cached)
+ok  	polymetrics.ai/internal/connectors/native/amazon-sqs	4.313s
+ok  	polymetrics.ai/internal/connectors/native/apify-dataset	(cached)
+ok  	polymetrics.ai/internal/connectors/native/ashby	(cached)
+ok  	polymetrics.ai/internal/connectors/native/aws-cloudtrail	(cached)
+ok  	polymetrics.ai/internal/connectors/native/babelforce	(cached)
+ok  	polymetrics.ai/internal/connectors/native/basecamp	(cached)
+ok  	polymetrics.ai/internal/connectors/native/bing-ads	5.604s
+ok  	polymetrics.ai/internal/connectors/native/bunny-inc	(cached)
+ok  	polymetrics.ai/internal/connectors/native/canny	(cached)
+ok  	polymetrics.ai/internal/connectors/native/copper	(cached)
+ok  	polymetrics.ai/internal/connectors/native/dixa	(cached)
+ok  	polymetrics.ai/internal/connectors/native/dynamodb	3.716s
+ok  	polymetrics.ai/internal/connectors/native/faker	3.639s
+ok  	polymetrics.ai/internal/connectors/native/fastbill	(cached)
+ok  	polymetrics.ai/internal/connectors/native/feishu	(cached)
+ok  	polymetrics.ai/internal/connectors/native/free-agent-connector	(cached)
+ok  	polymetrics.ai/internal/connectors/native/freightview	(cached)
+ok  	polymetrics.ai/internal/connectors/native/google-analytics-data-api	(cached)
+ok  	polymetrics.ai/internal/connectors/native/google-calendar	(cached)
+ok  	polymetrics.ai/internal/connectors/native/google-classroom	(cached)
+ok  	polymetrics.ai/internal/connectors/native/google-pagespeed-insights	(cached)
+ok  	polymetrics.ai/internal/connectors/native/less-annoying-crm	(cached)
+ok  	polymetrics.ai/internal/connectors/native/lokalise	(cached)
+ok  	polymetrics.ai/internal/connectors/native/mendeley	(cached)
+ok  	polymetrics.ai/internal/connectors/native/mercado-ads	(cached)
+ok  	polymetrics.ai/internal/connectors/native/metabase	(cached)
+ok  	polymetrics.ai/internal/connectors/native/mode	(cached)
+ok  	polymetrics.ai/internal/connectors/native/my-hours	(cached)
+ok  	polymetrics.ai/internal/connectors/native/nativeset	3.816s
+ok  	polymetrics.ai/internal/connectors/native/pocket	(cached)
+ok  	polymetrics.ai/internal/connectors/native/postgres	4.861s
+ok  	polymetrics.ai/internal/connectors/native/prestashop	(cached)
+ok  	polymetrics.ai/internal/connectors/native/rootly	(cached)
+ok  	polymetrics.ai/internal/connectors/native/safetyculture	(cached)
+ok  	polymetrics.ai/internal/connectors/native/tally-prime	4.355s
+ok  	polymetrics.ai/internal/connectors/native/yahoo-finance-price	(cached)
+ok  	polymetrics.ai/internal/coordination	(cached)
+ok  	polymetrics.ai/internal/coordination/issueguard	(cached)
+ok  	polymetrics.ai/internal/flow	2.733s
+ok  	polymetrics.ai/internal/ledger	1.812s
+ok  	polymetrics.ai/internal/perf	10.577s
+ok  	polymetrics.ai/internal/rlm	3.496s
+ok  	polymetrics.ai/internal/rlm/router	(cached)
+ok  	polymetrics.ai/internal/runtime	(cached)
+ok  	polymetrics.ai/internal/runtimecheck	(cached)
+ok  	polymetrics.ai/internal/safety	(cached)
+ok  	polymetrics.ai/internal/schedule	2.889s
+ok  	polymetrics.ai/internal/state	3.268s
+ok  	polymetrics.ai/internal/temporalprobe	(cached)
+ok  	polymetrics.ai/internal/vault	2.930s
+ok  	polymetrics.ai/internal/worker	4.507s
+ok  	polymetrics.ai/packaging/windows	(cached)
+ok  	polymetrics.ai/packaging/windows/winget	(cached)
+go build ./cmd/pm
+./pm docs validate --connectors-dir docs/connectors
+Validated connector docs in docs/connectors
+set -eu; \
+	SMOKE_DIR=$(mktemp -d); \
+	export PM_SAMPLE_TOKEN=sample-token; \
+	./pm init --root "$SMOKE_DIR" --json >/dev/null; \
+	./pm credentials add sample-local --connector sample --from-env token=PM_SAMPLE_TOKEN --root "$SMOKE_DIR" --json >/dev/null; \
+	./pm credentials add warehouse-local --connector warehouse --config path="$SMOKE_DIR/.polymetrics/warehouse" --root "$SMOKE_DIR" --json >/dev/null; \
+	./pm credentials add outbox-local --connector outbox --config path="$SMOKE_DIR/.polymetrics/outbox" --root "$SMOKE_DIR" --json >/dev/null; \
+	./pm connections create sample_to_warehouse --source sample:sample-local --destination warehouse:warehouse-local --stream customers --primary-key id --cursor updated_at --table sample_customers --root "$SMOKE_DIR" --json >/dev/null; \
+	./pm catalog refresh --connection sample_to_warehouse --root "$SMOKE_DIR" --json >/dev/null; \
+	./pm etl run --connection sample_to_warehouse --stream customers --root "$SMOKE_DIR" --json >/dev/null; \
+	PLAN_OUTPUT=$(./pm reverse plan customers_to_outbox --source-table sample_customers --destination outbox:outbox-local --map id:external_id --map name:full_name --map email:email --root "$SMOKE_DIR"); \
+	PLAN_ID=$(printf '%s\n' "$PLAN_OUTPUT" | awk '/Created reverse plan/ {print $4}'); \
+	./pm reverse preview "$PLAN_ID" --root "$SMOKE_DIR" --json >/dev/null; \
+	APPROVAL=$(printf '%s\n' "$PLAN_OUTPUT" | awk '/Approval token:/ {print $3}'); \
+	./pm reverse run "$PLAN_ID" --approve "$APPROVAL" --root "$SMOKE_DIR" --json >/dev/null; \
+	test -s "$SMOKE_DIR/.polymetrics/warehouse/sample_customers.jsonl"; \
+	test -s "$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
+	printf 'smoke ok: %s\n' "$SMOKE_DIR"
+smoke ok: /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.xewzVGyYX4
+golangci-lint run ./internal/connectors/engine/... ./internal/connectors/defs/... ./internal/connectors/hooks/... ./internal/connectors/native/... ./internal/connectors/conformance/... ./internal/connectors/certify/... ./internal/connectors/boundary/... ./cmd/connectorgen/...
+0 issues.
+go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 549 connector(s) checked, 0 findings
+go run ./cmd/connectorgen boundary . --json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ConnectorBoundaryReport",
+  "outcome": "clean",
+  "repo_root": "/Users/karthiksivadas/.treehouse/cli-83d592/34/cli",
+  "mode": "whole_tree",
+  "checked_files": 130,
+  "connectors_loaded": 549,
+  "findings": [],
+  "warnings": [],
+  "exceptions": [
+    {
+      "id": "bahmni-guide-examples",
+      "rule": "docs_example",
+      "connector": "bahmni",
+      "path": "internal/connectors/guide.go",
+      "match": "bahmni",
+      "matches": 4,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/535",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-connector-docs-catalog-validation",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/connector_docs.go",
+      "match": "github",
+      "matches": 2,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-docs-help-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/docs.go",
+      "match": "github",
+      "matches": 4,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-skills-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/skills.go",
+      "match": "github",
+      "matches": 5,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-guide-examples-and-links",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/connectors/guide.go",
+      "match": "github",
+      "matches": 34,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-operation-secret-encryption-kind",
+      "rule": "provider_policy",
+      "connector": "github",
+      "path": "internal/connectors/engine/bundle.go",
+      "match": "github_secret_encryption",
+      "matches": 1,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/65",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    }
+  ]
+}
+./scripts/tests/homebrew-release-notify.sh
+homebrew release notification assertions passed
+real 436.11
+user 366.86
+sys 78.58
