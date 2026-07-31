@@ -88,11 +88,16 @@
       "path": "/repositories/{workspace}/{repo_slug}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}"
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -102,11 +107,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_branch_restrictions"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -123,11 +133,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_branch_restrictions_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -144,11 +159,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_branching_model_settings"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -165,11 +185,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_commit_commit_approve"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -179,11 +204,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_commit_commit_comments"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -200,18 +230,28 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_commit_commit_comments_comment_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -242,11 +282,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_commit_commit_reports_reportid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -270,11 +315,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -284,11 +334,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -305,11 +360,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_commit_commit_statuses_build"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -319,11 +379,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_commit_commit_statuses_build_key"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -333,11 +398,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commits"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_commits"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/commits"
+      "path": "/repositories/{workspace}/{repo_slug}/commits",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -347,11 +417,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_commits_revision"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -389,11 +464,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_default_reviewers_target_username"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -403,11 +483,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_deploy_keys"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -424,11 +509,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_deploy_keys_key_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -452,18 +542,28 @@
       "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_d653140a"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_cc6580ca"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -493,15 +593,10 @@
     },
     {
       "method": "GET",
-      "operation": {
-        "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
-      },
-      "path": "/repositories/{workspace}/{repo_slug}/downloads"
+      "path": "/repositories/{workspace}/{repo_slug}/downloads",
+      "covered_by": {
+        "stream": "repositories_workspace_repo_slug_downloads"
+      }
     },
     {
       "method": "POST",
@@ -556,11 +651,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/environments"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_environments"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/environments"
+      "path": "/repositories/{workspace}/{repo_slug}/environments",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -577,11 +677,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_environments_environment_uuid_changes"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -605,11 +710,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/forks"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_forks"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/forks"
+      "path": "/repositories/{workspace}/{repo_slug}/forks",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -619,11 +729,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/hooks"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_hooks"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/hooks"
+      "path": "/repositories/{workspace}/{repo_slug}/hooks",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -640,11 +755,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_hooks_uid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -654,18 +774,28 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/issues"
+      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_export"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/export"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/export",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -713,11 +843,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_issues_issue_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -770,11 +905,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_issue_id_changes"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -791,11 +931,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_issue_id_comments"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -812,11 +957,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -838,11 +988,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_issues_issue_id_vote"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -864,11 +1019,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_issues_issue_id_watch"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -899,11 +1059,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/override-settings"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_override_settings"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/override-settings"
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -939,11 +1104,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_permissions_config_groups_group_slug"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -967,11 +1137,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_permissions_config_users_selected_user_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -981,11 +1156,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pipelines"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1023,11 +1203,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pipelines_config_runners"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1037,11 +1222,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1132,11 +1322,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pipelines_pipeline_uuid_stoppipeline"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1146,25 +1341,40 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config_build_number"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pipelines_config_schedules"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1181,11 +1391,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1209,11 +1424,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1230,11 +1450,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1244,11 +1469,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1265,11 +1495,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pipelines_config_variables"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1279,11 +1514,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1293,11 +1533,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_properties_app_key_property_name"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1321,11 +1566,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -1347,11 +1597,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pullrequests_pull_request_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -1373,11 +1628,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1387,11 +1647,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1408,11 +1673,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1422,23 +1692,23 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
-      "operation": {
-        "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
-      },
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits",
+      "covered_by": {
+        "stream": "repositories_workspace_repo_slug_pullrequests_pull_request_id_commits"
+      }
     },
     {
       "method": "GET",
@@ -1453,11 +1723,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_decline"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -1473,22 +1748,22 @@
     },
     {
       "method": "GET",
-      "operation": {
-        "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
-      },
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
+      "covered_by": {
+        "stream": "repositories_workspace_repo_slug_pullrequests_pull_request_id_diffstat"
+      }
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_merge"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "method": "GET",
@@ -1522,11 +1797,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1543,11 +1823,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1564,18 +1849,28 @@
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
-      "covered_by": {
-        "write": "update_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_ac817a14"
-      },
       "method": "PUT",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1606,11 +1901,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_refs_branches"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1634,11 +1934,16 @@
       "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_refs_tags"
-      },
       "method": "POST",
-      "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1778,11 +2083,16 @@
       "path": "/snippets/{workspace}/{encoded_id}/comments"
     },
     {
-      "covered_by": {
-        "write": "create_snippets_workspace_encoded_id_comments"
-      },
       "method": "POST",
-      "path": "/snippets/{workspace}/{encoded_id}/comments"
+      "path": "/snippets/{workspace}/{encoded_id}/comments",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1799,11 +2109,16 @@
       "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
     },
     {
-      "covered_by": {
-        "write": "update_snippets_workspace_encoded_id_comments_comment_id"
-      },
       "method": "PUT",
-      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1851,11 +2166,16 @@
       "path": "/snippets/{workspace}/{encoded_id}/watch"
     },
     {
-      "covered_by": {
-        "write": "update_snippets_workspace_encoded_id_watch"
-      },
       "method": "PUT",
-      "path": "/snippets/{workspace}/{encoded_id}/watch"
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1934,11 +2254,16 @@
       "path": "/teams/{username}/pipelines_config/variables"
     },
     {
-      "covered_by": {
-        "write": "create_teams_username_pipelines_config_variables"
-      },
       "method": "POST",
-      "path": "/teams/{username}/pipelines_config/variables"
+      "path": "/teams/{username}/pipelines_config/variables",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -1948,11 +2273,16 @@
       "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_teams_username_pipelines_config_variables_variable_uuid"
-      },
       "method": "PUT",
-      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2044,11 +2374,16 @@
       "path": "/users/{selected_user}/gpg-keys"
     },
     {
-      "covered_by": {
-        "write": "create_users_selected_user_gpg_keys"
-      },
       "method": "POST",
-      "path": "/users/{selected_user}/gpg-keys"
+      "path": "/users/{selected_user}/gpg-keys",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2072,11 +2407,16 @@
       "path": "/users/{selected_user}/pipelines_config/variables"
     },
     {
-      "covered_by": {
-        "write": "create_users_selected_user_pipelines_config_variables"
-      },
       "method": "POST",
-      "path": "/users/{selected_user}/pipelines_config/variables"
+      "path": "/users/{selected_user}/pipelines_config/variables",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2086,11 +2426,16 @@
       "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_users_selected_user_pipelines_config_variables_variable_uuid"
-      },
       "method": "PUT",
-      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2100,11 +2445,16 @@
       "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_users_selected_user_properties_app_key_property_name"
-      },
       "method": "PUT",
-      "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2140,11 +2490,16 @@
       "path": "/users/{selected_user}/ssh-keys"
     },
     {
-      "covered_by": {
-        "write": "create_users_selected_user_ssh_keys"
-      },
       "method": "POST",
-      "path": "/users/{selected_user}/ssh-keys"
+      "path": "/users/{selected_user}/ssh-keys",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2161,11 +2516,16 @@
       "path": "/users/{selected_user}/ssh-keys/{key_id}"
     },
     {
-      "covered_by": {
-        "write": "update_users_selected_user_ssh_keys_key_id"
-      },
       "method": "PUT",
-      "path": "/users/{selected_user}/ssh-keys/{key_id}"
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2189,11 +2549,16 @@
       "path": "/workspaces/{workspace}/hooks"
     },
     {
-      "covered_by": {
-        "write": "create_workspaces_workspace_hooks"
-      },
       "method": "POST",
-      "path": "/workspaces/{workspace}/hooks"
+      "path": "/workspaces/{workspace}/hooks",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2210,11 +2575,16 @@
       "path": "/workspaces/{workspace}/hooks/{uid}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_hooks_uid"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/hooks/{uid}"
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2283,11 +2653,16 @@
       "path": "/workspaces/{workspace}/pipelines-config/runners"
     },
     {
-      "covered_by": {
-        "write": "create_workspaces_workspace_pipelines_config_runners"
-      },
       "method": "POST",
-      "path": "/workspaces/{workspace}/pipelines-config/runners"
+      "path": "/workspaces/{workspace}/pipelines-config/runners",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2297,11 +2672,16 @@
       "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_pipelines_config_runners_runner_uuid"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2318,11 +2698,16 @@
       "path": "/workspaces/{workspace}/pipelines-config/variables"
     },
     {
-      "covered_by": {
-        "write": "create_workspaces_workspace_pipelines_config_variables"
-      },
       "method": "POST",
-      "path": "/workspaces/{workspace}/pipelines-config/variables"
+      "path": "/workspaces/{workspace}/pipelines-config/variables",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2332,11 +2717,16 @@
       "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_pipelines_config_variables_variable_uuid"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2353,11 +2743,16 @@
       "path": "/workspaces/{workspace}/projects"
     },
     {
-      "covered_by": {
-        "write": "create_workspaces_workspace_projects"
-      },
       "method": "POST",
-      "path": "/workspaces/{workspace}/projects"
+      "path": "/workspaces/{workspace}/projects",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2374,11 +2769,16 @@
       "path": "/workspaces/{workspace}/projects/{project_key}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_projects_project_key"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/projects/{project_key}"
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2395,11 +2795,16 @@
       "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_projects_project_key_branching_model_settings"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2423,11 +2828,16 @@
       "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_projects_project_key_default_reviewers_selected_user"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2437,11 +2847,16 @@
       "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
     },
     {
-      "covered_by": {
-        "write": "create_workspaces_workspace_projects_project_key_deploy_keys"
-      },
       "method": "POST",
-      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2479,11 +2894,16 @@
       "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {
@@ -2507,11 +2927,16 @@
       "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
     },
     {
-      "covered_by": {
-        "write": "update_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id"
-      },
       "method": "PUT",
-      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "Blocked until connector-local typed request schema and fixture evidence prove the request shape; path-only reverse-ETL mutation validation is not exposed.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      }
     },
     {
       "covered_by": {

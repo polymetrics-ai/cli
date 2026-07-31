@@ -48,7 +48,7 @@
 - [beamer](beamer/MANUAL.md): Reads and writes Beamer NPS survey responses, announcement posts, feature requests, comments, reactions, votes, and end users through the Beamer REST API.
 - [bigmailer](bigmailer/MANUAL.md): Reads and writes BigMailer brands, account users, and brand-scoped contacts, lists, custom fields, message types, segments, senders, templates, suppression lists, and campaigns through the BigMailer REST API.
 - [bing-ads](bing-ads/MANUAL.md): Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs. Read-only.
-- [bitbucket](bitbucket/MANUAL.md): Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for documented mutations with destructive confirmation on deletes.
+- [bitbucket](bitbucket/MANUAL.md): Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; exposes only closed-schema reverse-ETL actions and blocks mutations lacking request-shape evidence.
 - [bitly](bitly/MANUAL.md): Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short domains, webhooks, QR codes, and group tags, and writes bitlink/campaign/group/channel/webhook/custom-bitlink/QR-code mutations, through the Bitly v4 REST API.
 - [blogger](blogger/MANUAL.md): Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-view counts using an OAuth 2.0 refresh-token grant. Read-only.
 - [bluetally](bluetally/MANUAL.md): Reads BlueTally IT asset management data (assets, employees, licenses, maintenances, accessories) through the BlueTally REST API.

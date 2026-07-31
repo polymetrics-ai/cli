@@ -1,0 +1,1219 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/pullrequests/synthetic-conformance-value/diffstat",
+    "query": {
+      "page": "1",
+      "pagelen": "100"
+    }
+  },
+  "response": {
+    "body": {
+      "page": 1,
+      "pagelen": 100,
+      "size": 101,
+      "values": [
+        {
+          "id": "diffstat-001",
+          "lines_added": 1,
+          "lines_removed": 0,
+          "new": {
+            "path": "src/fixture-001.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-002",
+          "lines_added": 2,
+          "lines_removed": 1,
+          "new": {
+            "path": "src/fixture-002.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-003",
+          "lines_added": 3,
+          "lines_removed": 1,
+          "new": {
+            "path": "src/fixture-003.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-004",
+          "lines_added": 4,
+          "lines_removed": 2,
+          "new": {
+            "path": "src/fixture-004.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-005",
+          "lines_added": 5,
+          "lines_removed": 2,
+          "new": {
+            "path": "src/fixture-005.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-006",
+          "lines_added": 6,
+          "lines_removed": 3,
+          "new": {
+            "path": "src/fixture-006.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-007",
+          "lines_added": 7,
+          "lines_removed": 3,
+          "new": {
+            "path": "src/fixture-007.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-008",
+          "lines_added": 8,
+          "lines_removed": 4,
+          "new": {
+            "path": "src/fixture-008.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-009",
+          "lines_added": 9,
+          "lines_removed": 4,
+          "new": {
+            "path": "src/fixture-009.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-010",
+          "lines_added": 10,
+          "lines_removed": 5,
+          "new": {
+            "path": "src/fixture-010.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-011",
+          "lines_added": 11,
+          "lines_removed": 5,
+          "new": {
+            "path": "src/fixture-011.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-012",
+          "lines_added": 12,
+          "lines_removed": 6,
+          "new": {
+            "path": "src/fixture-012.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-013",
+          "lines_added": 13,
+          "lines_removed": 6,
+          "new": {
+            "path": "src/fixture-013.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-014",
+          "lines_added": 14,
+          "lines_removed": 7,
+          "new": {
+            "path": "src/fixture-014.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-015",
+          "lines_added": 15,
+          "lines_removed": 7,
+          "new": {
+            "path": "src/fixture-015.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-016",
+          "lines_added": 16,
+          "lines_removed": 8,
+          "new": {
+            "path": "src/fixture-016.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-017",
+          "lines_added": 17,
+          "lines_removed": 8,
+          "new": {
+            "path": "src/fixture-017.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-018",
+          "lines_added": 18,
+          "lines_removed": 9,
+          "new": {
+            "path": "src/fixture-018.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-019",
+          "lines_added": 19,
+          "lines_removed": 9,
+          "new": {
+            "path": "src/fixture-019.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-020",
+          "lines_added": 20,
+          "lines_removed": 10,
+          "new": {
+            "path": "src/fixture-020.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-021",
+          "lines_added": 21,
+          "lines_removed": 10,
+          "new": {
+            "path": "src/fixture-021.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-022",
+          "lines_added": 22,
+          "lines_removed": 11,
+          "new": {
+            "path": "src/fixture-022.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-023",
+          "lines_added": 23,
+          "lines_removed": 11,
+          "new": {
+            "path": "src/fixture-023.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-024",
+          "lines_added": 24,
+          "lines_removed": 12,
+          "new": {
+            "path": "src/fixture-024.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-025",
+          "lines_added": 25,
+          "lines_removed": 12,
+          "new": {
+            "path": "src/fixture-025.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-026",
+          "lines_added": 26,
+          "lines_removed": 13,
+          "new": {
+            "path": "src/fixture-026.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-027",
+          "lines_added": 27,
+          "lines_removed": 13,
+          "new": {
+            "path": "src/fixture-027.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-028",
+          "lines_added": 28,
+          "lines_removed": 14,
+          "new": {
+            "path": "src/fixture-028.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-029",
+          "lines_added": 29,
+          "lines_removed": 14,
+          "new": {
+            "path": "src/fixture-029.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-030",
+          "lines_added": 30,
+          "lines_removed": 15,
+          "new": {
+            "path": "src/fixture-030.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-031",
+          "lines_added": 31,
+          "lines_removed": 15,
+          "new": {
+            "path": "src/fixture-031.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-032",
+          "lines_added": 32,
+          "lines_removed": 16,
+          "new": {
+            "path": "src/fixture-032.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-033",
+          "lines_added": 33,
+          "lines_removed": 16,
+          "new": {
+            "path": "src/fixture-033.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-034",
+          "lines_added": 34,
+          "lines_removed": 17,
+          "new": {
+            "path": "src/fixture-034.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-035",
+          "lines_added": 35,
+          "lines_removed": 17,
+          "new": {
+            "path": "src/fixture-035.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-036",
+          "lines_added": 36,
+          "lines_removed": 18,
+          "new": {
+            "path": "src/fixture-036.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-037",
+          "lines_added": 37,
+          "lines_removed": 18,
+          "new": {
+            "path": "src/fixture-037.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-038",
+          "lines_added": 38,
+          "lines_removed": 19,
+          "new": {
+            "path": "src/fixture-038.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-039",
+          "lines_added": 39,
+          "lines_removed": 19,
+          "new": {
+            "path": "src/fixture-039.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-040",
+          "lines_added": 40,
+          "lines_removed": 20,
+          "new": {
+            "path": "src/fixture-040.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-041",
+          "lines_added": 41,
+          "lines_removed": 20,
+          "new": {
+            "path": "src/fixture-041.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-042",
+          "lines_added": 42,
+          "lines_removed": 21,
+          "new": {
+            "path": "src/fixture-042.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-043",
+          "lines_added": 43,
+          "lines_removed": 21,
+          "new": {
+            "path": "src/fixture-043.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-044",
+          "lines_added": 44,
+          "lines_removed": 22,
+          "new": {
+            "path": "src/fixture-044.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-045",
+          "lines_added": 45,
+          "lines_removed": 22,
+          "new": {
+            "path": "src/fixture-045.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-046",
+          "lines_added": 46,
+          "lines_removed": 23,
+          "new": {
+            "path": "src/fixture-046.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-047",
+          "lines_added": 47,
+          "lines_removed": 23,
+          "new": {
+            "path": "src/fixture-047.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-048",
+          "lines_added": 48,
+          "lines_removed": 24,
+          "new": {
+            "path": "src/fixture-048.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-049",
+          "lines_added": 49,
+          "lines_removed": 24,
+          "new": {
+            "path": "src/fixture-049.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-050",
+          "lines_added": 50,
+          "lines_removed": 25,
+          "new": {
+            "path": "src/fixture-050.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-051",
+          "lines_added": 51,
+          "lines_removed": 25,
+          "new": {
+            "path": "src/fixture-051.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-052",
+          "lines_added": 52,
+          "lines_removed": 26,
+          "new": {
+            "path": "src/fixture-052.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-053",
+          "lines_added": 53,
+          "lines_removed": 26,
+          "new": {
+            "path": "src/fixture-053.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-054",
+          "lines_added": 54,
+          "lines_removed": 27,
+          "new": {
+            "path": "src/fixture-054.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-055",
+          "lines_added": 55,
+          "lines_removed": 27,
+          "new": {
+            "path": "src/fixture-055.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-056",
+          "lines_added": 56,
+          "lines_removed": 28,
+          "new": {
+            "path": "src/fixture-056.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-057",
+          "lines_added": 57,
+          "lines_removed": 28,
+          "new": {
+            "path": "src/fixture-057.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-058",
+          "lines_added": 58,
+          "lines_removed": 29,
+          "new": {
+            "path": "src/fixture-058.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-059",
+          "lines_added": 59,
+          "lines_removed": 29,
+          "new": {
+            "path": "src/fixture-059.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-060",
+          "lines_added": 60,
+          "lines_removed": 30,
+          "new": {
+            "path": "src/fixture-060.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-061",
+          "lines_added": 61,
+          "lines_removed": 30,
+          "new": {
+            "path": "src/fixture-061.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-062",
+          "lines_added": 62,
+          "lines_removed": 31,
+          "new": {
+            "path": "src/fixture-062.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-063",
+          "lines_added": 63,
+          "lines_removed": 31,
+          "new": {
+            "path": "src/fixture-063.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-064",
+          "lines_added": 64,
+          "lines_removed": 32,
+          "new": {
+            "path": "src/fixture-064.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-065",
+          "lines_added": 65,
+          "lines_removed": 32,
+          "new": {
+            "path": "src/fixture-065.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-066",
+          "lines_added": 66,
+          "lines_removed": 33,
+          "new": {
+            "path": "src/fixture-066.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-067",
+          "lines_added": 67,
+          "lines_removed": 33,
+          "new": {
+            "path": "src/fixture-067.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-068",
+          "lines_added": 68,
+          "lines_removed": 34,
+          "new": {
+            "path": "src/fixture-068.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-069",
+          "lines_added": 69,
+          "lines_removed": 34,
+          "new": {
+            "path": "src/fixture-069.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-070",
+          "lines_added": 70,
+          "lines_removed": 35,
+          "new": {
+            "path": "src/fixture-070.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-071",
+          "lines_added": 71,
+          "lines_removed": 35,
+          "new": {
+            "path": "src/fixture-071.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-072",
+          "lines_added": 72,
+          "lines_removed": 36,
+          "new": {
+            "path": "src/fixture-072.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-073",
+          "lines_added": 73,
+          "lines_removed": 36,
+          "new": {
+            "path": "src/fixture-073.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-074",
+          "lines_added": 74,
+          "lines_removed": 37,
+          "new": {
+            "path": "src/fixture-074.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-075",
+          "lines_added": 75,
+          "lines_removed": 37,
+          "new": {
+            "path": "src/fixture-075.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-076",
+          "lines_added": 76,
+          "lines_removed": 38,
+          "new": {
+            "path": "src/fixture-076.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-077",
+          "lines_added": 77,
+          "lines_removed": 38,
+          "new": {
+            "path": "src/fixture-077.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-078",
+          "lines_added": 78,
+          "lines_removed": 39,
+          "new": {
+            "path": "src/fixture-078.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-079",
+          "lines_added": 79,
+          "lines_removed": 39,
+          "new": {
+            "path": "src/fixture-079.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-080",
+          "lines_added": 80,
+          "lines_removed": 40,
+          "new": {
+            "path": "src/fixture-080.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-081",
+          "lines_added": 81,
+          "lines_removed": 40,
+          "new": {
+            "path": "src/fixture-081.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-082",
+          "lines_added": 82,
+          "lines_removed": 41,
+          "new": {
+            "path": "src/fixture-082.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-083",
+          "lines_added": 83,
+          "lines_removed": 41,
+          "new": {
+            "path": "src/fixture-083.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-084",
+          "lines_added": 84,
+          "lines_removed": 42,
+          "new": {
+            "path": "src/fixture-084.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-085",
+          "lines_added": 85,
+          "lines_removed": 42,
+          "new": {
+            "path": "src/fixture-085.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-086",
+          "lines_added": 86,
+          "lines_removed": 43,
+          "new": {
+            "path": "src/fixture-086.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-087",
+          "lines_added": 87,
+          "lines_removed": 43,
+          "new": {
+            "path": "src/fixture-087.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-088",
+          "lines_added": 88,
+          "lines_removed": 44,
+          "new": {
+            "path": "src/fixture-088.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-089",
+          "lines_added": 89,
+          "lines_removed": 44,
+          "new": {
+            "path": "src/fixture-089.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-090",
+          "lines_added": 90,
+          "lines_removed": 45,
+          "new": {
+            "path": "src/fixture-090.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-091",
+          "lines_added": 91,
+          "lines_removed": 45,
+          "new": {
+            "path": "src/fixture-091.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-092",
+          "lines_added": 92,
+          "lines_removed": 46,
+          "new": {
+            "path": "src/fixture-092.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-093",
+          "lines_added": 93,
+          "lines_removed": 46,
+          "new": {
+            "path": "src/fixture-093.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-094",
+          "lines_added": 94,
+          "lines_removed": 47,
+          "new": {
+            "path": "src/fixture-094.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-095",
+          "lines_added": 95,
+          "lines_removed": 47,
+          "new": {
+            "path": "src/fixture-095.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-096",
+          "lines_added": 96,
+          "lines_removed": 48,
+          "new": {
+            "path": "src/fixture-096.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-097",
+          "lines_added": 97,
+          "lines_removed": 48,
+          "new": {
+            "path": "src/fixture-097.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-098",
+          "lines_added": 98,
+          "lines_removed": 49,
+          "new": {
+            "path": "src/fixture-098.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-099",
+          "lines_added": 99,
+          "lines_removed": 49,
+          "new": {
+            "path": "src/fixture-099.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "added",
+          "type": "diffstat"
+        },
+        {
+          "id": "diffstat-100",
+          "lines_added": 100,
+          "lines_removed": 50,
+          "new": {
+            "path": "src/fixture-100.go",
+            "type": "commit_file"
+          },
+          "old": null,
+          "status": "modified",
+          "type": "diffstat"
+        }
+      ]
+    }
+  }
+}
