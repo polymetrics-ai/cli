@@ -1,0 +1,23 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id",
+    "tag_ids": [
+      "fixture_tag_ids"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/fixture_conversation_id/tags",
+    "body": {
+      "tag_ids": [
+        "fixture_tag_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

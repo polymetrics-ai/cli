@@ -1,0 +1,21 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id",
+    "teammate_id": "fixture_teammate_id",
+    "scheduled_at": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/conversations/fixture_conversation_id/reminders",
+    "body": {
+      "teammate_id": "fixture_teammate_id",
+      "scheduled_at": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

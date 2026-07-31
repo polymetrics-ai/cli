@@ -1,0 +1,16 @@
+{
+  "record": {
+    "knowledge_base_id": "fixture_knowledge_base_id",
+    "locale": "fixture_locale"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/knowledge_bases/fixture_knowledge_base_id/locales/fixture_locale/content"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

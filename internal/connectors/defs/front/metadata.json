@@ -1,23 +1,25 @@
 {
   "name": "front",
   "display_name": "Front",
-  "description": "Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.",
+  "description": "Reads Front Core REST API streams and exposes fixed, typed, approval-gated Front write/direct/binary operation metadata for documented API parity.",
   "integration_type": "api",
-  "docs_url": "https://dev.frontapp.com/reference/introduction",
+  "docs_url": "https://dev.frontapp.com/llms.txt",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Front API read of contact, conversation, inbox, tag, teammate, and channel data",
-    "approval": "none; read-only, no reverse-ETL writes"
+    "read": "external Front API reads for contacts, conversations, inboxes, tags, teammates, channels, events, knowledge base, analytics metadata, accounts, and related resources",
+    "write": "fixed Front API mutations declared as reverse ETL write actions with typed schemas and destructive confirmation",
+    "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; every Front write action also declares destructive confirmation in this bundle"
   }
 }

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "contact_id": "fixture_contact_id",
+    "handle": "fixture_handle",
+    "source": "twitter"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/fixture_contact_id/handles",
+    "body": {
+      "handle": "fixture_handle",
+      "source": "twitter"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

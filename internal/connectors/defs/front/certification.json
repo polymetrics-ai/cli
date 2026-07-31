@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "contacts",
+    "live_unavailable": [
+      {
+        "kind": "not_certified",
+        "contains": [
+          "no live Front credentials were used by this fixture-only worker",
+          "live provider calls are explicitly out of scope"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "front_direct_search_conversations_fixture_metadata",
+      "command": "conversations search",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "conversations"
+        },
+        {
+          "literal": "search"
+        },
+        {
+          "literal": "--query"
+        },
+        {
+          "literal": "fixture search"
+        }
+      ]
+    }
+  ],
+  "binary_candidates": [],
+  "write_pairings": []
+}

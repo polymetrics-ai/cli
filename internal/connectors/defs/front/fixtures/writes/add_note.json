@@ -1,0 +1,21 @@
+{
+  "record": {
+    "contact_id": "fixture_contact_id",
+    "author_id": "fixture_author_id",
+    "body": "fixture_body"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/fixture_contact_id/notes",
+    "body": {
+      "author_id": "fixture_author_id",
+      "body": "fixture_body"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

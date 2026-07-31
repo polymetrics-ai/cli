@@ -1,0 +1,15 @@
+{
+  "record": {
+    "link_id": "fixture_link_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/links/fixture_link_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

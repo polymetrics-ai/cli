@@ -1,0 +1,15 @@
+{
+  "record": {
+    "knowledge_base_id": "fixture_knowledge_base_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/knowledge_bases/fixture_knowledge_base_id/articles"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

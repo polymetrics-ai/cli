@@ -1,0 +1,13 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/accounts"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

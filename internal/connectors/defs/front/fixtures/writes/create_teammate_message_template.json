@@ -1,0 +1,21 @@
+{
+  "record": {
+    "teammate_id": "fixture_teammate_id",
+    "name": "fixture_name",
+    "body": "fixture_body"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teammates/fixture_teammate_id/message_templates",
+    "body": {
+      "name": "fixture_name",
+      "body": "fixture_body"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "time_off_id": "fixture_time_off_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/time_offs/fixture_time_off_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}
