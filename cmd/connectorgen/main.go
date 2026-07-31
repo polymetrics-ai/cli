@@ -101,8 +101,13 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	var report Report
+	var err error
+	if _, statErr := os.Stat(filepath.Join(dir, "metadata.json")); statErr == nil {
+		report, err = validateSingleBundleDir(os.DirFS(filepath.Dir(dir)), filepath.Base(dir))
+	} else {
+		report, err = validateDir(os.DirFS(dir))
+	}
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1

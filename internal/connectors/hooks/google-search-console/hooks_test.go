@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -48,7 +49,7 @@ func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
 
 func TestReadStream_SitemapsUsesSingleSiteFallbackAndStringifiesCounts(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		const wantPath = "/sites/https:%2F%2Fexample.com%2F/sitemaps"
+		const wantPath = "/webmasters/v3/sites/https:%2F%2Fexample.com%2F/sitemaps"
 		if r.URL.EscapedPath() != wantPath {
 			t.Errorf("path = %q, want %q", r.URL.EscapedPath(), wantPath)
 			http.NotFound(w, r)
@@ -105,7 +106,7 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 	var sawStartRows []float64
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sawAuth = r.Header.Get("Authorization")
-		const wantPath = "/sites/https:%2F%2Fexample.com%2F/searchAnalytics/query"
+		const wantPath = "/webmasters/v3/sites/https:%2F%2Fexample.com%2F/searchAnalytics/query"
 		if r.URL.EscapedPath() != wantPath {
 			t.Errorf("path = %q, want %q", r.URL.EscapedPath(), wantPath)
 			http.NotFound(w, r)
@@ -222,6 +223,34 @@ func TestReadStream_MultipleSitesFanOut(t *testing.T) {
 	}
 	if len(sawPaths) != 2 {
 		t.Fatalf("requests = %d, want 2 (one per site)", len(sawPaths))
+	}
+	for _, path := range sawPaths {
+		if !strings.HasPrefix(path, "/webmasters/v3/sites/") {
+			t.Fatalf("path = %q, want Search Console API prefix", path)
+		}
+	}
+}
+
+func TestReadStream_AvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
+	var sawPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawPath = r.URL.Path
+		_, _ = w.Write([]byte(`{"rows":[]}`))
+	}))
+	defer srv.Close()
+
+	rt := &engine.Runtime{Requester: &connsdk.Requester{BaseURL: srv.URL + "/webmasters/v3"}}
+	req := connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: map[string]string{
+		"base_url":  srv.URL + "/webmasters/v3",
+		"site_urls": "https://example.com/",
+	}}}
+	h := &Hooks{}
+	_, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "search_analytics_by_query"}, req, rt, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("ReadStream: %v", err)
+	}
+	if strings.Contains(sawPath, "/webmasters/v3/webmasters/v3/") {
+		t.Fatalf("path = %q, want no duplicated Search Console API prefix", sawPath)
 	}
 }
 

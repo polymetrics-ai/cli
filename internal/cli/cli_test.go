@@ -599,6 +599,138 @@ func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	}
 }
 
+func TestGoogleSearchConsoleConnectorRunsTypedDirectReadFixtures(t *testing.T) {
+	seen := map[string]int{}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		seen[r.URL.EscapedPath()]++
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+
+		switch r.URL.EscapedPath() {
+		case "/webmasters/v3/sites/https:%2F%2Ffixture.example.com%2F/searchAnalytics/query":
+			var body struct {
+				StartDate       string   `json:"startDate"`
+				EndDate         string   `json:"endDate"`
+				Dimensions      []string `json:"dimensions"`
+				Type            string   `json:"type"`
+				DataState       string   `json:"dataState"`
+				AggregationType string   `json:"aggregationType"`
+				RowLimit        int      `json:"rowLimit"`
+				StartRow        int      `json:"startRow"`
+			}
+			if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+				t.Fatalf("decode search analytics body: %v", err)
+			}
+			if body.StartDate != "2026-06-01" || body.EndDate != "2026-06-30" || len(body.Dimensions) != 1 || body.Dimensions[0] != "QUERY" || body.Type != "WEB" || body.DataState != "FINAL" || body.AggregationType != "AUTO" || body.RowLimit != 25000 || body.StartRow != 0 {
+				t.Fatalf("search analytics body = %+v, want typed bounded first-page request", body)
+			}
+			_, _ = w.Write([]byte(`{"siteUrl":"https://fixture.example.com/","rows":[{"keys":["fixture query"],"clicks":1,"impressions":2,"ctr":0.5,"position":1.1}]}`))
+		case "/v1/urlInspection/index:inspect":
+			var body struct {
+				InspectionURL string `json:"inspectionUrl"`
+				SiteURL       string `json:"siteUrl"`
+				LanguageCode  string `json:"languageCode"`
+			}
+			if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+				t.Fatalf("decode url inspection body: %v", err)
+			}
+			if body.InspectionURL != "https://fixture.example.com/page.html" || body.SiteURL != "https://fixture.example.com/" || body.LanguageCode != "en-US" {
+				t.Fatalf("url inspection body = %+v, want typed URLs and language", body)
+			}
+			_, _ = w.Write([]byte(`{"inspectionResult":{"inspectionUrl":"https://fixture.example.com/page.html","indexStatusResult":{"verdict":"PASS"}}}`))
+		case "/v1/urlTestingTools/mobileFriendlyTest:run":
+			var body struct {
+				URL               string `json:"url"`
+				RequestScreenshot bool   `json:"requestScreenshot"`
+			}
+			if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+				t.Fatalf("decode mobile friendly body: %v", err)
+			}
+			if body.URL != "https://fixture.example.com/page.html" || body.RequestScreenshot {
+				t.Fatalf("mobile friendly body = %+v, want typed URL and requestScreenshot=false", body)
+			}
+			_, _ = w.Write([]byte(`{"mobileFriendliness":"MOBILE_FRIENDLY","url":"https://fixture.example.com/page.html"}`))
+		default:
+			t.Fatalf("unexpected path %q", r.URL.EscapedPath())
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("PM_TEST_GSC_ACCESS_TOKEN", "fixture-access-token")
+	runCLI(t, []string{
+		"credentials", "add", "gsc-local",
+		"--connector", "google-search-console",
+		"--from-env", "access_token=PM_TEST_GSC_ACCESS_TOKEN",
+		"--config", "base_url=" + srv.URL,
+		"--root", root,
+		"--json",
+	})
+
+	commands := [][]string{
+		{
+			"google-search-console", "direct", "search-analytics", "query",
+			"--credential", "gsc-local",
+			"--site-url", "https://fixture.example.com/",
+			"--start-date", "2026-06-01",
+			"--end-date", "2026-06-30",
+			"--dimension-1", "QUERY",
+			"--type", "WEB",
+			"--data-state", "FINAL",
+			"--aggregation-type", "AUTO",
+			"--root", root,
+			"--json",
+		},
+		{
+			"google-search-console", "direct", "url-inspection", "inspect",
+			"--credential", "gsc-local",
+			"--inspection-url", "https://fixture.example.com/page.html",
+			"--site-url", "https://fixture.example.com/",
+			"--language-code", "en-US",
+			"--root", root,
+			"--json",
+		},
+		{
+			"google-search-console", "direct", "mobile-friendly-test", "run",
+			"--credential", "gsc-local",
+			"--url", "https://fixture.example.com/page.html",
+			"--request-screenshot", "false",
+			"--root", root,
+			"--json",
+		},
+	}
+
+	for _, args := range commands {
+		stdout, _ := runCLI(t, args)
+		var env struct {
+			Kind     string         `json:"kind"`
+			Command  string         `json:"command"`
+			Method   string         `json:"method"`
+			Status   int            `json:"status"`
+			Response map[string]any `json:"response"`
+		}
+		if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+			t.Fatalf("decode json for %v: %v\n%s", args, err, stdout)
+		}
+		if env.Kind != "ConnectorCommandDirectRead" || env.Method != http.MethodPost || env.Status != http.StatusOK || len(env.Response) == 0 {
+			t.Fatalf("envelope = %+v, want typed GSC direct-read response", env)
+		}
+	}
+
+	for _, path := range []string{
+		"/webmasters/v3/sites/https:%2F%2Ffixture.example.com%2F/searchAnalytics/query",
+		"/v1/urlInspection/index:inspect",
+		"/v1/urlTestingTools/mobileFriendlyTest:run",
+	} {
+		if seen[path] != 1 {
+			t.Fatalf("seen[%q] = %d, want 1", path, seen[path])
+		}
+	}
+}
+
 func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	var gotPath string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

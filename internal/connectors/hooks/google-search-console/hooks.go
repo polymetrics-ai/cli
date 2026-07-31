@@ -93,7 +93,7 @@ func (h *Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req co
 		if err := ctx.Err(); err != nil {
 			return true, err
 		}
-		if err := h.readAnalyticsForSite(ctx, rt.Requester, site, dims, startDate, endDate, searchType, dataState, pageSize, maxPages, emit); err != nil {
+		if err := h.readAnalyticsForSite(ctx, rt.Requester, req.Config, site, dims, startDate, endDate, searchType, dataState, pageSize, maxPages, emit); err != nil {
 			return true, err
 		}
 	}
@@ -105,7 +105,7 @@ func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg conn
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		path := "/sites/" + url.PathEscape(site) + "/sitemaps"
+		path := gscEndpointPath(cfg, "/sites/"+url.PathEscape(site)+"/sitemaps")
 		resp, err := r.Do(ctx, http.MethodGet, path, nil, nil)
 		if err != nil {
 			return fmt.Errorf("read google-search-console sitemaps for %s: %w", site, err)
@@ -124,6 +124,16 @@ func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg conn
 		}
 	}
 	return nil
+}
+
+const gscAPIPrefix = "/webmasters/v3"
+
+func gscEndpointPath(cfg connectors.RuntimeConfig, suffix string) string {
+	base, err := url.Parse(strings.TrimSpace(cfg.Config["base_url"]))
+	if err == nil && strings.TrimRight(base.EscapedPath(), "/") == gscAPIPrefix {
+		return suffix
+	}
+	return gscAPIPrefix + suffix
 }
 
 func sitemapRecord(site string, item map[string]any) connectors.Record {
@@ -168,8 +178,8 @@ type analyticsRequestBody struct {
 // (google_search_console.go:207-263): the next page is requested by
 // advancing startRow by the number of rows received, until a short (or
 // empty) page is returned, or maxPages (0 = unbounded) is reached.
-func (h *Hooks) readAnalyticsForSite(ctx context.Context, r *connsdk.Requester, site string, dims []string, startDate, endDate, searchType, dataState string, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	path := "/sites/" + url.PathEscape(site) + "/searchAnalytics/query"
+func (h *Hooks) readAnalyticsForSite(ctx context.Context, r *connsdk.Requester, cfg connectors.RuntimeConfig, site string, dims []string, startDate, endDate, searchType, dataState string, pageSize, maxPages int, emit func(connectors.Record) error) error {
+	path := gscEndpointPath(cfg, "/sites/"+url.PathEscape(site)+"/searchAnalytics/query")
 	startRow := 0
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {

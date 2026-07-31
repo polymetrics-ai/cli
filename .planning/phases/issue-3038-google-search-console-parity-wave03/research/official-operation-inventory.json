@@ -1,0 +1,149 @@
+{
+  "source": "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
+  "fetched_at": "2026-07-31T13:36:28.305705+00:00",
+  "title": "Google Search Console API",
+  "version": "v1",
+  "revision": "20260729",
+  "rootUrl": "https://searchconsole.googleapis.com/",
+  "servicePath": "",
+  "baseUrl": "https://searchconsole.googleapis.com/",
+  "operation_count": 11,
+  "operations": [
+    {
+      "resource": "urlInspection.index",
+      "method_name": "inspect",
+      "operation_id": "searchconsole.urlInspection.index.inspect",
+      "http_method": "POST",
+      "path": "/v1/urlInspection/index:inspect",
+      "flatPath": "/v1/urlInspection/index:inspect",
+      "description": "Index inspection.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters",
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ]
+    },
+    {
+      "resource": "urlTestingTools.mobileFriendlyTest",
+      "method_name": "run",
+      "operation_id": "searchconsole.urlTestingTools.mobileFriendlyTest.run",
+      "http_method": "POST",
+      "path": "/v1/urlTestingTools/mobileFriendlyTest:run",
+      "flatPath": "/v1/urlTestingTools/mobileFriendlyTest:run",
+      "description": "Runs Mobile-Friendly Test for a given URL.",
+      "scopes": []
+    },
+    {
+      "resource": "sites",
+      "method_name": "list",
+      "operation_id": "webmasters.sites.list",
+      "http_method": "GET",
+      "path": "/webmasters/v3/sites",
+      "flatPath": "/webmasters/v3/sites",
+      "description": "Lists the user's Search Console sites.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters",
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ]
+    },
+    {
+      "resource": "sites",
+      "method_name": "delete",
+      "operation_id": "webmasters.sites.delete",
+      "http_method": "DELETE",
+      "path": "/webmasters/v3/sites/{siteUrl}",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}",
+      "description": "Removes a site from the set of the user's Search Console sites.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters"
+      ]
+    },
+    {
+      "resource": "sites",
+      "method_name": "get",
+      "operation_id": "webmasters.sites.get",
+      "http_method": "GET",
+      "path": "/webmasters/v3/sites/{siteUrl}",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}",
+      "description": "Retrieves information about specific site.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters",
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ]
+    },
+    {
+      "resource": "sites",
+      "method_name": "add",
+      "operation_id": "webmasters.sites.add",
+      "http_method": "PUT",
+      "path": "/webmasters/v3/sites/{siteUrl}",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}",
+      "description": "Adds a site to the set of the user's sites in Search Console.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters"
+      ]
+    },
+    {
+      "resource": "searchanalytics",
+      "method_name": "query",
+      "operation_id": "webmasters.searchanalytics.query",
+      "http_method": "POST",
+      "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
+      "description": "Query your data with filters and parameters that you define. Returns zero or more rows grouped by the row keys that you define. You must define a date range of one or more days. When date is one of the group by values, any days without data are omitted from the result list. If you need to know which days have data, issue a broad date range query grouped by date for any metric, and see which day rows are returned.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters",
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ]
+    },
+    {
+      "resource": "sitemaps",
+      "method_name": "list",
+      "operation_id": "webmasters.sitemaps.list",
+      "http_method": "GET",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}/sitemaps",
+      "description": "Lists the [sitemaps-entries](/webmaster-tools/v3/sitemaps) submitted for this site, or included in the sitemap index file (if `sitemapIndex` is specified in the request).",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters",
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ]
+    },
+    {
+      "resource": "sitemaps",
+      "method_name": "delete",
+      "operation_id": "webmasters.sitemaps.delete",
+      "http_method": "DELETE",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "description": "Deletes a sitemap from the Sitemaps report. Does not stop Google from crawling this sitemap or the URLs that were previously crawled in the deleted sitemap.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters"
+      ]
+    },
+    {
+      "resource": "sitemaps",
+      "method_name": "get",
+      "operation_id": "webmasters.sitemaps.get",
+      "http_method": "GET",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "description": "Retrieves information about a specific sitemap.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters",
+        "https://www.googleapis.com/auth/webmasters.readonly"
+      ]
+    },
+    {
+      "resource": "sitemaps",
+      "method_name": "submit",
+      "operation_id": "webmasters.sitemaps.submit",
+      "http_method": "PUT",
+      "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "flatPath": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+      "description": "Submits a sitemap for a site.",
+      "scopes": [
+        "https://www.googleapis.com/auth/webmasters"
+      ]
+    }
+  ]
+}
