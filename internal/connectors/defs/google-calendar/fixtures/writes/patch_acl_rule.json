@@ -1,0 +1,21 @@
+{
+  "record": {
+    "calendar_id": "synthetic-conformance-value",
+    "rule_id": "synthetic-conformance-value",
+    "role": "writer"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/calendars/synthetic-conformance-value/acl/synthetic-conformance-value",
+    "body": {
+      "role": "writer"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-response",
+      "kind": "calendar#fixture"
+    }
+  }
+}

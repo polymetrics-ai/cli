@@ -1,0 +1,20 @@
+{
+  "record": {
+    "calendar_id": "synthetic-conformance-value",
+    "text": "Fixture meeting tomorrow at noon"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calendars/synthetic-conformance-value/events/quickAdd",
+    "query": {
+      "text": "Fixture meeting tomorrow at noon"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-response",
+      "kind": "calendar#fixture"
+    }
+  }
+}

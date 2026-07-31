@@ -101,8 +101,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
@@ -123,6 +122,15 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+func validatePath(dir string) (Report, error) {
+	if _, err := os.Stat(filepath.Join(dir, "metadata.json")); err == nil {
+		name := filepath.Base(dir)
+		parent := filepath.Dir(dir)
+		return validateBundleNames(os.DirFS(parent), []string{name}), nil
+	}
+	return validateDir(os.DirFS(dir))
 }
 
 // renderText renders a Report as human-readable lines: one finding per line

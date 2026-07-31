@@ -1,0 +1,25 @@
+{
+  "phase": "google-calendar-parity-wave03",
+  "branch": "fm/cli-google-calendar-parity-wave03-r1",
+  "status": "verified",
+  "verificationPassed": true,
+  "verificationNotes": "Manual GSD fallback active because scripts/gsd prompt programming-loop is unavailable. All required local gates passed; no live Google Calendar calls or provider writes were performed.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Single connector worker in an isolated firstmate-launched worktree; no additional mutating subworker is needed."
+    }
+  ],
+  "counts": {
+    "officialTotal": 38,
+    "implemented": 38,
+    "fixtureTested": 38,
+    "blockedPlanned": 0,
+    "excludedNotApplicable": 0,
+    "certified": 0,
+    "streams": 11,
+    "writeActions": 26,
+    "directReadOperations": 1
+  }
+}

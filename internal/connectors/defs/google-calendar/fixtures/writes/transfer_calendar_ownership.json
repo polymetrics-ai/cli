@@ -1,0 +1,20 @@
+{
+  "record": {
+    "calendar_id": "synthetic-conformance-value",
+    "newDataOwner": "owner@example.test"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calendars/synthetic-conformance-value/transferOwnership",
+    "query": {
+      "newDataOwner": "owner@example.test"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-response",
+      "kind": "calendar#fixture"
+    }
+  }
+}

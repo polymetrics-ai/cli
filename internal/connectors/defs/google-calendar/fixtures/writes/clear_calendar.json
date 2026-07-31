@@ -1,0 +1,16 @@
+{
+  "record": {
+    "calendar_id": "synthetic-conformance-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/calendars/synthetic-conformance-value/clear"
+  },
+  "response": {
+    "status": 204,
+    "body": {
+      "id": "fixture-response",
+      "kind": "calendar#fixture"
+    }
+  }
+}

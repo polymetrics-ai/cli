@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/me/calendarList",
+    "query": {
+      "maxResults": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "calendar#calendarList",
+      "items": [
+        {
+          "kind": "calendar#calendarListEntry",
+          "id": "primary",
+          "summary": "Primary Calendar",
+          "accessRole": "owner"
+        }
+      ]
+    }
+  }
+}
