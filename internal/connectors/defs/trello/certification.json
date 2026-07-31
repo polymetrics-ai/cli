@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "boards",
+    "source_credential_defaults": {
+      "base_url": "https://api.trello.com/1"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "http 404",
+          "invalid token",
+          "unauthorized permission requested",
+          "rate limit"
+        ]
+      }
+    ]
+  }
+}

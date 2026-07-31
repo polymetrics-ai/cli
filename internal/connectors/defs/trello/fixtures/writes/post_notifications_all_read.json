@@ -1,0 +1,14 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/notifications/all/read"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

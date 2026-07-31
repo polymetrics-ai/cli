@@ -1,0 +1,17 @@
+{
+  "record": {
+    "callbackURL": "trello-fixture-value",
+    "idModel": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

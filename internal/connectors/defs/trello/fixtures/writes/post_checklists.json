@@ -1,0 +1,17 @@
+{
+  "record": {
+    "idCard": "trello-fixture-value",
+    "name": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/checklists"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

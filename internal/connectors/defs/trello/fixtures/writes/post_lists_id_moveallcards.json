@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "idBoard": "trello-fixture-value",
+    "idList": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/trello-fixture-value/moveAllCards"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

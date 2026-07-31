@@ -1,15 +1,2056 @@
 {
-  "api": "Trello REST API v1 (https://developer.atlassian.com/cloud/trello/rest/)",
+  "api": "Trello REST API v1",
   "docs": "https://developer.atlassian.com/cloud/trello/rest/",
-  "reviewed_at": "2026-07-03",
-  "scope": "L-size fresh migration of internal/connectors/trello: boards (full parity) plus lists/checklists (board_ids-scoped fan_out; auto-discovery narrowed, see docs.md). cards/actions are blocked — see blockers.",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Full official Trello OpenAPI parity audit from https://developer.atlassian.com/cloud/trello/swagger.v3.json sha256=b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19: 261 HTTP operations partitioned into 219 executable connector operations (3 streams, 95 JSON direct reads, 121 writes) and 42 blocked operation-ledger rows with exact evidence.",
   "endpoints": [
-    { "method": "GET", "path": "/members/me", "excluded": { "category": "non_data_endpoint", "reason": "authenticated-member identity probe used only by Check(), not a syncable object stream" } },
-    { "method": "GET", "path": "/members/me/boards", "covered_by": { "stream": "boards" } },
-    { "method": "GET", "path": "/boards/{id}", "excluded": { "category": "out_of_scope", "reason": "legacy's board_ids-configured per-id GET path for the boards stream itself is not modeled; boards always lists every accessible board (see docs.md Known limits) — a documented, non-security-relevant deviation, not a missing endpoint in practice (the same board data is still reachable via /members/me/boards)" } },
-    { "method": "GET", "path": "/boards/{id}/lists", "covered_by": { "stream": "lists" } },
-    { "method": "GET", "path": "/boards/{id}/checklists", "covered_by": { "stream": "checklists" } },
-    { "method": "GET", "path": "/boards/{id}/cards", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: cards requires board auto-discovery (fan_out.ids_from.request) AND id-cursor pagination (before param, last_record_field) on the SAME stream; the engine reuses one PaginationSpec for both the id-listing request and the per-board sub-fetch, so the id-listing call would either hard 401 (stream.Query's token param is not applied to fan_out.ids_from.request) or infinite-loop under lastRecordCursor (no short-page stop, no loop guard, and /members/me/boards ignores the before param entirely). See docs.md Known limits and this migration's reported blockers[]." } },
-    { "method": "GET", "path": "/boards/{id}/actions", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical fan_out + cursor-pagination conflict as /boards/{id}/cards above (actions also uses id-cursor before pagination). See docs.md Known limits and this migration's reported blockers[]." } }
+    {
+      "method": "GET",
+      "path": "/actions/{id}",
+      "covered_by": {
+        "direct_read": "read get-actions-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/actions/{id}",
+      "covered_by": {
+        "write": "put_actions_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/actions/{id}",
+      "covered_by": {
+        "write": "delete_actions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/actions/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/board",
+      "covered_by": {
+        "direct_read": "read get-actions-id-board"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/card",
+      "covered_by": {
+        "direct_read": "read get-actions-id-card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/list",
+      "covered_by": {
+        "direct_read": "read get-actions-id-list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/member",
+      "covered_by": {
+        "direct_read": "read get-actions-id-member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/memberCreator",
+      "covered_by": {
+        "direct_read": "read get-actions-id-membercreator"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{id}/organization",
+      "covered_by": {
+        "direct_read": "read get-actions-id-organization"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/actions/{id}/text",
+      "covered_by": {
+        "write": "put_actions_id_text"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{idAction}/reactions",
+      "covered_by": {
+        "direct_read": "read get-actions-idaction-reactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/actions/{idAction}/reactions",
+      "covered_by": {
+        "write": "post_actions_idaction_reactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{idAction}/reactions/{id}",
+      "covered_by": {
+        "direct_read": "read get-actions-idaction-reactions-id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/actions/{idAction}/reactions/{id}",
+      "covered_by": {
+        "write": "delete_actions_idaction_reactions_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/actions/{idAction}/reactionsSummary",
+      "covered_by": {
+        "direct_read": "read get-actions-idaction-reactionsummary"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{key}/compliance",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batch",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Trello /batch accepts arbitrary sub-request URLs and would become a raw generic API escape hatch; connector policy forbids exposing generic HTTP tools.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/memberships",
+      "covered_by": {
+        "direct_read": "read get-boards-id-memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}",
+      "covered_by": {
+        "direct_read": "read get-boards-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}",
+      "covered_by": {
+        "write": "put_boards_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}",
+      "covered_by": {
+        "write": "delete_boards_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/boards/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{boardId}/actions",
+      "covered_by": {
+        "direct_read": "read get-boards-id-actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{boardId}/boardStars",
+      "covered_by": {
+        "direct_read": "read get-boards-id-boardstars"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/checklists",
+      "covered_by": {
+        "stream": "checklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/cards",
+      "covered_by": {
+        "direct_read": "read get-boards-id-cards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/cards/{filter}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/boards/{id}/cards",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/customFields",
+      "covered_by": {
+        "direct_read": "read get-boards-id-customfields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/labels",
+      "covered_by": {
+        "direct_read": "read get-boards-id-labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/labels",
+      "covered_by": {
+        "write": "post_boards_id_labels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/lists",
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/lists",
+      "covered_by": {
+        "write": "post_boards_id_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/lists/{filter}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/boards/{id}/lists",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/members",
+      "covered_by": {
+        "direct_read": "read get-boards-id-members"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/members",
+      "covered_by": {
+        "write": "put_boards_id_members"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/members/{idMember}",
+      "covered_by": {
+        "write": "put_boards_id_members_idmember"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}/members/{idMember}",
+      "covered_by": {
+        "write": "boardsidmembersidmember"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/memberships/{idMembership}",
+      "covered_by": {
+        "write": "put_boards_id_memberships_idmembership"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/emailPosition",
+      "covered_by": {
+        "write": "put_boards_id_myprefs_emailposition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/idEmailList",
+      "covered_by": {
+        "write": "put_boards_id_myprefs_idemaillist"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebar",
+      "covered_by": {
+        "write": "put_boards_id_my_prefs_showsidebar"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebarActivity",
+      "covered_by": {
+        "write": "put_boards_id_my_prefs_showsidebaractivity"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebarBoardActions",
+      "covered_by": {
+        "write": "put_boards_id_my_prefs_showsidebarboardactions"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boards/{id}/myPrefs/showSidebarMembers",
+      "covered_by": {
+        "write": "put_boards_id_my_prefs_showsidebarmembers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/",
+      "covered_by": {
+        "write": "post_boards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/calendarKey/generate",
+      "covered_by": {
+        "write": "post_boards_id_calendarkey_generate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/emailKey/generate",
+      "covered_by": {
+        "write": "post_boards_id_emailkey_generate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/idTags",
+      "covered_by": {
+        "write": "post_boards_id_idtags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/markedAsViewed",
+      "covered_by": {
+        "write": "post_boards_id_markedasviewed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/boardPlugins",
+      "covered_by": {
+        "direct_read": "read get-boards-id-boardplugins"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/boardPlugins",
+      "covered_by": {
+        "write": "post_boards_id_boardplugins"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}/boardPlugins/{idPlugin}",
+      "covered_by": {
+        "write": "delete_boards_id_boardplugins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/plugins",
+      "covered_by": {
+        "direct_read": "read get-board-id-plugins"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{id}/exports",
+      "covered_by": {
+        "write": "post_boards_id_exports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/exports/{idExport}",
+      "covered_by": {
+        "direct_read": "read get-boards-id-exports-idexport"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{id}/exports/{idExport}",
+      "covered_by": {
+        "write": "delete_boards_id_exports_idexport"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/exports/{idExport}/download",
+      "covered_by": {
+        "direct_read": "read get-boards-id-exports-idexport-download"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{id}/exports/mostRecent",
+      "covered_by": {
+        "direct_read": "read get-boards-id-exports-mostrecent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards",
+      "covered_by": {
+        "write": "post_cards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}",
+      "covered_by": {
+        "direct_read": "read get-cards-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}",
+      "covered_by": {
+        "write": "put_cards_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}",
+      "covered_by": {
+        "write": "delete_cards_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/cards/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/actions",
+      "covered_by": {
+        "direct_read": "read get-cards-id-actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/attachments",
+      "covered_by": {
+        "direct_read": "read get-cards-id-attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/attachments",
+      "covered_by": {
+        "write": "post_cards_id_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/attachments/{idAttachment}",
+      "covered_by": {
+        "direct_read": "read get-cards-id-attachments-idattachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/attachments/{idAttachment}",
+      "covered_by": {
+        "write": "deleted_cards_id_attachments_idattachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/board",
+      "covered_by": {
+        "direct_read": "read get-cards-id-board"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/checkItemStates",
+      "covered_by": {
+        "direct_read": "read get-cards-id-checkitemstates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/checklists",
+      "covered_by": {
+        "direct_read": "read get-cards-id-checklists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/checklists",
+      "covered_by": {
+        "write": "post_cards_id_checklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/checkItem/{idCheckItem}",
+      "covered_by": {
+        "direct_read": "read get-cards-id-checkitem-idcheckitem"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}/checkItem/{idCheckItem}",
+      "covered_by": {
+        "write": "put_cards_id_checkitem_idcheckitem"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/checkItem/{idCheckItem}",
+      "covered_by": {
+        "write": "delete_cards_id_checkitem_idcheckitem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/list",
+      "covered_by": {
+        "direct_read": "read get-cards-id-list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/members",
+      "covered_by": {
+        "direct_read": "read get-cards-id-members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/membersVoted",
+      "covered_by": {
+        "direct_read": "read get-cards-id-membersvoted"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/membersVoted",
+      "covered_by": {
+        "write": "cardsidmembersvoted_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/pluginData",
+      "covered_by": {
+        "direct_read": "read get-cards-id-plugindata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/stickers",
+      "covered_by": {
+        "direct_read": "read get-cards-id-stickers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/stickers",
+      "covered_by": {
+        "write": "post_cards_id_stickers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/stickers/{idSticker}",
+      "covered_by": {
+        "direct_read": "read get-cards-id-stickers-idsticker"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}/stickers/{idSticker}",
+      "covered_by": {
+        "write": "put_cards_id_stickers_idsticker"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/stickers/{idSticker}",
+      "covered_by": {
+        "write": "delete_cards_id_stickers_idsticker"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{id}/actions/{idAction}/comments",
+      "covered_by": {
+        "write": "put_cards_id_actions_idaction_comments"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/actions/{idAction}/comments",
+      "covered_by": {
+        "write": "delete_cards_id_actions_id_comments"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{idCard}/customField/{idCustomField}/item",
+      "covered_by": {
+        "write": "put_cards_idcard_customfield_idcustomfield_item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{idCard}/customFields",
+      "covered_by": {
+        "write": "put_cards_idcard_customfields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cards/{id}/customFieldItems",
+      "covered_by": {
+        "direct_read": "read get-cards-id-customfielditems"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/actions/comments",
+      "covered_by": {
+        "write": "post_cards_id_actions_comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/idLabels",
+      "covered_by": {
+        "write": "post_cards_id_idlabels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/idMembers",
+      "covered_by": {
+        "write": "post_cards_id_idmembers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/labels",
+      "covered_by": {
+        "write": "post_cards_id_labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cards/{id}/markAssociatedNotificationsRead",
+      "covered_by": {
+        "write": "post_cards_id_markassociatednotificationsread"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/idLabels/{idLabel}",
+      "covered_by": {
+        "write": "delete_cards_id_idlabels_idlabel"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/idMembers/{idMember}",
+      "covered_by": {
+        "write": "delete_id_idmembers_idmember"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/membersVoted/{idMember}",
+      "covered_by": {
+        "write": "delete_cards_id_membersvoted_idmember"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}",
+      "covered_by": {
+        "write": "put_cards_idcard_checklist_idchecklist_checkitem_idcheckitem"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cards/{id}/checklists/{idChecklist}",
+      "covered_by": {
+        "write": "delete_cards_id_checklists_idchecklist"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checklists",
+      "covered_by": {
+        "write": "post_checklists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}",
+      "covered_by": {
+        "direct_read": "read get-checklists-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/checklists/{id}",
+      "covered_by": {
+        "write": "put_checlists_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/checklists/{id}",
+      "covered_by": {
+        "write": "delete_checklists_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/checklists/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/checklists/{id}/{field}",
+      "covered_by": {
+        "write": "put_checklists_id_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/board",
+      "covered_by": {
+        "direct_read": "read get-checklists-id-board"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/cards",
+      "covered_by": {
+        "direct_read": "read get-checklists-id-cards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/checkItems",
+      "covered_by": {
+        "direct_read": "read get-checklists-id-checkitems"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/checklists/{id}/checkItems",
+      "covered_by": {
+        "write": "post_checklists_id_checkitems"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/checklists/{id}/checkItems/{idCheckItem}",
+      "covered_by": {
+        "direct_read": "read get-checklists-id-checkitems-idcheckitem"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/checklists/{id}/checkItems/{idCheckItem}",
+      "covered_by": {
+        "write": "delete_checklists_id_checkitems_idcheckitem"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customFields",
+      "covered_by": {
+        "write": "post_customfields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customFields/{id}",
+      "covered_by": {
+        "direct_read": "read get-customfields-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customFields/{id}",
+      "covered_by": {
+        "write": "put_customfields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customFields/{id}",
+      "covered_by": {
+        "write": "delete_customfields_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customFields/{id}/options",
+      "covered_by": {
+        "direct_read": "read post-customfields-id-options"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customFields/{id}/options",
+      "covered_by": {
+        "write": "get_customfields_id_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customFields/{id}/options/{idCustomFieldOption}",
+      "covered_by": {
+        "direct_read": "read get-customfields-options-idcustomfieldoption"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customFields/{id}/options/{idCustomFieldOption}",
+      "covered_by": {
+        "write": "delete_customfields_options_idcustomfieldoption"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emoji",
+      "covered_by": {
+        "direct_read": "read emoji"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/auditlog",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/admins",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/signupUrl",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/members/query",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/members",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/members/{idMember}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/transferrable/organization/{idOrganization}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/transferrable/bulk/{idOrganizations}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/${id}/enterpriseJoinRequest/bulk",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/claimableOrganizations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/pendingOrganizations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/enterprises/{id}/tokens",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/organizations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/organizations",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/members/{idMember}/licensed",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/members/{idMember}/deactivated",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/enterprises/{id}/admins/{idMember}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/enterprises/{id}/admins/{idMember}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/enterprises/{id}/organizations/{idOrg}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/enterprises/{id}/organizations/bulk/{idOrganizations}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/labels/{id}",
+      "covered_by": {
+        "direct_read": "read get-labels-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/labels/{id}",
+      "covered_by": {
+        "write": "put_labels_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/labels/{id}",
+      "covered_by": {
+        "write": "delete_labels_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/labels/{id}/{field}",
+      "covered_by": {
+        "write": "put_labels_id_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/labels",
+      "covered_by": {
+        "write": "post_labels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}",
+      "covered_by": {
+        "direct_read": "read get-lists-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}",
+      "covered_by": {
+        "write": "put_lists_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists",
+      "covered_by": {
+        "write": "post_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{id}/archiveAllCards",
+      "covered_by": {
+        "write": "post_lists_id_archiveallcards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{id}/moveAllCards",
+      "covered_by": {
+        "write": "post_lists_id_moveallcards"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}/closed",
+      "covered_by": {
+        "write": "put_lists_id_closed"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}/idBoard",
+      "covered_by": {
+        "write": "put_id_idboard"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lists/{id}/{field}",
+      "covered_by": {
+        "write": "put_lists_id_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}/actions",
+      "covered_by": {
+        "direct_read": "read get-lists-id-actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}/board",
+      "covered_by": {
+        "direct_read": "read get-lists-id-board"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{id}/cards",
+      "covered_by": {
+        "direct_read": "read get-lists-id-cards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}",
+      "covered_by": {
+        "direct_read": "read get-members-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}",
+      "covered_by": {
+        "write": "put_members_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/members/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/actions",
+      "covered_by": {
+        "direct_read": "read get-members-id-actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardBackgrounds",
+      "covered_by": {
+        "direct_read": "read get-members-id-boardbackgrounds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/boardBackgrounds",
+      "covered_by": {
+        "write": "post_members_id_boardbackgrounds_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardBackgrounds/{idBackground}",
+      "covered_by": {
+        "direct_read": "read get-members-id-boardbackgrounds-idbackground"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/boardBackgrounds/{idBackground}",
+      "covered_by": {
+        "write": "put_members_id_boardbackgrounds_idbackground"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/boardBackgrounds/{idBackground}",
+      "covered_by": {
+        "write": "delete_members_id_boardbackgrounds_idbackground"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardStars",
+      "covered_by": {
+        "direct_read": "read get-members-id-boardstars"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/boardStars",
+      "covered_by": {
+        "write": "post_members_id_boardstars"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardStars/{idStar}",
+      "covered_by": {
+        "direct_read": "read get-members-id-boardstars-idstar"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/boardStars/{idStar}",
+      "covered_by": {
+        "write": "put_members_id_boardstars_idstar"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/boardStars/{idStar}",
+      "covered_by": {
+        "write": "delete_members_id_boardstars_idstar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boards",
+      "covered_by": {
+        "stream": "boards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/boardsInvited",
+      "covered_by": {
+        "direct_read": "read get-members-id-boardsinvited"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/cards",
+      "covered_by": {
+        "direct_read": "read get-members-id-cards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customBoardBackgrounds",
+      "covered_by": {
+        "direct_read": "read get-members-id-customboardbackgrounds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/customBoardBackgrounds",
+      "covered_by": {
+        "write": "membersidcustomboardbackgrounds_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+      "covered_by": {
+        "direct_read": "read get-members-id-customboardbackgrounds-idbackground"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+      "covered_by": {
+        "write": "put_members_id_customboardbackgrounds_idbackground"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+      "covered_by": {
+        "write": "delete_members_id_customboardbackgrounds_idbackground"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customEmoji",
+      "covered_by": {
+        "direct_read": "read get-members-id-customemoji"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/customEmoji",
+      "covered_by": {
+        "write": "post_members_id_customemoji"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customEmoji/{idEmoji}",
+      "covered_by": {
+        "direct_read": "read membersidcustomemojiidemoji"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customStickers",
+      "covered_by": {
+        "direct_read": "read get-members-id-customstickers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/customStickers",
+      "covered_by": {
+        "write": "post_members_id_customstickers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/customStickers/{idSticker}",
+      "covered_by": {
+        "direct_read": "read get-members-id-customstickers-idsticker"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/customStickers/{idSticker}",
+      "covered_by": {
+        "write": "delete_members_id_customstickers_idsticker"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/notifications",
+      "covered_by": {
+        "direct_read": "read get-members-id-notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/organizations",
+      "covered_by": {
+        "direct_read": "read get-members-id-organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/organizationsInvited",
+      "covered_by": {
+        "direct_read": "read get-members-id-organizationsinvited"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/savedSearches",
+      "covered_by": {
+        "direct_read": "read get-members-id-savedsearches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/savedSearches",
+      "covered_by": {
+        "write": "post_members_id_savedsearches"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/savedSearches/{idSearch}",
+      "covered_by": {
+        "direct_read": "read get-members-id-savedsearches-idsearch"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/savedSearches/{idSearch}",
+      "covered_by": {
+        "write": "put_members_id_savedsearches_idsearch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}/savedSearches/{idSearch}",
+      "covered_by": {
+        "write": "delete_members_id_savedsearches_idsearch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/tokens",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/avatar",
+      "covered_by": {
+        "write": "membersidavatar"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/oneTimeMessagesDismissed",
+      "covered_by": {
+        "write": "post_members_id_onetimemessagesdismissed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/notificationsChannelSettings",
+      "covered_by": {
+        "direct_read": "read get-members-id-notification-channel-settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/notificationsChannelSettings",
+      "covered_by": {
+        "write": "put_members_id_notification_channel_settings_channel_blocked_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members/{id}/notificationsChannelSettings/{channel}",
+      "covered_by": {
+        "direct_read": "read get-members-id-notification-channel-settings-channel"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/notificationsChannelSettings/{channel}",
+      "covered_by": {
+        "write": "put_members_id_notification_channel_settings_channel_blocked_keys_2"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}",
+      "covered_by": {
+        "write": "put_members_id_notification_channel_settings_channel_blocked_keys_3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}",
+      "covered_by": {
+        "direct_read": "read get-notifications-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/notifications/{id}",
+      "covered_by": {
+        "write": "put_notifications_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/notifications/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notifications/all/read",
+      "covered_by": {
+        "write": "post_notifications_all_read"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/notifications/{id}/unread",
+      "covered_by": {
+        "write": "put_notifications_id_unread"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/board",
+      "covered_by": {
+        "direct_read": "read get-notifications-id-board"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/card",
+      "covered_by": {
+        "direct_read": "read get-notifications-id-card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/list",
+      "covered_by": {
+        "direct_read": "read get-notifications-id-list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/member",
+      "covered_by": {
+        "direct_read": "read notificationsidmember"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/memberCreator",
+      "covered_by": {
+        "direct_read": "read get-notifications-id-membercreator"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/{id}/organization",
+      "covered_by": {
+        "direct_read": "read get-notifications-id-organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations",
+      "covered_by": {
+        "write": "post_organizations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}",
+      "covered_by": {
+        "direct_read": "read get-organizations-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}",
+      "covered_by": {
+        "write": "put_organizations_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}",
+      "covered_by": {
+        "write": "delete_organizations_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/organizations/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/actions",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/boards",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-boards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/exports",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-exports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{id}/exports",
+      "covered_by": {
+        "write": "post_organizations_id_exports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/members",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-members"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}/members",
+      "covered_by": {
+        "write": "put_organizations_id_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/memberships",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/memberships/{idMembership}",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-memberships-idmembership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/pluginData",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-plugindata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/tags",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{id}/tags",
+      "covered_by": {
+        "write": "post_organizations_id_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}/members/{idMember}",
+      "covered_by": {
+        "write": "put_organizations_id_members_idmember"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/members/{idMember}",
+      "covered_by": {
+        "write": "delete_organizations_id_members"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/organizations/{id}/members/{idMember}/deactivated",
+      "covered_by": {
+        "write": "put_organizations_id_members_idmember_deactivated"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{id}/logo",
+      "covered_by": {
+        "write": "post_organizations_id_logo"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/logo",
+      "covered_by": {
+        "write": "delete_organizations_id_logo"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/members/{idMember}/all",
+      "covered_by": {
+        "write": "organizations_id_members_idmember_all"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/prefs/associatedDomain",
+      "covered_by": {
+        "write": "delete_organizations_id_prefs_associateddomain"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/prefs/orgInviteRestrict",
+      "covered_by": {
+        "write": "delete_organizations_id_prefs_orginviterestrict"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{id}/tags/{idTag}",
+      "covered_by": {
+        "write": "delete_organizations_id_tags_idtag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{id}/newBillableGuests/{idBoard}",
+      "covered_by": {
+        "direct_read": "read get-organizations-id-newbillableguests-idboard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plugins/{id}/",
+      "covered_by": {
+        "direct_read": "read get-plugins-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plugins/{id}/",
+      "covered_by": {
+        "write": "put_plugins_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plugins/{idPlugin}/listing",
+      "covered_by": {
+        "write": "post_plugins_idplugin_listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plugins/{id}/compliance/memberPrivacy",
+      "covered_by": {
+        "direct_read": "read get-plugins-id-compliance-memberprivacy"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plugins/{idPlugin}/listings/{idListing}",
+      "covered_by": {
+        "write": "put_plugins_idplugin_listings_idlisting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "covered_by": {
+        "direct_read": "read get-search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/members/",
+      "covered_by": {
+        "direct_read": "read get-search-members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}/member",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}/webhooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tokens/{token}/webhooks",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tokens/{token}/webhooks/{idWebhook}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint is tracked but blocked by default because it exposes elevated, token-management, compliance, or enterprise administration data outside this connector-local parity slice.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tokens/{token}/webhooks/{idWebhook}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tokens/{token}/webhooks/{idWebhook}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tokens/{token}/",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Endpoint mutates enterprise, token, or application administration state and requires explicit human-gated product policy before it can become an executable Trello write action.",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/",
+      "covered_by": {
+        "write": "post_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "covered_by": {
+        "direct_read": "read get-webhooks-id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{id}",
+      "covered_by": {
+        "write": "put_webhooks_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "covered_by": {
+        "write": "delete_webhooks_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}/{field}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Trello field/filter accessor duplicates a typed object or collection endpoint already modeled by this connector; use the covered endpoint plus field filtering downstream.",
+        "duplicate_of": "/webhooks/{id}",
+        "source_url": "https://developer.atlassian.com/cloud/trello/rest/"
+      }
+    }
   ]
 }

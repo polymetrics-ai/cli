@@ -492,7 +492,7 @@
 - [todoist](todoist/MANUAL.md): Reads projects, sections, tasks, comments, labels, and project collaborators, and writes project/section/task/comment/label create, update, and delete actions (plus task close/reopen), through the Todoist REST API.
 - [toggl](toggl/MANUAL.md): Reads and writes time entries, projects, clients, tags, tasks, and users through the Toggl Track API.
 - [track-pms](track-pms/MANUAL.md): Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, and unit types through the Track PMS API.
-- [trello](trello/MANUAL.md): Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are blocked (see docs.md Known limits).
+- [trello](trello/MANUAL.md): Reads and writes the supportable Trello REST API surface for boards, cards, lists, members, organizations, labels, checklists, actions, webhooks, search, attachments, plugins, notifications, emoji, and saved searches with fixture-backed declarative operations.
 - [tremendous](tremendous/MANUAL.md): Reads and writes Tremendous campaigns, orders, rewards, funding sources, products, invoices, and members through the Tremendous API.
 - [trustpilot](trustpilot/MANUAL.md): Reads Trustpilot business-unit reviews, invitations, and business-unit profile metadata.
 - [tvmaze-schedule](tvmaze-schedule/MANUAL.md): Reads public TVmaze broadcast and web schedules without credentials.

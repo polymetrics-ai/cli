@@ -1,0 +1,17 @@
+{
+  "record": {
+    "idCard": "trello-fixture-value",
+    "idCustomField": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/cards/trello-fixture-value/customField/trello-fixture-value/item"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

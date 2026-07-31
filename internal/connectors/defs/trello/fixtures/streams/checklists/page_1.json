@@ -1,17 +1,18 @@
 {
   "request": {
     "method": "GET",
-    "path": "/boards/synthetic-conformance-value/checklists"
+    "path": "/boards/synthetic-conformance-value/checklists",
+    "query": {
+      "token": "synthetic-conformance-secret"
+    }
   },
   "response": {
     "status": 200,
     "body": [
       {
-        "id": "checklist_fixture_1",
-        "name": "Launch checklist",
-        "idBoard": "synthetic-conformance-value",
-        "idCard": "card_fixture_1",
-        "pos": 16384
+        "id": "trello-fixture-checklists",
+        "name": "Fixture checklists",
+        "fixture": true
       }
     ]
   }

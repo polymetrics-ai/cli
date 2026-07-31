@@ -488,7 +488,7 @@
 | `todoist` | [`icons/todoist.svg`](../icons/todoist.svg) | Todoist | `api` | ga | check, catalog, read, write | 6 | 17 | [Documentation](https://developer.todoist.com/rest/v2/) | bundle definition |
 | `toggl` | [`icons/toggl.svg`](../icons/toggl.svg) | Toggl | `api` | ga | check, catalog, read, write | 7 | 16 | [Documentation](https://developers.track.toggl.com/docs/) | bundle definition |
 | `track-pms` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Track PMS | `api` | ga | check, catalog, read, write | 6 | 8 | [Documentation](https://developer.trackhs.com/reference) | bundle definition |
-| `trello` | [`icons/trello.svg`](../icons/trello.svg) | Trello | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developer.atlassian.com/cloud/trello/rest/) | bundle definition |
+| `trello` | [`icons/trello.svg`](../icons/trello.svg) | Trello | `api` | ga | check, catalog, read, write, query | 3 | 121 | [Documentation](https://developer.atlassian.com/cloud/trello/rest/) | bundle definition |
 | `tremendous` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Tremendous | `api` | ga | check, catalog, read, write | 7 | 11 | [Documentation](https://developers.tremendous.com/) | bundle definition |
 | `trustpilot` | [`icons/trustpilot.svg`](../icons/trustpilot.svg) | Trustpilot | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.trustpilot.com/) | bundle definition |
 | `tvmaze-schedule` | [`icons/tvmazeschedule.svg`](../icons/tvmazeschedule.svg) | TVmaze Schedule | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://www.tvmaze.com/api) | bundle definition |

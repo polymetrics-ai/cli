@@ -202714,47 +202714,3496 @@
   {
     "slug": "trello",
     "name": "Trello",
-    "description": "Reads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are blocked (see docs.md Known limits).",
+    "description": "Reads and writes the supportable Trello REST API surface for boards, cards, lists, members, organizations, labels, checklists, actions, webhooks, search, attachments, plugins, notifications, emoji, and saved searches with fixture-backed declarative operations.",
     "docs_url": "https://developer.atlassian.com/cloud/trello/rest/",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
-      "query": false,
+      "write": true,
+      "query": true,
       "cdc": false,
       "dynamic_schema": false
     },
     "streams": [
       {
-        "name": "boards",
-        "primary_key": [
-          "id"
-        ],
+        "name": "checklists",
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "lists",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
       {
-        "name": "checklists",
-        "primary_key": [
-          "id"
-        ],
+        "name": "boards",
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Trello boards, lists, and checklists through the Trello REST API. Cards and actions are\nblocked (see docs.md Known limits).\n\nReadable streams: `boards`, `lists`, `checklists`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developer.atlassian.com/cloud/trello/rest/.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://api.trello.com/1`; format `uri`; Trello API base\n  URL override for tests or proxies.\n- `board_ids` (optional, string); Comma-separated list of Trello board IDs to scope the\n  lists/checklists streams to. Required for those two streams (no auto-discovery fallback here; see\n  docs.md Known limits) - the boards stream itself is unaffected and always lists every board the\n  authenticated member can access.\n- `key` (required, secret, string); Trello API key, sent as the 'key' query parameter on every\n  request. Never logged.\n- `token` (required, secret, string); Trello API token, sent as the 'token' query parameter on every\n  request. Never logged.\n\nSecret fields are redacted in logs and write previews: `key`, `token`.\n\nDefault configuration values: `base_url=https://api.trello.com/1`.\n\nAuthentication behavior:\n\n- API key authentication in query parameter `key` using `secrets.key`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/members/me` with query `fields`=`id`; `token`=`{{ secrets.token }}`.\n\n## Streams notes\n\nDefault pagination: single request; no pagination.\n\n- `boards`: GET `/members/me/boards` - records at response root; query `token`=`{{ secrets.token\n  }}`.\n- `lists`: GET `/boards/{{ fanout.id }}/lists` - records at response root; query `token`=`{{\n  secrets.token }}`; fan-out; ids from config field `board_ids`; id inserted into the request path;\n  stamps `idBoard`.\n- `checklists`: GET `/boards/{{ fanout.id }}/checklists` - records at response root; query\n  `token`=`{{ secrets.token }}`; fan-out; ids from config field `board_ids`; id inserted into the\n  request path; stamps `idBoard`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Trello API read of board/list/checklist data.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 3 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  non_data_endpoint=1, out_of_scope=3.\n",
+    "write_actions": [
+      {
+        "name": "put_actions_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_actions_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_actions_id_text",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_actions_idaction_reactions",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_actions_idaction_reactions_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_boards_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_boards_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_boards_id_labels",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_boards_id_lists",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_boards_id_members",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_members_idmember",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "boardsidmembersidmember",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_boards_id_memberships_idmembership",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_myprefs_emailposition",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_myprefs_idemaillist",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebar",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebaractivity",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebarboardactions",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_boards_id_my_prefs_showsidebarmembers",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_boards",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_boards_id_calendarkey_generate",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_boards_id_emailkey_generate",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_boards_id_idtags",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_boards_id_markedasviewed",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_boards_id_boardplugins",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_boards_id_boardplugins",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_boards_id_exports",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_boards_id_exports_idexport",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_cards",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_cards_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_cards_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_cards_id_attachments",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "deleted_cards_id_attachments_idattachment",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_cards_id_checklists",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_cards_id_checkitem_idcheckitem",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_cards_id_checkitem_idcheckitem",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "cardsidmembersvoted_1",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_cards_id_stickers",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_cards_id_stickers_idsticker",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_cards_id_stickers_idsticker",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_cards_id_actions_idaction_comments",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_cards_id_actions_id_comments",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_cards_idcard_customfield_idcustomfield_item",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_cards_idcard_customfields",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_cards_id_actions_comments",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_cards_id_idlabels",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_cards_id_idmembers",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_cards_id_labels",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_cards_id_markassociatednotificationsread",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_cards_id_idlabels_idlabel",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_id_idmembers_idmember",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_cards_id_membersvoted_idmember",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_cards_idcard_checklist_idchecklist_checkitem_idcheckitem",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_cards_id_checklists_idchecklist",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_checklists",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_checlists_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_checklists_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_checklists_id_field",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_checklists_id_checkitems",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_checklists_id_checkitems_idcheckitem",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_customfields",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_customfields_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_customfields_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "get_customfields_id_options",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_customfields_options_idcustomfieldoption",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_labels_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_labels_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_labels_id_field",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_labels",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_lists_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_lists",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_lists_id_archiveallcards",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_lists_id_moveallcards",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_lists_id_closed",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_id_idboard",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_lists_id_field",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_members_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_members_id_boardbackgrounds_1",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_members_id_boardbackgrounds_idbackground",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_members_id_boardbackgrounds_idbackground",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_members_id_boardstars",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_members_id_boardstars_idstar",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_members_id_boardstars_idstar",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "membersidcustomboardbackgrounds_1",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_members_id_customboardbackgrounds_idbackground",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_members_id_customboardbackgrounds_idbackground",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_members_id_customemoji",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_members_id_customstickers",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_members_id_customstickers_idsticker",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_members_id_savedsearches",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_members_id_savedsearches_idsearch",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_members_id_savedsearches_idsearch",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "membersidavatar",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "post_members_id_onetimemessagesdismissed",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_members_id_notification_channel_settings_channel_blocked_keys",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_members_id_notification_channel_settings_channel_blocked_keys_2",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_members_id_notification_channel_settings_channel_blocked_keys_3",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "put_notifications_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_notifications_all_read",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_notifications_id_unread",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_organizations",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_organizations_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_organizations_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "post_organizations_id_exports",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_organizations_id_members",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_organizations_id_tags",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_organizations_id_members_idmember",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_organizations_id_members",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_organizations_id_members_idmember_deactivated",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_organizations_id_logo",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_organizations_id_logo",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "organizations_id_members_idmember_all",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_organizations_id_prefs_associateddomain",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_organizations_id_prefs_orginviterestrict",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_organizations_id_tags_idtag",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "put_plugins_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_plugins_idplugin_listing",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_plugins_idplugin_listings_idlisting",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "post_webhooks",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "put_webhooks_id",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_webhooks_id",
+        "method": "DELETE",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Work with Trello REST resources from pm while the full operation ledger remains in connector metadata.",
+      "usage": "pm trello <read|write> <operation> [flags]",
+      "source_cli": null,
+      "groups": [
+        {
+          "id": "read",
+          "title": "Trello read and direct-read commands",
+          "commands": [
+            "read"
+          ]
+        },
+        {
+          "id": "write",
+          "title": "Representative Trello reverse ETL write commands",
+          "commands": [
+            "write"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Write machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Use a saved Trello connector credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Set connector config as key=value (for example id=<board-id>).",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to emit for ETL read commands.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum bytes for direct-read JSON responses.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "read get-actions-id",
+          "summary": "Get an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-id-board",
+          "summary": "Get the Board for an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-id-card",
+          "summary": "Get the Card for an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-id-list",
+          "summary": "Get the List for an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-id-member",
+          "summary": "Get the Member of an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-id-membercreator",
+          "summary": "Get the Member Creator of an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-id-organization",
+          "summary": "Get the Organization of an Action",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-idaction-reactions",
+          "summary": "Get Action's Reactions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id-action",
+              "type": "string",
+              "summary": "Set Trello path parameter idAction.",
+              "values": [],
+              "maps_to": "path.idAction"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-idaction-reactions-id",
+          "summary": "Get Action's Reaction",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id-action",
+              "type": "string",
+              "summary": "Set Trello path parameter idAction.",
+              "values": [],
+              "maps_to": "path.idAction"
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-actions-idaction-reactionsummary",
+          "summary": "List Action's summary of Reactions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id-action",
+              "type": "string",
+              "summary": "Set Trello path parameter idAction.",
+              "values": [],
+              "maps_to": "path.idAction"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-memberships",
+          "summary": "Get Memberships of a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id",
+          "summary": "Get a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-actions",
+          "summary": "Get Actions of a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "board-id",
+              "type": "string",
+              "summary": "Set Trello path parameter boardId.",
+              "values": [],
+              "maps_to": "path.boardId"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-boardstars",
+          "summary": "Get boardStars on a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "board-id",
+              "type": "string",
+              "summary": "Set Trello path parameter boardId.",
+              "values": [],
+              "maps_to": "path.boardId"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read checklists",
+          "summary": "Get Checklists on a Board",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "checklists",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm trello read checklists --credential <name> --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read get-boards-id-cards",
+          "summary": "Get Cards on a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-customfields",
+          "summary": "Get Custom Fields for Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-labels",
+          "summary": "Get Labels on a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read lists",
+          "summary": "Get Lists on a Board",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "lists",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm trello read lists --credential <name> --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read get-boards-id-members",
+          "summary": "Get the Members of a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-boardplugins",
+          "summary": "Get Enabled Power-Ups on Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-board-id-plugins",
+          "summary": "Get Power-Ups on a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-exports-idexport",
+          "summary": "Get an Export for a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-export",
+              "type": "string",
+              "summary": "Set Trello path parameter idExport.",
+              "values": [],
+              "maps_to": "path.idExport"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-exports-idexport-download",
+          "summary": "Download an Export for a Board",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-export",
+              "type": "string",
+              "summary": "Set Trello path parameter idExport.",
+              "values": [],
+              "maps_to": "path.idExport"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-boards-id-exports-mostrecent",
+          "summary": "Get a Board's Most Recent Export",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id",
+          "summary": "Get a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-actions",
+          "summary": "Get Actions on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-attachments",
+          "summary": "Get Attachments on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-attachments-idattachment",
+          "summary": "Get an Attachment on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-attachment",
+              "type": "string",
+              "summary": "Set Trello path parameter idAttachment.",
+              "values": [],
+              "maps_to": "path.idAttachment"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-board",
+          "summary": "Get the Board the Card is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-checkitemstates",
+          "summary": "Get checkItems on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-checklists",
+          "summary": "Get Checklists on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-checkitem-idcheckitem",
+          "summary": "Get checkItem on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-check-item",
+              "type": "string",
+              "summary": "Set Trello path parameter idCheckItem.",
+              "values": [],
+              "maps_to": "path.idCheckItem"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-list",
+          "summary": "Get the List of a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-members",
+          "summary": "Get the Members of a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-membersvoted",
+          "summary": "Get Members who have voted on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-plugindata",
+          "summary": "Get pluginData on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-stickers",
+          "summary": "Get Stickers on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-stickers-idsticker",
+          "summary": "Get a Sticker on a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-sticker",
+              "type": "string",
+              "summary": "Set Trello path parameter idSticker.",
+              "values": [],
+              "maps_to": "path.idSticker"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-cards-id-customfielditems",
+          "summary": "Get Custom Field Items for a Card",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-checklists-id",
+          "summary": "Get a Checklist",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-checklists-id-board",
+          "summary": "Get the Board the Checklist is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-checklists-id-cards",
+          "summary": "Get the Card a Checklist is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-checklists-id-checkitems",
+          "summary": "Get Checkitems on a Checklist",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-checklists-id-checkitems-idcheckitem",
+          "summary": "Get a Checkitem on a Checklist",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-check-item",
+              "type": "string",
+              "summary": "Set Trello path parameter idCheckItem.",
+              "values": [],
+              "maps_to": "path.idCheckItem"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-customfields-id",
+          "summary": "Get a Custom Field",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read post-customfields-id-options",
+          "summary": "Get Options of Custom Field drop down",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-customfields-options-idcustomfieldoption",
+          "summary": "Get Option of Custom Field dropdown",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-custom-field-option",
+              "type": "string",
+              "summary": "Set Trello path parameter idCustomFieldOption.",
+              "values": [],
+              "maps_to": "path.idCustomFieldOption"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read emoji",
+          "summary": "List available Emoji",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-labels-id",
+          "summary": "Get a Label",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-lists-id",
+          "summary": "Get a List",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-lists-id-actions",
+          "summary": "Get Actions for a List",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-lists-id-board",
+          "summary": "Get the Board a List is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-lists-id-cards",
+          "summary": "Get Cards in a List",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id",
+          "summary": "Get a Member",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-actions",
+          "summary": "Get a Member's Actions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-boardbackgrounds",
+          "summary": "Get Member's custom Board backgrounds",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-boardbackgrounds-idbackground",
+          "summary": "Get a boardBackground of a Member",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-background",
+              "type": "string",
+              "summary": "Set Trello path parameter idBackground.",
+              "values": [],
+              "maps_to": "path.idBackground"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-boardstars",
+          "summary": "Get a Member's boardStars",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-boardstars-idstar",
+          "summary": "Get a boardStar of Member",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-star",
+              "type": "string",
+              "summary": "Set Trello path parameter idStar.",
+              "values": [],
+              "maps_to": "path.idStar"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read boards",
+          "summary": "Get Boards that Member belongs to",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "boards",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm trello read boards --credential <name> --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read get-members-id-boardsinvited",
+          "summary": "Get Boards the Member has been invited to",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-cards",
+          "summary": "Get Cards the Member is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-customboardbackgrounds",
+          "summary": "Get a Member's custom Board Backgrounds",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-customboardbackgrounds-idbackground",
+          "summary": "Get custom Board Background of Member",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-background",
+              "type": "string",
+              "summary": "Set Trello path parameter idBackground.",
+              "values": [],
+              "maps_to": "path.idBackground"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-customemoji",
+          "summary": "Get a Member's customEmojis",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read membersidcustomemojiidemoji",
+          "summary": "Get a Member's custom Emoji",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-emoji",
+              "type": "string",
+              "summary": "Set Trello path parameter idEmoji.",
+              "values": [],
+              "maps_to": "path.idEmoji"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-customstickers",
+          "summary": "Get Member's custom Stickers",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-customstickers-idsticker",
+          "summary": "Get a Member's custom Sticker",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-sticker",
+              "type": "string",
+              "summary": "Set Trello path parameter idSticker.",
+              "values": [],
+              "maps_to": "path.idSticker"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-notifications",
+          "summary": "Get Member's Notifications",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-organizations",
+          "summary": "Get Member's Organizations",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-organizationsinvited",
+          "summary": "Get Organizations a Member has been invited to",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-savedsearches",
+          "summary": "Get Member's saved searched",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-savedsearches-idsearch",
+          "summary": "Get a saved search",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-search",
+              "type": "string",
+              "summary": "Set Trello path parameter idSearch.",
+              "values": [],
+              "maps_to": "path.idSearch"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-notification-channel-settings",
+          "summary": "Get a Member's notification channel settings",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-members-id-notification-channel-settings-channel",
+          "summary": "Get blocked notification keys of Member on this channel",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "channel",
+              "type": "string",
+              "summary": "Set Trello path parameter channel.",
+              "values": [],
+              "maps_to": "path.channel"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-notifications-id",
+          "summary": "Get a Notification",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-notifications-id-board",
+          "summary": "Get the Board a Notification is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-notifications-id-card",
+          "summary": "Get the Card a Notification is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-notifications-id-list",
+          "summary": "Get the List a Notification is on",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read notificationsidmember",
+          "summary": "Get the Member a Notification is about (not the creator)",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-notifications-id-membercreator",
+          "summary": "Get the Member who created the Notification",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-notifications-id-organization",
+          "summary": "Get a Notification's associated Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id",
+          "summary": "Get an Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-actions",
+          "summary": "Get Actions for Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-boards",
+          "summary": "Get Boards in an Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-exports",
+          "summary": "Retrieve Organization's Exports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-members",
+          "summary": "Get the Members of an Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-memberships",
+          "summary": "Get Memberships of an Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-memberships-idmembership",
+          "summary": "Get a Membership of an Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-membership",
+              "type": "string",
+              "summary": "Set Trello path parameter idMembership.",
+              "values": [],
+              "maps_to": "path.idMembership"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-plugindata",
+          "summary": "Get the pluginData Scoped to Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-tags",
+          "summary": "Get Tags of an Organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-organizations-id-newbillableguests-idboard",
+          "summary": "Get Organizations new billable guests",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            },
+            {
+              "name": "id-board",
+              "type": "string",
+              "summary": "Set Trello path parameter idBoard.",
+              "values": [],
+              "maps_to": "path.idBoard"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-plugins-id",
+          "summary": "Get a Plugin",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-plugins-id-compliance-memberprivacy",
+          "summary": "Get Plugin's Member privacy compliance",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-search",
+          "summary": "Search Trello",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "query",
+              "type": "string",
+              "summary": "Set Trello query parameter query.",
+              "values": [],
+              "maps_to": "query.query"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-search-members",
+          "summary": "Search for Members",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "query",
+              "type": "string",
+              "summary": "Set Trello query parameter query.",
+              "values": [],
+              "maps_to": "query.query"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "read get-webhooks-id",
+          "summary": "Get a Webhook",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello path parameter id.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Trello JSON direct read; response fields with secret/token/download/content-like names are redacted."
+        },
+        {
+          "path": "write create-board",
+          "summary": "Create a Trello board.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "post_boards",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Set Trello field name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "desc",
+              "type": "string",
+              "summary": "Set Trello field desc.",
+              "values": [],
+              "maps_to": "record.desc"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write create-list",
+          "summary": "Create a Trello list on a board.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "post_lists",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Set Trello field name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "id-board",
+              "type": "string",
+              "summary": "Set Trello field idBoard.",
+              "values": [],
+              "maps_to": "record.idBoard"
+            },
+            {
+              "name": "pos",
+              "type": "string",
+              "summary": "Set Trello field pos.",
+              "values": [],
+              "maps_to": "record.pos"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write create-card",
+          "summary": "Create a Trello card.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "post_cards",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id-list",
+              "type": "string",
+              "summary": "Set Trello field idList.",
+              "values": [],
+              "maps_to": "record.idList"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Set Trello field name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "desc",
+              "type": "string",
+              "summary": "Set Trello field desc.",
+              "values": [],
+              "maps_to": "record.desc"
+            },
+            {
+              "name": "due",
+              "type": "string",
+              "summary": "Set Trello field due.",
+              "values": [],
+              "maps_to": "record.due"
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Set Trello field start.",
+              "values": [],
+              "maps_to": "record.start"
+            },
+            {
+              "name": "due-complete",
+              "type": "boolean",
+              "summary": "Set Trello field dueComplete.",
+              "values": [],
+              "maps_to": "record.dueComplete"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write update-card",
+          "summary": "Update a Trello card.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "put_cards_id",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello field id.",
+              "values": [],
+              "maps_to": "record.id"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Set Trello field name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "desc",
+              "type": "string",
+              "summary": "Set Trello field desc.",
+              "values": [],
+              "maps_to": "record.desc"
+            },
+            {
+              "name": "closed",
+              "type": "boolean",
+              "summary": "Set Trello field closed.",
+              "values": [],
+              "maps_to": "record.closed"
+            },
+            {
+              "name": "id-list",
+              "type": "string",
+              "summary": "Set Trello field idList.",
+              "values": [],
+              "maps_to": "record.idList"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write comment-card",
+          "summary": "Add a comment to a Trello card.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "post_cards_id_actions_comments",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello field id.",
+              "values": [],
+              "maps_to": "record.id"
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "summary": "Set Trello field text.",
+              "values": [],
+              "maps_to": "record.text"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-card",
+          "summary": "Delete a Trello card.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_cards_id",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello field id.",
+              "values": [],
+              "maps_to": "record.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Deletes or removes Trello data; requires destructive approval.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write create-label",
+          "summary": "Create a Trello label.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "post_labels",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Set Trello field name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "color",
+              "type": "string",
+              "summary": "Set Trello field color.",
+              "values": [],
+              "maps_to": "record.color"
+            },
+            {
+              "name": "id-board",
+              "type": "string",
+              "summary": "Set Trello field idBoard.",
+              "values": [],
+              "maps_to": "record.idBoard"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write create-webhook",
+          "summary": "Create a Trello webhook.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "post_webhooks",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "callback-url",
+              "type": "string",
+              "summary": "Set Trello field callbackURL.",
+              "values": [],
+              "maps_to": "record.callbackURL"
+            },
+            {
+              "name": "id-model",
+              "type": "string",
+              "summary": "Set Trello field idModel.",
+              "values": [],
+              "maps_to": "record.idModel"
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Set Trello field description.",
+              "values": [],
+              "maps_to": "record.description"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Mutates Trello data through a typed closed-schema REST action; execution requires plan, preview, approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-webhook",
+          "summary": "Delete a Trello webhook.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_webhooks_id",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Set Trello field id.",
+              "values": [],
+              "maps_to": "record.id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "Deletes or removes Trello data; requires destructive approval.",
+          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "full-surface",
+          "summary": "All 261 official REST operations are tracked in api_surface.json; inspect the connector manifest for 3 streams, 95 direct reads, and 121 writes."
+        },
+        {
+          "name": "safety",
+          "summary": "Writes are reverse ETL only: plan, preview, approve, execute; no raw HTTP escape hatch is exposed."
+        }
+      ]
+    },
+    "docs_md": "# Trello connector docs\n\n## Overview\n\nThe Trello connector is generated from Atlassian's official Trello OpenAPI document and covers the supportable REST API surface without live provider calls in conformance. This parity wave audited `https://developer.atlassian.com/cloud/trello/swagger.v3.json` at SHA-256 `b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19` and partitions all 261 official HTTP operations into 219 executable connector operations (3 fixture-backed streams, 95 fixed JSON direct reads, and 121 fixture-backed typed writes) plus 42 blocked operation-ledger rows.\n\nExecutable streams cover the high-volume board/list/checklist ETL paths. Parameterized GET endpoints are exposed as fixed direct-read commands with closed path/query flags and `json_redacted` output policy. Executable writes are typed reverse ETL actions using closed record schemas for supportable Trello POST, PUT, and DELETE operations.\n\n## Auth setup\n\nCreate a Trello API key and token out of band, then add credentials without placing secret values in prompts or command history. Use environment variables or stdin only:\n\n```bash\npm credentials add trello-prod --connector trello --from-env key=TRELLO_API_KEY --from-env token=TRELLO_API_TOKEN\n```\n\nThe connector sends `key` as an API-key query authenticator and sends `token` on each declared Trello request. Both fields are marked `x-secret` and are redacted from previews and errors.\n\n## Streams notes\n\nThe fixture-backed ETL streams are `boards`, `lists`, and `checklists`. The `boards` stream reads `/members/me/boards`; `lists` and `checklists` read board-scoped endpoints and use `--config id=<board-id>` for the board id. The remaining supportable GET endpoints are fixed direct-read commands under `pm trello read ...` with explicit path/query flags.\n\n```bash\npm trello read boards --credential trello-prod --json\npm trello read lists --credential trello-prod --config id=<board-id> --json\npm trello read get-cards-id --credential trello-prod --id <card-id> --json\npm trello read get-search --credential trello-prod --query <search-text> --json\n```\n\nFixture pages under `fixtures/streams/**` are sanitized synthetic pages for local conformance replay only; they are not live Trello captures and contain no real board, member, organization, card, webhook, or token data.\n\n## Write actions & risks\n\nAll supportable Trello mutations are exposed as reverse ETL write actions, never as raw HTTP. CLI write commands create a plan first, support preview, require explicit approval, and only execute after approval. DELETE actions declare destructive confirmation plus idempotent missing-resource handling for `404`.\n\nRepresentative examples:\n\n```bash\npm trello write create-card --credential trello-prod --idlist <list-id> --name \"New card\" --preview --json\npm trello write comment-card --credential trello-prod --id <card-id> --text \"Fixture-safe comment\" --preview --json\npm trello write delete-webhook --credential trello-prod --id <webhook-id> --preview --json\n```\n\nThe declarative engine builds Trello write requests from typed records. Form bodies carry supportable Trello parameters while path parameters and token authentication are interpolated safely. Destructive or notification-producing effects remain gated by reverse ETL plan → preview → approval → execute.\n\n## Known limits\n\nThe official operation ledger intentionally blocks 42 endpoints:\n\n- Trello Enterprise administration endpoints remain blocked because they require elevated enterprise authority and mutate organization/member/admin state.\n- Token-management endpoints remain blocked because they expose or mutate credential/token state.\n- Application compliance is blocked as an elevated compliance direct-read surface.\n- `/batch` is blocked because it accepts arbitrary sub-request URLs and would be a raw generic HTTP escape hatch.\n- Field/filter accessor endpoints such as `/cards/{id}/{field}` are tracked as duplicates of covered object or collection endpoints.\n\nNo credentialed Trello checks, live provider calls, or provider writes are part of local conformance. Binary response payloads were not found in the audited OpenAPI content types; attachment operations are modeled as JSON/form REST metadata/actions only.\n",
     "icon": {
       "id": "trello",
       "path": "icons/trello.svg",

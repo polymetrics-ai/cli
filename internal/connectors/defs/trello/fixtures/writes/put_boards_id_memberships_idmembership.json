@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "idMembership": "trello-fixture-value",
+    "type": "admin"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/boards/trello-fixture-value/memberships/trello-fixture-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}

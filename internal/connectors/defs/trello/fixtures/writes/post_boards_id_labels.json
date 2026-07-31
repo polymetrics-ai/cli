@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "trello-fixture-value",
+    "name": "trello-fixture-value",
+    "color": "trello-fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/boards/trello-fixture-value/labels"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "trello-fixture-response",
+      "ok": true
+    }
+  }
+}
