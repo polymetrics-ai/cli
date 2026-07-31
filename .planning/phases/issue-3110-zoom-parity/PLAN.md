@@ -11,7 +11,7 @@ Allowed production paths for this slice:
 - CLI/help/golden/catalog and website generated surfaces only when regeneration reflects the Zoom connector metadata change
 - Issue bodies for #3110-#3117 through `gh-axi` for the required idempotent captain-policy addendum
 
-No shared runtime/engine/CLI Go behavior changes are planned for connector semantics. During verification, the recursive certification harness exposed a fixed 20m package-timeout blocker from repeatedly reparsing the embedded connector bundle catalog after adding the Zoom parity bundle. A minimal shared performance unblock may cache the immutable embedded bundle load while still returning a fresh registry per `New()` call; this must not change connector behavior, safety policy, or runtime surfaces.
+No shared runtime/engine/CLI Go behavior changes are in scope. Scope correction after commit `426eb0e3b`: revert `internal/connectors/bundleregistry/registry.go` to its pre-commit contents in a new corrective commit, preserve all Zoom-owned/generated parity work, rerun focused Zoom checks and `make verify` without the cache change, and document any genuine timeout dependency as out-of-scope rather than retaining a shared runtime workaround.
 
 ## GSD command path and fallback
 
