@@ -1,0 +1,168 @@
+{
+  "tagline": "Inspect QuickBooks Online accounting streams and the blocked official operation ledger.",
+  "usage": "pm quickbooks <group> <command> [flags]",
+  "source_cli": {
+    "name": "Intuit Developer QuickBooks Online Accounting API",
+    "docs": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+    "reference": "EntityJsonObject_v1 qbo operation inventory",
+    "source": "official_api_docs"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "Fixture-backed ETL streams",
+      "commands": [
+        "accounts list",
+        "customers list",
+        "invoices list",
+        "payments list",
+        "vendors list"
+      ]
+    },
+    {
+      "id": "planned",
+      "title": "Blocked official operation lanes",
+      "commands": [
+        "ledger status",
+        "writes planned",
+        "query planned",
+        "binary planned",
+        "cdc planned"
+      ]
+    }
+  ],
+  "global_flags": [],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Read QuickBooks chart-of-account records through the bounded Query API stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "flags": [],
+      "examples": [
+        "pm etl run --source quickbooks --stream accounts --batch-size 1000"
+      ],
+      "risk": "read-only Query API access to account records",
+      "approval": "no write approval required"
+    },
+    {
+      "path": "customers list",
+      "summary": "Read QuickBooks customer records through the bounded Query API stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "flags": [],
+      "examples": [
+        "pm etl run --source quickbooks --stream customers --batch-size 1000"
+      ],
+      "risk": "read-only Query API access to customer records",
+      "approval": "no write approval required"
+    },
+    {
+      "path": "invoices list",
+      "summary": "Read QuickBooks invoice records through the bounded Query API stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "flags": [],
+      "examples": [
+        "pm etl run --source quickbooks --stream invoices --batch-size 1000"
+      ],
+      "risk": "read-only Query API access to invoice records",
+      "approval": "no write approval required"
+    },
+    {
+      "path": "payments list",
+      "summary": "Read QuickBooks payment records through the bounded Query API stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payments",
+      "flags": [],
+      "examples": [
+        "pm etl run --source quickbooks --stream payments --batch-size 1000"
+      ],
+      "risk": "read-only Query API access to payment records",
+      "approval": "no write approval required"
+    },
+    {
+      "path": "vendors list",
+      "summary": "Read QuickBooks vendor records through the bounded Query API stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vendors",
+      "flags": [],
+      "examples": [
+        "pm etl run --source quickbooks --stream vendors --batch-size 1000"
+      ],
+      "risk": "read-only Query API access to vendor records",
+      "approval": "no write approval required"
+    },
+    {
+      "path": "ledger status",
+      "summary": "Inspect the complete r2 official operation ledger and blocked/planned lane counts.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "flags": [],
+      "examples": [
+        "pm connectors inspect quickbooks --json"
+      ],
+      "risk": "local metadata inspection only",
+      "approval": "no provider call",
+      "notes": "Use pm connectors inspect quickbooks --json; docs-only dynamic connector execution is intentionally not exposed."
+    },
+    {
+      "path": "writes planned",
+      "summary": "QuickBooks create/update/delete/send/batch operations are tracked but blocked until typed write schemas and fixtures are authored.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "flags": [],
+      "risk": "high; mutations and destructive deletes are blocked by default",
+      "approval": "future reverse ETL must use plan -> preview -> approval -> execute with destructive confirmation where applicable",
+      "notes": "No raw write passthrough exists."
+    },
+    {
+      "path": "query planned",
+      "summary": "Additional QuickBooks provider-query/search reads are tracked but blocked until fixed-target bounded direct-read commands exist.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [],
+      "output_policy": "json_redacted",
+      "risk": "medium; bounded read only once implemented",
+      "approval": "no write approval; future direct reads must remain fixed-target and redacted",
+      "notes": "No arbitrary SQL/query escape hatch is exposed."
+    },
+    {
+      "path": "binary planned",
+      "summary": "QuickBooks PDF, attachment, and report/file payload surfaces are tracked but blocked until bounded binary/report transfer support exists.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [],
+      "output_policy": "json_redacted",
+      "risk": "high; file payloads require size limits, path-safe storage, and redaction before execution",
+      "approval": "blocked by default",
+      "notes": "No generic file read/write surface is exposed."
+    },
+    {
+      "path": "cdc planned",
+      "summary": "QuickBooks change data capture is tracked but blocked until shared CDC truthfulness and state semantics are available.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [],
+      "output_policy": "json_redacted",
+      "risk": "medium; read-only changefeed once a typed cursor contract exists",
+      "approval": "blocked by default",
+      "notes": "No CDC capability is advertised by metadata."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "quickbooks-auth",
+      "summary": "Use OAuth 2.0 refresh-token credentials from environment variables or stdin; never paste secrets into prompts."
+    },
+    {
+      "name": "quickbooks-ledger",
+      "summary": "The operation ledger is complete for the r2 qbo audit, but only five read streams execute locally."
+    }
+  ]
+}

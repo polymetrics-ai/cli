@@ -7,12 +7,12 @@
     "client_id": {
       "type": "string",
       "x-secret": true,
-      "description": "Intuit Developer app Client ID, obtained from the app's Keys tab. Used only in the token-refresh request form; never logged."
+      "description": "Intuit Developer app Client ID, obtained from the app's Keys tab. Used only in the token-refresh Basic Authorization header; never logged."
     },
     "client_secret": {
       "type": "string",
       "x-secret": true,
-      "description": "Intuit Developer app Client Secret, obtained from the app's Keys tab. Used only in the token-refresh request form; never logged."
+      "description": "Intuit Developer app Client Secret, obtained from the app's Keys tab. Used only in the token-refresh Basic Authorization header; never logged."
     },
     "refresh_token": {
       "type": "string",
@@ -21,8 +21,7 @@
     },
     "realm_id": {
       "type": "string",
-      "x-secret": true,
-      "description": "QuickBooks company (Realm) ID that scopes every Query API request. Treated as secret-adjacent (identifies a specific company) and validated as a path-safe segment (no '/', '?', '#', or '..')."
+      "description": "QuickBooks company (Realm) ID that scopes every Query API request. This is not an OAuth secret, but it is validated as a numeric path segment and hook error text redacts it when provided through legacy secret storage."
     },
     "base_url": {
       "type": "string",
@@ -33,7 +32,7 @@
     "token_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://oauth2.bearer.token.intuit.com/oauth2/v1/tokens/bearer",
+      "default": "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
       "description": "Intuit OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a non-https or unparseable value to prevent exfiltrating the refresh token/client secret to an attacker-chosen endpoint."
     },
     "page_size": {
@@ -43,7 +42,7 @@
     },
     "max_pages": {
       "type": "string",
-      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/quickbooks/hooks.go's StreamHook. Permissive parse: empty, \"all\", or \"unlimited\" means unbounded; a positive integer string caps the page count at that value."
+      "description": "Optional hard cap on the number of pages read per stream, consumed by hooks/quickbooks/hooks.go's StreamHook. Permissive parse: empty, \"all\", or \"unlimited\" uses the connector's 10000-page safety cap and errors if that cap is reached; a positive integer string caps the page count at that value."
     },
     "sandbox": {
       "type": "string",

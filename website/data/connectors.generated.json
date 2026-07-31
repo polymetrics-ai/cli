@@ -183869,7 +183869,7 @@
   {
     "slug": "quickbooks",
     "name": "QuickBooks",
-    "description": "Reads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query API via the OAuth 2.0 refresh-token grant. Read-only.",
+    "description": "Reads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query API via the OAuth 2.0 refresh-token grant; tracks the complete r2 official qbo operation ledger with non-stream operations blocked by default.",
     "docs_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
     "integration_type": "api",
     "release_stage": "alpha",
@@ -183924,8 +183924,226 @@
       }
     ],
     "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query\nAPI via the OAuth 2.0 refresh-token grant. Read-only.\n\nReadable streams: `customers`, `invoices`, `payments`, `accounts`, `vendors`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation:\nhttps://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://quickbooks.api.intuit.com`; format `uri`;\n  QuickBooks Online Accounting API base URL override for tests or proxies. Use\n  https://sandbox-quickbooks.api.intuit.com for a sandbox company.\n- `client_id` (required, secret, string); Intuit Developer app Client ID, obtained from the app's\n  Keys tab. Used only in the token-refresh request form; never logged.\n- `client_secret` (required, secret, string); Intuit Developer app Client Secret, obtained from the\n  app's Keys tab. Used only in the token-refresh request form; never logged.\n- `max_pages` (optional, string); Permissive parse: empty, \"all\", or \"unlimited\" means unbounded; a\n  positive integer string caps the page count at that value.\n- `page_size` (optional, string); default `1000`; Records per page (1-1000, Query API MAXRESULTS).\n- `realm_id` (required, secret, string); QuickBooks company (Realm) ID that scopes every Query API\n  request. Treated as secret-adjacent (identifies a specific company) and validated as a path-safe\n  segment (no '/', '?', '#', or '..').\n- `refresh_token` (required, secret, string); Long-lived QuickBooks OAuth 2.0 refresh token (valid\n  up to ~100 days), exchanged for a short-lived access token at token_url; never logged. The\n  3-legged consent/acquisition dance is out of scope for this connector (credentials layer already\n  owns it).\n- `sandbox` (optional, string); default `false`; Documents whether this realm is a sandbox company\n  (informational only in this pass; base_url is the operative environment switch -- see Known\n  limits).\n- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for the earliest record\n  to replicate.\n- `token_url` (optional, string); default\n  `https://oauth2.bearer.token.intuit.com/oauth2/v1/tokens/bearer`; format `uri`; Intuit OAuth 2.0\n  token endpoint override. MUST be https in production; the hook fails closed on a non-https or\n  unparseable value to prevent exfiltrating the refresh token/client secret to an attacker-chosen\n  endpoint.\n\nSecret fields are redacted in logs and write previews: `client_id`, `client_secret`, `realm_id`,\n`refresh_token`.\n\nDefault configuration values: `base_url=https://quickbooks.api.intuit.com`, `page_size=1000`,\n`sandbox=false`, `token_url=https://oauth2.bearer.token.intuit.com/oauth2/v1/tokens/bearer`.\n\nAuthentication behavior:\n\n- Connector-specific authentication using `secrets.refresh_token`, `config.token_url`,\n  `secrets.client_id`, `secrets.client_secret`.\n- Access tokens are valid for one hour and are cached until 60 seconds before expiry, at which\n  point a fresh token is obtained.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `v3/company/{{ config.realm_id }}/query` with query `query`=`SELECT *\nFROM Customer STARTPOSITION 1 MAXRESULTS 1`.\n\n## Streams notes\n\nPagination embeds `STARTPOSITION` and `MAXRESULTS` inside the query string value itself, per the\nQuickBooks Query API. Paging stops when a page returns fewer than `page_size` records or\n`max_pages` is reached, whichever occurs first.\n\n- `customers`: GET `v3/company/{{ config.realm_id }}/query` - records path `QueryResponse.Customer`.\n- `invoices`: GET `v3/company/{{ config.realm_id }}/query` - records path `QueryResponse.Invoice`.\n- `payments`: GET `v3/company/{{ config.realm_id }}/query` - records path `QueryResponse.Payment`.\n- `accounts`: GET `v3/company/{{ config.realm_id }}/query` - records path `QueryResponse.Account`.\n- `vendors`: GET `v3/company/{{ config.realm_id }}/query` - records path `QueryResponse.Vendor`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external QuickBooks Online v3 Query API read of\ncustomer/invoice/payment/account/vendor entities.\n\n## Known limits\n\n- Batch defaults: read_page_size=1000.\n- API coverage includes 5 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  binary_payload=1, non_data_endpoint=1, out_of_scope=4.\n",
+    "cli_surface": {
+      "tagline": "Inspect QuickBooks Online accounting streams and the blocked official operation ledger.",
+      "usage": "pm quickbooks <group> <command> [flags]",
+      "source_cli": {
+        "name": "Intuit Developer QuickBooks Online Accounting API",
+        "docs": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
+        "reference": "EntityJsonObject_v1 qbo operation inventory",
+        "source": "official_api_docs"
+      },
+      "groups": [
+        {
+          "id": "etl",
+          "title": "Fixture-backed ETL streams",
+          "commands": [
+            "accounts list",
+            "customers list",
+            "invoices list",
+            "payments list",
+            "vendors list"
+          ]
+        },
+        {
+          "id": "planned",
+          "title": "Blocked official operation lanes",
+          "commands": [
+            "ledger status",
+            "writes planned",
+            "query planned",
+            "binary planned",
+            "cdc planned"
+          ]
+        }
+      ],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "accounts list",
+          "summary": "Read QuickBooks chart-of-account records through the bounded Query API stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "accounts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm etl run --source quickbooks --stream accounts --batch-size 1000"
+          ],
+          "output_policy": "",
+          "risk": "read-only Query API access to account records",
+          "approval": "no write approval required",
+          "notes": ""
+        },
+        {
+          "path": "customers list",
+          "summary": "Read QuickBooks customer records through the bounded Query API stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "customers",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm etl run --source quickbooks --stream customers --batch-size 1000"
+          ],
+          "output_policy": "",
+          "risk": "read-only Query API access to customer records",
+          "approval": "no write approval required",
+          "notes": ""
+        },
+        {
+          "path": "invoices list",
+          "summary": "Read QuickBooks invoice records through the bounded Query API stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "invoices",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm etl run --source quickbooks --stream invoices --batch-size 1000"
+          ],
+          "output_policy": "",
+          "risk": "read-only Query API access to invoice records",
+          "approval": "no write approval required",
+          "notes": ""
+        },
+        {
+          "path": "payments list",
+          "summary": "Read QuickBooks payment records through the bounded Query API stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "payments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm etl run --source quickbooks --stream payments --batch-size 1000"
+          ],
+          "output_policy": "",
+          "risk": "read-only Query API access to payment records",
+          "approval": "no write approval required",
+          "notes": ""
+        },
+        {
+          "path": "vendors list",
+          "summary": "Read QuickBooks vendor records through the bounded Query API stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "vendors",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm etl run --source quickbooks --stream vendors --batch-size 1000"
+          ],
+          "output_policy": "",
+          "risk": "read-only Query API access to vendor records",
+          "approval": "no write approval required",
+          "notes": ""
+        },
+        {
+          "path": "ledger status",
+          "summary": "Inspect the complete r2 official operation ledger and blocked/planned lane counts.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors inspect quickbooks --json"
+          ],
+          "output_policy": "",
+          "risk": "local metadata inspection only",
+          "approval": "no provider call",
+          "notes": "Use pm connectors inspect quickbooks --json; docs-only dynamic connector execution is intentionally not exposed."
+        },
+        {
+          "path": "writes planned",
+          "summary": "QuickBooks create/update/delete/send/batch operations are tracked but blocked until typed write schemas and fixtures are authored.",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high; mutations and destructive deletes are blocked by default",
+          "approval": "future reverse ETL must use plan -> preview -> approval -> execute with destructive confirmation where applicable",
+          "notes": "No raw write passthrough exists."
+        },
+        {
+          "path": "query planned",
+          "summary": "Additional QuickBooks provider-query/search reads are tracked but blocked until fixed-target bounded direct-read commands exist.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium; bounded read only once implemented",
+          "approval": "no write approval; future direct reads must remain fixed-target and redacted",
+          "notes": "No arbitrary SQL/query escape hatch is exposed."
+        },
+        {
+          "path": "binary planned",
+          "summary": "QuickBooks PDF, attachment, and report/file payload surfaces are tracked but blocked until bounded binary/report transfer support exists.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "high; file payloads require size limits, path-safe storage, and redaction before execution",
+          "approval": "blocked by default",
+          "notes": "No generic file read/write surface is exposed."
+        },
+        {
+          "path": "cdc planned",
+          "summary": "QuickBooks change data capture is tracked but blocked until shared CDC truthfulness and state semantics are available.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium; read-only changefeed once a typed cursor contract exists",
+          "approval": "blocked by default",
+          "notes": "No CDC capability is advertised by metadata."
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "quickbooks-auth",
+          "summary": "Use OAuth 2.0 refresh-token credentials from environment variables or stdin; never paste secrets into prompts."
+        },
+        {
+          "name": "quickbooks-ledger",
+          "summary": "The operation ledger is complete for the r2 qbo audit, but only five read streams execute locally."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads QuickBooks Online customers, invoices, payments, accounts, and vendors through the v3 Query\nAPI via the OAuth 2.0 refresh-token grant. The bundle also carries the complete r2 official\nQuickBooks Online Accounting API qbo operation ledger from Intuit `EntityJsonObject_v1.json`:\n43 ETL/read rows, 60 reverse-ETL write rows, 32 bounded direct/provider-query/search rows,\n25 binary/file/report rows, and 1 CDC/changefeed row.\n\nExecutable coverage is intentionally limited to the five legacy-compatible read streams:\n`customers`, `invoices`, `payments`, `accounts`, and `vendors`. All other official rows are tracked\nexactly once in `api_surface.json` and remain blocked by default until typed schemas, bounds,\nredaction, idempotency, fixtures, and any shared-runtime support exist.\n\nService API documentation:\nhttps://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://quickbooks.api.intuit.com`; format `uri`;\n  QuickBooks Online Accounting API base URL override for tests or proxies. Use\n  https://sandbox-quickbooks.api.intuit.com for a sandbox company.\n- `client_id` (required, secret, string); Intuit Developer app Client ID, obtained from the app's\n  Keys tab. Used only in the token-refresh Basic Authorization header; never logged.\n- `client_secret` (required, secret, string); Intuit Developer app Client Secret, obtained from the\n  app's Keys tab. Used only in the token-refresh Basic Authorization header; never logged.\n- `max_pages` (optional, string); Permissive parse: empty, \"all\", or \"unlimited\" uses the\n  connector's 10000-page safety cap and returns a clear error if that cap is reached; a positive\n  integer string caps the page count at that value.\n- `page_size` (optional, string); default `1000`; Records per page (1-1000, Query API MAXRESULTS).\n- `realm_id` (required, string); QuickBooks company (Realm) ID that scopes every Query API request.\n  It is not an OAuth secret, but it is validated as a numeric path segment before use.\n- `refresh_token` (required, secret, string); Long-lived QuickBooks OAuth 2.0 refresh token,\n  exchanged for a short-lived access token at `token_url`; never logged. The 3-legged consent and\n  acquisition flow is out of scope for this connector because the credentials layer owns it.\n- `sandbox` (optional, string); default `false`; Documents whether this realm is a sandbox company\n  (informational only; `base_url` is the operative environment switch).\n- `start_date` (optional, string); format `date-time`; retained as a forward-compatible config\n  field. The current stream hook does not send a server-side incremental filter.\n- `token_url` (optional, string); default\n  `https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer`; format `uri`; Intuit OAuth 2.0\n  token endpoint override. The hook fails closed on a non-https or unparseable value to prevent\n  sending refresh credentials to an attacker-chosen endpoint.\n\nSecret fields are redacted in logs and previews: `client_id`, `client_secret`, and\n`refresh_token`.\n\nDefault configuration values: `base_url=https://quickbooks.api.intuit.com`, `page_size=1000`,\n`sandbox=false`, `token_url=https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer`.\n\nAuthentication behavior:\n\n- Connector-specific authentication uses `secrets.refresh_token`, `config.token_url`,\n  `secrets.client_id`, and `secrets.client_secret`; client credentials are sent through HTTP Basic\n  auth on the token refresh request.\n- Access tokens are cached until 60 seconds before expiry, then refreshed through the OAuth 2.0\n  refresh-token grant.\n\nConnection checks call GET `v3/company/{{ config.realm_id }}/query` with query `query`=`SELECT *\nFROM Customer STARTPOSITION 1 MAXRESULTS 1`.\n\n## Streams notes\n\nPagination embeds `STARTPOSITION` and `MAXRESULTS` inside the Query API `query` string value.\nPaging stops when a page returns fewer than `page_size` records or `max_pages` is reached, whichever\ncomes first. The stream hook checks context cancellation between pages and records.\n\n- `customers`: GET `v3/company/{{ config.realm_id }}/query` - records path\n  `QueryResponse.Customer`; fixture-backed.\n- `invoices`: GET `v3/company/{{ config.realm_id }}/query` - records path\n  `QueryResponse.Invoice`; fixture-backed.\n- `payments`: GET `v3/company/{{ config.realm_id }}/query` - records path\n  `QueryResponse.Payment`; fixture-backed.\n- `accounts`: GET `v3/company/{{ config.realm_id }}/query` - records path\n  `QueryResponse.Account`; fixture-backed.\n- `vendors`: GET `v3/company/{{ config.realm_id }}/query` - records path\n  `QueryResponse.Vendor`; fixture-backed.\n\nThe remaining official ETL/read rows are blocked/planned in `api_surface.json`; they are not\nsilently excluded.\n\n## Write actions & risks\n\nNo executable write actions are declared in this bundle. Official QuickBooks create, update, delete,\nvoid, send, and batch operations are represented as blocked operation-ledger rows rather than raw\nwrite escapes.\n\nFuture write enablement must be action-by-action with a closed `record_schema`, redaction, risk\ntext, provider-supported idempotency notes, sanitized fixtures, and the existing reverse ETL\nplan -> preview -> explicit approval -> execute flow. Destructive operations must also declare\n`confirm: \"destructive\"`; they are not blanket-excluded as unsafe.\n\n## Known limits\n\n- Batch defaults: read_page_size=1000.\n- API coverage includes 161 operation-ledger row(s): 5 stream-backed executable rows and 156\n  blocked/planned rows.\n- Official lane counts represented in the ledger: `etl_read=43`, `reverse_etl_write=60`,\n  `direct_read_query_search=32`, `binary_file=25`, `cdc_changefeed=1`,\n  `excluded_not_applicable=0`, `total=161`.\n- Fixture-backed executable coverage remains uncertified: 5 ETL streams, 0 write actions,\n  0 implemented direct-read operations, 0 binary operations, and 0 CDC/changefeed operations.\n- The bundle-level conformance skip is intentional: QuickBooks uses a custom OAuth refresh-token\n  AuthHook and a StreamHook whose pagination state is embedded inside the Query API string. Static\n  validation, hook unit tests, sanitized fixtures, and archived parity evidence are the local proof\n  for fixture-only behavior.\n- Additional provider-query/search, report/PDF/attachment binary surfaces, CDC, and all mutations\n  require typed connector definitions and/or shared-runtime support before execution. No raw SQL,\n  arbitrary provider query, generic HTTP, shell, file, or passthrough escape hatch is exposed.\n",
     "icon": {
       "id": "quickbooks",
       "path": "icons/quickbooks.svg",

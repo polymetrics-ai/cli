@@ -1,14 +1,230 @@
 {
-  "api": "QuickBooks Online v3 Query API (https://quickbooks.api.intuit.com/v3)",
+  "api": "QuickBooks Online Accounting API qbo product operations (Intuit EntityJsonObject_v1)",
   "docs": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account",
-  "reviewed_at": "2026-07-03",
-  "scope": "Tier-2 migration: the 5 legacy-parity read entities only (Customer, Invoice, Payment, Account, Vendor) via the shared v3/company/{realmId}/query endpoint; legacy quickbooks is read-only (Write always returns ErrUnsupportedOperation) and the full QuickBooks Accounting API surface (Bill, Estimate, Item, TimeActivity, JournalEntry, attachments, reports, batch, CDC) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Complete r2 official operation ledger for the QuickBooks Online Accounting API qbo product operations mapped by the connector audit: 43 ETL/read rows, 60 reverse-ETL write rows, 32 bounded direct/provider-query/search rows, 25 binary/file/report rows, and 1 CDC/changefeed row. Current executable coverage remains the five legacy-compatible Query API streams (Customer, Invoice, Payment, Account, Vendor); every other official row is blocked by default until typed schemas, bounds, redaction, idempotency, fixtures, and shared-runtime support are present. Excludes qbpayments, qbdesktop, qbtime, and QuickBooks GraphQL per parent issue #3094.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size>",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/attachable/{attachableId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Attachable; official_verb=READ; operation_name=Read an attachable; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/bill/{billId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Bill; official_verb=READ; operation_name=Read a bill; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/billpayment/{billpaymentId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=BillPayment; official_verb=READ; operation_name=Read a billpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/budget/{budgetId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Budget; official_verb=READ; operation_name=Read a budget; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/changeorder/{changeorderId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=ChangeOrder; official_verb=READ; operation_name=Read a change order; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/class/{classId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Class; official_verb=READ; operation_name=Read a class; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/companycurrency/{companycurrencyId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=CompanyCurrency; official_verb=READ; operation_name=Read a companycurrency; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/companyinfo/{realmId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=CompanyInfo; official_verb=READ; operation_name=Read companyinfo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/creditcardpayment/{creditcardpaymentId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=CreditCardPayment; official_verb=READ; operation_name=Read a creditcardpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/creditmemo/{creditmemoId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=CreditMemo; official_verb=READ; operation_name=Read a credit memo; source_id=quickbooks-entity-json"
+      }
+    },
     {
       "method": "GET",
       "path": "/v3/company/{realmId}/query?query=SELECT * FROM Customer STARTPOSITION <n> MAXRESULTS <size>",
       "covered_by": {
         "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/customertype/{Id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=CustomerType; official_verb=READ; operation_name=Read a customertype; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/department/{departmentId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Department; official_verb=READ; operation_name=Read a department; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/deposit/{depositId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Deposit; official_verb=READ; operation_name=Read a deposit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/employee/{employeeId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Employee; official_verb=READ; operation_name=Read an employee; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/estimate/{estimateId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Estimate; official_verb=READ; operation_name=Read an estimate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/inventoryadjustment/{inventoryadjustmentId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=InventoryAdjustment; official_verb=READ; operation_name=Read an inventory adjustment; source_id=quickbooks-entity-json"
       }
     },
     {
@@ -20,6 +236,32 @@
     },
     {
       "method": "GET",
+      "path": "/v3/company/{realmId}/item/{itemId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Item; official_verb=READ; operation_name=Read a bundle; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/journalentry/{journalentryId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=JournalEntry; official_verb=READ; operation_name=Read a journalentry; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v3/company/{realmId}/query?query=SELECT * FROM Payment STARTPOSITION <n> MAXRESULTS <size>",
       "covered_by": {
         "stream": "payments"
@@ -27,9 +269,249 @@
     },
     {
       "method": "GET",
-      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size>",
-      "covered_by": {
-        "stream": "accounts"
+      "path": "/v3/company/{realmId}/paymentmethod/{paymentmethodId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=PaymentMethod; official_verb=READ; operation_name=Read a paymentmethod; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/preferences",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Preferences; official_verb=READ; operation_name=Read preferences; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/purchase/{purchaseId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Purchase; official_verb=READ; operation_name=Read a purchase; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/purchaseorder/{purchaseorderId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=PurchaseOrder; official_verb=READ; operation_name=Read a purchase order; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/recurringtransaction/{recurringtransactionId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=RecurringTransaction; official_verb=READ; operation_name=Read a recurring transaction; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/refundreceipt/{refundreceiptId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=RefundReceipt; official_verb=READ; operation_name=Read a refund receipt; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reimbursecharge/{taxrateId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=ReimburseCharge; official_verb=READ; operation_name=Read a reimburse charge; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/salesreceipt/{salesreceiptId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=SalesReceipt; official_verb=READ; operation_name=Read a salesreceipt; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxagency/{taxagencyId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxAgency; official_verb=READ; operation_name=Read a taxagency; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxclassification",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxClassification; official_verb=READ; operation_name=Read all taxclassifications; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxclassification/{parentid}/children",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxClassification; official_verb=READ; operation_name=Read a taxclassification by Parent ID; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxclassification/{taxClassificationId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxClassification; official_verb=READ; operation_name=Read a taxclassification by ID; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxclassification?level={level}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxClassification; official_verb=READ; operation_name=Read taxclassifications by level; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxcode/{taxcodeId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxCode; official_verb=READ; operation_name=Read a taxcode; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxpayment/{taxPaymentId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxPayment; official_verb=READ; operation_name=Read taxpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/taxrate/{taxrateId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TaxRate; official_verb=READ; operation_name=Read a taxrate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/term/{termId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Term; official_verb=READ; operation_name=Read a term; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/timeactivity/{timeactivityId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=TimeActivity; official_verb=READ; operation_name=Read a timeactivity object; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/transfer/{transferId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=Transfer; official_verb=READ; operation_name=Read an transfer; source_id=quickbooks-entity-json"
       }
     },
     {
@@ -41,50 +523,1549 @@
     },
     {
       "method": "GET",
-      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Bill|Estimate|Item|TimeActivity|JournalEntry ...",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/v3/company/{realmId}/vendorcredit/{vendorcreditId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks read operation is in scope for ETL/read parity but blocked/planned until a reviewed stream schema, pagination or fan-out shape, and fixture evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=etl_read; entity=VendorCredit; official_verb=READ; operation_name=Read a vendorcredit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/bill?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Bill; official_verb=DELETE; operation_name=Delete a bill; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/billpayment?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=BillPayment; official_verb=DELETE; operation_name=Delete a billpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/billpayment?operation=update&include=void",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=BillPayment; official_verb=DELETE; operation_name=Void a billpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/budget?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Budget; official_verb=DELETE; operation_name=Delete a budget; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/changeorder?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=ChangeOrder; official_verb=DELETE; operation_name=Delete a change order; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditcardpayment?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditCardPayment; official_verb=DELETE; operation_name=Delete a creditcardpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditmemo?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditMemo; official_verb=DELETE; operation_name=Delete a credit memo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/deposit?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Deposit; official_verb=DELETE; operation_name=Delete a deposit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/estimate?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Estimate; official_verb=DELETE; operation_name=Delete an estimate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/inventoryadjustment?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=InventoryAdjustment; official_verb=DELETE; operation_name=Delete an inventory adjustment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/invoice?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Invoice; official_verb=DELETE; operation_name=Delete an invoice; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/invoice?operation=void",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Invoice; official_verb=DELETE; operation_name=Void an invoice; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/journalentry?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=JournalEntry; official_verb=DELETE; operation_name=Delete a journalentry; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/payment?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Payment; official_verb=DELETE; operation_name=Delete a payment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/payment?operation=update&include=void",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Payment; official_verb=DELETE; operation_name=Void a payment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/purchase?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Purchase; official_verb=DELETE; operation_name=Delete a purchase; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/purchaseorder?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=PurchaseOrder; official_verb=DELETE; operation_name=Delete a purchase order; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/recurringtransaction?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=RecurringTransaction; official_verb=DELETE; operation_name=Delete a recurring transaction; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/refundreceipt?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=RefundReceipt; official_verb=DELETE; operation_name=Delete a refund receipt; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/salesreceipt?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=SalesReceipt; official_verb=DELETE; operation_name=Delete a salesreceipt; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/salesreceipt?operation=update&include=void",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=SalesReceipt; official_verb=DELETE; operation_name=Void a salesreceipt; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/timeactivity?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=TimeActivity; official_verb=DELETE; operation_name=Delete a timeactivity object; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/transfer?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Transfer; official_verb=DELETE; operation_name=Delete an transfer; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/vendorcredit?operation=delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks destructive or void/delete operation is in scope but blocked/planned until a typed destructive reverse-ETL action with confirm=destructive, redaction, idempotency notes, and fixture-backed plan/preview/approval/execute evidence is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=VendorCredit; official_verb=DELETE; operation_name=Delete a vendorcredit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/account",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Account; official_verb=CREATE; operation_name=Create an account; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/account",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Account; official_verb=UPDATE; operation_name=Full update an account; source_id=quickbooks-entity-json"
       }
     },
     {
       "method": "POST",
       "path": "/v3/company/{realmId}/batch",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Batch; official_verb=DEFAULT; operation_name=Sample batch request; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/bill",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Bill; official_verb=CREATE; operation_name=Create a bill; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/bill",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Bill; official_verb=UPDATE; operation_name=Full update a bill; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/billpayment",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=BillPayment; official_verb=CREATE; operation_name=Create a billpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/billpayment",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=BillPayment; official_verb=UPDATE; operation_name=Full update a billpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/budget",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Budget; official_verb=CREATE; operation_name=Create a budget; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/budget",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Budget; official_verb=UPDATE; operation_name=Full update a budget; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/changeorder",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=ChangeOrder; official_verb=CREATE; operation_name=Create a change order; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/changeorder",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=ChangeOrder; official_verb=UPDATE; operation_name=Full update a change order; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/class",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Class; official_verb=CREATE; operation_name=Create a class; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/class",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Class; official_verb=UPDATE; operation_name=Full update a class; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/companycurrency",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CompanyCurrency; official_verb=CREATE; operation_name=Create a companycurrency; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/companycurrency",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CompanyCurrency; official_verb=UPDATE; operation_name=Update a companycurrency; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/companyinfo",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CompanyInfo; official_verb=UPDATE; operation_name=Full update companyinfo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/companyinfo",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CompanyInfo; official_verb=UPDATE; operation_name=Sparse update companyinfo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditcardpayment",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditCardPayment; official_verb=CREATE; operation_name=Create a creditcardpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditcardpayment",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditCardPayment; official_verb=UPDATE; operation_name=Full update a creditcardpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditcardpayment",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditCardPayment; official_verb=UPDATE; operation_name=Sparse update a creditcardpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditmemo",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditMemo; official_verb=CREATE; operation_name=Create a credit memo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/creditmemo",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=CreditMemo; official_verb=UPDATE; operation_name=Full update a credit memo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/customer",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Customer; official_verb=CREATE; operation_name=Create a customer; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/customer",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Customer; official_verb=UPDATE; operation_name=Full update a customer; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/customer",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Customer; official_verb=UPDATE; operation_name=Sparse update a customer; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/department",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Department; official_verb=CREATE; operation_name=Create a department; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/department",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Department; official_verb=UPDATE; operation_name=Full update a department; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/deposit",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Deposit; official_verb=CREATE; operation_name=Create a deposit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/deposit",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Deposit; official_verb=UPDATE; operation_name=Full update a deposit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/deposit",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Deposit; official_verb=UPDATE; operation_name=Sparse update a deposit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/employee",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Employee; official_verb=CREATE; operation_name=Create an employee; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/employee",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Employee; official_verb=UPDATE; operation_name=Full update an employee; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/estimate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Estimate; official_verb=CREATE; operation_name=Create an estimate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/estimate/{estimateId}/send",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Estimate; official_verb=SEND; operation_name=Send an estimate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/estimate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Estimate; official_verb=UPDATE; operation_name=Full update an estimate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v3/company/{realmId}/estimate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks mutation is in scope but blocked/planned until a typed closed write schema, redaction, provider-supported idempotency notes, and fixture-backed plan/preview/approval/execute evidence are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=reverse_etl_write; entity=Estimate; official_verb=UPDATE; operation_name=Sparse update an estimate; source_id=quickbooks-entity-json"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/company/{realmId}/cdc",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM APAgingDetail MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=APAgingDetail; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/company/{realmId}/reports/*",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM APAgingSummary MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=APAgingSummary; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM ARAgingDetail MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=ARAgingDetail; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM ARAgingSummary MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=ARAgingSummary; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM AccountListDetail MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=AccountListDetail; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM BalanceSheet MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=BalanceSheet; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Bill MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Bill; official_verb=QUERY; operation_name=Query a bill; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM BillPayment MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=BillPayment; official_verb=QUERY; operation_name=Query a billpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Budget MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Budget; official_verb=QUERY; operation_name=Query a budget; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CashFlow MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CashFlow; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Class MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Class; official_verb=QUERY; operation_name=Query a class; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CompanyCurrency MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CompanyCurrency; official_verb=QUERY; operation_name=Query a companycurrency; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CreditCardPayment MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CreditCardPayment; official_verb=QUERY; operation_name=Query a creditcardpayment; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CreditMemo MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CreditMemo; official_verb=QUERY; operation_name=Query a credit memo; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CustomerBalance MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CustomerBalance; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CustomerBalanceDetail MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CustomerBalanceDetail; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CustomerIncome MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CustomerIncome; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM CustomerType MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=CustomerType; official_verb=QUERY; operation_name=Query a customertype; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Department MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Department; official_verb=QUERY; operation_name=Query a department; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Deposit MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Deposit; official_verb=QUERY; operation_name=Query a deposit; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Employee MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Employee; official_verb=QUERY; operation_name=Query an employee; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Estimate MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Estimate; official_verb=QUERY; operation_name=Query an estimate; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/exchangerate?sourcecurrencycode={currencycode}[&asofdate=<yyyy-mm-dd>]",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Exchangerate; official_verb=QUERY; operation_name=Get an exchangerate for an individual currency code.; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM GeneralLedger MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=GeneralLedger; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM InventoryValuationDetail MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=InventoryValuationDetail; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM InventoryValuationSummary MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=InventoryValuationSummary; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Item MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Item; official_verb=QUERY; operation_name=Query a bundle; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM JournalEntry MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=JournalEntry; official_verb=QUERY; operation_name=Query a journalentry; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM JournalReport MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=JournalReport; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM PaymentMethod MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=PaymentMethod; official_verb=QUERY; operation_name=Query a paymentmethod; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM Preferences MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=Preferences; official_verb=QUERY; operation_name=Query preferences; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/query?query=SELECT * FROM ProfitAndLoss MAXRESULTS <size>",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks provider-query/search read is in scope but blocked/planned until a fixed-target bounded command with schema-gated flags, max response bytes, and redaction policy is authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=direct_read_query_search; entity=ProfitAndLoss; official_verb=QUERY; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/creditmemo/{creditmemoId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=CreditMemo; official_verb=PDF; operation_name=Get a credit memo as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/estimate/{estimateId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=Estimate; official_verb=PDF; operation_name=Get an estimate as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/invoice/{invoiceId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=Invoice; official_verb=PDF; operation_name=Get an invoice as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/payment/{paymentId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=Payment; official_verb=PDF; operation_name=Get a payment as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/purchaseorder/{purchaseorderId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=PurchaseOrder; official_verb=PDF; operation_name=Get a purchase order as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/refundreceipt/{refundreceiptId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=RefundReceipt; official_verb=PDF; operation_name=Get a refund receipt as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/salesreceipt/{salesreceiptId}/pdf",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=SalesReceipt; official_verb=PDF; operation_name=Get a salesreceipt as PDF; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/download/{attachableId}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=Attachable; official_verb=DOWNLOAD; operation_name=Download an attachment; source_id=quickbooks-entity-json"
       }
     },
     {
       "method": "POST",
       "path": "/v3/company/{realmId}/upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "attachment bytes are not a syncable record stream"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks attachment upload/file mutation is tracked in the binary/file lane but remains blocked until typed file-write schemas, size limits, redaction, fixtures, and approval semantics exist",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=Attachable; official_verb=UPLOAD; operation_name=Upload attachments; source_id=quickbooks-entity-json; file_write=true"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/company/{realmId}/companyinfo/{realmId}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "company metadata, not a syncable record stream"
+      "path": "/v3/company/{realmId}/reports/AgedPayableDetail?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=APAgingDetail; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/AgedPayables?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=APAgingSummary; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/AgedReceivableDetail?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=ARAgingDetail; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/AgedReceivables?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=ARAgingSummary; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/AccountList?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=AccountListDetail; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/BalanceSheet?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=BalanceSheet; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/CashFlow?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=CashFlow; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/CustomerBalance?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=CustomerBalance; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/CustomerBalanceDetail?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=CustomerBalanceDetail; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/CustomerIncome?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=CustomerIncome; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/GeneralLedger?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=GeneralLedger; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/InventoryValuationDetail?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=InventoryValuationDetail; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/InventoryValuationSummary?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=InventoryValuationSummary; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/JournalReport?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=JournalReport; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/ProfitAndLoss?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=ProfitAndLoss; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/reports/ProfitAndLossDetail?{name}={value}[&...]",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks binary/file/report payload surface is in scope but blocked/planned until a bounded binary/report executor, max byte limits, path-safe storage policy, redaction, and fixtures are authored",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=binary_file; entity=ProfitAndLossDetail; official_verb=REPORT; operation_name=Query a report; source_id=quickbooks-entity-json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/company/{realmId}/cdc?entities={entityList}&changedSince={dateTime}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official QuickBooks CDC/change data capture operation is in scope but blocked/planned until the shared CDC truthfulness/state foundation and connector cursor semantics are available",
+        "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+        "notes": "official_lane=cdc_changefeed; entity=ChangeDataCapture; official_verb=DEFAULT; operation_name=Get a list of changed entities; source_id=quickbooks-entity-json"
       }
     }
   ]
