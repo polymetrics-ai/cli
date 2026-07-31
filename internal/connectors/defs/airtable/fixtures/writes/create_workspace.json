@@ -1,0 +1,14 @@
+{
+  "record": {
+    "enterpriseAccountId": "enterpriseAccountId_fixture",
+    "name": "Fixture Name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/workspaces",
+    "body": {
+      "enterpriseAccountId": "enterpriseAccountId_fixture",
+      "name": "Fixture Name"
+    }
+  }
+}

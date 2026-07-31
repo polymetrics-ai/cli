@@ -1,0 +1,23 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "workspaces": [
+      {
+        "sample": "value"
+      }
+    ],
+    "includeDescendantWorkspaces": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/workspaceAiAllowlist",
+    "body": {
+      "workspaces": [
+        {
+          "sample": "value"
+        }
+      ],
+      "includeDescendantWorkspaces": true
+    }
+  }
+}

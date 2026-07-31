@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value/blockInstallations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "block_installations_fixture_1",
+      "name": "Fixture Name"
+    }
+  }
+}

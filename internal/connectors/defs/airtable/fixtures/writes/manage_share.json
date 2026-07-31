@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "state": "enabled"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v0/meta/bases/synthetic-conformance-value/shares/id_fixture",
+    "body": {
+      "state": "enabled"
+    }
+  }
+}

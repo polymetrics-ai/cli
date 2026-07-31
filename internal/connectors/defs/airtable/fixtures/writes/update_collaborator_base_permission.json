@@ -1,0 +1,13 @@
+{
+  "record": {
+    "user_or_group_id": "user_or_group_id_fixture",
+    "permissionLevel": "read"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v0/meta/bases/synthetic-conformance-value/collaborators/user_or_group_id_fixture",
+    "body": {
+      "permissionLevel": "read"
+    }
+  }
+}

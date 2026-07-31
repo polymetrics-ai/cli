@@ -3,63 +3,404 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" },
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}",
+        "when": "{{ secrets.api_key }}"
+      },
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "offset",
       "token_path": "offset"
     },
-    "check": { "method": "GET", "path": "/meta/bases" },
+    "check": {
+      "method": "GET",
+      "path": "/v0/meta/bases"
+    },
     "error_map": [
-      { "status": 401, "hint": "airtable token is missing or invalid; re-run pm credentials add airtable" },
-      { "status": 403, "hint": "airtable token lacks access for this base/table" },
-      { "status": 429, "class": "rate_limited", "hint": "airtable rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "airtable token is missing or invalid; re-run pm credentials add airtable"
+      },
+      {
+        "status": 403,
+        "hint": "airtable token lacks access for this base, table, enterprise, SCIM, or workspace endpoint"
+      },
+      {
+        "status": 404,
+        "class": "not_found",
+        "hint": "airtable resource was not found or is not visible to the credential"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "airtable rate limit exceeded; retry after the provider backoff window"
+      }
     ]
   },
   "streams": [
     {
-      "name": "bases",
-      "path": "/meta/bases",
-      "records": { "path": "bases" },
-      "schema": "schemas/bases.json"
+      "name": "scim_groups",
+      "path": "/scim/v2/Groups",
+      "records": {
+        "path": "Resources"
+      },
+      "schema": "schemas/scim_groups.json",
+      "projection": "passthrough",
+      "query": {
+        "count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "startIndex",
+        "token_path": "nextStartIndex"
+      }
     },
     {
-      "name": "tables",
-      "path": "/meta/bases/{{ config.base_id }}/tables",
-      "records": { "path": "tables" },
-      "schema": "schemas/tables.json"
+      "name": "scim_group",
+      "path": "/scim/v2/Groups/{{ config.group_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/scim_group.json",
+      "projection": "passthrough"
     },
     {
-      "name": "records",
-      "path": "/{{ config.base_id }}/{{ config.table_id }}",
-      "query": { "pageSize": "{{ config.page_size }}" },
-      "records": { "path": "records" },
-      "schema": "schemas/records.json"
+      "name": "scim_users",
+      "path": "/scim/v2/Users",
+      "records": {
+        "path": "Resources"
+      },
+      "schema": "schemas/scim_users.json",
+      "projection": "passthrough",
+      "query": {
+        "count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "startIndex",
+        "token_path": "nextStartIndex"
+      }
+    },
+    {
+      "name": "scim_user",
+      "path": "/scim/v2/Users/{{ config.user_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/scim_user.json",
+      "projection": "passthrough"
     },
     {
       "name": "webhooks",
-      "path": "/bases/{{ config.base_id }}/webhooks",
-      "records": { "path": "webhooks" },
-      "schema": "schemas/webhooks.json"
+      "path": "/v0/bases/{{ config.base_id }}/webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "schema": "schemas/webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "webhook_payloads",
+      "path": "/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads",
+      "records": {
+        "path": "payloads"
+      },
+      "schema": "schemas/webhook_payloads.json",
+      "projection": "passthrough",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "cursor",
+        "token_path": "cursor"
+      }
+    },
+    {
+      "name": "bases",
+      "path": "/v0/meta/bases",
+      "records": {
+        "path": "bases"
+      },
+      "schema": "schemas/bases.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "base_collaborators",
+      "path": "/v0/meta/bases/{{ config.base_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/base_collaborators.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "block_installations",
+      "path": "/v0/meta/bases/{{ config.base_id }}/blockInstallations",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/block_installations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "interface",
+      "path": "/v0/meta/bases/{{ config.base_id }}/interfaces/{{ config.page_bundle_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/interface.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "shares",
+      "path": "/v0/meta/bases/{{ config.base_id }}/shares",
+      "records": {
+        "path": "shares"
+      },
+      "schema": "schemas/shares.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "tables",
+      "path": "/v0/meta/bases/{{ config.base_id }}/tables",
+      "records": {
+        "path": "tables"
+      },
+      "schema": "schemas/tables.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "views",
+      "path": "/v0/meta/bases/{{ config.base_id }}/views",
+      "records": {
+        "path": "views"
+      },
+      "schema": "schemas/views.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "view_metadata",
+      "path": "/v0/meta/bases/{{ config.base_id }}/views/{{ config.view_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/view_metadata.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enterprise",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/enterprise.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "audit_log_events",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogEvents",
+      "records": {
+        "path": "events"
+      },
+      "schema": "schemas/audit_log_events.json",
+      "projection": "passthrough",
+      "query": {
+        "pageSize": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next",
+        "token_path": "pagination.next"
+      }
+    },
+    {
+      "name": "audit_log_requests",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs",
+      "records": {
+        "path": "auditLogs"
+      },
+      "schema": "schemas/audit_log_requests.json",
+      "projection": "passthrough",
+      "query": {
+        "pageSize": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "audit_log_request",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs/{{ config.enterprise_audit_log_task_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/audit_log_request.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "change_events",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/changeEvents",
+      "records": {
+        "path": "events"
+      },
+      "schema": "schemas/change_events.json",
+      "projection": "passthrough",
+      "query": {
+        "pageSize": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "ediscovery_exports",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports",
+      "records": {
+        "path": "exports"
+      },
+      "schema": "schemas/ediscovery_exports.json",
+      "projection": "passthrough",
+      "query": {
+        "pageSize": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "ediscovery_export",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports/{{ config.enterprise_task_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/ediscovery_export.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enterprise_packages",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/packages",
+      "records": {
+        "path": "packages"
+      },
+      "schema": "schemas/enterprise_packages.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enterprise_personal_access_tokens",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/personalAccessTokens",
+      "records": {
+        "path": "personalAccessTokens"
+      },
+      "schema": "schemas/enterprise_personal_access_tokens.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enterprise_users",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users",
+      "records": {
+        "path": "users"
+      },
+      "schema": "schemas/enterprise_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "enterprise_user",
+      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users/{{ config.user_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/enterprise_user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "user_group",
+      "path": "/v0/meta/groups/{{ config.group_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/user_group.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "whoami",
+      "path": "/v0/meta/whoami",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/whoami.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "workspace_collaborators",
+      "path": "/v0/meta/workspaces/{{ config.workspace_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/workspace_collaborators.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "records",
+      "path": "/v0/{{ config.base_id }}/{{ config.table_id }}",
+      "records": {
+        "path": "records"
+      },
+      "schema": "schemas/records.json",
+      "projection": "passthrough",
+      "query": {
+        "pageSize": "{{ config.page_size }}"
+      }
+    },
+    {
+      "name": "record",
+      "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/record.json",
+      "projection": "passthrough"
     },
     {
       "name": "comments",
-      "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments",
-      "records": { "path": "comments" },
+      "path": "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments",
+      "records": {
+        "path": "comments"
+      },
+      "schema": "schemas/comments.json",
+      "projection": "passthrough",
       "fan_out": {
         "ids_from": {
           "request": {
-            "path": "/{{ config.base_id }}/{{ config.table_id }}",
+            "path": "/v0/{{ config.base_id }}/{{ config.table_id }}",
             "records_path": "records",
             "id_field": "id"
           }
         },
-        "into": { "path_var": "record_id" },
+        "into": {
+          "path_var": "record_id"
+        },
         "stamp_field": "record_id"
-      },
-      "schema": "schemas/comments.json"
+      }
     }
   ]
 }

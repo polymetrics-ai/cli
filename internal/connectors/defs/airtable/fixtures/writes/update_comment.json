@@ -1,14 +1,14 @@
 {
   "record": {
-    "record_id": "rec_fixture_1",
-    "id": "comFixture1",
-    "text": "Fixture comment edited"
+    "record_id": "record_id_fixture",
+    "row_comment_id": "row_comment_id_fixture",
+    "text": "text_fixture"
   },
   "expect": {
     "method": "PATCH",
-    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1/comments/comFixture1",
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/record_id_fixture/comments/row_comment_id_fixture",
     "body": {
-      "text": "Fixture comment edited"
+      "text": "text_fixture"
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "user_or_group_id": "user_or_group_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v0/meta/workspaces/workspace_id_fixture/collaborators/user_or_group_id_fixture"
+  }
+}

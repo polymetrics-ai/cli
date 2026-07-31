@@ -16,21 +16,61 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.airtable.com/v0",
-      "description": "Airtable API base URL override for tests or proxies."
+      "default": "https://api.airtable.com",
+      "description": "Airtable API origin override for tests or proxies. Paths in the bundle include /v0 or /scim as required by the official API."
     },
     "base_id": {
       "type": "string",
-      "description": "Airtable base id (required for the 'tables' and 'records' streams)."
+      "description": "Airtable base id for base-scoped streams and write actions."
     },
     "table_id": {
       "type": "string",
-      "description": "Airtable table id or name (required for the 'records' stream)."
+      "description": "Airtable table id or name for record/comment streams and write actions."
     },
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page for the 'records' stream (1-100)."
+      "description": "Records per page for list-record style endpoints (1-100)."
+    },
+    "record_id": {
+      "type": "string",
+      "description": "Airtable record id for single-record/detail streams."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Airtable webhook id for webhook payload/detail streams."
+    },
+    "page_bundle_id": {
+      "type": "string",
+      "description": "Airtable interface page bundle id for interface metadata streams."
+    },
+    "view_id": {
+      "type": "string",
+      "description": "Airtable view id for view metadata streams."
+    },
+    "enterprise_account_id": {
+      "type": "string",
+      "description": "Airtable enterprise account id for enterprise/admin/audit/HyperDB streams."
+    },
+    "enterprise_audit_log_task_id": {
+      "type": "string",
+      "description": "Airtable enterprise audit log task id for audit-log request status streams."
+    },
+    "enterprise_task_id": {
+      "type": "string",
+      "description": "Airtable enterprise task id for eDiscovery export status streams."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Airtable/SCIM group id for group detail streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Airtable/SCIM user id for user detail streams."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Airtable workspace id for workspace collaborator streams."
     }
   }
 }
