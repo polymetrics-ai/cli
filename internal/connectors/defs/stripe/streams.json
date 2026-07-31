@@ -1,6 +1,6 @@
 {
   "base": {
-    "url": "https://api.stripe.com/v1",
+    "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "headers": {
       "Stripe-Account": "{{ config.account_id }}"

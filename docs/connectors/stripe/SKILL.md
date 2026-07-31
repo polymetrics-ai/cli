@@ -28,6 +28,7 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
 ## Configuration
 
 - account_id
+- base_url
 - max_pages
 - mode
 - page_size

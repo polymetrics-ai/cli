@@ -36,6 +36,24 @@ func newWriteTestBundle(srv *httptest.Server, action WriteAction) Bundle {
 	}
 }
 
+func writeSpecWithDefaultBaseURL(t *testing.T, defaultURL string) *Schema {
+	t.Helper()
+	rawDefault, err := json.Marshal(defaultURL)
+	if err != nil {
+		t.Fatalf("json.Marshal defaultURL: %v", err)
+	}
+	spec, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "default": ` + string(rawDefault) + `}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	return spec
+}
+
 func captureServer(t *testing.T, status int, body string) (*httptest.Server, *capturedRequest) {
 	t.Helper()
 	cap := &capturedRequest{}
@@ -72,6 +90,86 @@ func (c *capturedRequest) json() map[string]any {
 	var m map[string]any
 	_ = json.Unmarshal(c.body, &m)
 	return m
+}
+
+func TestDryRunWriteMaterializesSpecDefaultBaseURL(t *testing.T) {
+	b := Bundle{
+		Name: "acme",
+		Spec: writeSpecWithDefaultBaseURL(t, "https://api.example.test/v1"),
+		HTTP: HTTPBase{URL: "{{ config.base_url }}"},
+		Writes: []WriteAction{{
+			Name:       "update_widget",
+			Kind:       "update",
+			Method:     http.MethodPost,
+			Path:       "/widgets/{{ record.id }}",
+			PathFields: []string{"id"},
+		}},
+	}
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{{
+		"id": "42",
+	}}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	if len(preview.Warnings) < 2 || preview.Warnings[1] != "resolved request: POST https://api.example.test/v1/widgets/42" {
+		t.Fatalf("warnings = %#v", preview.Warnings)
+	}
+}
+
+func TestWriteMaterializesSpecDefaultBaseURL(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Kind:       "update",
+		Method:     http.MethodPatch,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+	})
+	b.Spec = writeSpecWithDefaultBaseURL(t, srv.URL)
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
+		{"id": "42", "name": "new-name"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.path != "/widgets/42" {
+		t.Fatalf("path = %q, want /widgets/42", cap.path)
+	}
+}
+
+func TestWritePreservesConfiguredBaseURLOverride(t *testing.T) {
+	defaultSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusTeapot)
+	}))
+	defer defaultSrv.Close()
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Kind:       "update",
+		Method:     http.MethodPatch,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+	})
+	b.Spec = writeSpecWithDefaultBaseURL(t, defaultSrv.URL)
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": srv.URL}}
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget", Config: cfg}, []connectors.Record{
+		{"id": "42", "name": "new-name"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.path != "/widgets/42" {
+		t.Fatalf("path = %q, want /widgets/42", cap.path)
+	}
 }
 
 // --- body construction: json default (record minus path_fields) ---

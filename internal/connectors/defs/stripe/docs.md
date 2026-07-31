@@ -20,6 +20,8 @@ Connection fields:
 
 - `account_id` (optional, string); Optional Stripe account ID; sent as the Stripe-Account header for
   Connect.
+- `base_url` (optional, string); default `https://api.stripe.com/v1`; format `uri`; Stripe API base
+  URL override for tests or proxies.
 - `client_secret` (required, secret, string); Stripe secret API key (sk_...). Used only for Bearer
   auth; never logged.
 - `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
@@ -31,13 +33,13 @@ Connection fields:
 
 Secret fields are redacted in logs and write previews: `client_secret`.
 
-Default configuration values: `max_pages=0`, `page_size=100`.
+Default configuration values: `base_url=https://api.stripe.com/v1`, `max_pages=0`, `page_size=100`.
 
 Authentication behavior:
 
 - Bearer token authentication using `secrets.client_secret`.
 
-Requests use the fixed Stripe API base URL `https://api.stripe.com/v1`.
+Requests use the configured `base_url` value after applying defaults.
 
 Connection checks call GET `/customers`.
 

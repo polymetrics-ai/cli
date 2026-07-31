@@ -27,6 +27,7 @@ AUTHENTICATION
 
 CONFIGURATION
   account_id
+  base_url
   max_pages
   mode
   page_size

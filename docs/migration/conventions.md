@@ -31,9 +31,10 @@ docs.md              # Overview / Auth setup / Streams notes / Write actions & r
 
 Worked example — **stripe** (`internal/connectors/defs/stripe/`): `metadata.json` declares
 `capabilities.write: true`; `spec.json` has one `x-secret` field (`client_secret`) plus
-`account_id`/`start_date`/`page_size`/`max_pages`/`mode`; `streams.json`'s `base` sets the fixed
-Stripe API URL, a conditional `Stripe-Account` header (omitted when `account_id` is unset — see
-§3), bearer `auth`, a `cursor` pagination block (`last_record_field: id`, `stop_path: has_more` —
+`base_url`/`account_id`/`start_date`/`page_size`/`max_pages`/`mode`; `streams.json`'s `base` sets
+`url` from `{{ config.base_url }}` with a defaulted Stripe API URL, a conditional `Stripe-Account`
+header (omitted when `account_id` is unset — see §3), bearer `auth`, a `cursor` pagination block
+(`last_record_field: id`, `stop_path: has_more` —
 Stripe's `starting_after`/`has_more` convention), a `check` request, and an `error_map`; each of the
 5 streams shares the identical shape (`GET`, `records.path: "data"`,
 `incremental.cursor_field: created`, `param_format: unix_seconds`) — copy this shape for any

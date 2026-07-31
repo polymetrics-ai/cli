@@ -9,6 +9,12 @@
       "x-secret": true,
       "description": "Stripe secret API key (sk_...). Used only for Bearer auth; never logged."
     },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.stripe.com/v1",
+      "description": "Stripe API base URL override for tests or proxies."
+    },
     "account_id": {
       "type": "string",
       "description": "Optional Stripe account ID; sent as the Stripe-Account header for Connect."
