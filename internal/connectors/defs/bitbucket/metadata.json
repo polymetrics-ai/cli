@@ -11,7 +11,7 @@
     "read": true,
     "write": true
   },
-  "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for documented mutations with destructive confirmation on deletes.",
+  "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for JSON/path mutations and blocks multipart file-transfer writes until bounded upload support exists.",
   "display_name": "Bitbucket",
   "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
   "integration_type": "api",

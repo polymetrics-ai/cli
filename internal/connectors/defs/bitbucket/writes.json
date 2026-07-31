@@ -1491,33 +1491,6 @@
       "risk": "POST /repositories/{workspace}/{repo_slug}/issues/export Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
     },
     {
-      "kind": "create",
-      "method": "POST",
-      "name": "create_repositories_workspace_repo_slug_issues_import",
-      "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/import",
-      "path_fields": [
-        "workspace",
-        "repo_slug"
-      ],
-      "record_schema": {
-        "additionalProperties": true,
-        "properties": {
-          "repo_slug": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "workspace",
-          "repo_slug"
-        ],
-        "type": "object"
-      },
-      "risk": "POST /repositories/{workspace}/{repo_slug}/issues/import Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
-    },
-    {
       "body_type": "none",
       "confirm": "destructive",
       "delete": {
@@ -1588,38 +1561,6 @@
         "type": "object"
       },
       "risk": "PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
-    },
-    {
-      "kind": "create",
-      "method": "POST",
-      "name": "create_repositories_workspace_repo_slug_issues_issue_id_attachments",
-      "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/attachments",
-      "path_fields": [
-        "workspace",
-        "repo_slug",
-        "issue_id"
-      ],
-      "record_schema": {
-        "additionalProperties": true,
-        "properties": {
-          "issue_id": {
-            "type": "string"
-          },
-          "repo_slug": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "issue_id"
-        ],
-        "type": "object"
-      },
-      "risk": "POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
     },
     {
       "body_type": "none",
@@ -3667,33 +3608,6 @@
         "type": "object"
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
-    },
-    {
-      "kind": "create",
-      "method": "POST",
-      "name": "create_repositories_workspace_repo_slug_src",
-      "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/src",
-      "path_fields": [
-        "workspace",
-        "repo_slug"
-      ],
-      "record_schema": {
-        "additionalProperties": true,
-        "properties": {
-          "repo_slug": {
-            "type": "string"
-          },
-          "workspace": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "workspace",
-          "repo_slug"
-        ],
-        "type": "object"
-      },
-      "risk": "POST /repositories/{workspace}/{repo_slug}/src Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
     },
     {
       "kind": "create",

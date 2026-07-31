@@ -90,6 +90,34 @@
       "summary": "Check issue export status"
     },
     {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_issues_import",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Import issues"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_issues_issue_id_attachments",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Upload an attachment to an issue"
+    },
+    {
       "approval": "blocked pending bounded binary executor; no generic download is exposed",
       "binary": {
         "max_bytes": 104857600,
@@ -343,6 +371,20 @@
       "risk": "medium",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the patch for a pull request"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_src",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Create a commit by uploading a file"
     },
     {
       "approval": "blocked pending bounded binary executor; no generic download is exposed",

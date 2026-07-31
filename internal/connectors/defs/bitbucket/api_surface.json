@@ -677,10 +677,15 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/import"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_import"
-      },
       "method": "POST",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      },
       "path": "/repositories/{workspace}/{repo_slug}/issues/import"
     },
     {
@@ -712,10 +717,15 @@
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_issues_issue_id_attachments"
-      },
       "method": "POST",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      },
       "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments"
     },
     {
@@ -1637,10 +1647,15 @@
       "path": "/repositories/{workspace}/{repo_slug}/src"
     },
     {
-      "covered_by": {
-        "write": "create_repositories_workspace_repo_slug_src"
-      },
       "method": "POST",
+      "operation": {
+        "blocked_by_default": true,
+        "model": "sensitive_reverse_etl",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+        "risk": "high",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "status": "blocked"
+      },
       "path": "/repositories/{workspace}/{repo_slug}/src"
     },
     {
@@ -2497,5 +2512,5 @@
   ],
   "operation_ledger_version": 1,
   "reviewed_at": "2026-07-30",
-  "scope": "Complete official OpenAPI inventory from https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json; observed 331 operations ({'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48}) at sha256:efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2. Executable rows are declarative streams or typed reverse-ETL writes when the current connector engine can express them. Binary transfer and provider-search rows remain blocked in connector-local operation metadata pending shared bounded-command foundations; no live provider calls or credentials were used."
+  "scope": "Complete official OpenAPI inventory from https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json; observed 331 operations ({'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48}) at sha256:efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2. Executable rows are declarative streams or typed reverse-ETL writes when the current connector engine can express them. Binary transfer, file/multipart uploads, and provider-search rows remain blocked in connector-local operation metadata pending shared bounded-command foundations; no live provider calls or credentials were used."
 }

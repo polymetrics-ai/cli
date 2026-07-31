@@ -62,7 +62,7 @@ Evidence: `gh-axi issue edit` updated #79 and #90-#96 with marker `captain-polic
    - Add sanitized check, read, and write fixtures sufficient for conformance.
    - Document auth setup, streams, write risks, known limits, dependency blockers, and evidence.
 
-Implemented connector-local inventory summary: `api_surface.json` has 331 official rows (GET 179, POST 50, PUT 48, DELETE 54); 145 rows are declarative streams, 151 rows are typed reverse-ETL writes, and 35 rows are blocked connector-local operation metadata for binary/provider-query/upload foundations. All 54 DELETE writes carry `confirm: "destructive"`.
+Implemented connector-local inventory summary: `api_surface.json` has 331 official rows (GET 179, POST 50, PUT 48, DELETE 54); 145 rows are declarative streams, 148 rows are typed reverse-ETL writes, and 38 rows are blocked connector-local operation metadata for binary/provider-query/upload foundations. All 54 DELETE writes carry `confirm: "destructive"`.
 
 5. **Verification and commit**
    - Red: focused validation fails before bundle files exist.
@@ -91,6 +91,9 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
 | Vet | `go vet ./internal/connectors/... ./internal/cli/...` | passed |
 | Build | `go build ./cmd/pm` | passed |
 | Boundary | `make connector-boundary` | passed with clean outcome |
+| Review finding regression | JSON inspection of Bitbucket metadata | red state confirmed issue import, issue attachment, and repository `/src` multipart uploads were exposed as writes and `downloads get` referenced `get_addon_addon_key_client_key`; fixed state has 148 writes, 38 blocked rows, 4 `file_upload` operations, no removed upload writes, and `downloads get` references `get_repositories_workspace_repo_slug_downloads_filename` |
+| Focused review validation | copied Bitbucket definition into a single-connector temp root and ran `go run ./cmd/connectorgen validate <temp-root> --json` | passed with `connectors_checked: 1`, no findings, no warnings |
+| Conformance retry | `go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1` | timed out after 120s with no failure output; broader Go test processes were already active in the worktree |
 | Diff hygiene | `git diff --check` | passed |
 | Scope guard | `git status --short` and path review | working tree changes are the Bitbucket defs bundle, generated Bitbucket/catalog docs, CLI golden/catalog metadata required by the new connector, and this connector-local GSD artifact |
 | Merge-readiness plan | `scripts/gsd prompt progress --do "resume issue 79 Bitbucket connector parity through no-mistakes validation, PR creation, and green checks without live-provider work or merge"` | prompt generated; proceeding with no-mistakes AXI gate on the committed feature branch |
