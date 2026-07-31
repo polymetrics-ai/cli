@@ -1,0 +1,55 @@
+{
+  "operations": [
+    {
+      "id": "reports_query",
+      "kind": "rest_read",
+      "summary": "Query ad-hoc YouTube Analytics metrics and dimensions.",
+      "description": "Official youtubeAnalytics.reports.query (GET /v2/reports). Kept blocked because the connector direct-read executor cannot yet provide a bounded, typed provider-query surface across the separate Analytics API host without broad raw-query escape hatches.",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query",
+      "risk": "low",
+      "approval": "blocked by default; no live provider call is made by this connector operation definition",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/youtube",
+        "https://www.googleapis.com/auth/youtube.readonly",
+        "https://www.googleapis.com/auth/youtubepartner",
+        "https://www.googleapis.com/auth/yt-analytics-monetary.readonly",
+        "https://www.googleapis.com/auth/yt-analytics.readonly"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "{{ config.analytics_base_url }}/reports",
+        "max_bytes": 1048576,
+        "query": {
+          "ids": "channel==MINE|contentOwner==OWNER_NAME",
+          "startDate": "YYYY-MM-DD",
+          "endDate": "YYYY-MM-DD",
+          "metrics": "comma-separated metrics"
+        }
+      }
+    },
+    {
+      "id": "download_report",
+      "kind": "binary_download",
+      "summary": "Download generated YouTube Reporting report bytes.",
+      "description": "Official youtubereporting.media.download (GET /v1/media/{+resourceName}?alt=media). Kept blocked because generated report payloads are CSV/GZIP/binary bytes and the connector runtime intentionally lacks a bounded binary file-download executor for this surface.",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reports",
+      "risk": "medium",
+      "approval": "blocked by default pending bounded destination-file policy, size limits, digest/audit evidence, and explicit operator approval",
+      "output_policy": "bounded_binary_file",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/yt-analytics-monetary.readonly",
+        "https://www.googleapis.com/auth/yt-analytics.readonly"
+      ],
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/media/{resourceName}?alt=media",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    }
+  ]
+}

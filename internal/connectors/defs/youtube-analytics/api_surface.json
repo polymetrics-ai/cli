@@ -1,60 +1,102 @@
 {
-  "api": "YouTube Reporting API v1 (https://youtubereporting.googleapis.com/v1)",
-  "docs": "https://developers.google.com/youtube/reporting/v1/reports",
-  "reviewed_at": "2026-07-03",
-  "scope": "Tier-2 auth-hook migration: the 3 legacy-parity read streams only (jobs, report_types, reports); legacy youtube-analytics is read-only (Write always returns ErrUnsupportedOperation) and the full YouTube Reporting/Analytics API surface (job creation/deletion, bulk report media download, the separate Analytics querying API) is out of scope outside this connector's current declared surface",
+  "api": "YouTube Analytics API v2 + YouTube Reporting API v1",
+  "docs": "https://developers.google.com/youtube/analytics/reference/reports/query; https://developers.google.com/youtube/reporting/v1/reports",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Official public Google discovery documents re-audited for YouTube Analytics API v2 (revision 20260729, 8 operations) and YouTube Reporting API v1 (revision 20260729, 8 operations). JSON resources are covered by typed streams/write actions where the declarative engine can safely execute them. Provider ad-hoc reports.query and report-byte media download remain blocked operation metadata because they require shared direct-query/binary executor work.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v1/jobs",
-      "covered_by": {
-        "stream": "jobs"
+      "path": "/v2/groups",
+      "covered_by": { "stream": "groups" }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/groups",
+      "covered_by": { "write": "create_group" }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/groups",
+      "covered_by": { "write": "update_group" }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/groups",
+      "covered_by": { "write": "delete_group" }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groupItems",
+      "covered_by": { "stream": "group_items" }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/groupItems",
+      "covered_by": { "write": "create_group_item" }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/groupItems",
+      "covered_by": { "write": "delete_group_item" }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Official reports.query returns ad-hoc tabular QueryResponse data across the separate youtubeanalytics.googleapis.com host. Executable direct-read commands currently require a narrowly typed provider-query operation with bounded output policy and no raw-query escape hatch; keep blocked pending shared provider-query/direct-read foundation (#2985).",
+        "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query"
       }
     },
     {
       "method": "GET",
       "path": "/v1/reportTypes",
-      "covered_by": {
-        "stream": "report_types"
-      }
+      "covered_by": { "stream": "report_types" }
     },
     {
       "method": "GET",
-      "path": "/v1/jobs/{jobId}/reports",
-      "covered_by": {
-        "stream": "reports"
-      }
+      "path": "/v1/jobs",
+      "covered_by": { "stream": "jobs" }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/jobs/{jobId}",
+      "covered_by": { "stream": "job" }
     },
     {
       "method": "POST",
       "path": "/v1/jobs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
-      }
+      "covered_by": { "write": "create_job" }
     },
     {
       "method": "DELETE",
       "path": "/v1/jobs/{jobId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "deletes a scheduled reporting job; not a read stream"
-      }
+      "covered_by": { "write": "delete_job" }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/jobs/{jobId}/reports",
+      "covered_by": { "stream": "reports" }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/jobs/{jobId}/reports/{reportId}",
+      "covered_by": { "stream": "report" }
     },
     {
       "method": "GET",
       "path": "/v1/media/{+resourceName}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "bulk report CSV/GZIP bytes are not a syncable record stream"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "https://youtubeanalytics.googleapis.com/v2/reports:query",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "separate YouTube Analytics query API; legacy source-youtube-analytics only implements the bulk Reporting API control-plane resources migrated here"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official media.download returns generated report bytes at /v1/media/{+resourceName}?alt=media. This is not JSON metadata and is intentionally not modeled as a stream; keep blocked until a bounded binary file-download executor with destination path safety, size limits, digest/audit evidence, and explicit approval exists.",
+        "source_url": "https://developers.google.com/youtube/reporting/v1/reports"
       }
     }
   ]
