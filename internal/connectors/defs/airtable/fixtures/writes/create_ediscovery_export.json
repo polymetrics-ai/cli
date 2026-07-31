@@ -1,0 +1,15 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "baseId": "baseId_fixture",
+    "includeCsvFormat": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/exports",
+    "body": {
+      "baseId": "baseId_fixture",
+      "includeCsvFormat": true
+    }
+  }
+}

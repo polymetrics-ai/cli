@@ -1,0 +1,24 @@
+{
+  "record": {
+    "workspaceId": "workspaceId_fixture",
+    "name": "Fixture Name",
+    "tables": [
+      {
+        "sample": "value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/bases",
+    "body": {
+      "workspaceId": "workspaceId_fixture",
+      "name": "Fixture Name",
+      "tables": [
+        {
+          "sample": "value"
+        }
+      ]
+    }
+  }
+}

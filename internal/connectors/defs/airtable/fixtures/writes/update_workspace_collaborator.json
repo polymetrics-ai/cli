@@ -1,0 +1,14 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "user_or_group_id": "user_or_group_id_fixture",
+    "permissionLevel": "read"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v0/meta/workspaces/workspace_id_fixture/collaborators/user_or_group_id_fixture",
+    "body": {
+      "permissionLevel": "read"
+    }
+  }
+}
