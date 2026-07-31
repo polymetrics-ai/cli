@@ -212645,14 +212645,14 @@
   {
     "slug": "youtube-analytics",
     "name": "YouTube Analytics",
-    "description": "Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.",
+    "description": "Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analytics groups and group items, and safely plans documented job/group mutations via the Google OAuth 2.0 refresh-token grant.",
     "docs_url": "https://developers.google.com/youtube/reporting/v1/reports",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -212660,6 +212660,14 @@
     "streams": [
       {
         "name": "jobs",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "job",
         "primary_key": [
           "id"
         ],
@@ -212681,10 +212689,624 @@
         ],
         "cursor": "",
         "incremental": false
+      },
+      {
+        "name": "report",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "groups",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "group_items",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
+    "write_actions": [
+      {
+        "name": "create_job",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_job",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_group",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_group",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_group",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_group_item",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_group_item",
+        "method": "DELETE",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Read YouTube Reporting/Analytics metadata and safely plan documented job/group mutations.",
+      "usage": "pm youtube-analytics <command> [flags]",
+      "source_cli": {
+        "name": "YouTube Analytics and Reporting APIs",
+        "docs": "https://developers.google.com/youtube/analytics",
+        "reference": "Google Discovery: YouTube Analytics API v2 revision 20260729 and YouTube Reporting API v1 revision 20260729",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "reporting",
+          "title": "YouTube Reporting",
+          "commands": [
+            "jobs",
+            "report-types",
+            "reports"
+          ]
+        },
+        {
+          "id": "analytics-groups",
+          "title": "YouTube Analytics groups",
+          "commands": [
+            "groups",
+            "group-items"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the YouTube request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value; never pass secret values here.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to emit from stream commands.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "jobs list",
+          "summary": "Read YouTube Reporting jobs through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "jobs",
+          "write": "",
+          "source_cli_path": "GET /v1/jobs",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/list",
+          "flags": [
+            {
+              "name": "include-system-managed",
+              "type": "boolean",
+              "summary": "Include system-managed reporting jobs.",
+              "values": [],
+              "maps_to": "query.includeSystemManaged"
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics jobs list --credential youtube-prod --limit 25 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "jobs get",
+          "summary": "Read one YouTube Reporting job by configured job_id.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "job",
+          "write": "",
+          "source_cli_path": "GET /v1/jobs/{jobId}",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/get",
+          "flags": [],
+          "examples": [
+            "pm youtube-analytics jobs get --credential youtube-prod --config job_id=job_fixture_1 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Pass --config job_id=<job id>; ETL command flags intentionally map only to query parameters, not connector config path variables."
+        },
+        {
+          "path": "jobs create",
+          "summary": "Plan creation of a YouTube Reporting job.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_job",
+          "source_cli_path": "POST /v1/jobs",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/create",
+          "flags": [
+            {
+              "name": "report-type-id",
+              "type": "string",
+              "summary": "ReportType id the job should generate.",
+              "values": [],
+              "maps_to": "record.reportTypeId",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Optional reporting job display name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics jobs create --credential youtube-prod --report-type-id channel_basic_a3 --name 'Daily channel basics' --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Creates a scheduled YouTube Reporting job; requires reverse ETL plan, preview, explicit approval, then execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+          "notes": ""
+        },
+        {
+          "path": "jobs delete",
+          "summary": "Plan deletion of a YouTube Reporting job with typed destructive confirmation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_job",
+          "source_cli_path": "DELETE /v1/jobs/{jobId}",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/delete",
+          "flags": [
+            {
+              "name": "job-id",
+              "type": "string",
+              "summary": "Reporting job ID to delete.",
+              "values": [],
+              "maps_to": "record.job_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics jobs delete --credential youtube-prod --job-id job_fixture_delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Destructive job deletion stops future report generation; redacts job_id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+          "notes": ""
+        },
+        {
+          "path": "report-types list",
+          "summary": "Read YouTube Reporting report types through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "report_types",
+          "write": "",
+          "source_cli_path": "GET /v1/reportTypes",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/reportTypes/list",
+          "flags": [
+            {
+              "name": "include-system-managed",
+              "type": "boolean",
+              "summary": "Include system-managed report types.",
+              "values": [],
+              "maps_to": "query.includeSystemManaged"
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics report-types list --credential youtube-prod --limit 50 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "reports list",
+          "summary": "Read generated report metadata for the configured YouTube Reporting job.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "reports",
+          "write": "",
+          "source_cli_path": "GET /v1/jobs/{jobId}/reports",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/reports/list",
+          "flags": [
+            {
+              "name": "created-after",
+              "type": "string",
+              "summary": "createdAfter filter for reports.list.",
+              "values": [],
+              "maps_to": "query.createdAfter",
+              "format": "date-time",
+              "allow_empty": false
+            },
+            {
+              "name": "start-time-at-or-after",
+              "type": "string",
+              "summary": "startTimeAtOrAfter filter for reports.list.",
+              "values": [],
+              "maps_to": "query.startTimeAtOrAfter",
+              "format": "date-time",
+              "allow_empty": false
+            },
+            {
+              "name": "start-time-before",
+              "type": "string",
+              "summary": "startTimeBefore filter for reports.list.",
+              "values": [],
+              "maps_to": "query.startTimeBefore",
+              "format": "date-time",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics reports list --credential youtube-prod --config job_id=job_fixture_1 --limit 25 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Pass --config job_id=<job id>; downloaded report bytes are intentionally not emitted by this JSON metadata stream."
+        },
+        {
+          "path": "reports get",
+          "summary": "Read one generated report metadata resource for the configured job_id/report_id.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "report",
+          "write": "",
+          "source_cli_path": "GET /v1/jobs/{jobId}/reports/{reportId}",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/reports/get",
+          "flags": [],
+          "examples": [
+            "pm youtube-analytics reports get --credential youtube-prod --config job_id=job_fixture_1 --config report_id=report_fixture_1 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Pass --config job_id=<job id> --config report_id=<report id>; downloaded report bytes remain a blocked binary operation."
+        },
+        {
+          "path": "reports query",
+          "summary": "Documented YouTube Analytics reports.query provider query operation (blocked by default).",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "GET /v2/reports",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Blocked until provider-query/direct-read foundation supports bounded typed cross-host query execution without raw query escape hatches."
+        },
+        {
+          "path": "reports download",
+          "summary": "Documented YouTube Reporting media.download operation for generated report bytes (blocked by default).",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "GET /v1/media/{+resourceName}",
+          "source_url": "https://developers.google.com/youtube/reporting/v1/reports",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Blocked until a bounded binary file-download executor exists with destination path safety, size limits, digest/audit evidence, and explicit approval."
+        },
+        {
+          "path": "groups list",
+          "summary": "Read YouTube Analytics groups through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "groups",
+          "write": "",
+          "source_cli_path": "GET /v2/groups",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groups/list",
+          "flags": [
+            {
+              "name": "mine",
+              "type": "boolean",
+              "summary": "Set the groups.list mine query value.",
+              "values": [],
+              "maps_to": "query.mine"
+            },
+            {
+              "name": "group-ids",
+              "type": "string",
+              "summary": "Comma-separated group ids for the groups.list id query value.",
+              "values": [],
+              "maps_to": "query.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics groups list --credential youtube-prod --mine true --limit 25 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "groups create",
+          "summary": "Plan creation of a YouTube Analytics group.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_group",
+          "source_cli_path": "POST /v2/groups",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groups/insert",
+          "flags": [
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Group title.",
+              "values": [],
+              "maps_to": "record.snippet.title",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics groups create --credential youtube-prod --title 'Owned fixture group' --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+          "notes": ""
+        },
+        {
+          "path": "groups update",
+          "summary": "Plan update of a YouTube Analytics group's title.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_group",
+          "source_cli_path": "PUT /v2/groups",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groups/update",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "YouTube Analytics group id to update.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Replacement group title.",
+              "values": [],
+              "maps_to": "record.snippet.title",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics groups update --credential youtube-prod --id group_fixture_1 --title 'Renamed fixture group' --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Mutates YouTube Analytics group metadata; redacts group id from write errors; requires reverse ETL plan, preview, explicit approval, then execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+          "notes": ""
+        },
+        {
+          "path": "groups delete",
+          "summary": "Plan deletion of a YouTube Analytics group with typed destructive confirmation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_group",
+          "source_cli_path": "DELETE /v2/groups?id={id}",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groups/delete",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "YouTube Analytics group id to delete.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics groups delete --credential youtube-prod --id group_fixture_delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Destructive group deletion; redacts group id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+          "notes": ""
+        },
+        {
+          "path": "group-items list",
+          "summary": "Read items in a YouTube Analytics group through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "group_items",
+          "write": "",
+          "source_cli_path": "GET /v2/groupItems",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/list",
+          "flags": [
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "Group ID for the required groupItems.list groupId query value.",
+              "values": [],
+              "maps_to": "query.groupId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics group-items list --credential youtube-prod --group-id group_fixture_1 --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "group-items create",
+          "summary": "Plan adding a channel, playlist, video, or asset to a YouTube Analytics group.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_group_item",
+          "source_cli_path": "POST /v2/groupItems",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/insert",
+          "flags": [
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "Group ID to add the resource to.",
+              "values": [],
+              "maps_to": "record.groupId",
+              "allow_empty": false
+            },
+            {
+              "name": "resource-kind",
+              "type": "enum",
+              "summary": "Resource kind being added.",
+              "values": [
+                "youtube#channel",
+                "youtube#playlist",
+                "youtube#video",
+                "youtube#asset"
+              ],
+              "maps_to": "record.resource.kind"
+            },
+            {
+              "name": "resource-id",
+              "type": "string",
+              "summary": "Resource ID being added.",
+              "values": [],
+              "maps_to": "record.resource.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics group-items create --credential youtube-prod --group-id group_fixture_1 --resource-kind youtube#video --resource-id video_fixture_1 --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Adds an item to a YouTube Analytics group; redacts group/resource identifiers from write errors; requires reverse ETL plan, preview, explicit approval, then execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
+          "notes": ""
+        },
+        {
+          "path": "group-items delete",
+          "summary": "Plan removal of an item from a YouTube Analytics group with typed destructive confirmation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_group_item",
+          "source_cli_path": "DELETE /v2/groupItems?id={id}",
+          "source_url": "https://developers.google.com/youtube/analytics/reference/groupItems/delete",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Group item id to remove.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm youtube-analytics group-items delete --credential youtube-prod --id group_item_fixture_delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Destructive removal of a group item; redacts group-item id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.",
+          "approval": "Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "binary-downloads",
+          "summary": "Generated report metadata includes download_url, but media.download report bytes remain blocked until a bounded binary file-download executor exists."
+        },
+        {
+          "name": "content-owner-writes",
+          "summary": "Read streams support onBehalfOfContentOwner from content_owner_id; declarative write actions omit that optional query until write-action query templates are available."
+        },
+        {
+          "name": "destructive-confirmation",
+          "summary": "YouTube Reporting job deletes and YouTube Analytics group/group-item deletes require reverse ETL plan, preview, explicit approval, and typed destructive confirmation."
+        }
+      ]
+    },
     "docs_md": "# Overview\n\nReads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0\nrefresh-token grant.\n\nReadable streams: `jobs`, `report_types`, `reports`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developers.google.com/youtube/reporting/v1/reports.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://youtubereporting.googleapis.com/v1`; format `uri`;\n  YouTube Reporting API base URL override for tests or proxies.\n- `client_id` (required, secret, string); Google OAuth 2.0 client ID for the refresh-token grant.\n  Used only in the token-request form; never logged.\n- `client_secret` (optional, secret, string); Google OAuth 2.0 client secret (optional for some\n  client types). Used only in the token-request form; never logged.\n- `content_owner_id` (optional, string); Optional content-owner ID; sent as the\n  onBehalfOfContentOwner query parameter for content-owner-scoped accounts.\n- `job_id` (optional, string); Reporting job ID the 'reports' stream is scoped to (required only\n  when reading the reports stream).\n- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust\n  the stream.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; Records per page (1-100).\n- `refresh_token` (required, secret, string); Long-lived Google OAuth 2.0 refresh token. Exchanged\n  for a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance\n  is out of scope for this connector (credentials layer already owns it).\n- `scopes` (optional, string); default `https://www.googleapis.com/auth/yt-analytics.readonly`;\n  OAuth scope requested on the token-refresh grant.\n- `token_url` (optional, string); default `https://oauth2.googleapis.com/token`; format `uri`;\n  Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a\n  non-https or unparseable value to prevent exfiltrating the refresh token/client secret to an\n  attacker-chosen endpoint.\n\nSecret fields are redacted in logs and write previews: `client_id`, `client_secret`,\n`refresh_token`.\n\nDefault configuration values: `base_url=https://youtubereporting.googleapis.com/v1`, `max_pages=0`,\n`page_size=100`, `scopes=https://www.googleapis.com/auth/yt-analytics.readonly`,\n`token_url=https://oauth2.googleapis.com/token`.\n\nAuthentication behavior:\n\n- Connector-specific authentication using `secrets.refresh_token`, `config.token_url`,\n  `secrets.client_id`, `secrets.client_secret`, `config.scopes`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/reportTypes`.\n\n## Streams notes\n\nAll streams are read in full-refresh mode only; incremental sync is not available.\n\nDefault pagination: cursor pagination; cursor parameter `pageToken`; next token from\n`nextPageToken`.\n\n- `jobs`: GET `/jobs` - records path `jobs`; query `onBehalfOfContentOwner` from template `{{\n  config.content_owner_id }}`, omitted when absent; `pageSize`=`{{ config.page_size }}`; cursor\n  pagination; cursor parameter `pageToken`; next token from `nextPageToken`; computed output fields\n  `create_time`, `expire_time`, `report_type_id`, `system_managed`.\n- `report_types`: GET `/reportTypes` - records path `reportTypes`; query `onBehalfOfContentOwner`\n  from template `{{ config.content_owner_id }}`, omitted when absent; `pageSize`=`{{\n  config.page_size }}`; cursor pagination; cursor parameter `pageToken`; next token from\n  `nextPageToken`; computed output fields `deprecate_time`, `system_managed`.\n- `reports`: GET `/jobs/{{ config.job_id }}/reports` - records path `reports`; query\n  `onBehalfOfContentOwner` from template `{{ config.content_owner_id }}`, omitted when absent;\n  `pageSize`=`{{ config.page_size }}`; cursor pagination; cursor parameter `pageToken`; next token\n  from `nextPageToken`; computed output fields `create_time`, `download_url`, `end_time`,\n  `job_expire_time`, `job_id`, `start_time`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external YouTube Reporting API read of\nreporting-job/report-type/report metadata.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 3 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  binary_payload=1, destructive_admin=1, out_of_scope=2.\n",
     "icon": {
       "id": "youtube-analytics",

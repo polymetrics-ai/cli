@@ -1,0 +1,27 @@
+{
+  "record": {
+    "snippet": {
+      "title": "Owned fixture group"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups",
+    "body": {
+      "snippet": {
+        "title": "Owned fixture group"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "youtube#group",
+      "id": "group_fixture_created",
+      "snippet": {
+        "title": "Owned fixture group",
+        "publishedAt": "2026-01-01T00:00:00Z"
+      }
+    }
+  }
+}

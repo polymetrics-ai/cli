@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/jobs/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "job_fixture_1",
+      "reportTypeId": "channel_basic_a3",
+      "name": "Fixture Job One",
+      "createTime": "2026-01-01T00:00:00Z",
+      "expireTime": "2026-04-01T00:00:00Z",
+      "systemManaged": false
+    }
+  }
+}
