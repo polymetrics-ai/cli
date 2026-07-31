@@ -523,6 +523,104 @@
       "risk": "medium",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the workspace system GPG public key(s)"
+    },
+    {
+      "approval": "blocked pending bounded file upload foundation plus destructive confirmation",
+      "description": "Multipart ZIP issue import is destructive; this connector-local evidence row remains non-executable until bounded file snapshots, byte caps, and destructive confirmation are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_issues_import",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "critical",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Import Bitbucket issues from a ZIP archive"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "Issue attachment upload uses multipart/form-data and remains non-executable until bounded file snapshots, byte caps, and approvals are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_issues_issue_id_attachments",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Upload an issue attachment"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "Repository /src commits use multipart/form-data file payloads and remain non-executable until bounded file snapshots, byte caps, commit metadata, and approvals are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_src",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Commit repository source files"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "Snippet create uses multipart/file body content and remains non-executable until bounded file snapshots, byte caps, and approvals are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_snippets",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Create a snippet with file bodies"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "Workspace snippet create uses multipart/file body content and remains non-executable until bounded file snapshots, byte caps, and approvals are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_snippets_workspace",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Create a workspace snippet with file bodies"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "Snippet update uses multipart/file body content and remains non-executable until bounded file snapshots, byte caps, and approvals are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "put_snippets_workspace_encoded_id",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Update a snippet with file bodies"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "Snippet file-node update carries file body content and remains non-executable until bounded file snapshots, byte caps, and approvals are available.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "put_snippets_workspace_encoded_id_node_id",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Update a snippet file node"
     }
   ]
 }
