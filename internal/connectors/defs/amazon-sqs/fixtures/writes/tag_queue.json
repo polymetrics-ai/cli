@@ -1,0 +1,10 @@
+{
+  "record": {
+    "tag_key": "env",
+    "tag_value": "fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.TagQueue"
+  }
+}

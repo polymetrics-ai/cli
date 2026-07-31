@@ -1,0 +1,10 @@
+{
+  "record": {
+    "attribute_name": "VisibilityTimeout",
+    "attribute_value": "30"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.SetQueueAttributes"
+  }
+}
