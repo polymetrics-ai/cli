@@ -101,8 +101,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	fsys := os.DirFS(dir)
-	report, err := validateDir(fsys)
+	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
@@ -123,6 +122,29 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	return 0
+}
+
+// validatePath validates either a defs root (the historical contract) or a
+// single connector bundle directory. Several connector-issue checklists invoke
+// `connectorgen validate internal/connectors/defs/<name>` for a focused local
+// gate; when that path contains metadata.json, validate just that bundle rather
+// than treating fixtures/ and schemas/ as sibling connectors.
+func validatePath(dir string) (Report, error) {
+	clean := filepath.Clean(dir)
+	if info, err := os.Stat(filepath.Join(clean, "metadata.json")); err == nil && !info.IsDir() {
+		findings, warnings := validateBundleDir(os.DirFS(filepath.Dir(clean)), filepath.Base(clean))
+		if findings == nil {
+			findings = []Finding{}
+		}
+		if warnings == nil {
+			warnings = []Finding{}
+		}
+		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+	} else if err != nil && !os.IsNotExist(err) {
+		return Report{}, fmt.Errorf("validate: stat metadata.json: %w", err)
+	}
+
+	return validateDir(os.DirFS(clean))
 }
 
 // renderText renders a Report as human-readable lines: one finding per line

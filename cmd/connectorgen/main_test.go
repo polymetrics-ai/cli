@@ -123,6 +123,17 @@ func TestValidate_AcceptsGoodBundle(t *testing.T) {
 	}
 }
 
+func TestValidateCommand_AcceptsSingleBundleDir(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	exit := run([]string{"validate", filepath.Join("testdata", "valid", "goodconn")}, &stdout, &stderr)
+	if exit != 0 {
+		t.Fatalf("exit = %d, want 0\nstderr=%s\nstdout=%s", exit, stderr.String(), stdout.String())
+	}
+	if !strings.Contains(stdout.String(), "1 connector(s) checked, 0 findings") {
+		t.Fatalf("stdout missing focused validation summary:\n%s", stdout.String())
+	}
+}
+
 // TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
 // S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
 // queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`

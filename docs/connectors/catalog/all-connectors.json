@@ -57166,7 +57166,7 @@
   {
     "name": "gmail",
     "display_name": "Gmail",
-    "description": "Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases, delegates, forwarding addresses, and mailbox profile, and writes approved reverse-ETL mutations (send/insert/import/modify/trash/delete messages and threads; draft and label lifecycle; filter, send-as, delegate, and forwarding-address management; vacation/language/IMAP/POP/auto-forwarding settings) via the Google OAuth 2.0 refresh-token grant.",
+    "description": "Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases, delegates, forwarding addresses, mailbox profile, and bounded direct detail/settings resources; writes approved reverse-ETL mutations for message/thread/draft/label/filter/send-as/delegate/forwarding/S/MIME settings via the Google OAuth 2.0 refresh-token grant.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/gmail/api/reference/rest",
     "release_stage": "ga",
@@ -57240,6 +57240,11 @@
         "start_history_id": {
           "type": "string",
           "description": "Gmail historyId lower bound for the history stream's incremental sync (users.history.list's required startHistoryId). Unlike messages/threads/drafts, history genuinely publishes a server-recognized, monotonically-increasing cursor (historyId) -- see Streams notes in docs.md. Obtain an initial value from any message/thread/label/profile record's historyId field."
+        },
+        "userId": {
+          "type": "string",
+          "default": "me",
+          "description": "Gmail user ID path segment used by provider-style direct-read commands. Defaults to 'me'. The ETL/reverse-ETL surfaces keep using user_id for legacy compatibility."
         }
       }
     },
@@ -57410,6 +57415,21 @@
         "confirm": "destructive"
       },
       {
+        "name": "batch_delete_messages",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/users/{{ config.user_id }}/messages/batchDelete",
+        "risk": "permanently deletes every message ID in ids[] immediately, bypassing Trash; Gmail documents no per-ID existence guarantees",
+        "confirm": "destructive"
+      },
+      {
+        "name": "batch_modify_messages",
+        "kind": "update",
+        "method": "POST",
+        "path": "/users/{{ config.user_id }}/messages/batchModify",
+        "risk": "changes labels and Classification Label values across a bounded ids[] set in one Gmail batchModify request; validate the staged IDs before approval"
+      },
+      {
         "name": "modify_thread",
         "kind": "update",
         "method": "POST",
@@ -57544,6 +57564,28 @@
         "risk": "re-sends the verification email for a pending custom From: alias"
       },
       {
+        "name": "insert_smime_info",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo",
+        "risk": "uploads PKCS#12 S/MIME certificate material for a send-as alias; certificate bytes and password are redacted and require approved reverse ETL execution"
+      },
+      {
+        "name": "set_default_smime_info",
+        "kind": "update",
+        "method": "POST",
+        "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo/{{ record.id }}/setDefault",
+        "risk": "changes which S/MIME certificate Gmail uses by default for the send-as alias"
+      },
+      {
+        "name": "delete_smime_info",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}/smimeInfo/{{ record.id }}",
+        "risk": "deletes an S/MIME certificate configuration from the send-as alias; future encrypted sending may fail until another cert is configured",
+        "confirm": "destructive"
+      },
+      {
         "name": "create_delegate",
         "kind": "create",
         "method": "POST",
@@ -57608,9 +57650,9 @@
       }
     ],
     "risk": {
-      "read": "external Gmail API read of message/thread/draft/label/history/filter/send-as/delegate/forwarding-address/profile metadata",
-      "write": "external Gmail API mutation, including sending real outbound email, permanently deleting messages/threads/drafts, granting mailbox delegation, and changing account-wide forwarding/vacation/IMAP/POP settings",
-      "approval": "reverse ETL plan approval required before writes; several actions (send_message, send_draft, delete_message, delete_thread, delete_draft, create_delegate, update_auto_forwarding) warrant elevated operator scrutiny -- see docs.md Write actions \u0026 risks"
+      "read": "external Gmail API read of message/thread/draft/label/history/filter/send-as/delegate/forwarding-address/profile metadata plus bounded, redacted direct detail/settings reads",
+      "write": "external Gmail API mutation, including sending real outbound email, permanently deleting messages/threads/drafts, granting mailbox delegation, changing account-wide forwarding/vacation/IMAP/POP settings, and managing S/MIME certificate settings",
+      "approval": "reverse ETL plan approval required before writes; sending mail, permanent delete/batch delete, delegation, forwarding, and S/MIME certificate actions warrant elevated operator scrutiny -- see docs.md Write actions \u0026 risks"
     },
     "icon": {
       "id": "pm-sample",

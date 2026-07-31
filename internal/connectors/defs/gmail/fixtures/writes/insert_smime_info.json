@@ -1,0 +1,20 @@
+{
+  "record": {
+    "sendAsEmail": "alias_fixture@example.invalid",
+    "pkcs12": "fixture_pkcs12_blob"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/synthetic-conformance-value/settings/sendAs/alias_fixture%40example.invalid/smimeInfo",
+    "body": {
+      "pkcs12": "fixture_pkcs12_blob"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "smime_fixture_1",
+      "isDefault": false
+    }
+  }
+}

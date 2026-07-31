@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "labels",
+    "live_unavailable": [
+      {
+        "kind": "fixture_only",
+        "contains": [
+          "Gmail requires caller-owned OAuth refresh-token credentials and can send/delete real mail; this wave makes no live certification claim."
+        ]
+      },
+      {
+        "kind": "custom_auth",
+        "contains": [
+          "Conformance dynamic replay is skipped by metadata because the Gmail AuthHook must exchange a real refresh token at token_url."
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

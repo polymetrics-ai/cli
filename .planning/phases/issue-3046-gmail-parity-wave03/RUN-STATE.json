@@ -1,0 +1,42 @@
+{
+  "phase": "issue-3046-gmail-parity-wave03",
+  "branch": "fm/cli-gmail-parity-wave03-r1",
+  "state": "verified",
+  "verificationPassed": true,
+  "counts": {
+    "gmail_official_operations": 79,
+    "executable": 61,
+    "streams": 10,
+    "direct_reads": 11,
+    "writes": 40,
+    "blocked_planned": 18,
+    "cse_not_applicable": 11,
+    "certified_live": 0
+  },
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopCommand": "unavailable: scripts/gsd unknown GSD command: programming-loop",
+    "fallback": "manual GSD programming loop with scripts/gsd prompt issue-122-rebootstrap evidence"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "firstmate owns parent orchestration; this isolated worker owns one Gmail parity slice"
+    }
+  ],
+  "verification": [
+    "no-mistakes doctor",
+    "go run ./cmd/connectorgen validate internal/connectors/defs/gmail",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gmail' -count=1",
+    "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+    "go build ./cmd/pm",
+    "make connector-boundary",
+    "make verify",
+    "git diff --check"
+  ],
+  "issueAddendum": {
+    "posted_with": "gh-axi issue comment --body-file .planning/issues/gmail-parity-wave03/captain-policy-addendum.md",
+    "issues": [3046, 3047, 3048, 3049, 3050, 3051, 3052, 3053]
+  }
+}

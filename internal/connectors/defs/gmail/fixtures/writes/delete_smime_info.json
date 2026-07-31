@@ -1,0 +1,14 @@
+{
+  "record": {
+    "sendAsEmail": "alias_fixture@example.invalid",
+    "id": "smime_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/synthetic-conformance-value/settings/sendAs/alias_fixture%40example.invalid/smimeInfo/smime_fixture_1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}
