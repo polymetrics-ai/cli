@@ -10,9 +10,14 @@
       "reason": "single connector-owned write scope in one isolated worktree; mutating subagents would collide"
     },
     {
+      "cycle": "scope-correction",
+      "decision": "revert_shared_runtime_cache",
+      "reason": "user corrected scope: bundle registry cache is shared runtime work and must not remain in the connector-local Zoom parity branch"
+    },
+    {
       "cycle": "verify",
-      "decision": "shared_performance_unblock",
-      "reason": "cache immutable embedded bundle loading to keep recursive certification tests under the fixed make verify package timeout after Zoom parity expansion"
+      "decision": "no_genuine_timeout_dependency",
+      "reason": "focused Zoom checks and make verify passed without the cache change; earlier long-run ctx_execute SIGTERM was a tool-surface limitation, not a repository gate failure"
     }
   ]
 }
