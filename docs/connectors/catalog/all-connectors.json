@@ -35422,7 +35422,7 @@
   {
     "name": "dynamodb",
     "display_name": "DynamoDB",
-    "description": "Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated with hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.",
+    "description": "Reads, changes, and writes Amazon DynamoDB tables through the AWS JSON API with connector-local SigV4 signing, typed operation schemas, bounded reads, DynamoDB Streams changefeed support, and reverse-ETL write gates.",
     "integration_type": "database",
     "docs_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/",
     "release_stage": "ga",
@@ -35430,7 +35430,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -35446,52 +35446,347 @@
         "access_key_id": {
           "type": "string",
           "x-secret": true,
-          "description": "AWS access key id used to derive the AWS Signature Version 4 (SigV4) Authorization header. Never logged."
+          "description": "AWS access key id for SigV4 signing. Never logged."
         },
         "secret_access_key": {
           "type": "string",
           "x-secret": true,
-          "description": "AWS secret access key used to derive the SigV4 signing key HMAC chain. Never placed in a header or logged."
+          "description": "AWS secret access key for SigV4 signing. Never logged or previewed."
         },
         "endpoint": {
           "type": "string",
           "format": "uri",
-          "description": "DynamoDB JSON HTTP API endpoint, e.g. https://dynamodb.us-east-1.amazonaws.com. One of endpoint/base_url is required for live mode -- enforced by native/dynamodb's own Go config resolution (connection.go's resolveEndpoint), not this schema's required[] (JSON Schema's required[] cannot express an either-or pair)."
+          "description": "DynamoDB JSON API endpoint, e.g. https://dynamodb.us-east-1.amazonaws.com. Required for live mode unless base_url is set."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
-          "description": "Alias for endpoint, matching legacy's identical endpoint/base_url fallback. Ignored when endpoint is set."
+          "description": "Alias for endpoint."
+        },
+        "streams_endpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional DynamoDB Streams endpoint. Defaults to endpoint when unset."
         },
         "region": {
           "type": "string",
-          "description": "AWS region used in the SigV4 credential scope (e.g. us-east-1) and, conventionally, the endpoint's own region."
+          "description": "AWS region used in SigV4 credential scope."
         },
         "table_name": {
           "type": "string",
-          "description": "DynamoDB table name to Scan. One of table_name/table is required for live mode -- enforced by native/dynamodb's own Go config resolution (reader.go's tableName), not this schema's required[]."
+          "description": "Default DynamoDB table name for table-scoped reads and writes."
         },
         "table": {
           "type": "string",
-          "description": "Alias for table_name, matching legacy's identical table_name/table fallback. Ignored when table_name is set."
+          "description": "Alias for table_name."
+        },
+        "table_arn": {
+          "type": "string",
+          "description": "Default table ARN for ARN-scoped operations."
+        },
+        "resource_arn": {
+          "type": "string",
+          "description": "Default resource ARN for resource policy/tag operations."
+        },
+        "stream_arn": {
+          "type": "string",
+          "description": "Default DynamoDB Stream ARN for Streams operations."
+        },
+        "shard_id": {
+          "type": "string",
+          "description": "Default shard id for DynamoDB Streams shard-iterator reads."
         },
         "page_size": {
           "type": "string",
           "default": "100",
-          "description": "Scan Limit per page (a positive integer)."
+          "description": "Bounded per-request Limit/MaxResults/PageSize where the operation supports it."
         },
         "max_pages": {
           "type": "string",
           "default": "100",
-          "description": "Maximum Scan pages to request (a positive integer)."
+          "description": "Maximum pages per read/changefeed operation."
         },
         "mode": {
           "type": "string",
-          "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+          "description": "Runtime mode: live (default) or fixture for credential-free tests."
+        },
+        "backup_arn": {
+          "type": "string"
+        },
+        "backup_name": {
+          "type": "string"
+        },
+        "export_arn": {
+          "type": "string"
+        },
+        "import_arn": {
+          "type": "string"
+        },
+        "global_table_name": {
+          "type": "string"
+        },
+        "index_name": {
+          "type": "string"
+        },
+        "region_name": {
+          "type": "string"
+        },
+        "kinesis_stream_arn": {
+          "type": "string"
+        },
+        "iterator_type": {
+          "type": "string"
+        },
+        "sequence_number": {
+          "type": "string"
+        },
+        "query_key_name": {
+          "type": "string"
+        },
+        "query_key_type": {
+          "type": "string"
+        },
+        "query_key_value": {
+          "type": "string"
+        },
+        "transact_get_items": {
+          "type": "string",
+          "description": "Optional JSON TransactItems fixture/config for TransactGetItems stream tests only; not exposed as a generic CLI passthrough."
         }
       }
     },
     "streams": [
+      {
+        "name": "describe_backup",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_continuous_backups",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_contributor_insights",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_endpoints",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_export",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_global_table",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_global_table_settings",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_import",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_kinesis_streaming_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_limits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_table",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_table_replica_auto_scaling",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "describe_time_to_live",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_resource_policy",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_backups",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_contributor_insights",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_exports",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_global_tables",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_imports",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_tables",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_tags_of_resource",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
       {
         "name": "items",
         "primary_key": [
@@ -35502,12 +35797,267 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "query_items",
+        "primary_key": [
+          "pk"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "streams_describe_stream",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "streams_get_records",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "streams_get_shard_iterator",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "streams_list_streams",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "batch_write_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB BatchWriteItem mutation built from one typed put/delete request per record; no raw RequestItems body passthrough is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_backup",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB CreateBackup mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "create_global_table",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB CreateGlobalTable mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "create_table",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB CreateTable mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "delete_backup",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB DeleteBackup mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_item",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB DeleteItem mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_resource_policy",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB DeleteResourcePolicy mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_table",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB DeleteTable mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "disable_kinesis_streaming_destination",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB DisableKinesisStreamingDestination mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enable_kinesis_streaming_destination",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB EnableKinesisStreamingDestination mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "put_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB PutItem mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "put_resource_policy",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB PutResourcePolicy mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_table_from_backup",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB RestoreTableFromBackup mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_table_to_point_in_time",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB RestoreTableToPointInTime mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "tag_resource",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB TagResource mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "transact_write_items",
+        "kind": "create",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB TransactWriteItems mutation built from one typed put/delete transaction item per record; no raw TransactItems body passthrough is accepted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "untag_resource",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UntagResource mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_continuous_backups",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateContinuousBackups mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "update_contributor_insights",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateContributorInsights mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "update_global_table",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateGlobalTable mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_global_table_settings",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateGlobalTableSettings mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_item",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateItem mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_kinesis_streaming_destination",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateKinesisStreamingDestination mutation/admin operation with typed top-level schema."
+      },
+      {
+        "name": "update_table",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateTable mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_table_replica_auto_scaling",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateTableReplicaAutoScaling mutation/admin operation with typed top-level schema.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_time_to_live",
+        "kind": "update",
+        "method": "POST",
+        "path": "/",
+        "risk": "SigV4-signed DynamoDB UpdateTimeToLive mutation/admin operation with typed top-level schema."
       }
     ],
     "risk": {
-      "read": "external AWS DynamoDB Scan of table items",
-      "write": "n/a (read-only source)",
-      "approval": "none required for read-only sync"
+      "read": "bounded SigV4-signed DynamoDB and DynamoDB Streams JSON-RPC reads against configured table, resource, or stream identifiers",
+      "write": "typed SigV4-signed DynamoDB mutations/admin actions declared in writes.json; destructive actions require confirmation",
+      "approval": "reverse ETL writes require plan, preview, approval token, and destructive confirmation where declared"
     },
     "icon": {
       "id": "dynamodb",

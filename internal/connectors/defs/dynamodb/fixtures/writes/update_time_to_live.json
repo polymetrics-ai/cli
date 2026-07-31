@@ -1,0 +1,21 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "time_to_live_specification": {
+      "Enabled": true,
+      "AttributeName": "ttl"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table",
+      "time_to_live_specification": "fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

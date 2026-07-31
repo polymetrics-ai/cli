@@ -1,0 +1,20 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "stream_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture",
+    "update_kinesis_streaming_configuration": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table",
+      "stream_arn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture",
+      "update_kinesis_streaming_configuration": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

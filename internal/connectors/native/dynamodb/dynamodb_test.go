@@ -30,8 +30,8 @@ func TestNameAndMetadata(t *testing.T) {
 	if !caps.Check || !caps.Catalog || !caps.Read {
 		t.Fatalf("capabilities = %+v, want Check && Catalog && Read", caps)
 	}
-	if caps.Write {
-		t.Fatal("dynamodb is read-only; Write capability must be false")
+	if !caps.Write {
+		t.Fatal("dynamodb write parity is implemented; Write capability must be true")
 	}
 }
 
@@ -79,10 +79,9 @@ func TestNoInitRegistration(t *testing.T) {
 }
 
 // TestConnectorSatisfiesCoreInterfaces mirrors native/postgres's and
-// native/bing-ads's identical assertion. Writer/CDCReader interfaces are
-// deliberately NOT asserted: Write is unsupported (read-only source) and
-// there is no CDC concept at all for this connector (see connector.go's doc
-// comment on why there is no cdc.go).
+// native/bing-ads's interface assertion style, updated for DynamoDB's parity
+// surface: Connector/StatefulReader/DefinitionProvider plus typed write
+// validation/dry-run and DynamoDB Streams CDC support.
 func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	c := native.New()
 	var _ connectors.Connector = c
@@ -91,6 +90,15 @@ func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	}
 	if _, ok := any(c).(connectors.DefinitionProvider); !ok {
 		t.Fatal("native dynamodb connector must implement connectors.DefinitionProvider (engine.Base)")
+	}
+	if _, ok := any(c).(connectors.WriteValidator); !ok {
+		t.Fatal("native dynamodb connector must implement connectors.WriteValidator")
+	}
+	if _, ok := any(c).(connectors.DryRunWriter); !ok {
+		t.Fatal("native dynamodb connector must implement connectors.DryRunWriter")
+	}
+	if _, ok := any(c).(connectors.CDCReader); !ok {
+		t.Fatal("native dynamodb connector must implement connectors.CDCReader")
 	}
 }
 
@@ -182,12 +190,17 @@ func TestCatalogFixtureMode(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Catalog: %v", err)
 	}
-	if cat.Connector != "dynamodb" || len(cat.Streams) != 1 {
-		t.Fatalf("Catalog = %+v", cat)
+	if cat.Connector != "dynamodb" || len(cat.Streams) != 27 {
+		t.Fatalf("Catalog stream count = %d, want 27: %+v", len(cat.Streams), cat)
 	}
-	s := cat.Streams[0]
-	if s.Name != "items" || len(s.PrimaryKey) == 0 {
-		t.Fatalf("catalog stream = %+v, want items with a primary key", s)
+	foundItems := false
+	for _, s := range cat.Streams {
+		if s.Name == "items" && len(s.PrimaryKey) > 0 {
+			foundItems = true
+		}
+	}
+	if !foundItems {
+		t.Fatalf("catalog missing items stream with a primary key: %+v", cat.Streams)
 	}
 }
 
@@ -239,11 +252,11 @@ func TestInitialStateStatefulReader(t *testing.T) {
 	}
 }
 
-func TestWriteUnsupported(t *testing.T) {
+func TestWriteUnknownActionFails(t *testing.T) {
 	c := native.New()
-	_, err := c.Write(context.Background(), connectors.WriteRequest{}, nil)
-	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
-		t.Fatalf("Write = %v, want ErrUnsupportedOperation", err)
+	_, err := c.Write(context.Background(), connectors.WriteRequest{Action: "does_not_exist", Config: fixtureConfig()}, []connectors.Record{{}})
+	if err == nil || errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("Write unknown action = %v, want typed validation error", err)
 	}
 }
 

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "provisioned_write_capacity_auto_scaling_update": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

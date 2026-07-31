@@ -1,0 +1,207 @@
+{
+  "tagline": "Typed, bounded DynamoDB provider commands",
+  "usage": "pm connectors run dynamodb <command> [flags]",
+  "source_cli": {
+    "name": "AWS CLI dynamodb",
+    "docs": "https://docs.aws.amazon.com/cli/latest/reference/dynamodb/",
+    "reference": "AWS CLI DynamoDB command reference"
+  },
+  "groups": [
+    {
+      "id": "direct",
+      "title": "Direct reads",
+      "commands": [
+        "get-item",
+        "batch-get-item",
+        "transact-get-items"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum response bytes for direct reads; capped by the CLI runtime"
+    }
+  ],
+  "commands": [
+    {
+      "path": "get-item",
+      "summary": "Get one DynamoDB item by a typed scalar key",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "get_item",
+      "flags": [
+        {
+          "name": "table-name",
+          "type": "string",
+          "summary": "DynamoDB table name",
+          "maps_to": "body.table_name",
+          "allow_empty": false
+        },
+        {
+          "name": "key-name",
+          "type": "string",
+          "summary": "Partition/full key attribute name for the typed command helper",
+          "maps_to": "body.key_name",
+          "allow_empty": false
+        },
+        {
+          "name": "key-type",
+          "type": "enum",
+          "values": [
+            "S",
+            "N",
+            "B"
+          ],
+          "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+          "maps_to": "body.key_type"
+        },
+        {
+          "name": "consistent-read",
+          "type": "boolean",
+          "summary": "Request strongly consistent reads where DynamoDB supports it",
+          "maps_to": "body.consistent_read"
+        },
+        {
+          "name": "key-value",
+          "type": "string",
+          "summary": "Key attribute value",
+          "maps_to": "body.key_value",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "DynamoDB_20120810.GetItem"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "key_value"
+      ],
+      "risk": "Reads one item; key values are redacted from errors/output surfaces."
+    },
+    {
+      "path": "batch-get-item",
+      "summary": "Read multiple DynamoDB items by a typed scalar key list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "batch_get_item",
+      "flags": [
+        {
+          "name": "table-name",
+          "type": "string",
+          "summary": "DynamoDB table name",
+          "maps_to": "body.table_name",
+          "allow_empty": false
+        },
+        {
+          "name": "key-name",
+          "type": "string",
+          "summary": "Partition/full key attribute name for the typed command helper",
+          "maps_to": "body.key_name",
+          "allow_empty": false
+        },
+        {
+          "name": "key-type",
+          "type": "enum",
+          "values": [
+            "S",
+            "N",
+            "B"
+          ],
+          "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+          "maps_to": "body.key_type"
+        },
+        {
+          "name": "consistent-read",
+          "type": "boolean",
+          "summary": "Request strongly consistent reads where DynamoDB supports it",
+          "maps_to": "body.consistent_read"
+        },
+        {
+          "name": "key-values",
+          "type": "string_array",
+          "summary": "Comma-separated/repeated key attribute values",
+          "maps_to": "body.key_values"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "DynamoDB_20120810.BatchGetItem"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "key_values"
+      ],
+      "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces."
+    },
+    {
+      "path": "transact-get-items",
+      "summary": "Read multiple DynamoDB items by a typed scalar key list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "transact_get_items",
+      "flags": [
+        {
+          "name": "table-name",
+          "type": "string",
+          "summary": "DynamoDB table name",
+          "maps_to": "body.table_name",
+          "allow_empty": false
+        },
+        {
+          "name": "key-name",
+          "type": "string",
+          "summary": "Partition/full key attribute name for the typed command helper",
+          "maps_to": "body.key_name",
+          "allow_empty": false
+        },
+        {
+          "name": "key-type",
+          "type": "enum",
+          "values": [
+            "S",
+            "N",
+            "B"
+          ],
+          "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+          "maps_to": "body.key_type"
+        },
+        {
+          "name": "consistent-read",
+          "type": "boolean",
+          "summary": "Request strongly consistent reads where DynamoDB supports it",
+          "maps_to": "body.consistent_read"
+        },
+        {
+          "name": "key-values",
+          "type": "string_array",
+          "summary": "Comma-separated/repeated key attribute values",
+          "maps_to": "body.key_values"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "DynamoDB_20120810.TransactGetItems"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "key_values"
+      ],
+      "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "dynamodb-safety",
+      "summary": "DynamoDB connector commands are typed and do not expose raw PartiQL, expressions, or generic HTTP bodies."
+    }
+  ]
+}

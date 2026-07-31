@@ -19,7 +19,7 @@ import (
 
 const (
 	awsService          = "dynamodb"
-	scanTarget          = "DynamoDB_20120810.Scan"
+	scanTarget          = dynamoTargetPrefix + "Scan"
 	amzJSONContentType  = "application/x-amz-json-1.0"
 	defaultReadPageSize = 100
 	defaultMaxPages     = 100
@@ -41,7 +41,7 @@ type connConfig struct {
 // rule-for-rule from legacy internal/connectors/dynamodb/dynamodb.go's
 // endpoint/requireCredentials helpers. It never logs the secret access key.
 func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
-	endpoint, err := resolveEndpoint(cfg)
+	endpoint, err := resolveEndpoint(cfg, false)
 	if err != nil {
 		return connConfig{}, err
 	}
@@ -72,8 +72,14 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 // legacy's identical fallback) and validates it is an absolute http/https
 // URL with a host, bounding SSRF risk from a malformed/attacker-supplied
 // endpoint override.
-func resolveEndpoint(cfg connectors.RuntimeConfig) (string, error) {
-	base := strings.TrimSpace(cfg.Config["endpoint"])
+func resolveEndpoint(cfg connectors.RuntimeConfig, streams bool) (string, error) {
+	base := ""
+	if streams {
+		base = strings.TrimSpace(cfg.Config["streams_endpoint"])
+	}
+	if base == "" {
+		base = strings.TrimSpace(cfg.Config["endpoint"])
+	}
 	if base == "" {
 		base = strings.TrimSpace(cfg.Config["base_url"])
 	}

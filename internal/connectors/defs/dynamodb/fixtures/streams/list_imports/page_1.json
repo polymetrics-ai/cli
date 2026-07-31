@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "id": "list_imports-fixture-1",
+        "operation": "ListImports",
+        "response": {
+          "fixture": true
+        }
+      }
+    }
+  }
+}

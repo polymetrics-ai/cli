@@ -2,53 +2,121 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "DynamoDB Connection Specification",
   "type": "object",
-  "required": ["access_key_id", "secret_access_key", "region"],
+  "required": [
+    "access_key_id",
+    "secret_access_key",
+    "region"
+  ],
   "properties": {
     "access_key_id": {
       "type": "string",
       "x-secret": true,
-      "description": "AWS access key id used to derive the AWS Signature Version 4 (SigV4) Authorization header. Never logged."
+      "description": "AWS access key id for SigV4 signing. Never logged."
     },
     "secret_access_key": {
       "type": "string",
       "x-secret": true,
-      "description": "AWS secret access key used to derive the SigV4 signing key HMAC chain. Never placed in a header or logged."
+      "description": "AWS secret access key for SigV4 signing. Never logged or previewed."
     },
     "endpoint": {
       "type": "string",
       "format": "uri",
-      "description": "DynamoDB JSON HTTP API endpoint, e.g. https://dynamodb.us-east-1.amazonaws.com. One of endpoint/base_url is required for live mode -- enforced by native/dynamodb's own Go config resolution (connection.go's resolveEndpoint), not this schema's required[] (JSON Schema's required[] cannot express an either-or pair)."
+      "description": "DynamoDB JSON API endpoint, e.g. https://dynamodb.us-east-1.amazonaws.com. Required for live mode unless base_url is set."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Alias for endpoint, matching legacy's identical endpoint/base_url fallback. Ignored when endpoint is set."
+      "description": "Alias for endpoint."
+    },
+    "streams_endpoint": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional DynamoDB Streams endpoint. Defaults to endpoint when unset."
     },
     "region": {
       "type": "string",
-      "description": "AWS region used in the SigV4 credential scope (e.g. us-east-1) and, conventionally, the endpoint's own region."
+      "description": "AWS region used in SigV4 credential scope."
     },
     "table_name": {
       "type": "string",
-      "description": "DynamoDB table name to Scan. One of table_name/table is required for live mode -- enforced by native/dynamodb's own Go config resolution (reader.go's tableName), not this schema's required[]."
+      "description": "Default DynamoDB table name for table-scoped reads and writes."
     },
     "table": {
       "type": "string",
-      "description": "Alias for table_name, matching legacy's identical table_name/table fallback. Ignored when table_name is set."
+      "description": "Alias for table_name."
+    },
+    "table_arn": {
+      "type": "string",
+      "description": "Default table ARN for ARN-scoped operations."
+    },
+    "resource_arn": {
+      "type": "string",
+      "description": "Default resource ARN for resource policy/tag operations."
+    },
+    "stream_arn": {
+      "type": "string",
+      "description": "Default DynamoDB Stream ARN for Streams operations."
+    },
+    "shard_id": {
+      "type": "string",
+      "description": "Default shard id for DynamoDB Streams shard-iterator reads."
     },
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Scan Limit per page (a positive integer)."
+      "description": "Bounded per-request Limit/MaxResults/PageSize where the operation supports it."
     },
     "max_pages": {
       "type": "string",
       "default": "100",
-      "description": "Maximum Scan pages to request (a positive integer)."
+      "description": "Maximum pages per read/changefeed operation."
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for credential-free tests."
+    },
+    "backup_arn": {
+      "type": "string"
+    },
+    "backup_name": {
+      "type": "string"
+    },
+    "export_arn": {
+      "type": "string"
+    },
+    "import_arn": {
+      "type": "string"
+    },
+    "global_table_name": {
+      "type": "string"
+    },
+    "index_name": {
+      "type": "string"
+    },
+    "region_name": {
+      "type": "string"
+    },
+    "kinesis_stream_arn": {
+      "type": "string"
+    },
+    "iterator_type": {
+      "type": "string"
+    },
+    "sequence_number": {
+      "type": "string"
+    },
+    "query_key_name": {
+      "type": "string"
+    },
+    "query_key_type": {
+      "type": "string"
+    },
+    "query_key_value": {
+      "type": "string"
+    },
+    "transact_get_items": {
+      "type": "string",
+      "description": "Optional JSON TransactItems fixture/config for TransactGetItems stream tests only; not exposed as a generic CLI passthrough."
     }
   }
 }

@@ -1,61 +1,68 @@
 # Overview
 
-Reads DynamoDB table items through the AWS JSON HTTP API (DynamoDB_20120810.Scan), authenticated
-with hand-rolled AWS Signature Version 4 request signing. Read-only source; no write support.
+DynamoDB is a Tier-3 native connector because the official AWS JSON APIs are not ordinary REST resources: every operation is a `POST /` request with an `X-Amz-Target` operation name and AWS Signature Version 4 signing. The connector keeps that protocol in `internal/connectors/native/dynamodb` while the definition bundle owns the reviewed API ledger, schemas, CLI metadata, docs, fixtures, and write-action contracts.
 
-Readable streams: `items`.
+Officially reviewed scope: DynamoDB `DynamoDB_20120810` plus DynamoDB Streams `DynamoDBStreams_20120810`, API version 2012-08-10. DAX is a separate AWS service and is not counted.
 
-This connector is read-only; no write actions are declared.
+Implemented fixture-backed surface counts:
 
-Service API documentation: https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/.
+| surface | count |
+| --- | ---: |
+| ETL/read + DynamoDB Streams changefeed streams | 27 |
+| Bounded direct/keyed reads | 3 |
+| Reverse-ETL write actions | 26 |
+| Binary/import-export operations blocked on shared runtime | 2 |
+| Raw PartiQL statement operations disallowed | 3 |
+| Certified live operations | 0 |
 
 ## Auth setup
 
-Connection fields:
+Required secret fields:
 
-- `access_key_id` (required, secret, string); AWS access key id used to derive the AWS Signature
-  Version 4 (SigV4) Authorization header. Never logged.
-- `base_url` (optional, string); format `uri`; Ignored when endpoint is set.
-- `endpoint` (optional, string); format `uri`; DynamoDB JSON HTTP API endpoint, e.g.
-  https://dynamodb.us-east-1.amazonaws.com. One of endpoint/base_url is required for live mode --
-  enforced by native/dynamodb's own Go config resolution (connection.go's resolveEndpoint), not this
-  schema's required[] (JSON Schema's required[] cannot express an either-or pair).
-- `max_pages` (optional, string); default `100`; Maximum Scan pages to request (a positive integer).
-- `mode` (optional, string).
-- `page_size` (optional, string); default `100`; Scan Limit per page (a positive integer).
-- `region` (required, string); AWS region used in the SigV4 credential scope (e.g. us-east-1) and,
-  conventionally, the endpoint's own region.
-- `secret_access_key` (required, secret, string); AWS secret access key used to derive the SigV4
-  signing key HMAC chain. Never placed in a header or logged.
-- `table` (optional, string); Ignored when table_name is set.
-- `table_name` (optional, string); DynamoDB table name to Scan. One of table_name/table is required
-  for live mode -- enforced by native/dynamodb's own Go config resolution (reader.go's tableName),
-  not this schema's required[].
+- `access_key_id` — AWS access key id used in the SigV4 credential scope.
+- `secret_access_key` — AWS secret access key used only to derive SigV4 HMAC signing keys.
 
-Secret fields are redacted in logs and write previews: `access_key_id`, `secret_access_key`.
+Required live config:
 
-Default configuration values: `max_pages=100`, `page_size=100`.
+- `region` — AWS region in the SigV4 scope.
+- `endpoint` or `base_url` — DynamoDB JSON API endpoint, for example `https://dynamodb.us-east-1.amazonaws.com`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+Common optional config:
 
-Requests use the configured `endpoint` value after applying defaults.
+- `streams_endpoint` — DynamoDB Streams endpoint when it differs from `endpoint`.
+- `table_name` / `table` — default table for table-scoped streams and writes.
+- `table_arn`, `resource_arn`, `stream_arn`, `shard_id`, and operation-specific ARN/name fields for metadata or Streams operations.
+- `page_size` (default `100`) and `max_pages` (default `100`) bound read/changefeed loops.
+- `mode=fixture` runs deterministic credential-free tests and never contacts AWS.
 
-Connection checks call POST `/`.
+Never put secret values in prompt text or docs. Load credentials from environment variables, stdin, or the credential store.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+The connector declares 27 read/changefeed stream surfaces. Native code builds closed JSON-RPC bodies for each stream; there is no raw target/body escape hatch.
 
-- `items`: POST `/` - records path `Items`.
+DynamoDB read streams:
+
+- `items` (`Scan`) and `query_items` (`Query`) are bounded by `page_size`/`max_pages` and stop on `LastEvaluatedKey`.
+- Metadata/list streams cover `Describe*`, `GetResourcePolicy`, and `List*` operations from the official Smithy model.
+- `query_items` uses typed `KeyConditions` from `query_key_name`, `query_key_type`, and `query_key_value`; it does not expose raw key-condition expressions.
+
+DynamoDB Streams/changefeed surfaces:
+
+- `streams_list_streams`, `streams_describe_stream`, `streams_get_shard_iterator`, and `streams_get_records` track the official Streams operations.
+- `ReadCDC` uses `GetShardIterator` then bounded `GetRecords`, emits `INSERT`/`MODIFY`/`REMOVE` events, and stores the next shard iterator in event state.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external AWS DynamoDB Scan of table items.
+`writes.json` declares 26 named reverse-ETL actions. Each action has a closed top-level schema, risk text, dry-run preview support, and connector-local request construction. Reverse ETL remains plan -> preview -> explicit approval -> execute.
+
+Destructive or high-risk actions declare `confirm: destructive`, including table/resource deletion, restore operations, transaction writes, and table/global-table updates. `delete_item` is provider-idempotent when no condition is supplied: deleting a missing item succeeds according to DynamoDB semantics.
+
+The connector intentionally does not expose raw HTTP, raw AWS JSON bodies, raw PartiQL, unrestricted scans, arbitrary expression strings, generic shell/file operations, or generic SQL/query surfaces. `UpdateItem` uses typed `AttributeUpdates`; `Query` uses typed `KeyConditions`; PartiQL statement operations are disallowed in the ledger.
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 1 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=1, out_of_scope=7.
+- Fixture-only verification is not live certification. `certified=0` until a separately approved live executor supplies redacted artifacts.
+- `ExportTableToPointInTime` and `ImportTable` are tracked but blocked because the current shared connector-command runtime has no approved AWS S3 binary/import-export executor for these workflows.
+- `BatchExecuteStatement`, `ExecuteStatement`, and `ExecuteTransaction` are blocked/disallowed because they are raw PartiQL statement surfaces, and this task forbids raw PartiQL/query or arbitrary expressions/bodies.
+- DynamoDB item attributes are table-specific, so item streams expose generic `pk`/operation fields and preserve additional flattened item attributes at runtime.

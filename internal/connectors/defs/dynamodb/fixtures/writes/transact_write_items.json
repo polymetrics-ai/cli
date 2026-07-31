@@ -1,0 +1,35 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "operation": "delete",
+    "key": {
+      "pk": {
+        "S": "fixture#1"
+      }
+    },
+    "client_request_token": "fixture-token"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "TransactItems": [
+        {
+          "Delete": {
+            "TableName": "fixture_table",
+            "Key": {
+              "pk": {
+                "S": "fixture#1"
+              }
+            }
+          }
+        }
+      ],
+      "ClientRequestToken": "fixture-token"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

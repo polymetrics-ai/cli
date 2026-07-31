@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "response": {
+        "id": "get_resource_policy-fixture-1",
+        "operation": "GetResourcePolicy",
+        "response": {
+          "fixture": true
+        }
+      }
+    }
+  }
+}

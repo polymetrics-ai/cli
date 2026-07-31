@@ -1,0 +1,18 @@
+{
+  "record": {
+    "source_table_name": "fixture_table",
+    "target_table_name": "fixture_table"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "source_table_name": "fixture_table",
+      "target_table_name": "fixture_table"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

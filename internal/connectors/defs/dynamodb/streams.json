@@ -3,24 +3,411 @@
     "url": "{{ config.endpoint }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "none" }
+      {
+        "mode": "none"
+      }
     ],
-    "pagination": { "type": "none" },
-    "check": { "method": "POST", "path": "/" },
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "POST",
+      "path": "/"
+    },
     "error_map": [
-      { "status": 400, "hint": "dynamodb request rejected; check table_name/region and that the table exists" },
-      { "status": 403, "hint": "dynamodb SigV4 signature invalid or access_key_id/secret_access_key lack access; re-run pm credentials add dynamodb" },
-      { "status": 429, "class": "rate_limited", "hint": "dynamodb provisioned/on-demand throughput exceeded; the connector will retry with backoff" }
+      {
+        "status": 400,
+        "hint": "dynamodb request rejected; check typed operation inputs, table/region, and IAM access"
+      },
+      {
+        "status": 403,
+        "hint": "dynamodb SigV4 signature invalid or credentials lack access; re-add credentials from environment or stdin"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "dynamodb throughput/rate limit exceeded; retry later or lower page_size"
+      }
     ]
   },
   "streams": [
     {
+      "name": "describe_backup",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_backup.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_continuous_backups",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_continuous_backups.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_contributor_insights",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_contributor_insights.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_endpoints",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_endpoints.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_export",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_export.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_global_table",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_global_table.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_global_table_settings",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_global_table_settings.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_import",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_import.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_kinesis_streaming_destination",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_kinesis_streaming_destination.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_limits",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_limits.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_table",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_table.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_table_replica_auto_scaling",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_table_replica_auto_scaling.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "describe_time_to_live",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/describe_time_to_live.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "get_resource_policy",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/get_resource_policy.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_backups",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_backups.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_contributor_insights",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_contributor_insights.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_exports",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_exports.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_global_tables",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_global_tables.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_imports",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_imports.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_tables",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_tables.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "list_tags_of_resource",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/list_tags_of_resource.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
       "name": "items",
       "method": "POST",
       "path": "/",
-      "records": { "path": "Items" },
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
       "schema": "schemas/items.json",
-      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/dynamodb): this streams.json entry is documentation/schema-reference only (identity/spec/schema uniformity with every other connector, engine.Base.Definition()); Check/Catalog/Read are hand-written Go (SigV4 signing via connection.go's sign, AttributeValue flattening via cataloger.go's attribute), never routed through engine.Check/engine.Read -- the engine's declarative auth dialect has no SigV4 shape and RequestSpec has no AWS JSON-RPC X-Amz-Target header concept. Proven live by internal/connectors/native/dynamodb's own unit tests (dynamodb_test.go), ported rule-for-rule from legacy internal/connectors/dynamodb's identical test suite (signed-request assertions, pagination-via-LastEvaluatedKey, AttributeValue flattening)." }
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "query_items",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/query_items.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "streams_describe_stream",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/streams_describe_stream.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "streams_get_records",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/streams_get_records.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "streams_get_shard_iterator",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/streams_get_shard_iterator.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
+    },
+    {
+      "name": "streams_list_streams",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "response",
+        "single_object": true
+      },
+      "schema": "schemas/streams_list_streams.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Tier-3 native package (internal/connectors/native/dynamodb): DynamoDB uses AWS JSON-RPC X-Amz-Target dispatch plus SigV4 signing and typed AttributeValue envelopes. The declarative replay engine cannot execute these native operations; connector-local native tests and sanitized fixtures cover the operation registry, request bodies, pagination, writes, direct reads, and CDC helpers."
+      }
     }
   ]
 }

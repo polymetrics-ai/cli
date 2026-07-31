@@ -1,0 +1,26 @@
+{
+  "record": {
+    "table_name": "fixture_table",
+    "key": {
+      "pk": {
+        "S": "fixture#1"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "table_name": "fixture_table",
+      "key": {
+        "pk": {
+          "S": "fixture#1"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
