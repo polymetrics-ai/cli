@@ -32,15 +32,18 @@ docs.md              # Overview / Auth setup / Streams notes / Write actions & r
 Worked example — **stripe** (`internal/connectors/defs/stripe/`): `metadata.json` declares
 `capabilities.write: true`; `spec.json` has one `x-secret` field (`client_secret`) plus
 `base_url`/`account_id`/`start_date`/`page_size`/`max_pages`/`mode`; `streams.json`'s `base` sets
-`url`, a conditional `Stripe-Account` header (omitted when `account_id` is unset — see §3), bearer
-`auth`, a `cursor` pagination block (`last_record_field: id`, `stop_path: has_more` — Stripe's
-`starting_after`/`has_more` convention), a `check` request, and an `error_map`; each of the 5
-streams shares the identical shape (`GET`, `records.path: "data"`, `incremental.cursor_field:
-created`, `param_format: unix_seconds`) — copy this shape for any list-endpoint API with a uniform
-envelope. `writes.json` declares `create_customer`/`update_customer`, both `body_type: form`,
-`update_customer` carrying `path_fields: ["id"]`. `fixtures/streams/customers/{page_1,page_2}.json`
-is the **required 2-page fixture** for a paginated stream (§4). `docs.md` documents the
-`minProperties: 1` parity deviation (§5, item 1) inline as well as in this ledger.
+`url` from `{{ config.base_url }}` with a defaulted Stripe API URL, a conditional `Stripe-Account`
+header (omitted when `account_id` is unset — see §3), bearer `auth`, a `cursor` pagination block
+(`last_record_field: id`, `stop_path: has_more` —
+Stripe's `starting_after`/`has_more` convention), a `check` request, and an `error_map`; each of the
+5 streams shares the identical shape (`GET`, `records.path: "data"`,
+`incremental.cursor_field: created`, `param_format: unix_seconds`) — copy this shape for any
+list-endpoint API with a uniform envelope. `writes.json` declares `create_customer` and
+`update_customer` as approval-gated form writes plus `delete_customer` as a destructive no-body
+write with `confirm: "destructive"` and idempotent 404 handling; both mutating customer-by-id
+actions carry `path_fields: ["id"]`. `fixtures/streams/customers/{page_1,page_2}.json` is the
+**required 2-page fixture** for a paginated stream (§4). `docs.md` documents the `minProperties: 1`
+parity deviation (§5, item 1) inline as well as in this ledger.
 
 ### Tier 1 — read-only, no-auth variant
 
@@ -161,11 +164,12 @@ not a full override by default.
   not add a "supported_sync_modes" field anywhere — there isn't one in this dialect; the engine
   derives it from schema/stream shape at runtime.
 - **`api_surface.json` depth — minimal-honest for wave0/pilot** (DECISIONS.md #4): list every
-  implemented stream/write under `covered_by`; everything else documented as `excluded: {category:
-  "out_of_scope", reason: "Pass B capability expansion"}` (see stripe's `api_surface.json` for the
-  pattern — 5 covered streams, 2 covered writes, the remaining known Stripe surface excluded
-  out-of-scope, one `non_data_endpoint` for `/v1/balance`). Full API-surface research (every
-  documented endpoint actually implemented) is Pass B (wave5), not wave0/pilot/Pass-A fan-out. The
+  implemented stream/write under `covered_by`; everything else is documented as blocked/planned or
+  excluded operation-ledger metadata until typed schemas, bounds, fixtures, and safety evidence are
+  authored (see stripe's `api_surface.json` for the current full-ledger pattern — 5 covered streams,
+  3 covered customer writes, and the remaining official Stripe operations tracked exactly once as
+  blocked/planned or excluded rows). Full API-surface research (every documented endpoint actually
+  implemented) is Pass B (wave5), not wave0/pilot/Pass-A fan-out. The
   closed exclusion-category vocabulary (design §E.1 rule 3, enforced by the loader's meta-schema
   enum): `destructive_admin`, `requires_elevated_scope`, `binary_payload`, `deprecated`,
   `non_data_endpoint`, `duplicate_of`, `out_of_scope`.
@@ -683,8 +687,9 @@ engine enforces on the declarative read path (a short/empty final page from the 
 cycle-1 item 6, REVIEW-A.md C3 — RESOLVED: previously `default` was accepted-but-only-preserved,
 never read back out anywhere, so EVERY migrated connector hard-errored on a config shape legacy
 accepted, e.g. an unset `base_url` when legacy derived `https://api.github.com`/
-`https://api.monday.com/v2`/etc. in code). `engine.Check`/`engine.Read` both call
-`materializeConfigDefaults` before any template resolution: for every `spec.json` property that
+`https://api.monday.com/v2`/etc. in code). Every engine request path that resolves bundle
+configuration (`engine.Check`, `engine.Read`, direct-read operations, `DryRunWrite`, and `Write`)
+calls `materializeConfigDefaults` before template resolution: for every `spec.json` property that
 declares a `"default"` AND is genuinely ABSENT from the caller's `RuntimeConfig.Config` (a key
 already present — even as an explicit empty string — is NEVER overridden), the default's JSON value
 is stringified and filled in. This is the single, uniform mechanism for every legacy base-URL
@@ -698,7 +703,7 @@ one for base-URL construction — do not invent ad hoc Go for it (Tier-2 escalat
 needed). **Validate rule**: `connectorgen validate`'s `default_type_mismatch` rule hard-fails a
 `spec.json` property whose `"default"` value's JSON type does not match its own declared `"type"`
 (e.g. `"type":"integer","default":"not-a-number"`) — a mismatched default would otherwise silently
-materialize a wrong-shaped config value into every read/check.
+materialize a wrong-shaped config value into every defaulted engine request.
 
 **`metadata.json`'s `rate_limit` is informational-only, NEVER enforced** (F6, REVIEW.md):
 `Metadata.RateLimit.RequestsPerMinute` documents a connector's published rate limit for operator

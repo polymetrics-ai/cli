@@ -102,9 +102,11 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 		return connectors.WritePreview{}, err
 	}
 
+	cfg := materializeConfigDefaults(b, req.Config)
+
 	warnings := []string{fmt.Sprintf("%s executes a live mutation only after approval; dry run performs no external call", action.Name)}
 	if len(records) > 0 {
-		method, path, err := resolveWriteRequestLine(b, action, records[0], req.Config)
+		method, path, err := resolveWriteRequestLine(b, action, records[0], cfg)
 		if err != nil {
 			return connectors.WritePreview{}, err
 		}
@@ -344,7 +346,9 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 
-	rt, err := newRuntime(ctx, b, req.Config, h)
+	cfg := materializeConfigDefaults(b, req.Config)
+
+	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
@@ -368,7 +372,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 			}
 		}
 
-		if err := executeWriteRecord(ctx, b, action, rec, i, req.Config, rt); err != nil {
+		if err := executeWriteRecord(ctx, b, action, rec, i, cfg, rt); err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsWritten++
 				continue

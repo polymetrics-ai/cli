@@ -463,7 +463,7 @@
 - [stigg](stigg/MANUAL.md): Reads Stigg products, plans, customers, and subscriptions through the Stigg GraphQL-over-HTTP API. Read-only.
 - [stockdata](stockdata/MANUAL.md): Reads StockData market quotes, prices, splits, dividends, news, entity stats, entities, and source metadata through the StockData API.
 - [strava](strava/MANUAL.md): Reads the authenticated Strava athlete's profile, activities, lifetime stats, and clubs through the Strava v3 REST API.
-- [stripe](stripe/MANUAL.md): Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.
+- [stripe](stripe/MANUAL.md): Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer create, update, and typed destructive delete actions through the Stripe REST API.
 - [survey-sparrow](survey-sparrow/MANUAL.md): Reads and manages SurveySparrow surveys, contacts, responses, questions, channels, contact lists/properties, reminders, reputation platforms/reviews, survey folders, ticket fields, tickets, teams, roles, variables, webhooks, users, templates, email themes, and expressions through the SurveySparrow API.
 - [surveycto](surveycto/MANUAL.md): Reads SurveyCTO form IDs, submissions, datasets (including case-management datasets), dataset records, groups, roles, teams, and users, and writes dataset lifecycle mutations, dataset record creation, and user lifecycle mutations, through the SurveyCTO Server API v2.
 - [surveymonkey](surveymonkey/MANUAL.md): Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the documented API surface.

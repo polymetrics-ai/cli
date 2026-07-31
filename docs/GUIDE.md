@@ -275,8 +275,8 @@ pm connectors inspect stripe  # auth modes, streams, sync modes, write actions
 pm connectors inspect stripe --json
 ```
 
-**118 native connectors** are implemented today (a `646`-connector catalog is the
-roadmap). A few notes:
+The generated connector catalog is the source of truth for current connector counts and
+capabilities. A few examples:
 
 - **GitHub** (`github`) — full certification passed for the current connector surface:
   509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
@@ -286,7 +286,8 @@ roadmap). A few notes:
   safe `create_label` write lifecycle passed with read-back and cleanup; other writes
   remain approval-gated and are either safe untested pairings or blocked by policy.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
-  streams, plus `create_customer` / `update_customer` writes.
+  streams, plus approval-gated customer create/update/delete writes. Run
+  `pm connectors inspect stripe --json` for the current action list and destructive confirmation notes.
 - **Postgres** (`postgres`) — connects via `pgx`; discovers schemas/columns; snapshot +
   cursor-incremental reads. Logical-replication CDC is on the roadmap.
 - Most SaaS connectors are read-first; they add approval-gated writes where the upstream
