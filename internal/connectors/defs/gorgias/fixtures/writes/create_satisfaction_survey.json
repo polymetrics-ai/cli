@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customer_id": 123,
+    "ticket_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/satisfaction-surveys",
+    "body": {
+      "customer_id": 123,
+      "ticket_id": 123
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "query": "fixture_query"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/reporting/stats",
+    "body": {
+      "query": "fixture_query"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "phase": "issue-196-gorgias-parity",
+  "status": "implemented",
+  "verificationPassed": true,
+  "verificationNotes": [
+    "go run ./cmd/connectorgen validate passed with 549 connector(s) checked and 0 findings",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gorgias' -count=1 passed",
+    "scoped internal/cli dynamic connector/docs/help parity gate passed",
+    "broad go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1 -timeout=60s timed out in existing certification batch coverage and is not claimed green",
+    "go vet ./internal/connectors/... ./internal/cli/... passed",
+    "go build ./cmd/pm passed",
+    "make connector-boundary passed with clean outcome",
+    "git diff --check passed"
+  ],
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase issue-196-gorgias-parity --dry-run",
+  "gsdFallback": "programming-loop command unavailable in scripts/gsd list; followed .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop manually",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single connector-owned write scope in isolated firstmate worktree; mutating subworkers would collide on internal/connectors/defs/gorgias"
+    }
+  ],
+  "blockers": [],
+  "updatedAt": "2026-07-31T00:00:00Z"
+}

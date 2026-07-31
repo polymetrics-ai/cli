@@ -2,30 +2,106 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Gorgias Connection Specification",
   "type": "object",
-  "required": ["base_url", "username", "password"],
+  "required": [
+    "base_url",
+    "username",
+    "password"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Your Gorgias account's API base URL, e.g. https://<domain>.gorgias.com/api (domain_name-derived base URL is not supported by this bundle; supply the full API root here)."
+      "description": "Your Gorgias account API root, e.g. https://<domain>.gorgias.com/api. Supply the /api root because connector paths are API-root relative."
     },
     "username": {
       "type": "string",
-      "description": "Gorgias account email used for HTTP Basic auth (sent as the Basic auth username)."
+      "description": "Gorgias account email used for HTTP Basic auth."
     },
     "password": {
       "type": "string",
       "x-secret": true,
-      "description": "Gorgias API key used for HTTP Basic auth (sent as the Basic auth password); never logged."
+      "description": "Gorgias API key used as the HTTP Basic auth password; never logged."
     },
     "page_size": {
       "type": "string",
       "default": "100",
-      "description": "Records per page (1-100)."
+      "description": "Records per page for cursor-paginated list streams (1-100)."
     },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "custom_field_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `custom_field` stream (/custom-fields/{id})."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `customer_id` for the `customer_custom_fields_values` stream (/customers/{customer_id}/custom-fields)."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `event` stream (/events/{id})."
+    },
+    "integration_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `integration` stream (/integrations/{id})."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `job` stream (/jobs/{id})."
+    },
+    "macro_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `macro` stream (/macros/{id})."
+    },
+    "slug": {
+      "type": "string",
+      "description": "Gorgias path parameter `slug` for the `metric_card` stream (/metric-cards/{slug})."
+    },
+    "voice_call_event_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `voice_call_event` stream (/phone/voice-call-events/{id})."
+    },
+    "voice_call_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `voice_call` stream (/phone/voice-calls/{id})."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `rule` stream (/rules/{id})."
+    },
+    "satisfaction_survey_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `satisfaction_survey` stream (/satisfaction-surveys/{id})."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `tag` stream (/tags/{id})."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `team` stream (/teams/{id})."
+    },
+    "ticket_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `ticket` stream (/tickets/{id})."
+    },
+    "ticket_message_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `ticket_message` stream (/tickets/{ticket_id}/messages/{id})."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `user` stream (/users/{id})."
+    },
+    "view_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `view` stream (/views/{id})."
+    },
+    "widget_id": {
+      "type": "string",
+      "description": "Gorgias path parameter `id` for the `widget` stream (/widgets/{id})."
     }
   }
 }

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "code": "fixture_code",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rules",
+    "body": {
+      "code": "fixture_code",
+      "name": "fixture_name"
+    }
+  }
+}

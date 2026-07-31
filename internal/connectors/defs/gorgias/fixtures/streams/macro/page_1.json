@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/macros/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "operation_id": "get-macro",
+      "summary": "Retrieve a macro",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture macro",
+      "title": "Retrieve a macro",
+      "status": "active",
+      "type": "Macros",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

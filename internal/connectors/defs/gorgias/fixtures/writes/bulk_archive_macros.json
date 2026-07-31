@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ids": [
+      123
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/macros/archive",
+    "body": {
+      "ids": [
+        123
+      ]
+    }
+  }
+}

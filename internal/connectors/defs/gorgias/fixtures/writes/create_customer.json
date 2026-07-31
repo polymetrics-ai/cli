@@ -1,0 +1,24 @@
+{
+  "record": {
+    "channels": [
+      {
+        "address": "fixture_address",
+        "preferred": false,
+        "type": "fixture_type"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customers",
+    "body": {
+      "channels": [
+        {
+          "address": "fixture_address",
+          "preferred": false,
+          "type": "fixture_type"
+        }
+      ]
+    }
+  }
+}

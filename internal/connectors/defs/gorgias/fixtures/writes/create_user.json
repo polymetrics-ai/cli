@@ -1,0 +1,20 @@
+{
+  "record": {
+    "email": "fixture_email",
+    "name": "fixture_name",
+    "role": {
+      "name": "admin"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users",
+    "body": {
+      "email": "fixture_email",
+      "name": "fixture_name",
+      "role": {
+        "name": "admin"
+      }
+    }
+  }
+}

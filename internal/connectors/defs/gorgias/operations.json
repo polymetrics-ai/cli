@@ -1,0 +1,191 @@
+{
+  "operations": [
+    {
+      "id": "gorgias.files.upload_blocked",
+      "kind": "file_upload",
+      "summary": "Upload files",
+      "description": "Blocked metadata for documented Gorgias operation POST /upload; no generic passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/post_api-upload.md",
+      "risk": "high",
+      "approval": "blocked: file upload requires approved local path, payload digest, max-bytes enforcement, and reverse ETL approval integration",
+      "output_policy": "json_redacted",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gorgias.file.download_blocked",
+      "kind": "binary_download",
+      "summary": "Download a file",
+      "description": "Blocked metadata for documented Gorgias operation GET /{file_type}/download/{domain_hash}/{resource_name}; no generic passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/download-file.md",
+      "risk": "high",
+      "approval": "blocked: requires bounded binary/file executor and output-file policy",
+      "output_policy": "binary_file",
+      "binary": {
+        "method": "GET",
+        "path": "/{file_type}/download/{domain_hash}/{resource_name}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "gorgias.metric_cards.search",
+      "kind": "rest_read",
+      "summary": "Search metric cards",
+      "description": "Typed bounded Gorgias direct read for GET /metric-cards.",
+      "source_url": "https://developers.gorgias.com/reference/search-metric-cards.md",
+      "risk": "low",
+      "approval": "none: read-only bounded provider operation with schema-gated inputs",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/metric-cards",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.search",
+      "kind": "rest_read",
+      "summary": "Search for resources",
+      "description": "Typed bounded Gorgias direct read for POST /search.",
+      "source_url": "https://developers.gorgias.com/reference/search-1.md",
+      "risk": "medium",
+      "approval": "none: read-only bounded provider operation with schema-gated inputs",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/search",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Text query used to search for resources.",
+              "default": ""
+            },
+            "size": {
+              "type": "integer",
+              "description": "Maximum number of results returned.",
+              "default": 10
+            },
+            "type": {
+              "type": "string",
+              "description": "The type of search. Supported types:\n- `customer`: Search in customers' names and emails\n- `customer_profile`: Search in customers' names, emails, and channels' addresses (phones, emails, etc...)",
+              "enum": [
+                "agent",
+                "customer",
+                "customer_profile",
+                "customer_channel",
+                "customer_channel_email",
+                "customer_channel_phone",
+                "customers_by_phone",
+                "integration",
+                "team",
+                "tag"
+              ]
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "body": {
+          "type": "customer",
+          "query": "",
+          "size": 10
+        }
+      }
+    },
+    {
+      "id": "gorgias.stats.download_blocked",
+      "kind": "rest_read",
+      "summary": "Download a statistic",
+      "description": "Blocked metadata for documented Gorgias operation POST /stats/{name}/download; no generic passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic.md",
+      "risk": "high",
+      "approval": "blocked: requires bounded binary/file executor and output-file policy",
+      "output_policy": "binary_file",
+      "rest": {
+        "method": "POST",
+        "path": "/stats/{name}/download",
+        "max_bytes": 16777216,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "id": "gorgias.voice_call_recordings.list_blocked",
+      "kind": "binary_download",
+      "summary": "List voice call recordings",
+      "description": "Blocked metadata for documented Gorgias operation GET /phone/voice-call-recordings; no generic passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings.md",
+      "risk": "high",
+      "approval": "blocked: requires bounded binary/file executor and output-file policy",
+      "output_policy": "binary_file",
+      "binary": {
+        "method": "GET",
+        "path": "/phone/voice-call-recordings",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "gorgias.voice_call_recordings.delete_blocked",
+      "kind": "rest_write",
+      "summary": "Delete a voice call recording",
+      "description": "Blocked metadata for documented Gorgias operation DELETE /phone/voice-call-recordings/{id}; no generic passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording.md",
+      "risk": "high",
+      "approval": "blocked: destructive binary-recording mutation requires a typed reverse ETL/binary safety contract before execution",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "DELETE",
+        "path": "/phone/voice-call-recordings/{id}",
+        "max_bytes": 1048576
+      },
+      "mutation_class": "destructive",
+      "destructive": true
+    },
+    {
+      "id": "gorgias.voice_call_recordings.get_blocked",
+      "kind": "binary_download",
+      "summary": "Retrieve a voice call recording",
+      "description": "Blocked metadata for documented Gorgias operation GET /phone/voice-call-recordings/{id}; no generic passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording.md",
+      "risk": "high",
+      "approval": "blocked: requires bounded binary/file executor and output-file policy",
+      "output_policy": "binary_file",
+      "binary": {
+        "method": "GET",
+        "path": "/phone/voice-call-recordings/{id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "gorgias.views.items.search_blocked",
+      "kind": "composite",
+      "summary": "Search for view's items",
+      "description": "Blocked metadata for documented Gorgias PUT /views/{view_id}/items search operation; no generic HTTP passthrough is exposed.",
+      "source_url": "https://developers.gorgias.com/reference/update-view-items",
+      "risk": "medium",
+      "approval": "blocked: Gorgias documents this search as PUT; direct-read foundation currently permits only GET/POST typed JSON reads",
+      "output_policy": "json_redacted",
+      "composite": {
+        "steps": [
+          "blocked: non-mutating PUT provider-search contract is pending foundation #2985"
+        ]
+      }
+    }
+  ]
+}

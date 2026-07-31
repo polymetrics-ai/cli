@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rules",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "operation_id": "list-rules",
+          "summary": "List rules",
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "updated_datetime": "2026-01-02T00:00:01Z",
+          "name": "Fixture rules",
+          "title": "List rules",
+          "status": "active",
+          "type": "Rules",
+          "data": {
+            "source": "fixture"
+          }
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

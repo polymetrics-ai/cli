@@ -1,0 +1,22 @@
+{
+  "record": {
+    "priorities": [
+      {
+        "id": 123,
+        "priority": 123
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rules/priorities",
+    "body": {
+      "priorities": [
+        {
+          "id": 123,
+          "priority": 123
+        }
+      ]
+    }
+  }
+}

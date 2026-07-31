@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "operation_id": "list-integrations",
+          "summary": "List integrations",
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "updated_datetime": "2026-01-02T00:00:01Z",
+          "name": "Fixture integrations",
+          "title": "List integrations",
+          "status": "active",
+          "type": "Integrations",
+          "data": {
+            "source": "fixture"
+          }
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

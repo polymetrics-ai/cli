@@ -1,0 +1,16 @@
+{
+  "record": {
+    "messages": [
+      "fixture_message"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets",
+    "body": {
+      "messages": [
+        "fixture_message"
+      ]
+    }
+  }
+}

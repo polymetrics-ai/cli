@@ -1,0 +1,10 @@
+{
+  "record": {
+    "customer_id": 123,
+    "id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/123/custom-fields/123"
+  }
+}

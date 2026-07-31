@@ -1,0 +1,2423 @@
+{
+  "tagline": "Inspect, read, and safely plan typed Gorgias operations.",
+  "usage": "pm gorgias <command> [flags]",
+  "source_cli": {
+    "name": "Gorgias REST API",
+    "docs": "https://developers.gorgias.com/llms.txt",
+    "reference": "Official reference/*.md OpenAPI snippets",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "account",
+      "title": "Account",
+      "commands": [
+        "account"
+      ]
+    },
+    {
+      "id": "account-settings",
+      "title": "Account Settings",
+      "commands": [
+        "account-settings"
+      ]
+    },
+    {
+      "id": "bulk",
+      "title": "Bulk",
+      "commands": [
+        "bulk"
+      ]
+    },
+    {
+      "id": "cancel",
+      "title": "Cancel",
+      "commands": [
+        "cancel"
+      ]
+    },
+    {
+      "id": "create",
+      "title": "Create",
+      "commands": [
+        "create"
+      ]
+    },
+    {
+      "id": "custom-field",
+      "title": "Custom Field",
+      "commands": [
+        "custom-field"
+      ]
+    },
+    {
+      "id": "custom-fields",
+      "title": "Custom Fields",
+      "commands": [
+        "custom-fields"
+      ]
+    },
+    {
+      "id": "customer",
+      "title": "Customer",
+      "commands": [
+        "customer"
+      ]
+    },
+    {
+      "id": "customer-custom-fields-values",
+      "title": "Customer Custom Fields Values",
+      "commands": [
+        "customer-custom-fields-values"
+      ]
+    },
+    {
+      "id": "customers",
+      "title": "Customers",
+      "commands": [
+        "customers"
+      ]
+    },
+    {
+      "id": "delete",
+      "title": "Delete",
+      "commands": [
+        "delete"
+      ]
+    },
+    {
+      "id": "download",
+      "title": "Download",
+      "commands": [
+        "download"
+      ]
+    },
+    {
+      "id": "event",
+      "title": "Event",
+      "commands": [
+        "event"
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Events",
+      "commands": [
+        "events"
+      ]
+    },
+    {
+      "id": "get",
+      "title": "Get",
+      "commands": [
+        "get"
+      ]
+    },
+    {
+      "id": "integration",
+      "title": "Integration",
+      "commands": [
+        "integration"
+      ]
+    },
+    {
+      "id": "integrations",
+      "title": "Integrations",
+      "commands": [
+        "integrations"
+      ]
+    },
+    {
+      "id": "job",
+      "title": "Job",
+      "commands": [
+        "job"
+      ]
+    },
+    {
+      "id": "jobs",
+      "title": "Jobs",
+      "commands": [
+        "jobs"
+      ]
+    },
+    {
+      "id": "list",
+      "title": "List",
+      "commands": [
+        "list"
+      ]
+    },
+    {
+      "id": "macro",
+      "title": "Macro",
+      "commands": [
+        "macro"
+      ]
+    },
+    {
+      "id": "macros",
+      "title": "Macros",
+      "commands": [
+        "macros"
+      ]
+    },
+    {
+      "id": "merge",
+      "title": "Merge",
+      "commands": [
+        "merge"
+      ]
+    },
+    {
+      "id": "messages",
+      "title": "Messages",
+      "commands": [
+        "messages"
+      ]
+    },
+    {
+      "id": "metric-card",
+      "title": "Metric Card",
+      "commands": [
+        "metric-card"
+      ]
+    },
+    {
+      "id": "metric-cards",
+      "title": "Metric Cards",
+      "commands": [
+        "metric-cards"
+      ]
+    },
+    {
+      "id": "post",
+      "title": "Post",
+      "commands": [
+        "post"
+      ]
+    },
+    {
+      "id": "rule",
+      "title": "Rule",
+      "commands": [
+        "rule"
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Rules",
+      "commands": [
+        "rules"
+      ]
+    },
+    {
+      "id": "satisfaction-survey",
+      "title": "Satisfaction Survey",
+      "commands": [
+        "satisfaction-survey"
+      ]
+    },
+    {
+      "id": "satisfaction-surveys",
+      "title": "Satisfaction Surveys",
+      "commands": [
+        "satisfaction-surveys"
+      ]
+    },
+    {
+      "id": "search",
+      "title": "Search",
+      "commands": [
+        "search"
+      ]
+    },
+    {
+      "id": "tag",
+      "title": "Tag",
+      "commands": [
+        "tag"
+      ]
+    },
+    {
+      "id": "tags",
+      "title": "Tags",
+      "commands": [
+        "tags"
+      ]
+    },
+    {
+      "id": "team",
+      "title": "Team",
+      "commands": [
+        "team"
+      ]
+    },
+    {
+      "id": "teams",
+      "title": "Teams",
+      "commands": [
+        "teams"
+      ]
+    },
+    {
+      "id": "ticket",
+      "title": "Ticket",
+      "commands": [
+        "ticket"
+      ]
+    },
+    {
+      "id": "ticket-custom-fields",
+      "title": "Ticket Custom Fields",
+      "commands": [
+        "ticket-custom-fields"
+      ]
+    },
+    {
+      "id": "ticket-message",
+      "title": "Ticket Message",
+      "commands": [
+        "ticket-message"
+      ]
+    },
+    {
+      "id": "ticket-messages",
+      "title": "Ticket Messages",
+      "commands": [
+        "ticket-messages"
+      ]
+    },
+    {
+      "id": "ticket-tags",
+      "title": "Ticket Tags",
+      "commands": [
+        "ticket-tags"
+      ]
+    },
+    {
+      "id": "tickets",
+      "title": "Tickets",
+      "commands": [
+        "tickets"
+      ]
+    },
+    {
+      "id": "update",
+      "title": "Update",
+      "commands": [
+        "update"
+      ]
+    },
+    {
+      "id": "user",
+      "title": "User",
+      "commands": [
+        "user"
+      ]
+    },
+    {
+      "id": "users",
+      "title": "Users",
+      "commands": [
+        "users"
+      ]
+    },
+    {
+      "id": "view",
+      "title": "View",
+      "commands": [
+        "view"
+      ]
+    },
+    {
+      "id": "view-items",
+      "title": "View Items",
+      "commands": [
+        "view-items"
+      ]
+    },
+    {
+      "id": "views",
+      "title": "Views",
+      "commands": [
+        "views"
+      ]
+    },
+    {
+      "id": "voice-call",
+      "title": "Voice Call",
+      "commands": [
+        "voice-call"
+      ]
+    },
+    {
+      "id": "voice-call-event",
+      "title": "Voice Call Event",
+      "commands": [
+        "voice-call-event"
+      ]
+    },
+    {
+      "id": "voice-call-events",
+      "title": "Voice Call Events",
+      "commands": [
+        "voice-call-events"
+      ]
+    },
+    {
+      "id": "voice-calls",
+      "title": "Voice Calls",
+      "commands": [
+        "voice-calls"
+      ]
+    },
+    {
+      "id": "widget",
+      "title": "Widget",
+      "commands": [
+        "widget"
+      ]
+    },
+    {
+      "id": "widgets",
+      "title": "Widgets",
+      "commands": [
+        "widgets"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Gorgias request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum PM ETL records to emit."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum direct-read response bytes; operation caps still apply."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed destructive confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
+  "commands": [
+    {
+      "path": "tickets list",
+      "summary": "List tickets as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "source_url": "https://developers.gorgias.com/reference/list-tickets.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets"
+        }
+      ],
+      "examples": [
+        "pm gorgias tickets list --json --limit 25"
+      ]
+    },
+    {
+      "path": "account get",
+      "summary": "Retrieve your account as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://developers.gorgias.com/reference/get-account.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account"
+        }
+      ],
+      "examples": [
+        "pm gorgias account get --json --limit 25"
+      ]
+    },
+    {
+      "path": "account-settings list",
+      "summary": "List settings as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_settings",
+      "source_url": "https://developers.gorgias.com/reference/list-account-settings.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account/settings"
+        }
+      ],
+      "examples": [
+        "pm gorgias account-settings list --json --limit 25"
+      ]
+    },
+    {
+      "path": "custom-fields list",
+      "summary": "List custom fields as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://developers.gorgias.com/reference/list-custom-fields.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias custom-fields list --json --limit 25"
+      ]
+    },
+    {
+      "path": "custom-field get",
+      "summary": "Retrieve a custom field as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field",
+      "source_url": "https://developers.gorgias.com/reference/get-custom-field.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias custom-field get --json --limit 25"
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "List customers as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developers.gorgias.com/reference/list-customers.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ],
+      "examples": [
+        "pm gorgias customers list --json --limit 25"
+      ]
+    },
+    {
+      "path": "customer-custom-fields-values list",
+      "summary": "List customer field values as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_custom_fields_values",
+      "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias customer-custom-fields-values list --json --limit 25"
+      ]
+    },
+    {
+      "path": "customer get",
+      "summary": "Retrieve a customer as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer",
+      "source_url": "https://developers.gorgias.com/reference/get-customer.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias customer get --json --limit 25"
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "List events as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://developers.gorgias.com/reference/list-events.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "examples": [
+        "pm gorgias events list --json --limit 25"
+      ]
+    },
+    {
+      "path": "event get",
+      "summary": "Retrieve an event as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://developers.gorgias.com/reference/get-event.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias event get --json --limit 25"
+      ]
+    },
+    {
+      "path": "integrations list",
+      "summary": "List integrations as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integrations",
+      "source_url": "https://developers.gorgias.com/reference/list-integrations.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations"
+        }
+      ],
+      "examples": [
+        "pm gorgias integrations list --json --limit 25"
+      ]
+    },
+    {
+      "path": "integration get",
+      "summary": "Retrieve an integration as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integration",
+      "source_url": "https://developers.gorgias.com/reference/get-integration.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias integration get --json --limit 25"
+      ]
+    },
+    {
+      "path": "jobs list",
+      "summary": "List jobs as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_url": "https://developers.gorgias.com/reference/list-jobs.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs"
+        }
+      ],
+      "examples": [
+        "pm gorgias jobs list --json --limit 25"
+      ]
+    },
+    {
+      "path": "job get",
+      "summary": "Retrieve a job as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "job",
+      "source_url": "https://developers.gorgias.com/reference/get-job.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias job get --json --limit 25"
+      ]
+    },
+    {
+      "path": "macros list",
+      "summary": "List macros as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "macros",
+      "source_url": "https://developers.gorgias.com/reference/list-macros.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros"
+        }
+      ],
+      "examples": [
+        "pm gorgias macros list --json --limit 25"
+      ]
+    },
+    {
+      "path": "macro get",
+      "summary": "Retrieve a macro as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "macro",
+      "source_url": "https://developers.gorgias.com/reference/get-macro.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias macro get --json --limit 25"
+      ]
+    },
+    {
+      "path": "messages list",
+      "summary": "List messages as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://developers.gorgias.com/reference/list-messages.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages"
+        }
+      ],
+      "examples": [
+        "pm gorgias messages list --json --limit 25"
+      ]
+    },
+    {
+      "path": "metric-card get",
+      "summary": "Retrieve a metric card by slug as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metric_card",
+      "source_url": "https://developers.gorgias.com/reference/get-metric-card.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metric-cards/{slug}"
+        }
+      ],
+      "examples": [
+        "pm gorgias metric-card get --json --limit 25"
+      ]
+    },
+    {
+      "path": "voice-call-events list",
+      "summary": "List voice call events as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "voice_call_events",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phone/voice-call-events"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-call-events list --json --limit 25"
+      ]
+    },
+    {
+      "path": "voice-call-event get",
+      "summary": "Retrieve a voice call event as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "voice_call_event",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-event.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phone/voice-call-events/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-call-event get --json --limit 25"
+      ]
+    },
+    {
+      "path": "voice-calls list",
+      "summary": "List voice calls as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "voice_calls",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-calls.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phone/voice-calls"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-calls list --json --limit 25"
+      ]
+    },
+    {
+      "path": "voice-call get",
+      "summary": "Retrieve a voice call as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "voice_call",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phone/voice-calls/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-call get --json --limit 25"
+      ]
+    },
+    {
+      "path": "rules list",
+      "summary": "List rules as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rules",
+      "source_url": "https://developers.gorgias.com/reference/list-rules.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rules"
+        }
+      ],
+      "examples": [
+        "pm gorgias rules list --json --limit 25"
+      ]
+    },
+    {
+      "path": "rule get",
+      "summary": "Retrieve a rule as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rule",
+      "source_url": "https://developers.gorgias.com/reference/get-rule.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rules/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias rule get --json --limit 25"
+      ]
+    },
+    {
+      "path": "satisfaction-surveys list",
+      "summary": "List surveys as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "satisfaction_surveys",
+      "source_url": "https://developers.gorgias.com/reference/list-satisfaction-surveys.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/satisfaction-surveys"
+        }
+      ],
+      "examples": [
+        "pm gorgias satisfaction-surveys list --json --limit 25"
+      ]
+    },
+    {
+      "path": "satisfaction-survey get",
+      "summary": "Retrieve a survey as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "satisfaction_survey",
+      "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/satisfaction-surveys/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias satisfaction-survey get --json --limit 25"
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "List tags as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.gorgias.com/reference/list-tags.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tags list --json --limit 25"
+      ]
+    },
+    {
+      "path": "tag get",
+      "summary": "Retrieve a tag as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag",
+      "source_url": "https://developers.gorgias.com/reference/get-tag.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias tag get --json --limit 25"
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "List teams as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developers.gorgias.com/reference/list-teams.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ],
+      "examples": [
+        "pm gorgias teams list --json --limit 25"
+      ]
+    },
+    {
+      "path": "team get",
+      "summary": "Retrieve a team as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team",
+      "source_url": "https://developers.gorgias.com/reference/get-team.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias team get --json --limit 25"
+      ]
+    },
+    {
+      "path": "ticket get",
+      "summary": "Retrieve a ticket as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket",
+      "source_url": "https://developers.gorgias.com/reference/get-ticket.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias ticket get --json --limit 25"
+      ]
+    },
+    {
+      "path": "ticket-custom-fields list",
+      "summary": "List ticket field values as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_custom_fields",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias ticket-custom-fields list --json --limit 25"
+      ]
+    },
+    {
+      "path": "ticket-messages list",
+      "summary": "List messages of a ticket as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_messages",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-messages.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/messages"
+        }
+      ],
+      "examples": [
+        "pm gorgias ticket-messages list --json --limit 25"
+      ]
+    },
+    {
+      "path": "ticket-message get",
+      "summary": "Retrieve a message as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_message",
+      "source_url": "https://developers.gorgias.com/reference/get-ticket-message.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/messages/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias ticket-message get --json --limit 25"
+      ]
+    },
+    {
+      "path": "ticket-tags list",
+      "summary": "List ticket tags as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_tags",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-tags.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias ticket-tags list --json --limit 25"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List users as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.gorgias.com/reference/list-users.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "examples": [
+        "pm gorgias users list --json --limit 25"
+      ]
+    },
+    {
+      "path": "user get",
+      "summary": "Retrieve a user as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://developers.gorgias.com/reference/get-user.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias user get --json --limit 25"
+      ]
+    },
+    {
+      "path": "views list",
+      "summary": "List views as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "views",
+      "source_url": "https://developers.gorgias.com/reference/list-views.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/views"
+        }
+      ],
+      "examples": [
+        "pm gorgias views list --json --limit 25"
+      ]
+    },
+    {
+      "path": "view get",
+      "summary": "Retrieve a view as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "view",
+      "source_url": "https://developers.gorgias.com/reference/get-view.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/views/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias view get --json --limit 25"
+      ]
+    },
+    {
+      "path": "view-items list",
+      "summary": "List view's items as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "view_items",
+      "source_url": "https://developers.gorgias.com/reference/list-view-items.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/views/{view_id}/items"
+        }
+      ],
+      "examples": [
+        "pm gorgias view-items list --json --limit 25"
+      ]
+    },
+    {
+      "path": "widgets list",
+      "summary": "List widgets as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "widgets",
+      "source_url": "https://developers.gorgias.com/reference/list-widgets.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/widgets"
+        }
+      ],
+      "examples": [
+        "pm gorgias widgets list --json --limit 25"
+      ]
+    },
+    {
+      "path": "widget get",
+      "summary": "Retrieve a widget as Gorgias ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "widget",
+      "source_url": "https://developers.gorgias.com/reference/get-widget.md",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/widgets/{id}"
+        }
+      ],
+      "examples": [
+        "pm gorgias widget get --json --limit 25"
+      ]
+    },
+    {
+      "path": "metric-cards search",
+      "summary": "Search metric cards with bounded direct-read output.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.metric_cards.search",
+      "source_url": "https://developers.gorgias.com/reference/search-metric-cards.md",
+      "flags": [
+        {
+          "name": "category",
+          "type": "string",
+          "summary": "Filter cards by category.",
+          "maps_to": "query.category",
+          "allow_empty": false
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Filter by status. Defaults to `published` on the analytics side.",
+          "maps_to": "query.status",
+          "allow_empty": false
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "summary": "Case-insensitive substring search across title and public content.",
+          "maps_to": "query.q",
+          "allow_empty": false
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "summary": "Set to `deprecated` to include deprecated cards alongside published ones.",
+          "maps_to": "query.include",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metric-cards"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "url",
+        "download_url",
+        "recording_url",
+        "content",
+        "body_html",
+        "body_text"
+      ],
+      "risk": "Read-only provider operation; output is bounded and recursively redacted.",
+      "approval": "No approval required for read-only direct-read execution.",
+      "examples": [
+        "pm gorgias metric-cards search --json"
+      ]
+    },
+    {
+      "path": "search",
+      "summary": "Search for resources with bounded direct-read output.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "gorgias.search",
+      "source_url": "https://developers.gorgias.com/reference/search-1.md",
+      "flags": [
+        {
+          "name": "type",
+          "type": "enum",
+          "values": [
+            "agent",
+            "customer",
+            "customer_profile",
+            "customer_channel",
+            "customer_channel_email",
+            "customer_channel_phone",
+            "customers_by_phone",
+            "integration",
+            "team",
+            "tag"
+          ],
+          "summary": "Search type.",
+          "maps_to": "body.type"
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Search text.",
+          "maps_to": "body.query",
+          "allow_empty": true
+        },
+        {
+          "name": "size",
+          "type": "integer",
+          "summary": "Maximum results (1-50).",
+          "maps_to": "body.size"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/search"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "url",
+        "download_url",
+        "recording_url",
+        "content",
+        "body_html",
+        "body_text"
+      ],
+      "risk": "Read-only provider operation; output is bounded and recursively redacted.",
+      "approval": "No approval required for read-only direct-read execution.",
+      "examples": [
+        "pm gorgias search --json"
+      ]
+    },
+    {
+      "path": "create account setting",
+      "summary": "Plan/preview/approve Gorgias action: Create a setting.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_account_setting",
+      "source_url": "https://developers.gorgias.com/reference/create-account-setting.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/account/settings"
+        }
+      ],
+      "risk": "Create a setting via Gorgias POST /account/settings. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update account setting",
+      "summary": "Plan/preview/approve Gorgias action: Update a setting.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_account_setting",
+      "source_url": "https://developers.gorgias.com/reference/update-account-setting.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/account/settings/{id}"
+        }
+      ],
+      "risk": "Update a setting via Gorgias PUT /account/settings/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create custom field",
+      "summary": "Plan/preview/approve Gorgias action: Create a custom field.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_custom_field",
+      "source_url": "https://developers.gorgias.com/reference/create-custom-field.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom-fields"
+        }
+      ],
+      "risk": "Create a custom field via Gorgias POST /custom-fields. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update custom fields",
+      "summary": "Plan/preview/approve Gorgias action: Bulk update a list of custom fields.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_custom_fields",
+      "source_url": "https://developers.gorgias.com/reference/update-custom-fields.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/custom-fields"
+        }
+      ],
+      "risk": "Bulk update a list of custom fields via Gorgias PUT /custom-fields. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update custom field",
+      "summary": "Plan/preview/approve Gorgias action: Update a custom field.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_custom_field",
+      "source_url": "https://developers.gorgias.com/reference/update-custom-field.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/custom-fields/{id}"
+        }
+      ],
+      "risk": "Update a custom field via Gorgias PUT /custom-fields/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete customers",
+      "summary": "Plan/preview/approve Gorgias action: Delete customers.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_customers",
+      "source_url": "https://developers.gorgias.com/reference/delete-customers.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers"
+        }
+      ],
+      "risk": "Delete customers via Gorgias DELETE /customers. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create customer",
+      "summary": "Plan/preview/approve Gorgias action: Create a customer.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_customer",
+      "source_url": "https://developers.gorgias.com/reference/create-customer.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "risk": "Create a customer via Gorgias POST /customers. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "merge customers",
+      "summary": "Plan/preview/approve Gorgias action: Merge two customers.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "merge_customers",
+      "source_url": "https://developers.gorgias.com/reference/merge-customers.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/merge"
+        }
+      ],
+      "risk": "Merge two customers via Gorgias PUT /customers/merge. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update customer custom field values",
+      "summary": "Plan/preview/approve Gorgias action: Update customer fields values.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_customer_custom_field_values",
+      "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-values.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}/custom-fields"
+        }
+      ],
+      "risk": "Update customer fields values via Gorgias PUT /customers/{customer_id}/custom-fields. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete customer custom field value",
+      "summary": "Plan/preview/approve Gorgias action: Delete customer field value.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_customer_custom_field_value",
+      "source_url": "https://developers.gorgias.com/reference/delete-customer-custom-field-value.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/custom-fields/{id}"
+        }
+      ],
+      "risk": "Delete customer field value via Gorgias DELETE /customers/{customer_id}/custom-fields/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update customer custom field value",
+      "summary": "Plan/preview/approve Gorgias action: Update customer field value.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_customer_custom_field_value",
+      "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-value.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}/custom-fields/{id}"
+        }
+      ],
+      "risk": "Update customer field value via Gorgias PUT /customers/{customer_id}/custom-fields/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update customer data",
+      "summary": "Plan/preview/approve Gorgias action: Set customer data.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_customer_data",
+      "source_url": "https://developers.gorgias.com/reference/update-customer-data.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}/data"
+        }
+      ],
+      "risk": "Set customer data via Gorgias PUT /customers/{customer_id}/data. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete customer",
+      "summary": "Plan/preview/approve Gorgias action: Delete a customer.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_customer",
+      "source_url": "https://developers.gorgias.com/reference/delete-customer.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{id}"
+        }
+      ],
+      "risk": "Delete a customer via Gorgias DELETE /customers/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update customer",
+      "summary": "Plan/preview/approve Gorgias action: Update a customer.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_customer",
+      "source_url": "https://developers.gorgias.com/reference/update-customer.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{id}"
+        }
+      ],
+      "risk": "Update a customer via Gorgias PUT /customers/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create integration",
+      "summary": "Plan/preview/approve Gorgias action: Create an integration.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_integration",
+      "source_url": "https://developers.gorgias.com/reference/create-integration.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations"
+        }
+      ],
+      "risk": "Create an integration via Gorgias POST /integrations. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete integration",
+      "summary": "Plan/preview/approve Gorgias action: Delete an integration.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_integration",
+      "source_url": "https://developers.gorgias.com/reference/delete-integration.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/integrations/{id}"
+        }
+      ],
+      "risk": "Delete an integration via Gorgias DELETE /integrations/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update integration",
+      "summary": "Plan/preview/approve Gorgias action: Update an integration.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_integration",
+      "source_url": "https://developers.gorgias.com/reference/update-integration.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/integrations/{id}"
+        }
+      ],
+      "risk": "Update an integration via Gorgias PUT /integrations/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create job",
+      "summary": "Plan/preview/approve Gorgias action: Create a job.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_job",
+      "source_url": "https://developers.gorgias.com/reference/create-job.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/jobs"
+        }
+      ],
+      "risk": "Create a job via Gorgias POST /jobs. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "cancel job",
+      "summary": "Plan/preview/approve Gorgias action: Cancel a job.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "cancel_job",
+      "source_url": "https://developers.gorgias.com/reference/cancel-job.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/jobs/{id}"
+        }
+      ],
+      "risk": "Cancel a job via Gorgias DELETE /jobs/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update job",
+      "summary": "Plan/preview/approve Gorgias action: Update a job.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_job",
+      "source_url": "https://developers.gorgias.com/reference/update-job.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/jobs/{id}"
+        }
+      ],
+      "risk": "Update a job via Gorgias PUT /jobs/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create macro",
+      "summary": "Plan/preview/approve Gorgias action: Create a macro.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_macro",
+      "source_url": "https://developers.gorgias.com/reference/create-macro.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/macros"
+        }
+      ],
+      "risk": "Create a macro via Gorgias POST /macros. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "bulk archive macros",
+      "summary": "Plan/preview/approve Gorgias action: Archive macros.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "bulk_archive_macros",
+      "source_url": "https://developers.gorgias.com/reference/bulk-archive-macros.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/macros/archive"
+        }
+      ],
+      "risk": "Archive macros via Gorgias PUT /macros/archive. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "bulk unarchive macros",
+      "summary": "Plan/preview/approve Gorgias action: Unarchive macros.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "bulk_unarchive_macros",
+      "source_url": "https://developers.gorgias.com/reference/bulk-unarchive-macros.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/macros/unarchive"
+        }
+      ],
+      "risk": "Unarchive macros via Gorgias PUT /macros/unarchive. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete macro",
+      "summary": "Plan/preview/approve Gorgias action: Delete a macro.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_macro",
+      "source_url": "https://developers.gorgias.com/reference/delete-macro.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/macros/{id}"
+        }
+      ],
+      "risk": "Delete a macro via Gorgias DELETE /macros/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update macro",
+      "summary": "Plan/preview/approve Gorgias action: Update a macro.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_macro",
+      "source_url": "https://developers.gorgias.com/reference/update-macro.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/macros/{id}"
+        }
+      ],
+      "risk": "Update a macro via Gorgias PUT /macros/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create metric card feedback",
+      "summary": "Plan/preview/approve Gorgias action: Submit feedback on a metric card definition.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_metric_card_feedback",
+      "source_url": "https://developers.gorgias.com/reference/create-metric-card-feedback.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/metric-cards/{slug}/feedback"
+        }
+      ],
+      "risk": "Submit feedback on a metric card definition via Gorgias POST /metric-cards/{slug}/feedback. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "get statistic",
+      "summary": "Plan/preview/approve Gorgias action: Retrieve a statistic.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "get_statistic",
+      "source_url": "https://developers.gorgias.com/reference/get-statistic.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reporting/stats"
+        }
+      ],
+      "risk": "Retrieve a statistic via Gorgias POST /reporting/stats. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create rule",
+      "summary": "Plan/preview/approve Gorgias action: Create a rule.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_rule",
+      "source_url": "https://developers.gorgias.com/reference/create-rule.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rules"
+        }
+      ],
+      "risk": "Create a rule via Gorgias POST /rules. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update rules priorities",
+      "summary": "Plan/preview/approve Gorgias action: Update rules' priorities.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_rules_priorities",
+      "source_url": "https://developers.gorgias.com/reference/update-rules-priorities.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rules/priorities"
+        }
+      ],
+      "risk": "Update rules' priorities via Gorgias POST /rules/priorities. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete rule",
+      "summary": "Plan/preview/approve Gorgias action: Delete a rule.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_rule",
+      "source_url": "https://developers.gorgias.com/reference/delete-rule.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rules/{id}"
+        }
+      ],
+      "risk": "Delete a rule via Gorgias DELETE /rules/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update rule",
+      "summary": "Plan/preview/approve Gorgias action: Update a rule.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_rule",
+      "source_url": "https://developers.gorgias.com/reference/update-rule.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/rules/{id}"
+        }
+      ],
+      "risk": "Update a rule via Gorgias PUT /rules/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create satisfaction survey",
+      "summary": "Plan/preview/approve Gorgias action: Create a survey.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_satisfaction_survey",
+      "source_url": "https://developers.gorgias.com/reference/create-satisfaction-survey.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/satisfaction-surveys"
+        }
+      ],
+      "risk": "Create a survey via Gorgias POST /satisfaction-surveys. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update satisfaction survey",
+      "summary": "Plan/preview/approve Gorgias action: Update a survey.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_satisfaction_survey",
+      "source_url": "https://developers.gorgias.com/reference/update-satisfaction-survey.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/satisfaction-surveys/{id}"
+        }
+      ],
+      "risk": "Update a survey via Gorgias PUT /satisfaction-surveys/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "get legacy statistic",
+      "summary": "Plan/preview/approve Gorgias action: Retrieve a statistic.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "get_legacy_statistic",
+      "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/stats/{name}"
+        }
+      ],
+      "risk": "Retrieve a statistic via Gorgias POST /stats/{name}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete tags",
+      "summary": "Plan/preview/approve Gorgias action: Delete tags.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_tags",
+      "source_url": "https://developers.gorgias.com/reference/delete-tags.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags"
+        }
+      ],
+      "risk": "Delete tags via Gorgias DELETE /tags. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create tag",
+      "summary": "Plan/preview/approve Gorgias action: Create a tag.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_tag",
+      "source_url": "https://developers.gorgias.com/reference/create-tag.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "risk": "Create a tag via Gorgias POST /tags. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "merge tags",
+      "summary": "Plan/preview/approve Gorgias action: Merge tags.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "merge_tags",
+      "source_url": "https://developers.gorgias.com/reference/merge-tags.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tags/{destination_tag_id}/merge"
+        }
+      ],
+      "risk": "Merge tags via Gorgias PUT /tags/{destination_tag_id}/merge. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete tag",
+      "summary": "Plan/preview/approve Gorgias action: Delete a tag.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_tag",
+      "source_url": "https://developers.gorgias.com/reference/delete-tag.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{id}"
+        }
+      ],
+      "risk": "Delete a tag via Gorgias DELETE /tags/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update tag",
+      "summary": "Plan/preview/approve Gorgias action: Update a tag.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_tag",
+      "source_url": "https://developers.gorgias.com/reference/update-tag.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tags/{id}"
+        }
+      ],
+      "risk": "Update a tag via Gorgias PUT /tags/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create team",
+      "summary": "Plan/preview/approve Gorgias action: Create a team.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_team",
+      "source_url": "https://developers.gorgias.com/reference/create-team.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/teams"
+        }
+      ],
+      "risk": "Create a team via Gorgias POST /teams. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete team",
+      "summary": "Plan/preview/approve Gorgias action: Delete a team.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_team",
+      "source_url": "https://developers.gorgias.com/reference/delete-team.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/teams/{id}"
+        }
+      ],
+      "risk": "Delete a team via Gorgias DELETE /teams/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update team",
+      "summary": "Plan/preview/approve Gorgias action: Update a team.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_team",
+      "source_url": "https://developers.gorgias.com/reference/update-team.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/teams/{id}"
+        }
+      ],
+      "risk": "Update a team via Gorgias PUT /teams/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create ticket",
+      "summary": "Plan/preview/approve Gorgias action: Create a ticket.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_ticket",
+      "source_url": "https://developers.gorgias.com/reference/create-ticket.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets"
+        }
+      ],
+      "risk": "Create a ticket via Gorgias POST /tickets. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete ticket",
+      "summary": "Plan/preview/approve Gorgias action: Delete a ticket.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_ticket",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "risk": "Delete a ticket via Gorgias DELETE /tickets/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update ticket",
+      "summary": "Plan/preview/approve Gorgias action: Update a ticket.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_ticket",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{id}"
+        }
+      ],
+      "risk": "Update a ticket via Gorgias PUT /tickets/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update ticket custom fields",
+      "summary": "Plan/preview/approve Gorgias action: Update ticket fields values.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_ticket_custom_fields",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-fields.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{ticket_id}/custom-fields"
+        }
+      ],
+      "risk": "Update ticket fields values via Gorgias PUT /tickets/{ticket_id}/custom-fields. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete ticket custom field",
+      "summary": "Plan/preview/approve Gorgias action: Delete ticket field value.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_ticket_custom_field",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-custom-field.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}/custom-fields/{id}"
+        }
+      ],
+      "risk": "Delete ticket field value via Gorgias DELETE /tickets/{ticket_id}/custom-fields/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update ticket custom field",
+      "summary": "Plan/preview/approve Gorgias action: Update ticket field value.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_ticket_custom_field",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-field.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{ticket_id}/custom-fields/{id}"
+        }
+      ],
+      "risk": "Update ticket field value via Gorgias PUT /tickets/{ticket_id}/custom-fields/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create ticket message",
+      "summary": "Plan/preview/approve Gorgias action: Create a message.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_ticket_message",
+      "source_url": "https://developers.gorgias.com/reference/create-ticket-message.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/messages"
+        }
+      ],
+      "risk": "Create a message via Gorgias POST /tickets/{ticket_id}/messages. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete ticket message",
+      "summary": "Plan/preview/approve Gorgias action: Delete a message.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_ticket_message",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-message.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}/messages/{id}"
+        }
+      ],
+      "risk": "Delete a message via Gorgias DELETE /tickets/{ticket_id}/messages/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update ticket message",
+      "summary": "Plan/preview/approve Gorgias action: Update a message.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_ticket_message",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-message.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{ticket_id}/messages/{id}"
+        }
+      ],
+      "risk": "Update a message via Gorgias PUT /tickets/{ticket_id}/messages/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete ticket tags",
+      "summary": "Plan/preview/approve Gorgias action: Remove ticket tags.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_ticket_tags",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-tags.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}/tags"
+        }
+      ],
+      "risk": "Remove ticket tags via Gorgias DELETE /tickets/{ticket_id}/tags. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create ticket tags",
+      "summary": "Plan/preview/approve Gorgias action: Add ticket tags.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_ticket_tags",
+      "source_url": "https://developers.gorgias.com/reference/create-ticket-tags.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/tags"
+        }
+      ],
+      "risk": "Add ticket tags via Gorgias POST /tickets/{ticket_id}/tags. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update ticket tags",
+      "summary": "Plan/preview/approve Gorgias action: Set ticket tags.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_ticket_tags",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-tags.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{ticket_id}/tags"
+        }
+      ],
+      "risk": "Set ticket tags via Gorgias PUT /tickets/{ticket_id}/tags. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create user",
+      "summary": "Plan/preview/approve Gorgias action: Create a user.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_user",
+      "source_url": "https://developers.gorgias.com/reference/create-user.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "risk": "Create a user via Gorgias POST /users. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete user",
+      "summary": "Plan/preview/approve Gorgias action: Delete a user.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_user",
+      "source_url": "https://developers.gorgias.com/reference/delete-user.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{id}"
+        }
+      ],
+      "risk": "Delete a user via Gorgias DELETE /users/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update user",
+      "summary": "Plan/preview/approve Gorgias action: Update a user.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_user",
+      "source_url": "https://developers.gorgias.com/reference/update-user.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{id}"
+        }
+      ],
+      "risk": "Update a user via Gorgias PUT /users/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create view",
+      "summary": "Plan/preview/approve Gorgias action: Create a view.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_view",
+      "source_url": "https://developers.gorgias.com/reference/create-view.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/views"
+        }
+      ],
+      "risk": "Create a view via Gorgias POST /views. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete view",
+      "summary": "Plan/preview/approve Gorgias action: Delete a view.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_view",
+      "source_url": "https://developers.gorgias.com/reference/delete-view.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/views/{id}"
+        }
+      ],
+      "risk": "Delete a view via Gorgias DELETE /views/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update view",
+      "summary": "Plan/preview/approve Gorgias action: Update a view.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_view",
+      "source_url": "https://developers.gorgias.com/reference/update-view.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/views/{id}"
+        }
+      ],
+      "risk": "Update a view via Gorgias PUT /views/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "create widget",
+      "summary": "Plan/preview/approve Gorgias action: Create a widget.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "create_widget",
+      "source_url": "https://developers.gorgias.com/reference/create-widget.md",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/widgets"
+        }
+      ],
+      "risk": "Create a widget via Gorgias POST /widgets. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete widget",
+      "summary": "Plan/preview/approve Gorgias action: Delete a widget.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "delete_widget",
+      "source_url": "https://developers.gorgias.com/reference/delete-widget.md",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/widgets/{id}"
+        }
+      ],
+      "risk": "Delete a widget via Gorgias DELETE /widgets/{id}. Destructive or admin-like mutation; requires reverse ETL plan, preview, explicit approval, and typed destructive confirmation.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "update widget",
+      "summary": "Plan/preview/approve Gorgias action: Update a widget.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "write": "update_widget",
+      "source_url": "https://developers.gorgias.com/reference/update-widget.md",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/widgets/{id}"
+        }
+      ],
+      "risk": "Update a widget via Gorgias PUT /widgets/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval -> execute; destructive actions require --confirm typed confirmation.",
+      "notes": "Executable through the generic reverse ETL write-action path; no provider-specific raw HTTP command is exposed."
+    },
+    {
+      "path": "delete voice call recording",
+      "summary": "Planned/blocked Gorgias operation: Delete a voice call recording.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "operation": "gorgias.voice_call_recordings.delete_blocked",
+      "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision."
+    },
+    {
+      "path": "download file",
+      "summary": "Planned/blocked Gorgias operation: Download a file.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "operation": "gorgias.file.download_blocked",
+      "source_url": "https://developers.gorgias.com/reference/download-file.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision."
+    },
+    {
+      "path": "download legacy statistic",
+      "summary": "Planned/blocked Gorgias operation: Download a statistic.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "operation": "gorgias.stats.download_blocked",
+      "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision."
+    },
+    {
+      "path": "get voice call recording",
+      "summary": "Planned/blocked Gorgias operation: Retrieve a voice call recording.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "operation": "gorgias.voice_call_recordings.get_blocked",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision."
+    },
+    {
+      "path": "list voice call recordings",
+      "summary": "Planned/blocked Gorgias operation: List voice call recordings.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "operation": "gorgias.voice_call_recordings.list_blocked",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision."
+    },
+    {
+      "path": "post api upload",
+      "summary": "Planned/blocked Gorgias operation: Upload files.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "operation": "gorgias.files.upload_blocked",
+      "source_url": "https://developers.gorgias.com/reference/post_api-upload.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision."
+    },
+    {
+      "path": "update view items",
+      "summary": "Planned/blocked Gorgias operation: Search for view's items.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.gorgias.com/reference/update-view-items.md",
+      "risk": "Blocked until a connector-local safe executor exists; no generic passthrough is exposed.",
+      "approval": "Not executable in this bundle revision.",
+      "operation": "gorgias.views.items.search_blocked"
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "gorgias-auth",
+      "summary": "Gorgias Basic auth uses account email as username and API key as secret password."
+    },
+    {
+      "name": "gorgias-write-safety",
+      "summary": "Gorgias writes require reverse ETL plan, preview, approval, execute, and typed confirmation for destructive actions."
+    }
+  ]
+}
