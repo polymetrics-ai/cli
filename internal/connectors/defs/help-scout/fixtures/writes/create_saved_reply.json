@@ -1,0 +1,17 @@
+{
+  "record": {
+    "mailbox_id": 123,
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/mailboxes/123/saved-replies",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

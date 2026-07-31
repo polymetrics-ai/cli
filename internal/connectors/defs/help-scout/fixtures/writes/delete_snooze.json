@@ -1,0 +1,13 @@
+{
+  "record": {
+    "conversation_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/conversations/123/snooze"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

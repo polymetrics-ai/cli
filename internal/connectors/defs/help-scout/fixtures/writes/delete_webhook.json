@@ -1,0 +1,13 @@
+{
+  "record": {
+    "webhook_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/webhooks/123"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/tags/{{ config.tag_id }}",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_get_tag_by_id_1",
+      "name": "Fixture Get Tag by ID",
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

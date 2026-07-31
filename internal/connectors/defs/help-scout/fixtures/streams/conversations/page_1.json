@@ -1,8 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "path": "/conversations",
-    "query": { "sortField": "modifiedAt", "sortOrder": "asc", "page": "1", "size": "50" }
+    "path": "/v2/conversations",
+    "query": {
+      "sortField": "modifiedAt",
+      "sortOrder": "asc",
+      "page": "1",
+      "size": "50"
+    }
   },
   "response": {
     "status": 200,
@@ -55,7 +60,12 @@
           }
         ]
       },
-      "page": { "number": 1, "size": 50, "totalElements": 3, "totalPages": 2 }
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 3,
+        "totalPages": 2
+      }
     }
   }
 }

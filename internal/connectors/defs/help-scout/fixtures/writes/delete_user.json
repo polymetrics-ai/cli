@@ -1,0 +1,13 @@
+{
+  "record": {
+    "user_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/users/123"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

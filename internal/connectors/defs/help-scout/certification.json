@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "conversations",
+    "source_credential_defaults": {
+      "base_url": "https://api.helpscout.net",
+      "token_url": "https://api.helpscout.net/v2/oauth2/token"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "invalid_client",
+          "interpolate: unresolved key",
+          "missing client credentials"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

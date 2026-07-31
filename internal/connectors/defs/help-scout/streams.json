@@ -15,58 +15,466 @@
       "page_param": "page",
       "size_param": "size",
       "start_page": 1,
-      "page_size": 50
+      "page_size": 50,
+      "max_pages": 20
     },
-    "check": { "method": "GET", "path": "/mailboxes" },
+    "check": {
+      "method": "GET",
+      "path": "/v2/mailboxes"
+    },
     "error_map": [
-      { "status": 401, "hint": "help-scout client_id/client_secret is missing or invalid; re-run pm credentials add help-scout" },
-      { "status": 429, "class": "rate_limited", "hint": "help-scout rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "Help Scout client_id/client_secret is missing or invalid; re-run pm credentials add help-scout"
+      },
+      {
+        "status": 403,
+        "hint": "Help Scout credential lacks access to the requested Inbox API resource"
+      },
+      {
+        "status": 404,
+        "hint": "Help Scout resource not found or the credential lacks access"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Help Scout rate limit exceeded; retry later with bounded pages/batches"
+      }
     ]
   },
   "streams": [
     {
+      "name": "get_conversation_v3",
+      "path": "/v3/conversations/{{ config.conversation_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_conversation_v3.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_conversation",
+      "path": "/v2/conversations/{{ config.conversation_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_conversation.json",
+      "projection": "passthrough"
+    },
+    {
       "name": "conversations",
-      "path": "/conversations",
+      "path": "/v2/conversations",
+      "records": {
+        "path": "_embedded.conversations"
+      },
+      "schema": "schemas/conversations.json",
+      "projection": "passthrough",
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "list_threads_v3",
+      "path": "/v3/conversations/{{ config.conversation_id }}/threads",
+      "records": {
+        "path": "_embedded.threads"
       },
-      "records": { "path": "_embedded.conversations" },
-      "schema": "schemas/conversations.json"
+      "schema": "schemas/list_threads_v3.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_threads",
+      "path": "/v2/conversations/{{ config.conversation_id }}/threads",
+      "records": {
+        "path": "_embedded.threads"
+      },
+      "schema": "schemas/list_threads.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_thread_original_source",
+      "path": "/v2/conversations/{{ config.conversation_id }}/threads/{{ config.thread_id }}/original-source",
+      "records": {
+        "path": "_embedded.original_source"
+      },
+      "schema": "schemas/get_thread_original_source.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_address",
+      "path": "/v2/customers/{{ config.customer_id }}/address",
+      "records": {
+        "path": "_embedded.address"
+      },
+      "schema": "schemas/get_address.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_chats_handles",
+      "path": "/v2/customers/{{ config.customer_id }}/chats",
+      "records": {
+        "path": "_embedded.chats"
+      },
+      "schema": "schemas/list_chats_handles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_emails",
+      "path": "/v2/customers/{{ config.customer_id }}/emails",
+      "records": {
+        "path": "_embedded.emails"
+      },
+      "schema": "schemas/list_emails.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_customer",
+      "path": "/v2/customers/{{ config.customer_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_customer.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_customers_v3",
+      "path": "/v3/customers",
+      "records": {
+        "path": "_embedded.customers"
+      },
+      "schema": "schemas/list_customers_v3.json",
+      "projection": "passthrough"
     },
     {
       "name": "customers",
-      "path": "/customers",
+      "path": "/v2/customers",
+      "records": {
+        "path": "_embedded.customers"
+      },
+      "schema": "schemas/customers.json",
+      "projection": "passthrough",
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "list_phones",
+      "path": "/v2/customers/{{ config.customer_id }}/phones",
+      "records": {
+        "path": "_embedded.phones"
       },
-      "records": { "path": "_embedded.customers" },
-      "schema": "schemas/customers.json"
+      "schema": "schemas/list_phones.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_social_profiles",
+      "path": "/v2/customers/{{ config.customer_id }}/social-profiles",
+      "records": {
+        "path": "_embedded.socialProfiles"
+      },
+      "schema": "schemas/list_social_profiles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_websites",
+      "path": "/v2/customers/{{ config.customer_id }}/websites",
+      "records": {
+        "path": "_embedded.websites"
+      },
+      "schema": "schemas/list_websites.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_inbox",
+      "path": "/v2/mailboxes/{{ config.mailbox_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_inbox.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_inbox_custom_fields",
+      "path": "/v2/mailboxes/{{ config.mailbox_id }}/fields",
+      "records": {
+        "path": "_embedded.fields"
+      },
+      "schema": "schemas/list_inbox_custom_fields.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_inbox_folders",
+      "path": "/v2/mailboxes/{{ config.mailbox_id }}/folders",
+      "records": {
+        "path": "_embedded.folders"
+      },
+      "schema": "schemas/list_inbox_folders.json",
+      "projection": "passthrough"
     },
     {
       "name": "mailboxes",
-      "path": "/mailboxes",
-      "query": {
-        "sortField": "modifiedAt",
-        "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      "path": "/v2/mailboxes",
+      "records": {
+        "path": "_embedded.mailboxes"
       },
-      "records": { "path": "_embedded.mailboxes" },
-      "schema": "schemas/mailboxes.json"
+      "schema": "schemas/mailboxes.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_routing_configuration",
+      "path": "/v2/mailboxes/{{ config.mailbox_id }}/routing",
+      "records": {
+        "path": "_embedded.routing"
+      },
+      "schema": "schemas/get_routing_configuration.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_saved_reply",
+      "path": "/v2/mailboxes/{{ config.mailbox_id }}/saved-replies/{{ config.saved_reply_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_saved_reply.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_saved_replies",
+      "path": "/v2/mailboxes/{{ config.mailbox_id }}/saved-replies",
+      "records": {
+        "path": "_embedded.savedReplies"
+      },
+      "schema": "schemas/list_saved_replies.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_organization_conversations",
+      "path": "/v2/organizations/{{ config.organization_id }}/conversations",
+      "records": {
+        "path": "_embedded.conversations"
+      },
+      "schema": "schemas/get_organization_conversations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_organization_customers",
+      "path": "/v2/organizations/{{ config.organization_id }}/customers",
+      "records": {
+        "path": "_embedded.customers"
+      },
+      "schema": "schemas/get_organization_customers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_organization_by_id",
+      "path": "/v2/organizations/{{ config.organization_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_organization_by_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_organizations",
+      "path": "/v2/organizations",
+      "records": {
+        "path": "_embedded.organizations"
+      },
+      "schema": "schemas/list_organizations.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_organization_property_definition",
+      "path": "/v2/organizations/properties/{{ config.property_slug }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_organization_property_definition.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_organization_property_definitions",
+      "path": "/v2/organizations/properties",
+      "records": {
+        "path": "_embedded.properties"
+      },
+      "schema": "schemas/list_organization_property_definitions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_customer_property_definitions",
+      "path": "/v2/customer-properties",
+      "records": {
+        "path": "_embedded.customer_properties"
+      },
+      "schema": "schemas/list_customer_property_definitions.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_satisfaction_rating",
+      "path": "/v2/ratings/{{ config.rating_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_satisfaction_rating.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_system_user",
+      "path": "/v3/system-users/{{ config.system_user_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_system_user.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_system_users",
+      "path": "/v3/system-users",
+      "records": {
+        "path": "_embedded.systemUsers"
+      },
+      "schema": "schemas/list_system_users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_tag_by_id",
+      "path": "/v2/tags/{{ config.tag_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_tag_by_id.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_tags",
+      "path": "/v2/tags",
+      "records": {
+        "path": "_embedded.tags"
+      },
+      "schema": "schemas/list_tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_team_members",
+      "path": "/v2/teams/{{ config.team_id }}/members",
+      "records": {
+        "path": "_embedded.members"
+      },
+      "schema": "schemas/list_team_members.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_teams",
+      "path": "/v2/teams",
+      "records": {
+        "path": "_embedded.teams"
+      },
+      "schema": "schemas/list_teams.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_conversation_reassignment_configuration",
+      "path": "/v2/users/{{ config.user_id }}/conversation-reassignment",
+      "records": {
+        "path": "_embedded.conversation_reassignment"
+      },
+      "schema": "schemas/get_conversation_reassignment_configuration.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_user",
+      "path": "/v2/users/{{ config.user_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_user.json",
+      "projection": "passthrough"
     },
     {
       "name": "users",
-      "path": "/users",
-      "query": {
-        "sortField": "modifiedAt",
-        "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+      "path": "/v2/users",
+      "records": {
+        "path": "_embedded.users"
       },
-      "records": { "path": "_embedded.users" },
-      "schema": "schemas/users.json"
+      "schema": "schemas/users.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_resource_owner",
+      "path": "/v2/users/me",
+      "records": {
+        "path": "_embedded.me"
+      },
+      "schema": "schemas/get_resource_owner.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_user_status",
+      "path": "/v2/users/{{ config.user_id }}/status",
+      "records": {
+        "path": "_embedded.statuses"
+      },
+      "schema": "schemas/get_user_status.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_users_statuses",
+      "path": "/v2/users/status",
+      "records": {
+        "path": "_embedded.statuses"
+      },
+      "schema": "schemas/list_users_statuses.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_webhook",
+      "path": "/v2/webhooks/{{ config.webhook_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/get_webhook.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_webhooks",
+      "path": "/v2/webhooks",
+      "records": {
+        "path": "_embedded.webhooks"
+      },
+      "schema": "schemas/list_webhooks.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_workflows",
+      "path": "/v2/workflows",
+      "records": {
+        "path": "_embedded.workflows"
+      },
+      "schema": "schemas/list_workflows.json",
+      "projection": "passthrough"
     }
   ]
 }

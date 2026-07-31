@@ -1,0 +1,17 @@
+{
+  "record": {
+    "customer_id": 123,
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/customers/123/address",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

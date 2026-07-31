@@ -1,0 +1,14 @@
+{
+  "record": {
+    "organization_id": 123,
+    "property_slug": "fixture-value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/organizations/123/properties/fixture-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

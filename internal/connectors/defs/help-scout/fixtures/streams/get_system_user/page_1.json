@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/system-users/{{ config.system_user_id }}",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_get_system_user_1",
+      "name": "Fixture Get System User",
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

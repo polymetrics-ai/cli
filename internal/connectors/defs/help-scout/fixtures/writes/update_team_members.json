@@ -1,0 +1,17 @@
+{
+  "record": {
+    "team_id": 123,
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/teams/123/members",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
