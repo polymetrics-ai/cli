@@ -1872,7 +1872,7 @@
   {
     "slug": "airtable",
     "name": "Airtable",
-    "description": "Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.",
+    "description": "Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, HyperDB direct reads, and executes typed record/schema/admin mutations from fixture-tested declarative definitions.",
     "docs_url": "https://airtable.com/developers/web/api/introduction",
     "integration_type": "api",
     "release_stage": "ga",
@@ -1880,13 +1880,93 @@
       "check": true,
       "read": true,
       "write": true,
-      "query": false,
-      "cdc": false,
+      "query": true,
+      "cdc": true,
       "dynamic_schema": false
     },
     "streams": [
       {
+        "name": "scim_groups",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "scim_group",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "scim_users",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "scim_user",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webhooks",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webhook_payloads",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
         "name": "bases",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "base_collaborators",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "block_installations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "interface",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "shares",
         "primary_key": [
           "id"
         ],
@@ -1902,6 +1982,134 @@
         "incremental": false
       },
       {
+        "name": "views",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "view_metadata",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "enterprise",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "audit_log_events",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "audit_log_requests",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "audit_log_request",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "change_events",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "ediscovery_exports",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "ediscovery_export",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "enterprise_packages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "enterprise_personal_access_tokens",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "enterprise_users",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "enterprise_user",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_group",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "whoami",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspace_collaborators",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
         "name": "records",
         "primary_key": [
           "id"
@@ -1910,7 +2118,7 @@
         "incremental": false
       },
       {
-        "name": "webhooks",
+        "name": "record",
         "primary_key": [
           "id"
         ],
@@ -1928,19 +2136,134 @@
     ],
     "write_actions": [
       {
-        "name": "create_record",
+        "name": "create_scim_group",
         "method": "POST",
         "kind": "create"
       },
       {
-        "name": "update_record",
+        "name": "delete_scim_group",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "patch_scim_group",
         "method": "PATCH",
         "kind": "update"
       },
       {
-        "name": "delete_record",
+        "name": "put_scim_group",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_scim_user",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_scim_user",
         "method": "DELETE",
         "kind": "delete"
+      },
+      {
+        "name": "patch_scim_user",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "put_scim_user",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_webhook",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_webhook",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "set_webhook_notifications",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "refresh_webhook",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_base",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_base",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_block_installation",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "manage_block_installation",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "add_base_collaborator",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_base_collaborator",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_collaborator_base_permission",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "add_interface_collaborator",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_interface_collaborator",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_interface_collaborator",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_interface_invite",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_base_invite",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_share",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "manage_share",
+        "method": "PATCH",
+        "kind": "update"
       },
       {
         "name": "create_table",
@@ -1963,14 +2286,179 @@
         "kind": "update"
       },
       {
-        "name": "create_comment",
+        "name": "delete_view",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_audit_log_request",
         "method": "POST",
         "kind": "create"
       },
       {
-        "name": "update_comment",
+        "name": "create_descendant_enterprise",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_ediscovery_export",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "move_user_groups",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "move_workspaces",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_base_from_package_enterprise",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "revoke_enterprise_personal_access_tokens",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "delete_users_by_email",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "manage_user_batched",
         "method": "PATCH",
         "kind": "update"
+      },
+      {
+        "name": "manage_user_membership",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "grant_admin_access",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "revoke_admin_access",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "delete_user_by_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "manage_user",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "logout_user",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "remove_user_from_enterprise",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_workspace_ai_allowlist",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_workspace",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_workspace",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "add_workspace_collaborator",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_workspace_collaborator",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_workspace_collaborator",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_workspace_invite",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "move_base",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_workspace_restrictions",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "upload_attachment",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "delete_multiple_records",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_multiple_records",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "create_records",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_multiple_records_put",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_record",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_record",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "replace_record",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_comment",
+        "method": "POST",
+        "kind": "create"
       },
       {
         "name": "delete_comment",
@@ -1978,18 +2466,2190 @@
         "kind": "delete"
       },
       {
-        "name": "create_webhook",
-        "method": "POST",
-        "kind": "create"
+        "name": "update_comment",
+        "method": "PATCH",
+        "kind": "update"
       },
       {
-        "name": "delete_webhook",
-        "method": "DELETE",
-        "kind": "delete"
+        "name": "update_date_dependency_metadata",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "hyperdb_delete_records_by_primary_keys",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "hyperdb_upsert_records_by_primary_keys",
+        "method": "PUT",
+        "kind": "upsert"
       }
     ],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Airtable bases, tables, records, webhooks, and record comments, and writes\nrecord/table/field/comment/webhook mutations, through the Airtable Web API.\n\nReadable streams: `bases`, `tables`, `records`, `webhooks`, `comments`.\n\nWrite actions: `create_record`, `update_record`, `delete_record`, `create_table`, `update_table`,\n`create_field`, `update_field`, `create_comment`, `update_comment`, `delete_comment`,\n`create_webhook`, `delete_webhook`.\n\nService API documentation: https://airtable.com/developers/web/api/introduction.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (optional, secret, string); Airtable OAuth2 access token, sent as a Bearer token\n  when api_key is unset. Never logged.\n- `api_key` (optional, secret, string); Airtable Personal Access Token, sent as a Bearer token.\n  Preferred over access_token when both are set. Never logged.\n- `base_id` (optional, string); Airtable base id (required for the 'tables' and 'records' streams).\n- `base_url` (optional, string); default `https://api.airtable.com/v0`; format `uri`; Airtable API\n  base URL override for tests or proxies.\n- `page_size` (optional, string); default `100`; Records per page for the 'records' stream (1-100).\n- `table_id` (optional, string); Airtable table id or name (required for the 'records' stream).\n\nSecret fields are redacted in logs and write previews: `access_token`, `api_key`.\n\nDefault configuration values: `base_url=https://api.airtable.com/v0`, `page_size=100`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.api_key` when `{{ secrets.api_key }}`.\n- Bearer token authentication using `secrets.access_token` when `{{ secrets.access_token }}`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/meta/bases`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `offset`; next token from `offset`.\n\n- `bases`: GET `/meta/bases` - records path `bases`; cursor pagination; cursor parameter `offset`;\n  next token from `offset`.\n- `tables`: GET `/meta/bases/{{ config.base_id }}/tables` - records path `tables`; cursor\n  pagination; cursor parameter `offset`; next token from `offset`.\n- `records`: GET `/{{ config.base_id }}/{{ config.table_id }}` - records path `records`; query\n  `pageSize`=`{{ config.page_size }}`; cursor pagination; cursor parameter `offset`; next token from\n  `offset`.\n- `webhooks`: GET `/bases/{{ config.base_id }}/webhooks` - records path `webhooks`; cursor\n  pagination; cursor parameter `offset`; next token from `offset`.\n- `comments`: GET `/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments` - records\n  path `comments`; cursor pagination; cursor parameter `offset`; next token from `offset`; fan-out;\n  ids from request `/{{ config.base_id }}/{{ config.table_id }}`; id-list records path `records`; id\n  field `id`; id inserted into the request path; stamps `record_id`.\n\n## Write actions & risks\n\nOverall write risk: external Airtable API mutation of records, table/field schema, comments, and\nwebhooks; schema mutations (create_table/update_table/create_field/update_field) are visible to\nevery base collaborator, approval required.\n\nReverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:\n\n- `create_record`: POST `/{{ config.base_id }}/{{ config.table_id }}` - kind `create`; body type\n  `json`; required record fields `fields`; accepted fields `fields`; risk: creates a new record in\n  the configured base/table; low-risk external mutation, no approval required.\n- `update_record`: PATCH `/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}` - kind\n  `update`; body type `json`; path fields `id`; required record fields `id`, `fields`; accepted\n  fields `fields`, `id`; risk: mutates only the field values included in the request\n  (non-destructive PATCH); unincluded cell values are left unchanged.\n- `delete_record`: DELETE `/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}` - kind\n  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;\n  missing records treated as success for status `404`; risk: permanently removes a record from the\n  base/table; irreversible.\n- `create_table`: POST `/meta/bases/{{ config.base_id }}/tables` - kind `create`; body type `json`;\n  required record fields `name`, `fields`; accepted fields `description`, `fields`, `name`; risk:\n  creates a new table (schema mutation) in the configured base; low-risk but changes the base's\n  structure, visible to every collaborator.\n- `update_table`: PATCH `/meta/bases/{{ config.base_id }}/tables/{{ record.id }}` - kind `update`;\n  body type `json`; path fields `id`; required record fields `id`; accepted fields `description`,\n  `id`, `name`; risk: renames or redescribes an existing table; a visible schema change for every\n  collaborator on the base.\n- `create_field`: POST `/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields` - kind\n  `create`; body type `json`; path fields `table_id`; required record fields `table_id`, `name`,\n  `type`; accepted fields `description`, `name`, `table_id`, `type`; risk: creates a new column\n  (schema mutation) in the target table; low-risk but changes the table's structure, visible to\n  every collaborator.\n- `update_field`: PATCH `/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{\n  record.id }}` - kind `update`; body type `json`; path fields `table_id`, `id`; required record\n  fields `table_id`, `id`; accepted fields `description`, `id`, `name`, `table_id`; risk: renames or\n  redescribes an existing column; a visible schema change for every collaborator on the base.\n- `create_comment`: POST `/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id\n  }}/comments` - kind `create`; body type `json`; path fields `record_id`; required record fields\n  `record_id`, `text`; accepted fields `parentCommentId`, `record_id`, `text`; risk: adds a visible\n  comment to a record; every base collaborator with record access can see it, no external side\n  effect.\n- `update_comment`: PATCH `/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id\n  }}/comments/{{ record.id }}` - kind `update`; body type `json`; path fields `record_id`, `id`;\n  required record fields `record_id`, `id`, `text`; accepted fields `id`, `record_id`, `text`; risk:\n  edits the text of an existing comment; visible to every base collaborator with record access.\n- `delete_comment`: DELETE `/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id\n  }}/comments/{{ record.id }}` - kind `delete`; body type `none`; path fields `record_id`, `id`;\n  required record fields `record_id`, `id`; accepted fields `id`, `record_id`; missing records\n  treated as success for status `404`; risk: permanently removes a comment from a record;\n  irreversible.\n- `create_webhook`: POST `/bases/{{ config.base_id }}/webhooks` - kind `create`; body type `json`;\n  required record fields `notificationUrl`, `specification`; accepted fields `notificationUrl`,\n  `specification`; risk: registers a new outbound webhook that will POST live base-change\n  notifications to an external URL of the caller's choosing; verify the target endpoint before\n  enabling.\n- `delete_webhook`: DELETE `/bases/{{ config.base_id }}/webhooks/{{ record.id }}` - kind `delete`;\n  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing\n  records treated as success for status `404`; risk: permanently removes a webhook subscription;\n  notification delivery to its target URL stops immediately.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 5 stream-backed endpoint group(s), 12 write-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  destructive_admin=2, duplicate_of=5, non_data_endpoint=1, out_of_scope=4,\n  requires_elevated_scope=1.\n",
+    "cli_surface": {
+      "tagline": "Airtable provider-style commands for fixture-tested read, direct HyperDB query, and typed reverse-ETL action discovery.",
+      "usage": "pm airtable <command> [flags]",
+      "source_cli": {
+        "name": "Airtable Web API",
+        "docs": "https://airtable.com/developers/web/api/introduction",
+        "reference": "official OpenAPI operationId ledger",
+        "source": "https://airtable.com/developers/web/api/introduction"
+      },
+      "groups": [
+        {
+          "id": "read",
+          "title": "Read/query commands",
+          "commands": [
+            "read scim-groups",
+            "read scim-group",
+            "read scim-users",
+            "read scim-user",
+            "read webhooks",
+            "read webhook-payloads",
+            "read bases",
+            "read base-collaborators",
+            "read block-installations",
+            "read interface",
+            "read shares",
+            "read tables",
+            "read views",
+            "read view-metadata",
+            "read enterprise",
+            "read audit-log-events",
+            "read audit-log-requests",
+            "read audit-log-request",
+            "read change-events",
+            "read ediscovery-exports",
+            "read ediscovery-export",
+            "read enterprise-packages",
+            "read enterprise-personal-access-tokens",
+            "read enterprise-users",
+            "read enterprise-user",
+            "read user-group",
+            "read whoami",
+            "read workspace-collaborators",
+            "read records",
+            "read record",
+            "read comments",
+            "hyperdb get-records"
+          ]
+        },
+        {
+          "id": "write",
+          "title": "Reverse ETL/write action references",
+          "commands": [
+            "write create-scim-group",
+            "write delete-scim-group",
+            "write patch-scim-group",
+            "write put-scim-group",
+            "write create-scim-user",
+            "write delete-scim-user",
+            "write patch-scim-user",
+            "write put-scim-user",
+            "write create-webhook",
+            "write delete-webhook",
+            "write set-webhook-notifications",
+            "write refresh-webhook",
+            "write create-base",
+            "write delete-base",
+            "write delete-block-installation",
+            "write manage-block-installation",
+            "write add-base-collaborator",
+            "write delete-base-collaborator",
+            "write update-collaborator-base-permission",
+            "write add-interface-collaborator",
+            "write delete-interface-collaborator",
+            "write update-interface-collaborator",
+            "write delete-interface-invite",
+            "write delete-base-invite",
+            "write delete-share",
+            "write manage-share",
+            "write create-table",
+            "write update-table",
+            "write create-field",
+            "write update-field",
+            "write delete-view",
+            "write create-audit-log-request",
+            "write create-descendant-enterprise",
+            "write create-ediscovery-export",
+            "write move-user-groups",
+            "write move-workspaces",
+            "write create-base-from-package-enterprise",
+            "write revoke-enterprise-personal-access-tokens",
+            "write delete-users-by-email",
+            "write manage-user-batched",
+            "write manage-user-membership",
+            "write grant-admin-access",
+            "write revoke-admin-access",
+            "write delete-user-by-id",
+            "write manage-user",
+            "write logout-user",
+            "write remove-user-from-enterprise",
+            "write update-workspace-ai-allowlist",
+            "write create-workspace",
+            "write delete-workspace",
+            "write add-workspace-collaborator",
+            "write delete-workspace-collaborator",
+            "write update-workspace-collaborator",
+            "write delete-workspace-invite",
+            "write move-base",
+            "write update-workspace-restrictions",
+            "write upload-attachment",
+            "write delete-multiple-records",
+            "write update-multiple-records",
+            "write create-records",
+            "write update-multiple-records-put",
+            "write delete-record",
+            "write update-record",
+            "write replace-record",
+            "write create-comment",
+            "write delete-comment",
+            "write update-comment",
+            "write update-date-dependency-metadata",
+            "write hyperdb-delete-records-by-primary-keys",
+            "write hyperdb-upsert-records-by-primary-keys"
+          ]
+        }
+      ],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "read scim-groups",
+          "summary": "List groups",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "scim_groups",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read scim-group",
+          "summary": "Get group",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "scim_group",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "Airtable group id",
+              "values": [],
+              "maps_to": "config.group_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read scim-users",
+          "summary": "List users",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "scim_users",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read scim-user",
+          "summary": "Get user",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "scim_user",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Airtable user id",
+              "values": [],
+              "maps_to": "config.user_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read webhooks",
+          "summary": "List webhooks",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "webhooks",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read webhook-payloads",
+          "summary": "List webhook payloads",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "webhook_payloads",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            },
+            {
+              "name": "webhook-id",
+              "type": "string",
+              "summary": "Airtable webhook id",
+              "values": [],
+              "maps_to": "config.webhook_id"
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read bases",
+          "summary": "List bases",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bases",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read base-collaborators",
+          "summary": "Get base collaborators",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "base_collaborators",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read block-installations",
+          "summary": "List block installations",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "block_installations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read interface",
+          "summary": "Get interface",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "interface",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            },
+            {
+              "name": "page-bundle-id",
+              "type": "string",
+              "summary": "Airtable page bundle id",
+              "values": [],
+              "maps_to": "config.page_bundle_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read shares",
+          "summary": "List shares",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "shares",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read tables",
+          "summary": "Get base schema",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "tables",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read views",
+          "summary": "List views",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "views",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read view-metadata",
+          "summary": "Get view metadata",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "view_metadata",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            },
+            {
+              "name": "view-id",
+              "type": "string",
+              "summary": "Airtable view id",
+              "values": [],
+              "maps_to": "config.view_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read enterprise",
+          "summary": "Get enterprise",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "enterprise",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read audit-log-events",
+          "summary": "Audit log events",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "audit_log_events",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read audit-log-requests",
+          "summary": "List audit log requests",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "audit_log_requests",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read audit-log-request",
+          "summary": "Get audit log request",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "audit_log_request",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "enterprise-audit-log-task-id",
+              "type": "string",
+              "summary": "Airtable enterprise audit log task id",
+              "values": [],
+              "maps_to": "config.enterprise_audit_log_task_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read change-events",
+          "summary": "Change events",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "change_events",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read ediscovery-exports",
+          "summary": "List eDiscovery exports",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "ediscovery_exports",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read ediscovery-export",
+          "summary": "Get eDiscovery export",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "ediscovery_export",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "enterprise-task-id",
+              "type": "string",
+              "summary": "Airtable enterprise task id",
+              "values": [],
+              "maps_to": "config.enterprise_task_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read enterprise-packages",
+          "summary": "List packages",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "enterprise_packages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read enterprise-personal-access-tokens",
+          "summary": "List personal access tokens",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "enterprise_personal_access_tokens",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read enterprise-users",
+          "summary": "Get users by id or email",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "enterprise_users",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read enterprise-user",
+          "summary": "Get user by id",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "enterprise_user",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "config.enterprise_account_id"
+            },
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Airtable user id",
+              "values": [],
+              "maps_to": "config.user_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read user-group",
+          "summary": "Get user group",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "user_group",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "Airtable group id",
+              "values": [],
+              "maps_to": "config.group_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read whoami",
+          "summary": "Get user info",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "whoami",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read workspace-collaborators",
+          "summary": "Get workspace collaborators",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "workspace_collaborators",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "workspace-id",
+              "type": "string",
+              "summary": "Airtable workspace id",
+              "values": [],
+              "maps_to": "config.workspace_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read records",
+          "summary": "List records",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "records",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            },
+            {
+              "name": "table-id",
+              "type": "string",
+              "summary": "Airtable table id",
+              "values": [],
+              "maps_to": "config.table_id"
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "Bounded Airtable page size",
+              "values": [],
+              "maps_to": "config.page_size"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read record",
+          "summary": "Get record",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "record",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            },
+            {
+              "name": "table-id",
+              "type": "string",
+              "summary": "Airtable table id",
+              "values": [],
+              "maps_to": "config.table_id"
+            },
+            {
+              "name": "record-id",
+              "type": "string",
+              "summary": "Airtable record id",
+              "values": [],
+              "maps_to": "config.record_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "read comments",
+          "summary": "List comments",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "comments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "base-id",
+              "type": "string",
+              "summary": "Airtable base id",
+              "values": [],
+              "maps_to": "config.base_id"
+            },
+            {
+              "name": "table-id",
+              "type": "string",
+              "summary": "Airtable table id",
+              "values": [],
+              "maps_to": "config.table_id"
+            },
+            {
+              "name": "record-id",
+              "type": "string",
+              "summary": "Airtable record id",
+              "values": [],
+              "maps_to": "config.record_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "hyperdb get-records",
+          "summary": "Read HyperDB records by primary key",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [
+            {
+              "name": "enterprise-account-id",
+              "type": "string",
+              "summary": "Airtable enterprise account id",
+              "values": [],
+              "maps_to": "path.enterpriseAccountId"
+            },
+            {
+              "name": "data-table-id",
+              "type": "string",
+              "summary": "Airtable HyperDB data table id",
+              "values": [],
+              "maps_to": "path.dataTableId"
+            },
+            {
+              "name": "primary-key",
+              "type": "string_array",
+              "summary": "Primary key to fetch; repeat for multiple keys",
+              "values": [],
+              "maps_to": "body.primaryKeys"
+            },
+            {
+              "name": "field",
+              "type": "string_array",
+              "summary": "Optional field to include; repeat for multiple fields",
+              "values": [],
+              "maps_to": "body.fields"
+            },
+            {
+              "name": "max-records",
+              "type": "integer",
+              "summary": "Maximum records to return",
+              "values": [],
+              "maps_to": "body.maxRecords"
+            },
+            {
+              "name": "cursor",
+              "type": "string",
+              "summary": "Pagination cursor",
+              "values": [],
+              "maps_to": "body.cursor"
+            }
+          ],
+          "examples": [
+            "pm airtable hyperdb get-records --credential airtable --enterprise-account-id ent... --data-table-id dtbl... --primary-key pk... --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "read-only",
+          "notes": ""
+        },
+        {
+          "path": "write create-scim-group",
+          "summary": "Create group",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_scim_group",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-scim-group",
+          "summary": "Delete group",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_scim_group",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write patch-scim-group",
+          "summary": "Patch group",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "patch_scim_group",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write put-scim-group",
+          "summary": "Put group",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "put_scim_group",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-scim-user",
+          "summary": "Create user",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-scim-user",
+          "summary": "Delete user",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write patch-scim-user",
+          "summary": "Patch user",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "patch_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write put-scim-user",
+          "summary": "Put user",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "put_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-webhook",
+          "summary": "Create a webhook",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_webhook",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-webhook",
+          "summary": "Delete a webhook",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_webhook",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write set-webhook-notifications",
+          "summary": "Enable/disable webhook notifications",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "set_webhook_notifications",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write refresh-webhook",
+          "summary": "Refresh a webhook",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "refresh_webhook",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-base",
+          "summary": "Create base",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_base",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-base",
+          "summary": "Delete base",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_base",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-block-installation",
+          "summary": "Delete block installation",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_block_installation",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write manage-block-installation",
+          "summary": "Manage block installation",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "manage_block_installation",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write add-base-collaborator",
+          "summary": "Add base collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "add_base_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-base-collaborator",
+          "summary": "Delete base collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_base_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-collaborator-base-permission",
+          "summary": "Update collaborator base permission",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_collaborator_base_permission",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write add-interface-collaborator",
+          "summary": "Add interface collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "add_interface_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-interface-collaborator",
+          "summary": "Delete interface collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_interface_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-interface-collaborator",
+          "summary": "Update interface collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_interface_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-interface-invite",
+          "summary": "Delete interface invite",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_interface_invite",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-base-invite",
+          "summary": "Delete base invite",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_base_invite",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-share",
+          "summary": "Delete share",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_share",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write manage-share",
+          "summary": "Manage share",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "manage_share",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-table",
+          "summary": "Create table",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_table",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-table",
+          "summary": "Update table",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_table",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-field",
+          "summary": "Create field",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_field",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-field",
+          "summary": "Update field",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_field",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-view",
+          "summary": "Delete view",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_view",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-audit-log-request",
+          "summary": "Create audit log request",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_audit_log_request",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-descendant-enterprise",
+          "summary": "Create descendant enterprise",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_descendant_enterprise",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-ediscovery-export",
+          "summary": "Create eDiscovery export",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_ediscovery_export",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write move-user-groups",
+          "summary": "Move user groups",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "move_user_groups",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write move-workspaces",
+          "summary": "Move workspaces",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "move_workspaces",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-base-from-package-enterprise",
+          "summary": "Create base from package",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_base_from_package_enterprise",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write revoke-enterprise-personal-access-tokens",
+          "summary": "Revoke personal access tokens",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "revoke_enterprise_personal_access_tokens",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-users-by-email",
+          "summary": "Delete users by email",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_users_by_email",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write manage-user-batched",
+          "summary": "Manage user batched",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "manage_user_batched",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write manage-user-membership",
+          "summary": "Manage user membership",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "manage_user_membership",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write grant-admin-access",
+          "summary": "Grant admin access",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "grant_admin_access",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write revoke-admin-access",
+          "summary": "Revoke admin access",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "revoke_admin_access",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-user-by-id",
+          "summary": "Delete user by id",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_user_by_id",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write manage-user",
+          "summary": "Manage user",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "manage_user",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write logout-user",
+          "summary": "Logout user",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "logout_user",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write remove-user-from-enterprise",
+          "summary": "Remove user from enterprise",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "remove_user_from_enterprise",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-workspace-ai-allowlist",
+          "summary": "Update workspace AI allowlist",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_workspace_ai_allowlist",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-workspace",
+          "summary": "Create workspace",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_workspace",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-workspace",
+          "summary": "Delete workspace",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_workspace",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write add-workspace-collaborator",
+          "summary": "Add workspace collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "add_workspace_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-workspace-collaborator",
+          "summary": "Delete workspace collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_workspace_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-workspace-collaborator",
+          "summary": "Update workspace collaborator",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_workspace_collaborator",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-workspace-invite",
+          "summary": "Delete workspace invite",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_workspace_invite",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write move-base",
+          "summary": "Move base",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "move_base",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-workspace-restrictions",
+          "summary": "Update workspace restrictions",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_workspace_restrictions",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write upload-attachment",
+          "summary": "Upload attachment",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "upload_attachment",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-multiple-records",
+          "summary": "Delete multiple records",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_multiple_records",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-multiple-records",
+          "summary": "Update multiple records",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_multiple_records",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-records",
+          "summary": "Create records",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_records",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-multiple-records-put",
+          "summary": "Update multiple records (put)",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_multiple_records_put",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-record",
+          "summary": "Delete record",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_record",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-record",
+          "summary": "Update record",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_record",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write replace-record",
+          "summary": "Update record (put)",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "replace_record",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write create-comment",
+          "summary": "Create comment",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "create_comment",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write delete-comment",
+          "summary": "Delete comment",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "delete_comment",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-comment",
+          "summary": "Update comment",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_comment",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write update-date-dependency-metadata",
+          "summary": "Update date dependency metadata",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "update_date_dependency_metadata",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write hyperdb-delete-records-by-primary-keys",
+          "summary": "Delete records",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "hyperdb_delete_records_by_primary_keys",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "medium",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        },
+        {
+          "path": "write hyperdb-upsert-records-by-primary-keys",
+          "summary": "Update or insert records",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "hyperdb_upsert_records_by_primary_keys",
+          "source_cli_path": "",
+          "source_url": "https://airtable.com/developers/web/api/introduction",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high",
+          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "airtable-safety",
+          "summary": "Writes remain reverse ETL only: plan, preview, explicit approval, execute; no generic raw HTTP, SQL, or CSV write escape hatches."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nAirtable connector bundle expanded to official Web API parity from the embedded OpenAPI specification. It reads Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, audit/eDiscovery/change-event data, exposes the HyperDB getRecords direct read, and declares typed reverse-ETL write actions for every supportable JSON/no-body mutation.\n\nOfficial documentation: https://airtable.com/developers/web/api/introduction. OpenAPI SHA-256: `f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8`. Fixture-only validation; no live provider calls or certification claims.\n\n## Auth setup\n\n- `api_key` (secret): Airtable Personal Access Token, preferred when both token fields are set.\n- `access_token` (secret): Airtable OAuth2 access token fallback.\n- `base_url`: default `https://api.airtable.com`; connector paths include `/v0` or `/scim`.\n- Scope/config selectors include `base_id`, `table_id`, `record_id`, `webhook_id`, `enterprise_account_id`, `workspace_id`, `group_id`, `user_id`, `view_id`, and related task ids.\n\nAuthentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. Secret fields are redacted in logs and previews.\n\n## Streams notes\n\n31 fixture-backed streams cover all official GET operations. Default pagination uses `offset`; SCIM/webhook-payload/audit endpoints declare their provider-specific cursor parameters where applicable.\n\n- `scim_groups`: GET `/scim/v2/Groups` -> `Resources`; query count.\n\n- `scim_group`: GET `/scim/v2/Groups/{{ config.group_id }}` -> `.`.\n\n- `scim_users`: GET `/scim/v2/Users` -> `Resources`; query count.\n\n- `scim_user`: GET `/scim/v2/Users/{{ config.user_id }}` -> `.`.\n\n- `webhooks`: GET `/v0/bases/{{ config.base_id }}/webhooks` -> `webhooks`.\n\n- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit.\n\n- `bases`: GET `/v0/meta/bases` -> `bases`.\n\n- `base_collaborators`: GET `/v0/meta/bases/{{ config.base_id }}` -> `.`.\n\n- `block_installations`: GET `/v0/meta/bases/{{ config.base_id }}/blockInstallations` -> `.`.\n\n- `interface`: GET `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ config.page_bundle_id }}` -> `.`.\n\n- `shares`: GET `/v0/meta/bases/{{ config.base_id }}/shares` -> `shares`.\n\n- `tables`: GET `/v0/meta/bases/{{ config.base_id }}/tables` -> `tables`.\n\n- `views`: GET `/v0/meta/bases/{{ config.base_id }}/views` -> `views`.\n\n- `view_metadata`: GET `/v0/meta/bases/{{ config.base_id }}/views/{{ config.view_id }}` -> `.`.\n\n- `enterprise`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}` -> `.`.\n\n- `audit_log_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogEvents` -> `events`; query pageSize.\n\n- `audit_log_requests`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs` -> `auditLogs`; query pageSize.\n\n- `audit_log_request`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs/{{ config.enterprise_audit_log_task_id }}` -> `.`.\n\n- `change_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/changeEvents` -> `events`; query pageSize.\n\n- `ediscovery_exports`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports` -> `exports`; query pageSize.\n\n- `ediscovery_export`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports/{{ config.enterprise_task_id }}` -> `.`.\n\n- `enterprise_packages`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/packages` -> `packages`.\n\n- `enterprise_personal_access_tokens`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/personalAccessTokens` -> `personalAccessTokens`.\n\n- `enterprise_users`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users` -> `users`.\n\n- `enterprise_user`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users/{{ config.user_id }}` -> `.`.\n\n- `user_group`: GET `/v0/meta/groups/{{ config.group_id }}` -> `.`.\n\n- `whoami`: GET `/v0/meta/whoami` -> `.`.\n\n- `workspace_collaborators`: GET `/v0/meta/workspaces/{{ config.workspace_id }}` -> `.`.\n\n- `records`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}` -> `records`; query pageSize.\n\n- `record`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}` -> `.`.\n\n- `comments`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments` -> `comments`; fan-out.\n\n## Direct read\n\n- `hyperdb get-records`: POST `/v0/meta/enterpriseAccounts/{enterpriseAccountId}/hyperdb/dataTables/{dataTableId}/records`, typed JSON body with `primaryKeys`, optional `fields`, `maxRecords`, and `cursor`; output policy `json_redacted`.\n\n## Write actions & risks\n\n70 fixture-backed write actions cover supportable JSON/no-body POST/PATCH/PUT/DELETE operations. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.\n\n- `create_scim_group`: POST `/scim/v2/Groups`; kind `create`; body `json`; path fields `none`; required `schemas, displayName`.\n\n- `delete_scim_group`: DELETE `/scim/v2/Groups/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `patch_scim_group`: PATCH `/scim/v2/Groups/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, Operations`.\n\n- `put_scim_group`: PUT `/scim/v2/Groups/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas`.\n\n- `create_scim_user`: POST `/scim/v2/Users`; kind `create`; body `json`; path fields `none`; required `schemas, userName`.\n\n- `delete_scim_user`: DELETE `/scim/v2/Users/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `patch_scim_user`: PATCH `/scim/v2/Users/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, Operations`.\n\n- `put_scim_user`: PUT `/scim/v2/Users/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, userName`.\n\n- `create_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks`; kind `create`; body `json`; path fields `none`; required `specification`.\n\n- `delete_webhook`: DELETE `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `set_webhook_notifications`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/enableNotifications`; kind `update`; body `json`; path fields `id`; required `id, enable`.\n\n- `refresh_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/refresh`; kind `update`; body `json`; path fields `id`; required `id`.\n\n- `create_base`: POST `/v0/meta/bases`; kind `create`; body `json`; path fields `none`; required `workspaceId, name, tables`.\n\n- `delete_base`: DELETE `/v0/meta/bases/{{ record.base_id }}`; kind `delete`; body `none`; path fields `base_id`; required `base_id`.\n\n- `delete_block_installation`: DELETE `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `manage_block_installation`: PATCH `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.\n\n- `add_base_collaborator`: POST `/v0/meta/bases/{{ config.base_id }}/collaborators`; kind `create`; body `json`; path fields `none`; required `collaborators`.\n\n- `delete_base_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `user_or_group_id`; required `user_or_group_id`.\n\n- `update_collaborator_base_permission`: PATCH `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `user_or_group_id`; required `user_or_group_id, permissionLevel`.\n\n- `add_interface_collaborator`: POST `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators`; kind `create`; body `json`; path fields `page_bundle_id`; required `page_bundle_id, collaborators`.\n\n- `delete_interface_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id`.\n\n- `update_interface_collaborator`: PATCH `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id, permissionLevel`.\n\n- `delete_interface_invite`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, invite_id`; required `page_bundle_id, invite_id`.\n\n- `delete_base_invite`: DELETE `/v0/meta/bases/{{ config.base_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `invite_id`; required `invite_id`.\n\n- `delete_share`: DELETE `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `manage_share`: PATCH `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.\n\n- `create_table`: POST `/v0/meta/bases/{{ config.base_id }}/tables`; kind `create`; body `json`; path fields `none`; required `name, fields`.\n\n- `update_table`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `none`.\n\n- `create_field`: POST `/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields`; kind `create`; body `json`; path fields `table_id`; required `table_id, name, type`.\n\n- `update_field`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.column_id }}`; kind `update`; body `json`; path fields `table_id, column_id`; required `table_id, column_id`.\n\n- `delete_view`: DELETE `/v0/meta/bases/{{ config.base_id }}/views/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `create_audit_log_request`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/auditLogs`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, timePeriod`.\n\n- `create_descendant_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/descendants`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, name`.\n\n- `create_ediscovery_export`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/exports`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, baseId`.\n\n- `move_user_groups`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveGroups`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, groupIds, targetEnterpriseAccountId`.\n\n- `move_workspaces`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveWorkspaces`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, workspaceIds, targetEnterpriseAccountId`.\n\n- `create_base_from_package_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/packages/{{ record.package_id }}/install`; kind `create`; body `json`; path fields `enterprise_account_id, package_id`; required `enterprise_account_id, package_id, workspaceId, packageReleaseId, name`.\n\n- `revoke_enterprise_personal_access_tokens`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/personalAccessTokens/revoke`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, tokenIds`.\n\n- `delete_users_by_email`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users?email={{ record.email | urlencode }}`; kind `delete`; body `none`; path fields `enterprise_account_id, email`; required `enterprise_account_id, email`.\n\n- `manage_user_batched`: PATCH `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `manage_user_membership`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/claim`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `grant_admin_access`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/grantAdminAccess`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `revoke_admin_access`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/revokeAdminAccess`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `delete_user_by_id`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `delete`; body `none`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `manage_user`: PATCH `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `logout_user`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/logout`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `remove_user_from_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/remove`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `update_workspace_ai_allowlist`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/workspaceAiAllowlist`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, workspaces`.\n\n- `create_workspace`: POST `/v0/meta/workspaces`; kind `create`; body `json`; path fields `none`; required `enterpriseAccountId, name`.\n\n- `delete_workspace`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}`; kind `delete`; body `none`; path fields `workspace_id`; required `workspace_id`.\n\n- `add_workspace_collaborator`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators`; kind `create`; body `json`; path fields `workspace_id`; required `workspace_id, collaborators`.\n\n- `delete_workspace_collaborator`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id`.\n\n- `update_workspace_collaborator`: PATCH `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id, permissionLevel`.\n\n- `delete_workspace_invite`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `workspace_id, invite_id`; required `workspace_id, invite_id`.\n\n- `move_base`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/moveBase`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id, baseId, targetWorkspaceId`.\n\n- `update_workspace_restrictions`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id`.\n\n- `upload_attachment`: POST `/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment`; kind `custom`; body `json`; path fields `record_id, attachment_field_id_or_name`; required `record_id, attachment_field_id_or_name, contentType, filename, file`.\n\n- `delete_multiple_records`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}?records[]={{ record.records | join:&records[]= }}`; kind `delete`; body `none`; path fields `records`; required `records`.\n\n- `update_multiple_records`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.\n\n- `create_records`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `create`; body `json`; path fields `none`; required `fields`.\n\n- `update_multiple_records_put`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.\n\n- `delete_record`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `update_record`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.\n\n- `replace_record`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.\n\n- `create_comment`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments`; kind `create`; body `json`; path fields `record_id`; required `record_id, text`.\n\n- `delete_comment`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}`; kind `delete`; body `none`; path fields `record_id, row_comment_id`; required `record_id, row_comment_id`.\n\n- `update_comment`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}`; kind `update`; body `json`; path fields `record_id, row_comment_id`; required `record_id, row_comment_id, text`.\n\n- `update_date_dependency_metadata`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata`; kind `update`; body `json`; path fields `id`; required `id, predecessorRecordId, dateDependencyMetadata`.\n\n- `hyperdb_delete_records_by_primary_keys`: POST `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords`; kind `custom`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, primaryKeys`.\n\n- `hyperdb_upsert_records_by_primary_keys`: PUT `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords`; kind `upsert`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, records`.\n\n## Known limits\n\n- Blocked row: `post-sync-api-endpoint` (`POST /v0/{baseId}/{apiEndpointSyncId}/sync`) because the official Sync API import is `text/csv`; the shared declarative write runtime has no typed bounded CSV body dialect and generic raw uploads remain disallowed.\n\n- API-surface ledger rows: 103 total = 31 streams + 70 writes + 1 direct read + 1 blocked operation.\n\n- Certification remains fixture-only/uncertified until separately approved live-safe credentials and provider resources are supplied outside this wave.\n",
     "icon": {
       "id": "airtable",
       "path": "icons/airtable.svg",

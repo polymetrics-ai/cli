@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/bases/synthetic-conformance-value/webhooks/synthetic-conformance-value/payloads",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payloads": [
+        {
+          "id": "webhook_payloads_fixture_1",
+          "baseTransactionNumber": 1,
+          "timestamp": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -203,6 +203,55 @@ func TestGongTranscriptCommandAllowsDeclaredResponseCap(t *testing.T) {
 	}
 }
 
+func TestAirtableHyperDBDirectReadUsesTypedOperationSurface(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/v0/ent_fixture/dtbl_fixture/getRecords" {
+			t.Errorf("request = %s %s, want POST HyperDB records path", r.Method, r.URL.Path)
+		}
+		var body struct {
+			PrimaryKeys []string `json:"primaryKeys"`
+			MaxRecords  int      `json:"maxRecords"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decode body: %v", err)
+		}
+		if len(body.PrimaryKeys) != 1 || body.PrimaryKeys[0] != "pk_fixture" || body.MaxRecords != 1 {
+			t.Errorf("body = %+v, want primaryKeys=[pk_fixture] maxRecords=1", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"records":[{"id":"rec_fixture","fields":{"Name":"Fixture"}}]}`))
+	}))
+	t.Cleanup(server.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("PM_TEST_AIRTABLE_API_KEY", "fixture-airtable-token")
+	runCLI(t, []string{
+		"credentials", "add", "airtable-local",
+		"--connector", "airtable",
+		"--from-env", "api_key=PM_TEST_AIRTABLE_API_KEY",
+		"--config", "base_url=" + server.URL,
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"airtable", "hyperdb", "get-records",
+		"--credential", "airtable-local",
+		"--enterprise-account-id", "ent_fixture",
+		"--data-table-id", "dtbl_fixture",
+		"--primary-key", "pk_fixture",
+		"--max-records", "1",
+		"--root", root,
+		"--json",
+	})
+	for _, want := range []string{`"kind": "ConnectorCommandDirectRead"`, `"path": "/v0/ent_fixture/dtbl_fixture/getRecords"`, `"records"`} {
+		if !strings.Contains(stdout, want) {
+			t.Fatalf("airtable direct read output missing %q:\n%s", want, stdout)
+		}
+	}
+}
+
 func TestRootHelpJSONIsAgentReadable(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"--json", "--help"}, &stdout, &stderr)

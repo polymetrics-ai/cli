@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/workspaces/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "workspace_collaborators_fixture_1",
+      "name": "Fixture Name"
+    }
+  }
+}

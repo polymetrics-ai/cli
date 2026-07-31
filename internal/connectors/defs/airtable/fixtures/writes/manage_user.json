@@ -1,0 +1,14 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "id": "id_fixture",
+    "email": "user.fixture@example.invalid"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/users/id_fixture",
+    "body": {
+      "email": "user.fixture@example.invalid"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "record_fixture_1",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "fields": {
+        "Name": "Fixture value"
+      }
+    }
+  }
+}

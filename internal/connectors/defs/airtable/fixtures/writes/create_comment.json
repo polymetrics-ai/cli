@@ -1,17 +1,15 @@
 {
   "record": {
-    "record_id": "rec_fixture_1",
-    "text": "Fixture comment"
+    "record_id": "record_id_fixture",
+    "text": "text_fixture",
+    "parentCommentId": "parentCommentId_fixture"
   },
   "expect": {
     "method": "POST",
-    "path": "/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_1/comments",
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/record_id_fixture/comments",
     "body": {
-      "text": "Fixture comment"
+      "text": "text_fixture",
+      "parentCommentId": "parentCommentId_fixture"
     }
-  },
-  "response": {
-    "status": 200,
-    "body": { "id": "comFixtureNew", "text": "Fixture comment", "createdTime": "2026-01-01T00:00:00.000Z" }
   }
 }

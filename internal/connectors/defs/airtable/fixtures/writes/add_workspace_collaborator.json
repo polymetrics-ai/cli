@@ -1,0 +1,21 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "collaborators": [
+      {
+        "sample": "value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/workspaces/workspace_id_fixture/collaborators",
+    "body": {
+      "collaborators": [
+        {
+          "sample": "value"
+        }
+      ]
+    }
+  }
+}

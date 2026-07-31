@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/auditLogs",
+    "query": {
+      "pageSize": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "auditLogs": [
+        {
+          "id": "audit_log_requests_fixture_1",
+          "name": "Fixture Name"
+        }
+      ]
+    }
+  }
+}

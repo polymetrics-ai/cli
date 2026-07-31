@@ -1,14 +1,14 @@
 {
   "record": {
-    "table_id": "tbl_fixture_1",
-    "id": "fld_fixture_1",
-    "name": "Fixture Field Renamed"
+    "table_id": "table_id_fixture",
+    "column_id": "column_id_fixture",
+    "description": "description_fixture"
   },
   "expect": {
     "method": "PATCH",
-    "path": "/meta/bases/synthetic-conformance-value/tables/tbl_fixture_1/fields/fld_fixture_1",
+    "path": "/v0/meta/bases/synthetic-conformance-value/tables/table_id_fixture/fields/column_id_fixture",
     "body": {
-      "name": "Fixture Field Renamed"
+      "description": "description_fixture"
     }
   }
 }

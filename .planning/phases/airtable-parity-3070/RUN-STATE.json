@@ -1,0 +1,46 @@
+{
+  "phase": "airtable-parity-3070",
+  "issue": 3070,
+  "branch": "fm/cli-airtable-parity-wave03-r1",
+  "status": "verified_ready_to_commit",
+  "verificationPassed": true,
+  "verificationNote": "Exact single-bundle command `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` is recorded as a tooling mismatch: current connectorgen validates directories of bundle directories and treats fixtures/schemas as connectors. Effective root validation plus conformance, CLI, build, boundary, make verify, and diff-check gates passed.",
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run",
+    "programmingLoopResult": "unavailable: unknown GSD command: programming-loop",
+    "fallback": "manual GSD execution of scripts/gsd prompt plan-phase and execute-phase prompts",
+    "planCommand": "scripts/gsd prompt plan-phase airtable-parity-3070 --skip-research",
+    "executeCommand": "scripts/gsd prompt execute-phase airtable-parity-3070 --dry-run"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "all child issues share internal/connectors/defs/airtable and generated docs/catalog surfaces; mutating worker fan-out would collide"
+    }
+  ],
+  "sourceAudit": {
+    "url": "https://airtable.com/developers/web/api/introduction",
+    "openapiVersion": "3.1.0",
+    "openapiSHA256": "f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8",
+    "operationCount": 103,
+    "methodCounts": { "GET": 31, "POST": 33, "DELETE": 19, "PATCH": 15, "PUT": 5 },
+    "laneCounts": { "etl_read": 27, "reverse_etl_write": 69, "direct_read_query_search": 1, "binary_file": 1, "cdc_changefeed": 5 }
+  },
+  "implementation": {
+    "apiSurfaceRows": 103,
+    "streams": 31,
+    "writes": 70,
+    "directReads": 1,
+    "blockedRows": 1,
+    "blockedReason": "Airtable Sync API CSV import requires text/csv request bodies; no typed bounded CSV write body dialect exists in the declarative write runtime."
+  },
+  "safety": {
+    "liveProviderCalls": false,
+    "credentialsRequested": false,
+    "providerWrites": false,
+    "noMistakes": false,
+    "pushOrPR": false
+  }
+}

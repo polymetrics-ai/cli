@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/users"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "id": "enterprise_users_fixture_1",
+          "email": "user.fixture@example.invalid",
+          "name": "Fixture User"
+        }
+      ]
+    }
+  }
+}

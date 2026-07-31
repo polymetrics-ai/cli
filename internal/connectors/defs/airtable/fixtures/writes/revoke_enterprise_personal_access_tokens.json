@@ -1,0 +1,17 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "tokenIds": [
+      "tokenIds_item_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/personalAccessTokens/revoke",
+    "body": {
+      "tokenIds": [
+        "tokenIds_item_fixture"
+      ]
+    }
+  }
+}

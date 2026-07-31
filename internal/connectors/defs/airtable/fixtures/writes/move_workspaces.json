@@ -1,0 +1,21 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "workspaceIds": [
+      "workspaceIds_item_fixture"
+    ],
+    "targetEnterpriseAccountId": "targetEnterpriseAccountId_fixture",
+    "replacementOwnerId": "replacementOwnerId_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/moveWorkspaces",
+    "body": {
+      "workspaceIds": [
+        "workspaceIds_item_fixture"
+      ],
+      "targetEnterpriseAccountId": "targetEnterpriseAccountId_fixture",
+      "replacementOwnerId": "replacementOwnerId_fixture"
+    }
+  }
+}
