@@ -2,9 +2,19 @@
   "phase": "segment-parity-3150",
   "branch": "fm/cli-segment-parity-wave04-r1",
   "issues": [3150, 3151, 3152, 3153, 3154, 3155, 3156, 3157],
-  "status": "local-gates-passed-pending-commit",
+  "status": "scope-correction-verified-pending-commit",
   "push_pr_no_mistakes": false,
   "live_provider_calls": false,
+  "corrective_scope": {
+    "base_commit": "dae45a78e",
+    "action": "reverted only bundleregistry files to pre-commit contents in a new corrective commit",
+    "files": [
+      "internal/connectors/bundleregistry/registry.go",
+      "internal/connectors/bundleregistry/registry_test.go"
+    ],
+    "prohibited": ["amend", "reset", "rebase", "discard Segment work", "push", "PR", "no-mistakes"],
+    "pre_commit_match_check": "git diff dae45a78e^ -- internal/connectors/bundleregistry/registry.go internal/connectors/bundleregistry/registry_test.go --exit-code passed"
+  },
   "official_segment_openapi": {
     "version": "73.0.8",
     "openapi": "3.0.3",
@@ -23,27 +33,25 @@
     "cli_commands": 28
   },
   "gates": {
+    "scope_correction": "pass",
     "segment_count_test": "pass",
     "segment_conformance": "pass",
     "connectorgen_validate": "pass",
     "focused_cli_docs": "pass",
     "go_build_cmd_pm": "pass",
     "connector_boundary": "pass",
-    "make_verify": "pass",
+    "make_verify": "pass_without_bundleregistry_cache_no_code_timeout_dependency_observed",
     "git_diff_check": "pass"
   },
   "required_skills": [
     "gsd-core",
     "golang-how-to",
-    "golang-cli",
     "golang-testing",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
     "golang-error-handling",
     "golang-security",
     "golang-safety",
-    "golang-structs-interfaces",
-    "golang-context",
-    "golang-concurrency",
-    "golang-documentation",
     "golang-lint",
     "context-mode"
   ]

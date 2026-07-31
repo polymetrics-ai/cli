@@ -4,6 +4,7 @@
 
 - Adapter: `scripts/gsd doctor` already passed in this session.
 - Prompt loaded: `scripts/gsd prompt gsd-plan-phase "Segment connector parity #3150-#3157" --skip-research` and `scripts/gsd prompt gsd-execute-phase "Segment connector parity"`.
+- Scope-correction prompt loaded: `scripts/gsd prompt gsd-plan-phase "Segment parity #3150 scope correction: revert bundleregistry files only" --skip-research` and `scripts/gsd prompt gsd-execute-phase "Segment parity #3150 scope correction: corrective commit only"`.
 - Manual fallback: repo-local GSD has no `programming-loop` prompt name in `scripts/gsd list`; this plan records the manual GSD/TDD loop before production edits.
 - Required skills used: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-documentation`, `golang-lint`, `context-mode`.
 
@@ -23,7 +24,8 @@ Implement definition-owned Segment Public API parity from the official Redocly O
 
 - Do not push, open/update PRs, merge, or invoke `/no-mistakes`.
 - Do not run live Segment calls, credentials, secrets, VPS, certification, or Thaalam changes.
-- Keep production changes connector-local except owned tests, docs, generated help/manual artifacts, planning artifacts, and a behavior-preserving bundleregistry cache needed to keep the enlarged declarative bundle set within local test timeouts.
+- Keep production changes connector-local except owned tests, docs, generated help/manual artifacts, and planning artifacts.
+- Scope correction: revert `internal/connectors/bundleregistry/registry.go` and `internal/connectors/bundleregistry/registry_test.go` to their pre-`dae45a78e` contents in a new corrective commit; do not amend, reset, rebase, or discard Segment connector work.
 - No generic HTTP method/path/body/query, shell, file, SQL, arbitrary event/body, or passthrough escape hatch.
 - Reverse ETL remains plan -> preview -> explicit approval -> execute; deletes require destructive confirmation.
 
@@ -44,6 +46,7 @@ Implement definition-owned Segment Public API parity from the official Redocly O
    - Focused CLI/help tests via existing golden transcripts and direct Segment help/inspect commands.
 4. Regenerate docs/skills/manual/help surfaces.
 5. Run gates and commit locally only.
+6. Corrective slice: remove the accidental shared `bundleregistry` cache/test changes, rerun focused Segment checks and `make verify` without that cache, document any genuine timeout dependency, then create a new corrective commit.
 
 ## Verification checklist
 
@@ -54,3 +57,4 @@ See `VERIFICATION.md`; all required local gates passed before the final commit.
 - Segment now tracks the official v73.0.8 OpenAPI surface: 197 API endpoints, 197 operation rows, 80 fixture-backed streams, 96 fixed write actions, 19 bounded direct reads, 1 blocked binary/file workflow, and 1 disallowed echo/test endpoint.
 - The generated CLI surface intentionally documents representative stream/write groups plus every fixed direct-read operation (28 commands total) while full operation parity is enforced in `api_surface.json`/`operations.json` and docs.
 - Reverse ETL writes remain fixed-action only and continue through the shared plan/preview/approval flow; no raw method/path/body escape hatch was added.
+- Scope correction planned before edits: shared `bundleregistry` runtime files will be restored to pre-parity contents, preserving all Segment-owned/generated surfaces.
