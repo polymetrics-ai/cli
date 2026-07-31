@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reverse-etl-models/synthetic-conformance-value/subscriptionId/synthetic-conformance-value/syncs",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "syncStatuses": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list reverse etl sync statuses from model and subscription id",
+            "slug": "list-reverse-etl-sync-statuses-from-model-and-subscription-id",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/sources/synthetic-conformance-value/live-plugins/latest",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "livePlugin": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get latest from live plugins",
+          "slug": "get-latest-from-live-plugins",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

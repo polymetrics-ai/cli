@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/audiences/synthetic-conformance-value/activations",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "activations": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list activations from audience",
+            "slug": "list-activations-from-audience",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/spaces/synthetic-conformance-value/computed-traits/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "computedTrait": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get computed trait",
+          "slug": "get-computed-trait",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

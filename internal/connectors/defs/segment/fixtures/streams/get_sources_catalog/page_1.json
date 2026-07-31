@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/sources",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "pagination": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get sources catalog",
+          "slug": "get-sources-catalog",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

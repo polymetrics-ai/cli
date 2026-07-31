@@ -417,7 +417,7 @@
 | `scryfall` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Scryfall | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://scryfall.com/docs/api) | bundle definition |
 | `searxng` | [`icons/searxng.svg`](../icons/searxng.svg) | SearXNG | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.searxng.org) | bundle definition |
 | `secoda` | [`icons/secoda.svg`](../icons/secoda.svg) | Secoda | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.secoda.co/api.md) | bundle definition |
-| `segment` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Segment | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://docs.segmentapis.com/tag/Getting-Started) | bundle definition |
+| `segment` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Segment | `api` | beta | check, catalog, read, write | 80 | 96 | [Documentation](https://docs.segmentapis.com/) | bundle definition |
 | `sendgrid` | [`icons/sendgrid.svg`](../icons/sendgrid.svg) | Sendgrid | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication) | bundle definition |
 | `sendinblue` | [`icons/sendinblue.svg`](../icons/sendinblue.svg) | Sendinblue | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.brevo.com/reference) | bundle definition |
 | `sendowl` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | SendOwl | `api` | ga | check, catalog, read, write | 6 | 14 | [Documentation](https://www.sendowl.com/developers/) | bundle definition |

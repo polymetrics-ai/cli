@@ -1,0 +1,4889 @@
+{
+  "actions": [
+    {
+      "name": "add_activation_to_audience",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.connectionId }}/activations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          },
+          "connectionId": {
+            "type": "string",
+            "description": "Segment path parameter connectionId"
+          },
+          "activationName": {
+            "type": "string",
+            "description": "Activation name. For Warehouse Destinations, this is used as the table name."
+          },
+          "activationType": {
+            "type": "string",
+            "description": "Determines when an event is sent to the Destination."
+          },
+          "destinationMapping": {
+            "type": "object",
+            "description": "Defines the specific action and data mapping for the Destination. Only applicable for Action Destinations.",
+            "properties": {
+              "actionId": {
+                "type": "string",
+                "description": "The id for the action that Segment should perform on the Destination."
+              },
+              "settings": {
+                "type": "object",
+                "description": "The action/mapping settings."
+              }
+            },
+            "required": [
+              "actionId"
+            ],
+            "additionalProperties": false
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Optional human-readable label for the activation. Only supported for Warehouse Destinations. When omitted, the activationName is used as the label."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Determines whether an activation is enabled."
+          },
+          "performResync": {
+            "type": "boolean",
+            "description": "Determines whether to perform a full resync upon creation. If true, the entire audience is resent to the Destination from scratch. If false, only future changes will be synced."
+          },
+          "personalization": {
+            "type": "object",
+            "description": "The data points used to enrich the event. Defines which profile traits and/or entity properties are included in the event sent to the Destination.",
+            "properties": {
+              "entities": {
+                "type": "array",
+                "description": "Entities V2 Object.",
+                "items": {
+                  "type": "object",
+                  "description": "The Personalization Input Entity.",
+                  "properties": {
+                    "properties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "relationshipSlug": {
+                      "type": "string",
+                      "description": "The relationship slug for the entity."
+                    }
+                  },
+                  "required": [
+                    "properties",
+                    "relationshipSlug"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "profile": {
+                "type": "object",
+                "description": "Profile Object.",
+                "properties": {
+                  "mapping": {
+                    "type": "object"
+                  },
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "properties"
+                ],
+                "additionalProperties": false
+              },
+              "syncEntityPropertyChanges": {
+                "type": "boolean",
+                "description": "Sync entity property changes to the Destination."
+              }
+            },
+            "required": [
+              "profile"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId",
+          "connectionId",
+          "activationName",
+          "activationType",
+          "performResync",
+          "personalization"
+        ]
+      },
+      "risk": "Segment Add Activation to Audience (POST /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId",
+        "connectionId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_audience_schedule_to_audience",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "config": {},
+          "strategy": {
+            "type": "string",
+            "enum": [
+              "PERIODIC",
+              "SPECIFIC_DAYS"
+            ],
+            "description": "Strategy of the audience schedule (periodic or specific days)."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id",
+          "config",
+          "strategy"
+        ]
+      },
+      "risk": "Segment Add Audience Schedule to Audience (POST /spaces/{spaceId}/audiences/{id}/schedules) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_connection_from_source_to_warehouse",
+      "kind": "create",
+      "method": "POST",
+      "path": "/warehouses/{{ record.warehouseId }}/connected-sources/{{ record.sourceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "warehouseId",
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Add Connection from Source to Warehouse (POST /warehouses/{warehouseId}/connected-sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "warehouseId",
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_source_connection_from_warehouse",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/warehouses/{{ record.warehouseId }}/connected-sources/{{ record.sourceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "warehouseId",
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Remove Source Connection from Warehouse (DELETE /warehouses/{warehouseId}/connected-sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "warehouseId",
+        "sourceId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_destination_to_audience",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          },
+          "connectionSettings": {
+            "description": "The settings that a Destination requires to create audiences on a third-party platform. These settings are Destination-specific."
+          },
+          "destination": {
+            "type": "object",
+            "description": "The Destination.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The Destination id. Use the List Destinations endpoint to look up available ids."
+              },
+              "type": {
+                "type": "string",
+                "description": "The category of the Destination."
+              }
+            },
+            "required": [
+              "id",
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          "idSyncConfiguration": {
+            "type": "array",
+            "description": "Identifier sync configuration. Defines which external ids to sync and their selection strategies. Maximum 5 items allowed.",
+            "items": {
+              "type": "object",
+              "description": "The identifier sync configuration input.",
+              "properties": {
+                "externalId": {
+                  "type": "string",
+                  "description": "The id type to sync. Examples: user_id, email, anonymous_id."
+                },
+                "mapTo": {
+                  "type": "string",
+                  "description": "Optional destination-specific identifier to map to (for example, \"Email_Address_c\")."
+                },
+                "strategy": {
+                  "type": "string",
+                  "description": "The rule for selecting which identifiers to sync from a profile."
+                }
+              },
+              "required": [
+                "externalId",
+                "strategy"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId",
+          "destination"
+        ]
+      },
+      "risk": "Segment Add Destination to Audience (POST /spaces/{spaceId}/audiences/{audienceId}/destination-connections) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "connectionSettings"
+      ]
+    },
+    {
+      "name": "add_labels_to_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sources/{{ record.sourceId }}/labels",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "labels": {
+            "type": "array",
+            "description": "The labels to associate with a Source.",
+            "items": {
+              "type": "object",
+              "description": "A label lets Workspace owners assign permissions to users, and grant these users access to groups.",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "An optional description of the purpose of this label."
+                },
+                "key": {
+                  "type": "string",
+                  "description": "The key that represents the name of this label."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The value associated with the key of this label."
+                }
+              },
+              "required": [
+                "key",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "labels"
+        ]
+      },
+      "risk": "Segment Add Labels to Source (POST /sources/{sourceId}/labels) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "replace_labels_in_source",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/sources/{{ record.sourceId }}/labels",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "labels": {
+            "type": "array",
+            "description": "The list of labels to replace in the Source.",
+            "items": {
+              "type": "object",
+              "description": "A label lets Workspace owners assign permissions to users, and grant these users access to groups.",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "An optional description of the purpose of this label."
+                },
+                "key": {
+                  "type": "string",
+                  "description": "The key that represents the name of this label."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The value associated with the key of this label."
+                }
+              },
+              "required": [
+                "key",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "labels"
+        ]
+      },
+      "risk": "Segment Replace Labels in Source (PUT /sources/{sourceId}/labels) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_permissions_to_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/{{ record.userId }}/permissions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "Segment path parameter userId"
+          },
+          "permissions": {
+            "type": "array",
+            "description": "The permissions to add.",
+            "items": {
+              "type": "object",
+              "description": "The input for a permission, associated with a resource and/or labels.",
+              "properties": {
+                "resources": {
+                  "type": "array",
+                  "description": "The resources to link the selected role to.",
+                  "items": {
+                    "type": "object",
+                    "description": "The most basic representation of a resource belonging to a set of permissions.",
+                    "additionalProperties": false
+                  }
+                },
+                "roleId": {
+                  "type": "string",
+                  "description": "The role id of this permission."
+                }
+              },
+              "required": [
+                "resources",
+                "roleId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "permissions"
+        ]
+      },
+      "risk": "Segment Add Permissions to User (POST /users/{userId}/permissions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "replace_permissions_for_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.userId }}/permissions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "Segment path parameter userId"
+          },
+          "permissions": {
+            "type": "array",
+            "description": "The permissions to add.",
+            "items": {
+              "type": "object",
+              "description": "The input for a permission, associated with a resource and/or labels.",
+              "properties": {
+                "resources": {
+                  "type": "array",
+                  "description": "The resources to link the selected role to.",
+                  "items": {
+                    "type": "object",
+                    "description": "The most basic representation of a resource belonging to a set of permissions.",
+                    "additionalProperties": false
+                  }
+                },
+                "roleId": {
+                  "type": "string",
+                  "description": "The role id of this permission."
+                }
+              },
+              "required": [
+                "resources",
+                "roleId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "permissions"
+        ]
+      },
+      "risk": "Segment Replace Permissions for User (PUT /users/{userId}/permissions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_permissions_to_user_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups/{{ record.userGroupId }}/permissions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          },
+          "permissions": {
+            "type": "array",
+            "description": "The permissions to add.",
+            "items": {
+              "type": "object",
+              "description": "The input for a permission, associated with a resource and/or labels.",
+              "properties": {
+                "resources": {
+                  "type": "array",
+                  "description": "The resources to link the selected role to.",
+                  "items": {
+                    "type": "object",
+                    "description": "The most basic representation of a resource belonging to a set of permissions.",
+                    "additionalProperties": false
+                  }
+                },
+                "roleId": {
+                  "type": "string",
+                  "description": "The role id of this permission."
+                }
+              },
+              "required": [
+                "resources",
+                "roleId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId",
+          "permissions"
+        ]
+      },
+      "risk": "Segment Add Permissions to User Group (POST /groups/{userGroupId}/permissions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "replace_permissions_for_user_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/groups/{{ record.userGroupId }}/permissions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          },
+          "permissions": {
+            "type": "array",
+            "description": "The permissions to replace with.",
+            "items": {
+              "type": "object",
+              "description": "The input for a permission, associated with a resource and/or labels.",
+              "properties": {
+                "resources": {
+                  "type": "array",
+                  "description": "The resources to link the selected role to.",
+                  "items": {
+                    "type": "object",
+                    "description": "The most basic representation of a resource belonging to a set of permissions.",
+                    "additionalProperties": false
+                  }
+                },
+                "roleId": {
+                  "type": "string",
+                  "description": "The role id of this permission."
+                }
+              },
+              "required": [
+                "resources",
+                "roleId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId",
+          "permissions"
+        ]
+      },
+      "risk": "Segment Replace Permissions for User Group (PUT /groups/{userGroupId}/permissions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "add_source_to_tracking_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}/sources",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "The id of the Source associated with the Tracking Plan."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId",
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Add Source to Tracking Plan (POST /tracking-plans/{trackingPlanId}/sources) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_source_from_tracking_plan",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}/sources",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId"
+        ]
+      },
+      "risk": "Segment Remove Source from Tracking Plan (DELETE /tracking-plans/{trackingPlanId}/sources) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "add_users_to_user_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups/{{ record.userGroupId }}/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          },
+          "emails": {
+            "type": "array",
+            "description": "The email addresses of the users and invites to add.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId",
+          "emails"
+        ]
+      },
+      "risk": "Segment Add Users to User Group (POST /groups/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "cancel_reverse_etl_sync_for_model",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reverse-etl-models/{{ record.modelId }}/syncs/{{ record.syncId }}/cancel",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "modelId": {
+            "type": "string",
+            "description": "Segment path parameter modelId"
+          },
+          "syncId": {
+            "type": "string",
+            "description": "Segment path parameter syncId"
+          },
+          "reasonForCanceling": {
+            "type": "number",
+            "description": "The reason for canceling the sync."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "modelId",
+          "syncId"
+        ]
+      },
+      "risk": "Segment Cancel Reverse ETL Sync for Model (POST /reverse-etl-models/{modelId}/syncs/{syncId}/cancel) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "modelId",
+        "syncId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_audience",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/audiences",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceType": {
+            "type": "string",
+            "enum": [
+              "ACCOUNTS",
+              "LINKED",
+              "USERS"
+            ],
+            "description": "Denotes the type of audience product."
+          },
+          "definition": {
+            "type": "object",
+            "description": "Query language definition.",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "The query language string defining the audience segmentation criteria."
+              },
+              "targetEntity": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The target entity relationship slug, only applicable for linked audiences. Use ```profile``` when the targeting the profile."
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the audience."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Determines whether a computation is enabled."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the audience."
+          },
+          "options": {
+            "type": "object",
+            "description": "Represents the options of Including Anonymous users and Historical Data.",
+            "properties": {
+              "backfillEventDataDays": {
+                "type": "number",
+                "description": "If specified, the value of this field indicates the number of days (specified from the date the audience was created) that event data will be included from when determining audience membership."
+              },
+              "filterByExternalIds": {
+                "type": "array",
+                "description": "The set of profile external identifiers being used to determine audience membership.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "includeHistoricalData": {
+                "type": "boolean",
+                "description": "Determines whether data prior to the audience being created is included when determining audience membership."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceType",
+          "definition",
+          "name"
+        ]
+      },
+      "risk": "Segment Create Audience (POST /spaces/{spaceId}/audiences) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_cloud_source_regulation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/regulations/cloudsources/{{ record.sourceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "collection": {
+            "type": "string",
+            "description": "The Cloud Source collection to regulate."
+          },
+          "regulationType": {
+            "type": "string",
+            "enum": [
+              "DELETE_INTERNAL",
+              "DELETE_ONLY",
+              "SUPPRESS_ONLY",
+              "SUPPRESS_WITH_DELETE",
+              "SUPPRESS_WITH_DELETE_INTERNAL",
+              "UNSUPPRESS"
+            ],
+            "description": "The regulation type to create."
+          },
+          "subjectIds": {
+            "type": "array",
+            "description": "The list of `userId` or `objectId` values of the subjects to regulate.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subjectType": {
+            "type": "string",
+            "enum": [
+              "OBJECT_ID"
+            ],
+            "description": "The subject type. Must be `objectId` for Cloud Sources."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "collection",
+          "regulationType",
+          "subjectIds",
+          "subjectType"
+        ]
+      },
+      "risk": "Segment Create Cloud Source Regulation (POST /regulations/cloudsources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_computed_trait",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/computed-traits",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "definition": {
+            "type": "object",
+            "description": "Represents the Compute Query Language definition of the computation and type of computation.",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "The query language string defining the computed trait aggregation criteria."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ACCOUNTS",
+                  "USERS"
+                ],
+                "description": "The underlying data type being aggregated for this computed trait."
+              }
+            },
+            "required": [
+              "query",
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the computation."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Determines whether a computation is enabled."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the computation."
+          },
+          "options": {
+            "type": "object",
+            "description": "Options which should be applied when aggregating computed traits.",
+            "properties": {
+              "backfillDurationDays": {
+                "type": "number",
+                "description": "If specified, the value of this field indicates the number of days, specified from the date the audience was created, that event data will be included from when determining audience membership."
+              },
+              "includeAnonymousUsers": {
+                "type": "boolean",
+                "description": "Determines whether anonymous users should be included when determining the computed trait value."
+              },
+              "includeHistoricalData": {
+                "type": "boolean",
+                "description": "Determines whether data prior to the computed trait being created is included when determining the computed trait value."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "definition",
+          "name"
+        ]
+      },
+      "risk": "Segment Create Computed Trait (POST /spaces/{spaceId}/computed-traits) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_credential",
+      "kind": "create",
+      "method": "POST",
+      "path": "/credentials",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "A human-readable name for this Credential."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains type-specific settings for this Credential."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "settings"
+        ]
+      },
+      "risk": "Segment Create Credential (POST /credentials) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_dbt_model_sync_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/dbt-model-syncs/trigger",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "The Source id to trigger a dbt model sync."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Create Dbt Model Sync Trigger (POST /dbt-model-syncs/trigger) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_destination",
+      "kind": "create",
+      "method": "POST",
+      "path": "/destinations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this Destination should receive data."
+          },
+          "metadataId": {
+            "type": "string",
+            "description": "The id of the metadata to link to the new Destination."
+          },
+          "name": {
+            "type": "string",
+            "description": "Defines the display name of the Destination."
+          },
+          "settings": {
+            "type": "object",
+            "description": "An object that contains settings for the Destination based on the \"required\" and \"advanced\" settings present in the",
+            "additionalProperties": true
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "The id of the Source to connect to this Destination instance."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "metadataId",
+          "settings",
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Create Destination (POST /destinations) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_destination_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/destinations/{{ record.destinationId }}/subscriptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "actionId": {
+            "type": "string",
+            "description": "The associated action id the subscription should trigger."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Is the subscription enabled."
+          },
+          "modelId": {
+            "type": "string",
+            "description": "When creating a Reverse ETL connection, indicates the Model being used to"
+          },
+          "name": {
+            "type": "string",
+            "description": "A user-defined name for the subscription."
+          },
+          "settings": {
+            "type": "object",
+            "description": "The fields used for configuring this action."
+          },
+          "trigger": {
+            "type": "string",
+            "description": "The FQL statement."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId",
+          "actionId",
+          "enabled",
+          "name",
+          "trigger"
+        ]
+      },
+      "risk": "Segment Create Destination Subscription (POST /destinations/{destinationId}/subscriptions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_filter_for_destination",
+      "kind": "create",
+      "method": "POST",
+      "path": "/destination/{{ record.destinationId }}/filters",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "actions": {
+            "type": "array",
+            "description": "Actions for the Destination filter.",
+            "items": {
+              "type": "object",
+              "description": "Represents a Destination filter action.",
+              "properties": {
+                "fields": {
+                  "type": "object",
+                  "description": "A dictionary of paths to object keys that this filter applies to.",
+                  "additionalProperties": true
+                },
+                "path": {
+                  "type": "string",
+                  "description": "The JSON path to a property within a payload object from which Segment generates a deterministic"
+                },
+                "percent": {
+                  "type": "number",
+                  "description": "A decimal between 0 and 1 used for 'sample' type events and"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "ALLOW_PROPERTIES",
+                    "DROP",
+                    "DROP_PROPERTIES",
+                    "SAMPLE"
+                  ],
+                  "description": "The kind of Transformation to apply to any matched properties."
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the filter."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "When set to true, the Destination filter is active."
+          },
+          "if": {
+            "type": "string",
+            "description": "The filter's condition."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "The id of the Source associated with this filter."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the filter."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId",
+          "actions",
+          "enabled",
+          "if",
+          "sourceId",
+          "title"
+        ]
+      },
+      "risk": "Segment Create Filter for Destination (POST /destination/{destinationId}/filters) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_filter_for_space",
+      "kind": "create",
+      "method": "POST",
+      "path": "/filters",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The description of the filter."
+          },
+          "drop": {
+            "type": "boolean",
+            "description": "Whether the event is dropped."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the filter is enabled."
+          },
+          "if": {
+            "type": "string",
+            "description": "The \"if\" statement for a filter."
+          },
+          "integrationId": {
+            "type": "string",
+            "description": "The Space id to filter on."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the filter."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "if",
+          "integrationId",
+          "name"
+        ]
+      },
+      "risk": "Segment Create Filter for Space (POST /filters) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_function",
+      "kind": "create",
+      "method": "POST",
+      "path": "/functions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The Function code."
+          },
+          "description": {
+            "type": "string",
+            "description": "A description for this Function."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "A display name for this Function."
+          },
+          "logoUrl": {
+            "type": "string",
+            "description": "The URL of the logo for this Function."
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "DESTINATION",
+              "INSERT_DESTINATION",
+              "INSERT_SOURCE",
+              "INSERT_TRANSFORMATION",
+              "SOURCE"
+            ],
+            "description": "The Function type."
+          },
+          "settings": {
+            "type": "array",
+            "description": "The list of settings for this Function.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "A description of this Function Setting."
+                },
+                "label": {
+                  "type": "string",
+                  "description": "The label for this Function Setting."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of this Function Setting."
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Whether this Function Setting is required."
+                },
+                "sensitive": {
+                  "type": "boolean",
+                  "description": "Whether this Function Setting contains sensitive information."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "ARRAY",
+                    "BOOLEAN",
+                    "STRING",
+                    "TEXT_MAP"
+                  ],
+                  "description": "The type of this Function Setting."
+                }
+              },
+              "required": [
+                "description",
+                "label",
+                "name",
+                "required",
+                "sensitive",
+                "type"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "displayName",
+          "resourceType"
+        ]
+      },
+      "risk": "Segment Create Function (POST /functions) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_function_deployment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/functions/{{ record.functionId }}/deploy",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "functionId": {
+            "type": "string",
+            "description": "Segment path parameter functionId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "functionId"
+        ]
+      },
+      "risk": "Segment Create Function Deployment (POST /functions/{functionId}/deploy) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "functionId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_insert_function_instance",
+      "kind": "create",
+      "method": "POST",
+      "path": "/insert-function-instances",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this insert Function instance should be enabled for the Destination."
+          },
+          "functionId": {
+            "type": "string",
+            "description": "Insert Function id to which this instance is associated. "
+          },
+          "integrationId": {
+            "type": "string",
+            "description": "The Source or Destination id to be connected."
+          },
+          "name": {
+            "type": "string",
+            "description": "Defines the display name of the insert Function instance."
+          },
+          "settings": {
+            "type": "object",
+            "description": "An object that contains settings for this insert Function instance based on the settings present in the",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "functionId",
+          "integrationId",
+          "name",
+          "settings"
+        ]
+      },
+      "risk": "Segment Create Insert Function Instance (POST /insert-function-instances) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_invites",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invites",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "invites": {
+            "type": "array",
+            "description": "The list of invites.",
+            "items": {
+              "type": "object",
+              "description": "Defines an invitation to join a Workspace.",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "The invited user's email to attach the permissions to."
+                },
+                "permissions": {
+                  "type": "array",
+                  "description": "The permissions to attach to the invited user.",
+                  "items": {
+                    "type": "object",
+                    "description": "Defines a permission to apply to the user in an invite.",
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "email"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "invites"
+        ]
+      },
+      "risk": "Segment Create Invites (POST /invites) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_invites",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/invites",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "Segment Delete Invites (DELETE /invites) mutates provider state; execute only through reverse ETL approval gates.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "create_label",
+      "kind": "create",
+      "method": "POST",
+      "path": "/labels",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "object",
+            "description": "The new label to create in the Workspace.",
+            "properties": {
+              "description": {
+                "type": "string",
+                "description": "An optional description of the purpose of this label."
+              },
+              "key": {
+                "type": "string",
+                "description": "The key that represents the name of this label."
+              },
+              "value": {
+                "type": "string",
+                "description": "The value associated with the key of this label."
+              }
+            },
+            "required": [
+              "key",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "label"
+        ]
+      },
+      "risk": "Segment Create Label (POST /labels) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_live_plugin",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sources/{{ record.sourceId }}/live-plugins/create",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "code": {
+            "type": "string",
+            "description": "The Live Plugin code to be uploaded."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "code"
+        ]
+      },
+      "risk": "Segment Create Live Plugin (POST /sources/{sourceId}/live-plugins/create) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_profiles_warehouse",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/profiles-warehouses",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to allow this Warehouse to receive data. Defaults to true."
+          },
+          "metadataId": {
+            "type": "string",
+            "description": "The Warehouse metadata to use."
+          },
+          "name": {
+            "type": "string",
+            "description": "An optional human-readable name for this Warehouse."
+          },
+          "schemaName": {
+            "type": "string",
+            "description": "The custom schema name that Segment uses on the Warehouse side. The space slug value is default otherwise."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains instance-specific settings for a Warehouse."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "metadataId",
+          "settings"
+        ]
+      },
+      "risk": "Segment Create Profiles Warehouse (POST /spaces/{spaceId}/profiles-warehouses) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_reverse_etl_manual_sync",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reverse-etl-syncs",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "modelId": {
+            "type": "string",
+            "description": "The id of the Model."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "The id of the Source."
+          },
+          "subscriptionId": {
+            "type": "string",
+            "description": "The id of the Subscription."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "modelId",
+          "sourceId",
+          "subscriptionId"
+        ]
+      },
+      "risk": "Segment Create Reverse ETL Manual Sync (POST /reverse-etl-syncs) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_reverse_etl_model",
+      "kind": "create",
+      "method": "POST",
+      "path": "/reverse-etl-models",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "A longer, more descriptive explanation of the Model."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the Model should have syncs enabled. When disabled, no"
+          },
+          "name": {
+            "type": "string",
+            "description": "A short, human-readable description of the Model."
+          },
+          "query": {
+            "type": "string",
+            "description": "The SQL query that will be executed to extract data from the connected"
+          },
+          "queryIdentifierColumn": {
+            "type": "string",
+            "description": "Indicates the column named in `query` that should be used to uniquely"
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Indicates which Source to attach this model to."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "description",
+          "enabled",
+          "name",
+          "query",
+          "queryIdentifierColumn",
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Create Reverse Etl Model (POST /reverse-etl-models) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sources",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "disconnectAllWarehouses": {
+            "type": "boolean",
+            "description": "Whether to disconnect all Warehouses from the Source."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to allow this Source to send data. Defaults to true."
+          },
+          "metadataId": {
+            "type": "string",
+            "description": "The id of the Source metadata from which this instance of the Source derives."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains instance-specific settings for the Source."
+          },
+          "slug": {
+            "type": "string",
+            "description": "The slug by which to identify the Source in the Segment app."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "enabled",
+          "metadataId",
+          "slug"
+        ]
+      },
+      "risk": "Segment Create Source (POST /sources) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_source_regulation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/regulations/sources/{{ record.sourceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "regulationType": {
+            "type": "string",
+            "enum": [
+              "DELETE_ARCHIVE_ONLY",
+              "DELETE_INTERNAL",
+              "DELETE_ONLY",
+              "SUPPRESS_ONLY",
+              "SUPPRESS_WITH_DELETE",
+              "SUPPRESS_WITH_DELETE_INTERNAL",
+              "UNSUPPRESS"
+            ],
+            "description": "The regulation type to create."
+          },
+          "subjectIds": {
+            "type": "array",
+            "description": "The list of `userId` or `objectId` or `anonymousId` values of the subjects to regulate.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subjectType": {
+            "type": "string",
+            "enum": [
+              "ANONYMOUS_ID",
+              "USER_ID"
+            ],
+            "description": "The subject type."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "regulationType",
+          "subjectIds",
+          "subjectType"
+        ]
+      },
+      "risk": "Segment Create Source Regulation (POST /regulations/sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_tracking_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tracking-plans",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The Tracking Plan's description."
+          },
+          "name": {
+            "type": "string",
+            "description": "The Tracking Plan's name."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ENGAGE",
+              "LIVE",
+              "PROPERTY_LIBRARY",
+              "RULE_LIBRARY",
+              "TEMPLATE"
+            ],
+            "description": "The Tracking Plan's type."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "type"
+        ]
+      },
+      "risk": "Segment Create Tracking Plan (POST /tracking-plans) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_transformation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/transformations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "allowProperties": {
+            "type": "array",
+            "description": "Optional array for allowing properties from your events.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "destinationMetadataId": {
+            "type": "string",
+            "description": "The optional Destination metadata id to be associated with the Transformation."
+          },
+          "drop": {
+            "type": "boolean",
+            "description": "Optional boolean value if the Transformation should drop the event entirely when the if statement matches, ignores all other transforms."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "If the Transformation should be enabled."
+          },
+          "fqlDefinedProperties": {
+            "type": "array",
+            "description": "Optional array for defining new properties in [FQL](https://segment.com/docs/config-api/fql/). Currently limited to 1 property.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "fql": {
+                  "type": "string",
+                  "description": "The FQL expression used to compute the property."
+                },
+                "propertyName": {
+                  "type": "string",
+                  "description": "The new property name."
+                }
+              },
+              "required": [
+                "fql",
+                "propertyName"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "hashPropertiesConfiguration": {
+            "type": "object",
+            "description": "Optional object for hashing properties within an event.",
+            "properties": {
+              "algorithm": {
+                "type": "string",
+                "description": "Which algorithm to use to hash to properties."
+              },
+              "encoding": {
+                "type": "string",
+                "enum": [
+                  "BASE16",
+                  "BASE64",
+                  "BASE64URL",
+                  "HEX"
+                ],
+                "description": "Optional encoding to use for the hashing."
+              },
+              "key": {
+                "type": "string",
+                "description": "Optional key to hash with."
+              },
+              "paths": {
+                "type": "array",
+                "description": "The paths to the properties to be hashed.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "algorithm",
+              "paths"
+            ],
+            "additionalProperties": false
+          },
+          "if": {
+            "type": "string",
+            "description": "If statement ([FQL](https://segment.com/docs/config-api/fql/)) to match events."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Transformation."
+          },
+          "newEventName": {
+            "type": "string",
+            "description": "Optional new event name for renaming events. Works only for 'track' event type."
+          },
+          "propertyRenames": {
+            "type": "array",
+            "description": "Optional array for renaming properties collected by your events.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "newName": {
+                  "type": "string",
+                  "description": "The new name to rename the property."
+                },
+                "oldName": {
+                  "type": "string",
+                  "description": "The old name of the property."
+                }
+              },
+              "required": [
+                "newName",
+                "oldName"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "propertyValueTransformations": {
+            "type": "array",
+            "description": "Optional array for transforming properties and values collected by your events. Limited to 10 properties.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "propertyPaths": {
+                  "type": "array",
+                  "description": "The property paths. The maximum number of paths is 10.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "propertyValue": {
+                  "type": "string",
+                  "description": "The new value of the property paths."
+                }
+              },
+              "required": [
+                "propertyPaths",
+                "propertyValue"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "The Source to be associated with the Transformation."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "enabled",
+          "if",
+          "name",
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Create Transformation (POST /transformations) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_user_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/groups",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the user group to create."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "Segment Create User Group (POST /groups) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_validation_in_warehouse",
+      "kind": "create",
+      "method": "POST",
+      "path": "/warehouses/validation",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "metadataId": {
+            "type": "string",
+            "description": "The id of the Warehouse metadata type."
+          },
+          "settings": {
+            "type": "object",
+            "description": "The settings to check."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "metadataId",
+          "settings"
+        ]
+      },
+      "risk": "Segment Create Validation in Warehouse (POST /warehouses/validation) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_warehouse",
+      "kind": "create",
+      "method": "POST",
+      "path": "/warehouses",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "disconnectAllSources": {
+            "type": "boolean",
+            "description": "Whether to disconnect all Sources from this Warehouse."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to allow this Warehouse to receive data. Defaults to true."
+          },
+          "metadataId": {
+            "type": "string",
+            "description": "The Warehouse metadata to use."
+          },
+          "name": {
+            "type": "string",
+            "description": "An optional human-readable name for this Warehouse."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains instance-specific settings for a Warehouse."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "metadataId",
+          "settings"
+        ]
+      },
+      "risk": "Segment Create Warehouse (POST /warehouses) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "create_workspace_regulation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/regulations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "regulationType": {
+            "type": "string",
+            "enum": [
+              "DELETE_INTERNAL",
+              "DELETE_ONLY",
+              "SUPPRESS_ONLY",
+              "SUPPRESS_WITH_DELETE",
+              "SUPPRESS_WITH_DELETE_INTERNAL",
+              "UNSUPPRESS"
+            ],
+            "description": "The regulation type to create."
+          },
+          "subjectIds": {
+            "type": "array",
+            "description": "The list of `userId` or `objectId` values of the subjects to regulate.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subjectType": {
+            "type": "string",
+            "enum": [
+              "OBJECT_ID",
+              "USER_ID"
+            ],
+            "description": "The subject type. Use `objectId` for Cloud Source regulations."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "regulationType",
+          "subjectIds",
+          "subjectType"
+        ]
+      },
+      "risk": "Segment Create Workspace Regulation (POST /regulations) mutates provider state; execute only through reverse ETL approval gates.",
+      "body_type": "json"
+    },
+    {
+      "name": "create_write_key_for_source",
+      "kind": "create",
+      "method": "POST",
+      "path": "/sources/{{ record.sourceId }}/writekey",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Create Write Key for Source (POST /sources/{sourceId}/writekey) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_destination",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/destinations/{{ record.destinationId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId"
+        ]
+      },
+      "risk": "Segment Delete Destination (DELETE /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_destination",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/destinations/{{ record.destinationId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this Destination should receive data."
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Defines the display name of the Destination."
+          },
+          "settings": {
+            "type": "object",
+            "description": "An optional object that contains settings for the Destination based on the \"required\" and \"advanced\" settings present",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId"
+        ]
+      },
+      "risk": "Segment Update Destination (PATCH /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "delete_filter_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/filters/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Segment Delete Filter By Id (DELETE /filters/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_filter_by_id",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/filters/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the filter."
+          },
+          "drop": {
+            "type": "boolean",
+            "description": "Whether the event is dropped."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the filter is enabled."
+          },
+          "if": {
+            "type": "string",
+            "description": "The \"if\" statement for a filter."
+          },
+          "integrationId": {
+            "type": "string",
+            "description": "The Integration id of the resource."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the filter."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "integrationId"
+        ]
+      },
+      "risk": "Segment Update Filter By Id (PATCH /filters/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_function",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/functions/{{ record.functionId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "functionId": {
+            "type": "string",
+            "description": "Segment path parameter functionId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "functionId"
+        ]
+      },
+      "risk": "Segment Delete Function (DELETE /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "functionId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_function",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/functions/{{ record.functionId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "functionId": {
+            "type": "string",
+            "description": "Segment path parameter functionId"
+          },
+          "code": {
+            "type": "string",
+            "description": "The Function code."
+          },
+          "description": {
+            "type": "string",
+            "description": "A description for this Function."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "A display name for this Function."
+          },
+          "logoUrl": {
+            "type": "string",
+            "description": "A logo for this Function."
+          },
+          "settings": {
+            "type": "array",
+            "description": "The list of settings for this Function.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "A description of this Function Setting."
+                },
+                "label": {
+                  "type": "string",
+                  "description": "The label for this Function Setting."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of this Function Setting."
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Whether this Function Setting is required."
+                },
+                "sensitive": {
+                  "type": "boolean",
+                  "description": "Whether this Function Setting contains sensitive information."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "ARRAY",
+                    "BOOLEAN",
+                    "STRING",
+                    "TEXT_MAP"
+                  ],
+                  "description": "The type of this Function Setting."
+                }
+              },
+              "required": [
+                "description",
+                "label",
+                "name",
+                "required",
+                "sensitive",
+                "type"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "functionId"
+        ]
+      },
+      "risk": "Segment Update Function (PATCH /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "functionId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "delete_insert_function_instance",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/insert-function-instances/{{ record.instanceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "instanceId": {
+            "type": "string",
+            "description": "Segment path parameter instanceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "instanceId"
+        ]
+      },
+      "risk": "Segment Delete Insert Function Instance (DELETE /insert-function-instances/{instanceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "instanceId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_insert_function_instance",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/insert-function-instances/{{ record.instanceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "instanceId": {
+            "type": "string",
+            "description": "Segment path parameter instanceId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether this insert Function instance should be enabled for the Destination."
+          },
+          "name": {
+            "type": "string",
+            "description": "Defines the display name of the insert Function instance."
+          },
+          "settings": {
+            "type": "object",
+            "description": "An object that contains settings for this insert Function instance based on the settings present in the",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "instanceId",
+          "settings"
+        ]
+      },
+      "risk": "Segment Update Insert Function Instance (PATCH /insert-function-instances/{instanceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "instanceId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "delete_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/labels/{{ record.key }}/{{ record.value }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Segment path parameter key"
+          },
+          "value": {
+            "type": "string",
+            "description": "Segment path parameter value"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "value"
+        ]
+      },
+      "risk": "Segment Delete Label (DELETE /labels/{key}/{value}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "key",
+        "value"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none",
+      "redact_fields": [
+        "key"
+      ]
+    },
+    {
+      "name": "delete_live_plugin_code",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sources/{{ record.sourceId }}/live-plugins/delete-code",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Delete Live Plugin Code (DELETE /sources/{sourceId}/live-plugins/delete-code) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "delete_reverse_etl_model",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/reverse-etl-models/{{ record.modelId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "modelId": {
+            "type": "string",
+            "description": "Segment path parameter modelId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "modelId"
+        ]
+      },
+      "risk": "Segment Delete Reverse Etl Model (DELETE /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "modelId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_reverse_etl_model",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/reverse-etl-models/{{ record.modelId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "modelId": {
+            "type": "string",
+            "description": "Segment path parameter modelId"
+          },
+          "description": {
+            "type": "string",
+            "description": "A longer, more descriptive explanation of the Model."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the Model should have syncs enabled. When disabled, no"
+          },
+          "name": {
+            "type": "string",
+            "description": "A short, human-readable description of the Model."
+          },
+          "query": {
+            "type": "string",
+            "description": "The SQL query that will be executed to extract data from the connected"
+          },
+          "queryIdentifierColumn": {
+            "type": "string",
+            "description": "Indicates the column named in `query` that should be used to uniquely"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "modelId"
+        ]
+      },
+      "risk": "Segment Update Reverse Etl Model (PATCH /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "modelId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sources/{{ record.sourceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Delete Source (DELETE /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_source",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sources/{{ record.sourceId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to allow the Source to send data."
+          },
+          "name": {
+            "type": "string",
+            "description": "An optional human-readable name to associate with the Source."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains instance-specific settings for the Source."
+          },
+          "slug": {
+            "type": "string",
+            "description": "The slug that identifies the Source."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Update Source (PATCH /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "delete_tracking_plan",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId"
+        ]
+      },
+      "risk": "Segment Delete Tracking Plan (DELETE /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_tracking_plan",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          },
+          "description": {
+            "type": "string",
+            "description": "The Tracking Plan's description."
+          },
+          "name": {
+            "type": "string",
+            "description": "The Tracking Plan's name."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId"
+        ]
+      },
+      "risk": "Segment Update Tracking Plan (PATCH /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_transformation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/transformations/{{ record.transformationId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "transformationId": {
+            "type": "string",
+            "description": "Segment path parameter transformationId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "transformationId"
+        ]
+      },
+      "risk": "Segment Delete Transformation (DELETE /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "transformationId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_transformation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/transformations/{{ record.transformationId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "transformationId": {
+            "type": "string",
+            "description": "Segment path parameter transformationId"
+          },
+          "allowProperties": {
+            "type": "array",
+            "description": "Optional array for allowing properties from your events.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "destinationMetadataId": {
+            "type": "string",
+            "description": "The optional Destination metadata to be associated with the Transformation."
+          },
+          "drop": {
+            "type": "boolean",
+            "description": "Optional boolean value if the Transformation should drop the event entirely when the if statement matches, ignores all other transforms."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "If the Transformation should be enabled."
+          },
+          "fqlDefinedProperties": {
+            "type": "array",
+            "description": "Optional array for updating properties defined in [FQL](https://segment.com/docs/config-api/fql/). Currently limited to 1 property.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "fql": {
+                  "type": "string",
+                  "description": "The FQL expression used to compute the property."
+                },
+                "propertyName": {
+                  "type": "string",
+                  "description": "The new property name."
+                }
+              },
+              "required": [
+                "fql",
+                "propertyName"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "hashPropertiesConfiguration": {
+            "type": "object",
+            "description": "Optional object for hashing properties within an event.",
+            "properties": {
+              "algorithm": {
+                "type": "string",
+                "description": "Which algorithm to use to hash to properties."
+              },
+              "encoding": {
+                "type": "string",
+                "enum": [
+                  "BASE16",
+                  "BASE64",
+                  "BASE64URL",
+                  "HEX"
+                ],
+                "description": "Optional encoding to use for the hashing."
+              },
+              "key": {
+                "type": "string",
+                "description": "Optional key to hash with."
+              },
+              "paths": {
+                "type": "array",
+                "description": "The paths to the properties to be hashed.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "algorithm",
+              "paths"
+            ],
+            "additionalProperties": false
+          },
+          "if": {
+            "type": "string",
+            "description": "If statement ([FQL](https://segment.com/docs/config-api/fql/)) to match events."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the Transformation."
+          },
+          "newEventName": {
+            "type": "string",
+            "description": "Optional new event name for renaming events. Works only for 'track' event type."
+          },
+          "propertyRenames": {
+            "type": "array",
+            "description": "Optional array for renaming properties collected by your events.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "newName": {
+                  "type": "string",
+                  "description": "The new name to rename the property."
+                },
+                "oldName": {
+                  "type": "string",
+                  "description": "The old name of the property."
+                }
+              },
+              "required": [
+                "newName",
+                "oldName"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "propertyValueTransformations": {
+            "type": "array",
+            "description": "Optional array for transforming properties and values collected by your events. Limited to 10 properties.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "propertyPaths": {
+                  "type": "array",
+                  "description": "The property paths. The maximum number of paths is 10.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "propertyValue": {
+                  "type": "string",
+                  "description": "The new value of the property paths."
+                }
+              },
+              "required": [
+                "propertyPaths",
+                "propertyValue"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "The optional Source to be associated with the Transformation."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "transformationId"
+        ]
+      },
+      "risk": "Segment Update Transformation (PATCH /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "transformationId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_user_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.userGroupId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId"
+        ]
+      },
+      "risk": "Segment Delete User Group (DELETE /groups/{userGroupId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_user_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/groups/{{ record.userGroupId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          },
+          "name": {
+            "type": "string",
+            "description": "The intended value to rename the user group to."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId",
+          "name"
+        ]
+      },
+      "risk": "Segment Update User Group (PATCH /groups/{userGroupId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_users",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "Segment Delete Users (DELETE /users) mutates provider state; execute only through reverse ETL approval gates.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "delete_warehouse",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/warehouses/{{ record.warehouseId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "warehouseId"
+        ]
+      },
+      "risk": "Segment Delete Warehouse (DELETE /warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "warehouseId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_warehouse",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/warehouses/{{ record.warehouseId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to allow this Warehouse to receive data."
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An optional human-readable name to associate with this Warehouse."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains instance-specific settings for a Warehouse."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "warehouseId",
+          "settings"
+        ]
+      },
+      "risk": "Segment Update Warehouse (PATCH /warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "warehouseId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "force_execute_audience_run",
+      "kind": "create",
+      "method": "POST",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/runs",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId"
+        ]
+      },
+      "risk": "Segment Force Execute Audience Run (POST /spaces/{spaceId}/audiences/{audienceId}/runs) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_activation_from_audience",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/activations/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId",
+          "id"
+        ]
+      },
+      "risk": "Segment Remove Activation from Audience (DELETE /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId",
+        "id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_activation_for_audience",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/activations/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "activationName": {
+            "type": "string",
+            "description": "Activation name. For Warehouse Destinations, this is used as the table name."
+          },
+          "destinationMapping": {
+            "type": "object",
+            "description": "Defines the specific action and data mapping for the Destination. Only applicable for Action Destinations.",
+            "properties": {
+              "actionId": {
+                "type": "string",
+                "description": "The id for the action that Segment should perform on the Destination."
+              },
+              "settings": {
+                "type": "object",
+                "description": "The action/mapping settings."
+              }
+            },
+            "required": [
+              "actionId"
+            ],
+            "additionalProperties": false
+          },
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional human-readable label for the activation. Only supported for Warehouse Destinations. Send null to clear. When omitted, the activationName is used as the label."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Determines whether an activation is enabled."
+          },
+          "performResync": {
+            "type": "boolean",
+            "description": "Determines whether to perform a full resync after the update. If true, the entire audience is resent to the Destination using the updated configuration. If false, the update applies only to future syncs."
+          },
+          "personalization": {
+            "type": "object",
+            "description": "The data points used to enrich the event. Defines which profile traits and/or entity properties are included in the event sent to the Destination.",
+            "properties": {
+              "entities": {
+                "type": "array",
+                "description": "Entities V2 Object.",
+                "items": {
+                  "type": "object",
+                  "description": "The Personalization Input Entity.",
+                  "properties": {
+                    "properties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "relationshipSlug": {
+                      "type": "string",
+                      "description": "The relationship slug for the entity."
+                    }
+                  },
+                  "required": [
+                    "properties",
+                    "relationshipSlug"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "profile": {
+                "type": "object",
+                "description": "Profile Object.",
+                "properties": {
+                  "mapping": {
+                    "type": "object"
+                  },
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "properties"
+                ],
+                "additionalProperties": false
+              },
+              "syncEntityPropertyChanges": {
+                "type": "boolean",
+                "description": "Sync entity property changes to the Destination."
+              }
+            },
+            "required": [
+              "profile"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId",
+          "id"
+        ]
+      },
+      "risk": "Segment Update Activation for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId",
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "replace_advanced_sync_schedule_for_warehouse",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/warehouses/{{ record.warehouseId }}/advanced-sync-schedule",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to turn on an advanced sync schedule for the Warehouse."
+          },
+          "schedule": {
+            "type": "object",
+            "description": "The full sync schedule for the Warehouse.",
+            "properties": {
+              "times": {
+                "type": "array",
+                "description": "A list that contains the times when syncs should occur.",
+                "items": {
+                  "type": "object",
+                  "description": "Determines the time of day at which a Warehouse should sync.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable to the sync at the specified hour."
+                    },
+                    "hourOfDay": {
+                      "type": "number",
+                      "description": "The hour of day for which to enable/disable a sync, between 0 and 23."
+                    }
+                  },
+                  "required": [
+                    "enabled",
+                    "hourOfDay"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "timezone": {
+                "type": "string",
+                "description": "A TZ-database timezone for this sync schedule."
+              }
+            },
+            "required": [
+              "times",
+              "timezone"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "warehouseId",
+          "enabled"
+        ]
+      },
+      "risk": "Segment Replace Advanced Sync Schedule for Warehouse (PUT /warehouses/{warehouseId}/advanced-sync-schedule) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "warehouseId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_audience_from_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id"
+        ]
+      },
+      "risk": "Segment Remove Audience from Space (DELETE /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_audience_for_space",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "definition": {
+            "type": "object",
+            "description": "Represents the Compute Query Language definition of the computation and type of computation.",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "The query language string defining the audience segmentation criteria."
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "additionalProperties": false
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the computation."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enabled/disabled status for the audience."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the computation."
+          },
+          "options": {
+            "type": "object",
+            "description": "Represents the options of Including Anonymous users and Historical Data.",
+            "properties": {
+              "backfillEventDataDays": {
+                "type": "number",
+                "description": "If specified, the value of this field indicates the number of days (specified from the date the audience was created) that event data will be included from when determining audience membership."
+              },
+              "filterByExternalIds": {
+                "type": "array",
+                "description": "The set of profile external identifiers being used to determine audience membership.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "includeHistoricalData": {
+                "type": "boolean",
+                "description": "Determines whether data prior to the audience being created is included when determining audience membership."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id"
+        ]
+      },
+      "risk": "Segment Update Audience for Space (PATCH /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_audience_schedule_from_audience",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules/{{ record.scheduleId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "scheduleId": {
+            "type": "string",
+            "description": "Segment path parameter scheduleId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id",
+          "scheduleId"
+        ]
+      },
+      "risk": "Segment Remove Audience Schedule from Audience (DELETE /spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id",
+        "scheduleId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_audience_schedule_for_audience",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules/{{ record.scheduleId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "scheduleId": {
+            "type": "string",
+            "description": "Segment path parameter scheduleId"
+          },
+          "config": {},
+          "strategy": {
+            "type": "string",
+            "enum": [
+              "PERIODIC",
+              "SPECIFIC_DAYS"
+            ],
+            "description": "Strategy of the audience schedule (periodic or specific days)."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id",
+          "scheduleId",
+          "config",
+          "strategy"
+        ]
+      },
+      "risk": "Segment Update Audience Schedule for Audience (PATCH /spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id",
+        "scheduleId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_computed_trait_from_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.spaceId }}/computed-traits/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id"
+        ]
+      },
+      "risk": "Segment Remove Computed Trait from Space (DELETE /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_computed_trait_for_space",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/computed-traits/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "definition": {
+            "type": "object",
+            "description": "Query language definition and type.",
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "The query language string defining the computed trait aggregation criteria."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ACCOUNTS",
+                  "USERS"
+                ],
+                "description": "The underlying data type being aggregated for this computed trait."
+              }
+            },
+            "required": [
+              "query",
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the computation."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enabled/disabled status for the computed trait."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the computation."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "id"
+        ]
+      },
+      "risk": "Segment Update Computed Trait for Space (PATCH /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_filter_from_destination",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/destination/{{ record.destinationId }}/filters/{{ record.filterId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "filterId": {
+            "type": "string",
+            "description": "Segment path parameter filterId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId",
+          "filterId"
+        ]
+      },
+      "risk": "Segment Remove Filter from Destination (DELETE /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId",
+        "filterId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_filter_for_destination",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/destination/{{ record.destinationId }}/filters/{{ record.filterId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "filterId": {
+            "type": "string",
+            "description": "Segment path parameter filterId"
+          },
+          "actions": {
+            "type": "array",
+            "description": "Actions for this Destination filter.",
+            "items": {
+              "type": "object",
+              "description": "Represents a Destination filter action.",
+              "properties": {
+                "fields": {
+                  "type": "object",
+                  "description": "A dictionary of paths to object keys that this filter applies to.",
+                  "additionalProperties": true
+                },
+                "path": {
+                  "type": "string",
+                  "description": "The JSON path to a property within a payload object from which Segment generates a deterministic"
+                },
+                "percent": {
+                  "type": "number",
+                  "description": "A decimal between 0 and 1 used for 'sample' type events and"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "ALLOW_PROPERTIES",
+                    "DROP",
+                    "DROP_PROPERTIES",
+                    "SAMPLE"
+                  ],
+                  "description": "The kind of Transformation to apply to any matched properties."
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The description of this filter."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "When set to true, this Destination filter is active."
+          },
+          "if": {
+            "type": "string",
+            "description": "The FQL if condition to update."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title to update."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId",
+          "filterId"
+        ]
+      },
+      "risk": "Segment Update Filter for Destination (PATCH /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId",
+        "filterId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_subscription_from_destination",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/destinations/{{ record.destinationId }}/subscriptions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId",
+          "id"
+        ]
+      },
+      "risk": "Segment Remove Subscription from Destination (DELETE /destinations/{destinationId}/subscriptions/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId",
+        "id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_subscription_for_destination",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/destinations/{{ record.destinationId }}/subscriptions/{{ record.id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "id": {
+            "type": "string",
+            "description": "Segment path parameter id"
+          },
+          "input": {
+            "type": "object",
+            "description": "A set of valid Destination input params required for updating.",
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "description": "Is the subscription enabled."
+              },
+              "name": {
+                "type": "string",
+                "description": "The user-defined name for the subscription."
+              },
+              "reverseETLModelId": {
+                "type": "string",
+                "description": "(Reverse ETL only) The reverse ETL model to attach this subscription to."
+              },
+              "reverseETLSchedule": {
+                "type": "object",
+                "description": "(Reverse ETL only) The schedule for the subscription being attached to ReverseETL model.",
+                "properties": {
+                  "config": {},
+                  "strategy": {
+                    "type": "string",
+                    "enum": [
+                      "CRON",
+                      "DBT_CLOUD",
+                      "MANUAL",
+                      "PERIODIC",
+                      "SPECIFIC_DAYS"
+                    ],
+                    "description": "Strategy supports: Periodic, Specific Days, Manual, CRON and DBT_CLOUD."
+                  }
+                },
+                "required": [
+                  "strategy"
+                ],
+                "additionalProperties": false
+              },
+              "settings": {
+                "type": "object",
+                "description": "The fields used for configuring this action."
+              },
+              "trigger": {
+                "type": "string",
+                "description": "The fql statement."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "destinationId",
+          "id",
+          "input"
+        ]
+      },
+      "risk": "Segment Update Subscription for Destination (PATCH /destinations/{destinationId}/subscriptions/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "destinationId",
+        "id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "restore_function_version",
+      "kind": "create",
+      "method": "POST",
+      "path": "/functions/{{ record.functionId }}/versions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "functionId": {
+            "type": "string",
+            "description": "Segment path parameter functionId"
+          },
+          "versionId": {
+            "type": "string",
+            "description": "An identifier for this version."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "functionId",
+          "versionId"
+        ]
+      },
+      "risk": "Segment Restore Function Version (POST /functions/{functionId}/versions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "functionId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_rules_from_tracking_plan",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}/rules",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId"
+        ]
+      },
+      "risk": "Segment Remove Rules from Tracking Plan (DELETE /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "replace_rules_in_tracking_plan",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}/rules",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          },
+          "rules": {
+            "type": "array",
+            "description": "Rules to replace.",
+            "items": {
+              "type": "object",
+              "description": "Represents a rule to add to a Tracking Plan.",
+              "properties": {
+                "jsonSchema": {
+                  "description": "JSON Schema of this rule."
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Key to this rule (free-form string like 'Button clicked')."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "COMMON",
+                    "GROUP",
+                    "IDENTIFY",
+                    "PAGE",
+                    "SCREEN",
+                    "TRACK"
+                  ],
+                  "description": "The type for this Tracking Plan rule."
+                },
+                "version": {
+                  "type": "number",
+                  "description": "Version of this rule."
+                }
+              },
+              "required": [
+                "jsonSchema",
+                "type",
+                "version"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId",
+          "rules"
+        ]
+      },
+      "risk": "Segment Replace Rules in Tracking Plan (PUT /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_rules_in_tracking_plan",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tracking-plans/{{ record.trackingPlanId }}/rules",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "trackingPlanId": {
+            "type": "string",
+            "description": "Segment path parameter trackingPlanId"
+          },
+          "rules": {
+            "type": "array",
+            "description": "Rules to update or insert.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "jsonSchema": {
+                  "description": "JSON Schema of this rule."
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Key to this rule (free-form string like 'Button clicked')."
+                },
+                "newKey": {
+                  "type": "string",
+                  "description": "This rule's new intended key."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "COMMON",
+                    "GROUP",
+                    "IDENTIFY",
+                    "PAGE",
+                    "SCREEN",
+                    "TRACK"
+                  ],
+                  "description": "The type for this Tracking Plan rule."
+                },
+                "version": {
+                  "type": "number",
+                  "description": "Version of this rule."
+                }
+              },
+              "required": [
+                "jsonSchema",
+                "type",
+                "version"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "trackingPlanId",
+          "rules"
+        ]
+      },
+      "risk": "Segment Update Rules in Tracking Plan (PATCH /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "trackingPlanId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_schema_settings_in_source",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/sources/{{ record.sourceId }}/settings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "forwardingBlockedEventsTo": {
+            "type": "string",
+            "description": "Source id to forward blocked events to."
+          },
+          "forwardingViolationsTo": {
+            "type": "string",
+            "description": "Source id to forward violations to."
+          },
+          "group": {
+            "type": "object",
+            "description": "Group settings.",
+            "properties": {
+              "allowTraitsOnViolations": {
+                "type": "boolean",
+                "description": "Enable to allow group traits on violations."
+              },
+              "allowUnplannedTraits": {
+                "type": "boolean",
+                "description": "Enable to allow unplanned group traits."
+              },
+              "commonEventOnViolations": {
+                "type": "string",
+                "enum": [
+                  "ALLOW",
+                  "BLOCK",
+                  "OMIT_TRAITS"
+                ],
+                "description": "The common group event on violations."
+              }
+            },
+            "additionalProperties": false
+          },
+          "identify": {
+            "type": "object",
+            "description": "Identify settings.",
+            "properties": {
+              "allowTraitsOnViolations": {
+                "type": "boolean",
+                "description": "Enable to allow identify traits on violations."
+              },
+              "allowUnplannedTraits": {
+                "type": "boolean",
+                "description": "Enable to allow unplanned identify traits."
+              },
+              "commonEventOnViolations": {
+                "type": "string",
+                "enum": [
+                  "ALLOW",
+                  "BLOCK",
+                  "OMIT_TRAITS"
+                ],
+                "description": "The common identify event on violations."
+              }
+            },
+            "additionalProperties": false
+          },
+          "track": {
+            "type": "object",
+            "description": "Track settings.",
+            "properties": {
+              "allowEventOnViolations": {
+                "type": "boolean",
+                "description": "Allow track event on violations."
+              },
+              "allowPropertiesOnViolations": {
+                "type": "boolean",
+                "description": "Enable to allow track properties on violations."
+              },
+              "allowUnplannedEventProperties": {
+                "type": "boolean",
+                "description": "Enable to allow unplanned track event properties."
+              },
+              "allowUnplannedEvents": {
+                "type": "boolean",
+                "description": "Enable to allow unplanned track events."
+              },
+              "commonEventOnViolations": {
+                "type": "string",
+                "enum": [
+                  "ALLOW",
+                  "BLOCK",
+                  "OMIT_PROPERTIES"
+                ],
+                "description": "The common track event on violations."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId"
+        ]
+      },
+      "risk": "Segment Update Schema Settings in Source (PATCH /sources/{sourceId}/settings) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_selective_sync_for_warehouse_and_space",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}/selective-syncs",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "enableEventTables": {
+            "type": "boolean",
+            "description": "A flag to enable or disable all event Tables. This field is optional."
+          },
+          "syncOverrides": {
+            "type": "array",
+            "description": "A list of sync Schema overrides to apply to this Space Warehouse.",
+            "items": {
+              "type": "object",
+              "description": "Overrides the enabled or disabled state of the specified collection and / or properties within the schema.",
+              "properties": {
+                "collection": {
+                  "type": "string",
+                  "description": "The collection within the Source."
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Represents the overridden enabled state for the listed collection and / or properties."
+                },
+                "property": {
+                  "type": "string",
+                  "description": "A map that contains the properties within the collection to which the Warehouse should sync."
+                }
+              },
+              "required": [
+                "collection",
+                "enabled"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "warehouseId"
+        ]
+      },
+      "risk": "Segment Update Selective Sync for Warehouse And Space (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "warehouseId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_destination_from_audience",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.destinationId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          },
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId",
+          "destinationId"
+        ]
+      },
+      "risk": "Segment Remove Destination from Audience (DELETE /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId",
+        "destinationId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_destination_for_audience",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.destinationId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "audienceId": {
+            "type": "string",
+            "description": "Segment path parameter audienceId"
+          },
+          "destinationId": {
+            "type": "string",
+            "description": "Segment path parameter destinationId"
+          },
+          "connectionSettings": {
+            "description": "The settings that a Destination requires to create audiences on a third-party platform."
+          },
+          "idSyncConfiguration": {
+            "type": "array",
+            "description": "Identifier sync configuration - array of external IDs to sync with their strategies. Maximum 5 items allowed.",
+            "items": {
+              "type": "object",
+              "description": "The identifier sync configuration input.",
+              "properties": {
+                "externalId": {
+                  "type": "string",
+                  "description": "The id type to sync. Examples: user_id, email, anonymous_id."
+                },
+                "mapTo": {
+                  "type": "string",
+                  "description": "Optional destination-specific identifier to map to (for example, \"Email_Address_c\")."
+                },
+                "strategy": {
+                  "type": "string",
+                  "description": "The rule for selecting which identifiers to sync from a profile."
+                }
+              },
+              "required": [
+                "externalId",
+                "strategy"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "audienceId",
+          "destinationId"
+        ]
+      },
+      "risk": "Segment Update Destination for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "audienceId",
+        "destinationId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "connectionSettings"
+      ]
+    },
+    {
+      "name": "remove_profiles_warehouse_from_space",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "warehouseId"
+        ]
+      },
+      "risk": "Segment Remove Profiles Warehouse from Space (DELETE /spaces/{spaceId}/profiles-warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "warehouseId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "update_profiles_warehouse_for_space_warehouse",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable to allow this Warehouse to receive data. Defaults to true."
+          },
+          "name": {
+            "type": "string",
+            "description": "An optional human-readable name for this Warehouse."
+          },
+          "schemaName": {
+            "type": "string",
+            "description": "The custom schema name that Segment uses on the Warehouse side. The space slug value is default otherwise."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains instance-specific settings for a Warehouse."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "warehouseId",
+          "settings"
+        ]
+      },
+      "risk": "Segment Update Profiles Warehouse for Space Warehouse (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId",
+        "warehouseId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "settings"
+      ]
+    },
+    {
+      "name": "remove_users_from_user_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/group/{{ record.userGroupId }}/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId"
+        ]
+      },
+      "risk": "Segment Remove Users from User Group (DELETE /group/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "replace_users_in_user_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/group/{{ record.userGroupId }}/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "userGroupId": {
+            "type": "string",
+            "description": "Segment path parameter userGroupId"
+          },
+          "emails": {
+            "type": "array",
+            "description": "The email addresses of the users and invites to replace.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userGroupId",
+          "emails"
+        ]
+      },
+      "risk": "Segment Replace Users in User Group (PUT /group/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "userGroupId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_write_key_from_source",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/sources/{{ record.sourceId }}/writekey/{{ record.writeKey }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "description": "Segment path parameter sourceId"
+          },
+          "writeKey": {
+            "type": "string",
+            "description": "Segment path parameter writeKey"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "writeKey"
+        ]
+      },
+      "risk": "Segment Remove Write Key from Source (DELETE /sources/{sourceId}/writekey/{writeKey}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "sourceId",
+        "writeKey"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "body_type": "none",
+      "redact_fields": [
+        "writeKey"
+      ]
+    },
+    {
+      "name": "replace_messaging_subscriptions_in_spaces",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/spaces/{{ record.spaceId }}/messaging-subscriptions",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string",
+            "description": "Segment path parameter spaceId"
+          },
+          "subscriptions": {
+            "type": "array",
+            "description": "An array of subscriptions.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "groups": {
+                  "type": "array",
+                  "description": "Optional groups subscription status.",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false
+                  }
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Key is the phone number or email."
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "DID_NOT_SUBSCRIBE",
+                    "SUBSCRIBED",
+                    "UNSUBSCRIBED"
+                  ],
+                  "description": "The user subscribed, unsubscribed, or on initial status globally."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "ANDROID_PUSH",
+                    "EMAIL",
+                    "IOS_PUSH",
+                    "SMS",
+                    "WHATSAPP"
+                  ],
+                  "description": "Type is communication medium used."
+                }
+              },
+              "required": [
+                "key",
+                "type"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "subscriptions"
+        ]
+      },
+      "risk": "Segment Replace Messaging Subscriptions in Spaces (PUT /spaces/{spaceId}/messaging-subscriptions) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_credential",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/credentials/{{ record.credentialId }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "credentialId": {
+            "type": "string",
+            "description": "Segment path parameter credentialId"
+          },
+          "name": {
+            "type": "string",
+            "description": "An optional human-readable name to associate with this Credential."
+          },
+          "settings": {
+            "type": "object",
+            "description": "A key-value object that contains type-specific settings for this Credential."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "credentialId"
+        ]
+      },
+      "risk": "Segment Update Credential (PATCH /credentials/{credentialId}) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "credentialId"
+      ],
+      "body_type": "json",
+      "redact_fields": [
+        "credentialId",
+        "settings"
+      ]
+    },
+    {
+      "name": "update_selective_sync_for_warehouse",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/warehouses/{{ record.warehouseId }}/selective-sync",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "warehouseId": {
+            "type": "string",
+            "description": "Segment path parameter warehouseId"
+          },
+          "syncOverrides": {
+            "type": "array",
+            "description": "A list of sync schema overrides to apply to this Warehouse.",
+            "items": {
+              "type": "object",
+              "description": "Represents the override for a Source/collection/property? path to apply to a Warehouse.",
+              "properties": {
+                "collection": {
+                  "type": "string",
+                  "description": "The collection the schema item override applies to."
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable to apply the override."
+                },
+                "property": {
+                  "type": "string",
+                  "description": "A property within the collection to which the override applies."
+                },
+                "sourceId": {
+                  "type": "string",
+                  "description": "The id of the Source this schema item applies to."
+                }
+              },
+              "required": [
+                "enabled",
+                "sourceId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "warehouseId",
+          "syncOverrides"
+        ]
+      },
+      "risk": "Segment Update Selective Sync for Warehouse (PATCH /warehouses/{warehouseId}/selective-sync) mutates provider state; execute only through reverse ETL approval gates.",
+      "path_fields": [
+        "warehouseId"
+      ],
+      "body_type": "json"
+    }
+  ]
+}

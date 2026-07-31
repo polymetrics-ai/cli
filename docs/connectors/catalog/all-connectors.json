@@ -123421,15 +123421,15 @@
   {
     "name": "segment",
     "display_name": "Segment",
-    "description": "Reads Segment workspace, source, and destination metadata through the Segment Public API.",
+    "description": "Definition-owned Segment Public API connector covering the audited OpenAPI 73.0.8 operation ledger with fixture-backed reads, bounded direct reads, and approval-gated reverse ETL actions.",
     "integration_type": "api",
-    "docs_url": "https://docs.segmentapis.com/tag/Getting-Started",
-    "release_stage": "ga",
+    "docs_url": "https://docs.segmentapis.com/",
+    "release_stage": "beta",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -123443,19 +123443,152 @@
         "api_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Segment Public API access token, sent as a Bearer token (Authorization: Bearer \u003capi_token\u003e). Never logged."
+          "description": "Segment Public API access token, sent as Authorization: Bearer. Supply through --from-env or --value-stdin; never put token values in chat or shell history."
+        },
+        "audienceId": {
+          "type": "string",
+          "description": "Optional Segment path parameter audienceId used by nested stream/direct-read commands."
+        },
+        "audienceType": {
+          "type": "string",
+          "description": "Optional Segment path parameter audienceType used by nested stream/direct-read commands."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://api.segmentapis.com",
-          "description": "Segment Public API base URL override for tests, proxies, or a region-specific endpoint (e.g. https://api.eu1.segmentapis.com). Takes precedence over any region-based derivation legacy performed in code; see docs.md's Known limits."
+          "description": "Segment Public API base URL override for tests, proxies, or regional endpoints."
+        },
+        "connectionId": {
+          "type": "string",
+          "description": "Optional Segment path parameter connectionId used by nested stream/direct-read commands."
+        },
+        "credentialId": {
+          "type": "string",
+          "description": "Optional Segment path parameter credentialId used by nested stream/direct-read commands."
+        },
+        "destinationId": {
+          "type": "string",
+          "description": "Optional Segment path parameter destinationId used by nested stream/direct-read commands."
+        },
+        "destinationMetadataId": {
+          "type": "string",
+          "description": "Optional Segment path parameter destinationMetadataId used by nested stream/direct-read commands."
+        },
+        "entitySlug": {
+          "type": "string",
+          "description": "Optional Segment path parameter entitySlug used by nested stream/direct-read commands."
+        },
+        "eventName": {
+          "type": "string",
+          "description": "Optional Segment path parameter eventName used by nested stream/direct-read commands."
+        },
+        "filterId": {
+          "type": "string",
+          "description": "Optional Segment path parameter filterId used by nested stream/direct-read commands."
+        },
+        "functionId": {
+          "type": "string",
+          "description": "Optional Segment path parameter functionId used by nested stream/direct-read commands."
+        },
+        "id": {
+          "type": "string",
+          "description": "Optional Segment path parameter id used by nested stream/direct-read commands."
+        },
+        "instanceId": {
+          "type": "string",
+          "description": "Optional Segment path parameter instanceId used by nested stream/direct-read commands."
+        },
+        "key": {
+          "type": "string",
+          "description": "Optional Segment path parameter key used by nested stream/direct-read commands."
+        },
+        "modelId": {
+          "type": "string",
+          "description": "Optional Segment path parameter modelId used by nested stream/direct-read commands."
+        },
+        "page_size": {
+          "type": "string",
+          "default": "100",
+          "description": "Optional Segment list page size used as pagination.count for list-shaped streams."
+        },
+        "propertyName": {
+          "type": "string",
+          "description": "Optional Segment path parameter propertyName used by nested stream/direct-read commands."
+        },
+        "regulateId": {
+          "type": "string",
+          "description": "Optional Segment path parameter regulateId used by nested stream/direct-read commands."
+        },
+        "scheduleId": {
+          "type": "string",
+          "description": "Optional Segment path parameter scheduleId used by nested stream/direct-read commands."
+        },
+        "sourceId": {
+          "type": "string",
+          "description": "Optional Segment path parameter sourceId used by nested stream/direct-read commands."
+        },
+        "sourceMetadataId": {
+          "type": "string",
+          "description": "Optional Segment path parameter sourceMetadataId used by nested stream/direct-read commands."
+        },
+        "spaceId": {
+          "type": "string",
+          "description": "Optional Segment path parameter spaceId used by nested stream/direct-read commands."
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Optional Segment path parameter subscriptionId used by nested stream/direct-read commands."
+        },
+        "syncId": {
+          "type": "string",
+          "description": "Optional Segment path parameter syncId used by nested stream/direct-read commands."
+        },
+        "trackingPlanId": {
+          "type": "string",
+          "description": "Optional Segment path parameter trackingPlanId used by nested stream/direct-read commands."
+        },
+        "traitKey": {
+          "type": "string",
+          "description": "Optional Segment path parameter traitKey used by nested stream/direct-read commands."
+        },
+        "transformationId": {
+          "type": "string",
+          "description": "Optional Segment path parameter transformationId used by nested stream/direct-read commands."
+        },
+        "userGroupId": {
+          "type": "string",
+          "description": "Optional Segment path parameter userGroupId used by nested stream/direct-read commands."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Optional Segment path parameter userId used by nested stream/direct-read commands."
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional Segment path parameter value used by nested stream/direct-read commands."
+        },
+        "versionId": {
+          "type": "string",
+          "description": "Optional Segment path parameter versionId used by nested stream/direct-read commands."
+        },
+        "warehouseId": {
+          "type": "string",
+          "description": "Optional Segment path parameter warehouseId used by nested stream/direct-read commands."
+        },
+        "warehouseMetadataId": {
+          "type": "string",
+          "description": "Optional Segment path parameter warehouseMetadataId used by nested stream/direct-read commands."
+        },
+        "writeKey": {
+          "type": "string",
+          "description": "Optional Segment path parameter writeKey used by nested stream/direct-read commands."
         }
       }
     },
     "streams": [
       {
-        "name": "workspaces",
+        "name": "list_audience_schedules_from_space_and_audience",
         "primary_key": [
           "id"
         ],
@@ -123466,7 +123599,7 @@
         ]
       },
       {
-        "name": "sources",
+        "name": "list_destinations_from_audience",
         "primary_key": [
           "id"
         ],
@@ -123477,7 +123610,857 @@
         ]
       },
       {
-        "name": "destinations",
+        "name": "list_sources_from_tracking_plan",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_users_from_user_group",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_audiences",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_computed_traits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_destinations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_subscriptions_from_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_filters_from_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_filters_for_space",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_functions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_insert_function_instances",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_invites",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_labels",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_profiles_warehouse_in_space",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_reverse_etl_models",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_sources",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_regulations_from_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_tracking_plans",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_transformations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_user_groups",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_warehouses",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_workspace_regulations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_filter_by_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_function",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_insert_function_instance",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_reverse_etl_model",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_tracking_plan",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_transformation",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_user_group",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_warehouse",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_activation_from_audience",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_advanced_sync_schedule_from_warehouse",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_audience",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_audience_schedule_from_space_and_audience",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_computed_trait",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_connection_state_from_warehouse",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_destination_metadata",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_destinations_catalog",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_filter_in_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_function_version",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_latest_from_live_plugins",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_regulation",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_reverse_etl_sync_status",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_source_metadata",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_sources_catalog",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_space",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_subscription_from_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_user",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_warehouse_metadata",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_warehouses_catalog",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_workspace",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_activations_from_audience",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_audience_consumers_from_space_and_audience",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_audit_events",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "timestamp",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped",
+          "incremental_append",
+          "incremental_append_deduped"
+        ]
+      },
+      {
+        "name": "list_connected_destinations_from_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_connected_sources_from_warehouse",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_connected_warehouses_from_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_delivery_metrics_summary_from_destination",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_function_versions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_invites_from_user_group",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_reverse_etl_sync_statuses_from_model_and_subscription_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_roles",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_rules_from_tracking_plan",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_sample_values_from_entity_property",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_sample_values_from_event_property",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_sample_values_from_trait",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_schema_settings_in_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_selective_syncs_from_warehouse_and_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_selective_syncs_from_warehouse_and_space",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_spaces",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_supported_destinations_from_audience",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_suppressions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_syncs_from_warehouse",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_syncs_from_warehouse_and_source",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_traits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_user_groups_from_user",
         "primary_key": [
           "id"
         ],
@@ -123488,9 +124471,711 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "add_activation_to_audience",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.connectionId }}/activations",
+        "risk": "Segment Add Activation to Audience (POST /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "add_audience_schedule_to_audience",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules",
+        "risk": "Segment Add Audience Schedule to Audience (POST /spaces/{spaceId}/audiences/{id}/schedules) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "add_connection_from_source_to_warehouse",
+        "kind": "create",
+        "method": "POST",
+        "path": "/warehouses/{{ record.warehouseId }}/connected-sources/{{ record.sourceId }}",
+        "risk": "Segment Add Connection from Source to Warehouse (POST /warehouses/{warehouseId}/connected-sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_source_connection_from_warehouse",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/warehouses/{{ record.warehouseId }}/connected-sources/{{ record.sourceId }}",
+        "risk": "Segment Remove Source Connection from Warehouse (DELETE /warehouses/{warehouseId}/connected-sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_destination_to_audience",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections",
+        "risk": "Segment Add Destination to Audience (POST /spaces/{spaceId}/audiences/{audienceId}/destination-connections) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "add_labels_to_source",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sources/{{ record.sourceId }}/labels",
+        "risk": "Segment Add Labels to Source (POST /sources/{sourceId}/labels) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "replace_labels_in_source",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/sources/{{ record.sourceId }}/labels",
+        "risk": "Segment Replace Labels in Source (PUT /sources/{sourceId}/labels) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "add_permissions_to_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.userId }}/permissions",
+        "risk": "Segment Add Permissions to User (POST /users/{userId}/permissions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "replace_permissions_for_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.userId }}/permissions",
+        "risk": "Segment Replace Permissions for User (PUT /users/{userId}/permissions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "add_permissions_to_user_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.userGroupId }}/permissions",
+        "risk": "Segment Add Permissions to User Group (POST /groups/{userGroupId}/permissions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "replace_permissions_for_user_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/groups/{{ record.userGroupId }}/permissions",
+        "risk": "Segment Replace Permissions for User Group (PUT /groups/{userGroupId}/permissions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "add_source_to_tracking_plan",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}/sources",
+        "risk": "Segment Add Source to Tracking Plan (POST /tracking-plans/{trackingPlanId}/sources) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_source_from_tracking_plan",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}/sources",
+        "risk": "Segment Remove Source from Tracking Plan (DELETE /tracking-plans/{trackingPlanId}/sources) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_users_to_user_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.userGroupId }}/users",
+        "risk": "Segment Add Users to User Group (POST /groups/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "cancel_reverse_etl_sync_for_model",
+        "kind": "create",
+        "method": "POST",
+        "path": "/reverse-etl-models/{{ record.modelId }}/syncs/{{ record.syncId }}/cancel",
+        "risk": "Segment Cancel Reverse ETL Sync for Model (POST /reverse-etl-models/{modelId}/syncs/{syncId}/cancel) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_audience",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/audiences",
+        "risk": "Segment Create Audience (POST /spaces/{spaceId}/audiences) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_cloud_source_regulation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/regulations/cloudsources/{{ record.sourceId }}",
+        "risk": "Segment Create Cloud Source Regulation (POST /regulations/cloudsources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_computed_trait",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/computed-traits",
+        "risk": "Segment Create Computed Trait (POST /spaces/{spaceId}/computed-traits) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_credential",
+        "kind": "create",
+        "method": "POST",
+        "path": "/credentials",
+        "risk": "Segment Create Credential (POST /credentials) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_dbt_model_sync_trigger",
+        "kind": "create",
+        "method": "POST",
+        "path": "/dbt-model-syncs/trigger",
+        "risk": "Segment Create Dbt Model Sync Trigger (POST /dbt-model-syncs/trigger) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_destination",
+        "kind": "create",
+        "method": "POST",
+        "path": "/destinations",
+        "risk": "Segment Create Destination (POST /destinations) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_destination_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/destinations/{{ record.destinationId }}/subscriptions",
+        "risk": "Segment Create Destination Subscription (POST /destinations/{destinationId}/subscriptions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_filter_for_destination",
+        "kind": "create",
+        "method": "POST",
+        "path": "/destination/{{ record.destinationId }}/filters",
+        "risk": "Segment Create Filter for Destination (POST /destination/{destinationId}/filters) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_filter_for_space",
+        "kind": "create",
+        "method": "POST",
+        "path": "/filters",
+        "risk": "Segment Create Filter for Space (POST /filters) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_function",
+        "kind": "create",
+        "method": "POST",
+        "path": "/functions",
+        "risk": "Segment Create Function (POST /functions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_function_deployment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/functions/{{ record.functionId }}/deploy",
+        "risk": "Segment Create Function Deployment (POST /functions/{functionId}/deploy) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_insert_function_instance",
+        "kind": "create",
+        "method": "POST",
+        "path": "/insert-function-instances",
+        "risk": "Segment Create Insert Function Instance (POST /insert-function-instances) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_invites",
+        "kind": "create",
+        "method": "POST",
+        "path": "/invites",
+        "risk": "Segment Create Invites (POST /invites) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_invites",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/invites",
+        "risk": "Segment Delete Invites (DELETE /invites) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_label",
+        "kind": "create",
+        "method": "POST",
+        "path": "/labels",
+        "risk": "Segment Create Label (POST /labels) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_live_plugin",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sources/{{ record.sourceId }}/live-plugins/create",
+        "risk": "Segment Create Live Plugin (POST /sources/{sourceId}/live-plugins/create) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_profiles_warehouse",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/profiles-warehouses",
+        "risk": "Segment Create Profiles Warehouse (POST /spaces/{spaceId}/profiles-warehouses) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_reverse_etl_manual_sync",
+        "kind": "create",
+        "method": "POST",
+        "path": "/reverse-etl-syncs",
+        "risk": "Segment Create Reverse ETL Manual Sync (POST /reverse-etl-syncs) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_reverse_etl_model",
+        "kind": "create",
+        "method": "POST",
+        "path": "/reverse-etl-models",
+        "risk": "Segment Create Reverse Etl Model (POST /reverse-etl-models) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_source",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sources",
+        "risk": "Segment Create Source (POST /sources) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_source_regulation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/regulations/sources/{{ record.sourceId }}",
+        "risk": "Segment Create Source Regulation (POST /regulations/sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_tracking_plan",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tracking-plans",
+        "risk": "Segment Create Tracking Plan (POST /tracking-plans) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_transformation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/transformations",
+        "risk": "Segment Create Transformation (POST /transformations) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_user_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Segment Create User Group (POST /groups) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_validation_in_warehouse",
+        "kind": "create",
+        "method": "POST",
+        "path": "/warehouses/validation",
+        "risk": "Segment Create Validation in Warehouse (POST /warehouses/validation) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_warehouse",
+        "kind": "create",
+        "method": "POST",
+        "path": "/warehouses",
+        "risk": "Segment Create Warehouse (POST /warehouses) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_workspace_regulation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/regulations",
+        "risk": "Segment Create Workspace Regulation (POST /regulations) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "create_write_key_for_source",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sources/{{ record.sourceId }}/writekey",
+        "risk": "Segment Create Write Key for Source (POST /sources/{sourceId}/writekey) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_destination",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/destinations/{{ record.destinationId }}",
+        "risk": "Segment Delete Destination (DELETE /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_destination",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/destinations/{{ record.destinationId }}",
+        "risk": "Segment Update Destination (PATCH /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_filter_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/filters/{{ record.id }}",
+        "risk": "Segment Delete Filter By Id (DELETE /filters/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_filter_by_id",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/filters/{{ record.id }}",
+        "risk": "Segment Update Filter By Id (PATCH /filters/{id}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_function",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/functions/{{ record.functionId }}",
+        "risk": "Segment Delete Function (DELETE /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_function",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/functions/{{ record.functionId }}",
+        "risk": "Segment Update Function (PATCH /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_insert_function_instance",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/insert-function-instances/{{ record.instanceId }}",
+        "risk": "Segment Delete Insert Function Instance (DELETE /insert-function-instances/{instanceId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_insert_function_instance",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/insert-function-instances/{{ record.instanceId }}",
+        "risk": "Segment Update Insert Function Instance (PATCH /insert-function-instances/{instanceId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_label",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/labels/{{ record.key }}/{{ record.value }}",
+        "risk": "Segment Delete Label (DELETE /labels/{key}/{value}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_live_plugin_code",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/sources/{{ record.sourceId }}/live-plugins/delete-code",
+        "risk": "Segment Delete Live Plugin Code (DELETE /sources/{sourceId}/live-plugins/delete-code) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_reverse_etl_model",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/reverse-etl-models/{{ record.modelId }}",
+        "risk": "Segment Delete Reverse Etl Model (DELETE /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_reverse_etl_model",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/reverse-etl-models/{{ record.modelId }}",
+        "risk": "Segment Update Reverse Etl Model (PATCH /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_source",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/sources/{{ record.sourceId }}",
+        "risk": "Segment Delete Source (DELETE /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_source",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/sources/{{ record.sourceId }}",
+        "risk": "Segment Update Source (PATCH /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_tracking_plan",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}",
+        "risk": "Segment Delete Tracking Plan (DELETE /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_tracking_plan",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}",
+        "risk": "Segment Update Tracking Plan (PATCH /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_transformation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/transformations/{{ record.transformationId }}",
+        "risk": "Segment Delete Transformation (DELETE /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_transformation",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/transformations/{{ record.transformationId }}",
+        "risk": "Segment Update Transformation (PATCH /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_user_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.userGroupId }}",
+        "risk": "Segment Delete User Group (DELETE /groups/{userGroupId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_user_group",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/groups/{{ record.userGroupId }}",
+        "risk": "Segment Update User Group (PATCH /groups/{userGroupId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "delete_users",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users",
+        "risk": "Segment Delete Users (DELETE /users) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_warehouse",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/warehouses/{{ record.warehouseId }}",
+        "risk": "Segment Delete Warehouse (DELETE /warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_warehouse",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/warehouses/{{ record.warehouseId }}",
+        "risk": "Segment Update Warehouse (PATCH /warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "force_execute_audience_run",
+        "kind": "create",
+        "method": "POST",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/runs",
+        "risk": "Segment Force Execute Audience Run (POST /spaces/{spaceId}/audiences/{audienceId}/runs) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_activation_from_audience",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/activations/{{ record.id }}",
+        "risk": "Segment Remove Activation from Audience (DELETE /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_activation_for_audience",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/activations/{{ record.id }}",
+        "risk": "Segment Update Activation for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "replace_advanced_sync_schedule_for_warehouse",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/warehouses/{{ record.warehouseId }}/advanced-sync-schedule",
+        "risk": "Segment Replace Advanced Sync Schedule for Warehouse (PUT /warehouses/{warehouseId}/advanced-sync-schedule) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_audience_from_space",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}",
+        "risk": "Segment Remove Audience from Space (DELETE /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_audience_for_space",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}",
+        "risk": "Segment Update Audience for Space (PATCH /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_audience_schedule_from_audience",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules/{{ record.scheduleId }}",
+        "risk": "Segment Remove Audience Schedule from Audience (DELETE /spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_audience_schedule_for_audience",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules/{{ record.scheduleId }}",
+        "risk": "Segment Update Audience Schedule for Audience (PATCH /spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_computed_trait_from_space",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/spaces/{{ record.spaceId }}/computed-traits/{{ record.id }}",
+        "risk": "Segment Remove Computed Trait from Space (DELETE /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_computed_trait_for_space",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/computed-traits/{{ record.id }}",
+        "risk": "Segment Update Computed Trait for Space (PATCH /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_filter_from_destination",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/destination/{{ record.destinationId }}/filters/{{ record.filterId }}",
+        "risk": "Segment Remove Filter from Destination (DELETE /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_filter_for_destination",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/destination/{{ record.destinationId }}/filters/{{ record.filterId }}",
+        "risk": "Segment Update Filter for Destination (PATCH /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_subscription_from_destination",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/destinations/{{ record.destinationId }}/subscriptions/{{ record.id }}",
+        "risk": "Segment Remove Subscription from Destination (DELETE /destinations/{destinationId}/subscriptions/{id}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_subscription_for_destination",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/destinations/{{ record.destinationId }}/subscriptions/{{ record.id }}",
+        "risk": "Segment Update Subscription for Destination (PATCH /destinations/{destinationId}/subscriptions/{id}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "restore_function_version",
+        "kind": "create",
+        "method": "POST",
+        "path": "/functions/{{ record.functionId }}/versions",
+        "risk": "Segment Restore Function Version (POST /functions/{functionId}/versions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_rules_from_tracking_plan",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}/rules",
+        "risk": "Segment Remove Rules from Tracking Plan (DELETE /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "replace_rules_in_tracking_plan",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}/rules",
+        "risk": "Segment Replace Rules in Tracking Plan (PUT /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "update_rules_in_tracking_plan",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/tracking-plans/{{ record.trackingPlanId }}/rules",
+        "risk": "Segment Update Rules in Tracking Plan (PATCH /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "update_schema_settings_in_source",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/sources/{{ record.sourceId }}/settings",
+        "risk": "Segment Update Schema Settings in Source (PATCH /sources/{sourceId}/settings) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "update_selective_sync_for_warehouse_and_space",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}/selective-syncs",
+        "risk": "Segment Update Selective Sync for Warehouse And Space (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_destination_from_audience",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.destinationId }}",
+        "risk": "Segment Remove Destination from Audience (DELETE /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_destination_for_audience",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.destinationId }}",
+        "risk": "Segment Update Destination for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_profiles_warehouse_from_space",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}",
+        "risk": "Segment Remove Profiles Warehouse from Space (DELETE /spaces/{spaceId}/profiles-warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_profiles_warehouse_for_space_warehouse",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}",
+        "risk": "Segment Update Profiles Warehouse for Space Warehouse (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_users_from_user_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/group/{{ record.userGroupId }}/users",
+        "risk": "Segment Remove Users from User Group (DELETE /group/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "replace_users_in_user_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/group/{{ record.userGroupId }}/users",
+        "risk": "Segment Replace Users in User Group (PUT /group/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "remove_write_key_from_source",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/sources/{{ record.sourceId }}/writekey/{{ record.writeKey }}",
+        "risk": "Segment Remove Write Key from Source (DELETE /sources/{sourceId}/writekey/{writeKey}) mutates provider state; execute only through reverse ETL approval gates.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "replace_messaging_subscriptions_in_spaces",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/spaces/{{ record.spaceId }}/messaging-subscriptions",
+        "risk": "Segment Replace Messaging Subscriptions in Spaces (PUT /spaces/{spaceId}/messaging-subscriptions) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "update_credential",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/credentials/{{ record.credentialId }}",
+        "risk": "Segment Update Credential (PATCH /credentials/{credentialId}) mutates provider state; execute only through reverse ETL approval gates."
+      },
+      {
+        "name": "update_selective_sync_for_warehouse",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/warehouses/{{ record.warehouseId }}/selective-sync",
+        "risk": "Segment Update Selective Sync for Warehouse (PATCH /warehouses/{warehouseId}/selective-sync) mutates provider state; execute only through reverse ETL approval gates."
+      }
+    ],
     "risk": {
-      "read": "external Segment Public API read of workspace, source, and destination metadata",
-      "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+      "read": "Segment API reads may include workspace configuration, schema, usage, and audit metadata; output is fixture-tested and redacted by command policies.",
+      "write": "Segment reverse ETL actions mutate sources, destinations, audiences, warehouses, IAM, functions, filters, tracking plans, and deletion workflows; every action requires plan, preview, explicit approval, and destructive confirmation for deletes.",
+      "approval": "Reverse ETL plan -\u003e preview -\u003e explicit approval token -\u003e execute; agents cannot self-approve JSON plans."
     },
     "icon": {
       "id": "pm-sample",

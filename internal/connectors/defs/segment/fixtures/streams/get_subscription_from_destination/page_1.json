@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/destinations/synthetic-conformance-value/subscriptions/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "subscription": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get subscription from destination",
+          "slug": "get-subscription-from-destination",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

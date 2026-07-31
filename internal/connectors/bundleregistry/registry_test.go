@@ -1,6 +1,7 @@
 package bundleregistry
 
 import (
+	"context"
 	"strings"
 	"testing"
 
@@ -49,6 +50,33 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	}
 	if _, ok := postgresConnector.(nativepostgres.Connector); !ok {
 		t.Fatalf("postgres registry type = %T, want Tier-3 native override", postgresConnector)
+	}
+}
+
+type registryIsolationConnector struct{}
+
+func (registryIsolationConnector) Name() string { return "registry-isolation-test" }
+func (registryIsolationConnector) Metadata() connectors.Metadata {
+	return connectors.Metadata{Name: "registry-isolation-test"}
+}
+func (registryIsolationConnector) Check(context.Context, connectors.RuntimeConfig) error { return nil }
+func (registryIsolationConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{}, nil
+}
+func (registryIsolationConnector) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return nil
+}
+func (registryIsolationConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
+}
+
+func TestNewReturnsIsolatedRegistryInstances(t *testing.T) {
+	first := New()
+	first.Register(registryIsolationConnector{})
+
+	second := New()
+	if _, ok := second.Get("registry-isolation-test"); ok {
+		t.Fatal("New() leaked connector registered on a previous registry instance")
 	}
 }
 

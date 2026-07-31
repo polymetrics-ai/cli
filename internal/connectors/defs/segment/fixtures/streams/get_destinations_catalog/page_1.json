@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/catalog/destinations",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "pagination": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get destinations catalog",
+          "slug": "get-destinations-catalog",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/insert-function-instances",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "instances": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list insert function instances",
+            "slug": "list-insert-function-instances",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

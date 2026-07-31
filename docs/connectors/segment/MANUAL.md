@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector segment [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Segment workspace, source, and destination metadata through the Segment Public API.
+  Definition-owned Segment Public API connector covering the audited OpenAPI 73.0.8 operation ledger with fixture-backed reads, bounded direct reads, and approval-gated reverse ETL actions.
 
 ICON
   asset: icons/pm-sample.svg
@@ -18,34 +18,736 @@ ICON
   review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  audienceId
+  audienceType
   base_url
+  connectionId
+  credentialId
+  destinationId
+  destinationMetadataId
+  entitySlug
+  eventName
+  filterId
+  functionId
+  id
+  instanceId
+  key
+  modelId
+  page_size
+  propertyName
+  regulateId
+  scheduleId
+  sourceId
+  sourceMetadataId
+  spaceId
+  subscriptionId
+  syncId
+  trackingPlanId
+  traitKey
+  transformationId
+  userGroupId
+  userId
+  value
+  versionId
+  warehouseId
+  warehouseMetadataId
+  writeKey
   api_token (secret)
 
 ETL STREAMS
-  workspaces:
+  list_audience_schedules_from_space_and_audience:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
-  sources:
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_destinations_from_audience:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
-  destinations:
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_sources_from_tracking_plan:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_users_from_user_group:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_audiences:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_computed_traits:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_destinations:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_subscriptions_from_destination:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_filters_from_destination:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_filters_for_space:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_functions:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_insert_function_instances:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_invites:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_labels:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_profiles_warehouse_in_space:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_reverse_etl_models:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_sources:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_regulations_from_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_tracking_plans:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_transformations:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_user_groups:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_warehouses:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_workspace_regulations:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_destination:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_filter_by_id:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_function:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_insert_function_instance:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_reverse_etl_model:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_tracking_plan:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_transformation:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_user_group:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_users:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_warehouse:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_activation_from_audience:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_advanced_sync_schedule_from_warehouse:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_audience:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_audience_schedule_from_space_and_audience:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_computed_trait:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_connection_state_from_warehouse:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_destination_metadata:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_destinations_catalog:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_filter_in_destination:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_function_version:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_latest_from_live_plugins:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_regulation:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_reverse_etl_sync_status:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_source_metadata:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_sources_catalog:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_space:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_subscription_from_destination:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_user:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_warehouse_metadata:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_warehouses_catalog:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  get_workspace:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_activations_from_audience:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_audience_consumers_from_space_and_audience:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_audit_events:
+    primary key: id
+    cursor: timestamp
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_connected_destinations_from_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_connected_sources_from_warehouse:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_connected_warehouses_from_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_delivery_metrics_summary_from_destination:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_function_versions:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_invites_from_user_group:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_reverse_etl_sync_statuses_from_model_and_subscription_id:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_roles:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_rules_from_tracking_plan:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_sample_values_from_entity_property:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_sample_values_from_event_property:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_sample_values_from_trait:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_schema_settings_in_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_selective_syncs_from_warehouse_and_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_selective_syncs_from_warehouse_and_space:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_spaces:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_supported_destinations_from_audience:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_suppressions:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_syncs_from_warehouse:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_syncs_from_warehouse_and_source:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_traits:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
+  list_user_groups_from_user:
+    primary key: id
+    fields: createdAt(), event(), id(), key(), name(), slug(), timestamp(), type(), updatedAt(), workspaceId()
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+
+REVERSE ETL ACTIONS
+  add_activation_to_audience:
+    endpoint: POST /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.connectionId }}/activations
+    required fields: spaceId, audienceId, connectionId, activationName, activationType, performResync, personalization
+    risk: Segment Add Activation to Audience (POST /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations) mutates provider state; execute only through reverse ETL approval gates.
+  add_audience_schedule_to_audience:
+    endpoint: POST /spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules
+    required fields: spaceId, id, config, strategy
+    risk: Segment Add Audience Schedule to Audience (POST /spaces/{spaceId}/audiences/{id}/schedules) mutates provider state; execute only through reverse ETL approval gates.
+  add_connection_from_source_to_warehouse:
+    endpoint: POST /warehouses/{{ record.warehouseId }}/connected-sources/{{ record.sourceId }}
+    required fields: warehouseId, sourceId
+    risk: Segment Add Connection from Source to Warehouse (POST /warehouses/{warehouseId}/connected-sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_source_connection_from_warehouse:
+    endpoint: DELETE /warehouses/{{ record.warehouseId }}/connected-sources/{{ record.sourceId }}
+    required fields: warehouseId, sourceId
+    risk: Segment Remove Source Connection from Warehouse (DELETE /warehouses/{warehouseId}/connected-sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.
+  add_destination_to_audience:
+    endpoint: POST /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections
+    required fields: spaceId, audienceId, destination
+    risk: Segment Add Destination to Audience (POST /spaces/{spaceId}/audiences/{audienceId}/destination-connections) mutates provider state; execute only through reverse ETL approval gates.
+  add_labels_to_source:
+    endpoint: POST /sources/{{ record.sourceId }}/labels
+    required fields: sourceId, labels
+    risk: Segment Add Labels to Source (POST /sources/{sourceId}/labels) mutates provider state; execute only through reverse ETL approval gates.
+  replace_labels_in_source:
+    endpoint: PUT /sources/{{ record.sourceId }}/labels
+    required fields: sourceId, labels
+    risk: Segment Replace Labels in Source (PUT /sources/{sourceId}/labels) mutates provider state; execute only through reverse ETL approval gates.
+  add_permissions_to_user:
+    endpoint: POST /users/{{ record.userId }}/permissions
+    required fields: userId, permissions
+    risk: Segment Add Permissions to User (POST /users/{userId}/permissions) mutates provider state; execute only through reverse ETL approval gates.
+  replace_permissions_for_user:
+    endpoint: PUT /users/{{ record.userId }}/permissions
+    required fields: userId, permissions
+    risk: Segment Replace Permissions for User (PUT /users/{userId}/permissions) mutates provider state; execute only through reverse ETL approval gates.
+  add_permissions_to_user_group:
+    endpoint: POST /groups/{{ record.userGroupId }}/permissions
+    required fields: userGroupId, permissions
+    risk: Segment Add Permissions to User Group (POST /groups/{userGroupId}/permissions) mutates provider state; execute only through reverse ETL approval gates.
+  replace_permissions_for_user_group:
+    endpoint: PUT /groups/{{ record.userGroupId }}/permissions
+    required fields: userGroupId, permissions
+    risk: Segment Replace Permissions for User Group (PUT /groups/{userGroupId}/permissions) mutates provider state; execute only through reverse ETL approval gates.
+  add_source_to_tracking_plan:
+    endpoint: POST /tracking-plans/{{ record.trackingPlanId }}/sources
+    required fields: trackingPlanId, sourceId
+    risk: Segment Add Source to Tracking Plan (POST /tracking-plans/{trackingPlanId}/sources) mutates provider state; execute only through reverse ETL approval gates.
+  remove_source_from_tracking_plan:
+    endpoint: DELETE /tracking-plans/{{ record.trackingPlanId }}/sources
+    required fields: trackingPlanId
+    risk: Segment Remove Source from Tracking Plan (DELETE /tracking-plans/{trackingPlanId}/sources) mutates provider state; execute only through reverse ETL approval gates.
+  add_users_to_user_group:
+    endpoint: POST /groups/{{ record.userGroupId }}/users
+    required fields: userGroupId, emails
+    risk: Segment Add Users to User Group (POST /groups/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.
+  cancel_reverse_etl_sync_for_model:
+    endpoint: POST /reverse-etl-models/{{ record.modelId }}/syncs/{{ record.syncId }}/cancel
+    required fields: modelId, syncId
+    risk: Segment Cancel Reverse ETL Sync for Model (POST /reverse-etl-models/{modelId}/syncs/{syncId}/cancel) mutates provider state; execute only through reverse ETL approval gates.
+  create_audience:
+    endpoint: POST /spaces/{{ record.spaceId }}/audiences
+    required fields: spaceId, audienceType, definition, name
+    risk: Segment Create Audience (POST /spaces/{spaceId}/audiences) mutates provider state; execute only through reverse ETL approval gates.
+  create_cloud_source_regulation:
+    endpoint: POST /regulations/cloudsources/{{ record.sourceId }}
+    required fields: sourceId, collection, regulationType, subjectIds, subjectType
+    risk: Segment Create Cloud Source Regulation (POST /regulations/cloudsources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.
+  create_computed_trait:
+    endpoint: POST /spaces/{{ record.spaceId }}/computed-traits
+    required fields: spaceId, definition, name
+    risk: Segment Create Computed Trait (POST /spaces/{spaceId}/computed-traits) mutates provider state; execute only through reverse ETL approval gates.
+  create_credential:
+    endpoint: POST /credentials
+    required fields: name, settings
+    risk: Segment Create Credential (POST /credentials) mutates provider state; execute only through reverse ETL approval gates.
+  create_dbt_model_sync_trigger:
+    endpoint: POST /dbt-model-syncs/trigger
+    required fields: sourceId
+    risk: Segment Create Dbt Model Sync Trigger (POST /dbt-model-syncs/trigger) mutates provider state; execute only through reverse ETL approval gates.
+  create_destination:
+    endpoint: POST /destinations
+    required fields: metadataId, settings, sourceId
+    risk: Segment Create Destination (POST /destinations) mutates provider state; execute only through reverse ETL approval gates.
+  create_destination_subscription:
+    endpoint: POST /destinations/{{ record.destinationId }}/subscriptions
+    required fields: destinationId, actionId, enabled, name, trigger
+    risk: Segment Create Destination Subscription (POST /destinations/{destinationId}/subscriptions) mutates provider state; execute only through reverse ETL approval gates.
+  create_filter_for_destination:
+    endpoint: POST /destination/{{ record.destinationId }}/filters
+    required fields: destinationId, actions, enabled, if, sourceId, title
+    risk: Segment Create Filter for Destination (POST /destination/{destinationId}/filters) mutates provider state; execute only through reverse ETL approval gates.
+  create_filter_for_space:
+    endpoint: POST /filters
+    required fields: if, integrationId, name
+    risk: Segment Create Filter for Space (POST /filters) mutates provider state; execute only through reverse ETL approval gates.
+  create_function:
+    endpoint: POST /functions
+    required fields: code, displayName, resourceType
+    risk: Segment Create Function (POST /functions) mutates provider state; execute only through reverse ETL approval gates.
+  create_function_deployment:
+    endpoint: POST /functions/{{ record.functionId }}/deploy
+    required fields: functionId
+    risk: Segment Create Function Deployment (POST /functions/{functionId}/deploy) mutates provider state; execute only through reverse ETL approval gates.
+  create_insert_function_instance:
+    endpoint: POST /insert-function-instances
+    required fields: functionId, integrationId, name, settings
+    risk: Segment Create Insert Function Instance (POST /insert-function-instances) mutates provider state; execute only through reverse ETL approval gates.
+  create_invites:
+    endpoint: POST /invites
+    required fields: invites
+    risk: Segment Create Invites (POST /invites) mutates provider state; execute only through reverse ETL approval gates.
+  delete_invites:
+    endpoint: DELETE /invites
+    risk: Segment Delete Invites (DELETE /invites) mutates provider state; execute only through reverse ETL approval gates.
+  create_label:
+    endpoint: POST /labels
+    required fields: label
+    risk: Segment Create Label (POST /labels) mutates provider state; execute only through reverse ETL approval gates.
+  create_live_plugin:
+    endpoint: POST /sources/{{ record.sourceId }}/live-plugins/create
+    required fields: sourceId, code
+    risk: Segment Create Live Plugin (POST /sources/{sourceId}/live-plugins/create) mutates provider state; execute only through reverse ETL approval gates.
+  create_profiles_warehouse:
+    endpoint: POST /spaces/{{ record.spaceId }}/profiles-warehouses
+    required fields: spaceId, metadataId, settings
+    risk: Segment Create Profiles Warehouse (POST /spaces/{spaceId}/profiles-warehouses) mutates provider state; execute only through reverse ETL approval gates.
+  create_reverse_etl_manual_sync:
+    endpoint: POST /reverse-etl-syncs
+    required fields: modelId, sourceId, subscriptionId
+    risk: Segment Create Reverse ETL Manual Sync (POST /reverse-etl-syncs) mutates provider state; execute only through reverse ETL approval gates.
+  create_reverse_etl_model:
+    endpoint: POST /reverse-etl-models
+    required fields: description, enabled, name, query, queryIdentifierColumn, sourceId
+    risk: Segment Create Reverse Etl Model (POST /reverse-etl-models) mutates provider state; execute only through reverse ETL approval gates.
+  create_source:
+    endpoint: POST /sources
+    required fields: enabled, metadataId, slug
+    risk: Segment Create Source (POST /sources) mutates provider state; execute only through reverse ETL approval gates.
+  create_source_regulation:
+    endpoint: POST /regulations/sources/{{ record.sourceId }}
+    required fields: sourceId, regulationType, subjectIds, subjectType
+    risk: Segment Create Source Regulation (POST /regulations/sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.
+  create_tracking_plan:
+    endpoint: POST /tracking-plans
+    required fields: name, type
+    risk: Segment Create Tracking Plan (POST /tracking-plans) mutates provider state; execute only through reverse ETL approval gates.
+  create_transformation:
+    endpoint: POST /transformations
+    required fields: enabled, if, name, sourceId
+    risk: Segment Create Transformation (POST /transformations) mutates provider state; execute only through reverse ETL approval gates.
+  create_user_group:
+    endpoint: POST /groups
+    required fields: name
+    risk: Segment Create User Group (POST /groups) mutates provider state; execute only through reverse ETL approval gates.
+  create_validation_in_warehouse:
+    endpoint: POST /warehouses/validation
+    required fields: metadataId, settings
+    risk: Segment Create Validation in Warehouse (POST /warehouses/validation) mutates provider state; execute only through reverse ETL approval gates.
+  create_warehouse:
+    endpoint: POST /warehouses
+    required fields: metadataId, settings
+    risk: Segment Create Warehouse (POST /warehouses) mutates provider state; execute only through reverse ETL approval gates.
+  create_workspace_regulation:
+    endpoint: POST /regulations
+    required fields: regulationType, subjectIds, subjectType
+    risk: Segment Create Workspace Regulation (POST /regulations) mutates provider state; execute only through reverse ETL approval gates.
+  create_write_key_for_source:
+    endpoint: POST /sources/{{ record.sourceId }}/writekey
+    required fields: sourceId
+    risk: Segment Create Write Key for Source (POST /sources/{sourceId}/writekey) mutates provider state; execute only through reverse ETL approval gates.
+  delete_destination:
+    endpoint: DELETE /destinations/{{ record.destinationId }}
+    required fields: destinationId
+    risk: Segment Delete Destination (DELETE /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_destination:
+    endpoint: PATCH /destinations/{{ record.destinationId }}
+    required fields: destinationId
+    risk: Segment Update Destination (PATCH /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_filter_by_id:
+    endpoint: DELETE /filters/{{ record.id }}
+    required fields: id
+    risk: Segment Delete Filter By Id (DELETE /filters/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  update_filter_by_id:
+    endpoint: PATCH /filters/{{ record.id }}
+    required fields: id, integrationId
+    risk: Segment Update Filter By Id (PATCH /filters/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_function:
+    endpoint: DELETE /functions/{{ record.functionId }}
+    required fields: functionId
+    risk: Segment Delete Function (DELETE /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_function:
+    endpoint: PATCH /functions/{{ record.functionId }}
+    required fields: functionId
+    risk: Segment Update Function (PATCH /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_insert_function_instance:
+    endpoint: DELETE /insert-function-instances/{{ record.instanceId }}
+    required fields: instanceId
+    risk: Segment Delete Insert Function Instance (DELETE /insert-function-instances/{instanceId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_insert_function_instance:
+    endpoint: PATCH /insert-function-instances/{{ record.instanceId }}
+    required fields: instanceId, settings
+    risk: Segment Update Insert Function Instance (PATCH /insert-function-instances/{instanceId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_label:
+    endpoint: DELETE /labels/{{ record.key }}/{{ record.value }}
+    required fields: key, value
+    risk: Segment Delete Label (DELETE /labels/{key}/{value}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_live_plugin_code:
+    endpoint: DELETE /sources/{{ record.sourceId }}/live-plugins/delete-code
+    required fields: sourceId
+    risk: Segment Delete Live Plugin Code (DELETE /sources/{sourceId}/live-plugins/delete-code) mutates provider state; execute only through reverse ETL approval gates.
+  delete_reverse_etl_model:
+    endpoint: DELETE /reverse-etl-models/{{ record.modelId }}
+    required fields: modelId
+    risk: Segment Delete Reverse Etl Model (DELETE /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_reverse_etl_model:
+    endpoint: PATCH /reverse-etl-models/{{ record.modelId }}
+    required fields: modelId
+    risk: Segment Update Reverse Etl Model (PATCH /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_source:
+    endpoint: DELETE /sources/{{ record.sourceId }}
+    required fields: sourceId
+    risk: Segment Delete Source (DELETE /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_source:
+    endpoint: PATCH /sources/{{ record.sourceId }}
+    required fields: sourceId
+    risk: Segment Update Source (PATCH /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_tracking_plan:
+    endpoint: DELETE /tracking-plans/{{ record.trackingPlanId }}
+    required fields: trackingPlanId
+    risk: Segment Delete Tracking Plan (DELETE /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_tracking_plan:
+    endpoint: PATCH /tracking-plans/{{ record.trackingPlanId }}
+    required fields: trackingPlanId
+    risk: Segment Update Tracking Plan (PATCH /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_transformation:
+    endpoint: DELETE /transformations/{{ record.transformationId }}
+    required fields: transformationId
+    risk: Segment Delete Transformation (DELETE /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_transformation:
+    endpoint: PATCH /transformations/{{ record.transformationId }}
+    required fields: transformationId
+    risk: Segment Update Transformation (PATCH /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_user_group:
+    endpoint: DELETE /groups/{{ record.userGroupId }}
+    required fields: userGroupId
+    risk: Segment Delete User Group (DELETE /groups/{userGroupId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_user_group:
+    endpoint: PATCH /groups/{{ record.userGroupId }}
+    required fields: userGroupId, name
+    risk: Segment Update User Group (PATCH /groups/{userGroupId}) mutates provider state; execute only through reverse ETL approval gates.
+  delete_users:
+    endpoint: DELETE /users
+    risk: Segment Delete Users (DELETE /users) mutates provider state; execute only through reverse ETL approval gates.
+  delete_warehouse:
+    endpoint: DELETE /warehouses/{{ record.warehouseId }}
+    required fields: warehouseId
+    risk: Segment Delete Warehouse (DELETE /warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_warehouse:
+    endpoint: PATCH /warehouses/{{ record.warehouseId }}
+    required fields: warehouseId, settings
+    risk: Segment Update Warehouse (PATCH /warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.
+  force_execute_audience_run:
+    endpoint: POST /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/runs
+    required fields: spaceId, audienceId
+    risk: Segment Force Execute Audience Run (POST /spaces/{spaceId}/audiences/{audienceId}/runs) mutates provider state; execute only through reverse ETL approval gates.
+  remove_activation_from_audience:
+    endpoint: DELETE /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/activations/{{ record.id }}
+    required fields: spaceId, audienceId, id
+    risk: Segment Remove Activation from Audience (DELETE /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  update_activation_for_audience:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/activations/{{ record.id }}
+    required fields: spaceId, audienceId, id
+    risk: Segment Update Activation for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  replace_advanced_sync_schedule_for_warehouse:
+    endpoint: PUT /warehouses/{{ record.warehouseId }}/advanced-sync-schedule
+    required fields: warehouseId, enabled
+    risk: Segment Replace Advanced Sync Schedule for Warehouse (PUT /warehouses/{warehouseId}/advanced-sync-schedule) mutates provider state; execute only through reverse ETL approval gates.
+  remove_audience_from_space:
+    endpoint: DELETE /spaces/{{ record.spaceId }}/audiences/{{ record.id }}
+    required fields: spaceId, id
+    risk: Segment Remove Audience from Space (DELETE /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  update_audience_for_space:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/audiences/{{ record.id }}
+    required fields: spaceId, id
+    risk: Segment Update Audience for Space (PATCH /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_audience_schedule_from_audience:
+    endpoint: DELETE /spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules/{{ record.scheduleId }}
+    required fields: spaceId, id, scheduleId
+    risk: Segment Remove Audience Schedule from Audience (DELETE /spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_audience_schedule_for_audience:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/audiences/{{ record.id }}/schedules/{{ record.scheduleId }}
+    required fields: spaceId, id, scheduleId, config, strategy
+    risk: Segment Update Audience Schedule for Audience (PATCH /spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_computed_trait_from_space:
+    endpoint: DELETE /spaces/{{ record.spaceId }}/computed-traits/{{ record.id }}
+    required fields: spaceId, id
+    risk: Segment Remove Computed Trait from Space (DELETE /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  update_computed_trait_for_space:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/computed-traits/{{ record.id }}
+    required fields: spaceId, id
+    risk: Segment Update Computed Trait for Space (PATCH /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_filter_from_destination:
+    endpoint: DELETE /destination/{{ record.destinationId }}/filters/{{ record.filterId }}
+    required fields: destinationId, filterId
+    risk: Segment Remove Filter from Destination (DELETE /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_filter_for_destination:
+    endpoint: PATCH /destination/{{ record.destinationId }}/filters/{{ record.filterId }}
+    required fields: destinationId, filterId
+    risk: Segment Update Filter for Destination (PATCH /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_subscription_from_destination:
+    endpoint: DELETE /destinations/{{ record.destinationId }}/subscriptions/{{ record.id }}
+    required fields: destinationId, id
+    risk: Segment Remove Subscription from Destination (DELETE /destinations/{destinationId}/subscriptions/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  update_subscription_for_destination:
+    endpoint: PATCH /destinations/{{ record.destinationId }}/subscriptions/{{ record.id }}
+    required fields: destinationId, id, input
+    risk: Segment Update Subscription for Destination (PATCH /destinations/{destinationId}/subscriptions/{id}) mutates provider state; execute only through reverse ETL approval gates.
+  restore_function_version:
+    endpoint: POST /functions/{{ record.functionId }}/versions
+    required fields: functionId, versionId
+    risk: Segment Restore Function Version (POST /functions/{functionId}/versions) mutates provider state; execute only through reverse ETL approval gates.
+  remove_rules_from_tracking_plan:
+    endpoint: DELETE /tracking-plans/{{ record.trackingPlanId }}/rules
+    required fields: trackingPlanId
+    risk: Segment Remove Rules from Tracking Plan (DELETE /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.
+  replace_rules_in_tracking_plan:
+    endpoint: PUT /tracking-plans/{{ record.trackingPlanId }}/rules
+    required fields: trackingPlanId, rules
+    risk: Segment Replace Rules in Tracking Plan (PUT /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.
+  update_rules_in_tracking_plan:
+    endpoint: PATCH /tracking-plans/{{ record.trackingPlanId }}/rules
+    required fields: trackingPlanId, rules
+    risk: Segment Update Rules in Tracking Plan (PATCH /tracking-plans/{trackingPlanId}/rules) mutates provider state; execute only through reverse ETL approval gates.
+  update_schema_settings_in_source:
+    endpoint: PATCH /sources/{{ record.sourceId }}/settings
+    required fields: sourceId
+    risk: Segment Update Schema Settings in Source (PATCH /sources/{sourceId}/settings) mutates provider state; execute only through reverse ETL approval gates.
+  update_selective_sync_for_warehouse_and_space:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}/selective-syncs
+    required fields: spaceId, warehouseId
+    risk: Segment Update Selective Sync for Warehouse And Space (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs) mutates provider state; execute only through reverse ETL approval gates.
+  remove_destination_from_audience:
+    endpoint: DELETE /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.destinationId }}
+    required fields: spaceId, audienceId, destinationId
+    risk: Segment Remove Destination from Audience (DELETE /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_destination_for_audience:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/audiences/{{ record.audienceId }}/destination-connections/{{ record.destinationId }}
+    required fields: spaceId, audienceId, destinationId
+    risk: Segment Update Destination for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_profiles_warehouse_from_space:
+    endpoint: DELETE /spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}
+    required fields: spaceId, warehouseId
+    risk: Segment Remove Profiles Warehouse from Space (DELETE /spaces/{spaceId}/profiles-warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_profiles_warehouse_for_space_warehouse:
+    endpoint: PATCH /spaces/{{ record.spaceId }}/profiles-warehouses/{{ record.warehouseId }}
+    required fields: spaceId, warehouseId, settings
+    risk: Segment Update Profiles Warehouse for Space Warehouse (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}) mutates provider state; execute only through reverse ETL approval gates.
+  remove_users_from_user_group:
+    endpoint: DELETE /group/{{ record.userGroupId }}/users
+    required fields: userGroupId
+    risk: Segment Remove Users from User Group (DELETE /group/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.
+  replace_users_in_user_group:
+    endpoint: PUT /group/{{ record.userGroupId }}/users
+    required fields: userGroupId, emails
+    risk: Segment Replace Users in User Group (PUT /group/{userGroupId}/users) mutates provider state; execute only through reverse ETL approval gates.
+  remove_write_key_from_source:
+    endpoint: DELETE /sources/{{ record.sourceId }}/writekey/{{ record.writeKey }}
+    required fields: sourceId, writeKey
+    risk: Segment Remove Write Key from Source (DELETE /sources/{sourceId}/writekey/{writeKey}) mutates provider state; execute only through reverse ETL approval gates.
+  replace_messaging_subscriptions_in_spaces:
+    endpoint: PUT /spaces/{{ record.spaceId }}/messaging-subscriptions
+    required fields: spaceId, subscriptions
+    risk: Segment Replace Messaging Subscriptions in Spaces (PUT /spaces/{spaceId}/messaging-subscriptions) mutates provider state; execute only through reverse ETL approval gates.
+  update_credential:
+    endpoint: PATCH /credentials/{{ record.credentialId }}
+    required fields: credentialId
+    risk: Segment Update Credential (PATCH /credentials/{credentialId}) mutates provider state; execute only through reverse ETL approval gates.
+  update_selective_sync_for_warehouse:
+    endpoint: PATCH /warehouses/{{ record.warehouseId }}/selective-sync
+    required fields: warehouseId, syncOverrides
+    risk: Segment Update Selective Sync for Warehouse (PATCH /warehouses/{warehouseId}/selective-sync) mutates provider state; execute only through reverse ETL approval gates.
 
 SECURITY
-  read risk: external Segment Public API read of workspace, source, and destination metadata
-  approval: none; read-only, no reverse-ETL writes implemented by legacy
+  read risk: Segment API reads may include workspace configuration, schema, usage, and audit metadata; output is fixture-tested and redacted by command policies.
+  write risk: Segment reverse ETL actions mutate sources, destinations, audiences, warehouses, IAM, functions, filters, tracking plans, and deletion workflows; every action requires plan, preview, explicit approval, and destructive confirmation for deletes.
+  approval: Reverse ETL plan -> preview -> explicit approval token -> execute; agents cannot self-approve JSON plans.
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Inspect, read, query, and safely plan typed Segment Public API operations without raw HTTP escapes.
+  Usage: pm segment <streams|queries|writes|binary|testing> <command> [flags]
+  Source CLI: Segment Public API (OpenAPI 73.0.8)
+  Global flags:
+    --credential (string): Segment credential name; secrets are resolved from the local vault only.
+    --connection (string): Alias for --credential when invoking connector commands.
+    --config (string_array): Non-secret config override key=value; never pass api_token here.
+    --limit (integer): Maximum records for stream commands.
+    --max-bytes (integer): Maximum response bytes for direct read commands.
+    --preview (boolean): For write commands, include a dry-run reverse ETL preview without executing the provider mutation.
+    --plan (string): Existing reverse ETL plan id for preview or approved execution.
+    --approve (string): Approval token required to execute a stored write plan.
+    --confirm (string): Destructive confirmation challenge, e.g. destructive for DELETE actions.
+  ETL and CDC Streams
+    streams list-sources - List Sources [intent=etl availability=implemented stream=list_sources]
+    streams get-workspace - Get Workspace [intent=etl availability=implemented stream=get_workspace]
+    streams list-audit-events - List Audit Events [intent=etl availability=implemented stream=list_audit_events]
+    streams list-spaces - List Spaces [intent=etl availability=implemented stream=list_spaces]
+  Bounded Direct Provider Queries
+    queries batch-query-messaging-subscriptions-for-space - Batch Query Messaging Subscriptions for Space [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --subscriptions
+    queries create-audience-preview - Create Audience Preview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --audience-type, --definition, --options
+    queries get-audience-preview - Get Audience Preview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --id
+    queries get-daily-per-source-api-calls-usage - Get Daily Per Source API Calls Usage [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --period
+    queries get-daily-per-source-mtu-usage - Get Daily Per Source MTU Usage [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --period
+    queries get-daily-workspace-api-calls-usage - Get Daily Workspace API Calls Usage [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --period
+    queries get-daily-workspace-mtu-usage - Get Daily Workspace MTU Usage [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --period
+    queries get-egress-failed-metrics-from-delivery-overview - Get Egress Failed Metrics from Delivery Overview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --source-id, --destination-config-id, --start-time, --end-time, --group-by, --granularity, --filter
+    queries get-egress-success-metrics-from-delivery-overview - Get Egress Success Metrics from Delivery Overview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --source-id, --destination-config-id, --start-time, --end-time, --group-by, --granularity, --filter
+    queries get-events-volume-from-workspace - Get Events Volume from Workspace [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --granularity, --start-time, --end-time, --group-by, --source-id, --event-name, --event-type, --app-version
+    queries get-filtered-at-destination-metrics-from-delivery-overview - Get Filtered At Destination Metrics from Delivery Overview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --source-id, --destination-config-id, --start-time, --end-time, --group-by, --granularity, --filter
+    queries get-filtered-at-source-metrics-from-delivery-overview - Get Filtered At Source Metrics from Delivery Overview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --source-id, --start-time, --end-time, --group-by, --granularity, --filter
+    queries get-ingress-failed-metrics-from-delivery-overview - Get Ingress Failed Metrics from Delivery Overview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --source-id, --start-time, --end-time, --group-by, --granularity, --filter
+    queries get-ingress-success-metrics-from-delivery-overview - Get Ingress Success Metrics from Delivery Overview [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --source-id, --start-time, --end-time, --group-by, --granularity, --filter
+    queries list-entity-paths - List Entity Paths [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --search
+    queries list-events - List Events [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --sort-by, --sort-dir, --search
+    queries list-properties-from-entity - List Properties from Entity [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --entity-slug, --include-sample-values, --samples-count
+    queries list-properties-from-event - List Properties from Event [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --space-id, --event-name, --sort-by, --sort-dir, --search, --include-sample-values, --samples-count
+    queries preview-destination-filter - Preview Destination Filter [intent=direct_read availability=implemented]; approval: not required for read-only direct operations; risk: bounded Segment provider query/search read; JSON output is redacted and capped; flags: --filter, --payload
+  Reverse ETL Write Plans
+    writes create-source - Create Source [intent=reverse_etl availability=partial write=create_source]; approval: Use pm reverse plan with --action, then preview and execute only with an explicit approval token.; risk: Segment Create Source (POST /sources) mutates provider state; execute only through reverse ETL approval gates.; notes: The provider command surface documents this fixed write action; execution uses the shared reverse ETL plan/preview/approval workflow rather than a raw inline body flag.
+    writes update-source - Update Source [intent=reverse_etl availability=partial write=update_source]; approval: Use pm reverse plan with --action, then preview and execute only with an explicit approval token.; risk: Segment Update Source (PATCH /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.; notes: The provider command surface documents this fixed write action; execution uses the shared reverse ETL plan/preview/approval workflow rather than a raw inline body flag.
+    writes remove-write-key-from-source - Remove Write Key from Source [intent=reverse_etl availability=partial write=remove_write_key_from_source]; approval: Use pm reverse plan with --action, then preview and execute only with an explicit approval token.; risk: Segment Remove Write Key from Source (DELETE /sources/{sourceId}/writekey/{writeKey}) mutates provider state; execute only through reverse ETL approval gates.; notes: The provider command surface documents this fixed write action; execution uses the shared reverse ETL plan/preview/approval workflow rather than a raw inline body flag.
+  Blocked Binary/File Workflows
+    binary create-download - Create Download [intent=direct_read availability=unsupported_local unsupported local workflow]; approval: not executable in this slice; risk: binary/file transfer workflow blocked by default; notes: Use provider UI or a separately approved binary executor; no generic file download escape hatch is exposed.
+  Excluded Testing Endpoints
+    testing echo - Echo [intent=docs_only availability=excluded]; risk: non-data testing endpoint; notes: Excluded from executable connector surface.
+  Help topics:
+    auth - Store api_token from environment or stdin; connector inspection never reads secrets.
+    parity - 197 official OpenAPI operations are partitioned across streams, direct reads, writes, binary-blocked, and excluded rows.
+    reverse-etl - Segment writes always use plan, preview, approval, execute; JSON plans redact approval tokens.
 
 EXAMPLES
   # Inspect as a manual
@@ -58,6 +760,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect segment before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

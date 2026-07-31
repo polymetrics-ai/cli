@@ -1,23 +1,28 @@
 {
   "name": "segment",
   "display_name": "Segment",
-  "description": "Reads Segment workspace, source, and destination metadata through the Segment Public API.",
+  "description": "Definition-owned Segment Public API connector covering the audited OpenAPI 73.0.8 operation ledger with fixture-backed reads, bounded direct reads, and approval-gated reverse ETL actions.",
   "integration_type": "api",
-  "docs_url": "https://docs.segmentapis.com/tag/Getting-Started",
-  "release_stage": "ga",
+  "docs_url": "https://docs.segmentapis.com/",
+  "release_stage": "beta",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
-    "cdc": false,
+    "cdc": true,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 120
   },
   "risk": {
-    "read": "external Segment Public API read of workspace, source, and destination metadata",
-    "approval": "none; read-only, no reverse-ETL writes implemented by legacy"
+    "read": "Segment API reads may include workspace configuration, schema, usage, and audit metadata; output is fixture-tested and redacted by command policies.",
+    "write": "Segment reverse ETL actions mutate sources, destinations, audiences, warehouses, IAM, functions, filters, tracking plans, and deletion workflows; every action requires plan, preview, explicit approval, and destructive confirmation for deletes.",
+    "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; agents cannot self-approve JSON plans."
   }
 }

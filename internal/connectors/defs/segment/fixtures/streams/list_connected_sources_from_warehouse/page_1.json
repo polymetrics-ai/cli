@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/warehouses/synthetic-conformance-value/connected-sources",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "sources": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list connected sources from warehouse",
+            "slug": "list-connected-sources-from-warehouse",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}

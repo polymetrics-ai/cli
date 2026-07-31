@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reverse-etl-models/synthetic-conformance-value/syncs/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "reverseETLSyncStatus": {
+          "id": "synthetic-conformance-value",
+          "name": "Synthetic Segment get reverse etl sync status",
+          "slug": "get-reverse-etl-sync-status",
+          "workspaceId": "synthetic-conformance-value",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      }
+    }
+  }
+}

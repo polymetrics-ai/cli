@@ -1,58 +1,19 @@
 # Overview
 
-Reads Segment workspace, source, and destination metadata through the Segment Public API.
+Segment is a definition-owned connector for the official Segment Public API OpenAPI 3.0.3 surface published from docs.segmentapis.com (declared version 73.0.8). This bundle records all 197 official method/path operations exactly once in `api_surface.json` and `operations.json`: 79 ETL reads, 1 audit-events CDC/changefeed read, 19 bounded direct provider queries, 96 approval-gated reverse ETL writes, 1 blocked binary/file workflow, and 1 excluded testing endpoint.
 
-Readable streams: `workspaces`, `sources`, `destinations`.
+# Auth setup
 
-This connector is read-only; no write actions are declared.
+Use a Segment Public API token as `api_token`. Add it from an environment variable or stdin, never chat or shell history. The connector sends it as a Bearer token and supports a non-secret `base_url` override for tests and regional endpoints.
 
-Service API documentation: https://docs.segmentapis.com/tag/Getting-Started.
+# Streams notes
 
-## Auth setup
+Read streams are generated from fixed OpenAPI GET operations and use connector-relative paths only. List-shaped streams use Segment's cursor-style `pagination.count` / `pagination.cursor` query names and fixture replay with sanitized synthetic records. Nested streams require their documented path parameters as non-secret config fields. `audit_events` is the CDC/changefeed surface and declares `timestamp` as the incremental cursor.
 
-Connection fields:
+# Write actions & risks
 
-- `api_token` (required, secret, string); Segment Public API access token, sent as a Bearer token
-  (Authorization: Bearer <api_token>). Never logged.
-- `base_url` (optional, string); default `https://api.segmentapis.com`; format `uri`; Segment Public
-  API base URL override for tests, proxies, or a region-specific endpoint (e.g.
-  https://api.eu1.segmentapis.com).
+Every non-read mutation in the official lane is a named reverse ETL action with a fixed method and connector-relative path. Path parameters are record fields, request bodies are schema-derived, and DELETE actions require the `destructive` confirmation challenge. Execution remains the shared reverse ETL sequence: plan, preview, explicit approval token, execute. JSON plan output redacts approval tokens so agents cannot self-approve external Segment mutations.
 
-Secret fields are redacted in logs and write previews: `api_token`.
+# Known limits
 
-Default configuration values: `base_url=https://api.segmentapis.com`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.api_token`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/workspaces`.
-
-## Streams notes
-
-Default pagination: page-number pagination; page parameter `page`; size parameter `page_size`;
-starts at 1; page size 100.
-
-- `workspaces`: GET `/workspaces` - records path `workspaces`; page-number pagination; page
-  parameter `page`; size parameter `page_size`; starts at 1; page size 100; emits passthrough
-  records.
-- `sources`: GET `/sources` - records path `sources`; page-number pagination; page parameter `page`;
-  size parameter `page_size`; starts at 1; page size 100; emits passthrough records.
-- `destinations`: GET `/destinations` - records path `destinations`; page-number pagination; page
-  parameter `page`; size parameter `page_size`; starts at 1; page size 100; emits passthrough
-  records.
-
-## Write actions & risks
-
-This connector is read-only. Read behavior: external Segment Public API read of workspace, source,
-and destination metadata.
-
-## Known limits
-
-- Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=29, duplicate_of=1, non_data_endpoint=18, out_of_scope=60,
-  requires_elevated_scope=76.
+No live Segment provider calls or certification artifacts are included in this fixture-only parity slice. `createDownload` is tracked as a binary/file workflow but remains blocked because this connector does not expose a generic local file download executor. `echo` is excluded as a non-data testing endpoint. OpenAPI union schemas are conservatively represented in the engine's minimal JSON Schema dialect; operation IDs, source URLs, and fixed paths remain the authoritative mapping.

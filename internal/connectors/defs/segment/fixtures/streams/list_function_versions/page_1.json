@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/functions/synthetic-conformance-value/versions",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "versions": [
+          {
+            "id": "synthetic-conformance-value",
+            "name": "Synthetic Segment list function versions",
+            "slug": "list-function-versions",
+            "workspaceId": "synthetic-conformance-value",
+            "updatedAt": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "pagination": {
+          "current": "synthetic",
+          "totalEntries": 1
+        }
+      }
+    }
+  }
+}
