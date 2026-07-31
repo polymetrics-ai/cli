@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "messages",
+    "source_credential_defaults": {
+      "max_polls": "1",
+      "max_batch_size": "1",
+      "max_wait_time": "0"
+    },
+    "live_unavailable": [
+      {
+        "kind": "auth",
+        "contains": [
+          "missing credentials",
+          "InvalidClientTokenId",
+          "SignatureDoesNotMatch"
+        ]
+      },
+      {
+        "kind": "permission",
+        "contains": [
+          "AccessDenied",
+          "not authorized"
+        ]
+      }
+    ]
+  },
+  "write_pairings": []
+}

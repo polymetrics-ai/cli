@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"sort"
@@ -28,6 +29,7 @@ const (
 // sessionToken are secrets and are never logged.
 type sqsConfig struct {
 	queueURL     string
+	endpointURL  string
 	region       string
 	accessKey    string
 	secretKey    string
@@ -40,9 +42,9 @@ type sqsConfig struct {
 // values, access_key/secret_key are required secrets, session_token is an
 // optional secret.
 func resolveConnConfig(cfg connectors.RuntimeConfig) (sqsConfig, error) {
-	queueURL := strings.TrimSpace(cfg.Config["queue_url"])
-	if queueURL == "" {
-		return sqsConfig{}, errors.New("amazon-sqs connector requires config queue_url")
+	queueURL, err := normalizeSQSURL(cfg.Config["queue_url"], "queue_url", true)
+	if err != nil {
+		return sqsConfig{}, err
 	}
 	region := strings.TrimSpace(cfg.Config["region"])
 	if region == "" {
@@ -53,13 +55,77 @@ func resolveConnConfig(cfg connectors.RuntimeConfig) (sqsConfig, error) {
 	if accessKey == "" || secretKey == "" {
 		return sqsConfig{}, errors.New("amazon-sqs connector requires secrets access_key and secret_key")
 	}
+	endpointURL := strings.TrimSpace(cfg.Config["endpoint_url"])
+	if endpointURL == "" {
+		endpointURL = serviceEndpointFromQueueURL(queueURL)
+	} else {
+		endpointURL, err = normalizeSQSURL(endpointURL, "endpoint_url", false)
+		if err != nil {
+			return sqsConfig{}, err
+		}
+	}
 	return sqsConfig{
 		queueURL:     queueURL,
+		endpointURL:  endpointURL,
 		region:       region,
 		accessKey:    accessKey,
 		secretKey:    secretKey,
 		sessionToken: strings.TrimSpace(cfg.Secrets["session_token"]),
 	}, nil
+}
+
+func normalizeSQSURL(raw, field string, queueURL bool) (string, error) {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return "", fmt.Errorf("amazon-sqs connector requires config %s", field)
+	}
+	u, err := url.Parse(raw)
+	if err != nil || u.Scheme == "" || u.Host == "" || u.Opaque != "" {
+		return "", fmt.Errorf("amazon-sqs config %s must be an absolute URL", field)
+	}
+	if u.User != nil {
+		return "", fmt.Errorf("amazon-sqs config %s must not include userinfo", field)
+	}
+	if u.RawQuery != "" || u.ForceQuery || u.Fragment != "" {
+		return "", fmt.Errorf("amazon-sqs config %s must not include query or fragment components", field)
+	}
+	scheme := strings.ToLower(u.Scheme)
+	if scheme != "https" {
+		if scheme != "http" || !isLocalhost(u.Hostname()) {
+			return "", fmt.Errorf("amazon-sqs config %s must use https; http is allowed only for localhost test endpoints", field)
+		}
+	}
+	if !queueURL {
+		if u.Path == "" {
+			u.Path = "/"
+		}
+		if u.Path != "/" {
+			return "", fmt.Errorf("amazon-sqs config %s must not include a non-root path", field)
+		}
+	}
+	u.Scheme = scheme
+	u.RawPath = ""
+	return u.String(), nil
+}
+
+func isLocalhost(host string) bool {
+	if strings.EqualFold(host, "localhost") {
+		return true
+	}
+	ip := net.ParseIP(host)
+	return ip != nil && ip.IsLoopback()
+}
+
+func serviceEndpointFromQueueURL(raw string) string {
+	u, err := url.Parse(raw)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return raw
+	}
+	u.Path = "/"
+	u.RawPath = ""
+	u.RawQuery = ""
+	u.Fragment = ""
+	return u.String()
 }
 
 func fixtureMode(cfg connectors.RuntimeConfig) bool {
@@ -77,6 +143,7 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 		return nil
 	}
 	form := url.Values{"Action": {"GetQueueAttributes"}, "Version": {apiVersion}, "AttributeName.1": {"QueueArn"}}
+	addConfiguredQueueURL(form, cfg)
 	_, err := c.do(ctx, cfg, form)
 	if err != nil {
 		return fmt.Errorf("check amazon-sqs: %w", err)
@@ -87,14 +154,56 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 // do builds, signs (SigV4), sends, and reads the body of one SQS Query API
 // POST. Ported rule-for-rule from legacy's do (amazon_sqs.go:131-171).
 func (c Connector) do(ctx context.Context, cfg connectors.RuntimeConfig, form url.Values) ([]byte, error) {
-	conn, err := resolveConnConfig(cfg)
+	resp, err := c.doQueue(ctx, cfg, form, 16<<20)
 	if err != nil {
 		return nil, err
 	}
-	body := []byte(form.Encode())
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, conn.queueURL, bytes.NewReader(body))
+	return resp.body, nil
+}
+
+type sqsHTTPResponse struct {
+	status int
+	body   []byte
+}
+
+func (c Connector) doQueue(ctx context.Context, cfg connectors.RuntimeConfig, form url.Values, maxBytes int) (sqsHTTPResponse, error) {
+	conn, err := resolveConnConfig(cfg)
 	if err != nil {
-		return nil, fmt.Errorf("build sqs request: %w", err)
+		return sqsHTTPResponse{}, err
+	}
+	form = cloneValues(form)
+	form.Set("QueueUrl", conn.queueURL)
+	return c.doEndpoint(ctx, conn, conn.queueURL, form, maxBytes)
+}
+
+func (c Connector) doService(ctx context.Context, cfg connectors.RuntimeConfig, form url.Values, maxBytes int) (sqsHTTPResponse, error) {
+	conn, err := resolveConnConfig(cfg)
+	if err != nil {
+		return sqsHTTPResponse{}, err
+	}
+	form = cloneValues(form)
+	if strings.TrimSpace(form.Get("QueueUrl")) != "" {
+		form.Set("QueueUrl", conn.queueURL)
+	}
+	return c.doEndpoint(ctx, conn, conn.endpointURL, form, maxBytes)
+}
+
+func cloneValues(in url.Values) url.Values {
+	out := make(url.Values, len(in))
+	for k, values := range in {
+		out[k] = append([]string(nil), values...)
+	}
+	return out
+}
+
+func (c Connector) doEndpoint(ctx context.Context, conn sqsConfig, endpoint string, form url.Values, maxBytes int) (sqsHTTPResponse, error) {
+	if maxBytes <= 0 || maxBytes > 16<<20 {
+		maxBytes = 16 << 20
+	}
+	body := []byte(form.Encode())
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))
+	if err != nil {
+		return sqsHTTPResponse{}, fmt.Errorf("build sqs request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "text/xml")
@@ -110,14 +219,26 @@ func (c Connector) do(ctx context.Context, cfg connectors.RuntimeConfig, form ur
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("send sqs request: %w", err)
+		return sqsHTTPResponse{}, fmt.Errorf("send sqs request: %w", err)
 	}
 	defer func() { _ = resp.Body.Close() }()
-	respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 16<<20))
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("sqs returned %s", resp.Status)
+	respBody, readErr := io.ReadAll(io.LimitReader(resp.Body, int64(maxBytes)+1))
+	if readErr != nil {
+		return sqsHTTPResponse{}, fmt.Errorf("read sqs response: %w", readErr)
 	}
-	return respBody, nil
+	if len(respBody) > maxBytes {
+		return sqsHTTPResponse{}, fmt.Errorf("sqs response too large: %d bytes exceeds limit %d", len(respBody), maxBytes)
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return sqsHTTPResponse{}, fmt.Errorf("sqs returned %s", resp.Status)
+	}
+	return sqsHTTPResponse{status: resp.StatusCode, body: respBody}, nil
+}
+
+func addConfiguredQueueURL(form url.Values, cfg connectors.RuntimeConfig) {
+	if strings.TrimSpace(form.Get("QueueUrl")) == "" {
+		form.Set("QueueUrl", strings.TrimSpace(cfg.Config["queue_url"]))
+	}
 }
 
 // sign computes and attaches an AWS SigV4 Authorization header. Ported
