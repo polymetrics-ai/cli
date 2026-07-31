@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/users/selected-user-fixture/gpg-keys/fingerprint-fixture"
+  },
+  "record": {
+    "selected_user": "selected-user-fixture",
+    "fingerprint": "fingerprint-fixture"
+  }
+}

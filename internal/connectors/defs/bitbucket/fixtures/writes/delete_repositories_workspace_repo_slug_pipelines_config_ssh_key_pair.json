@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/pipelines_config/ssh/key_pair"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/pipelines-config/caches"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture"
+  }
+}

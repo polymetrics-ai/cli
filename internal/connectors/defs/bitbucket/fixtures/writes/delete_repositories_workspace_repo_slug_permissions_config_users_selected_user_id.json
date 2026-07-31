@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/permissions-config/users/selected-user-id-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture",
+    "selected_user_id": "selected-user-id-fixture"
+  }
+}

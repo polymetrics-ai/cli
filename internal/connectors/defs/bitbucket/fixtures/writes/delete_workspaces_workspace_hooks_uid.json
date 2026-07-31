@@ -1,0 +1,10 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/workspace_fixture/hooks/hook-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "uid": "hook-fixture"
+  }
+}

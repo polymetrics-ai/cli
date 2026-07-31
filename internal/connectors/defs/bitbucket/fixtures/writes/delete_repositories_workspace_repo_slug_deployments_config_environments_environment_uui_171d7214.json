@@ -1,0 +1,12 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/workspace_fixture/repo-fixture/deployments_config/environments/environment-uuid-fixture/variables/variable-uuid-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "repo_slug": "repo-fixture",
+    "environment_uuid": "environment-uuid-fixture",
+    "variable_uuid": "variable-uuid-fixture"
+  }
+}

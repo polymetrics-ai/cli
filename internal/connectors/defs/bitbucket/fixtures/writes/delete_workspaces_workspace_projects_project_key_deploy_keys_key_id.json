@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/workspaces/workspace_fixture/projects/PROJ/deploy-keys/key-fixture"
+  },
+  "record": {
+    "workspace": "workspace_fixture",
+    "project_key": "PROJ",
+    "key_id": "key-fixture"
+  }
+}
