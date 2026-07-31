@@ -1,12 +1,26 @@
 package conformance
 
 import (
+	"net/url"
 	"strings"
 	"testing"
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/engine"
 )
+
+func TestCompareWriteExpectationQueryIsExactWhenDeclared(t *testing.T) {
+	got := capturedRequest{Method: "POST", Path: "/resource", Query: url.Values{"text": {"hello"}, "extra": {"unexpected"}}}
+	want := writeExpectation{Method: "POST", Path: "/resource", Query: map[string]string{"text": "hello"}}
+	if mismatch := compareWriteExpectation(got, want); mismatch == "" {
+		t.Fatal("compareWriteExpectation accepted an unexpected extra query parameter")
+	}
+
+	got.Query = url.Values{"text": {"hello"}}
+	if mismatch := compareWriteExpectation(got, want); mismatch != "" {
+		t.Fatalf("compareWriteExpectation exact query mismatch = %q", mismatch)
+	}
+}
 
 // --- dynamic checks: good bundle -----------------------------------------
 

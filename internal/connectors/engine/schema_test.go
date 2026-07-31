@@ -287,6 +287,55 @@ func TestSchemaDefaultTypeMismatches(t *testing.T) {
 	}
 }
 
+func TestSchemaAnyOfRequiredAlternatives(t *testing.T) {
+	raw := `{
+		"type": "object",
+		"properties": {
+			"dateTime": {"type": "string"},
+			"date": {"type": "string"},
+			"timeZone": {"type": "string"}
+		},
+		"additionalProperties": false,
+		"anyOf": [
+			{"required": ["dateTime"]},
+			{"required": ["date"]}
+		]
+	}`
+	sch, err := CompileSchema(json.RawMessage(raw))
+	if err != nil {
+		t.Fatalf("compile: %v", err)
+	}
+	for _, v := range []map[string]any{{"dateTime": "2020-01-01T00:00:00Z"}, {"date": "2020-01-01"}} {
+		if err := sch.Validate(v); err != nil {
+			t.Fatalf("Validate(%v): %v", v, err)
+		}
+	}
+	if err := sch.Validate(map[string]any{"timeZone": "UTC"}); err == nil {
+		t.Fatal("Validate without date or dateTime succeeded")
+	}
+}
+
+func TestSchemaOneOfRejectsMultipleMatches(t *testing.T) {
+	raw := `{
+		"type": "object",
+		"properties": {
+			"dateTime": {"type": "string"},
+			"date": {"type": "string"}
+		},
+		"oneOf": [
+			{"required": ["dateTime"]},
+			{"required": ["date"]}
+		]
+	}`
+	sch, err := CompileSchema(json.RawMessage(raw))
+	if err != nil {
+		t.Fatalf("compile: %v", err)
+	}
+	if err := sch.Validate(map[string]any{"dateTime": "2020-01-01T00:00:00Z", "date": "2020-01-01"}); err == nil {
+		t.Fatal("Validate with both oneOf alternatives succeeded")
+	}
+}
+
 func TestSchemaProperties(t *testing.T) {
 	raw := `{
 		"type": "object",

@@ -26,6 +26,8 @@ type schemaNode struct {
 	required             []string
 	properties           map[string]*schemaNode
 	items                *schemaNode
+	anyOf                []*schemaNode
+	oneOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	minProperties        int
@@ -65,6 +67,8 @@ var structuralKeywords = map[string]bool{
 	"properties":           true,
 	"items":                true,
 	"enum":                 true,
+	"anyOf":                true,
+	"oneOf":                true,
 	"pattern":              true,
 	"minProperties":        true,
 	"additionalProperties": true,
@@ -160,6 +164,22 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		n.enum = vals
 	}
 
+	if raw, ok := m["anyOf"]; ok {
+		children, err := compileSchemaList(raw, "anyOf")
+		if err != nil {
+			return nil, err
+		}
+		n.anyOf = children
+	}
+
+	if raw, ok := m["oneOf"]; ok {
+		children, err := compileSchemaList(raw, "oneOf")
+		if err != nil {
+			return nil, err
+		}
+		n.oneOf = children
+	}
+
 	if raw, ok := m["pattern"]; ok {
 		var pat string
 		if err := json.Unmarshal(raw, &pat); err != nil {
@@ -228,6 +248,22 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	return n, nil
 }
 
+func compileSchemaList(raw json.RawMessage, keyword string) ([]*schemaNode, error) {
+	var subs []map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &subs); err != nil {
+		return nil, fmt.Errorf("compile schema: %s: %w", keyword, err)
+	}
+	children := make([]*schemaNode, 0, len(subs))
+	for i, sub := range subs {
+		child, err := compileNode(sub)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: %s.%d: %w", keyword, i, err)
+		}
+		children = append(children, child)
+	}
+	return children, nil
+}
+
 func compileTypes(raw json.RawMessage) ([]string, error) {
 	var single string
 	if err := json.Unmarshal(raw, &single); err == nil {
@@ -270,6 +306,38 @@ func (n *schemaNode) validate(v any, path string) error {
 		}
 		if !matched {
 			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
+		}
+	}
+	if len(n.anyOf) > 0 {
+		matched := false
+		var firstErr error
+		for _, child := range n.anyOf {
+			if err := child.validate(v, path); err == nil {
+				matched = true
+				break
+			} else if firstErr == nil {
+				firstErr = err
+			}
+		}
+		if !matched {
+			return fmt.Errorf("%s: value does not match anyOf: %v", displayPath(path), firstErr)
+		}
+	}
+	if len(n.oneOf) > 0 {
+		matches := 0
+		var firstErr error
+		for _, child := range n.oneOf {
+			if err := child.validate(v, path); err == nil {
+				matches++
+			} else if firstErr == nil {
+				firstErr = err
+			}
+		}
+		switch {
+		case matches == 0:
+			return fmt.Errorf("%s: value does not match oneOf: %v", displayPath(path), firstErr)
+		case matches > 1:
+			return fmt.Errorf("%s: value matches multiple oneOf branches", displayPath(path))
 		}
 	}
 

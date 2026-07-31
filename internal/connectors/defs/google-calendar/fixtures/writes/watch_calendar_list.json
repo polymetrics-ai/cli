@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "synthetic-conformance-value",
+    "type": "web_hook",
+    "address": "https://example.test/calendar-hook"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/users/me/calendarList/watch",
+    "body": {
+      "id": "synthetic-conformance-value",
+      "type": "web_hook",
+      "address": "https://example.test/calendar-hook"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture-response",
+      "kind": "calendar#fixture"
+    }
+  }
+}

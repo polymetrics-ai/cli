@@ -3,46 +3,65 @@
   "title": "events",
   "type": "object",
   "properties": {
-    "id": {
+    "kind": {
       "type": "string"
     },
-    "iCalUID": {
+    "etag": {
+      "type": "string"
+    },
+    "id": {
       "type": "string"
     },
     "status": {
       "type": "string"
     },
-    "summary": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "location": {
-      "type": "string"
-    },
     "htmlLink": {
-      "type": "string"
-    },
-    "created": {
       "type": [
         "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
     "updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
       "type": [
         "string",
-        "number",
-        "integer",
-        "boolean",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "colorId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creator": {
+      "type": [
         "object",
-        "array",
+        "null"
+      ]
+    },
+    "organizer": {
+      "type": [
+        "object",
         "null"
       ]
     },
@@ -52,23 +71,173 @@
     "end": {
       "type": "object"
     },
-    "creator": {
-      "type": "object"
+    "endTimeUnspecified": {
+      "type": [
+        "boolean",
+        "null"
+      ]
     },
-    "organizer": {
-      "type": "object"
-    },
-    "attendees": {
-      "type": "array"
+    "recurrence": {
+      "type": [
+        "array",
+        "null"
+      ]
     },
     "recurringEventId": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
-    "etag": {
-      "type": "string"
+    "originalStartTime": {
+      "type": [
+        "object",
+        "null"
+      ]
     },
-    "kind": {
-      "type": "string"
+    "transparency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "iCalUID": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sequence": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "attendees": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "attendeesOmitted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "extendedProperties": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "hangoutLink": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conferenceData": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gadget": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "anyoneCanAddSelf": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "guestsCanInviteOthers": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "guestsCanModify": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "guestsCanSeeOtherGuests": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "privateCopy": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "locked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reminders": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "attachments": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "eventType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "outOfOfficeProperties": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "focusTimeProperties": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "workingLocationProperties": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "birthdayProperties": {
+      "type": [
+        "object",
+        "null"
+      ]
     }
   },
   "x-primary-key": [

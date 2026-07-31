@@ -160,7 +160,7 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 // from real credentials) per THREAT-MODEL §4 — conformance never touches
 // live secrets.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{}, Secrets: map[string]string{}}
+	cfg := connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__", Config: map[string]string{}, Secrets: map[string]string{}}
 	if b.Spec == nil {
 		return cfg
 	}
@@ -795,7 +795,7 @@ func isAllDigitsForAssertion(s string) bool {
 // --- write fixture parsing -------------------------------------------------
 
 // writeFixture is fixtures/writes/<action>.json's shape (design §E.2):
-// {"record": {...}, "expect": {"method","path","body"}}.
+// {"record": {...}, "expect": {"method","path","query","body"}}.
 type writeFixture struct {
 	Record   map[string]any   `json:"record"`
 	Expect   writeExpectation `json:"expect"`
@@ -803,9 +803,10 @@ type writeFixture struct {
 }
 
 type writeExpectation struct {
-	Method string         `json:"method"`
-	Path   string         `json:"path"`
-	Body   map[string]any `json:"body,omitempty"`
+	Method string            `json:"method"`
+	Path   string            `json:"path"`
+	Query  map[string]string `json:"query,omitempty"`
+	Body   map[string]any    `json:"body,omitempty"`
 }
 
 // loadWriteFixture reads fixtures/writes/<action>.json.
@@ -848,6 +849,20 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	}
 	if want.Path != "" && got.Path != want.Path {
 		return fmt.Sprintf("path = %q, want %q", got.Path, want.Path)
+	}
+	if want.Query != nil {
+		if len(got.Query) != len(want.Query) {
+			return fmt.Sprintf("query has %d key(s), want exactly %d", len(got.Query), len(want.Query))
+		}
+		for k, wantVal := range want.Query {
+			values, ok := got.Query[k]
+			if !ok {
+				return fmt.Sprintf("query[%q] missing, want %q", k, wantVal)
+			}
+			if len(values) != 1 || values[0] != wantVal {
+				return fmt.Sprintf("query[%q] = %q, want exactly %q", k, values, wantVal)
+			}
+		}
 	}
 	for k, wantVal := range want.Body {
 		gotVal, ok := got.Body[k]
