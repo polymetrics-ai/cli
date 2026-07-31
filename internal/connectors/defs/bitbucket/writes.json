@@ -36,6 +36,11 @@
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
     {
+      "body_fields": [
+        "scm",
+        "is_private",
+        "description"
+      ],
       "kind": "create",
       "method": "POST",
       "name": "create_repositories_workspace_repo_slug",

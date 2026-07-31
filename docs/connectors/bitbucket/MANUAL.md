@@ -533,6 +533,7 @@ REVERSE ETL ACTIONS
   create_repositories_workspace_repo_slug:
     endpoint: POST /repositories/{{ record.workspace }}/{{ record.repo_slug }}
     required fields: workspace, repo_slug, scm, is_private
+    optional fields: description
     risk: POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
   delete_repositories_workspace_repo_slug_branch_restrictions_id:
     endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/branch-restrictions/{{ record.id }}

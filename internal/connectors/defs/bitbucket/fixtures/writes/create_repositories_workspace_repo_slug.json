@@ -1,6 +1,7 @@
 {
   "expect": {
     "body": {
+      "description": "fixture repository description",
       "is_private": true,
       "scm": "git"
     },
@@ -8,6 +9,7 @@
     "path": "/repositories/workspace_fixture/repo-fixture"
   },
   "record": {
+    "description": "fixture repository description",
     "is_private": true,
     "repo_slug": "repo-fixture",
     "scm": "git",
