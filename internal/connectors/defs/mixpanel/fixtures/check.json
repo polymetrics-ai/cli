@@ -1,7 +1,13 @@
 {
-  "request": { "method": "GET", "path": "/cohorts/list" },
+  "request": {
+    "method": "GET",
+    "path": "/account"
+  },
   "response": {
     "status": 200,
-    "body": { "cohorts": [] }
+    "body": {
+      "id": "acct_fixture",
+      "status": "ok"
+    }
   }
 }

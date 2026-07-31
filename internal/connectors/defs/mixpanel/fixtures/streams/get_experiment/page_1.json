@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/workspaces/synthetic-conformance-value/experiments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "get_experiment_fixture_1",
+          "name": "Get Experiment",
+          "status": "ok",
+          "source_operation": "get-experiment",
+          "workspace_id": "fixture_workspace_id",
+          "experiment_id": "fixture_experiment_id"
+        }
+      ]
+    }
+  }
+}

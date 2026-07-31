@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/warehouse-sources/imports/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "get_warehouse_import_fixture_1",
+          "name": "Get a specific warehouse import",
+          "status": "ok",
+          "source_operation": "get-warehouse-import",
+          "projectId": "fixture_projectid",
+          "importId": "fixture_importid"
+        }
+      ]
+    }
+  }
+}

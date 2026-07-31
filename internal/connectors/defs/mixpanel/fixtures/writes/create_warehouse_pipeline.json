@@ -1,0 +1,10 @@
+{
+  "record": {
+    "type": "fixture_type",
+    "from_date": "2026-01-01"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/nessie/pipeline/create"
+  }
+}

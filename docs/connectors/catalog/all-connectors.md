@@ -290,7 +290,7 @@
 | `miro` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Miro | `api` | ga | check, catalog, read, write | 84 | 98 | [Documentation](https://developers.miro.com/reference/api-reference) | bundle definition |
 | `missive` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Missive | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://missiveapp.com/help/api-documentation) | bundle definition |
 | `mixmax` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mixmax | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.mixmax.com/) | bundle definition |
-| `mixpanel` | [`icons/mixpanel.svg`](../icons/mixpanel.svg) | Mixpanel | `api` | ga | check, catalog, read | 10 | 0 | [Documentation](https://developer.mixpanel.com/reference/overview) | bundle definition |
+| `mixpanel` | [`icons/mixpanel.svg`](../icons/mixpanel.svg) | Mixpanel | `api` | ga | check, catalog, read, write, query | 25 | 60 | [Documentation](https://docs.mixpanel.com/reference/overview) | bundle definition |
 | `mode` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mode | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://mode.com/developer/api-reference/) | bundle definition |
 | `monday` | [`icons/monday.svg`](../icons/monday.svg) | Monday | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.monday.com/api-reference/docs) | bundle definition |
 | `mux` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mux | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.mux.com/api-reference) | bundle definition |

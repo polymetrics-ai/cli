@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data-retrievals/v3.0/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "get_retrieval_fixture_1",
+          "name": "Check Status of Retrieval",
+          "status": "ok",
+          "source_operation": "get-retrieval",
+          "tracking_id": "fixture_tracking_id"
+        }
+      ]
+    }
+  }
+}

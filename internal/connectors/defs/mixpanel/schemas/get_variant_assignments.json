@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Evaluate Feature Flags (GET)",
+  "type": "object",
+  "x-primary-key": [
+    "flag_key"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "flag_key": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_operation": {
+      "type": "string"
+    }
+  }
+}

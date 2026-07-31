@@ -1,0 +1,5188 @@
+{
+  "actions": [
+    {
+      "name": "import_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/import?strict={{ record.strict }}&project_id={{ record.project_id }}",
+      "path_fields": [
+        "strict",
+        "project_id"
+      ],
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string",
+              "description": "The name of the event."
+            },
+            "properties": {
+              "type": "object",
+              "description": "A JSON object containing properties of the event.",
+              "properties": {
+                "time": {
+                  "type": "integer",
+                  "description": "The time at which the event occurred, in seconds or milliseconds since UTC epoch. If the time value is set in the future, it will be overwritten with the current present time at ingestion."
+                },
+                "distinct_id": {
+                  "type": "string",
+                  "description": "The unique identifier of the user who performed the event."
+                },
+                "$insert_id": {
+                  "type": "string",
+                  "description": "A unique identifier for the event, used for deduplication. Events with identical values for (event, time, distinct_id, $insert_id) are considered duplicates; only the latest ingested one will be considered in queries."
+                }
+              },
+              "required": [
+                "time",
+                "$insert_id",
+                "distinct_id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "event",
+            "properties"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "strict",
+          "project_id"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "description": "The name of the event."
+                },
+                "properties": {
+                  "type": "object",
+                  "description": "A JSON object containing properties of the event.",
+                  "properties": {
+                    "time": {
+                      "type": "integer",
+                      "description": "The time at which the event occurred, in seconds or milliseconds since UTC epoch. If the time value is set in the future, it will be overwritten with the current present time at ingestion."
+                    },
+                    "distinct_id": {
+                      "type": "string",
+                      "description": "The unique identifier of the user who performed the event."
+                    },
+                    "$insert_id": {
+                      "type": "string",
+                      "description": "A unique identifier for the event, used for deduplication. Events with identical values for (event, time, distinct_id, $insert_id) are considered duplicates; only the latest ingested one will be considered in queries."
+                    }
+                  },
+                  "required": [
+                    "time",
+                    "$insert_id",
+                    "distinct_id"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "strict": {
+            "type": "string",
+            "enum": [
+              "0",
+              "1"
+            ]
+          },
+          "project_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Import Events via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "track_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/track",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string",
+              "description": "The name of the event."
+            },
+            "properties": {
+              "type": "object",
+              "description": "A JSON object containing properties of the event.",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "Project token."
+                },
+                "time": {
+                  "type": "integer",
+                  "description": "The time at which the event occurred, in seconds or milliseconds since UTC epoch. If the time value is set in the future, it will be overwritten with the current present time at ingestion."
+                },
+                "distinct_id": {
+                  "type": "string",
+                  "description": "The unique identifier of the user who performed the event."
+                },
+                "$insert_id": {
+                  "type": "string",
+                  "description": "A unique identifier for the event, used for deduplication. Events with identical values for (event, time, distinct_id, $insert_id) are considered duplicates; only the latest ingested one will be considered in queries."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "event",
+            "properties"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "description": "The name of the event."
+                },
+                "properties": {
+                  "type": "object",
+                  "description": "A JSON object containing properties of the event.",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Project token."
+                    },
+                    "time": {
+                      "type": "integer",
+                      "description": "The time at which the event occurred, in seconds or milliseconds since UTC epoch. If the time value is set in the future, it will be overwritten with the current present time at ingestion."
+                    },
+                    "distinct_id": {
+                      "type": "string",
+                      "description": "The unique identifier of the user who performed the event."
+                    },
+                    "$insert_id": {
+                      "type": "string",
+                      "description": "A unique identifier for the event, used for deduplication. Events with identical values for (event, time, distinct_id, $insert_id) are considered duplicates; only the latest ingested one will be considered in queries."
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Track Events via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_set",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and $set operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$set": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$set"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and $set operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$set": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$set"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Set Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_set_property_once",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and $set_once operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$set_once": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$set_once"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and $set_once operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$set_once": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$set_once"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Set Property Once via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_numerical_add",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and $add operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$add": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$add"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and $add operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$add": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$add"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Increment Numerical Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "user_profile_union",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and a $union operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$union": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$union"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and a $union operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$union": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$union"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Union To List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_append_to_list_property",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and $append operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$append": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$append"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and $append operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$append": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$append"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Append to List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_remove_from_list_property",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and $remove operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$remove": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$remove"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and $remove operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$remove": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$remove"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Remove from List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_delete_property",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, and $unset operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$unset": {
+              "type": "array",
+              "description": "Profile properties to be removed.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$unset"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, and $unset operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$unset": {
+                  "type": "array",
+                  "description": "Profile properties to be removed.",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$unset"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "profile_batch_update",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "A JSON list of update objects, each with a $token, $distinct_id, and an operation.",
+            "default": "[\n    {\n        \"$token\": \"YOUR_PROJECT_TOKEN\",\n        \"$distinct_id\": \"13793\",\n        \"$set\": { \"$email\": \"user1@mail.com\" }\n    },\n    {\n        \"$token\": \"YOUR_PROJECT_TOKEN\",\n        \"$distinct_id\": \"13794\",\n        \"$add\": { \"Coins Gathered\": 13 }\n    },\n    {\n        \"$token\": \"YOUR_PROJECT_TOKEN\",\n        \"$distinct_id\": \"13795\",\n        \"$unset\": [\"$email\"]\n    }\n]\n"
+          }
+        }
+      },
+      "risk": "Update Multiple Profiles via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_profile",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/engage",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $distinct_id, $ignore_alias and a $delete operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$distinct_id": {
+              "type": "string",
+              "default": "13793"
+            },
+            "$delete": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": "null"
+            },
+            "$ignore_alias": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$delete"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $distinct_id, $ignore_alias and a $delete operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "default": "13793"
+                },
+                "$delete": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": "null"
+                },
+                "$ignore_alias": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$delete"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Profile via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "group_set_property",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $group_key, $group_id, and $set operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$group_key": {
+              "type": "string",
+              "default": "Company"
+            },
+            "$group_id": {
+              "type": "string",
+              "default": "Mixpanel"
+            },
+            "$set": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$set"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $group_key, $group_id, and $set operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$group_key": {
+                  "type": "string",
+                  "default": "Company"
+                },
+                "$group_id": {
+                  "type": "string",
+                  "default": "Mixpanel"
+                },
+                "$set": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$set"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Update Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "group_set_property_once",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $group_key, $group_id, and $set_once operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$group_key": {
+              "type": "string",
+              "default": "Company"
+            },
+            "$group_id": {
+              "type": "string",
+              "default": "Mixpanel"
+            },
+            "$set_once": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$set_once"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $group_key, $group_id, and $set_once operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$group_key": {
+                  "type": "string",
+                  "default": "Company"
+                },
+                "$group_id": {
+                  "type": "string",
+                  "default": "Mixpanel"
+                },
+                "$set_once": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$set_once"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Set Property Once via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "group_delete_property",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $group_key, $group_id, and $unset operation list.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$group_key": {
+              "type": "string",
+              "default": "Company"
+            },
+            "$group_id": {
+              "type": "string",
+              "default": "Mixpanel"
+            },
+            "$unset": {
+              "type": "array",
+              "description": "Profile properties to be removed.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$unset"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $group_key, $group_id, and $unset operation list.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$group_key": {
+                  "type": "string",
+                  "default": "Company"
+                },
+                "$group_id": {
+                  "type": "string",
+                  "default": "Mixpanel"
+                },
+                "$unset": {
+                  "type": "array",
+                  "description": "Profile properties to be removed.",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$unset"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "group_remove_from_list_property",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $group_key, $group_id, and $remove operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$group_key": {
+              "type": "string",
+              "default": "Company"
+            },
+            "$group_id": {
+              "type": "string",
+              "default": "Mixpanel"
+            },
+            "$remove": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$remove"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $group_key, $group_id, and $remove operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$group_key": {
+                  "type": "string",
+                  "default": "Company"
+                },
+                "$group_id": {
+                  "type": "string",
+                  "default": "Mixpanel"
+                },
+                "$remove": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$remove"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Remove from List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "group_union",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with a $token, $group_key, $group_id, and a union operation object.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$group_key": {
+              "type": "string",
+              "default": "Company"
+            },
+            "$group_id": {
+              "type": "string",
+              "default": "Mixpanel"
+            },
+            "$union": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with a $token, $group_key, $group_id, and a union operation object.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$group_key": {
+                  "type": "string",
+                  "default": "Company"
+                },
+                "$group_id": {
+                  "type": "string",
+                  "default": "Mixpanel"
+                },
+                "$union": {
+                  "type": "object",
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "risk": "Union To List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "group_batch_update",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "A JSON list of update objects, each with a $token, $group_key, $group_id, and an operation.",
+            "default": "[\n    {\n        \"$token\": \"YOUR_PROJECT_TOKEN\",\n        \"$group_key\": \"Company\",\n        \"$group_id\": \"Mixpanel\",\n        \"$set\": {\n            \"Address\": \"1313 Mockingbird Lane\"\n        }\n    },\n    {\n        \"$token\": \"YOUR_PROJECT_TOKEN\",\n        \"$group_key\": \"Company\",\n        \"$group_id\": \"Wayne Enterprises\",\n        \"$set_once\": {\n            \"Address\": \"Wayne Tower, Gotham City\"\n        }\n    }\n]\n"
+          }
+        }
+      },
+      "risk": "Batch Update Group Profiles via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/groups",
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A JSON update object, with $token, $group_key, and $group_id values and a $delete key.",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "default": "YOUR_PROJECT_TOKEN"
+            },
+            "$group_key": {
+              "type": "string",
+              "default": "Company"
+            },
+            "$group_id": {
+              "type": "string",
+              "default": "Mixpanel"
+            },
+            "$delete": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": "null"
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "A JSON update object, with $token, $group_key, and $group_id values and a $delete key.",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "default": "YOUR_PROJECT_TOKEN"
+                },
+                "$group_key": {
+                  "type": "string",
+                  "default": "Company"
+                },
+                "$group_id": {
+                  "type": "string",
+                  "default": "Mixpanel"
+                },
+                "$delete": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": "null"
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Group via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_identity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/track",
+      "redact_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "A JSON object with the required Event Object fields and any additional event properties.",
+            "default": "{\n      \"event\": \"$identify\",\n      \"properties\": {\n          \"$identified_id\": \"ORIGINAL_ID\",\n          \"$anon_id\": \"NEW_ID\",\n          \"token\": \"YOUR_PROJECT_TOKEN\"\n      }\n}\n"
+          },
+          "strict": {
+            "type": [
+              "object",
+              "integer",
+              "string"
+            ],
+            "properties": {},
+            "additionalProperties": false
+          }
+        }
+      },
+      "risk": "Create Identity via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "identity_create_alias",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/track",
+      "redact_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "A JSON object with the required Event Object fields and any additional event properties.",
+            "default": "{\n    \"event\": \"$create_alias\",\n    \"properties\": {\n        \"distinct_id\": \"other_distinct_id\",\n        \"alias\": \"your_id\",\n        \"token\": \"YOUR_PROJECT_TOKEN\"\n    }\n}\n"
+          },
+          "strict": {
+            "type": [
+              "object",
+              "integer",
+              "string"
+            ],
+            "properties": {},
+            "additionalProperties": false
+          }
+        }
+      },
+      "risk": "Create Alias via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "identity_merge",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/import?strict={{ record.strict }}",
+      "path_fields": [
+        "strict"
+      ],
+      "redact_fields": [
+        "items"
+      ],
+      "body_type": "json_array",
+      "body_field": "items",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string",
+              "description": "This is the name of the event. If you're loading data from a data warehouse, we recommend using the name of the table as the name of the event.",
+              "default": "$merge"
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "$distinct_ids": {
+                  "type": "array",
+                  "description": "The two distinct_ids to merge together.",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "$distinct_ids"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "event",
+            "properties"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "strict"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "description": "This is the name of the event. If you're loading data from a data warehouse, we recommend using the name of the table as the name of the event.",
+                  "default": "$merge"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "$distinct_ids": {
+                      "type": "array",
+                      "description": "The two distinct_ids to merge together.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "$distinct_ids"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "strict": {
+            "type": "string",
+            "enum": [
+              "0",
+              "1"
+            ]
+          }
+        }
+      },
+      "risk": "Merge Identities via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "upload_schemas_for_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/schemas",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entries",
+          "projectId"
+        ],
+        "properties": {
+          "entries": {
+            "type": "array",
+            "description": "The list of schema entries to upload",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entityType": {
+                  "type": "string",
+                  "enum": [
+                    "event",
+                    "profile"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The entity name (eg: Added To Cart)"
+                },
+                "schemaJson": {
+                  "type": "object",
+                  "description": "The schema for the entity",
+                  "properties": {
+                    "description": {
+                      "type": "string",
+                      "description": "The entity description"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "description": "The list of properties that should be included on an instance of this entity",
+                      "additionalProperties": false
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "com.mixpanel": {
+                          "type": "object",
+                          "description": "Metadata about this entity that is specific to Mixpanel",
+                          "properties": {
+                            "$source": {
+                              "type": "string",
+                              "description": "The source of this schema. Used by partners to identify themselves"
+                            },
+                            "displayName": {
+                              "type": "string",
+                              "description": "If set, this name will be used in the Mixpanel UI instead of the entity name"
+                            },
+                            "tags": {
+                              "type": "array",
+                              "description": "A list of tags to associate to this entity that can be used in the Mixpanel UI for filtering",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "hidden": {
+                              "type": "boolean",
+                              "description": "If true, this entity will be hidden in the Mixpanel UI",
+                              "default": false
+                            },
+                            "dropped": {
+                              "type": "boolean",
+                              "description": "[Events only] If true, the event will be dropped at ingestion time.",
+                              "default": false
+                            },
+                            "contacts": {
+                              "type": "array",
+                              "description": "A list of emails belonging to users responsible for this entity.",
+                              "items": {
+                                "type": "string",
+                                "additionalProperties": false
+                              }
+                            },
+                            "teamContacts": {
+                              "type": "array",
+                              "description": "A list of team names responsible for this entity.",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "name",
+                "entityType",
+                "schemaJson"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "truncate": {
+            "type": "boolean",
+            "description": "If true, delete your entire data dictionary before inserting these entries. This is primarily useful if you want to upload a single file that represents your entire data dictionary.",
+            "default": false
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create/Replace Multiple via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_all_schemas_in_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.projectId }}/schemas",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete all Schemas via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_schemas_for_entity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.projectId }}/schemas/{{ record.entityType }}",
+      "path_fields": [
+        "projectId",
+        "entityType"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "entityType"
+        ],
+        "properties": {
+          "projectId": {
+            "type": "integer"
+          },
+          "entityType": {
+            "type": "string",
+            "enum": [
+              "event",
+              "profile"
+            ]
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete for Entity via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_schema_by_entity_and_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.projectId }}/schemas/{{ record.entityType }}/{{ record.name }}",
+      "path_fields": [
+        "projectId",
+        "entityType",
+        "name"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "entityType",
+          "name"
+        ],
+        "properties": {
+          "projectId": {
+            "type": "integer"
+          },
+          "entityType": {
+            "type": "string",
+            "enum": [
+              "event",
+              "profile"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete for Entity and Name via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "upload_schema_by_entity_and_name",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/schemas/{{ record.entityType }}/{{ record.name }}",
+      "path_fields": [
+        "projectId",
+        "entityType",
+        "name"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "entityType",
+          "name"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The entity description"
+          },
+          "properties": {
+            "type": "object",
+            "description": "The list of properties that should be included on an instance of this entity",
+            "additionalProperties": false
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "com.mixpanel": {
+                "type": "object",
+                "description": "Metadata about this entity that is specific to Mixpanel",
+                "properties": {
+                  "$source": {
+                    "type": "string",
+                    "description": "The source of this schema. Used by partners to identify themselves"
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "description": "If set, this name will be used in the Mixpanel UI instead of the entity name"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "description": "A list of tags to associate to this entity that can be used in the Mixpanel UI for filtering",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "hidden": {
+                    "type": "boolean",
+                    "description": "If true, this entity will be hidden in the Mixpanel UI",
+                    "default": false
+                  },
+                  "dropped": {
+                    "type": "boolean",
+                    "description": "[Events only] If true, the event will be dropped at ingestion time.",
+                    "default": false
+                  },
+                  "contacts": {
+                    "type": "array",
+                    "description": "A list of emails belonging to users responsible for this entity.",
+                    "items": {
+                      "type": "string",
+                      "additionalProperties": false
+                    }
+                  },
+                  "teamContacts": {
+                    "type": "array",
+                    "description": "A list of team names responsible for this entity.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "entityType": {
+            "type": "string",
+            "enum": [
+              "event",
+              "profile"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create/Replace One via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_warehouse_pipeline",
+      "kind": "create",
+      "method": "POST",
+      "path": "/nessie/pipeline/create",
+      "redact_fields": [
+        "client_secret",
+        "snowflake_password"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "from_date"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "number",
+            "description": "Your project id (must be specified when using service account based authentication)"
+          },
+          "type": {
+            "type": "string",
+            "default": "gcs-schema"
+          },
+          "trial": {
+            "type": "boolean",
+            "description": "**Default**: `false` A trial pipeline will be created if value is true. The trial exports all of your events and user data for thirty calendar days, starting from one day before the API call was made. A trial pipeline has default values for the following parameters: **data_source**: `events and peop",
+            "default": false
+          },
+          "data_source": {
+            "type": "string",
+            "description": "**Default**: `events` **data_source** can be either `events` or `people`. `events` exports Mixpanel event data. `people` exports Mixpanel user data.",
+            "default": "events",
+            "enum": [
+              "events",
+              "people"
+            ]
+          },
+          "from_date": {
+            "type": "string",
+            "description": "The starting date of the export window. It is formatted as `YYYY-MM-DD` and cannot be more than six months in the past. If **trial** is set to `true` this will default to the previous day; otherwise, it is a required parameter."
+          },
+          "to_date": {
+            "type": "string",
+            "description": "The ending date of the export window. It is formatted as `YYYY-MM-DD`. The export will continue indefinitely if **to_date** is empty."
+          },
+          "frequency": {
+            "type": "string",
+            "description": "**Default**: `daily` **frequency** can be either `hourly` or `daily`. `hourly` exports the data every hour. `daily` exports the data at midnight (based on the projects timezone). **frequency** should only be passed if your export window is indefinite.",
+            "default": "daily",
+            "enum": [
+              "daily",
+              "hourly"
+            ]
+          },
+          "events": {
+            "type": "string",
+            "description": "A whitelist for the event(s) you intend to export. For multiple events, you will need to pass in each event name as separate `events` parameters like so: `--data 'events=event1' \\ --data 'events=event2'` All events in the project will be exported if no events are specified."
+          },
+          "where": {
+            "type": "string",
+            "description": "A selector expression used to filter by events data, such as event properties. Learn more about how to construct event selector expressions [here](/reference/segmentation-expressions). This parameter is only valid when **data_source** is `events`."
+          },
+          "data_format": {
+            "type": "string",
+            "description": "**Default**: `json` The file format of the exported data. **data_format** can be either `json` or `parquet`.",
+            "default": "json",
+            "enum": [
+              "json",
+              "parquet"
+            ]
+          },
+          "gcs_bucket": {
+            "type": "string",
+            "description": "*Required if **type** is `gcs-schema` The GCS bucket to export the Mixpanel data to."
+          },
+          "gcs_prefix": {
+            "type": "string",
+            "description": "*Required if **type** is `gcs-schema` The GCS path prefix of the bucket."
+          },
+          "gcs_region": {
+            "type": "string",
+            "description": "*Required if **type** is `gcs-schema` The GCS region for the bucket.",
+            "enum": [
+              "northamerica-northeast1",
+              "us-central1",
+              "us-east1",
+              "us-east4",
+              "us-west1",
+              "us-west2",
+              "southamerica-east1",
+              "europe-north1",
+              "europe-west1",
+              "europe-west2",
+              "europe-west3",
+              "europe-west4",
+              "europe-west6",
+              "asia-east1",
+              "asia-east2",
+              "asia-northeast1",
+              "asia-northeast2",
+              "asia-northeast3",
+              "asia-south1",
+              "asia-southeast1",
+              "australia-southeast1"
+            ]
+          },
+          "s3_bucket": {
+            "type": "string",
+            "description": "The S3 bucket to which the data needs to be exported."
+          },
+          "s3_region": {
+            "type": "string",
+            "description": "The valid S3 region for the bucket.",
+            "enum": [
+              "us-east-1",
+              "us-east-2",
+              "us-west-1",
+              "us-west-2",
+              "ap-northeast-1",
+              "ap-northeast-2",
+              "ap-northeast-3",
+              "ap-southeast-1",
+              "ap-southeast-2",
+              "ap-south-1",
+              "ca-central-1",
+              "cn-north-1",
+              "cn-northwest-1",
+              "eu-central-1",
+              "eu-north-1",
+              "eu-west-1",
+              "eu-west-2",
+              "eu-west-3",
+              "sa-east-1"
+            ]
+          },
+          "s3_role": {
+            "type": "string",
+            "description": "There is no default value. AWS Role the writer should assume when writing to s3 e.g. arn:aws:iam::<account-id>:role/example-s3-role."
+          },
+          "s3_prefix": {
+            "type": "string",
+            "description": "There is no default value. The path prefix for the export."
+          },
+          "s3_encryption": {
+            "type": "string",
+            "description": "At rest encryption used by the s3 bucket.",
+            "default": "none",
+            "enum": [
+              "none",
+              "aes",
+              "kms"
+            ]
+          },
+          "s3_kms_key_id": {
+            "type": "string",
+            "description": "There is no default value. If s3_encryption is set to kms, this can specify the custom key id you desire to use."
+          },
+          "storage_account": {
+            "type": "string",
+            "description": "Blob Storage Account where the data will be exported."
+          },
+          "container_name": {
+            "type": "string",
+            "description": "The Blob Container within the account where data will be exported."
+          },
+          "prefix": {
+            "type": "string",
+            "description": "A custom prefix for all the data being exported to the container."
+          },
+          "client_id": {
+            "type": "string",
+            "description": "`clientId` from the Service Principal credentials."
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "`clientSecret` from the Service Principal credentials."
+          },
+          "tenant_id": {
+            "type": "string",
+            "description": "`tenantId` from the Service Principal credentials. This is specific to the Active Directory instance where the Service Principal resides."
+          },
+          "schema_type": {
+            "type": "string",
+            "description": "**Default**: `monoschema` Allowed options are `monoschema` and `multischema`. `monoschema` loads all events into a single table. `multischema` loads every event into its own dedicated table. All user data is exported as `monoschema`. This param is not supported for people data_source.",
+            "default": "monoschema",
+            "enum": [
+              "monoschema",
+              "multischema"
+            ]
+          },
+          "sync": {
+            "type": "boolean",
+            "description": "A value of `true` updates exported data with any changes that occur in your Mixpanel dataset. These changes include deletions, late data, and imports that fall into your export window.",
+            "default": true,
+            "enum": [
+              true
+            ]
+          },
+          "bq_region": {
+            "type": "string",
+            "description": "The region used for BigQuery.",
+            "enum": [
+              "US",
+              "US_CENTRAL_1",
+              "US_EAST_1",
+              "US_WEST_1",
+              "US_WEST_2",
+              "US_EAST_4",
+              "NORTH_AMERICA_NORTHEAST_1",
+              "SOUTH_AMERICA_EAST_1",
+              "EU",
+              "EUROPE_NORTH_1",
+              "EUROPE_WEST_2",
+              "EUROPE_WEST_3",
+              "EUROPE_WEST_4",
+              "EUROPE_WEST_6",
+              "ASIA_SOUTH_1",
+              "ASIA_EAST_1",
+              "ASIA_EAST_2",
+              "ASIA_NORTHEAST_1",
+              "ASIA_NORTHEAST_2",
+              "ASIA_NORTHEAST_3",
+              "ASIA_SOUTHEAST_1",
+              "ASIA_SOUTHEAST_2",
+              "AUSTRALIA_SOUTHEAST_1"
+            ]
+          },
+          "bq_prefix": {
+            "type": "string",
+            "description": "The table prefix to be added to all the tables exported as part of the this pipeline. Only alphanumeric characters and underscores can be used."
+          },
+          "gcp_project": {
+            "type": "string",
+            "description": "Customer's GCP project ID where the BigQuery dataset is present."
+          },
+          "bq_dataset_name": {
+            "type": "string",
+            "description": "Dataset created by the customer on their GCP project to which Mixpanel exports data."
+          },
+          "snowflake_prefix": {
+            "type": "string",
+            "description": "Prefix for created views and tables."
+          },
+          "snowflake_account_name": {
+            "type": "string",
+            "description": "The Snowflake account identifier (e.g. myorg-myaccount)."
+          },
+          "snowflake_warehouse": {
+            "type": "string",
+            "description": "The Snowflake warehouse to use for loading data."
+          },
+          "snowflake_storage_integration": {
+            "type": "string",
+            "description": "The name of the Snowflake storage integration for GCS staging."
+          },
+          "snowflake_user": {
+            "type": "string",
+            "description": "The Snowflake user for authentication."
+          },
+          "snowflake_password": {
+            "type": "string",
+            "description": "The password for the Snowflake user."
+          },
+          "snowflake_role": {
+            "type": "string",
+            "description": "The Snowflake role to use."
+          },
+          "snowflake_database": {
+            "type": "string",
+            "description": "The Snowflake database to export data into."
+          },
+          "snowflake_schema": {
+            "type": "string",
+            "description": "The Snowflake schema to export data into."
+          },
+          "use_glue": {
+            "type": "boolean",
+            "description": "**Default**: `false` Use glue schema export.",
+            "default": false
+          },
+          "glue_database": {
+            "type": "string",
+            "description": "Required if **use_glue** is `true`. The glue database to which the schema needs to be exported."
+          },
+          "glue_role": {
+            "type": "string",
+            "description": "Required if **use_glue** is `true`. e.g. arn:aws:iam::<account-id>:role/example-glue-role There is no default value. The role that needs to be assumed for updating glue."
+          },
+          "glue_table_prefix": {
+            "type": "string",
+            "description": "There is no default value. Prefix to add to table names when creating them."
+          }
+        }
+      },
+      "risk": "Create Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "edit_warehouse_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "/nessie/pipeline/edit",
+      "redact_fields": [
+        "azure_client_secret"
+      ],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name that uniquely identifies the pipeline."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Your project id (must be specified when using service account based authentication)"
+          },
+          "events": {
+            "type": "string",
+            "description": "A whitelist for the event(s) you intend to export. For multiple events, you will need to pass in each event name as separate `events` parameters like so: `--data 'events=event1' \\ --data 'events=event2'` Please note that after this update, the sync of older dates to your data warehouse (if enabled) "
+          },
+          "where": {
+            "type": "string",
+            "description": "A selector expression used to filter by events data, such as event properties. Please note that after this update, the sync of older dates to your data warehouse (if enabled) will only contain events matching your new where clause."
+          },
+          "azure_client_id": {
+            "type": "string",
+            "description": "`clientId` from the Service Principal credentials."
+          },
+          "azure_client_secret": {
+            "type": "string",
+            "description": "`clientSecret` from the Service Principal credentials."
+          },
+          "azure_tenant_id": {
+            "type": "string",
+            "description": "`tenantId` from the Service Principal credentials. This is specific to the Active Directory instance where the Service Principal resides."
+          },
+          "bq_share_with_group": {
+            "type": "array",
+            "description": "Group account email addresses to share the data-set with if managed by mixpanel. e.g. bq-access-alias@somecompany.com. Please note that this will only add new shares and won't remove the old ones.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "glue_database": {
+            "type": "string",
+            "description": "The glue database to which the schema needs to be exported."
+          },
+          "glue_role": {
+            "type": "string",
+            "description": "There is no default value. The role that needs to be assumed for updating glue e.g. arn:aws:iam::<account-id>:role/example-glue-role"
+          },
+          "glue_table_prefix": {
+            "type": "string",
+            "description": "Prefix to add to table names when creating them."
+          }
+        }
+      },
+      "risk": "Edit Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "cancel_warehouse_pipeline",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/nessie/pipeline/cancel",
+      "redact_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name that uniquely identifies the pipeline."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Your project id (must be specified when using service account based authentication)"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "pause_warehouse_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "/nessie/pipeline/pause",
+      "redact_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name that uniquely identifies the pipeline."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Your project id (must be specified when using service account based authentication)"
+          }
+        }
+      },
+      "risk": "Pause Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "resume_warehouse_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "/nessie/pipeline/resume",
+      "redact_fields": [],
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name that uniquely identifies the pipeline."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Your project id (must be specified when using service account based authentication)"
+          }
+        }
+      },
+      "risk": "Resume Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_service_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/service-accounts",
+      "path_fields": [
+        "organizationId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "username",
+          "organizationId"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "A descriptive name for the service account"
+          },
+          "role": {
+            "type": "string",
+            "description": "The service account's role",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "consumer"
+            ]
+          },
+          "expires": {
+            "type": "string",
+            "description": "The datetime that the service account should expire"
+          },
+          "projects": {
+            "type": "array",
+            "description": "A list of projects to make this serivce account a member of",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The project id to add the service account to"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "The service account's role",
+                  "enum": [
+                    "owner",
+                    "admin",
+                    "analyst",
+                    "consumer"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "organizationId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create Service Account via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_service_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.organizationId }}/service-accounts/{{ record.serviceAccountId }}",
+      "path_fields": [
+        "organizationId",
+        "serviceAccountId"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organizationId",
+          "serviceAccountId"
+        ],
+        "properties": {
+          "organizationId": {
+            "type": "integer"
+          },
+          "serviceAccountId": {
+            "type": "integer"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Service Account via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "add_service_accounts_to_projects",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/service-accounts/add-to-project",
+      "path_fields": [
+        "organizationId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projects",
+          "service_account_ids",
+          "organizationId"
+        ],
+        "properties": {
+          "projects": {
+            "type": "array",
+            "description": "List of project/roles",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The project id to add the service account to"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "The service account's role",
+                  "enum": [
+                    "owner",
+                    "admin",
+                    "analyst",
+                    "consumer"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "role"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "service_account_ids": {
+            "type": "array",
+            "description": "List of service account ids",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "organizationId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Add Service Accounts To Projects via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "remove_service_accounts_from_projects",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/organizations/{{ record.organizationId }}/service-accounts/remove-from-project",
+      "path_fields": [
+        "organizationId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projects",
+          "organizationId"
+        ],
+        "properties": {
+          "projects": {
+            "type": "array",
+            "description": "A list of projects and service accounts to remove",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "The project id to remove the service account from"
+                },
+                "service_account_ids": {
+                  "type": "array",
+                  "description": "The list of service account ids to remove from the project",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "service_account_ids"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "organizationId": {
+            "type": "integer"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Remove Service Accounts From Projects via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_annotation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/annotations",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "A string representation of a date in \"YYYY-MM-DD HH:mm:ss\" format"
+          },
+          "description": {
+            "type": "string",
+            "description": "The text that will be shown when looking at the annotation"
+          },
+          "tags": {
+            "type": "array",
+            "description": "The ids of the tags to be added to the annotation",
+            "items": {
+              "type": "number"
+            }
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create Annotations via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "patch_annotation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ record.projectId }}/annotations/{{ record.annotationId }}",
+      "path_fields": [
+        "projectId",
+        "annotationId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "annotationId"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The text that will be shown when looking at the annotation"
+          },
+          "tags": {
+            "type": "array",
+            "description": "The ids of the tags to be added to the annotation",
+            "items": {
+              "type": "number"
+            }
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "annotationId": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "Patch Annotation via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_annotation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.projectId }}/annotations/{{ record.annotationId }}",
+      "path_fields": [
+        "projectId",
+        "annotationId"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "annotationId"
+        ],
+        "properties": {
+          "projectId": {
+            "type": "integer"
+          },
+          "annotationId": {
+            "type": "number"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Annotation via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_annotation_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/annotations/tags",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The text that will be shown when the tag is added to an annotation"
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create Annotation Tag via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_retrieval",
+      "kind": "create",
+      "method": "POST",
+      "path": "/data-retrievals/v3.0?token={{ record.token }}",
+      "path_fields": [
+        "token"
+      ],
+      "redact_fields": [
+        "token"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "distinct_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Distinct IDs involved in the request"
+            }
+          },
+          "compliance_type": {
+            "type": "string",
+            "description": "Select CCPA or GDPR. Default is GDPR."
+          },
+          "disclosure_type": {
+            "type": "string",
+            "description": "Only required if compliance_type = CCPA. Can be Data, Categories, or Sources. Default is Data."
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a Retrieval via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_deletion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/data-deletions/v3.0?token={{ record.token }}",
+      "path_fields": [
+        "token"
+      ],
+      "redact_fields": [
+        "token"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "distinct_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Distinct IDs involved in the request"
+            }
+          },
+          "compliance_type": {
+            "type": "string",
+            "description": "Select CCPA or GDPR. Default is GDPR."
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Create a Deletion via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_deletion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/data-deletions/v3.0/{{ record.tracking_id }}?token={{ record.token }}",
+      "path_fields": [
+        "tracking_id",
+        "token"
+      ],
+      "redact_fields": [
+        "token"
+      ],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tracking_id",
+          "token"
+        ],
+        "properties": {
+          "tracking_id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Cancel a Deletion via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "update_warehouse_import",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}",
+      "path_fields": [
+        "projectId",
+        "importId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "paused",
+          "run_every",
+          "projectId",
+          "importId"
+        ],
+        "properties": {
+          "paused": {
+            "type": "boolean",
+            "description": "Whether to pause (true) or resume (false) the import"
+          },
+          "run_every": {
+            "type": "integer",
+            "description": "Sync frequency in nanoseconds. Only these values are accepted: - `0` - API-triggered only (use the manual-sync endpoint to trigger) - `3600000000000` - Hourly - `86400000000000` - Daily - `604800000000000` - Weekly",
+            "enum": [
+              0,
+              3600000000000,
+              86400000000000,
+              604800000000000
+            ]
+          },
+          "databricks_params": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "export_cluster_config": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "spark_version": {
+                    "type": "string",
+                    "description": "Spark runtime version (e.g., '15.4.x-scala2.12')"
+                  },
+                  "node_type_id": {
+                    "type": "string",
+                    "description": "Instance type for worker nodes (e.g., 'n2-standard-4' for GCP)"
+                  },
+                  "driver_node_type_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance type for driver node (defaults to node_type_id if not set)"
+                  },
+                  "num_workers": {
+                    "type": "integer",
+                    "description": "Fixed number of worker nodes"
+                  },
+                  "autoscale": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Autoscaling configuration (overrides num_workers if set)",
+                    "properties": {
+                      "min_workers": {
+                        "type": "integer"
+                      },
+                      "max_workers": {
+                        "type": "integer"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "spark_conf": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Spark configuration key-value pairs",
+                    "additionalProperties": false
+                  },
+                  "spark_env_vars": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Environment variables (PYSPARK_PYTHON is always included)",
+                    "additionalProperties": false
+                  },
+                  "data_security_mode": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Data security mode for the cluster",
+                    "enum": [
+                      "USER_ISOLATION",
+                      "SINGLE_USER",
+                      "NONE",
+                      "LEGACY_TABLE_ACL",
+                      "LEGACY_PASSTHROUGH",
+                      "LEGACY_SINGLE_USER",
+                      "LEGACY_SINGLE_USER_STANDARD"
+                    ]
+                  },
+                  "single_user_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Required if data_security_mode is SINGLE_USER"
+                  },
+                  "custom_tags": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Custom tags (provider=mixpanel is always added)",
+                    "additionalProperties": false
+                  },
+                  "policy_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Cluster policy ID"
+                  },
+                  "instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for worker nodes"
+                  },
+                  "driver_instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for driver node"
+                  },
+                  "enable_elastic_disk": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Enable autoscaling local storage"
+                  },
+                  "runtime_engine": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Runtime engine (STANDARD or PHOTON)",
+                    "enum": [
+                      "STANDARD",
+                      "PHOTON"
+                    ]
+                  },
+                  "aws_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "AWS-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "azure_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Azure-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "gcp_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "GCP-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "init_scripts": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "description": "Cluster initialization scripts",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "importId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Update a warehouse import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_warehouse_import",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}",
+      "path_fields": [
+        "projectId",
+        "importId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "importId"
+        ],
+        "properties": {
+          "delete_data": {
+            "type": "boolean",
+            "description": "Whether to also delete the imported data from Mixpanel",
+            "default": false
+          },
+          "projectId": {
+            "type": "integer"
+          },
+          "importId": {
+            "type": "integer"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete a warehouse import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_event_stream_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/event-stream",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "time_column_name",
+          "sync_mode",
+          "projectId"
+        ],
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "event_stream"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object",
+            "description": "Table location parameters (structure depends on warehouse type)",
+            "additionalProperties": false
+          },
+          "event_name": {
+            "type": "string"
+          },
+          "event_column_name": {
+            "type": "string"
+          },
+          "time_column_name": {
+            "type": "string"
+          },
+          "user_column_name": {
+            "type": "string"
+          },
+          "company_column_name": {
+            "type": "string",
+            "description": "Required for B2B projects. The column containing the company identifier."
+          },
+          "device_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "json_properties_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "time_based",
+              "mirror_mode",
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer",
+            "description": "Sync frequency in nanoseconds. Only these values are accepted: - `0` - API-triggered only (use the manual-sync endpoint to trigger) - `3600000000000` - Hourly - `86400000000000` - Daily - `604800000000000` - Weekly",
+            "enum": [
+              0,
+              3600000000000,
+              86400000000000,
+              604800000000000
+            ]
+          },
+          "insert_time_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "property_mappings": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false
+          },
+          "databricks_params": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "export_cluster_config": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "spark_version": {
+                    "type": "string",
+                    "description": "Spark runtime version (e.g., '15.4.x-scala2.12')"
+                  },
+                  "node_type_id": {
+                    "type": "string",
+                    "description": "Instance type for worker nodes (e.g., 'n2-standard-4' for GCP)"
+                  },
+                  "driver_node_type_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance type for driver node (defaults to node_type_id if not set)"
+                  },
+                  "num_workers": {
+                    "type": "integer",
+                    "description": "Fixed number of worker nodes"
+                  },
+                  "autoscale": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Autoscaling configuration (overrides num_workers if set)",
+                    "properties": {
+                      "min_workers": {
+                        "type": "integer"
+                      },
+                      "max_workers": {
+                        "type": "integer"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "spark_conf": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Spark configuration key-value pairs",
+                    "additionalProperties": false
+                  },
+                  "spark_env_vars": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Environment variables (PYSPARK_PYTHON is always included)",
+                    "additionalProperties": false
+                  },
+                  "data_security_mode": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Data security mode for the cluster",
+                    "enum": [
+                      "USER_ISOLATION",
+                      "SINGLE_USER",
+                      "NONE",
+                      "LEGACY_TABLE_ACL",
+                      "LEGACY_PASSTHROUGH",
+                      "LEGACY_SINGLE_USER",
+                      "LEGACY_SINGLE_USER_STANDARD"
+                    ]
+                  },
+                  "single_user_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Required if data_security_mode is SINGLE_USER"
+                  },
+                  "custom_tags": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Custom tags (provider=mixpanel is always added)",
+                    "additionalProperties": false
+                  },
+                  "policy_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Cluster policy ID"
+                  },
+                  "instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for worker nodes"
+                  },
+                  "driver_instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for driver node"
+                  },
+                  "enable_elastic_disk": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Enable autoscaling local storage"
+                  },
+                  "runtime_engine": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Runtime engine (STANDARD or PHOTON)",
+                    "enum": [
+                      "STANDARD",
+                      "PHOTON"
+                    ]
+                  },
+                  "aws_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "AWS-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "azure_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Azure-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "gcp_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "GCP-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "init_scripts": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "description": "Cluster initialization scripts",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create an event stream import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_people_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/people",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "user_column_name",
+          "sync_mode",
+          "projectId"
+        ],
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "people"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object",
+            "description": "Table location parameters (structure depends on warehouse type)",
+            "additionalProperties": false
+          },
+          "user_column_name": {
+            "type": "string"
+          },
+          "json_properties_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "time_based",
+              "mirror_mode",
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer",
+            "description": "Sync frequency in nanoseconds. Only these values are accepted: - `0` - API-triggered only (use the manual-sync endpoint to trigger) - `3600000000000` - Hourly - `86400000000000` - Daily - `604800000000000` - Weekly",
+            "enum": [
+              0,
+              3600000000000,
+              86400000000000,
+              604800000000000
+            ]
+          },
+          "insert_time_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "property_mappings": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false
+          },
+          "databricks_params": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "export_cluster_config": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "spark_version": {
+                    "type": "string",
+                    "description": "Spark runtime version (e.g., '15.4.x-scala2.12')"
+                  },
+                  "node_type_id": {
+                    "type": "string",
+                    "description": "Instance type for worker nodes (e.g., 'n2-standard-4' for GCP)"
+                  },
+                  "driver_node_type_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance type for driver node (defaults to node_type_id if not set)"
+                  },
+                  "num_workers": {
+                    "type": "integer",
+                    "description": "Fixed number of worker nodes"
+                  },
+                  "autoscale": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Autoscaling configuration (overrides num_workers if set)",
+                    "properties": {
+                      "min_workers": {
+                        "type": "integer"
+                      },
+                      "max_workers": {
+                        "type": "integer"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "spark_conf": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Spark configuration key-value pairs",
+                    "additionalProperties": false
+                  },
+                  "spark_env_vars": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Environment variables (PYSPARK_PYTHON is always included)",
+                    "additionalProperties": false
+                  },
+                  "data_security_mode": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Data security mode for the cluster",
+                    "enum": [
+                      "USER_ISOLATION",
+                      "SINGLE_USER",
+                      "NONE",
+                      "LEGACY_TABLE_ACL",
+                      "LEGACY_PASSTHROUGH",
+                      "LEGACY_SINGLE_USER",
+                      "LEGACY_SINGLE_USER_STANDARD"
+                    ]
+                  },
+                  "single_user_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Required if data_security_mode is SINGLE_USER"
+                  },
+                  "custom_tags": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Custom tags (provider=mixpanel is always added)",
+                    "additionalProperties": false
+                  },
+                  "policy_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Cluster policy ID"
+                  },
+                  "instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for worker nodes"
+                  },
+                  "driver_instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for driver node"
+                  },
+                  "enable_elastic_disk": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Enable autoscaling local storage"
+                  },
+                  "runtime_engine": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Runtime engine (STANDARD or PHOTON)",
+                    "enum": [
+                      "STANDARD",
+                      "PHOTON"
+                    ]
+                  },
+                  "aws_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "AWS-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "azure_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Azure-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "gcp_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "GCP-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "init_scripts": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "description": "Cluster initialization scripts",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create a people (user profiles) import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_groups_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/groups",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "group_key",
+          "group_id_column",
+          "sync_mode",
+          "projectId"
+        ],
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "groups"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object",
+            "description": "Table location parameters (structure depends on warehouse type)",
+            "additionalProperties": false
+          },
+          "group_key": {
+            "type": "string"
+          },
+          "group_id_column": {
+            "type": "string"
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "time_based",
+              "mirror_mode",
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer",
+            "description": "Sync frequency in nanoseconds. Only these values are accepted: - `0` - API-triggered only (use the manual-sync endpoint to trigger) - `3600000000000` - Hourly - `86400000000000` - Daily - `604800000000000` - Weekly",
+            "enum": [
+              0,
+              3600000000000,
+              86400000000000,
+              604800000000000
+            ]
+          },
+          "insert_time_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "json_properties_column_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "property_mappings": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false
+          },
+          "databricks_params": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "export_cluster_config": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "spark_version": {
+                    "type": "string",
+                    "description": "Spark runtime version (e.g., '15.4.x-scala2.12')"
+                  },
+                  "node_type_id": {
+                    "type": "string",
+                    "description": "Instance type for worker nodes (e.g., 'n2-standard-4' for GCP)"
+                  },
+                  "driver_node_type_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance type for driver node (defaults to node_type_id if not set)"
+                  },
+                  "num_workers": {
+                    "type": "integer",
+                    "description": "Fixed number of worker nodes"
+                  },
+                  "autoscale": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Autoscaling configuration (overrides num_workers if set)",
+                    "properties": {
+                      "min_workers": {
+                        "type": "integer"
+                      },
+                      "max_workers": {
+                        "type": "integer"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "spark_conf": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Spark configuration key-value pairs",
+                    "additionalProperties": false
+                  },
+                  "spark_env_vars": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Environment variables (PYSPARK_PYTHON is always included)",
+                    "additionalProperties": false
+                  },
+                  "data_security_mode": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Data security mode for the cluster",
+                    "enum": [
+                      "USER_ISOLATION",
+                      "SINGLE_USER",
+                      "NONE",
+                      "LEGACY_TABLE_ACL",
+                      "LEGACY_PASSTHROUGH",
+                      "LEGACY_SINGLE_USER",
+                      "LEGACY_SINGLE_USER_STANDARD"
+                    ]
+                  },
+                  "single_user_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Required if data_security_mode is SINGLE_USER"
+                  },
+                  "custom_tags": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Custom tags (provider=mixpanel is always added)",
+                    "additionalProperties": false
+                  },
+                  "policy_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Cluster policy ID"
+                  },
+                  "instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for worker nodes"
+                  },
+                  "driver_instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for driver node"
+                  },
+                  "enable_elastic_disk": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Enable autoscaling local storage"
+                  },
+                  "runtime_engine": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Runtime engine (STANDARD or PHOTON)",
+                    "enum": [
+                      "STANDARD",
+                      "PHOTON"
+                    ]
+                  },
+                  "aws_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "AWS-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "azure_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Azure-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "gcp_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "GCP-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "init_scripts": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "description": "Cluster initialization scripts",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create a groups import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_lookup_table_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/lookup-table",
+      "path_fields": [
+        "projectId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "mixpanel_property",
+          "property_key_column_name",
+          "sync_mode",
+          "projectId"
+        ],
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "lookup_table"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object",
+            "description": "Table location parameters (structure depends on warehouse type)",
+            "additionalProperties": false
+          },
+          "mixpanel_property": {
+            "type": "object",
+            "description": "The Mixpanel property that this lookup table will be joined on. This defines the \"Join Key\" â the Mixpanel event or user property whose values will be matched against the `property_key_column_name` column in your warehouse table. For example, if your events have a property called `product_id` and yo",
+            "properties": {
+              "value": {
+                "type": "string",
+                "description": "The name of the Mixpanel property to join on. This is the event or user property whose values will be matched against the lookup table's key column."
+              },
+              "resourceType": {
+                "type": "string",
+                "description": "Whether the join property is an event property (`event`) or a user profile property (`user`).",
+                "enum": [
+                  "event",
+                  "user"
+                ]
+              },
+              "customPropertyId": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "Optional. If the join property is a custom property (created via Lexicon), provide its ID here. Set to `null` for standard properties."
+              }
+            },
+            "required": [
+              "value",
+              "resourceType"
+            ],
+            "additionalProperties": false
+          },
+          "property_key_column_name": {
+            "type": "string",
+            "description": "The name of the column in your warehouse table that contains the join key values. This column's values will be matched against the Mixpanel property specified in `mixpanel_property.value` to look up the corresponding row."
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer",
+            "description": "Sync frequency in nanoseconds. Only these values are accepted: - `0` - API-triggered only (use the manual-sync endpoint to trigger) - `3600000000000` - Hourly - `86400000000000` - Daily - `604800000000000` - Weekly",
+            "enum": [
+              0,
+              3600000000000,
+              86400000000000,
+              604800000000000
+            ]
+          },
+          "databricks_params": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "export_cluster_config": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "spark_version": {
+                    "type": "string",
+                    "description": "Spark runtime version (e.g., '15.4.x-scala2.12')"
+                  },
+                  "node_type_id": {
+                    "type": "string",
+                    "description": "Instance type for worker nodes (e.g., 'n2-standard-4' for GCP)"
+                  },
+                  "driver_node_type_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance type for driver node (defaults to node_type_id if not set)"
+                  },
+                  "num_workers": {
+                    "type": "integer",
+                    "description": "Fixed number of worker nodes"
+                  },
+                  "autoscale": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Autoscaling configuration (overrides num_workers if set)",
+                    "properties": {
+                      "min_workers": {
+                        "type": "integer"
+                      },
+                      "max_workers": {
+                        "type": "integer"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "spark_conf": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Spark configuration key-value pairs",
+                    "additionalProperties": false
+                  },
+                  "spark_env_vars": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Environment variables (PYSPARK_PYTHON is always included)",
+                    "additionalProperties": false
+                  },
+                  "data_security_mode": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Data security mode for the cluster",
+                    "enum": [
+                      "USER_ISOLATION",
+                      "SINGLE_USER",
+                      "NONE",
+                      "LEGACY_TABLE_ACL",
+                      "LEGACY_PASSTHROUGH",
+                      "LEGACY_SINGLE_USER",
+                      "LEGACY_SINGLE_USER_STANDARD"
+                    ]
+                  },
+                  "single_user_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Required if data_security_mode is SINGLE_USER"
+                  },
+                  "custom_tags": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Custom tags (provider=mixpanel is always added)",
+                    "additionalProperties": false
+                  },
+                  "policy_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Cluster policy ID"
+                  },
+                  "instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for worker nodes"
+                  },
+                  "driver_instance_pool_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Instance pool ID for driver node"
+                  },
+                  "enable_elastic_disk": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Enable autoscaling local storage"
+                  },
+                  "runtime_engine": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Runtime engine (STANDARD or PHOTON)",
+                    "enum": [
+                      "STANDARD",
+                      "PHOTON"
+                    ]
+                  },
+                  "aws_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "AWS-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "azure_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Azure-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "gcp_attributes": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "GCP-specific cluster configuration",
+                    "additionalProperties": false
+                  },
+                  "init_scripts": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "description": "Cluster initialization scripts",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "projectId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create a lookup table import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "run_an_import",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}/manual-sync",
+      "path_fields": [
+        "projectId",
+        "importId"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "importId"
+        ],
+        "properties": {
+          "projectId": {
+            "type": "integer"
+          },
+          "importId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Run an import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_feature_flag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags",
+      "path_fields": [
+        "project_id",
+        "workspace_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "key",
+          "tags",
+          "context",
+          "serving_method",
+          "ruleset",
+          "project_id",
+          "workspace_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "experiment_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled",
+              "archived"
+            ]
+          },
+          "context": {
+            "type": "string"
+          },
+          "data_group_id": {
+            "type": [
+              "string",
+              "integer",
+              "null"
+            ]
+          },
+          "serving_method": {
+            "type": "string",
+            "enum": [
+              "client",
+              "server",
+              "remote_or_local",
+              "remote_only"
+            ]
+          },
+          "ruleset": {
+            "type": "object",
+            "properties": {
+              "variants": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "boolean",
+                        "string"
+                      ]
+                    },
+                    "description": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "is_control": {
+                      "type": "boolean"
+                    },
+                    "split": {
+                      "type": "number"
+                    },
+                    "is_sticky": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "value",
+                    "is_control",
+                    "split"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "rollout": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "cohort_definition": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "runtime_evaluation_definition": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "runtime_evaluation_rule": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "runtime_event_rule": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Configuration for first-time event targeting in rollout groups.",
+                      "properties": {
+                        "event_name": {
+                          "type": "string"
+                        },
+                        "time_window": {
+                          "type": "string",
+                          "enum": [
+                            "while_flag_enabled"
+                          ]
+                        },
+                        "duration": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "end_of_session",
+                            "indefinitely"
+                          ]
+                        },
+                        "property_filters": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "event_name",
+                        "time_window"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "cohort_hash": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "rollout_percentage": {
+                      "type": "number"
+                    },
+                    "variant_override": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "A pointer to the variant defined under ruleset.variants[<key>]",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "key"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "variant_splits": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "rollout_percentage",
+                    "variant_splits"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "test": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "variants",
+              "rollout"
+            ],
+            "additionalProperties": false
+          },
+          "workspace_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "is_experiment_active": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hash_salt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reset_hash_salt": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_feature_flag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags/{{ record.flag_id }}",
+      "path_fields": [
+        "project_id",
+        "workspace_id",
+        "flag_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "project_id",
+          "workspace_id",
+          "flag_id"
+        ],
+        "properties": {
+          "project_id": {
+            "type": "integer"
+          },
+          "workspace_id": {
+            "type": "integer"
+          },
+          "flag_id": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "update_feature_flag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags/{{ record.flag_id }}",
+      "path_fields": [
+        "project_id",
+        "workspace_id",
+        "flag_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "key",
+          "tags",
+          "context",
+          "serving_method",
+          "ruleset",
+          "project_id",
+          "workspace_id",
+          "flag_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "experiment_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled",
+              "archived"
+            ]
+          },
+          "context": {
+            "type": "string"
+          },
+          "data_group_id": {
+            "type": [
+              "string",
+              "integer",
+              "null"
+            ]
+          },
+          "serving_method": {
+            "type": "string",
+            "enum": [
+              "client",
+              "server",
+              "remote_or_local",
+              "remote_only"
+            ]
+          },
+          "ruleset": {
+            "type": "object",
+            "properties": {
+              "variants": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": [
+                        "boolean",
+                        "string"
+                      ]
+                    },
+                    "description": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "is_control": {
+                      "type": "boolean"
+                    },
+                    "split": {
+                      "type": "number"
+                    },
+                    "is_sticky": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "value",
+                    "is_control",
+                    "split"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "rollout": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "cohort_definition": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "runtime_evaluation_definition": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "runtime_evaluation_rule": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "runtime_event_rule": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Configuration for first-time event targeting in rollout groups.",
+                      "properties": {
+                        "event_name": {
+                          "type": "string"
+                        },
+                        "time_window": {
+                          "type": "string",
+                          "enum": [
+                            "while_flag_enabled"
+                          ]
+                        },
+                        "duration": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "end_of_session",
+                            "indefinitely"
+                          ]
+                        },
+                        "property_filters": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "event_name",
+                        "time_window"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "cohort_hash": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "rollout_percentage": {
+                      "type": "number"
+                    },
+                    "variant_override": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "A pointer to the variant defined under ruleset.variants[<key>]",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "key"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "variant_splits": {
+                      "type": "object",
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "rollout_percentage",
+                    "variant_splits"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "test": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "variants",
+              "rollout"
+            ],
+            "additionalProperties": false
+          },
+          "workspace_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "is_experiment_active": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hash_salt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reset_hash_salt": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": "integer"
+          },
+          "flag_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "create_experiment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments",
+      "path_fields": [
+        "workspace_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "workspace_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "hypothesis": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "global_access_type": {
+            "type": "string"
+          },
+          "workspace_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Create Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "update_experiment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "hypothesis": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "exposures_cache": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "results_cache": {
+            "type": "object",
+            "additionalProperties": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "global_access_type": {
+            "type": "string"
+          },
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Update Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "delete_experiment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Delete Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "archive_experiment",
+      "kind": "update",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/archive",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Archive Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "unarchive_experiment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/archive",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "body_fields": [],
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Unarchive Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "decide_experiment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/decide",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "success",
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "variant": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Decide Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "force_conclude_experiment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/force_conclude",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "end_date": {
+            "type": "string"
+          },
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Force Conclude Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    },
+    {
+      "name": "launch_experiment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/launch",
+      "path_fields": [
+        "workspace_id",
+        "experiment_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workspace_id",
+          "experiment_id"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "integer"
+          },
+          "experiment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Launch Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+    }
+  ]
+}

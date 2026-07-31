@@ -1,0 +1,10 @@
+{
+  "record": {
+    "projectId": 1,
+    "entityType": "event"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/1/schemas/event"
+  }
+}

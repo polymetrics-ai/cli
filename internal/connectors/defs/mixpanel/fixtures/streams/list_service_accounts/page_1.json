@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/organizations/synthetic-conformance-value/service-accounts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "list_service_accounts_fixture_1",
+          "name": "List Service Accounts",
+          "status": "ok",
+          "source_operation": "list-service-accounts",
+          "organizationId": "fixture_organizationid"
+        }
+      ]
+    }
+  }
+}

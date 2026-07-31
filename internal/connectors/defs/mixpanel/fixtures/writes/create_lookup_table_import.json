@@ -1,0 +1,18 @@
+{
+  "record": {
+    "import_type": "lookup_table",
+    "warehouse_source_id": 1,
+    "table_params": {},
+    "mixpanel_property": {
+      "value": "fixture_value",
+      "resourceType": "event"
+    },
+    "property_key_column_name": "fixture_property_key_column_name",
+    "sync_mode": "full_sync",
+    "projectId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/warehouse-sources/imports/lookup-table"
+  }
+}

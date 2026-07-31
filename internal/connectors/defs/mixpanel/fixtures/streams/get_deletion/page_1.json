@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/data-deletions/v3.0/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "get_deletion_fixture_1",
+          "name": "Check Status of Deletion",
+          "status": "ok",
+          "source_operation": "get-deletion",
+          "tracking_id": "fixture_tracking_id"
+        }
+      ]
+    }
+  }
+}

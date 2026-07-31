@@ -1,0 +1,10 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "workspace_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/workspaces/1/experiments"
+  }
+}

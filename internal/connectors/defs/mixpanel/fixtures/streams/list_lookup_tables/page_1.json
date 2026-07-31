@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lookup-tables"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "list_lookup_tables_fixture_1",
+      "name": "List Lookup Tables",
+      "status": "ok",
+      "source_operation": "list-lookup-tables"
+    }
+  }
+}

@@ -1,0 +1,1749 @@
+{
+  "operations": [
+    {
+      "id": "import_events",
+      "kind": "rest_write",
+      "summary": "Import Events",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/import"
+      }
+    },
+    {
+      "id": "track_event",
+      "kind": "rest_write",
+      "summary": "Track Events",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/track"
+      }
+    },
+    {
+      "id": "profile_set",
+      "kind": "rest_write",
+      "summary": "Set Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-set"
+      }
+    },
+    {
+      "id": "profile_set_property_once",
+      "kind": "rest_write",
+      "summary": "Set Property Once",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-set-once"
+      }
+    },
+    {
+      "id": "profile_numerical_add",
+      "kind": "rest_write",
+      "summary": "Increment Numerical Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-numerical-add"
+      }
+    },
+    {
+      "id": "user_profile_union",
+      "kind": "rest_write",
+      "summary": "Union To List Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-union"
+      }
+    },
+    {
+      "id": "profile_append_to_list_property",
+      "kind": "rest_write",
+      "summary": "Append to List Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-list-append"
+      }
+    },
+    {
+      "id": "profile_remove_from_list_property",
+      "kind": "rest_write",
+      "summary": "Remove from List Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-list-remove"
+      }
+    },
+    {
+      "id": "profile_delete_property",
+      "kind": "rest_write",
+      "summary": "Delete Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-unset"
+      }
+    },
+    {
+      "id": "profile_batch_update",
+      "kind": "rest_write",
+      "summary": "Update Multiple Profiles",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-batch-update"
+      }
+    },
+    {
+      "id": "delete_profile",
+      "kind": "rest_write",
+      "summary": "Delete Profile",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/engage#profile-delete"
+      }
+    },
+    {
+      "id": "group_set_property",
+      "kind": "rest_write",
+      "summary": "Update Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-set"
+      }
+    },
+    {
+      "id": "group_set_property_once",
+      "kind": "rest_write",
+      "summary": "Set Property Once",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-set-once"
+      }
+    },
+    {
+      "id": "group_delete_property",
+      "kind": "rest_write",
+      "summary": "Delete Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-unset"
+      }
+    },
+    {
+      "id": "group_remove_from_list_property",
+      "kind": "rest_write",
+      "summary": "Remove from List Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-remove-from-list"
+      }
+    },
+    {
+      "id": "group_union",
+      "kind": "rest_write",
+      "summary": "Union To List Property",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-union"
+      }
+    },
+    {
+      "id": "group_batch_update",
+      "kind": "rest_write",
+      "summary": "Batch Update Group Profiles",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-batch-update"
+      }
+    },
+    {
+      "id": "delete_group",
+      "kind": "rest_write",
+      "summary": "Delete Group",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/groups#group-delete"
+      }
+    },
+    {
+      "id": "list_lookup_tables",
+      "kind": "stream_etl",
+      "summary": "List Lookup Tables",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_lookup_tables"
+        ]
+      }
+    },
+    {
+      "id": "replace_lookup_table",
+      "kind": "composite",
+      "summary": "Replace a Lookup Table",
+      "description": "Replacing a lookup table requires a raw text/csv payload. The declarative write engine currently has no typed CSV/file upload body for this endpoint; keep it planned instead of adding a generic file or raw-body escape hatch.",
+      "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+      "risk": "high",
+      "approval": "Blocked/planned: no executable safe runtime path in this slice.",
+      "output_policy": "blocked",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "blocked:PUT /lookup-tables/{id}"
+        ]
+      }
+    },
+    {
+      "id": "create_identity",
+      "kind": "rest_write",
+      "summary": "Create Identity",
+      "source_url": "https://docs.mixpanel.com/openapi/identity.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/track#create-identity"
+      }
+    },
+    {
+      "id": "identity_create_alias",
+      "kind": "rest_write",
+      "summary": "Create Alias",
+      "source_url": "https://docs.mixpanel.com/openapi/identity.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/track#identity-create-alias"
+      }
+    },
+    {
+      "id": "identity_merge",
+      "kind": "rest_write",
+      "summary": "Merge Identities",
+      "source_url": "https://docs.mixpanel.com/openapi/identity.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/import#identity-merge"
+      }
+    },
+    {
+      "id": "insights_query",
+      "kind": "rest_read",
+      "summary": "Query Saved Report",
+      "description": "Get data from your Insights reports. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/insights",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "funnels_query",
+      "kind": "rest_read",
+      "summary": "Query Saved Report",
+      "description": "Get data for a funnel. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/funnels",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "funnels_list_saved",
+      "kind": "rest_read",
+      "summary": "List Saved Funnels",
+      "description": "Get the names and funnel_ids of your funnels.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/funnels/list",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "retention_query",
+      "kind": "rest_read",
+      "summary": "Query Retention Report",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/retention",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "retention_frequency_query",
+      "kind": "rest_read",
+      "summary": "Query Frequency Report",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/retention/addiction",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "segmentation_query",
+      "kind": "rest_read",
+      "summary": "Query Segmentation Report",
+      "description": "Get data for an event, segmented and filtered by properties. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/segmentation",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "segmentation_numeric_query",
+      "kind": "rest_read",
+      "summary": "Numerically Bucket",
+      "description": "Get data for an event, segmented and filtered by properties, with values placed into numeric buckets. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/segmentation/numeric",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "segmentation_sum_query",
+      "kind": "rest_read",
+      "summary": "Numerically Sum",
+      "description": "Sums an expression for events per unit time. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/segmentation/sum",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "segmentation_query_average",
+      "kind": "rest_read",
+      "summary": "Numerically Average",
+      "description": "Averages an expression for events per unit time. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/segmentation/average",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "activity_stream_query",
+      "kind": "stream_etl",
+      "summary": "Profile Event Activity",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:activity_stream_query"
+        ]
+      }
+    },
+    {
+      "id": "cohorts_list",
+      "kind": "composite",
+      "summary": "List Saved Cohorts",
+      "description": "Mixpanel documents this Query API operation as POST without a JSON body; the current safe operation direct-read executor supports bounded JSON GET/POST only, so this remains planned rather than exposing a form/raw passthrough.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "medium",
+      "approval": "Blocked/planned: no executable safe runtime path in this slice.",
+      "output_policy": "blocked",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "blocked:POST /cohorts/list"
+        ]
+      }
+    },
+    {
+      "id": "engage_query",
+      "kind": "composite",
+      "summary": "Query Profiles",
+      "description": "Mixpanel documents this Query API operation as application/x-www-form-urlencoded profile search. The current safe operation direct-read executor does not expose form/raw provider searches, so this remains planned.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "medium",
+      "approval": "Blocked/planned: no executable safe runtime path in this slice.",
+      "output_policy": "blocked",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "blocked:POST /engage"
+        ]
+      }
+    },
+    {
+      "id": "list_recent_events",
+      "kind": "rest_read",
+      "summary": "Aggregate Event Counts",
+      "description": "Get unique, total, or average data for a set of events over N days, weeks, or months. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "query_top_events",
+      "kind": "rest_read",
+      "summary": "Today's Top Events",
+      "description": "Get the top events for today, with their counts and the normalized percent change from yesterday. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/events/top",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "query_months_top_event_names",
+      "kind": "rest_read",
+      "summary": "Top Events",
+      "description": "Get a list of the most common events over the last 31 days. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/events/names",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "query_event_properties",
+      "kind": "rest_read",
+      "summary": "Aggregrated Event Property Values",
+      "description": "Get unique, total, or average data for of a single event and property over days, weeks, or months. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/events/properties",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "query_events_top_properties",
+      "kind": "rest_read",
+      "summary": "Top Event Properties",
+      "description": "Get the top property names for an event. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/events/properties/top",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "query_events_top_property_values",
+      "kind": "rest_read",
+      "summary": "Top Event Property Values",
+      "description": "Get the top values for a property. The Query API has a rate limit of 60 queries per hour and a maximum of 5 concurrent queries.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only JSON response; no provider mutation.",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/events/properties/values",
+        "max_bytes": 16777216
+      },
+      "sensitive_policy": {
+        "redact_fields": [
+          "token",
+          "secret",
+          "password",
+          "api_secret",
+          "project_token",
+          "authorization"
+        ]
+      }
+    },
+    {
+      "id": "query_jql",
+      "kind": "composite",
+      "summary": "Custom JQL Query",
+      "description": "JQL accepts arbitrary JavaScript text. Exposing arbitrary provider-side scripts would violate Connector Guard; a future bounded report-specific wrapper must replace this raw script surface.",
+      "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+      "risk": "critical",
+      "approval": "Blocked/planned: no executable safe runtime path in this slice.",
+      "output_policy": "blocked",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "blocked:POST /jql"
+        ]
+      }
+    },
+    {
+      "id": "raw_event_export",
+      "kind": "binary_download",
+      "summary": "Download Data",
+      "description": "Raw event export returns newline-delimited/binary-style export data and needs a bounded file/binary export executor before it can be enabled without overloading JSON direct-read output.",
+      "source_url": "https://docs.mixpanel.com/openapi/export.openapi.yaml",
+      "risk": "medium",
+      "approval": "Blocked/planned: no executable safe runtime path in this slice.",
+      "output_policy": "blocked",
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/export",
+        "max_bytes": 67108864,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "list_all_schemas_for_project",
+      "kind": "stream_etl",
+      "summary": "List Schemas",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_all_schemas_for_project"
+        ]
+      }
+    },
+    {
+      "id": "upload_schemas_for_project",
+      "kind": "rest_write",
+      "summary": "Create/Replace Multiple",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/schemas"
+      }
+    },
+    {
+      "id": "delete_all_schemas_in_project",
+      "kind": "rest_write",
+      "summary": "Delete all Schemas",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/schemas"
+      }
+    },
+    {
+      "id": "list_schemas_for_entity",
+      "kind": "stream_etl",
+      "summary": "List for Entity",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_schemas_for_entity"
+        ]
+      }
+    },
+    {
+      "id": "delete_schemas_for_entity",
+      "kind": "rest_write",
+      "summary": "Delete for Entity",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/schemas/{entityType}"
+      }
+    },
+    {
+      "id": "list_schemas_by_entity_and_name",
+      "kind": "stream_etl",
+      "summary": "List for Entity and Name",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_schemas_by_entity_and_name"
+        ]
+      }
+    },
+    {
+      "id": "delete_schema_by_entity_and_name",
+      "kind": "rest_write",
+      "summary": "Delete for Entity and Name",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/schemas/{entityType}/{name}"
+      }
+    },
+    {
+      "id": "upload_schema_by_entity_and_name",
+      "kind": "rest_write",
+      "summary": "Create/Replace One",
+      "source_url": "https://docs.mixpanel.com/openapi/lexicon-schemas.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/schemas/{entityType}/{name}"
+      }
+    },
+    {
+      "id": "list_warehouse_pipeline_jobs",
+      "kind": "stream_etl",
+      "summary": "List Pipelines",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_warehouse_pipeline_jobs"
+        ]
+      }
+    },
+    {
+      "id": "create_warehouse_pipeline",
+      "kind": "rest_write",
+      "summary": "Create Pipeline",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/nessie/pipeline/create"
+      }
+    },
+    {
+      "id": "edit_warehouse_pipeline",
+      "kind": "rest_write",
+      "summary": "Edit Pipeline",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/nessie/pipeline/edit"
+      }
+    },
+    {
+      "id": "cancel_warehouse_pipeline",
+      "kind": "rest_write",
+      "summary": "Delete Pipeline",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/nessie/pipeline/cancel"
+      }
+    },
+    {
+      "id": "pause_warehouse_pipeline",
+      "kind": "rest_write",
+      "summary": "Pause Pipeline",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/nessie/pipeline/pause"
+      }
+    },
+    {
+      "id": "resume_warehouse_pipeline",
+      "kind": "rest_write",
+      "summary": "Resume Pipeline",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/nessie/pipeline/resume"
+      }
+    },
+    {
+      "id": "get_warehouse_pipeline_status",
+      "kind": "stream_etl",
+      "summary": "Get Pipeline",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_warehouse_pipeline_status"
+        ]
+      }
+    },
+    {
+      "id": "list_warehouse_pipeline_sync_dates",
+      "kind": "stream_etl",
+      "summary": "List Pipeline Logs",
+      "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_warehouse_pipeline_sync_dates"
+        ]
+      }
+    },
+    {
+      "id": "list_service_accounts",
+      "kind": "stream_etl",
+      "summary": "List Service Accounts",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_service_accounts"
+        ]
+      }
+    },
+    {
+      "id": "create_service_account",
+      "kind": "rest_write",
+      "summary": "Create Service Account",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/service-accounts"
+      }
+    },
+    {
+      "id": "get_service_account",
+      "kind": "stream_etl",
+      "summary": "Get Service Account",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_service_account"
+        ]
+      }
+    },
+    {
+      "id": "delete_service_account",
+      "kind": "rest_write",
+      "summary": "Delete Service Account",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}"
+      }
+    },
+    {
+      "id": "list_project_service_accounts",
+      "kind": "stream_etl",
+      "summary": "List Service Accounts For Project",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_project_service_accounts"
+        ]
+      }
+    },
+    {
+      "id": "add_service_accounts_to_projects",
+      "kind": "rest_write",
+      "summary": "Add Service Accounts To Projects",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/service-accounts/add-to-project"
+      }
+    },
+    {
+      "id": "remove_service_accounts_from_projects",
+      "kind": "rest_write",
+      "summary": "Remove Service Accounts From Projects",
+      "source_url": "https://docs.mixpanel.com/openapi/service-accounts.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/service-accounts/remove-from-project"
+      }
+    },
+    {
+      "id": "list_all_annotations_for_project",
+      "kind": "stream_etl",
+      "summary": "List Annotations",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_all_annotations_for_project"
+        ]
+      }
+    },
+    {
+      "id": "create_annotation",
+      "kind": "rest_write",
+      "summary": "Create Annotations",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/annotations"
+      }
+    },
+    {
+      "id": "get_annotation",
+      "kind": "stream_etl",
+      "summary": "Get Annotation",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_annotation"
+        ]
+      }
+    },
+    {
+      "id": "patch_annotation",
+      "kind": "rest_write",
+      "summary": "Patch Annotation",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{projectId}/annotations/{annotationId}"
+      }
+    },
+    {
+      "id": "delete_annotation",
+      "kind": "rest_write",
+      "summary": "Delete Annotation",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/annotations/{annotationId}"
+      }
+    },
+    {
+      "id": "get_annotation_tags",
+      "kind": "stream_etl",
+      "summary": "Get Annotation Tags",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_annotation_tags"
+        ]
+      }
+    },
+    {
+      "id": "create_annotation_tag",
+      "kind": "rest_write",
+      "summary": "Create Annotation Tag",
+      "source_url": "https://docs.mixpanel.com/openapi/annotations.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/annotations/tags"
+      }
+    },
+    {
+      "id": "create_retrieval",
+      "kind": "rest_write",
+      "summary": "Create a Retrieval",
+      "source_url": "https://docs.mixpanel.com/openapi/gdpr.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/data-retrievals/v3.0"
+      }
+    },
+    {
+      "id": "get_retrieval",
+      "kind": "stream_etl",
+      "summary": "Check Status of Retrieval",
+      "source_url": "https://docs.mixpanel.com/openapi/gdpr.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_retrieval"
+        ]
+      }
+    },
+    {
+      "id": "create_deletion",
+      "kind": "rest_write",
+      "summary": "Create a Deletion",
+      "source_url": "https://docs.mixpanel.com/openapi/gdpr.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/data-deletions/v3.0"
+      }
+    },
+    {
+      "id": "get_deletion",
+      "kind": "stream_etl",
+      "summary": "Check Status of Deletion",
+      "source_url": "https://docs.mixpanel.com/openapi/gdpr.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_deletion"
+        ]
+      }
+    },
+    {
+      "id": "delete_deletion",
+      "kind": "rest_write",
+      "summary": "Cancel a Deletion",
+      "source_url": "https://docs.mixpanel.com/openapi/gdpr.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/data-deletions/v3.0/{tracking_id}"
+      }
+    },
+    {
+      "id": "list_warehouse_imports",
+      "kind": "stream_etl",
+      "summary": "List all warehouse imports",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_warehouse_imports"
+        ]
+      }
+    },
+    {
+      "id": "get_warehouse_import",
+      "kind": "stream_etl",
+      "summary": "Get a specific warehouse import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_warehouse_import"
+        ]
+      }
+    },
+    {
+      "id": "update_warehouse_import",
+      "kind": "rest_write",
+      "summary": "Update a warehouse import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{projectId}/warehouse-sources/imports/{importId}"
+      }
+    },
+    {
+      "id": "delete_warehouse_import",
+      "kind": "rest_write",
+      "summary": "Delete a warehouse import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{projectId}/warehouse-sources/imports/{importId}"
+      }
+    },
+    {
+      "id": "create_event_stream_import",
+      "kind": "rest_write",
+      "summary": "Create an event stream import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/warehouse-sources/imports/event-stream"
+      }
+    },
+    {
+      "id": "create_people_import",
+      "kind": "rest_write",
+      "summary": "Create a people (user profiles) import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/warehouse-sources/imports/people"
+      }
+    },
+    {
+      "id": "create_groups_import",
+      "kind": "rest_write",
+      "summary": "Create a groups import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/warehouse-sources/imports/groups"
+      }
+    },
+    {
+      "id": "create_lookup_table_import",
+      "kind": "rest_write",
+      "summary": "Create a lookup table import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{projectId}/warehouse-sources/imports/lookup-table"
+      }
+    },
+    {
+      "id": "run_an_import",
+      "kind": "rest_write",
+      "summary": "Run an import",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/manual-sync"
+      }
+    },
+    {
+      "id": "get_import_history",
+      "kind": "stream_etl",
+      "summary": "Get import job history",
+      "source_url": "https://docs.mixpanel.com/openapi/warehouse-connectors.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_import_history"
+        ]
+      }
+    },
+    {
+      "id": "get_variant_assignments",
+      "kind": "stream_etl",
+      "summary": "Evaluate Feature Flags (GET)",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_variant_assignments"
+        ]
+      }
+    },
+    {
+      "id": "get_flag_definitions",
+      "kind": "stream_etl",
+      "summary": "Get Feature Flag Definitions",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_flag_definitions"
+        ]
+      }
+    },
+    {
+      "id": "list_feature_flags",
+      "kind": "stream_etl",
+      "summary": "List Feature Flags",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags-management.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_feature_flags"
+        ]
+      }
+    },
+    {
+      "id": "create_feature_flag",
+      "kind": "rest_write",
+      "summary": "Create Feature Flag",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags-management.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags"
+      }
+    },
+    {
+      "id": "get_feature_flag",
+      "kind": "stream_etl",
+      "summary": "Get Feature Flag",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags-management.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_feature_flag"
+        ]
+      }
+    },
+    {
+      "id": "delete_feature_flag",
+      "kind": "rest_write",
+      "summary": "Delete Feature Flag",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags-management.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}"
+      }
+    },
+    {
+      "id": "update_feature_flag",
+      "kind": "rest_write",
+      "summary": "Update Feature Flag",
+      "source_url": "https://docs.mixpanel.com/openapi/feature-flags-management.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}"
+      }
+    },
+    {
+      "id": "list_experiments",
+      "kind": "stream_etl",
+      "summary": "List Experiments",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:list_experiments"
+        ]
+      }
+    },
+    {
+      "id": "create_experiment",
+      "kind": "rest_write",
+      "summary": "Create Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace_id}/experiments"
+      }
+    },
+    {
+      "id": "get_experiment",
+      "kind": "stream_etl",
+      "summary": "Get Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "low",
+      "approval": "Read-only stream extraction.",
+      "output_policy": "records",
+      "mutation_class": "none",
+      "composite": {
+        "steps": [
+          "stream:get_experiment"
+        ]
+      }
+    },
+    {
+      "id": "update_experiment",
+      "kind": "rest_write",
+      "summary": "Update Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}"
+      }
+    },
+    {
+      "id": "delete_experiment",
+      "kind": "rest_write",
+      "summary": "Delete Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}"
+      }
+    },
+    {
+      "id": "archive_experiment",
+      "kind": "rest_write",
+      "summary": "Archive Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/archive"
+      }
+    },
+    {
+      "id": "unarchive_experiment",
+      "kind": "rest_write",
+      "summary": "Unarchive Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/archive"
+      }
+    },
+    {
+      "id": "decide_experiment",
+      "kind": "rest_write",
+      "summary": "Decide Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/decide"
+      }
+    },
+    {
+      "id": "force_conclude_experiment",
+      "kind": "rest_write",
+      "summary": "Force Conclude Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "high",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": true,
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/force_conclude"
+      }
+    },
+    {
+      "id": "launch_experiment",
+      "kind": "rest_write",
+      "summary": "Launch Experiment",
+      "source_url": "https://docs.mixpanel.com/openapi/experiments.openapi.yaml",
+      "risk": "medium",
+      "approval": "Reverse ETL plan, preview, explicit approval, execute.",
+      "output_policy": "write_result",
+      "mutation_class": "admin",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/launch"
+      }
+    }
+  ]
+}

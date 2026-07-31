@@ -1,0 +1,11 @@
+{
+  "record": {
+    "success": true,
+    "workspace_id": 1,
+    "experiment_id": "fixture_experiment_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/workspaces/1/experiments/fixture_experiment_id/decide"
+  }
+}

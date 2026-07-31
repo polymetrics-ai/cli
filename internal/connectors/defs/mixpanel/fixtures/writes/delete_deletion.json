@@ -1,0 +1,10 @@
+{
+  "record": {
+    "tracking_id": "fixture_tracking_id",
+    "token": "synthetic-fixture-redacted"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/data-deletions/v3.0/fixture_tracking_id"
+  }
+}

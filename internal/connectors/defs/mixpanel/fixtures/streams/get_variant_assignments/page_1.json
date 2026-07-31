@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/flags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "flags": {
+        "fixture_flag": {
+          "name": "Evaluate Feature Flags (GET)",
+          "status": "ok",
+          "source_operation": "get-variant-assignments"
+        }
+      }
+    }
+  }
+}

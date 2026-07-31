@@ -1,112 +1,349 @@
 {
   "base": {
     "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "custom", "hook": "mixpanel" }
+      {
+        "mode": "custom",
+        "hook": "mixpanel"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/account"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "mixpanel credentials are missing or invalid; re-run pm credentials add mixpanel"
+      },
+      {
+        "status": 403,
+        "hint": "mixpanel service account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "mixpanel rate limit exceeded; retry with backoff"
+      }
     ],
     "pagination": {
-      "type": "cursor",
-      "cursor_param": "page",
-      "token_path": "next"
-    },
-    "check": { "method": "GET", "path": "/cohorts/list" },
-    "error_map": [
-      { "status": 401, "hint": "mixpanel username/password credentials are missing or invalid; re-run pm credentials add mixpanel" },
-      { "status": 403, "hint": "mixpanel service account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "mixpanel rate limit exceeded; the connector will retry with backoff" }
-    ]
+      "type": "none",
+      "page_size": 1000
+    }
   },
   "streams": [
     {
-      "name": "cohorts",
-      "path": "/cohorts/list",
-      "query": { "limit": "{{ config.page_size }}" },
-      "records": { "path": "cohorts" },
-      "schema": "schemas/cohorts.json"
-    },
-    {
-      "name": "annotations",
-      "path": "/annotations",
-      "query": { "limit": "{{ config.page_size }}" },
-      "records": { "path": "annotations" },
-      "schema": "schemas/annotations.json"
-    },
-    {
-      "name": "engage",
-      "path": "/engage",
-      "query": { "limit": "{{ config.page_size }}" },
-      "records": { "path": "results" },
-      "schema": "schemas/engage.json"
-    },
-    {
-      "name": "saved_funnels",
-      "path": "https://mixpanel.com/api/query/funnels/list",
+      "name": "list_lookup_tables",
+      "method": "GET",
+      "path": "/lookup-tables",
       "query": {
-        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
-        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+        "project_id": "{{ config.project_id }}"
       },
-      "records": { "path": "." },
-      "schema": "schemas/saved_funnels.json"
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/list_lookup_tables.json"
     },
     {
-      "name": "activity_stream",
-      "path": "https://mixpanel.com/api/query/stream/query",
+      "name": "activity_stream_query",
+      "method": "GET",
+      "path": "/stream/query",
       "query": {
-        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
-        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
+        "project_id": "{{ config.project_id }}",
+        "workspace_id": {
+          "value": "{{ config.workspace_id }}",
+          "omit_when_absent": true
+        },
         "distinct_ids": "{{ config.distinct_ids }}",
         "from_date": "{{ config.from_date }}",
         "to_date": "{{ config.to_date }}"
       },
-      "records": { "path": "results.events" },
-      "schema": "schemas/activity_stream.json"
-    },
-    {
-      "name": "top_events",
-      "path": "https://mixpanel.com/api/query/events/top",
-      "query": {
-        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
-        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
-        "type": "{{ config.analysis_type }}",
-        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      "records": {
+        "path": "results.events"
       },
-      "records": { "path": "events" },
-      "schema": "schemas/top_events.json"
+      "schema": "schemas/activity_stream_query.json"
     },
     {
-      "name": "event_property_names",
-      "path": "https://mixpanel.com/api/query/events/properties/top",
-      "query": {
-        "project_id": { "template": "{{ config.project_id }}", "omit_when_absent": true },
-        "workspace_id": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
-        "event": "{{ config.event_name }}",
-        "limit": { "template": "{{ config.limit }}", "omit_when_absent": true }
+      "name": "list_all_schemas_for_project",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/schemas",
+      "records": {
+        "path": "results"
       },
-      "records": { "path": ".", "keyed_object": true, "key_field": "name" },
-      "schema": "schemas/event_property_names.json"
+      "schema": "schemas/list_all_schemas_for_project.json"
     },
     {
-      "name": "project_annotations",
-      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations",
+      "name": "list_schemas_for_entity",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/schemas/{{ config.entityType }}",
       "query": {
-        "fromDate": { "template": "{{ config.from_date }}", "omit_when_absent": true },
-        "toDate": { "template": "{{ config.to_date }}", "omit_when_absent": true }
+        "entity_name": {
+          "value": "{{ config.entity_name }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "results" },
-      "schema": "schemas/project_annotations.json"
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_schemas_for_entity.json"
     },
     {
-      "name": "project_annotation",
-      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/{{ config.annotation_id }}",
-      "records": { "path": "results", "single_object": true },
-      "schema": "schemas/project_annotation.json"
+      "name": "list_schemas_by_entity_and_name",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/schemas/{{ config.entityType }}/{{ config.name }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_schemas_by_entity_and_name.json"
     },
     {
-      "name": "annotation_tags",
-      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/tags",
-      "records": { "path": "." },
-      "schema": "schemas/annotation_tags.json"
+      "name": "list_warehouse_pipeline_jobs",
+      "method": "GET",
+      "path": "/nessie/pipeline/jobs",
+      "query": {
+        "project_id": "{{ config.project_id }}"
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/list_warehouse_pipeline_jobs.json"
+    },
+    {
+      "name": "get_warehouse_pipeline_status",
+      "method": "GET",
+      "path": "/nessie/pipeline/status",
+      "query": {
+        "project_id": "{{ config.project_id }}",
+        "name": "{{ config.name }}",
+        "summary": {
+          "value": "{{ config.summary }}",
+          "omit_when_absent": true
+        },
+        "status": {
+          "value": "{{ config.status }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/get_warehouse_pipeline_status.json"
+    },
+    {
+      "name": "list_warehouse_pipeline_sync_dates",
+      "method": "GET",
+      "path": "/nessie/pipeline/timeline",
+      "query": {
+        "project_id": "{{ config.project_id }}",
+        "name": {
+          "value": "{{ config.name }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_warehouse_pipeline_sync_dates.json"
+    },
+    {
+      "name": "list_service_accounts",
+      "method": "GET",
+      "path": "/organizations/{{ config.organizationId }}/service-accounts",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_service_accounts.json"
+    },
+    {
+      "name": "get_service_account",
+      "method": "GET",
+      "path": "/organizations/{{ config.organizationId }}/service-accounts/{{ config.serviceAccountId }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_service_account.json"
+    },
+    {
+      "name": "list_project_service_accounts",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/service-accounts",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_project_service_accounts.json"
+    },
+    {
+      "name": "list_all_annotations_for_project",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/annotations",
+      "query": {
+        "fromDate": {
+          "value": "{{ config.fromDate }}",
+          "omit_when_absent": true
+        },
+        "toDate": {
+          "value": "{{ config.toDate }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_all_annotations_for_project.json"
+    },
+    {
+      "name": "get_annotation",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/annotations/{{ config.annotationId }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_annotation.json"
+    },
+    {
+      "name": "get_annotation_tags",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/annotations/tags",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_annotation_tags.json"
+    },
+    {
+      "name": "get_retrieval",
+      "method": "GET",
+      "path": "/data-retrievals/v3.0/{{ config.tracking_id }}",
+      "query": {
+        "token": "{{ secrets.project_token }}"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_retrieval.json"
+    },
+    {
+      "name": "get_deletion",
+      "method": "GET",
+      "path": "/data-deletions/v3.0/{{ config.tracking_id }}",
+      "query": {
+        "token": "{{ secrets.project_token }}"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_deletion.json"
+    },
+    {
+      "name": "list_warehouse_imports",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/warehouse-sources/imports",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_warehouse_imports.json"
+    },
+    {
+      "name": "get_warehouse_import",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/warehouse-sources/imports/{{ config.importId }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_warehouse_import.json"
+    },
+    {
+      "name": "get_import_history",
+      "method": "GET",
+      "path": "/projects/{{ config.projectId }}/warehouse-sources/imports/{{ config.importId }}/history",
+      "records": {
+        "path": "results.runs"
+      },
+      "schema": "schemas/get_import_history.json"
+    },
+    {
+      "name": "get_variant_assignments",
+      "method": "GET",
+      "path": "/flags",
+      "query": {
+        "token": {
+          "value": "{{ secrets.project_token }}",
+          "omit_when_absent": true
+        },
+        "project_id": {
+          "value": "{{ config.project_id }}",
+          "omit_when_absent": true
+        },
+        "context": "{{ config.context }}"
+      },
+      "records": {
+        "path": "flags",
+        "keyed_object": true,
+        "key_field": "flag_key"
+      },
+      "schema": "schemas/get_variant_assignments.json"
+    },
+    {
+      "name": "get_flag_definitions",
+      "method": "GET",
+      "path": "/flags/definitions",
+      "query": {
+        "token": {
+          "value": "{{ secrets.project_token }}",
+          "omit_when_absent": true
+        },
+        "project_id": {
+          "value": "{{ config.project_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "flags",
+        "keyed_object": true,
+        "key_field": "flag_key"
+      },
+      "schema": "schemas/get_flag_definitions.json"
+    },
+    {
+      "name": "list_feature_flags",
+      "method": "GET",
+      "path": "/projects/{{ config.project_id }}/workspaces/{{ config.workspace_id }}/feature-flags",
+      "query": {
+        "include_archived": {
+          "value": "{{ config.include_archived }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_feature_flags.json"
+    },
+    {
+      "name": "get_feature_flag",
+      "method": "GET",
+      "path": "/projects/{{ config.project_id }}/workspaces/{{ config.workspace_id }}/feature-flags/{{ config.flag_id }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_feature_flag.json"
+    },
+    {
+      "name": "list_experiments",
+      "method": "GET",
+      "path": "/workspaces/{{ config.workspace_id }}/experiments",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/list_experiments.json"
+    },
+    {
+      "name": "get_experiment",
+      "method": "GET",
+      "path": "/workspaces/{{ config.workspace_id }}/experiments/{{ config.experiment_id }}",
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/get_experiment.json"
     }
   ]
 }

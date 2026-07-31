@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/nessie/pipeline/timeline"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "list_warehouse_pipeline_sync_dates_fixture_1",
+          "name": "List Pipeline Logs",
+          "status": "ok",
+          "source_operation": "list-warehouse-pipeline-sync-dates"
+        }
+      ]
+    }
+  }
+}

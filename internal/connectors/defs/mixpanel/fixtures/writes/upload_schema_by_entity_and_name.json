@@ -1,0 +1,11 @@
+{
+  "record": {
+    "projectId": 1,
+    "entityType": "event",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/schemas/event/fixture_name"
+  }
+}

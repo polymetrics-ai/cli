@@ -1,0 +1,11 @@
+{
+  "record": {
+    "project_id": 1,
+    "workspace_id": 1,
+    "flag_id": "fixture_flag_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/1/workspaces/1/feature-flags/fixture_flag_id"
+  }
+}

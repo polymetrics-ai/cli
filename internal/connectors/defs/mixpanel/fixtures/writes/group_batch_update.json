@@ -1,0 +1,9 @@
+{
+  "record": {
+    "value": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups"
+  }
+}

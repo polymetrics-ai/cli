@@ -80739,16 +80739,16 @@
   {
     "name": "mixpanel",
     "display_name": "Mixpanel",
-    "description": "Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.",
+    "description": "Reads documented Mixpanel API resources, executes bounded Query API JSON reads, and models documented Mixpanel mutations as typed approval-gated reverse ETL actions from official OpenAPI YAMLs.",
     "integration_type": "api",
-    "docs_url": "https://developer.mixpanel.com/reference/overview",
+    "docs_url": "https://docs.mixpanel.com/reference/overview",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
-      "query": false
+      "write": true,
+      "query": true
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -80758,84 +80758,248 @@
       "properties": {
         "username": {
           "type": "string",
-          "description": "Mixpanel Query API service account username (not secret), consumed by hooks/mixpanel/hooks.go's AuthHook. Takes priority over the username_secret secret when both are set (matches legacy's mixpanelCredentials config-then-secrets precedence)."
+          "description": "Mixpanel service account username. The custom hook also accepts username_secret when this non-secret config value is unset."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://mixpanel.com/api/2.0",
-          "description": "Mixpanel Query API base URL override for tests or proxies."
+          "default": "https://mixpanel.com/api/query",
+          "description": "Mixpanel API base URL for the operation family. Query commands default to https://mixpanel.com/api/query; App API streams/writes use https://mixpanel.com/api/app; ingestion/identity use https://api.mixpanel.com; export/data pipelines use https://data.mixpanel.com/api/2.0. Override per credential or command config as needed."
         },
         "page_size": {
           "type": "string",
           "default": "1000",
-          "description": "Records per page (1-10000)."
-        },
-        "project_id": {
-          "type": "string",
-          "description": "Mixpanel project id used by current Query API, Annotations API, and other project-scoped API endpoints."
-        },
-        "workspace_id": {
-          "type": "string",
-          "description": "Optional Mixpanel workspace id for Query API endpoints that accept workspace_id."
-        },
-        "annotation_id": {
-          "type": "string",
-          "description": "Annotation id for the project_annotation detail stream."
-        },
-        "from_date": {
-          "type": "string",
-          "description": "Optional yyyy-mm-dd lower date bound for current Query or Annotations API streams."
-        },
-        "to_date": {
-          "type": "string",
-          "description": "Optional yyyy-mm-dd upper date bound for current Query or Annotations API streams."
-        },
-        "analysis_type": {
-          "type": "string",
-          "default": "unique",
-          "description": "Mixpanel event analysis type for event breakdown streams: general, unique, or average."
-        },
-        "event_name": {
-          "type": "string",
-          "description": "Event name for event-property breakdown streams."
-        },
-        "distinct_ids": {
-          "type": "string",
-          "description": "JSON array string of distinct ids for the activity_stream Query API stream."
-        },
-        "limit": {
-          "type": "string",
-          "description": "Optional result limit for Query API list-style streams."
+          "description": "Default page size for paginated reads where supported."
         },
         "max_pages": {
           "type": "string",
-          "description": "Maximum pages; leave unset, or use all/unlimited, to exhaust the stream."
+          "description": "Optional maximum pages for bounded stream reads."
+        },
+        "addiction_unit": {
+          "type": "string",
+          "description": "Mixpanel addiction_unit parameter used by documented streams or direct/read operations."
+        },
+        "annotationId": {
+          "type": "string",
+          "description": "Mixpanel annotationId parameter used by documented streams or direct/read operations."
+        },
+        "bookmark_id": {
+          "type": "string",
+          "description": "Mixpanel bookmark_id parameter used by documented streams or direct/read operations."
+        },
+        "born_event": {
+          "type": "string",
+          "description": "Mixpanel born_event parameter used by documented streams or direct/read operations."
+        },
+        "born_where": {
+          "type": "string",
+          "description": "Mixpanel born_where parameter used by documented streams or direct/read operations."
+        },
+        "callback": {
+          "type": "string",
+          "description": "Mixpanel callback parameter used by documented streams or direct/read operations."
+        },
+        "context": {
+          "type": "string",
+          "description": "Mixpanel context parameter used by documented streams or direct/read operations."
+        },
+        "distinct_ids": {
+          "type": "string",
+          "description": "Mixpanel distinct_ids parameter used by documented streams or direct/read operations."
+        },
+        "entityType": {
+          "type": "string",
+          "description": "Mixpanel entityType parameter used by documented streams or direct/read operations."
+        },
+        "entity_name": {
+          "type": "string",
+          "description": "Mixpanel entity_name parameter used by documented streams or direct/read operations."
+        },
+        "event": {
+          "type": "string",
+          "description": "Mixpanel event parameter used by documented streams or direct/read operations."
+        },
+        "experiment_id": {
+          "type": "string",
+          "description": "Mixpanel experiment_id parameter used by documented streams or direct/read operations."
+        },
+        "flag_id": {
+          "type": "string",
+          "description": "Mixpanel flag_id parameter used by documented streams or direct/read operations."
+        },
+        "format": {
+          "type": "string",
+          "description": "Mixpanel format parameter used by documented streams or direct/read operations."
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "Mixpanel fromDate parameter used by documented streams or direct/read operations."
+        },
+        "from_date": {
+          "type": "string",
+          "description": "Mixpanel from_date parameter used by documented streams or direct/read operations."
+        },
+        "funnel_id": {
+          "type": "string",
+          "description": "Mixpanel funnel_id parameter used by documented streams or direct/read operations."
+        },
+        "id": {
+          "type": "string",
+          "description": "Mixpanel id parameter used by documented streams or direct/read operations."
+        },
+        "img": {
+          "type": "string",
+          "description": "Mixpanel img parameter used by documented streams or direct/read operations."
+        },
+        "importId": {
+          "type": "string",
+          "description": "Mixpanel importId parameter used by documented streams or direct/read operations."
+        },
+        "include_archived": {
+          "type": "string",
+          "description": "Mixpanel include_archived parameter used by documented streams or direct/read operations."
+        },
+        "interval": {
+          "type": "string",
+          "description": "Mixpanel interval parameter used by documented streams or direct/read operations."
+        },
+        "interval_count": {
+          "type": "string",
+          "description": "Mixpanel interval_count parameter used by documented streams or direct/read operations."
+        },
+        "ip": {
+          "type": "string",
+          "description": "Mixpanel ip parameter used by documented streams or direct/read operations."
+        },
+        "length": {
+          "type": "string",
+          "description": "Mixpanel length parameter used by documented streams or direct/read operations."
+        },
+        "length_unit": {
+          "type": "string",
+          "description": "Mixpanel length_unit parameter used by documented streams or direct/read operations."
+        },
+        "limit": {
+          "type": "string",
+          "description": "Mixpanel limit parameter used by documented streams or direct/read operations."
+        },
+        "name": {
+          "type": "string",
+          "description": "Mixpanel name parameter used by documented streams or direct/read operations."
+        },
+        "on": {
+          "type": "string",
+          "description": "Mixpanel on parameter used by documented streams or direct/read operations."
+        },
+        "organizationId": {
+          "type": "string",
+          "description": "Mixpanel organizationId parameter used by documented streams or direct/read operations."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Mixpanel projectId parameter used by documented streams or direct/read operations."
+        },
+        "project_id": {
+          "type": "string",
+          "description": "Mixpanel project_id parameter used by documented streams or direct/read operations."
+        },
+        "retention_type": {
+          "type": "string",
+          "description": "Mixpanel retention_type parameter used by documented streams or direct/read operations."
+        },
+        "serviceAccountId": {
+          "type": "string",
+          "description": "Mixpanel serviceAccountId parameter used by documented streams or direct/read operations."
+        },
+        "status": {
+          "type": "string",
+          "description": "Mixpanel status parameter used by documented streams or direct/read operations."
+        },
+        "strict": {
+          "type": "string",
+          "description": "Mixpanel strict parameter used by documented streams or direct/read operations."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Mixpanel summary parameter used by documented streams or direct/read operations."
+        },
+        "time_in_ms": {
+          "type": "string",
+          "description": "Mixpanel time_in_ms parameter used by documented streams or direct/read operations."
+        },
+        "toDate": {
+          "type": "string",
+          "description": "Mixpanel toDate parameter used by documented streams or direct/read operations."
+        },
+        "to_date": {
+          "type": "string",
+          "description": "Mixpanel to_date parameter used by documented streams or direct/read operations."
+        },
+        "token": {
+          "type": "string",
+          "description": "Mixpanel token parameter used by documented streams or direct/read operations."
+        },
+        "tracking_id": {
+          "type": "string",
+          "description": "Mixpanel tracking_id parameter used by documented streams or direct/read operations."
+        },
+        "type": {
+          "type": "string",
+          "description": "Mixpanel type parameter used by documented streams or direct/read operations."
+        },
+        "unbounded_retention": {
+          "type": "string",
+          "description": "Mixpanel unbounded_retention parameter used by documented streams or direct/read operations."
+        },
+        "unit": {
+          "type": "string",
+          "description": "Mixpanel unit parameter used by documented streams or direct/read operations."
+        },
+        "values": {
+          "type": "string",
+          "description": "Mixpanel values parameter used by documented streams or direct/read operations."
+        },
+        "verbose": {
+          "type": "string",
+          "description": "Mixpanel verbose parameter used by documented streams or direct/read operations."
+        },
+        "where": {
+          "type": "string",
+          "description": "Mixpanel where parameter used by documented streams or direct/read operations."
+        },
+        "workspace_id": {
+          "type": "string",
+          "description": "Mixpanel workspace_id parameter used by documented streams or direct/read operations."
+        },
+        "project_token": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Mixpanel project token for feature flag/project-token endpoints; prefer supplying from env/stdin."
         },
         "username_secret": {
           "type": "string",
           "x-secret": true,
-          "description": "Mixpanel Query API service account username, provided as a secret (mirrors legacy's cfg.Secrets[\"username\"] fallback). Used only when the non-secret username config value is unset; matches legacy's mixpanelCredentials config-then-secrets precedence exactly. Never logged."
+          "description": "Secret fallback for Mixpanel service account username. Never printed."
         },
         "password": {
           "type": "string",
           "x-secret": true,
-          "description": "Mixpanel Query API service account secret (password). Takes priority over api_secret when both are set (matches legacy's password-then-api_secret precedence). Used only for Basic auth; never logged."
+          "description": "Mixpanel service account password or project secret for Basic auth. Never printed."
         },
         "api_secret": {
           "type": "string",
           "x-secret": true,
-          "description": "Mixpanel legacy project API secret, used as the Basic auth password only when the password secret is unset (matches legacy's mixpanelCredentials fallback). Never logged."
+          "description": "Legacy Mixpanel project API secret fallback used as Basic-auth password when password is unset. Never printed."
         },
         "mode": {
           "type": "string",
-          "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+          "description": "Runtime mode label; fixture is used only for credential-free replay tests."
         }
       }
     },
     "streams": [
       {
-        "name": "cohorts",
+        "name": "list_lookup_tables",
         "primary_key": [
           "id"
         ],
@@ -80846,7 +81010,7 @@
         ]
       },
       {
-        "name": "annotations",
+        "name": "activity_stream_query",
         "primary_key": [
           "id"
         ],
@@ -80857,58 +81021,7 @@
         ]
       },
       {
-        "name": "engage",
-        "primary_key": [
-          "distinct_id"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "saved_funnels",
-        "primary_key": [
-          "funnel_id"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "activity_stream",
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite"
-        ]
-      },
-      {
-        "name": "top_events",
-        "primary_key": [
-          "event"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "event_property_names",
-        "primary_key": [
-          "name"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "project_annotations",
+        "name": "list_all_schemas_for_project",
         "primary_key": [
           "id"
         ],
@@ -80919,7 +81032,7 @@
         ]
       },
       {
-        "name": "project_annotation",
+        "name": "list_schemas_for_entity",
         "primary_key": [
           "id"
         ],
@@ -80930,7 +81043,227 @@
         ]
       },
       {
-        "name": "annotation_tags",
+        "name": "list_schemas_by_entity_and_name",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_warehouse_pipeline_jobs",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_warehouse_pipeline_status",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_warehouse_pipeline_sync_dates",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_service_accounts",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_service_account",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_project_service_accounts",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_all_annotations_for_project",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_annotation",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_annotation_tags",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_retrieval",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_deletion",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_warehouse_imports",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_warehouse_import",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_import_history",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_variant_assignments",
+        "primary_key": [
+          "flag_key"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_flag_definitions",
+        "primary_key": [
+          "flag_key"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_feature_flags",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_feature_flag",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_experiments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_experiment",
         "primary_key": [
           "id"
         ],
@@ -80941,9 +81274,452 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "import_events",
+        "kind": "create",
+        "method": "POST",
+        "path": "/import?strict={{ record.strict }}\u0026project_id={{ record.project_id }}",
+        "risk": "Import Events via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "track_event",
+        "kind": "create",
+        "method": "POST",
+        "path": "/track",
+        "risk": "Track Events via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "profile_set",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Set Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "profile_set_property_once",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Set Property Once via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "profile_numerical_add",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Increment Numerical Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "user_profile_union",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Union To List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "profile_append_to_list_property",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Append to List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "profile_remove_from_list_property",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Remove from List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "profile_delete_property",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Delete Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "profile_batch_update",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Update Multiple Profiles via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_profile",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/engage",
+        "risk": "Delete Profile via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "group_set_property",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Update Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "group_set_property_once",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Set Property Once via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "group_delete_property",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Delete Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "group_remove_from_list_property",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Remove from List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "group_union",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Union To List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "group_batch_update",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Batch Update Group Profiles via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_group",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/groups",
+        "risk": "Delete Group via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_identity",
+        "kind": "create",
+        "method": "POST",
+        "path": "/track",
+        "risk": "Create Identity via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "identity_create_alias",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/track",
+        "risk": "Create Alias via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "identity_merge",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/import?strict={{ record.strict }}",
+        "risk": "Merge Identities via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "upload_schemas_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/schemas",
+        "risk": "Create/Replace Multiple via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_all_schemas_in_project",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.projectId }}/schemas",
+        "risk": "Delete all Schemas via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_schemas_for_entity",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.projectId }}/schemas/{{ record.entityType }}",
+        "risk": "Delete for Entity via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_schema_by_entity_and_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.projectId }}/schemas/{{ record.entityType }}/{{ record.name }}",
+        "risk": "Delete for Entity and Name via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_schema_by_entity_and_name",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/schemas/{{ record.entityType }}/{{ record.name }}",
+        "risk": "Create/Replace One via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_warehouse_pipeline",
+        "kind": "create",
+        "method": "POST",
+        "path": "/nessie/pipeline/create",
+        "risk": "Create Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "edit_warehouse_pipeline",
+        "kind": "update",
+        "method": "POST",
+        "path": "/nessie/pipeline/edit",
+        "risk": "Edit Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "cancel_warehouse_pipeline",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/nessie/pipeline/cancel",
+        "risk": "Delete Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pause_warehouse_pipeline",
+        "kind": "update",
+        "method": "POST",
+        "path": "/nessie/pipeline/pause",
+        "risk": "Pause Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "resume_warehouse_pipeline",
+        "kind": "update",
+        "method": "POST",
+        "path": "/nessie/pipeline/resume",
+        "risk": "Resume Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_service_account",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.organizationId }}/service-accounts",
+        "risk": "Create Service Account via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_service_account",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.organizationId }}/service-accounts/{{ record.serviceAccountId }}",
+        "risk": "Delete Service Account via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_service_accounts_to_projects",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/organizations/{{ record.organizationId }}/service-accounts/add-to-project",
+        "risk": "Add Service Accounts To Projects via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "remove_service_accounts_from_projects",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/organizations/{{ record.organizationId }}/service-accounts/remove-from-project",
+        "risk": "Remove Service Accounts From Projects via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_annotation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/annotations",
+        "risk": "Create Annotations via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "patch_annotation",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/projects/{{ record.projectId }}/annotations/{{ record.annotationId }}",
+        "risk": "Patch Annotation via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_annotation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.projectId }}/annotations/{{ record.annotationId }}",
+        "risk": "Delete Annotation via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_annotation_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/annotations/tags",
+        "risk": "Create Annotation Tag via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_retrieval",
+        "kind": "create",
+        "method": "POST",
+        "path": "/data-retrievals/v3.0?token={{ record.token }}",
+        "risk": "Create a Retrieval via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_deletion",
+        "kind": "create",
+        "method": "POST",
+        "path": "/data-deletions/v3.0?token={{ record.token }}",
+        "risk": "Create a Deletion via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_deletion",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/data-deletions/v3.0/{{ record.tracking_id }}?token={{ record.token }}",
+        "risk": "Cancel a Deletion via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_warehouse_import",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}",
+        "risk": "Update a warehouse import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_warehouse_import",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}",
+        "risk": "Delete a warehouse import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_event_stream_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/event-stream",
+        "risk": "Create an event stream import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_people_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/people",
+        "risk": "Create a people (user profiles) import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_groups_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/groups",
+        "risk": "Create a groups import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_lookup_table_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/lookup-table",
+        "risk": "Create a lookup table import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "run_an_import",
+        "kind": "custom",
+        "method": "PUT",
+        "path": "/projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}/manual-sync",
+        "risk": "Run an import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_feature_flag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags",
+        "risk": "Create Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_feature_flag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags/{{ record.flag_id }}",
+        "risk": "Delete Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_feature_flag",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags/{{ record.flag_id }}",
+        "risk": "Update Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "create_experiment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments",
+        "risk": "Create Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "update_experiment",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}",
+        "risk": "Update Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "delete_experiment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}",
+        "risk": "Delete Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_experiment",
+        "kind": "update",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/archive",
+        "risk": "Archive Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unarchive_experiment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/archive",
+        "risk": "Unarchive Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "decide_experiment",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/decide",
+        "risk": "Decide Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+      },
+      {
+        "name": "force_conclude_experiment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/force_conclude",
+        "risk": "Force Conclude Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "launch_experiment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/launch",
+        "risk": "Launch Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution."
+      }
+    ],
     "risk": {
-      "read": "external Mixpanel Query/Application API read of cohort, annotation, profile, saved funnel, event breakdown, and annotation metadata",
-      "approval": "none; read-only Query API"
+      "read": "External Mixpanel API reads over documented Query/App/Data/Feature Flag endpoints; use bounded --limit/batch-size and connector config for the appropriate Mixpanel API host.",
+      "write": "Typed Mixpanel reverse ETL mutations for ingestion, identity, schemas, data pipelines, service accounts, annotations, GDPR, warehouse imports, feature flags, and experiments; destructive/admin actions require typed destructive confirmation and reverse-ETL approval.",
+      "approval": "No Mixpanel mutation executes from inspection/help/catalog. Reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute; fixture-only status is not live certification."
     },
     "icon": {
       "id": "mixpanel",

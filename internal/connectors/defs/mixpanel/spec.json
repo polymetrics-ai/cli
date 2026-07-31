@@ -6,78 +6,242 @@
   "properties": {
     "username": {
       "type": "string",
-      "description": "Mixpanel Query API service account username (not secret), consumed by hooks/mixpanel/hooks.go's AuthHook. Takes priority over the username_secret secret when both are set (matches legacy's mixpanelCredentials config-then-secrets precedence)."
+      "description": "Mixpanel service account username. The custom hook also accepts username_secret when this non-secret config value is unset."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://mixpanel.com/api/2.0",
-      "description": "Mixpanel Query API base URL override for tests or proxies."
+      "default": "https://mixpanel.com/api/query",
+      "description": "Mixpanel API base URL for the operation family. Query commands default to https://mixpanel.com/api/query; App API streams/writes use https://mixpanel.com/api/app; ingestion/identity use https://api.mixpanel.com; export/data pipelines use https://data.mixpanel.com/api/2.0. Override per credential or command config as needed."
     },
     "page_size": {
       "type": "string",
       "default": "1000",
-      "description": "Records per page (1-10000)."
-    },
-    "project_id": {
-      "type": "string",
-      "description": "Mixpanel project id used by current Query API, Annotations API, and other project-scoped API endpoints."
-    },
-    "workspace_id": {
-      "type": "string",
-      "description": "Optional Mixpanel workspace id for Query API endpoints that accept workspace_id."
-    },
-    "annotation_id": {
-      "type": "string",
-      "description": "Annotation id for the project_annotation detail stream."
-    },
-    "from_date": {
-      "type": "string",
-      "description": "Optional yyyy-mm-dd lower date bound for current Query or Annotations API streams."
-    },
-    "to_date": {
-      "type": "string",
-      "description": "Optional yyyy-mm-dd upper date bound for current Query or Annotations API streams."
-    },
-    "analysis_type": {
-      "type": "string",
-      "default": "unique",
-      "description": "Mixpanel event analysis type for event breakdown streams: general, unique, or average."
-    },
-    "event_name": {
-      "type": "string",
-      "description": "Event name for event-property breakdown streams."
-    },
-    "distinct_ids": {
-      "type": "string",
-      "description": "JSON array string of distinct ids for the activity_stream Query API stream."
-    },
-    "limit": {
-      "type": "string",
-      "description": "Optional result limit for Query API list-style streams."
+      "description": "Default page size for paginated reads where supported."
     },
     "max_pages": {
       "type": "string",
-      "description": "Maximum pages; leave unset, or use all/unlimited, to exhaust the stream."
+      "description": "Optional maximum pages for bounded stream reads."
+    },
+    "addiction_unit": {
+      "type": "string",
+      "description": "Mixpanel addiction_unit parameter used by documented streams or direct/read operations."
+    },
+    "annotationId": {
+      "type": "string",
+      "description": "Mixpanel annotationId parameter used by documented streams or direct/read operations."
+    },
+    "bookmark_id": {
+      "type": "string",
+      "description": "Mixpanel bookmark_id parameter used by documented streams or direct/read operations."
+    },
+    "born_event": {
+      "type": "string",
+      "description": "Mixpanel born_event parameter used by documented streams or direct/read operations."
+    },
+    "born_where": {
+      "type": "string",
+      "description": "Mixpanel born_where parameter used by documented streams or direct/read operations."
+    },
+    "callback": {
+      "type": "string",
+      "description": "Mixpanel callback parameter used by documented streams or direct/read operations."
+    },
+    "context": {
+      "type": "string",
+      "description": "Mixpanel context parameter used by documented streams or direct/read operations."
+    },
+    "distinct_ids": {
+      "type": "string",
+      "description": "Mixpanel distinct_ids parameter used by documented streams or direct/read operations."
+    },
+    "entityType": {
+      "type": "string",
+      "description": "Mixpanel entityType parameter used by documented streams or direct/read operations."
+    },
+    "entity_name": {
+      "type": "string",
+      "description": "Mixpanel entity_name parameter used by documented streams or direct/read operations."
+    },
+    "event": {
+      "type": "string",
+      "description": "Mixpanel event parameter used by documented streams or direct/read operations."
+    },
+    "experiment_id": {
+      "type": "string",
+      "description": "Mixpanel experiment_id parameter used by documented streams or direct/read operations."
+    },
+    "flag_id": {
+      "type": "string",
+      "description": "Mixpanel flag_id parameter used by documented streams or direct/read operations."
+    },
+    "format": {
+      "type": "string",
+      "description": "Mixpanel format parameter used by documented streams or direct/read operations."
+    },
+    "fromDate": {
+      "type": "string",
+      "description": "Mixpanel fromDate parameter used by documented streams or direct/read operations."
+    },
+    "from_date": {
+      "type": "string",
+      "description": "Mixpanel from_date parameter used by documented streams or direct/read operations."
+    },
+    "funnel_id": {
+      "type": "string",
+      "description": "Mixpanel funnel_id parameter used by documented streams or direct/read operations."
+    },
+    "id": {
+      "type": "string",
+      "description": "Mixpanel id parameter used by documented streams or direct/read operations."
+    },
+    "img": {
+      "type": "string",
+      "description": "Mixpanel img parameter used by documented streams or direct/read operations."
+    },
+    "importId": {
+      "type": "string",
+      "description": "Mixpanel importId parameter used by documented streams or direct/read operations."
+    },
+    "include_archived": {
+      "type": "string",
+      "description": "Mixpanel include_archived parameter used by documented streams or direct/read operations."
+    },
+    "interval": {
+      "type": "string",
+      "description": "Mixpanel interval parameter used by documented streams or direct/read operations."
+    },
+    "interval_count": {
+      "type": "string",
+      "description": "Mixpanel interval_count parameter used by documented streams or direct/read operations."
+    },
+    "ip": {
+      "type": "string",
+      "description": "Mixpanel ip parameter used by documented streams or direct/read operations."
+    },
+    "length": {
+      "type": "string",
+      "description": "Mixpanel length parameter used by documented streams or direct/read operations."
+    },
+    "length_unit": {
+      "type": "string",
+      "description": "Mixpanel length_unit parameter used by documented streams or direct/read operations."
+    },
+    "limit": {
+      "type": "string",
+      "description": "Mixpanel limit parameter used by documented streams or direct/read operations."
+    },
+    "name": {
+      "type": "string",
+      "description": "Mixpanel name parameter used by documented streams or direct/read operations."
+    },
+    "on": {
+      "type": "string",
+      "description": "Mixpanel on parameter used by documented streams or direct/read operations."
+    },
+    "organizationId": {
+      "type": "string",
+      "description": "Mixpanel organizationId parameter used by documented streams or direct/read operations."
+    },
+    "projectId": {
+      "type": "string",
+      "description": "Mixpanel projectId parameter used by documented streams or direct/read operations."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Mixpanel project_id parameter used by documented streams or direct/read operations."
+    },
+    "retention_type": {
+      "type": "string",
+      "description": "Mixpanel retention_type parameter used by documented streams or direct/read operations."
+    },
+    "serviceAccountId": {
+      "type": "string",
+      "description": "Mixpanel serviceAccountId parameter used by documented streams or direct/read operations."
+    },
+    "status": {
+      "type": "string",
+      "description": "Mixpanel status parameter used by documented streams or direct/read operations."
+    },
+    "strict": {
+      "type": "string",
+      "description": "Mixpanel strict parameter used by documented streams or direct/read operations."
+    },
+    "summary": {
+      "type": "string",
+      "description": "Mixpanel summary parameter used by documented streams or direct/read operations."
+    },
+    "time_in_ms": {
+      "type": "string",
+      "description": "Mixpanel time_in_ms parameter used by documented streams or direct/read operations."
+    },
+    "toDate": {
+      "type": "string",
+      "description": "Mixpanel toDate parameter used by documented streams or direct/read operations."
+    },
+    "to_date": {
+      "type": "string",
+      "description": "Mixpanel to_date parameter used by documented streams or direct/read operations."
+    },
+    "token": {
+      "type": "string",
+      "description": "Mixpanel token parameter used by documented streams or direct/read operations."
+    },
+    "tracking_id": {
+      "type": "string",
+      "description": "Mixpanel tracking_id parameter used by documented streams or direct/read operations."
+    },
+    "type": {
+      "type": "string",
+      "description": "Mixpanel type parameter used by documented streams or direct/read operations."
+    },
+    "unbounded_retention": {
+      "type": "string",
+      "description": "Mixpanel unbounded_retention parameter used by documented streams or direct/read operations."
+    },
+    "unit": {
+      "type": "string",
+      "description": "Mixpanel unit parameter used by documented streams or direct/read operations."
+    },
+    "values": {
+      "type": "string",
+      "description": "Mixpanel values parameter used by documented streams or direct/read operations."
+    },
+    "verbose": {
+      "type": "string",
+      "description": "Mixpanel verbose parameter used by documented streams or direct/read operations."
+    },
+    "where": {
+      "type": "string",
+      "description": "Mixpanel where parameter used by documented streams or direct/read operations."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Mixpanel workspace_id parameter used by documented streams or direct/read operations."
+    },
+    "project_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mixpanel project token for feature flag/project-token endpoints; prefer supplying from env/stdin."
     },
     "username_secret": {
       "type": "string",
       "x-secret": true,
-      "description": "Mixpanel Query API service account username, provided as a secret (mirrors legacy's cfg.Secrets[\"username\"] fallback). Used only when the non-secret username config value is unset; matches legacy's mixpanelCredentials config-then-secrets precedence exactly. Never logged."
+      "description": "Secret fallback for Mixpanel service account username. Never printed."
     },
     "password": {
       "type": "string",
       "x-secret": true,
-      "description": "Mixpanel Query API service account secret (password). Takes priority over api_secret when both are set (matches legacy's password-then-api_secret precedence). Used only for Basic auth; never logged."
+      "description": "Mixpanel service account password or project secret for Basic auth. Never printed."
     },
     "api_secret": {
       "type": "string",
       "x-secret": true,
-      "description": "Mixpanel legacy project API secret, used as the Basic auth password only when the password secret is unset (matches legacy's mixpanelCredentials fallback). Never logged."
+      "description": "Legacy Mixpanel project API secret fallback used as Basic-auth password when password is unset. Never printed."
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode label; fixture is used only for credential-free replay tests."
     }
   }
 }

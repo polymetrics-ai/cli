@@ -294,7 +294,7 @@
 - [miro](miro/MANUAL.md): Reads and writes documented Miro Platform, Enterprise, SCIM, and experimental REST API resources through the Miro Developer Platform API.
 - [missive](missive/MANUAL.md): Reads Missive contacts, contact groups, users, teams, and shared labels through the Missive REST API.
 - [mixmax](mixmax/MANUAL.md): Reads Mixmax code snippets, messages, rules, sequences, and meeting types through the Mixmax REST API.
-- [mixpanel](mixpanel/MANUAL.md): Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.
+- [mixpanel](mixpanel/MANUAL.md): Reads documented Mixpanel API resources, executes bounded Query API JSON reads, and models documented Mixpanel mutations as typed approval-gated reverse ETL actions from official OpenAPI YAMLs.
 - [mode](mode/MANUAL.md): Reads Mode collections (spaces), reports, data sources, groups, and memberships through the Mode REST API.
 - [monday](monday/MANUAL.md): Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.
 - [mux](mux/MANUAL.md): Reads Mux Video assets, live streams, direct uploads, and system signing keys through the Mux REST API using HTTP Basic authentication.

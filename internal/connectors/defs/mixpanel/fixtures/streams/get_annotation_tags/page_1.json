@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/annotations/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "get_annotation_tags_fixture_1",
+          "name": "Get Annotation Tags",
+          "status": "ok",
+          "source_operation": "get-annotation-tags",
+          "projectId": "fixture_projectid"
+        }
+      ]
+    }
+  }
+}

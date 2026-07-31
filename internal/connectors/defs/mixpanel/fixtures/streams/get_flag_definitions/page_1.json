@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/flags/definitions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "flags": {
+        "fixture_flag": {
+          "name": "Get Feature Flag Definitions",
+          "status": "ok",
+          "source_operation": "get-flag-definitions"
+        }
+      }
+    }
+  }
+}

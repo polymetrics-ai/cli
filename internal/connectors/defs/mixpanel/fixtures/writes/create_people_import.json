@@ -1,0 +1,14 @@
+{
+  "record": {
+    "import_type": "people",
+    "warehouse_source_id": 1,
+    "table_params": {},
+    "user_column_name": "fixture_user_column_name",
+    "sync_mode": "time_based",
+    "projectId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/warehouse-sources/imports/people"
+  }
+}

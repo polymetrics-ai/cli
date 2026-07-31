@@ -1,0 +1,2080 @@
+{
+  "tagline": "Inspect and operate documented Mixpanel API surfaces with guarded ETL/direct-read/reverse-ETL paths.",
+  "usage": "pm mixpanel <group> <command> [flags]",
+  "source_cli": {
+    "name": "Mixpanel OpenAPI reference",
+    "docs": "https://docs.mixpanel.com/reference/overview",
+    "reference": "https://docs.mixpanel.com/reference/overview",
+    "source": "official OpenAPI YAML files"
+  },
+  "groups": [
+    {
+      "id": "activity-feed",
+      "title": "Activity Feed",
+      "commands": [
+        "activity-feed activity-stream-query"
+      ]
+    },
+    {
+      "id": "check-status-of-deletion",
+      "title": "Check Status Of Deletion",
+      "commands": [
+        "check-status-of-deletion get-deletion"
+      ]
+    },
+    {
+      "id": "check-status-of-retrieval",
+      "title": "Check Status Of Retrieval",
+      "commands": [
+        "check-status-of-retrieval get-retrieval"
+      ]
+    },
+    {
+      "id": "cohorts",
+      "title": "Cohorts",
+      "commands": [
+        "cohorts cohorts-list"
+      ]
+    },
+    {
+      "id": "engage",
+      "title": "Engage",
+      "commands": [
+        "engage engage-query"
+      ]
+    },
+    {
+      "id": "event-breakdown",
+      "title": "Event Breakdown",
+      "commands": [
+        "event-breakdown list-recent-events",
+        "event-breakdown query-event-properties",
+        "event-breakdown query-events-top-properties",
+        "event-breakdown query-events-top-property-values",
+        "event-breakdown query-months-top-event-names",
+        "event-breakdown query-top-events"
+      ]
+    },
+    {
+      "id": "experiment-management",
+      "title": "Experiment Management",
+      "commands": [
+        "experiment-management get-experiment",
+        "experiment-management list-experiments"
+      ]
+    },
+    {
+      "id": "export",
+      "title": "Export",
+      "commands": [
+        "export raw-event-export"
+      ]
+    },
+    {
+      "id": "flag-management",
+      "title": "Flag Management",
+      "commands": [
+        "flag-management get-feature-flag",
+        "flag-management list-feature-flags"
+      ]
+    },
+    {
+      "id": "funnels",
+      "title": "Funnels",
+      "commands": [
+        "funnels funnels-list-saved",
+        "funnels funnels-query"
+      ]
+    },
+    {
+      "id": "get-annotation-tags",
+      "title": "Get Annotation Tags",
+      "commands": [
+        "get-annotation-tags get-annotation-tags"
+      ]
+    },
+    {
+      "id": "get-flag-definitions",
+      "title": "Get Flag Definitions",
+      "commands": [
+        "get-flag-definitions get-flag-definitions"
+      ]
+    },
+    {
+      "id": "get-variant-assignments",
+      "title": "Get Variant Assignments",
+      "commands": [
+        "get-variant-assignments get-variant-assignments"
+      ]
+    },
+    {
+      "id": "insights",
+      "title": "Insights",
+      "commands": [
+        "insights insights-query"
+      ]
+    },
+    {
+      "id": "jql",
+      "title": "Jql",
+      "commands": [
+        "jql query-jql"
+      ]
+    },
+    {
+      "id": "lookup-tables",
+      "title": "Lookup Tables",
+      "commands": [
+        "lookup-tables list-lookup-tables"
+      ]
+    },
+    {
+      "id": "project-membership",
+      "title": "Project Membership",
+      "commands": [
+        "project-membership list-project-service-accounts"
+      ]
+    },
+    {
+      "id": "retention",
+      "title": "Retention",
+      "commands": [
+        "retention retention-frequency-query",
+        "retention retention-query"
+      ]
+    },
+    {
+      "id": "retrieve-annotations",
+      "title": "Retrieve Annotations",
+      "commands": [
+        "retrieve-annotations get-annotation",
+        "retrieve-annotations list-all-annotations-for-project"
+      ]
+    },
+    {
+      "id": "retrieve-pipelines",
+      "title": "Retrieve Pipelines",
+      "commands": [
+        "retrieve-pipelines get-warehouse-pipeline-status",
+        "retrieve-pipelines list-warehouse-pipeline-jobs",
+        "retrieve-pipelines list-warehouse-pipeline-sync-dates"
+      ]
+    },
+    {
+      "id": "retrieve-schemas",
+      "title": "Retrieve Schemas",
+      "commands": [
+        "retrieve-schemas list-all-schemas-for-project",
+        "retrieve-schemas list-schemas-by-entity-and-name",
+        "retrieve-schemas list-schemas-for-entity"
+      ]
+    },
+    {
+      "id": "retrieve-service-accounts",
+      "title": "Retrieve Service Accounts",
+      "commands": [
+        "retrieve-service-accounts get-service-account",
+        "retrieve-service-accounts list-service-accounts"
+      ]
+    },
+    {
+      "id": "segmentation",
+      "title": "Segmentation",
+      "commands": [
+        "segmentation segmentation-numeric-query",
+        "segmentation segmentation-query",
+        "segmentation segmentation-query-average",
+        "segmentation segmentation-sum-query"
+      ]
+    },
+    {
+      "id": "warehouse-imports",
+      "title": "Warehouse Imports",
+      "commands": [
+        "warehouse-imports get-import-history",
+        "warehouse-imports get-warehouse-import",
+        "warehouse-imports list-warehouse-imports"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Saved Mixpanel credential name."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override key=value; use base_url for the appropriate Mixpanel API host."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit JSON where supported."
+    }
+  ],
+  "commands": [
+    {
+      "path": "lookup-tables list-lookup-tables",
+      "summary": "List Lookup Tables",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_lookup_tables",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "The Mixpanel project_id, used to authenticate service account credentials.",
+          "maps_to": "query.project_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lookup-tables"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "insights insights-query",
+      "summary": "Query Saved Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "insights_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "bookmark_id",
+          "type": "integer",
+          "summary": "The ID of your Insights report can be found from the url: `https://mixpanel.com/project/<YOUR_PROJECT_ID>/view/<YOUR_WORKSPACE_ID>/app/boards#id=12345&editor-card-id=%22report-<YOUR_BOOKMARK_ID>%22`",
+          "maps_to": "query.bookmark_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "funnels funnels-query",
+      "summary": "Query Saved Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "funnels_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "funnel_id",
+          "type": "integer",
+          "summary": "The funnel that you wish to get data for.",
+          "maps_to": "query.funnel_id"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "length",
+          "type": "integer",
+          "summary": "The number of units (defined by length_unit) each user has to complete the funnel, starting from the time they triggered the first step in the funnel. May not be greater than 90 days. Note that we will query for events past the end of to_date to look for funnel completions. This defaults to the value that was previously saved in the UI for this funnel.",
+          "maps_to": "query.length"
+        },
+        {
+          "name": "length_unit",
+          "type": "enum",
+          "summary": "The unit applied to the length parameter can be \"second\", \"minute\", \"hour\", or \"day\". Defaults to the value that was previously saved in the UI for this funnel.",
+          "maps_to": "query.length_unit",
+          "values": [
+            "day",
+            "hour",
+            "minute",
+            "second"
+          ]
+        },
+        {
+          "name": "interval",
+          "type": "integer",
+          "summary": "The number of days you want each bucket to contain. The default value is 1.",
+          "maps_to": "query.interval"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This is an alternate way of specifying interval and can be \"day\", \"week\", or \"month\".",
+          "maps_to": "query.unit",
+          "values": [
+            "day",
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The property expression to segment the event on. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter events by. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.where"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Return the top property values. Defaults to 255 if not explicitly included. Maximum value 10,000. This parameter does nothing if \\\"on\\\" is not specified.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/funnels"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "funnels funnels-list-saved",
+      "summary": "List Saved Funnels",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "funnels_list_saved",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/funnels/list"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "retention retention-query",
+      "summary": "Query Retention Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "retention_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "retention_type",
+          "type": "enum",
+          "summary": "Must be either \"birth\" or \"compounded\". Defaults to \"birth\". The \u00e2birth\u00e2 retention type corresponds to first time retention. The \u00e2compounded\u00e2 retention type corresponds to recurring retention. See the [Types of Retention](https://help.mixpanel.com/hc/en-us/articles/360001370146) article for more information.",
+          "maps_to": "query.retention_type",
+          "values": [
+            "birth",
+            "compounded"
+          ]
+        },
+        {
+          "name": "born_event",
+          "type": "string",
+          "summary": "The first event a user must do to be counted in a birth retention cohort. Required when retention_type is \"birth\"; ignored otherwise.",
+          "maps_to": "query.born_event"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event to generate returning counts for. Applies to both birth and compounded retention. If not specified, we look across all events.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "born_where",
+          "type": "string",
+          "summary": "An expression to filter born_events by. See the [expressions section](/reference/segmentation-expressions) above.",
+          "maps_to": "query.born_where"
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter born_events by. See the [expressions section](/reference/segmentation-expressions) above.",
+          "maps_to": "query.where"
+        },
+        {
+          "name": "interval",
+          "type": "integer",
+          "summary": "The number of units (can be specified in either days, weeks, or months) that you want per individual bucketed interval. May not be greater than 90 days if days is the specified unit. The default value is 1.",
+          "maps_to": "query.interval"
+        },
+        {
+          "name": "interval_count",
+          "type": "integer",
+          "summary": "The number of individual buckets, or intervals, that are returned; defaults to 1. Note that we include a \"0th\" interval for events that take place less than one interval after the initial event.",
+          "maps_to": "query.interval_count"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "The interval unit. It can be \"day\", \"week\", or \"month\". Default is \"day\".",
+          "maps_to": "query.unit",
+          "values": [
+            "day",
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "unbounded_retention",
+          "type": "boolean",
+          "summary": "A counting method for retention queries where retention values accumulate from right to left, i.e. day N is equal to users who retained on day N and any day after. The default value of false does not perform this accumulation. [Learn more about Counting Method](https://help.mixpanel.com/hc/en-us/articles/360045484191).",
+          "maps_to": "query.unbounded_retention"
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The property expression to segment the second event on. See the [expressions section](/reference/segmentation-expressions) above.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Return the top limit segmentation values. This parameter does nothing if \"on\" is not specified.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/retention"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "retention retention-frequency-query",
+      "summary": "Query Frequency Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "retention_frequency_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "The overall time period to return frequency of actions for can be \"day\", \"week\", or \"month\".",
+          "maps_to": "query.unit",
+          "values": [
+            "day",
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "addiction_unit",
+          "type": "enum",
+          "summary": "The granularity to return frequency of actions at can be \"hour\" or \"day\".",
+          "maps_to": "query.addiction_unit",
+          "values": [
+            "hour",
+            "day"
+          ]
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event to generate returning counts for.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter the returning events by. See the [expressions section](/reference/segmentation-expressions) above.",
+          "maps_to": "query.where"
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The property expression to segment the second event on. See the [expressions section](/reference/segmentation-expressions) above.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Return the top limit segmentation values. This parameter does nothing if \"on\" is not specified.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/retention/addiction"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "segmentation segmentation-query",
+      "summary": "Query Segmentation Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "segmentation_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The property expression to segment the event on. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This can be \"minute\", \"hour\", \"day\", or \"month\". This determines the buckets into which the property values that you segment on are placed. The default value is \"day\".",
+          "maps_to": "query.unit",
+          "values": [
+            "minute",
+            "hour",
+            "day",
+            "month"
+          ]
+        },
+        {
+          "name": "interval",
+          "type": "integer",
+          "summary": "Optional parameter in lieu of 'unit' when 'type' is not 'general'. Determines the number of days your results are bucketed into can be used with or without 'from_date' and 'to_date' parameters.",
+          "maps_to": "query.interval"
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter events by. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.where"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Return the top property values. Defaults to 60. Maximum value 10,000. This parameter does nothing if \"on\" is not specified.",
+          "maps_to": "query.limit"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "This can be \"general\", \"unique\", or \"average\". If this is set to \"unique\", we return the unique count of events or property values. If set to \"general\", we return the total, including repeats. If set to \"average\", we return the average count. The default value is \"general\".",
+          "maps_to": "query.type",
+          "values": [
+            "general",
+            "unique",
+            "average"
+          ]
+        },
+        {
+          "name": "format",
+          "type": "enum",
+          "summary": "Can be set to \"csv\".",
+          "maps_to": "query.format",
+          "values": [
+            "csv"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "segmentation segmentation-numeric-query",
+      "summary": "Numerically Bucket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "segmentation_numeric_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The property expression to segment the event on. This expression must be a numeric property. See the [expressions section](/reference/segmentation-expressions) below.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This can be \"hour\" or \"day\". This determines the buckets into which the property values that you segment on are placed. The default value is \"day\".",
+          "maps_to": "query.unit",
+          "values": [
+            "hour",
+            "day"
+          ]
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter events by. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.where"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "This can be \"hour\" or \"day\". This determines the buckets into which the property values that you segment on are placed. The default value is \"day\".",
+          "maps_to": "query.type",
+          "values": [
+            "general",
+            "unique",
+            "average"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation/numeric"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "segmentation segmentation-sum-query",
+      "summary": "Numerically Sum",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "segmentation_sum_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The expression to sum per unit time. The result of the expression should be a numeric value. If the expression is not numeric, a value of 0.0 is assumed. See the [expressions section](/reference/segmentation-expressions) below.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This can be \"hour\" or \"day\". This determines the buckets into which the property values that you segment on are placed. The default value is \"day\".",
+          "maps_to": "query.unit",
+          "values": [
+            "hour",
+            "day"
+          ]
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter events by. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.where"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation/sum"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "segmentation segmentation-query-average",
+      "summary": "Numerically Average",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "segmentation_query_average",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "on",
+          "type": "string",
+          "summary": "The expression to sum per unit time. The result of the expression should be a numeric value. If the expression is not numeric, a value of 0.0 is assumed. See the [expressions section](/reference/segmentation-expressions) below.",
+          "maps_to": "query.on"
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This can be \"hour\" or \"day\". This determines the buckets into which the property values that you segment on are placed. The default value is \"day\".",
+          "maps_to": "query.unit",
+          "values": [
+            "hour",
+            "day"
+          ]
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter events by. See the [expression to segment](/reference/segmentation-expressions) below.",
+          "maps_to": "query.where"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation/average"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "activity-feed activity-stream-query",
+      "summary": "Profile Event Activity",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity_stream_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "distinct_ids",
+          "type": "string",
+          "summary": "A JSON array as a string representing the `distinct_ids` to return activity feeds for. For example: `[\"12a34aa567eb8d-9ab1c26f345b67-89123c45-6aeaa7-89f12af345f678\"]`",
+          "maps_to": "query.distinct_ids"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stream/query"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "cohorts cohorts-list",
+      "summary": "List Saved Cohorts",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "cohorts_list",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/cohorts/list"
+        }
+      ],
+      "risk": "Blocked/planned Mixpanel operation.",
+      "notes": "Mixpanel documents this Query API operation as POST without a JSON body; the current safe operation direct-read executor supports bounded JSON GET/POST only, so this remains planned rather than exposing a form/raw passthrough."
+    },
+    {
+      "path": "engage engage-query",
+      "summary": "Query Profiles",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "engage_query",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage"
+        }
+      ],
+      "risk": "Blocked/planned Mixpanel operation.",
+      "notes": "Mixpanel documents this Query API operation as application/x-www-form-urlencoded profile search. The current safe operation direct-read executor does not expose form/raw provider searches, so this remains planned."
+    },
+    {
+      "path": "event-breakdown list-recent-events",
+      "summary": "Aggregate Event Counts",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "list_recent_events",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event or events that you wish to get data for, encoded as a JSON array. Example format: \"[\"play song\", \"log in\", \"add playlist\"]\".",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The analysis type you would like to get data for - such as general, unique, or average events. Valid values: \"general\", \"unique\", or \"average\".",
+          "maps_to": "query.type",
+          "values": [
+            "general",
+            "unique",
+            "average"
+          ]
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This can be \"minute\", \"hour\", \"day\", \"week\", or \"month\". It determines the level of granularity of the data you get back. Note that you cannot get hourly uniques.",
+          "maps_to": "query.unit",
+          "values": [
+            "minute",
+            "hour",
+            "day",
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "interval",
+          "type": "integer",
+          "summary": "The number of \"units\" to return data for - minutes, hours, days, weeks, or months. 1 will return data for the current unit (minute, hour, day, week or month). 2 will return the current and previous units, and so on. Specify either interval or from_date and to_date.",
+          "maps_to": "query.interval"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "format",
+          "type": "enum",
+          "summary": "The data return format, such as JSON or CSV. Options: \"json\" (default), \"csv\".",
+          "maps_to": "query.format",
+          "values": [
+            "json",
+            "csv"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "event-breakdown query-top-events",
+      "summary": "Today's Top Events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "query_top_events",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The analysis type you would like to get data for - such as general, unique, or average events. Valid values: \"general\", \"unique\", or \"average\".",
+          "maps_to": "query.type",
+          "values": [
+            "general",
+            "unique",
+            "average"
+          ]
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "The maximum number of events to return. Defaults to 100.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/top"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "event-breakdown query-months-top-event-names",
+      "summary": "Top Events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "query_months_top_event_names",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The analysis type you would like to get data for - such as general, unique, or average events. Valid values: \"general\", \"unique\", or \"average\".",
+          "maps_to": "query.type",
+          "values": [
+            "general",
+            "unique",
+            "average"
+          ]
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "The maximum number of values to return. Defaults to 255.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/names"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "event-breakdown query-event-properties",
+      "summary": "Aggregrated Event Property Values",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "query_event_properties",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the property you would like to get data for.",
+          "maps_to": "query.name"
+        },
+        {
+          "name": "values",
+          "type": "string",
+          "summary": "The specific property values that you would like to get data for, encoded as a JSON array. Example: If you have a property \"gender\" you may have values \"male\", \"female\" and \"unknown\". If you just want data for female and unknown users, you can include a values property that looks like \"[\"female\", \"unknown\"]\".",
+          "maps_to": "query.values"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "The analysis type you would like to get data for - such as general, unique, or average events. Valid values: \"general\", \"unique\", or \"average\".",
+          "maps_to": "query.type",
+          "values": [
+            "general",
+            "unique",
+            "average"
+          ]
+        },
+        {
+          "name": "unit",
+          "type": "enum",
+          "summary": "This can be \"minute\", \"hour\", \"day\", \"week\", or \"month\". It determines the level of granularity of the data you get back. Note that you cannot get hourly uniques.",
+          "maps_to": "query.unit",
+          "values": [
+            "minute",
+            "hour",
+            "day",
+            "week",
+            "month"
+          ]
+        },
+        {
+          "name": "interval",
+          "type": "integer",
+          "summary": "The number of \"units\" to return data for - minutes, hours, days, weeks, or months. 1 will return data for the current unit (minute, hour, day, week or month). 2 will return the current and previous units, and so on. Specify either interval or from_date and to_date.",
+          "maps_to": "query.interval"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "format",
+          "type": "enum",
+          "summary": "The data return format, such as JSON or CSV. Options: \"json\" (default), \"csv\".",
+          "maps_to": "query.format",
+          "values": [
+            "json",
+            "csv"
+          ]
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "The maximum number of values to return. Defaults to 255.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/properties"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "event-breakdown query-events-top-properties",
+      "summary": "Top Event Properties",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "query_events_top_properties",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "The maximum number of properties to return. Defaults to 10.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/properties/top"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "event-breakdown query-events-top-property-values",
+      "summary": "Top Event Property Values",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "query_events_top_property_values",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event that you wish to get data for. Note: this is a single event name, not an array.",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the property you would like to get data for.",
+          "maps_to": "query.name"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "The maximum number of values to return. Defaults to 255.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/properties/values"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "token",
+        "secret",
+        "password",
+        "api_secret",
+        "project_token",
+        "authorization"
+      ],
+      "risk": "Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields."
+    },
+    {
+      "path": "jql query-jql",
+      "summary": "Custom JQL Query",
+      "intent": "direct_read",
+      "availability": "unsafe_or_disallowed",
+      "operation": "query_jql",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "workspace_id",
+          "type": "integer",
+          "summary": "The id of the workspace if applicable.",
+          "maps_to": "query.workspace_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/jql"
+        }
+      ],
+      "risk": "Blocked/planned Mixpanel operation.",
+      "notes": "JQL accepts arbitrary JavaScript text. Exposing arbitrary provider-side scripts would violate Connector Guard; a future bounded report-specific wrapper must replace this raw script surface."
+    },
+    {
+      "path": "export raw-event-export",
+      "summary": "Download Data",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "raw_event_export",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive and interpreted as UTC timezone for projects created after 1 January 2023 and current project timezone for projects created before 11 January 2023.",
+          "maps_to": "query.from_date"
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive and interpreted as UTC timezone for projects created after 1 January 2023 and current project timezone for projects created before 11 January 2023.",
+          "maps_to": "query.to_date"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Use this parameter if you want to limit the max number of events to be returned. Value cannot be over 100000.",
+          "maps_to": "query.limit"
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "The event or events that you wish to get data for, encoded as a JSON array (for example, `[\"signup\",\"purchase\"]`).",
+          "maps_to": "query.event"
+        },
+        {
+          "name": "where",
+          "type": "string",
+          "summary": "An expression to filter events by. More info on expression sequence structure can be found [here](/reference/segmentation-expressions)",
+          "maps_to": "query.where"
+        },
+        {
+          "name": "time_in_ms",
+          "type": "boolean",
+          "summary": "Defaults to `false` which will export event timestamps with second-precision. Set to `true` to export event timestamps with millisecond-precision.",
+          "maps_to": "query.time_in_ms"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export"
+        }
+      ],
+      "risk": "Blocked/planned Mixpanel operation.",
+      "notes": "Raw event export returns newline-delimited/binary-style export data and needs a bounded file/binary export executor before it can be enabled without overloading JSON direct-read output."
+    },
+    {
+      "path": "retrieve-schemas list-all-schemas-for-project",
+      "summary": "List Schemas",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_all_schemas_for_project",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/schemas"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-schemas list-schemas-for-entity",
+      "summary": "List for Entity",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_schemas_for_entity",
+      "flags": [
+        {
+          "name": "entity_name",
+          "type": "string",
+          "summary": "The entity name (eg: Added To Cart)",
+          "maps_to": "query.entity_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/schemas/{entityType}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-schemas list-schemas-by-entity-and-name",
+      "summary": "List for Entity and Name",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_schemas_by_entity_and_name",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/schemas/{entityType}/{name}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-pipelines list-warehouse-pipeline-jobs",
+      "summary": "List Pipelines",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_warehouse_pipeline_jobs",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nessie/pipeline/jobs"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-pipelines get-warehouse-pipeline-status",
+      "summary": "Get Pipeline",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_warehouse_pipeline_status",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name that uniquely identifies the pipeline.",
+          "maps_to": "query.name"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Default: `false`. Only lists task count by status and no details.",
+          "maps_to": "query.summary"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Filters the tasks by the given status. Valid options for status are `pending`, `running`, `retried`, `failed`, `canceled`, and `timed_out`.",
+          "maps_to": "query.status"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nessie/pipeline/status"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-pipelines list-warehouse-pipeline-sync-dates",
+      "summary": "List Pipeline Logs",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_warehouse_pipeline_sync_dates",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required if using service account to authenticate request.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name that uniquely identifies the pipeline.",
+          "maps_to": "query.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nessie/pipeline/timeline"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-service-accounts list-service-accounts",
+      "summary": "List Service Accounts",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_service_accounts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/service-accounts"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-service-accounts get-service-account",
+      "summary": "Get Service Account",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_service_account",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "project-membership list-project-service-accounts",
+      "summary": "List Service Accounts For Project",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_project_service_accounts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/service-accounts"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-annotations list-all-annotations-for-project",
+      "summary": "List Annotations",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_all_annotations_for_project",
+      "flags": [
+        {
+          "name": "fromdate",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to begin querying from. This date is inclusive.",
+          "maps_to": "query.fromDate"
+        },
+        {
+          "name": "todate",
+          "type": "string",
+          "summary": "The date in yyyy-mm-dd format to query to. This date is inclusive.",
+          "maps_to": "query.toDate"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/annotations"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "retrieve-annotations get-annotation",
+      "summary": "Get Annotation",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_annotation",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/annotations/{annotationId}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "get-annotation-tags get-annotation-tags",
+      "summary": "Get Annotation Tags",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_annotation_tags",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/annotations/tags"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "check-status-of-retrieval get-retrieval",
+      "summary": "Check Status of Retrieval",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_retrieval",
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Your project token",
+          "maps_to": "query.token"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-retrievals/v3.0/{tracking_id}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "check-status-of-deletion get-deletion",
+      "summary": "Check Status of Deletion",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_deletion",
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Your project token",
+          "maps_to": "query.token"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-deletions/v3.0/{tracking_id}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "warehouse-imports list-warehouse-imports",
+      "summary": "List all warehouse imports",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_warehouse_imports",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/warehouse-sources/imports"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "warehouse-imports get-warehouse-import",
+      "summary": "Get a specific warehouse import",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_warehouse_import",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "warehouse-imports get-import-history",
+      "summary": "Get import job history",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_import_history",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/history"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "get-variant-assignments get-variant-assignments",
+      "summary": "Evaluate Feature Flags (GET)",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_variant_assignments",
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Your project token",
+          "maps_to": "query.token"
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "The Mixpanel project_id. Provide if using service account auth.",
+          "maps_to": "query.project_id"
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "summary": "URL-encoded JSON object containing evaluation context with distinct_id (required) and optional device_id and custom_properties object",
+          "maps_to": "query.context"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/flags"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "get-flag-definitions get-flag-definitions",
+      "summary": "Get Feature Flag Definitions",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_flag_definitions",
+      "flags": [
+        {
+          "name": "token",
+          "type": "string",
+          "summary": "Your project token",
+          "maps_to": "query.token"
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "The Mixpanel project_id. Provide if using service account auth.",
+          "maps_to": "query.project_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/flags/definitions"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "flag-management list-feature-flags",
+      "summary": "List Feature Flags",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_feature_flags",
+      "flags": [
+        {
+          "name": "include_archived",
+          "type": "enum",
+          "summary": "Whether to include archived (soft-deleted) feature flags. Defaults to false.",
+          "maps_to": "query.include_archived",
+          "values": [
+            "true",
+            "false"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "flag-management get-feature-flag",
+      "summary": "Get Feature Flag",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_feature_flag",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "experiment-management list-experiments",
+      "summary": "List Experiments",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_experiments",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspace_id}/experiments"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    },
+    {
+      "path": "experiment-management get-experiment",
+      "summary": "Get Experiment",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_experiment",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}"
+        }
+      ],
+      "risk": "Read-only Mixpanel stream; use --limit/ETL batching for large responses."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "hosts",
+      "summary": "Mixpanel publishes Query, App, Ingestion, Export/Data Pipeline, and Feature Flag endpoints on different base URLs; set base_url per credential/operation family."
+    },
+    {
+      "name": "safety",
+      "summary": "No raw JQL, generic HTTP, raw CSV, or binary export passthrough is exposed by this connector."
+    },
+    {
+      "name": "writes",
+      "summary": "Mixpanel write actions are available through pm reverse plan/preview/run using the action names in pm connectors inspect mixpanel; provider-style mutation flags are intentionally not generated for complex payloads."
+    }
+  ]
+}

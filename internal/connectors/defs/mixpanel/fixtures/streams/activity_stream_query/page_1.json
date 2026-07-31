@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/stream/query"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": {
+        "events": [
+          {
+            "id": "activity_stream_query_fixture_1",
+            "name": "Profile Event Activity",
+            "status": "ok",
+            "source_operation": "activity-stream-query"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "items": [
+      {
+        "$token": "synthetic-fixture-redacted",
+        "$distinct_id": "fixture_distinct_id",
+        "$remove": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/engage"
+  }
+}

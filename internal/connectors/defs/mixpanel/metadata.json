@@ -1,15 +1,15 @@
 {
   "name": "mixpanel",
   "display_name": "Mixpanel",
-  "description": "Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.",
+  "description": "Reads documented Mixpanel API resources, executes bounded Query API JSON reads, and models documented Mixpanel mutations as typed approval-gated reverse ETL actions from official OpenAPI YAMLs.",
   "integration_type": "api",
-  "docs_url": "https://developer.mixpanel.com/reference/overview",
+  "docs_url": "https://docs.mixpanel.com/reference/overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
-    "query": false,
+    "write": true,
+    "query": true,
     "cdc": false,
     "dynamic_schema": false
   },
@@ -17,11 +17,11 @@
     "read_page_size": 1000
   },
   "risk": {
-    "read": "external Mixpanel Query/Application API read of cohort, annotation, profile, saved funnel, event breakdown, and annotation metadata",
-    "approval": "none; read-only Query API"
+    "read": "External Mixpanel API reads over documented Query/App/Data/Feature Flag endpoints; use bounded --limit/batch-size and connector config for the appropriate Mixpanel API host.",
+    "write": "Typed Mixpanel reverse ETL mutations for ingestion, identity, schemas, data pipelines, service accounts, annotations, GDPR, warehouse imports, feature flags, and experiments; destructive/admin actions require typed destructive confirmation and reverse-ETL approval.",
+    "approval": "No Mixpanel mutation executes from inspection/help/catalog. Reverse ETL writes require plan -> preview -> explicit approval -> execute; fixture-only status is not live certification."
   },
   "conformance": {
-    "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for mixpanel (the AuthHook's real Basic-auth username/password + api_secret fallback resolution) -- conformance's synthetic config has no real username/password/api_secret combination and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+    "skip_dynamic": false
   }
 }

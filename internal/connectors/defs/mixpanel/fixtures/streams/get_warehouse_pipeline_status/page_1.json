@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/nessie/pipeline/status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "get_warehouse_pipeline_status_fixture_1",
+      "name": "Get Pipeline",
+      "status": "ok",
+      "source_operation": "get-warehouse-pipeline-status"
+    }
+  }
+}

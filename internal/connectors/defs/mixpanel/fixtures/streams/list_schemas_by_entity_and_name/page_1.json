@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/schemas/synthetic-conformance-value/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "list_schemas_by_entity_and_name_fixture_1",
+          "name": "fixture_name",
+          "status": "ok",
+          "source_operation": "list-schemas-by-entity-and-name",
+          "projectId": "fixture_projectid",
+          "entityType": "fixture_entitytype"
+        }
+      ]
+    }
+  }
+}

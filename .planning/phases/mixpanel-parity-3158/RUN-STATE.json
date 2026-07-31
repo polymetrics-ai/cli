@@ -1,0 +1,83 @@
+{
+  "phase": "mixpanel-parity-3158",
+  "branch": "fm/cli-mixpanel-parity-wave04-r1",
+  "status": "implemented-with-make-verify-timeout-blocker",
+  "verificationPassed": false,
+  "verification": [
+    {
+      "command": "official Mixpanel OpenAPI inventory comparison",
+      "result": "pass: 105 official operations, local operations 105, api_surface rows 105, missing 0, extra 0, duplicate operation IDs 0"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+      "result": "pass: 549 connectors checked, 0 findings"
+    },
+    {
+      "command": "temp defs-root Mixpanel-only connectorgen validate",
+      "result": "pass: 1 connector checked, 0 findings"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/mixpanel|TestMixpanelOperationDirectReadsReplay' -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go test ./internal/cli -run 'Test(CobraRouterShellPreservesDynamicConnector|ConnectorInspect|ConnectorCatalog|DocsGenerateIncludesConnectorCatalog|Golden)' -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "pass"
+    },
+    {
+      "command": "./pm docs validate --connectors-dir docs/connectors",
+      "result": "pass"
+    },
+    {
+      "command": "make connector-boundary",
+      "result": "pass: outcome clean"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "make verify",
+      "result": "attempted; failed in repository-wide go test -timeout 20m due internal/cli and internal/connectors/certify package timeouts. Focused Mixpanel gates passed; internal/cli passed separately with -timeout 35m."
+    },
+    {
+      "command": "gh-axi issue addendum marker verification",
+      "result": "pass: #3158 and #3159-#3165 each contain exactly one captain-policy addendum marker"
+    }
+  ],
+  "counts": {
+    "official_operations": 105,
+    "implemented_operations": 100,
+    "stream_replay_fixtures": 25,
+    "write_fixtures": 60,
+    "direct_read_replay_subtests": 15,
+    "blocked_planned_operations": 5,
+    "excluded_not_applicable": 0,
+    "certified_live": 0
+  },
+  "safety": {
+    "liveCredentials": false,
+    "providerCalls": false,
+    "providerWrites": false,
+    "sharedRuntimeEdits": false,
+    "newDependencies": false
+  },
+  "requiredSkills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-security",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-safety",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation"
+  ]
+}

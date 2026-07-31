@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/workspaces/synthetic-conformance-value/feature-flags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "list_feature_flags_fixture_1",
+          "name": "List Feature Flags",
+          "status": "ok",
+          "source_operation": "list-feature-flags",
+          "project_id": "fixture_project_id",
+          "workspace_id": "fixture_workspace_id"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "record": {
+    "projectId": 1,
+    "annotationId": 1.25
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/1/annotations/1.25"
+  }
+}

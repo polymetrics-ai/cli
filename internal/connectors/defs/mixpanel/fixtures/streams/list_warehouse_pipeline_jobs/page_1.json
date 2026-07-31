@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/nessie/pipeline/jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "list_warehouse_pipeline_jobs_fixture_1",
+      "name": "List Pipelines",
+      "status": "ok",
+      "source_operation": "list-warehouse-pipeline-jobs"
+    }
+  }
+}

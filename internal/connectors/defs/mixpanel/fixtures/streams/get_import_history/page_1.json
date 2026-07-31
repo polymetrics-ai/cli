@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/warehouse-sources/imports/synthetic-conformance-value/history"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": {
+        "runs": [
+          {
+            "id": "get_import_history_fixture_1",
+            "name": "Get import job history",
+            "status": "ok",
+            "source_operation": "get-import-history",
+            "projectId": "fixture_projectid",
+            "importId": "fixture_importid"
+          }
+        ]
+      }
+    }
+  }
+}

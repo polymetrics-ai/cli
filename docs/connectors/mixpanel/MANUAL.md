@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mixpanel [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.
+  Reads documented Mixpanel API resources, executes bounded Query API JSON reads, and models documented Mixpanel mutations as typed approval-gated reverse ETL actions from official OpenAPI YAMLs.
 
 ICON
   asset: icons/mixpanel.svg
@@ -19,69 +19,479 @@ ICON
   review_url: https://developer.mixpanel.com/reference/overview
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=true
   Integration type: api
 
 AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  analysis_type
-  annotation_id
+  addiction_unit
+  annotationId
   base_url
+  bookmark_id
+  born_event
+  born_where
+  callback
+  context
   distinct_ids
-  event_name
+  entityType
+  entity_name
+  event
+  experiment_id
+  flag_id
+  format
+  fromDate
   from_date
+  funnel_id
+  id
+  img
+  importId
+  include_archived
+  interval
+  interval_count
+  ip
+  length
+  length_unit
   limit
   max_pages
   mode
+  name
+  on
+  organizationId
   page_size
+  projectId
   project_id
+  retention_type
+  serviceAccountId
+  status
+  strict
+  summary
+  time_in_ms
+  toDate
   to_date
+  token
+  tracking_id
+  type
+  unbounded_retention
+  unit
   username
+  values
+  verbose
+  where
   workspace_id
   api_secret (secret)
   password (secret)
+  project_token (secret)
   username_secret (secret)
 
 ETL STREAMS
-  cohorts:
+  list_lookup_tables:
     primary key: id
-    fields: count(), id(), name()
-  annotations:
+    fields: id(), name(), source_operation(), status()
+  activity_stream_query:
     primary key: id
-    fields: date(), description(), id()
-  engage:
-    primary key: distinct_id
-    fields: created(), distinct_id(), email()
-  saved_funnels:
-    primary key: funnel_id
-    fields: funnel_id(), name()
-  activity_stream:
-    fields: event(), properties()
-  top_events:
-    primary key: event
-    fields: amount(), event(), percent_change()
-  event_property_names:
-    primary key: name
-    fields: count(), name()
-  project_annotations:
+    fields: id(), name(), source_operation(), status()
+  list_all_schemas_for_project:
     primary key: id
-    fields: date(), description(), id(), tags(), user()
-  project_annotation:
+    fields: id(), name(), projectId(), source_operation(), status()
+  list_schemas_for_entity:
     primary key: id
-    fields: date(), description(), id(), tags(), user()
-  annotation_tags:
+    fields: entityType(), id(), name(), projectId(), source_operation(), status()
+  list_schemas_by_entity_and_name:
     primary key: id
-    fields: has_annotations(), id(), name(), project_id()
+    fields: entityType(), id(), name(), projectId(), source_operation(), status()
+  list_warehouse_pipeline_jobs:
+    primary key: id
+    fields: id(), name(), source_operation(), status()
+  get_warehouse_pipeline_status:
+    primary key: id
+    fields: id(), name(), source_operation(), status()
+  list_warehouse_pipeline_sync_dates:
+    primary key: id
+    fields: id(), name(), source_operation(), status()
+  list_service_accounts:
+    primary key: id
+    fields: id(), name(), organizationId(), source_operation(), status()
+  get_service_account:
+    primary key: id
+    fields: id(), name(), organizationId(), serviceAccountId(), source_operation(), status()
+  list_project_service_accounts:
+    primary key: id
+    fields: id(), name(), projectId(), source_operation(), status()
+  list_all_annotations_for_project:
+    primary key: id
+    fields: id(), name(), projectId(), source_operation(), status()
+  get_annotation:
+    primary key: id
+    fields: annotationId(), id(), name(), projectId(), source_operation(), status()
+  get_annotation_tags:
+    primary key: id
+    fields: id(), name(), projectId(), source_operation(), status()
+  get_retrieval:
+    primary key: id
+    fields: id(), name(), source_operation(), status(), tracking_id()
+  get_deletion:
+    primary key: id
+    fields: id(), name(), source_operation(), status(), tracking_id()
+  list_warehouse_imports:
+    primary key: id
+    fields: id(), name(), projectId(), source_operation(), status()
+  get_warehouse_import:
+    primary key: id
+    fields: id(), importId(), name(), projectId(), source_operation(), status()
+  get_import_history:
+    primary key: id
+    fields: id(), importId(), name(), projectId(), source_operation(), status()
+  get_variant_assignments:
+    primary key: flag_key
+    fields: flag_key(), name(), source_operation(), status()
+  get_flag_definitions:
+    primary key: flag_key
+    fields: flag_key(), name(), source_operation(), status()
+  list_feature_flags:
+    primary key: id
+    fields: id(), name(), project_id(), source_operation(), status(), workspace_id()
+  get_feature_flag:
+    primary key: id
+    fields: flag_id(), id(), name(), project_id(), source_operation(), status(), workspace_id()
+  list_experiments:
+    primary key: id
+    fields: id(), name(), source_operation(), status(), workspace_id()
+  get_experiment:
+    primary key: id
+    fields: experiment_id(), id(), name(), source_operation(), status(), workspace_id()
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+REVERSE ETL ACTIONS
+  import_events:
+    endpoint: POST /import?strict={{ record.strict }}&project_id={{ record.project_id }}
+    required fields: strict, project_id, items
+    risk: Import Events via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  track_event:
+    endpoint: POST /track
+    required fields: items
+    risk: Track Events via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_set:
+    endpoint: POST /engage
+    required fields: items
+    risk: Set Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_set_property_once:
+    endpoint: POST /engage
+    required fields: items
+    risk: Set Property Once via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_numerical_add:
+    endpoint: POST /engage
+    required fields: items
+    risk: Increment Numerical Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  user_profile_union:
+    endpoint: POST /engage
+    required fields: items
+    risk: Union To List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_append_to_list_property:
+    endpoint: POST /engage
+    required fields: items
+    risk: Append to List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_remove_from_list_property:
+    endpoint: POST /engage
+    required fields: items
+    risk: Remove from List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_delete_property:
+    endpoint: POST /engage
+    required fields: items
+    risk: Delete Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  profile_batch_update:
+    endpoint: POST /engage
+    risk: Update Multiple Profiles via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_profile:
+    endpoint: POST /engage
+    required fields: items
+    risk: Delete Profile via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  group_set_property:
+    endpoint: POST /groups
+    required fields: items
+    risk: Update Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  group_set_property_once:
+    endpoint: POST /groups
+    required fields: items
+    risk: Set Property Once via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  group_delete_property:
+    endpoint: POST /groups
+    required fields: items
+    risk: Delete Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  group_remove_from_list_property:
+    endpoint: POST /groups
+    required fields: items
+    risk: Remove from List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  group_union:
+    endpoint: POST /groups
+    required fields: items
+    risk: Union To List Property via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  group_batch_update:
+    endpoint: POST /groups
+    risk: Batch Update Group Profiles via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_group:
+    endpoint: POST /groups
+    required fields: items
+    risk: Delete Group via documented Mixpanel ingestion API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_identity:
+    endpoint: POST /track
+    required fields: data
+    risk: Create Identity via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution.
+  identity_create_alias:
+    endpoint: POST /track
+    required fields: data
+    risk: Create Alias via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution.
+  identity_merge:
+    endpoint: POST /import?strict={{ record.strict }}
+    required fields: strict, items
+    risk: Merge Identities via documented Mixpanel identity API; reverse ETL requires plan, preview, explicit approval, and execution.
+  upload_schemas_for_project:
+    endpoint: POST /projects/{{ record.projectId }}/schemas
+    required fields: projectId, entries
+    risk: Create/Replace Multiple via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_all_schemas_in_project:
+    endpoint: DELETE /projects/{{ record.projectId }}/schemas
+    required fields: projectId
+    risk: Delete all Schemas via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_schemas_for_entity:
+    endpoint: DELETE /projects/{{ record.projectId }}/schemas/{{ record.entityType }}
+    required fields: projectId, entityType
+    risk: Delete for Entity via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_schema_by_entity_and_name:
+    endpoint: DELETE /projects/{{ record.projectId }}/schemas/{{ record.entityType }}/{{ record.name }}
+    required fields: projectId, entityType, name
+    risk: Delete for Entity and Name via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.
+  upload_schema_by_entity_and_name:
+    endpoint: POST /projects/{{ record.projectId }}/schemas/{{ record.entityType }}/{{ record.name }}
+    required fields: projectId, entityType, name
+    risk: Create/Replace One via documented Mixpanel lexicon-schemas API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_warehouse_pipeline:
+    endpoint: POST /nessie/pipeline/create
+    required fields: type, from_date
+    risk: Create Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution.
+  edit_warehouse_pipeline:
+    endpoint: POST /nessie/pipeline/edit
+    required fields: name
+    risk: Edit Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution.
+  cancel_warehouse_pipeline:
+    endpoint: POST /nessie/pipeline/cancel
+    required fields: name
+    risk: Delete Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution.
+  pause_warehouse_pipeline:
+    endpoint: POST /nessie/pipeline/pause
+    required fields: name
+    risk: Pause Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution.
+  resume_warehouse_pipeline:
+    endpoint: POST /nessie/pipeline/resume
+    required fields: name
+    risk: Resume Pipeline via documented Mixpanel data-pipelines API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_service_account:
+    endpoint: POST /organizations/{{ record.organizationId }}/service-accounts
+    required fields: organizationId, username
+    risk: Create Service Account via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_service_account:
+    endpoint: DELETE /organizations/{{ record.organizationId }}/service-accounts/{{ record.serviceAccountId }}
+    required fields: organizationId, serviceAccountId
+    risk: Delete Service Account via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution.
+  add_service_accounts_to_projects:
+    endpoint: POST /organizations/{{ record.organizationId }}/service-accounts/add-to-project
+    required fields: organizationId, projects, service_account_ids
+    risk: Add Service Accounts To Projects via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution.
+  remove_service_accounts_from_projects:
+    endpoint: POST /organizations/{{ record.organizationId }}/service-accounts/remove-from-project
+    required fields: organizationId, projects
+    risk: Remove Service Accounts From Projects via documented Mixpanel service-accounts API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_annotation:
+    endpoint: POST /projects/{{ record.projectId }}/annotations
+    required fields: projectId
+    risk: Create Annotations via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution.
+  patch_annotation:
+    endpoint: PATCH /projects/{{ record.projectId }}/annotations/{{ record.annotationId }}
+    required fields: projectId, annotationId
+    risk: Patch Annotation via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_annotation:
+    endpoint: DELETE /projects/{{ record.projectId }}/annotations/{{ record.annotationId }}
+    required fields: projectId, annotationId
+    risk: Delete Annotation via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_annotation_tag:
+    endpoint: POST /projects/{{ record.projectId }}/annotations/tags
+    required fields: projectId
+    risk: Create Annotation Tag via documented Mixpanel annotations API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_retrieval:
+    endpoint: POST /data-retrievals/v3.0?token={{ record.token }}
+    required fields: token
+    risk: Create a Retrieval via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_deletion:
+    endpoint: POST /data-deletions/v3.0?token={{ record.token }}
+    required fields: token
+    risk: Create a Deletion via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_deletion:
+    endpoint: DELETE /data-deletions/v3.0/{{ record.tracking_id }}?token={{ record.token }}
+    required fields: tracking_id, token
+    risk: Cancel a Deletion via documented Mixpanel gdpr API; reverse ETL requires plan, preview, explicit approval, and execution.
+  update_warehouse_import:
+    endpoint: PATCH /projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}
+    required fields: projectId, importId, paused, run_every
+    risk: Update a warehouse import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_warehouse_import:
+    endpoint: DELETE /projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}
+    required fields: projectId, importId
+    risk: Delete a warehouse import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_event_stream_import:
+    endpoint: POST /projects/{{ record.projectId }}/warehouse-sources/imports/event-stream
+    required fields: projectId, import_type, warehouse_source_id, table_params, time_column_name, sync_mode
+    risk: Create an event stream import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_people_import:
+    endpoint: POST /projects/{{ record.projectId }}/warehouse-sources/imports/people
+    required fields: projectId, import_type, warehouse_source_id, table_params, user_column_name, sync_mode
+    risk: Create a people (user profiles) import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_groups_import:
+    endpoint: POST /projects/{{ record.projectId }}/warehouse-sources/imports/groups
+    required fields: projectId, import_type, warehouse_source_id, table_params, group_key, group_id_column, sync_mode
+    risk: Create a groups import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_lookup_table_import:
+    endpoint: POST /projects/{{ record.projectId }}/warehouse-sources/imports/lookup-table
+    required fields: projectId, import_type, warehouse_source_id, table_params, mixpanel_property, property_key_column_name, sync_mode
+    risk: Create a lookup table import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  run_an_import:
+    endpoint: PUT /projects/{{ record.projectId }}/warehouse-sources/imports/{{ record.importId }}/manual-sync
+    required fields: projectId, importId
+    risk: Run an import via documented Mixpanel warehouse-connectors API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_feature_flag:
+    endpoint: POST /projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags
+    required fields: project_id, workspace_id, name, key, tags, context, serving_method, ruleset
+    risk: Create Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_feature_flag:
+    endpoint: DELETE /projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags/{{ record.flag_id }}
+    required fields: project_id, workspace_id, flag_id
+    risk: Delete Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution.
+  update_feature_flag:
+    endpoint: PUT /projects/{{ record.project_id }}/workspaces/{{ record.workspace_id }}/feature-flags/{{ record.flag_id }}
+    required fields: project_id, workspace_id, flag_id, name, key, tags, context, serving_method, ruleset
+    risk: Update Feature Flag via documented Mixpanel feature-flags-management API; reverse ETL requires plan, preview, explicit approval, and execution.
+  create_experiment:
+    endpoint: POST /workspaces/{{ record.workspace_id }}/experiments
+    required fields: workspace_id, name
+    risk: Create Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  update_experiment:
+    endpoint: PATCH /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}
+    required fields: workspace_id, experiment_id
+    risk: Update Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  delete_experiment:
+    endpoint: DELETE /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}
+    required fields: workspace_id, experiment_id
+    risk: Delete Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  archive_experiment:
+    endpoint: POST /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/archive
+    required fields: workspace_id, experiment_id
+    risk: Archive Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  unarchive_experiment:
+    endpoint: DELETE /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/archive
+    required fields: workspace_id, experiment_id
+    risk: Unarchive Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  decide_experiment:
+    endpoint: PATCH /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/decide
+    required fields: workspace_id, experiment_id, success
+    risk: Decide Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  force_conclude_experiment:
+    endpoint: PUT /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/force_conclude
+    required fields: workspace_id, experiment_id
+    risk: Force Conclude Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+  launch_experiment:
+    endpoint: PUT /workspaces/{{ record.workspace_id }}/experiments/{{ record.experiment_id }}/launch
+    required fields: workspace_id, experiment_id
+    risk: Launch Experiment via documented Mixpanel experiments API; reverse ETL requires plan, preview, explicit approval, and execution.
+
 SECURITY
-  read risk: external Mixpanel Query/Application API read of cohort, annotation, profile, saved funnel, event breakdown, and annotation metadata
-  approval: none; read-only Query API
+  read risk: External Mixpanel API reads over documented Query/App/Data/Feature Flag endpoints; use bounded --limit/batch-size and connector config for the appropriate Mixpanel API host.
+  write risk: Typed Mixpanel reverse ETL mutations for ingestion, identity, schemas, data pipelines, service accounts, annotations, GDPR, warehouse imports, feature flags, and experiments; destructive/admin actions require typed destructive confirmation and reverse-ETL approval.
+  approval: No Mixpanel mutation executes from inspection/help/catalog. Reverse ETL writes require plan -> preview -> explicit approval -> execute; fixture-only status is not live certification.
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Inspect and operate documented Mixpanel API surfaces with guarded ETL/direct-read/reverse-ETL paths.
+  Usage: pm mixpanel <group> <command> [flags]
+  Source CLI: Mixpanel OpenAPI reference (https://docs.mixpanel.com/reference/overview)
+  Global flags:
+    --credential (string): Saved Mixpanel credential name.
+    --config (string_array): Connector config override key=value; use base_url for the appropriate Mixpanel API host.
+    --json (boolean): Emit JSON where supported.
+  Activity Feed
+  Check Status Of Deletion
+  Check Status Of Retrieval
+  Cohorts
+  Engage
+  Event Breakdown
+  Experiment Management
+  Export
+  Flag Management
+  Funnels
+  Get Annotation Tags
+  Get Flag Definitions
+  Get Variant Assignments
+  Insights
+  Jql
+  Lookup Tables
+  Project Membership
+  Retention
+  Retrieve Annotations
+  Retrieve Pipelines
+  Retrieve Schemas
+  Retrieve Service Accounts
+  Segmentation
+  Warehouse Imports
+  Other Commands
+    lookup-tables list-lookup-tables - List Lookup Tables [intent=etl availability=implemented stream=list_lookup_tables]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --project_id
+    insights insights-query - Query Saved Report [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --bookmark_id
+    funnels funnels-query - Query Saved Report [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --funnel_id, --from_date, --to_date, --length, --length_unit, --interval, --unit, --on, --where, --limit
+    funnels funnels-list-saved - List Saved Funnels [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id
+    retention retention-query - Query Retention Report [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --from_date, --to_date, --retention_type, --born_event, --event, --born_where, --where, --interval, --interval_count, --unit, --unbounded_retention, --on, --limit
+    retention retention-frequency-query - Query Frequency Report [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --from_date, --to_date, --unit, --addiction_unit, --event, --where, --on, --limit
+    segmentation segmentation-query - Query Segmentation Report [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --from_date, --to_date, --on, --unit, --interval, --where, --limit, --type, --format
+    segmentation segmentation-numeric-query - Numerically Bucket [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --from_date, --to_date, --on, --unit, --where, --type
+    segmentation segmentation-sum-query - Numerically Sum [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --from_date, --to_date, --on, --unit, --where
+    segmentation segmentation-query-average - Numerically Average [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --from_date, --to_date, --on, --unit, --where
+    activity-feed activity-stream-query - Profile Event Activity [intent=etl availability=implemented stream=activity_stream_query]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --project_id, --workspace_id, --distinct_ids, --from_date, --to_date
+    cohorts cohorts-list - List Saved Cohorts [intent=direct_read availability=planned]; risk: Blocked/planned Mixpanel operation.; notes: Mixpanel documents this Query API operation as POST without a JSON body; the current safe operation direct-read executor supports bounded JSON GET/POST only, so this remains planned rather than exposing a form/raw passthrough.; flags: --project_id, --workspace_id
+    engage engage-query - Query Profiles [intent=direct_read availability=planned]; risk: Blocked/planned Mixpanel operation.; notes: Mixpanel documents this Query API operation as application/x-www-form-urlencoded profile search. The current safe operation direct-read executor does not expose form/raw provider searches, so this remains planned.; flags: --project_id, --workspace_id
+    event-breakdown list-recent-events - Aggregate Event Counts [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --type, --unit, --interval, --from_date, --to_date, --format
+    event-breakdown query-top-events - Today's Top Events [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --type, --limit
+    event-breakdown query-months-top-event-names - Top Events [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --type, --limit
+    event-breakdown query-event-properties - Aggregrated Event Property Values [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --name, --values, --type, --unit, --interval, --from_date, --to_date, --format, --limit
+    event-breakdown query-events-top-properties - Top Event Properties [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --limit
+    event-breakdown query-events-top-property-values - Top Event Property Values [intent=direct_read availability=implemented]; risk: Read-only bounded Mixpanel query response; output redacts secret-looking JSON fields.; flags: --project_id, --workspace_id, --event, --name, --limit
+    jql query-jql - Custom JQL Query [intent=direct_read availability=unsafe_or_disallowed]; risk: Blocked/planned Mixpanel operation.; notes: JQL accepts arbitrary JavaScript text. Exposing arbitrary provider-side scripts would violate Connector Guard; a future bounded report-specific wrapper must replace this raw script surface.; flags: --project_id, --workspace_id
+    export raw-event-export - Download Data [intent=direct_read availability=planned]; risk: Blocked/planned Mixpanel operation.; notes: Raw event export returns newline-delimited/binary-style export data and needs a bounded file/binary export executor before it can be enabled without overloading JSON direct-read output.; flags: --project_id, --from_date, --to_date, --limit, --event, --where, --time_in_ms
+    retrieve-schemas list-all-schemas-for-project - List Schemas [intent=etl availability=implemented stream=list_all_schemas_for_project]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    retrieve-schemas list-schemas-for-entity - List for Entity [intent=etl availability=implemented stream=list_schemas_for_entity]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --entity_name
+    retrieve-schemas list-schemas-by-entity-and-name - List for Entity and Name [intent=etl availability=implemented stream=list_schemas_by_entity_and_name]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    retrieve-pipelines list-warehouse-pipeline-jobs - List Pipelines [intent=etl availability=implemented stream=list_warehouse_pipeline_jobs]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --project_id
+    retrieve-pipelines get-warehouse-pipeline-status - Get Pipeline [intent=etl availability=implemented stream=get_warehouse_pipeline_status]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --project_id, --name, --summary, --status
+    retrieve-pipelines list-warehouse-pipeline-sync-dates - List Pipeline Logs [intent=etl availability=implemented stream=list_warehouse_pipeline_sync_dates]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --project_id, --name
+    retrieve-service-accounts list-service-accounts - List Service Accounts [intent=etl availability=implemented stream=list_service_accounts]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    retrieve-service-accounts get-service-account - Get Service Account [intent=etl availability=implemented stream=get_service_account]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    project-membership list-project-service-accounts - List Service Accounts For Project [intent=etl availability=implemented stream=list_project_service_accounts]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    retrieve-annotations list-all-annotations-for-project - List Annotations [intent=etl availability=implemented stream=list_all_annotations_for_project]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --fromdate, --todate
+    retrieve-annotations get-annotation - Get Annotation [intent=etl availability=implemented stream=get_annotation]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    get-annotation-tags get-annotation-tags - Get Annotation Tags [intent=etl availability=implemented stream=get_annotation_tags]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    check-status-of-retrieval get-retrieval - Check Status of Retrieval [intent=etl availability=implemented stream=get_retrieval]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --token
+    check-status-of-deletion get-deletion - Check Status of Deletion [intent=etl availability=implemented stream=get_deletion]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --token
+    warehouse-imports list-warehouse-imports - List all warehouse imports [intent=etl availability=implemented stream=list_warehouse_imports]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    warehouse-imports get-warehouse-import - Get a specific warehouse import [intent=etl availability=implemented stream=get_warehouse_import]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    warehouse-imports get-import-history - Get import job history [intent=etl availability=implemented stream=get_import_history]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    get-variant-assignments get-variant-assignments - Evaluate Feature Flags (GET) [intent=etl availability=implemented stream=get_variant_assignments]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --token, --project_id, --context
+    get-flag-definitions get-flag-definitions - Get Feature Flag Definitions [intent=etl availability=implemented stream=get_flag_definitions]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --token, --project_id
+    flag-management list-feature-flags - List Feature Flags [intent=etl availability=implemented stream=list_feature_flags]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.; flags: --include_archived
+    flag-management get-feature-flag - Get Feature Flag [intent=etl availability=implemented stream=get_feature_flag]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    experiment-management list-experiments - List Experiments [intent=etl availability=implemented stream=list_experiments]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+    experiment-management get-experiment - Get Experiment [intent=etl availability=implemented stream=get_experiment]; risk: Read-only Mixpanel stream; use --limit/ETL batching for large responses.
+  Help topics:
+    hosts - Mixpanel publishes Query, App, Ingestion, Export/Data Pipeline, and Feature Flag endpoints on different base URLs; set base_url per credential/operation family.
+    safety - No raw JQL, generic HTTP, raw CSV, or binary export passthrough is exposed by this connector.
+    writes - Mixpanel write actions are available through pm reverse plan/preview/run using the action names in pm connectors inspect mixpanel; provider-style mutation flags are intentionally not generated for complex payloads.
 
 EXAMPLES
   # Inspect as a manual
@@ -94,6 +504,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect mixpanel before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

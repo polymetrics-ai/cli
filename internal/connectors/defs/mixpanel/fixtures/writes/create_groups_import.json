@@ -1,0 +1,15 @@
+{
+  "record": {
+    "import_type": "groups",
+    "warehouse_source_id": 1,
+    "table_params": {},
+    "group_key": "fixture_group_key",
+    "group_id_column": "fixture_group_id_column",
+    "sync_mode": "time_based",
+    "projectId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/warehouse-sources/imports/groups"
+  }
+}

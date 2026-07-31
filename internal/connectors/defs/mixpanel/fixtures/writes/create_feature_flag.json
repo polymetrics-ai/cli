@@ -1,0 +1,33 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "key": "fixture_key",
+    "tags": [
+      "fixture_tags"
+    ],
+    "context": "fixture_context",
+    "serving_method": "client",
+    "ruleset": {
+      "variants": [
+        {
+          "key": "fixture_key",
+          "value": true,
+          "is_control": true,
+          "split": 1.25
+        }
+      ],
+      "rollout": [
+        {
+          "rollout_percentage": 1.25,
+          "variant_splits": {}
+        }
+      ]
+    },
+    "project_id": 1,
+    "workspace_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/workspaces/1/feature-flags"
+  }
+}

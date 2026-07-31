@@ -1,0 +1,19 @@
+{
+  "record": {
+    "entries": [
+      {
+        "name": "fixture_name",
+        "entityType": "event",
+        "schemaJson": {
+          "description": "fixture_description",
+          "properties": {}
+        }
+      }
+    ],
+    "projectId": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/1/schemas"
+  }
+}

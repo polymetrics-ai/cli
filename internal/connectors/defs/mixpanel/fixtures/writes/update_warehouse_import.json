@@ -1,0 +1,12 @@
+{
+  "record": {
+    "paused": true,
+    "run_every": 0,
+    "projectId": 1,
+    "importId": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/1/warehouse-sources/imports/1"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "items": [
+      {
+        "event": "fixture_event",
+        "properties": {
+          "time": 1,
+          "$insert_id": "fixture_insert_id",
+          "distinct_id": "fixture_distinct_id"
+        }
+      }
+    ],
+    "strict": "0",
+    "project_id": "fixture_project_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/import"
+  }
+}

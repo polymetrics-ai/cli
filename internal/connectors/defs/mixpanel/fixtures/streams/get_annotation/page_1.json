@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/synthetic-conformance-value/annotations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "get_annotation_fixture_1",
+          "name": "Get Annotation",
+          "status": "ok",
+          "source_operation": "get-annotation",
+          "projectId": "fixture_projectid",
+          "annotationId": "fixture_annotationid"
+        }
+      ]
+    }
+  }
+}

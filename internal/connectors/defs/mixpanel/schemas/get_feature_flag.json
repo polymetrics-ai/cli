@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Get Feature Flag",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "integer"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_operation": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "workspace_id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "flag_id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

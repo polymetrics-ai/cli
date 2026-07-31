@@ -1,0 +1,9 @@
+{
+  "record": {
+    "token": "synthetic-fixture-redacted"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/data-deletions/v3.0"
+  }
+}

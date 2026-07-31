@@ -1,0 +1,10 @@
+{
+  "record": {
+    "projectId": 1,
+    "importId": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/1/warehouse-sources/imports/1"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "projectId": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/1/schemas"
+  }
+}

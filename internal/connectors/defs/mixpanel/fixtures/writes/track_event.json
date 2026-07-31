@@ -1,0 +1,17 @@
+{
+  "record": {
+    "items": [
+      {
+        "event": "fixture_event",
+        "properties": {
+          "token": "synthetic-fixture-redacted",
+          "time": 1
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/track"
+  }
+}

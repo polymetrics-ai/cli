@@ -1,0 +1,9 @@
+{
+  "record": {
+    "data": "fixture_data"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/track"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "items": [
+      {
+        "$token": "synthetic-fixture-redacted",
+        "$group_key": "fixture_group_key",
+        "$group_id": "fixture_group_id",
+        "$remove": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups"
+  }
+}

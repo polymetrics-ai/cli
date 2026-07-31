@@ -1,0 +1,19 @@
+{
+  "record": {
+    "items": [
+      {
+        "event": "fixture_event",
+        "properties": {
+          "$distinct_ids": [
+            "fixture_distinct_ids"
+          ]
+        }
+      }
+    ],
+    "strict": "0"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/import"
+  }
+}

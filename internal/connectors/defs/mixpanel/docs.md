@@ -1,108 +1,69 @@
-# Overview
+# Mixpanel connector
 
-Mixpanel reads 10 stream(s).
+## Overview
 
-Readable streams: `cohorts`, `annotations`, `engage`, `saved_funnels`, `activity_stream`,
-`top_events`, `event_property_names`, `project_annotations`, `project_annotation`,
-`annotation_tags`.
+This bundle is generated from the official Mixpanel OpenAPI YAML files linked from <https://docs.mixpanel.com/reference/overview>. It records every documented operation exactly once in `api_surface.json` and keeps duplicate method/path rows distinct across Mixpanel API documents.
 
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://developer.mixpanel.com/reference/overview.
 
 ## Auth setup
 
-Connection fields:
+Use `pm connectors inspect mixpanel --json` before adding credentials. Supply secrets from environment variables or stdin only. The connector supports the existing Mixpanel custom Basic-auth hook: `username` config or `username_secret`, plus `password` or `api_secret`. Some documented Mixpanel operation families also require query/config fields such as `project_id`, `projectId`, `workspace_id`, or project-token fields; configure those on the saved credential or pass explicit `--config key=value` overrides.
 
-- `analysis_type` (optional, string); default `unique`; Mixpanel event analysis type for event
-  breakdown streams: general, unique, or average.
-- `annotation_id` (optional, string); Annotation id for the project_annotation detail stream.
-- `api_secret` (optional, secret, string); Never logged.
-- `base_url` (optional, string); default `https://mixpanel.com/api/2.0`; format `uri`; Mixpanel
-  Query API base URL override for tests or proxies.
-- `distinct_ids` (optional, string); JSON array string of distinct ids for the activity_stream Query
-  API stream.
-- `event_name` (optional, string); Event name for event-property breakdown streams.
-- `from_date` (optional, string); Optional yyyy-mm-dd lower date bound for current Query or
-  Annotations API streams.
-- `limit` (optional, string); Optional result limit for Query API list-style streams.
-- `max_pages` (optional, string); Maximum pages; leave unset, or use all/unlimited, to exhaust the
-  stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `1000`; Records per page (1-10000).
-- `password` (optional, secret, string); Mixpanel Query API service account secret (password). Used
-  only for Basic auth; never logged.
-- `project_id` (optional, string); Mixpanel project id used by current Query API, Annotations API,
-  and other project-scoped API endpoints.
-- `to_date` (optional, string); Optional yyyy-mm-dd upper date bound for current Query or
-  Annotations API streams.
-- `username` (optional, string).
-- `username_secret` (optional, secret, string); Never logged.
-- `workspace_id` (optional, string); Optional Mixpanel workspace id for Query API endpoints that
-  accept workspace_id.
+## Current parity ledger
 
-Secret fields are redacted in logs and write previews: `api_secret`, `password`, `username_secret`.
+| Disposition | Count |
+| --- | ---: |
+| Official operations | 105 |
+| Implemented fixture-backed operations | 100 |
+| Blocked/planned operations | 5 |
+| Excluded/not-applicable operations | 0 |
+| Certified live operations | 0 |
 
-Default configuration values: `analysis_type=unique`, `base_url=https://mixpanel.com/api/2.0`,
-`page_size=1000`.
-
-Authentication behavior:
-
-- Connector-specific authentication.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/cohorts/list`.
+| Lane | Official | Implemented | Blocked/planned |
+| --- | ---: | ---: | ---: |
+| `etl_read` | 24 | 24 | 0 |
+| `cdc_changefeed` | 1 | 1 | 0 |
+| `direct_read_query_search` | 18 | 15 | 3 |
+| `binary_file` | 1 | 0 | 1 |
+| `reverse_etl_write` | 61 | 60 | 1 |
 
 ## Streams notes
 
-Default pagination: cursor pagination; cursor parameter `page`; next token from `next`.
 
-- `cohorts`: GET `/cohorts/list` - records path `cohorts`; query `limit`=`{{ config.page_size }}`;
-  cursor pagination; cursor parameter `page`; next token from `next`.
-- `annotations`: GET `/annotations` - records path `annotations`; query `limit`=`{{ config.page_size
-  }}`; cursor pagination; cursor parameter `page`; next token from `next`.
-- `engage`: GET `/engage` - records path `results`; query `limit`=`{{ config.page_size }}`; cursor
-  pagination; cursor parameter `page`; next token from `next`.
-- `saved_funnels`: GET `https://mixpanel.com/api/query/funnels/list` - records path `.`; query
-  `project_id` from template `{{ config.project_id }}`, omitted when absent; `workspace_id` from
-  template `{{ config.workspace_id }}`, omitted when absent; cursor pagination; cursor parameter
-  `page`; next token from `next`.
-- `activity_stream`: GET `https://mixpanel.com/api/query/stream/query` - records path
-  `results.events`; query `distinct_ids`=`{{ config.distinct_ids }}`; `from_date`=`{{
-  config.from_date }}`; `project_id` from template `{{ config.project_id }}`, omitted when absent;
-  `to_date`=`{{ config.to_date }}`; `workspace_id` from template `{{ config.workspace_id }}`,
-  omitted when absent; cursor pagination; cursor parameter `page`; next token from `next`.
-- `top_events`: GET `https://mixpanel.com/api/query/events/top` - records path `events`; query
-  `limit` from template `{{ config.limit }}`, omitted when absent; `project_id` from template `{{
-  config.project_id }}`, omitted when absent; `type`=`{{ config.analysis_type }}`; `workspace_id`
-  from template `{{ config.workspace_id }}`, omitted when absent; cursor pagination; cursor
-  parameter `page`; next token from `next`.
-- `event_property_names`: GET `https://mixpanel.com/api/query/events/properties/top` - records path
-  `.`; flattens keyed objects; key field `name`; query `event`=`{{ config.event_name }}`; `limit`
-  from template `{{ config.limit }}`, omitted when absent; `project_id` from template `{{
-  config.project_id }}`, omitted when absent; `workspace_id` from template `{{ config.workspace_id
-  }}`, omitted when absent; cursor pagination; cursor parameter `page`; next token from `next`.
-- `project_annotations`: GET `https://mixpanel.com/api/app/projects/{{ config.project_id
-  }}/annotations` - records path `results`; query `fromDate` from template `{{ config.from_date }}`,
-  omitted when absent; `toDate` from template `{{ config.to_date }}`, omitted when absent; cursor
-  pagination; cursor parameter `page`; next token from `next`.
-- `project_annotation`: GET `https://mixpanel.com/api/app/projects/{{ config.project_id
-  }}/annotations/{{ config.annotation_id }}` - single-object response; records path `results`;
-  cursor pagination; cursor parameter `page`; next token from `next`.
-- `annotation_tags`: GET `https://mixpanel.com/api/app/projects/{{ config.project_id
-  }}/annotations/tags` - records path `.`; cursor pagination; cursor parameter `page`; next token
-  from `next`.
+- **Streams:** 25 documented read/changefeed-like operations are declared as bounded replay-tested streams under `streams.json`.
+- **Direct reads:** 15 safe JSON Query API GET operations are declared in `operations.json` and exposed through `cli_surface.json` with `json_redacted` output.
+- **Writes:** 60 documented mutations are declared as typed reverse-ETL write actions with closed record schemas and sanitized write fixtures.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Mixpanel Query/Application API read of cohort,
-annotation, profile, saved funnel, event breakdown, and annotation metadata.
+Reverse-ETL actions are typed and approval-gated. Destructive/admin operations use destructive confirmation metadata and idempotency notes where supported by the provider surface. Use `pm reverse plan`, `pm reverse preview`, and `pm reverse run` rather than attempting direct mutation from a help or inspect command.
+
+## Base URL families
+
+Mixpanel publishes different API documents on different hosts. `base_url` is intentionally configurable per credential or command invocation:
+
+| Family | Default host to use |
+| --- | --- |
+| Query API direct reads | `https://mixpanel.com/api/query` |
+| App API resources (schemas, service accounts, annotations, GDPR, warehouse, management, experiments) | `https://mixpanel.com/api/app` |
+| Ingestion and Identity APIs | `https://api.mixpanel.com` |
+| Export/Data Pipelines | `https://data.mixpanel.com/api/2.0` |
+| Feature flag evaluation | `https://api.mixpanel.com` |
+
+The default `base_url` is the Query API because direct provider-query commands are the most host-specific CLI surface. ETL and reverse-ETL workflows may use credentials configured with the operation family's host.
 
 ## Known limits
 
-- Batch defaults: read_page_size=1000.
-- API coverage includes 10 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=7, duplicate_of=1, non_data_endpoint=2, out_of_scope=1,
-  requires_elevated_scope=25.
+
+The connector does **not** expose arbitrary JQL scripts, generic HTTP method/path/body passthrough, raw CSV upload, raw binary export, shell, or local file escape hatches. Unsupported official operations remain blocked/planned in `api_surface.json`:
+
+- `POST /jql` is disallowed as an arbitrary provider-side script surface.
+- `POST /cohorts/list` and `POST /engage` need a safe form/query direct-read executor.
+- `GET /export` needs a bounded binary/file export executor.
+- `PUT /lookup-tables/{id}` needs a typed CSV upload executor.
+
+Destructive/delete/admin operations are in scope when represented as typed reverse-ETL actions. Implemented destructive actions declare `confirm: "destructive"`, idempotent 404 handling where applicable, redaction metadata, and rely on the existing plan → preview → explicit approval → execute flow.
+
+## Fixture and certification status
+
+All implemented streams and write actions have sanitized replay fixtures. No live Mixpanel credentials were requested or used, no provider calls were made, and no live certification is claimed in this bundle.
