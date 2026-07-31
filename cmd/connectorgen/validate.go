@@ -228,6 +228,33 @@ func validateDir(fsys fs.FS) (Report, error) {
 	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}, nil
 }
 
+// validateSingleBundleDir loads and validates one named bundle from a defs-root
+// filesystem. It lets `connectorgen validate internal/connectors/defs/<name>`
+// use the same rules as a full defs-root validation while preserving the
+// historical full-tree behavior of validateDir.
+func validateSingleBundleDir(fsys fs.FS, name string) (Report, error) {
+	findings, warnings := validateBundleDir(fsys, name)
+	sort.Slice(findings, func(i, j int) bool {
+		if findings[i].Connector != findings[j].Connector {
+			return findings[i].Connector < findings[j].Connector
+		}
+		if findings[i].File != findings[j].File {
+			return findings[i].File < findings[j].File
+		}
+		return findings[i].Rule < findings[j].Rule
+	})
+	sort.Slice(warnings, func(i, j int) bool {
+		if warnings[i].Connector != warnings[j].Connector {
+			return warnings[i].Connector < warnings[j].Connector
+		}
+		if warnings[i].File != warnings[j].File {
+			return warnings[i].File < warnings[j].File
+		}
+		return warnings[i].Rule < warnings[j].Rule
+	})
+	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+}
+
 // bundleDirNames returns the sorted top-level directory names of fsys, the
 // same candidate set engine.LoadAll iterates.
 func bundleDirNames(fsys fs.FS) ([]string, error) {
@@ -1457,11 +1484,11 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
-			if cmd.Operation != "" && state.operation != nil {
+		if state.excluded || !state.hasExecutableSurface() {
+			if cmd.Operation != "" && state.hasOperation() {
 				continue
 			}
-			if cmd.Intent == "direct_read" && directReadCoverageMatches(state.coveredBy, cmd.Path) {
+			if cmd.Intent == "direct_read" && state.directReadCoverageMatches(cmd.Path) {
 				continue
 			}
 			findings = append(findings, Finding{
@@ -1472,20 +1499,20 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if cmd.Stream != "" && state.coveredBy.Stream != cmd.Stream {
+		if cmd.Stream != "" && !state.streamCoverageMatches(cmd.Stream) {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s without covered_by.stream %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, cmd.Stream),
 			})
 		}
-		if cmd.Write != "" && state.coveredBy.Write != cmd.Write {
+		if cmd.Write != "" && !state.writeCoverageMatches(cmd.Write) {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Write, cmd.Write),
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s without covered_by.write %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, cmd.Write),
 			})
 		}
 	}
@@ -1498,19 +1525,66 @@ func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceE
 		return endpoints
 	}
 	for _, ep := range surface.Endpoints {
-		endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
-			coveredBy: ep.CoveredBy,
-			excluded:  ep.Excluded != nil,
-			operation: ep.Operation,
+		key := surfaceEndpointKey(ep.Method, ep.Path)
+		state := endpoints[key]
+		if ep.CoveredBy != nil {
+			state.coveredBy = append(state.coveredBy, ep.CoveredBy)
 		}
+		if ep.Excluded != nil {
+			state.excluded = true
+		}
+		if ep.Operation != nil {
+			state.operations = append(state.operations, ep.Operation)
+		}
+		endpoints[key] = state
 	}
 	return endpoints
 }
 
 type cliSurfaceEndpointState struct {
-	coveredBy *engine.SurfaceCoverage
-	excluded  bool
-	operation *engine.SurfaceOperation
+	coveredBy  []*engine.SurfaceCoverage
+	excluded   bool
+	operations []*engine.SurfaceOperation
+}
+
+func (s cliSurfaceEndpointState) hasExecutableSurface() bool {
+	for _, covered := range s.coveredBy {
+		if covered.Stream != "" || covered.Write != "" || len(coveredDirectReadTargets(covered)) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func (s cliSurfaceEndpointState) hasOperation() bool {
+	return len(s.operations) > 0
+}
+
+func (s cliSurfaceEndpointState) streamCoverageMatches(stream string) bool {
+	for _, covered := range s.coveredBy {
+		if covered.Stream == stream {
+			return true
+		}
+	}
+	return false
+}
+
+func (s cliSurfaceEndpointState) writeCoverageMatches(write string) bool {
+	for _, covered := range s.coveredBy {
+		if covered.Write == write {
+			return true
+		}
+	}
+	return false
+}
+
+func (s cliSurfaceEndpointState) directReadCoverageMatches(path string) bool {
+	for _, covered := range s.coveredBy {
+		if directReadCoverageMatches(covered, path) {
+			return true
+		}
+	}
+	return false
 }
 
 func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {

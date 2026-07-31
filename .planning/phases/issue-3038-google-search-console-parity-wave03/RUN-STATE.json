@@ -1,0 +1,24 @@
+{
+  "phase": "issue-3038-google-search-console-parity-wave03",
+  "branch": "fm/cli-google-search-console-parity-wave03-r1",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase issue-3038-google-search-console-parity-wave03 --dry-run",
+  "gsdFallback": "manual universal runtime loop because scripts/gsd returned unknown GSD command: programming-loop while doctor passed",
+  "orchestrationDecisions": [
+    {
+      "cycle": "planning",
+      "decision": "local_critical_path",
+      "reason": "firstmate assigned one isolated worker for one connector scope; no mutating subagents spawned"
+    }
+  ],
+  "verificationPassed": true,
+  "verification": [
+    "go run ./cmd/connectorgen validate internal/connectors/defs/google-search-console",
+    "go test ./internal/connectors/conformance -run 'TestConformance/google-search-console' -count=1",
+    "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+    "go build ./cmd/pm",
+    "make connector-boundary",
+    "make verify",
+    "git diff --check"
+  ],
+  "status": "ready_to_commit"
+}

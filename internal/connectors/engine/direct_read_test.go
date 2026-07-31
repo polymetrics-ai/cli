@@ -158,6 +158,33 @@ func TestDirectReadRejectsPathTraversalBeforeNetwork(t *testing.T) {
 	}
 }
 
+func TestDirectReadEncodesOpaqueURLPathVariables(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.EscapedPath()
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+		PathParams: map[string]string{
+			"siteUrl":  "https://example.com/",
+			"feedpath": "https://example.com/sitemap.xml",
+		},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	const wantPath = "/webmasters/v3/sites/https:%2F%2Fexample.com%2F/sitemaps/https:%2F%2Fexample.com%2Fsitemap.xml"
+	if gotPath != wantPath {
+		t.Fatalf("path = %q, want %q", gotPath, wantPath)
+	}
+}
+
 func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
