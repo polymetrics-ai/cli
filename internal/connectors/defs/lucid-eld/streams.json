@@ -1,0 +1,85 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-API-Provider-Key": "{{ secrets.provider_api_key }}",
+      "X-API-Company-Key": "{{ secrets.company_api_key }}"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v2/company-info"
+    },
+    "error_map": [
+      {
+        "status": 400,
+        "hint": "lucid-eld rejected the request parameters; check vehicle_id, date format MM-DD-YYYY, status, limit, and page values"
+      },
+      {
+        "status": 401,
+        "hint": "lucid-eld provider/company API keys are missing or invalid; re-run pm credentials add lucid-eld"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "lucid-eld request was rate limited by the provider key"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "drivers",
+      "path": "/v2/drivers",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 2
+      },
+      "schema": "schemas/drivers.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "vehicles",
+      "path": "/v2/vehicles",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "limit",
+        "start_page": 1,
+        "page_size": 100,
+        "max_pages": 2
+      },
+      "schema": "schemas/vehicles.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "vehicle_location_history",
+      "path": "/v2/vehicle-location-history/{{ config.vehicle_id }}",
+      "query": {
+        "start_date": "{{ config.start_date }}",
+        "end_date": "{{ config.end_date }}",
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "next_page_token",
+        "token_path": "next_page_token",
+        "max_pages": 2
+      },
+      "schema": "schemas/vehicle_location_history.json",
+      "projection": "passthrough"
+    }
+  ]
+}

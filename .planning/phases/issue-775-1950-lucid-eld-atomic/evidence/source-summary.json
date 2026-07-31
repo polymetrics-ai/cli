@@ -1,0 +1,82 @@
+{
+  "openapi": {
+    "url": "https://api.drivehos.app/partner/swagger/doc.json",
+    "fetched_at": "2026-07-30T01:56:20.128346+00:00",
+    "status": 200,
+    "content_type": "application/json",
+    "bytes": 19882,
+    "sha256": "1b3756f4c69c9133e24754a856d2fe9ec2b08768edd5dec25b899f564ddb7ec4",
+    "swagger": "2.0",
+    "definitions": ["handlers.ResponseV2"],
+    "securityDefinitions": {},
+    "operation_count": 8,
+    "operations": [
+      {
+        "method": "GET",
+        "path": "/v2/company-info",
+        "summary": "Get company info",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/driver/{driver_id}",
+        "summary": "Get driver by ID",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "driver_id:path:required"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/drivers",
+        "summary": "Get drivers list",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "limit:query:default=100:max=1000", "page:query:default=1"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/latest-driver-status",
+        "summary": "Get drivers last status",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "driver_id:query:optional", "limit:query:default=100:max=1000", "page:query"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/latest-vehicle-status",
+        "summary": "Get last vehicle status",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "vehicle_id:query:optional", "limit:query:default=100:max=200", "page:query"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/vehicle-location-history/{vehicle_id}",
+        "summary": "Get vehicle location history",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "vehicle_id:path:required", "start_date:query:required:MM-DD-YYYY", "end_date:query:required:MM-DD-YYYY", "next_page_token:query:optional", "limit:query:default=100:max=1000"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/vehicle/{vehicle_id}",
+        "summary": "Get vehicle by ID",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "vehicle_id:path:required"]
+      },
+      {
+        "method": "GET",
+        "path": "/v2/vehicles",
+        "summary": "Get list of vehicles",
+        "parameters": ["X-API-Provider-Key:header:required", "X-API-Company-Key:header:required", "status:query:optional:active|inactive", "limit:query:default=100:max=1000", "page:query"]
+      }
+    ]
+  },
+  "swagger_ui": {
+    "url": "https://api.drivehos.app/partner/swagger",
+    "fetched_at": "2026-07-30T01:56:21.417976+00:00",
+    "status": 200,
+    "content_type": "text/html",
+    "bytes": 3609,
+    "sha256": "f5f4f0a04d06a641aaafd89d531bbaf22c7ae91c338e6c611cfc6cec69bfe060",
+    "summary": "Swagger UI shell that loads the official OpenAPI document."
+  },
+  "withterminal_markdown": {
+    "url": "https://docs.withterminal.com/providers/tsp/lucid-eld.md",
+    "fetched_at": "2026-07-30T01:56:53.948860+00:00",
+    "status": 200,
+    "content_type": "text/markdown; charset=utf-8",
+    "bytes": 13495,
+    "sha256": "df18b088f94701c22763e354b624cb45aec46327d0100a2448ae385e611b9821",
+    "summary_file": "withterminal-provider.md"
+  }
+}

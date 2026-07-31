@@ -1,0 +1,548 @@
+{
+    "schemes": [],
+    "swagger": "2.0",
+    "info": {
+        "description": "",
+        "title": "",
+        "contact": {},
+        "version": ""
+    },
+    "host": "",
+    "basePath": "",
+    "paths": {
+        "/v2/company-info": {
+            "get": {
+                "description": "Get company info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get company info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/driver/{driver_id}": {
+            "get": {
+                "description": "Get driver by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get driver by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Driver ID",
+                        "name": "driver_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/drivers": {
+            "get": {
+                "description": "Get drivers list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get drivers list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 100,
+                        "description": "Limit (default 100, max 1000)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/latest-driver-status": {
+            "get": {
+                "description": "Get drivers last status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get drivers last status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Driver ID",
+                        "name": "driver_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit (default 100, max 1000)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/latest-vehicle-status": {
+            "get": {
+                "description": "Get last vehicle status with comprehensive OBD data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get last vehicle status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Vehicle ID",
+                        "name": "vehicle_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit (default 100, max 200)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/vehicle-location-history/{vehicle_id}": {
+            "get": {
+                "description": "Get vehicle location history",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get vehicle location history",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Vehicle ID",
+                        "name": "vehicle_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date in MM-DD-YYYY format",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date in MM-DD-YYYY format",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Token for next",
+                        "name": "next_page_token",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Records per page (default 100, max 1000)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/vehicle/{vehicle_id}": {
+            "get": {
+                "description": "Get vehicle by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get vehicle by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Vehicle ID",
+                        "name": "vehicle_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/vehicles": {
+            "get": {
+                "description": "Get list of vehicles",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partner-v2"
+                ],
+                "summary": "Get list of vehicles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider API Key (with rate limiting)",
+                        "name": "X-API-Provider-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company API Key (no rate limiting)",
+                        "name": "X-API-Company-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by status (active/inactive)",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit (default 100, max 1000)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ResponseV2"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.ResponseV2": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "description": {
+                    "type": "string"
+                },
+                "next_page_token": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "status_code": {
+                    "type": "integer"
+                },
+                "total_elements": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

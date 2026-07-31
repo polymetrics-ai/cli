@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/company-info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "company_id": "company_fixture_001",
+        "name": "Synthetic Fleet"
+      },
+      "description": "synthetic fixture response",
+      "next_page_token": "",
+      "page": 1,
+      "size": 100,
+      "status_code": 200,
+      "total_elements": 101,
+      "total_pages": 2
+    }
+  }
+}

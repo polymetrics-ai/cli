@@ -268,6 +268,7 @@
 - [lob](lob/MANUAL.md): Reads Lob addresses, postcards, letters, checks, and bank accounts through the Lob print & mail REST API.
 - [lokalise](lokalise/MANUAL.md): Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API.
 - [looker](looker/MANUAL.md): Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.
+- [lucid-eld](lucid-eld/MANUAL.md): Reads DriveHOS/Lucid ELD Partner API v2 company, driver, vehicle, latest status, and vehicle location history data through bounded read-only GET endpoints. The official API surface documents no mutations, reports, webhooks, or binary/media operations.
 - [luma](luma/MANUAL.md): Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.
 - [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
 - [mailerlite](mailerlite/MANUAL.md): Reads MailerLite subscribers, campaigns, groups, segments, and automations through the MailerLite v2 REST API.

@@ -1,0 +1,271 @@
+{
+  "tagline": "Read DriveHOS/Lucid ELD Partner API v2 company, driver, vehicle, status, and vehicle-location data.",
+  "usage": "pm lucid-eld <command> [flags]",
+  "source_cli": {
+    "name": "DriveHOS/Lucid ELD Partner API v2",
+    "docs": "https://api.drivehos.app/partner/swagger/doc.json",
+    "reference": "OpenAPI 2.0 fetched 2026-07-30",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "company",
+      "title": "Company",
+      "commands": [
+        "company"
+      ]
+    },
+    {
+      "id": "drivers",
+      "title": "Drivers",
+      "commands": [
+        "drivers"
+      ]
+    },
+    {
+      "id": "vehicles",
+      "title": "Vehicles",
+      "commands": [
+        "vehicles"
+      ]
+    },
+    {
+      "id": "vehicle-location-history",
+      "title": "Vehicle location history",
+      "commands": [
+        "vehicle-location-history"
+      ]
+    },
+    {
+      "id": "latest-status",
+      "title": "Latest status",
+      "commands": [
+        "latest"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Lucid ELD request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value, including vehicle_id/start_date/end_date for vehicle location history."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit for stream commands."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum direct-read response bytes; typed operations declare their own lower cap."
+    }
+  ],
+  "commands": [
+    {
+      "path": "drivers list",
+      "summary": "List Lucid ELD drivers as passthrough ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "drivers",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/drivers"
+        }
+      ],
+      "examples": [
+        "pm lucid-eld drivers list --json"
+      ],
+      "notes": "The stream schema is passthrough because the official OpenAPI response envelope leaves data untyped. Provider pagination uses the fixed Tier-1 page size of 100; the global --limit flag remains a client-side ETL row cap only."
+    },
+    {
+      "path": "vehicles list",
+      "summary": "List Lucid ELD vehicles as passthrough ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vehicles",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/vehicles"
+        }
+      ],
+      "examples": [
+        "pm lucid-eld vehicles list --json"
+      ],
+      "notes": "The stream schema is passthrough because the official OpenAPI response envelope leaves data untyped. Provider status/page/limit query controls are not exposed in this Tier-1 pilot; pagination uses the fixed page size of 100 and the global --limit flag remains a client-side ETL row cap only."
+    },
+    {
+      "path": "vehicle-location-history list",
+      "summary": "List vehicle location history for the configured vehicle_id and MM-DD-YYYY date window.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vehicle_location_history",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/vehicle-location-history/{vehicle_id}"
+        }
+      ],
+      "examples": [
+        "pm lucid-eld vehicle-location-history list --json --config vehicle_id=vehicle_fixture_001 --config start_date=01-01-2026 --config end_date=01-02-2026"
+      ],
+      "notes": "vehicle_id, start_date, and end_date are connector config values for this stream. The engine resolves those config templates before request-query overrides, so this Tier-1 command does not expose separate date or provider limit flags."
+    },
+    {
+      "path": "company info get",
+      "summary": "Retrieve Lucid ELD company info.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "lucid-eld.company_info_get",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company-info"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
+      "approval": "none: read-only bounded GET",
+      "examples": [
+        "pm lucid-eld company info get --json"
+      ]
+    },
+    {
+      "path": "drivers get",
+      "summary": "Retrieve one Lucid ELD driver by driver_id.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "lucid-eld.drivers_get",
+      "flags": [
+        {
+          "name": "driver-id",
+          "type": "string",
+          "summary": "Driver ID path value.",
+          "maps_to": "path.driver_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/driver/{driver_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
+      "approval": "none: read-only bounded GET",
+      "examples": [
+        "pm lucid-eld drivers get --json --driver-id <driver_id>"
+      ]
+    },
+    {
+      "path": "vehicles get",
+      "summary": "Retrieve one Lucid ELD vehicle by vehicle_id.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "lucid-eld.vehicles_get",
+      "flags": [
+        {
+          "name": "vehicle-id",
+          "type": "string",
+          "summary": "Vehicle ID path value.",
+          "maps_to": "path.vehicle_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/vehicle/{vehicle_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
+      "approval": "none: read-only bounded GET",
+      "examples": [
+        "pm lucid-eld vehicles get --json --vehicle-id <vehicle_id>"
+      ]
+    },
+    {
+      "path": "latest driver statuses list",
+      "summary": "Retrieve latest Lucid ELD driver statuses with an optional driver_id filter and fixed provider limit.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "lucid-eld.latest_driver_statuses_list",
+      "flags": [
+        {
+          "name": "driver-id",
+          "type": "string",
+          "summary": "Optional driver ID query filter.",
+          "maps_to": "query.driver_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/latest-driver-status"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
+      "approval": "none: read-only bounded GET",
+      "examples": [
+        "pm lucid-eld latest driver statuses list --json --driver-id <driver_id>"
+      ],
+      "notes": "The operation declares fixed query.limit=100. The global --limit flag is not a provider page-size override for direct reads."
+    },
+    {
+      "path": "latest vehicle statuses list",
+      "summary": "Retrieve latest Lucid ELD vehicle statuses with an optional vehicle_id filter and fixed provider limit.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "lucid-eld.latest_vehicle_statuses_list",
+      "flags": [
+        {
+          "name": "vehicle-id",
+          "type": "string",
+          "summary": "Optional vehicle ID query filter.",
+          "maps_to": "query.vehicle_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/latest-vehicle-status"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
+      "approval": "none: read-only bounded GET",
+      "examples": [
+        "pm lucid-eld latest vehicle statuses list --json --vehicle-id <vehicle_id>"
+      ],
+      "notes": "The operation declares fixed query.limit=100. The global --limit flag is not a provider page-size override for direct reads."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "lucid-eld",
+      "summary": "Lucid ELD connector commands are definition-owned and read-only; no official mutation endpoints are documented."
+    }
+  ]
+}

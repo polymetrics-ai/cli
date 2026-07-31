@@ -197,6 +197,18 @@ type Report struct {
 // with ConnectorsChecked == 0 and no findings, matching engine.LoadAll's own
 // tolerance for defs/ shipping zero bundles before Wave F.
 func validateDir(fsys fs.FS) (Report, error) {
+	if name, ok := bundleRootName(fsys); ok {
+		parent := singleBundleRootFS{FS: fsys, name: name}
+		findings := []Finding{}
+		warnings := []Finding{}
+		bundleFindings, bundleWarnings := validateBundleDir(parent, name)
+		findings = append(findings, bundleFindings...)
+		warnings = append(warnings, bundleWarnings...)
+		sortValidationFindings(findings)
+		sortValidationFindings(warnings)
+		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
+	}
+
 	names, err := bundleDirNames(fsys)
 	if err != nil {
 		return Report{}, err
@@ -211,21 +223,53 @@ func validateDir(fsys fs.FS) (Report, error) {
 		findings = append(findings, bundleFindings...)
 		warnings = append(warnings, bundleWarnings...)
 	}
-	sortFindings := func(list []Finding) {
-		sort.Slice(list, func(i, j int) bool {
-			if list[i].Connector != list[j].Connector {
-				return list[i].Connector < list[j].Connector
-			}
-			if list[i].File != list[j].File {
-				return list[i].File < list[j].File
-			}
-			return list[i].Rule < list[j].Rule
-		})
-	}
-	sortFindings(findings)
-	sortFindings(warnings)
+	sortValidationFindings(findings)
+	sortValidationFindings(warnings)
 
 	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}, nil
+}
+
+func sortValidationFindings(list []Finding) {
+	sort.Slice(list, func(i, j int) bool {
+		if list[i].Connector != list[j].Connector {
+			return list[i].Connector < list[j].Connector
+		}
+		if list[i].File != list[j].File {
+			return list[i].File < list[j].File
+		}
+		return list[i].Rule < list[j].Rule
+	})
+}
+
+func bundleRootName(fsys fs.FS) (string, bool) {
+	raw, err := fs.ReadFile(fsys, "metadata.json")
+	if err != nil {
+		return "", false
+	}
+	var doc struct {
+		Name string `json:"name"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		return "", false
+	}
+	name := strings.TrimSpace(doc.Name)
+	return name, name != ""
+}
+
+type singleBundleRootFS struct {
+	fs.FS
+	name string
+}
+
+func (s singleBundleRootFS) Open(name string) (fs.File, error) {
+	if name == "." || name == s.name {
+		return s.FS.Open(".")
+	}
+	prefix := s.name + "/"
+	if strings.HasPrefix(name, prefix) {
+		return s.FS.Open(strings.TrimPrefix(name, prefix))
+	}
+	return nil, fs.ErrNotExist
 }
 
 // bundleDirNames returns the sorted top-level directory names of fsys, the

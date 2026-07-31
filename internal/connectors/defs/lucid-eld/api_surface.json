@@ -1,0 +1,65 @@
+{
+  "api": "Lucid ELD / DriveHOS Partner API v2 (OpenAPI 2.0)",
+  "docs": "https://api.drivehos.app/partner/swagger/doc.json",
+  "reviewed_at": "2026-07-30",
+  "operation_ledger_version": 1,
+  "scope": "Exact public unauthenticated DriveHOS/Lucid ELD Partner API v2 Swagger 2.0 inventory fetched from https://api.drivehos.app/partner/swagger/doc.json on 2026-07-30 (SHA-256 1b3756f4c69c9133e24754a856d2fe9ec2b08768edd5dec25b899f564ddb7ec4): 8 GET operations and no documented POST/PUT/PATCH/DELETE, report, webhook-registration, or binary/media operations. WithTerminal provider page https://docs.withterminal.com/providers/tsp/lucid-eld confirms Lucid ELD supports Driver, Vehicle, Latest Vehicle Location, and Vehicle Location models, lists crash reports and camera media as unsupported, and is used only as capability context rather than wire-schema evidence. covered_by targets are planned child-lane surfaces for #1952 streams and #1953 bounded direct reads; no write targets are present because the official inventory contains no mutations.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/company-info",
+      "covered_by": {
+        "direct_read": "company info get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/driver/{driver_id}",
+      "covered_by": {
+        "direct_read": "drivers get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/drivers",
+      "covered_by": {
+        "stream": "drivers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/latest-driver-status",
+      "covered_by": {
+        "direct_read": "latest driver statuses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/latest-vehicle-status",
+      "covered_by": {
+        "direct_read": "latest vehicle statuses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vehicle-location-history/{vehicle_id}",
+      "covered_by": {
+        "stream": "vehicle_location_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vehicle/{vehicle_id}",
+      "covered_by": {
+        "direct_read": "vehicles get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vehicles",
+      "covered_by": {
+        "stream": "vehicles"
+      }
+    }
+  ]
+}

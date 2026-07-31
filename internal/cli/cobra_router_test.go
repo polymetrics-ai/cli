@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 
@@ -275,6 +276,140 @@ func TestCobraRouterShellPreservesDynamicConnectorPassthroughWithLateGlobals(t *
 	}
 	if env.Kind != "ConnectorCommandRead" || env.Command != "issue list" || env.Stream != "issues" || env.Count != 1 {
 		t.Fatalf("envelope = %+v, want dynamic connector read result", env)
+	}
+}
+
+func TestCobraRouterDynamicLucidELDUsesConfigDateWindowAndRejectsProviderPaginationFlags(t *testing.T) {
+	var historyQuery url.Values
+	var latestDriverQuery url.Values
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/v2/vehicle-location-history/vehicle_fixture_001":
+			historyQuery = r.URL.Query()
+			_, _ = w.Write([]byte(`{
+				"data": [{"id": "history_fixture_001"}],
+				"description": "ok",
+				"next_page_token": "",
+				"page": 1,
+				"size": 1,
+				"status_code": 200,
+				"total_elements": 1,
+				"total_pages": 1
+			}`))
+		case "/v2/latest-driver-status":
+			latestDriverQuery = r.URL.Query()
+			_, _ = w.Write([]byte(`{"data": [{"id": "driver_status_fixture_001"}], "status_code": 200}`))
+		case "/v2/drivers", "/v2/vehicles":
+			_, _ = w.Write([]byte(`{"data": [], "status_code": 200}`))
+		default:
+			t.Fatalf("unexpected path %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	t.Setenv("PM_TEST_LUCID_PROVIDER_KEY", "fixture_provider_key")
+	t.Setenv("PM_TEST_LUCID_COMPANY_KEY", "fixture_company_key")
+	runCobraRouterCLI(t, []string{"init", "--root", root, "--json"})
+	runCobraRouterCLI(t, []string{
+		"credentials", "add", "lucid-router",
+		"--connector", "lucid-eld",
+		"--config", "base_url=" + srv.URL,
+		"--config", "vehicle_id=vehicle_fixture_001",
+		"--config", "start_date=01-01-2026",
+		"--config", "end_date=01-02-2026",
+		"--from-env", "provider_api_key=PM_TEST_LUCID_PROVIDER_KEY",
+		"--from-env", "company_api_key=PM_TEST_LUCID_COMPANY_KEY",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCobraRouterCLI(t, []string{
+		"lucid-eld", "vehicle-location-history", "list",
+		"--credential", "lucid-router",
+		"--limit", "1",
+		"--root", root,
+		"--json",
+	})
+	if got := historyQuery.Get("start_date"); got != "01-01-2026" {
+		t.Fatalf("history start_date = %q, want config-backed date window", got)
+	}
+	if got := historyQuery.Get("end_date"); got != "01-02-2026" {
+		t.Fatalf("history end_date = %q, want config-backed date window", got)
+	}
+	if got := historyQuery.Get("limit"); got != "100" {
+		t.Fatalf("history provider limit = %q, want fixed Tier-1 default 100", got)
+	}
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Stream  string `json:"stream"`
+		Count   int    `json:"count"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode history json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandRead" || env.Command != "vehicle-location-history list" || env.Stream != "vehicle_location_history" || env.Count != 1 {
+		t.Fatalf("history envelope = %+v, want dynamic connector read with one client-limited record", env)
+	}
+
+	runCobraRouterCLI(t, []string{
+		"lucid-eld", "latest", "driver", "statuses", "list",
+		"--credential", "lucid-router",
+		"--driver-id", "driver_fixture_001",
+		"--limit", "25",
+		"--root", root,
+		"--json",
+	})
+	if got := latestDriverQuery.Get("driver_id"); got != "driver_fixture_001" {
+		t.Fatalf("latest driver_id = %q, want command query filter", got)
+	}
+	if got := latestDriverQuery.Get("limit"); got != "100" {
+		t.Fatalf("latest driver provider limit = %q, want fixed operation default 100 despite global --limit", got)
+	}
+	if got := latestDriverQuery.Get("page"); got != "" {
+		t.Fatalf("latest driver page = %q, want no provider page override in Tier-1 pilot", got)
+	}
+
+	unsupported := []struct {
+		name string
+		args []string
+		want string
+	}{
+		{
+			name: "history start-date flag",
+			args: []string{"lucid-eld", "vehicle-location-history", "list", "--credential", "lucid-router", "--start-date", "02-01-2026", "--root", root, "--json"},
+			want: "unknown flag --start-date",
+		},
+		{
+			name: "drivers page flag",
+			args: []string{"lucid-eld", "drivers", "list", "--credential", "lucid-router", "--page", "2", "--root", root, "--json"},
+			want: "unknown flag --page",
+		},
+		{
+			name: "vehicles status flag",
+			args: []string{"lucid-eld", "vehicles", "list", "--credential", "lucid-router", "--status", "active", "--root", root, "--json"},
+			want: "unknown flag --status",
+		},
+		{
+			name: "latest page flag",
+			args: []string{"lucid-eld", "latest", "driver", "statuses", "list", "--credential", "lucid-router", "--page", "2", "--root", root, "--json"},
+			want: "unknown flag --page",
+		},
+	}
+	for _, tt := range unsupported {
+		t.Run(tt.name, func(t *testing.T) {
+			var outBuf, errBuf bytes.Buffer
+			code := Run(tt.args, &outBuf, &errBuf)
+			if code == 0 {
+				t.Fatalf("Run(%v) code = 0, want rejection for removed provider flag; stdout=%s stderr=%s", tt.args, outBuf.String(), errBuf.String())
+			}
+			if got := outBuf.String() + errBuf.String(); !strings.Contains(got, tt.want) {
+				t.Fatalf("Run(%v) output missing %q:\nstdout=%s\nstderr=%s", tt.args, tt.want, outBuf.String(), errBuf.String())
+			}
+		})
 	}
 }
 

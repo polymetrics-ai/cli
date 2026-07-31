@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lucid ELD Connection Specification",
+  "type": "object",
+  "required": [
+    "provider_api_key",
+    "company_api_key"
+  ],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.drivehos.app",
+      "description": "DriveHOS/Lucid ELD Partner API origin. The official Swagger document is hosted at https://api.drivehos.app/partner/swagger/doc.json and declares root-relative /v2 paths. Override only if Lucid/DriveHOS supplies a different Partner API origin."
+    },
+    "provider_api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Provider API Key (with rate limiting), sent as the X-API-Provider-Key header."
+    },
+    "company_api_key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Company API Key (no rate limiting), sent as the X-API-Company-Key header."
+    },
+    "vehicle_id": {
+      "type": "string",
+      "description": "Vehicle ID used by the vehicle_location_history stream path. Single-vehicle direct reads can also pass vehicle_id as a command flag."
+    },
+    "start_date": {
+      "type": "string",
+      "pattern": "^(0[1-9]|1[0-2])-[0-3][0-9]-[0-9]{4}$",
+      "description": "Required vehicle location history start date in the official wire format MM-DD-YYYY."
+    },
+    "end_date": {
+      "type": "string",
+      "pattern": "^(0[1-9]|1[0-2])-[0-3][0-9]-[0-9]{4}$",
+      "description": "Required vehicle location history end date in the official wire format MM-DD-YYYY."
+    }
+  }
+}

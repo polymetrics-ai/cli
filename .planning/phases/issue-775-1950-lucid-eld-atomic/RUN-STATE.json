@@ -1,0 +1,63 @@
+{
+  "issue": 1950,
+  "parent_issue": 775,
+  "phase": "issue-775-1950-lucid-eld-atomic",
+  "branch": "feat/1950-lucid-eld-operation-ledger",
+  "pr": 3166,
+  "gsd": {
+    "mode": "manual_fallback",
+    "doctor_passed": true,
+    "command_attempted": "scripts/gsd prompt programming-loop init --phase issue-775-1950-lucid-eld-atomic --dry-run",
+    "fallback_reason": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "verificationPassed": true,
+  "terminal": true,
+  "verificationNote": "PR #3166 review-fix gates passed, make verify passed, branch pushed, and PR body updated with review disposition",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan-relocation",
+      "decision": "local_critical_path",
+      "reason": "isolated worker owns one child issue/branch/cwd; recursive subagents are blocked"
+    },
+    {
+      "cycle": "tdd-red",
+      "decision": "local_critical_path",
+      "reason": "current branch was red from incomplete connector bundle and unrecognized GSD evidence path; red commands captured before production edits"
+    },
+    {
+      "cycle": "execute-atomic-bundle",
+      "decision": "local_critical_path",
+      "reason": "one connector-def directory plus required generated CLI/docs parity artifacts; no independent subagent lane exists"
+    },
+    {
+      "cycle": "handoff",
+      "decision": "local_critical_path",
+      "reason": "branch was locally verified and ready for push/PR update; no recursive delegation used"
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #3166 review findings are in the assigned Lucid ELD bundle/docs/test scope; no recursive subagent tool is available to this worker"
+    },
+    {
+      "cycle": "review-fix-tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "focused red CLI/runtime flag-behavior test was added inline before production JSON/docs edits"
+    },
+    {
+      "cycle": "review-fix-execute",
+      "decision": "local_critical_path",
+      "reason": "single connector command surface/docs correction plus focused CLI test; no disjoint worker lane exists"
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "requested verification block and make verify passed locally"
+    },
+    {
+      "cycle": "review-fix-handoff",
+      "decision": "local_critical_path",
+      "reason": "branch pushed and PR body updated; worker handoff ready"
+    }
+  ]
+}
