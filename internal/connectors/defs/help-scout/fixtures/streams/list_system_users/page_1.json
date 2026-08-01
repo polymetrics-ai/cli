@@ -10,20 +10,46 @@
   "response": {
     "status": 200,
     "body": {
+      "_embedded": {
+        "system_users": [
+          {
+            "_links": {
+              "self": {
+                "href": "https://api.helpscout.net/v3/system-users/155250"
+              }
+            },
+            "id": 155250,
+            "type": "system_user",
+            "firstName": "Fixture",
+            "lastName": "Agent",
+            "initials": "FA",
+            "timezone": "UTC",
+            "role": "user",
+            "createdAt": "2026-04-22T15:17:33Z",
+            "updatedAt": "2026-04-22T15:17:33Z"
+          }
+        ]
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v3/system-users?page=1"
+        },
+        "first": {
+          "href": "https://api.helpscout.net/v3/system-users?page=1"
+        },
+        "last": {
+          "href": "https://api.helpscout.net/v3/system-users?page=1"
+        },
+        "page": {
+          "href": "https://api.helpscout.net/v3/system-users{?page,size}",
+          "templated": true
+        }
+      },
       "page": {
         "number": 1,
         "size": 50,
         "totalElements": 1,
         "totalPages": 1
-      },
-      "_embedded": {
-        "systemUsers": [
-          {
-            "id": "fixture_list_system_users_1",
-            "name": "Fixture List System Users",
-            "createdAt": "2026-01-01T00:00:00Z"
-          }
-        ]
       }
     }
   }

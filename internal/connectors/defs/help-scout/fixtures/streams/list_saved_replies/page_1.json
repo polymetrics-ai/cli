@@ -9,22 +9,18 @@
   },
   "response": {
     "status": 200,
-    "body": {
-      "page": {
-        "number": 1,
-        "size": 50,
-        "totalElements": 1,
-        "totalPages": 1
+    "body": [
+      {
+        "id": 123456,
+        "name": "Fixture saved reply one",
+        "preview": "Fixture saved reply preview one."
       },
-      "_embedded": {
-        "savedReplies": [
-          {
-            "id": "fixture_list_saved_replies_1",
-            "name": "Fixture List Saved Replies",
-            "createdAt": "2026-01-01T00:00:00Z"
-          }
-        ]
+      {
+        "id": 234567,
+        "name": "Fixture saved reply two",
+        "preview": "Fixture saved reply preview two.",
+        "chatPreview": "Fixture chat preview."
       }
-    }
+    ]
   }
 }

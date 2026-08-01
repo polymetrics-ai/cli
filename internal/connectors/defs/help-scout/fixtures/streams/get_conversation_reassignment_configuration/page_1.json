@@ -10,9 +10,16 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "fixture_get_conversation_reassignment_configuration_1",
-      "name": "Fixture Get Conversation Reassignment configuration",
-      "createdAt": "2026-01-01T00:00:00Z"
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/users/4/conversation-reassignment"
+        }
+      },
+      "enabled": true,
+      "awayDuration": {
+        "hours": 2,
+        "minutes": 30
+      }
     }
   }
 }

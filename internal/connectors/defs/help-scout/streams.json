@@ -102,7 +102,8 @@
       "name": "get_thread_original_source",
       "path": "/v2/conversations/{{ config.conversation_id }}/threads/{{ config.thread_id }}/original-source",
       "records": {
-        "path": "_embedded.original_source"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/get_thread_original_source.json",
       "projection": "passthrough"
@@ -111,7 +112,8 @@
       "name": "get_address",
       "path": "/v2/customers/{{ config.customer_id }}/address",
       "records": {
-        "path": "_embedded.address"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/get_address.json",
       "projection": "passthrough"
@@ -183,7 +185,7 @@
       "name": "list_social_profiles",
       "path": "/v2/customers/{{ config.customer_id }}/social-profiles",
       "records": {
-        "path": "_embedded.socialProfiles"
+        "path": "_embedded.social-profiles"
       },
       "schema": "schemas/list_social_profiles.json",
       "projection": "passthrough"
@@ -238,7 +240,8 @@
       "name": "get_routing_configuration",
       "path": "/v2/mailboxes/{{ config.mailbox_id }}/routing",
       "records": {
-        "path": "_embedded.routing"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/get_routing_configuration.json",
       "projection": "passthrough"
@@ -257,7 +260,7 @@
       "name": "list_saved_replies",
       "path": "/v2/mailboxes/{{ config.mailbox_id }}/saved-replies",
       "records": {
-        "path": "_embedded.savedReplies"
+        "path": "."
       },
       "schema": "schemas/list_saved_replies.json",
       "projection": "passthrough"
@@ -313,7 +316,7 @@
       "name": "list_organization_property_definitions",
       "path": "/v2/organizations/properties",
       "records": {
-        "path": "_embedded.properties"
+        "path": "_embedded.organization-properties"
       },
       "schema": "schemas/list_organization_property_definitions.json",
       "projection": "passthrough"
@@ -322,7 +325,7 @@
       "name": "list_customer_property_definitions",
       "path": "/v2/customer-properties",
       "records": {
-        "path": "_embedded.customer_properties"
+        "path": "_embedded.customer-properties"
       },
       "schema": "schemas/list_customer_property_definitions.json",
       "projection": "passthrough"
@@ -351,7 +354,7 @@
       "name": "list_system_users",
       "path": "/v3/system-users",
       "records": {
-        "path": "_embedded.systemUsers"
+        "path": "_embedded.system_users"
       },
       "schema": "schemas/list_system_users.json",
       "projection": "passthrough"
@@ -379,7 +382,7 @@
       "name": "list_team_members",
       "path": "/v2/teams/{{ config.team_id }}/members",
       "records": {
-        "path": "_embedded.members"
+        "path": "_embedded.users"
       },
       "schema": "schemas/list_team_members.json",
       "projection": "passthrough"
@@ -397,7 +400,8 @@
       "name": "get_conversation_reassignment_configuration",
       "path": "/v2/users/{{ config.user_id }}/conversation-reassignment",
       "records": {
-        "path": "_embedded.conversation_reassignment"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/get_conversation_reassignment_configuration.json",
       "projection": "passthrough"
@@ -425,7 +429,8 @@
       "name": "get_resource_owner",
       "path": "/v2/users/me",
       "records": {
-        "path": "_embedded.me"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/get_resource_owner.json",
       "projection": "passthrough"
@@ -434,7 +439,8 @@
       "name": "get_user_status",
       "path": "/v2/users/{{ config.user_id }}/status",
       "records": {
-        "path": "_embedded.statuses"
+        "path": ".",
+        "single_object": true
       },
       "schema": "schemas/get_user_status.json",
       "projection": "passthrough"
@@ -443,7 +449,7 @@
       "name": "list_users_statuses",
       "path": "/v2/users/status",
       "records": {
-        "path": "_embedded.statuses"
+        "path": "_embedded.userStatuses"
       },
       "schema": "schemas/list_users_statuses.json",
       "projection": "passthrough"

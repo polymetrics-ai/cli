@@ -10,20 +10,34 @@
   "response": {
     "status": 200,
     "body": {
-      "page": {
-        "number": 1,
-        "size": 50,
-        "totalElements": 1,
-        "totalPages": 1
-      },
       "_embedded": {
-        "socialProfiles": [
+        "social-profiles": [
           {
-            "id": "fixture_list_social_profiles_1",
-            "name": "Fixture List Social Profiles",
-            "createdAt": "2026-01-01T00:00:00Z"
+            "_links": {
+              "self": {
+                "href": "https://api.helpscout.net/v2/customers/100/social-profiles/1"
+              }
+            },
+            "id": 1,
+            "value": "https://social.example.com/helpscout",
+            "type": "twitter"
+          },
+          {
+            "_links": {
+              "self": {
+                "href": "https://api.helpscout.net/v2/customers/100/social-profiles/2"
+              }
+            },
+            "id": 2,
+            "value": "https://social.example.com/helpscout-plus",
+            "type": "googleplus"
           }
         ]
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/customers/100/social-profiles"
+        }
       }
     }
   }

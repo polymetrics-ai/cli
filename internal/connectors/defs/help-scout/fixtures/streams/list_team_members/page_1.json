@@ -10,20 +10,55 @@
   "response": {
     "status": 200,
     "body": {
+      "_embedded": {
+        "users": [
+          {
+            "_links": {
+              "self": {
+                "href": "https://api.helpscout.net/v2/users/4"
+              }
+            },
+            "id": 4,
+            "firstName": "Fixture",
+            "lastName": "Member",
+            "email": "team.member@example.com",
+            "role": "owner",
+            "timezone": "UTC",
+            "photoUrl": "https://example.com/member.png",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-02T00:00:00Z",
+            "lastVisit": "2026-01-03T00:00:00Z",
+            "type": "user",
+            "mention": "fixture-member",
+            "initials": "FM",
+            "jobTitle": "Support Specialist",
+            "phone": "+15550101",
+            "alternateEmails": [
+              "team.member.alt@example.com"
+            ]
+          }
+        ]
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/teams/10/members?page=1"
+        },
+        "first": {
+          "href": "https://api.helpscout.net/v2/teams/10/members?page=1"
+        },
+        "last": {
+          "href": "https://api.helpscout.net/v2/teams/10/members?page=1"
+        },
+        "page": {
+          "href": "https://api.helpscout.net/v2/teams/10/members{?page,size}",
+          "templated": true
+        }
+      },
       "page": {
         "number": 1,
         "size": 50,
         "totalElements": 1,
         "totalPages": 1
-      },
-      "_embedded": {
-        "members": [
-          {
-            "id": "fixture_list_team_members_1",
-            "name": "Fixture List Team Members",
-            "createdAt": "2026-01-01T00:00:00Z"
-          }
-        ]
       }
     }
   }

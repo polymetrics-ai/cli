@@ -10,20 +10,37 @@
   "response": {
     "status": 200,
     "body": {
-      "page": {
-        "number": 1,
-        "size": 50,
-        "totalElements": 1,
-        "totalPages": 1
-      },
       "_embedded": {
-        "properties": [
+        "organization-properties": [
           {
-            "id": "fixture_list_organization_property_definitions_1",
-            "name": "Fixture List Organization Property Definitions",
-            "createdAt": "2026-01-01T00:00:00Z"
+            "type": "text",
+            "slug": "customer-tier",
+            "name": "Customer Tier"
+          },
+          {
+            "type": "number",
+            "slug": "annual-revenue",
+            "name": "Annual Revenue"
+          },
+          {
+            "type": "dropdown",
+            "slug": "industry",
+            "name": "Industry",
+            "options": [
+              {
+                "label": "Technology"
+              },
+              {
+                "label": "Healthcare"
+              }
+            ]
           }
         ]
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/organizations/properties"
+        }
       }
     }
   }

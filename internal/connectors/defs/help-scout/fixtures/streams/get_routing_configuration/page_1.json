@@ -10,9 +10,38 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "fixture_get_routing_configuration_1",
-      "name": "Fixture Get Routing configuration",
-      "createdAt": "2026-01-01T00:00:00Z"
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/mailboxes/100/routing"
+        }
+      },
+      "state": "enabled",
+      "assignmentLimit": 10,
+      "assignmentMethod": "round_robin",
+      "userIds": [
+        1,
+        2,
+        3
+      ],
+      "rotation": [
+        {
+          "userId": 1,
+          "conversationsCount": 0,
+          "eligible": true
+        },
+        {
+          "userId": 2,
+          "conversationsCount": 2,
+          "eligible": false,
+          "reason": "away"
+        },
+        {
+          "userId": 3,
+          "conversationsCount": 10,
+          "eligible": false,
+          "reason": "at_capacity"
+        }
+      ]
     }
   }
 }

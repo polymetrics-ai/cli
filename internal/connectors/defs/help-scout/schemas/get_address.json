@@ -2,47 +2,28 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "get_address",
   "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
   "properties": {
-    "id": {
+    "_links": {
       "type": [
-        "integer",
-        "string",
+        "object",
         "null"
-      ]
+      ],
+      "additionalProperties": true
     },
-    "number": {
-      "type": [
-        "integer",
-        "string",
-        "null"
-      ]
-    },
-    "name": {
+    "city": {
       "type": [
         "string",
         "null"
       ]
     },
-    "email": {
+    "lines": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "items": {
+        "type": "string"
+      }
     },
     "state": {
       "type": [
@@ -50,19 +31,13 @@
         "null"
       ]
     },
-    "createdAt": {
+    "postalCode": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updatedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "modifiedAt": {
+    "country": {
       "type": [
         "string",
         "null"

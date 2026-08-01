@@ -3,19 +3,24 @@
   "title": "list_organization_property_definitions",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "slug"
   ],
   "properties": {
-    "id": {
+    "_links": {
       "type": [
-        "integer",
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "type": {
+      "type": [
         "string",
         "null"
       ]
     },
-    "number": {
+    "slug": {
       "type": [
-        "integer",
         "string",
         "null"
       ]
@@ -26,47 +31,29 @@
         "null"
       ]
     },
-    "email": {
+    "options": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "createdAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updatedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "modifiedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
     }
   },
   "additionalProperties": true

@@ -10,9 +10,19 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "fixture_get_address_1",
-      "name": "Fixture Get Address",
-      "createdAt": "2026-01-01T00:00:00Z"
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/customers/100/address"
+        }
+      },
+      "city": "Fixture City",
+      "lines": [
+        "123 Fixture Street",
+        "Suite 100"
+      ],
+      "state": "TX",
+      "postalCode": "75001",
+      "country": "US"
     }
   }
 }

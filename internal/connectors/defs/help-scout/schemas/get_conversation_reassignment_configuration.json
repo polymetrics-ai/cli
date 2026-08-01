@@ -2,71 +2,40 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "get_conversation_reassignment_configuration",
   "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
   "properties": {
-    "id": {
+    "_links": {
       "type": [
-        "integer",
-        "string",
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "enabled": {
+      "type": [
+        "boolean",
         "null"
       ]
     },
-    "number": {
+    "awayDuration": {
       "type": [
-        "integer",
-        "string",
+        "object",
         "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "email": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "createdAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updatedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "modifiedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "properties": {
+        "hours": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "minutes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
     }
   },
   "additionalProperties": true

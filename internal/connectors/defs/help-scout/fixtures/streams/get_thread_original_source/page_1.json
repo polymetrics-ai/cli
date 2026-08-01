@@ -10,9 +10,7 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "fixture_get_thread_original_source_1",
-      "name": "Fixture Get Thread Original Source",
-      "createdAt": "2026-01-01T00:00:00Z"
+      "original": "fixture thread source text"
     }
   }
 }

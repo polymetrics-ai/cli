@@ -10,20 +10,39 @@
   "response": {
     "status": 200,
     "body": {
-      "page": {
-        "number": 1,
-        "size": 50,
-        "totalElements": 1,
-        "totalPages": 1
-      },
       "_embedded": {
-        "customer_properties": [
+        "customer-properties": [
           {
-            "id": "fixture_list_customer_property_definitions_1",
-            "name": "Fixture List Customer Property Definitions",
-            "createdAt": "2026-01-01T00:00:00Z"
+            "type": "text",
+            "slug": "car",
+            "name": "Car"
+          },
+          {
+            "type": "number",
+            "slug": "employees",
+            "name": "Employees"
+          },
+          {
+            "type": "dropdown",
+            "slug": "plan",
+            "name": "Plan",
+            "options": [
+              {
+                "id": "fixture-option-standard",
+                "label": "Standard"
+              },
+              {
+                "id": "fixture-option-plus",
+                "label": "Plus"
+              }
+            ]
           }
         ]
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/customer-properties"
+        }
       }
     }
   }

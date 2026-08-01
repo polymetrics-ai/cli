@@ -2,47 +2,13 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "get_routing_configuration",
   "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
   "properties": {
-    "id": {
+    "_links": {
       "type": [
-        "integer",
-        "string",
+        "object",
         "null"
-      ]
-    },
-    "number": {
-      "type": [
-        "integer",
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "email": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "additionalProperties": true
     },
     "state": {
       "type": [
@@ -50,23 +16,66 @@
         "null"
       ]
     },
-    "createdAt": {
+    "assignmentLimit": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "assignmentMethod": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updatedAt": {
+    "userIds": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
+      ],
+      "items": {
+        "type": [
+          "integer",
+          "string"
+        ]
+      }
     },
-    "modifiedAt": {
+    "rotation": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ]
+          },
+          "conversationsCount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "eligible": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
     }
   },
   "additionalProperties": true

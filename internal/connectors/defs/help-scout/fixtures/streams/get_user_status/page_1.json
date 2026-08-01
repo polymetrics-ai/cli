@@ -10,9 +10,29 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "fixture_get_user_status_1",
-      "name": "Fixture Get user status",
-      "createdAt": "2026-01-01T00:00:00Z"
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/users/4/status"
+        }
+      },
+      "userId": 4,
+      "email": {
+        "status": "active",
+        "updatedAt": "2026-01-15T10:30:00Z",
+        "performedBy": 4,
+        "source": "api",
+        "customStatus": {
+          "text": "On a fixture break",
+          "emojiName": ":coffee:"
+        }
+      },
+      "chat": {
+        "status": "custom",
+        "mailboxStatuses": {
+          "100": "assign",
+          "101": "unavailable"
+        }
+      }
     }
   }
 }

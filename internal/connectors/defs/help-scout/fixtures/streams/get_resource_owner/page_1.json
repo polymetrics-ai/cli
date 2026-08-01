@@ -10,9 +10,30 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "fixture_get_resource_owner_1",
-      "name": "Fixture Get Resource Owner",
-      "createdAt": "2026-01-01T00:00:00Z"
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/users/me"
+        }
+      },
+      "id": 4,
+      "firstName": "Fixture",
+      "lastName": "Owner",
+      "email": "resource.owner@example.com",
+      "role": "owner",
+      "timezone": "UTC",
+      "photoUrl": "https://example.com/avatar.png",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-02T00:00:00Z",
+      "lastVisit": "2026-01-03T00:00:00Z",
+      "type": "user",
+      "mention": "fixture-owner",
+      "initials": "FO",
+      "jobTitle": "Support Lead",
+      "phone": "+15550100",
+      "alternateEmails": [
+        "resource.owner.alt@example.com"
+      ],
+      "companyId": 1
     }
   }
 }

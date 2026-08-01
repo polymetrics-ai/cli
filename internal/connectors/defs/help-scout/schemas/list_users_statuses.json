@@ -3,70 +3,36 @@
   "title": "list_users_statuses",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "userId"
   ],
   "properties": {
-    "id": {
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "userId": {
       "type": [
         "integer",
-        "string",
-        "null"
-      ]
-    },
-    "number": {
-      "type": [
-        "integer",
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
         "string",
         "null"
       ]
     },
     "email": {
       "type": [
-        "string",
+        "object",
         "null"
-      ]
+      ],
+      "additionalProperties": true
     },
-    "type": {
+    "chat": {
       "type": [
-        "string",
+        "object",
         "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "createdAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updatedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "modifiedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "additionalProperties": true
     }
   },
   "additionalProperties": true

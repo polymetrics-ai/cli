@@ -10,20 +10,68 @@
   "response": {
     "status": 200,
     "body": {
+      "_embedded": {
+        "userStatuses": [
+          {
+            "_links": {
+              "self": {
+                "href": "https://api.helpscout.net/v2/users/4/status"
+              }
+            },
+            "userId": 4,
+            "email": {
+              "status": "active",
+              "updatedAt": "2026-01-15T10:30:00Z",
+              "performedBy": 4,
+              "source": "api",
+              "customStatus": {
+                "text": "On a fixture break",
+                "emojiName": ":coffee:"
+              }
+            },
+            "chat": {
+              "status": "custom",
+              "mailboxStatuses": {
+                "100": "assign",
+                "101": "unavailable"
+              }
+            }
+          },
+          {
+            "userId": 5,
+            "email": {
+              "status": "away",
+              "updatedAt": "2026-01-15T11:00:00Z",
+              "performedBy": 5,
+              "source": "ui"
+            },
+            "chat": {
+              "status": "unavailable",
+              "mailboxStatuses": {}
+            }
+          }
+        ]
+      },
+      "_links": {
+        "self": {
+          "href": "https://api.helpscout.net/v2/users/status?page=1"
+        },
+        "first": {
+          "href": "https://api.helpscout.net/v2/users/status?page=1"
+        },
+        "last": {
+          "href": "https://api.helpscout.net/v2/users/status?page=1"
+        },
+        "page": {
+          "href": "https://api.helpscout.net/v2/users/status{?page,size}",
+          "templated": true
+        }
+      },
       "page": {
         "number": 1,
         "size": 50,
-        "totalElements": 1,
+        "totalElements": 2,
         "totalPages": 1
-      },
-      "_embedded": {
-        "statuses": [
-          {
-            "id": "fixture_list_users_statuses_1",
-            "name": "Fixture List users statuses",
-            "createdAt": "2026-01-01T00:00:00Z"
-          }
-        ]
       }
     }
   }
