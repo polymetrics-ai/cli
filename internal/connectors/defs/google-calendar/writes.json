@@ -417,7 +417,8 @@
             }
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "minProperties": 2
       },
       "risk": "replaces an authenticated-user calendar-list entry",
       "path_fields": [
