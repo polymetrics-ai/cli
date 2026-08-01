@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/item_families/fam_fixture_1"
+    "path": "/item_families/fam_fixture_1",
+    "body": {
+      "name": "Updated Fixture Family"
+    }
   }
 }

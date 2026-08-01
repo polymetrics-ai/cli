@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/item_families"
+    "path": "/exports/item_families",
+    "body": {
+      "business_entity_id": {
+        "is": "fixture_is",
+        "is_present": "true"
+      }
+    }
   }
 }

@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/credit_notes/fixture_credit_note_id/remove_tax_withheld_refund"
+    "path": "/credit_notes/fixture_credit_note_id/remove_tax_withheld_refund",
+    "body": {
+      "tax_withheld": {
+        "id": "fixture_id"
+      }
+    }
   }
 }

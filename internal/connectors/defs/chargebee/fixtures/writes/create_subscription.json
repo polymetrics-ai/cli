@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/cus_fixture_1/subscription_for_items"
+    "path": "/customers/cus_fixture_1/subscription_for_items",
+    "body": {
+      "id": "sub_fixture_1"
+    }
   }
 }

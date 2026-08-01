@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/promotional_credits/deduct"
+    "path": "/promotional_credits/deduct",
+    "body": {
+      "customer_id": "cus_fixture_1",
+      "description": "Fixture credit deduction",
+      "amount": 200
+    }
   }
 }

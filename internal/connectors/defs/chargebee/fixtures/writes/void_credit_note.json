@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/credit_notes/cn_fixture_1/void"
+    "path": "/credit_notes/cn_fixture_1/void",
+    "body": {
+      "comment": "fixture void"
+    }
   }
 }

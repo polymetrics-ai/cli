@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders/order_fixture_1/cancel"
+    "path": "/orders/order_fixture_1/cancel",
+    "body": {
+      "cancellation_reason": "customer_asked_to_cancel"
+    }
   }
 }

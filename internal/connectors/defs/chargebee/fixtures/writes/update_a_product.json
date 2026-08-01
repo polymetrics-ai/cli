@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/products/fixture_product_id"
+    "path": "/products/fixture_product_id",
+    "body": {
+      "name": "fixture_name"
+    }
   }
 }

@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/usages"
+    "path": "/subscriptions/fixture_subscription_id/usages",
+    "body": {
+      "item_price_id": "fixture_item_price_id",
+      "quantity": "fixture_quantity",
+      "usage_date": 1
+    }
   }
 }

@@ -6,6 +6,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/fixture_cust_payment_source_id/verify_bank_account"
+    "path": "/payment_sources/fixture_cust_payment_source_id/verify_bank_account",
+    "body": {
+      "amount1": 1,
+      "amount2": 1
+    }
   }
 }

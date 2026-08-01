@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/quotes/fixture_quote_id/update_status"
+    "path": "/quotes/fixture_quote_id/update_status",
+    "body": {
+      "status": "accepted"
+    }
   }
 }

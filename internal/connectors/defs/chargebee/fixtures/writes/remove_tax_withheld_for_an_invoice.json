@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/remove_tax_withheld"
+    "path": "/invoices/fixture_invoice_id/remove_tax_withheld",
+    "body": {
+      "tax_withheld": {
+        "id": "fixture_id"
+      }
+    }
   }
 }

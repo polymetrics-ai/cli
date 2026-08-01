@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/create_using_temp_token"
+    "path": "/payment_sources/create_using_temp_token",
+    "body": {
+      "customer_id": "fixture_customer_id",
+      "tmp_token": "fixture_tmp_token",
+      "type": "fixture_type"
+    }
   }
 }

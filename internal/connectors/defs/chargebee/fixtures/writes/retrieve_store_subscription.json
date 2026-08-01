@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/retrieve"
+    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/retrieve",
+    "body": {
+      "receipt": "fixture_receipt"
+    }
   }
 }

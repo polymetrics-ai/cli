@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/transactions/create_authorization"
+    "path": "/transactions/create_authorization",
+    "body": {
+      "amount": 1,
+      "customer_id": "fixture_customer_id"
+    }
   }
 }

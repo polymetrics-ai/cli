@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/items/fixture_item_id/attached_items"
+    "path": "/items/fixture_item_id/attached_items",
+    "body": {
+      "type": "recommended"
+    }
   }
 }

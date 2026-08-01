@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/delete_usage"
+    "path": "/subscriptions/fixture_subscription_id/delete_usage",
+    "body": {
+      "id": "fixture_id"
+    }
   }
 }

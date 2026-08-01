@@ -19,6 +19,24 @@
       "risk": "low"
     },
     {
+      "name": "create_widget_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/widgets/{{ record.id }}/notes",
+      "path_fields": ["id"],
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "note"],
+        "properties": {
+          "id": { "type": "integer" },
+          "note": { "type": "string" }
+        }
+      },
+      "risk": "low"
+    },
+    {
       "name": "delete_widget",
       "kind": "delete",
       "method": "DELETE",

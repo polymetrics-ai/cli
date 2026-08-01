@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/portal_sessions/fixture_portal_session_id/activate"
+    "path": "/portal_sessions/fixture_portal_session_id/activate",
+    "body": {
+      "token": "fixture_token"
+    }
   }
 }

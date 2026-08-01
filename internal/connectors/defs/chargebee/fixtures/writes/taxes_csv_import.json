@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/csv_tax_rules"
+    "path": "/csv_tax_rules",
+    "body": {
+      "tax_profile_name": "fixture_tax_profile_name"
+    }
   }
 }

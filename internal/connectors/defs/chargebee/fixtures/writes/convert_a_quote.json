@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/quotes/fixture_quote_id/convert"
+    "path": "/quotes/fixture_quote_id/convert",
+    "body": {
+      "invoice_date": 1
+    }
   }
 }

@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/tokens/create_using_temp_token"
+    "path": "/tokens/create_using_temp_token",
+    "body": {
+      "id_at_vault": "fixture_id_at_vault",
+      "payment_method_type": "fixture_payment_method_type"
+    }
   }
 }

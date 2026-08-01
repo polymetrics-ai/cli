@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/update_details"
+    "path": "/invoices/fixture_invoice_id/update_details",
+    "body": {
+      "vat_number": "fixture_vat_number"
+    }
   }
 }

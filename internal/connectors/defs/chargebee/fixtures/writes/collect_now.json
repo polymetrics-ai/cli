@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/collect_now"
+    "path": "/hosted_pages/collect_now",
+    "body": {
+      "redirect_url": "https://fixture.example.com/chargebee"
+    }
   }
 }

@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_schedule_schemes"
+    "path": "/payment_schedule_schemes",
+    "body": {
+      "name": "fixture_name",
+      "number_of_schedules": 1,
+      "period_unit": "day"
+    }
   }
 }

@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/import_for_items"
+    "path": "/customers/fixture_customer_id/import_for_items",
+    "body": {
+      "status": "future"
+    }
   }
 }

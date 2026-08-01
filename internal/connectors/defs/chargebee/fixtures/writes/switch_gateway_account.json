@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/fixture_cust_payment_source_id/switch_gateway_account"
+    "path": "/payment_sources/fixture_cust_payment_source_id/switch_gateway_account",
+    "body": {
+      "gateway_account_id": "fixture_gateway_account_id"
+    }
   }
 }

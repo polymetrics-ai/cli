@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/delete_contact"
+    "path": "/customers/fixture_customer_id/delete_contact",
+    "body": {
+      "contact": {
+        "id": "fixture_id"
+      }
+    }
   }
 }

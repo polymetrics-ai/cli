@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/time_machines/fixture_time_machine_name/start_afresh"
+    "path": "/time_machines/fixture_time_machine_name/start_afresh",
+    "body": {
+      "genesis_time": 1
+    }
   }
 }

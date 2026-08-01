@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/credit_notes/fixture_credit_note_id/delete"
+    "path": "/credit_notes/fixture_credit_note_id/delete",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

@@ -6,6 +6,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/transactions/fixture_transaction_id/record_refund"
+    "path": "/transactions/fixture_transaction_id/record_refund",
+    "body": {
+      "date": 1,
+      "payment_method": "cash"
+    }
   }
 }

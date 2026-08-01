@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/record_refund"
+    "path": "/invoices/fixture_invoice_id/record_refund",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

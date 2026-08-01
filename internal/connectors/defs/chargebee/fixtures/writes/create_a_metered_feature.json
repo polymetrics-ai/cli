@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/metered_features"
+    "path": "/metered_features",
+    "body": {
+      "feature_unit": "fixture_feature_unit",
+      "name": "fixture_name",
+      "query": "fixture_query"
+    }
   }
 }

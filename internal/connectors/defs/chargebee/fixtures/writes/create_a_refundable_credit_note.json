@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders/fixture_order_id/create_refundable_credit_note"
+    "path": "/orders/fixture_order_id/create_refundable_credit_note",
+    "body": {
+      "customer_notes": "fixture_customer_notes"
+    }
   }
 }

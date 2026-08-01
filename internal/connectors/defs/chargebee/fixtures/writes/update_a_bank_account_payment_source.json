@@ -8,6 +8,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/fixture_cust_payment_source_id/update_bank_account"
+    "path": "/payment_sources/fixture_cust_payment_source_id/update_bank_account",
+    "body": {
+      "bank_account": {
+        "first_name": "fixture_first_name",
+        "last_name": "fixture_last_name"
+      }
+    }
   }
 }

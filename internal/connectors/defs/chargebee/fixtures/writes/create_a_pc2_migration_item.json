@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/pc2_migration_items"
+    "path": "/pc2_migration_items",
+    "body": {
+      "id": "fixture_id",
+      "name": "fixture_name",
+      "pc1_type": "plan",
+      "pc2_migration_id": "fixture_pc2_migration_id"
+    }
   }
 }

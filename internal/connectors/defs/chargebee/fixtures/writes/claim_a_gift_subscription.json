@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/claim_gift"
+    "path": "/hosted_pages/claim_gift",
+    "body": {
+      "redirect_url": "https://fixture.example.com/chargebee"
+    }
   }
 }

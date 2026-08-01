@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/update_scheduled_changes"
+    "path": "/subscriptions/fixture_subscription_id/update_scheduled_changes",
+    "body": {
+      "cancel_reason_code": "fixture_cancel_reason_code"
+    }
   }
 }

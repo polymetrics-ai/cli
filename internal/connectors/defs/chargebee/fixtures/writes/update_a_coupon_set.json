@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/coupon_sets/fixture_coupon_set_id/update"
+    "path": "/coupon_sets/fixture_coupon_set_id/update",
+    "body": {
+      "name": "fixture_name"
+    }
   }
 }

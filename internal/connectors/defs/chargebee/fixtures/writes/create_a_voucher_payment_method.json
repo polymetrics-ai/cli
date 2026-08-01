@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/create_voucher_payment_source"
+    "path": "/payment_sources/create_voucher_payment_source",
+    "body": {
+      "customer_id": "fixture_customer_id"
+    }
   }
 }

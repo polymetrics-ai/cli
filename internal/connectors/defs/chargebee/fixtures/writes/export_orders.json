@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/orders"
+    "path": "/exports/orders",
+    "body": {
+      "total": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      }
+    }
   }
 }

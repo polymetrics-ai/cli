@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_intents"
+    "path": "/payment_intents",
+    "body": {
+      "amount": 1,
+      "currency_code": "fixture_currency_code"
+    }
   }
 }

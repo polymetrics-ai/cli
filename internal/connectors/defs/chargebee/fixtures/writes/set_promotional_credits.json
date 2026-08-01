@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/promotional_credits/set"
+    "path": "/promotional_credits/set",
+    "body": {
+      "customer_id": "fixture_customer_id",
+      "description": "fixture_description"
+    }
   }
 }

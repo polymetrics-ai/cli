@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/pricing_page_sessions/create_for_new_subscription"
+    "path": "/pricing_page_sessions/create_for_new_subscription",
+    "body": {
+      "redirect_url": "https://fixture.example.com/chargebee"
+    }
   }
 }

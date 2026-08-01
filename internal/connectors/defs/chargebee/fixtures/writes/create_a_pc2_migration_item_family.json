@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/pc2_migration_item_families"
+    "path": "/pc2_migration_item_families",
+    "body": {
+      "id": "fixture_id",
+      "name": "fixture_name",
+      "pc2_migration_id": "fixture_pc2_migration_id"
+    }
   }
 }

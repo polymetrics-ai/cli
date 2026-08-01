@@ -9,6 +9,13 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/remove_advance_invoice_schedule"
+    "path": "/subscriptions/fixture_subscription_id/remove_advance_invoice_schedule",
+    "body": {
+      "specific_dates_schedule": {
+        "id": [
+          "fixture_id_item"
+        ]
+      }
+    }
   }
 }

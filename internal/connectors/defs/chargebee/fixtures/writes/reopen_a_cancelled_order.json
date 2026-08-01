@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders/fixture_order_id/reopen"
+    "path": "/orders/fixture_order_id/reopen",
+    "body": {
+      "void_cancellation_credit_notes": false
+    }
   }
 }

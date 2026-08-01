@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/ramps/fixture_ramp_id/update"
+    "path": "/ramps/fixture_ramp_id/update",
+    "body": {
+      "effective_from": 1
+    }
   }
 }

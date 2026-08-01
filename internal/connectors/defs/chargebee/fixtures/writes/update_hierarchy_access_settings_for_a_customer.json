@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/update_hierarchy_settings"
+    "path": "/customers/fixture_customer_id/update_hierarchy_settings",
+    "body": {
+      "use_default_hierarchy_settings": false
+    }
   }
 }

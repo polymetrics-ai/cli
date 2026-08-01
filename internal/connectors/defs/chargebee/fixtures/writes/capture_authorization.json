@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/ledger_operations/capture_authorization"
+    "path": "/ledger_operations/capture_authorization",
+    "body": {
+      "amount": "fixture_amount",
+      "authorization_id": "fixture_authorization_id",
+      "ledger_operation_timestamp": 1
+    }
   }
 }

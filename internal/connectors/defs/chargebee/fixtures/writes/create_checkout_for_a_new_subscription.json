@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/checkout_new_for_items"
+    "path": "/hosted_pages/checkout_new_for_items",
+    "body": {
+      "layout": "in_app"
+    }
   }
 }

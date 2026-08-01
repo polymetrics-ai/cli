@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers"
+    "path": "/customers",
+    "body": {
+      "email": "fixture@example.com",
+      "first_name": "Fixture"
+    }
   }
 }

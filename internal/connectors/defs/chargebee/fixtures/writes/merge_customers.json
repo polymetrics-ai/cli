@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/merge"
+    "path": "/customers/merge",
+    "body": {
+      "from_customer_id": "fixture_from_customer_id",
+      "to_customer_id": "fixture_to_customer_id"
+    }
   }
 }

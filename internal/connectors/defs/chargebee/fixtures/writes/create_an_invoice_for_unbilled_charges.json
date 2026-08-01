@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/unbilled_charges/invoice_unbilled_charges"
+    "path": "/unbilled_charges/invoice_unbilled_charges",
+    "body": {
+      "subscription_id": "fixture_subscription_id"
+    }
   }
 }

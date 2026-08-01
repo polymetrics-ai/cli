@@ -6,6 +6,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/offer_fulfillments/fixture_offer_fulfillment_id"
+    "path": "/offer_fulfillments/fixture_offer_fulfillment_id",
+    "body": {
+      "id": "fixture_id",
+      "status": "completed"
+    }
   }
 }

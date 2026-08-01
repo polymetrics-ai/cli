@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/coupons/coupon_fixture_1/update_for_items"
+    "path": "/coupons/coupon_fixture_1/update_for_items",
+    "body": {
+      "name": "Updated Fixture Coupon"
+    }
   }
 }

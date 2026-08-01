@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/tokens/create_for_card"
+    "path": "/tokens/create_for_card",
+    "body": {
+      "browser_details": {
+        "fixture": "value"
+      }
+    }
   }
 }

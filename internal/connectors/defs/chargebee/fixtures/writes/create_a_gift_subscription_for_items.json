@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/gifts/create_for_items"
+    "path": "/gifts/create_for_items",
+    "body": {
+      "scheduled_at": 1
+    }
   }
 }

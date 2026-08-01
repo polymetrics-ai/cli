@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/credit_notes"
+    "path": "/credit_notes",
+    "body": {
+      "type": "adjustment",
+      "customer_id": "cus_fixture_1"
+    }
   }
 }

@@ -116,6 +116,7 @@
       "computed_fields": {
         "id": "{{ record.discount.id }}",
         "updated_at": "{{ record.discount.updated_at }}",
+        "object": "{{ record.discount.object }}",
         "deleted": "{{ record.discount.deleted }}"
       },
       "schema": "schemas/list_discounts_for_a_subscription.json"
@@ -133,6 +134,7 @@
       "computed_fields": {
         "id": "{{ record.contract_term.id }}",
         "updated_at": "{{ record.contract_term.updated_at }}",
+        "object": "{{ record.contract_term.object }}",
         "deleted": "{{ record.contract_term.deleted }}"
       },
       "schema": "schemas/list_contract_terms_for_a_subscription.json"
@@ -182,6 +184,7 @@
       "computed_fields": {
         "id": "{{ record.hierarchy.id }}",
         "updated_at": "{{ record.hierarchy.updated_at }}",
+        "object": "{{ record.hierarchy.object }}",
         "deleted": "{{ record.hierarchy.deleted }}"
       },
       "schema": "schemas/list_hierarchy_details.json"
@@ -234,6 +237,7 @@
       "computed_fields": {
         "id": "{{ record.contact.id }}",
         "updated_at": "{{ record.contact.updated_at }}",
+        "object": "{{ record.contact.object }}",
         "deleted": "{{ record.contact.deleted }}"
       },
       "schema": "schemas/list_of_contacts_for_a_customer.json"
@@ -437,6 +441,7 @@
       "computed_fields": {
         "id": "{{ record.payment_reference_number.id }}",
         "updated_at": "{{ record.payment_reference_number.updated_at }}",
+        "object": "{{ record.payment_reference_number.object }}",
         "deleted": "{{ record.payment_reference_number.deleted }}"
       },
       "schema": "schemas/list_payment_reference_numbers.json"
@@ -647,6 +652,7 @@
       "computed_fields": {
         "id": "{{ record.transaction.id }}",
         "updated_at": "{{ record.transaction.updated_at }}",
+        "object": "{{ record.transaction.object }}",
         "deleted": "{{ record.transaction.deleted }}"
       },
       "schema": "schemas/list_payments_for_an_invoice.json"
@@ -744,6 +750,7 @@
       "computed_fields": {
         "id": "{{ record.quote_line_group.id }}",
         "updated_at": "{{ record.quote_line_group.updated_at }}",
+        "object": "{{ record.quote_line_group.object }}",
         "deleted": "{{ record.quote_line_group.deleted }}"
       },
       "schema": "schemas/list_quote_line_groups.json"
@@ -886,6 +893,7 @@
       "computed_fields": {
         "id": "{{ record.usage.id }}",
         "updated_at": "{{ record.usage.updated_at }}",
+        "object": "{{ record.usage.object }}",
         "deleted": "{{ record.usage.deleted }}"
       },
       "schema": "schemas/list_usages.json"
@@ -945,6 +953,7 @@
       "computed_fields": {
         "id": "{{ record.site_migration_detail.id }}",
         "updated_at": "{{ record.site_migration_detail.updated_at }}",
+        "object": "{{ record.site_migration_detail.object }}",
         "deleted": "{{ record.site_migration_detail.deleted }}"
       },
       "schema": "schemas/list_site_migration_details.json"
@@ -1028,6 +1037,7 @@
       "computed_fields": {
         "id": "{{ record.custom_field_config.id }}",
         "updated_at": "{{ record.custom_field_config.updated_at }}",
+        "object": "{{ record.custom_field_config.object }}",
         "deleted": "{{ record.custom_field_config.deleted }}"
       },
       "schema": "schemas/list_custom_field_configs.json"
@@ -1131,6 +1141,7 @@
       "computed_fields": {
         "id": "{{ record.variant.id }}",
         "updated_at": "{{ record.variant.updated_at }}",
+        "object": "{{ record.variant.object }}",
         "deleted": "{{ record.variant.deleted }}"
       },
       "schema": "schemas/list_product_variants.json"
@@ -1255,6 +1266,7 @@
       "computed_fields": {
         "id": "{{ record.item_price.id }}",
         "updated_at": "{{ record.item_price.updated_at }}",
+        "object": "{{ record.item_price.object }}",
         "deleted": "{{ record.item_price.deleted }}"
       },
       "schema": "schemas/list_applicable_item_prices_for_a_plan_item_price.json"
@@ -1272,6 +1284,7 @@
       "computed_fields": {
         "id": "{{ record.item.id }}",
         "updated_at": "{{ record.item.updated_at }}",
+        "object": "{{ record.item.object }}",
         "deleted": "{{ record.item.deleted }}"
       },
       "schema": "schemas/list_applicable_items_for_a_plan_item_price.json"
@@ -1339,6 +1352,7 @@
       "computed_fields": {
         "id": "{{ record.attached_item.id }}",
         "updated_at": "{{ record.attached_item.updated_at }}",
+        "object": "{{ record.attached_item.object }}",
         "deleted": "{{ record.attached_item.deleted }}"
       },
       "schema": "schemas/list_attached_items.json"
@@ -1431,6 +1445,7 @@
       "computed_fields": {
         "id": "{{ record.subscription_entitlement.id }}",
         "updated_at": "{{ record.subscription_entitlement.updated_at }}",
+        "object": "{{ record.subscription_entitlement.object }}",
         "deleted": "{{ record.subscription_entitlement.deleted }}"
       },
       "schema": "schemas/list_subscription_entitlements.json"
@@ -1448,6 +1463,7 @@
       "computed_fields": {
         "id": "{{ record.customer_entitlement.id }}",
         "updated_at": "{{ record.customer_entitlement.updated_at }}",
+        "object": "{{ record.customer_entitlement.object }}",
         "deleted": "{{ record.customer_entitlement.deleted }}"
       },
       "schema": "schemas/list_customer_entitlements.json"
@@ -1465,6 +1481,7 @@
       "computed_fields": {
         "id": "{{ record.item_entitlement.id }}",
         "updated_at": "{{ record.item_entitlement.updated_at }}",
+        "object": "{{ record.item_entitlement.object }}",
         "deleted": "{{ record.item_entitlement.deleted }}"
       },
       "schema": "schemas/list_item_entitlements_for_a_feature.json"
@@ -1482,6 +1499,7 @@
       "computed_fields": {
         "id": "{{ record.item_entitlement.id }}",
         "updated_at": "{{ record.item_entitlement.updated_at }}",
+        "object": "{{ record.item_entitlement.object }}",
         "deleted": "{{ record.item_entitlement.deleted }}"
       },
       "schema": "schemas/list_item_entitlements_for_an_item.json"
@@ -1519,6 +1537,7 @@
       "computed_fields": {
         "id": "{{ record.entitlement_override.id }}",
         "updated_at": "{{ record.entitlement_override.updated_at }}",
+        "object": "{{ record.entitlement_override.object }}",
         "deleted": "{{ record.entitlement_override.deleted }}"
       },
       "schema": "schemas/list_entitlement_overrides_for_a_subscription.json"
@@ -1536,6 +1555,7 @@
       "computed_fields": {
         "id": "{{ record.business_entity_transfer.id }}",
         "updated_at": "{{ record.business_entity_transfer.updated_at }}",
+        "object": "{{ record.business_entity_transfer.object }}",
         "deleted": "{{ record.business_entity_transfer.deleted }}"
       },
       "schema": "schemas/list_the_business_entity_transfers.json"
@@ -1553,6 +1573,7 @@
       "computed_fields": {
         "id": "{{ record.payment_voucher.id }}",
         "updated_at": "{{ record.payment_voucher.updated_at }}",
+        "object": "{{ record.payment_voucher.object }}",
         "deleted": "{{ record.payment_voucher.deleted }}"
       },
       "schema": "schemas/list_vouchers_for_a_customer.json"
@@ -1570,6 +1591,7 @@
       "computed_fields": {
         "id": "{{ record.payment_voucher.id }}",
         "updated_at": "{{ record.payment_voucher.updated_at }}",
+        "object": "{{ record.payment_voucher.object }}",
         "deleted": "{{ record.payment_voucher.deleted }}"
       },
       "schema": "schemas/list_vouchers_for_an_invoice.json"
@@ -1609,6 +1631,7 @@
       "computed_fields": {
         "id": "{{ record.currency.id }}",
         "updated_at": "{{ record.currency.updated_at }}",
+        "object": "{{ record.currency.object }}",
         "deleted": "{{ record.currency.deleted }}"
       },
       "schema": "schemas/list_currencies.json"
@@ -1701,6 +1724,7 @@
       "computed_fields": {
         "id": "{{ record.pc2_migration_item_family.id }}",
         "updated_at": "{{ record.pc2_migration_item_family.updated_at }}",
+        "object": "{{ record.pc2_migration_item_family.object }}",
         "deleted": "{{ record.pc2_migration_item_family.deleted }}"
       },
       "schema": "schemas/list_pc2_migration_item_families.json"
@@ -1729,6 +1753,7 @@
       "computed_fields": {
         "id": "{{ record.pc2_migration_item.id }}",
         "updated_at": "{{ record.pc2_migration_item.updated_at }}",
+        "object": "{{ record.pc2_migration_item.object }}",
         "deleted": "{{ record.pc2_migration_item.deleted }}"
       },
       "schema": "schemas/list_pc2_migration_items.json"
@@ -1746,6 +1771,7 @@
       "computed_fields": {
         "id": "{{ record.pc2_migration_applicable_item.id }}",
         "updated_at": "{{ record.pc2_migration_applicable_item.updated_at }}",
+        "object": "{{ record.pc2_migration_applicable_item.object }}",
         "deleted": "{{ record.pc2_migration_applicable_item.deleted }}"
       },
       "schema": "schemas/applicable_items_a_pc2_migration_item.json"
@@ -1763,6 +1789,7 @@
       "computed_fields": {
         "id": "{{ record.pc2_migration_item_price.id }}",
         "updated_at": "{{ record.pc2_migration_item_price.updated_at }}",
+        "object": "{{ record.pc2_migration_item_price.object }}",
         "deleted": "{{ record.pc2_migration_item_price.deleted }}"
       },
       "schema": "schemas/list_pc2_migration_item_prices.json"
@@ -1791,6 +1818,7 @@
       "computed_fields": {
         "id": "{{ record.site_pc_meta_record.id }}",
         "updated_at": "{{ record.site_pc_meta_record.updated_at }}",
+        "object": "{{ record.site_pc_meta_record.object }}",
         "deleted": "{{ record.site_pc_meta_record.deleted }}"
       },
       "schema": "schemas/list_site_pc_meta_records.json"
@@ -1819,6 +1847,7 @@
       "computed_fields": {
         "id": "{{ record.omnichannel_transaction.id }}",
         "updated_at": "{{ record.omnichannel_transaction.updated_at }}",
+        "object": "{{ record.omnichannel_transaction.object }}",
         "deleted": "{{ record.omnichannel_transaction.deleted }}"
       },
       "schema": "schemas/list_omnichannel_transactions_of_an_omnichannel_subscription.json"
@@ -1836,6 +1865,7 @@
       "computed_fields": {
         "id": "{{ record.omnichannel_subscription.id }}",
         "updated_at": "{{ record.omnichannel_subscription.updated_at }}",
+        "object": "{{ record.omnichannel_subscription.object }}",
         "deleted": "{{ record.omnichannel_subscription.deleted }}"
       },
       "schema": "schemas/list_omnichannel_subscriptions.json"
@@ -1853,6 +1883,7 @@
       "computed_fields": {
         "id": "{{ record.omnichannel_subscription_item_scheduled_change.id }}",
         "updated_at": "{{ record.omnichannel_subscription_item_scheduled_change.updated_at }}",
+        "object": "{{ record.omnichannel_subscription_item_scheduled_change.object }}",
         "deleted": "{{ record.omnichannel_subscription_item_scheduled_change.deleted }}"
       },
       "schema": "schemas/list_scheduled_changes_for_omnichannel_subscription_item.json"
@@ -1881,6 +1912,7 @@
       "computed_fields": {
         "id": "{{ record.omnichannel_one_time_order.id }}",
         "updated_at": "{{ record.omnichannel_one_time_order.updated_at }}",
+        "object": "{{ record.omnichannel_one_time_order.object }}",
         "deleted": "{{ record.omnichannel_one_time_order.deleted }}"
       },
       "schema": "schemas/list_omnichannel_one_time_orders.json"
@@ -1920,6 +1952,7 @@
       "computed_fields": {
         "id": "{{ record.meter.id }}",
         "updated_at": "{{ record.meter.updated_at }}",
+        "object": "{{ record.meter.object }}",
         "deleted": "{{ record.meter.deleted }}"
       },
       "schema": "schemas/list_all_available_meters.json"
@@ -1959,6 +1992,7 @@
       "computed_fields": {
         "id": "{{ record.usage_summary.id }}",
         "updated_at": "{{ record.usage_summary.updated_at }}",
+        "object": "{{ record.usage_summary.object }}",
         "deleted": "{{ record.usage_summary.deleted }}"
       },
       "schema": "schemas/retrieve_usage_summary_for_a_subscription.json"
@@ -1976,6 +2010,7 @@
       "computed_fields": {
         "id": "{{ record.usage_charge.id }}",
         "updated_at": "{{ record.usage_charge.updated_at }}",
+        "object": "{{ record.usage_charge.object }}",
         "deleted": "{{ record.usage_charge.deleted }}"
       },
       "schema": "schemas/retrieve_usage_charges_for_a_subscription.json"
@@ -1993,6 +2028,7 @@
       "computed_fields": {
         "id": "{{ record.alert.id }}",
         "updated_at": "{{ record.alert.updated_at }}",
+        "object": "{{ record.alert.object }}",
         "deleted": "{{ record.alert.deleted }}"
       },
       "schema": "schemas/list_applicable_alerts_for_a_subscription.json"
@@ -2043,6 +2079,7 @@
       "computed_fields": {
         "id": "{{ record.alert_status.id }}",
         "updated_at": "{{ record.alert_status.updated_at }}",
+        "object": "{{ record.alert_status.object }}",
         "deleted": "{{ record.alert_status.deleted }}"
       },
       "schema": "schemas/list_alert_statuses_for_a_subscription.json"
@@ -2060,6 +2097,7 @@
       "computed_fields": {
         "id": "{{ record.alert_status.id }}",
         "updated_at": "{{ record.alert_status.updated_at }}",
+        "object": "{{ record.alert_status.object }}",
         "deleted": "{{ record.alert_status.deleted }}"
       },
       "schema": "schemas/list_alert_statuses_for_an_alert.json"
@@ -2128,6 +2166,7 @@
       "computed_fields": {
         "id": "{{ record.grant_block.id }}",
         "updated_at": "{{ record.grant_block.updated_at }}",
+        "object": "{{ record.grant_block.object }}",
         "deleted": "{{ record.grant_block.deleted }}"
       },
       "schema": "schemas/list_grant_blocks.json"

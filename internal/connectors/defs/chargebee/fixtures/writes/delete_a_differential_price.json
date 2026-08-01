@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/differential_prices/fixture_differential_price_id/delete"
+    "path": "/differential_prices/fixture_differential_price_id/delete",
+    "body": {
+      "item_price_id": "fixture_item_price_id"
+    }
   }
 }

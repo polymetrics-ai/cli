@@ -13,6 +13,18 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/transactions"
+    "path": "/exports/transactions",
+    "body": {
+      "transaction": {
+        "id": {
+          "is": "fixture_is",
+          "is_not": "fixture_is_not"
+        },
+        "customer_id": {
+          "is": "fixture_is",
+          "is_not": "fixture_is_not"
+        }
+      }
+    }
   }
 }

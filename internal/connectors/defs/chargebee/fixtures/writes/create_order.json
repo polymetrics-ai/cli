@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders"
+    "path": "/orders",
+    "body": {
+      "invoice_id": "inv_fixture_1"
+    }
   }
 }

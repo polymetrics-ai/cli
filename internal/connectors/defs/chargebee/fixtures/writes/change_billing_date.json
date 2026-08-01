@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/change_billing_date"
+    "path": "/customers/fixture_customer_id/change_billing_date",
+    "body": {
+      "billing_date": 1
+    }
   }
 }

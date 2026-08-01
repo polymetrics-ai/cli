@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/remove_scheduled_cancellation"
+    "path": "/subscriptions/fixture_subscription_id/remove_scheduled_cancellation",
+    "body": {
+      "billing_cycles": 1
+    }
   }
 }

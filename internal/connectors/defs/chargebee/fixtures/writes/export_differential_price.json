@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/differential_prices"
+    "path": "/exports/differential_prices",
+    "body": {
+      "item_id": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      }
+    }
   }
 }

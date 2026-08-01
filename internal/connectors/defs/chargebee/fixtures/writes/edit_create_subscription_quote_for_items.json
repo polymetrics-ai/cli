@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/quotes/fixture_quote_id/edit_create_subscription_quote_for_items"
+    "path": "/quotes/fixture_quote_id/edit_create_subscription_quote_for_items",
+    "body": {
+      "notes": "fixture_notes"
+    }
   }
 }

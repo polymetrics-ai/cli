@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/import_invoice"
+    "path": "/invoices/import_invoice",
+    "body": {
+      "date": 1,
+      "id": "fixture_id",
+      "total": 1
+    }
   }
 }

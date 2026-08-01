@@ -1,0 +1,8 @@
+{
+  "record": { "id": 1, "note": "fixture note" },
+  "expect": {
+    "method": "POST",
+    "path": "/widgets/1/notes",
+    "body": { "note": "fixture note" }
+  }
+}

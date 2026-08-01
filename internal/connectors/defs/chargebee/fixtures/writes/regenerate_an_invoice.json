@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/regenerate_invoice"
+    "path": "/subscriptions/fixture_subscription_id/regenerate_invoice",
+    "body": {
+      "date_from": 1
+    }
   }
 }

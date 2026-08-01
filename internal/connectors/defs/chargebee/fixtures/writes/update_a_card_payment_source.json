@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/fixture_cust_payment_source_id/update_card"
+    "path": "/payment_sources/fixture_cust_payment_source_id/update_card",
+    "body": {
+      "gateway_meta_data": {
+        "fixture": "value"
+      }
+    }
   }
 }

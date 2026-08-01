@@ -8,6 +8,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/add_contact"
+    "path": "/customers/fixture_customer_id/add_contact",
+    "body": {
+      "contact": {
+        "id": "fixture_id",
+        "first_name": "fixture_first_name"
+      }
+    }
   }
 }

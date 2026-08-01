@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/promotional_credits/add"
+    "path": "/promotional_credits/add",
+    "body": {
+      "customer_id": "cus_fixture_1",
+      "description": "Fixture credit grant",
+      "amount": 500
+    }
   }
 }

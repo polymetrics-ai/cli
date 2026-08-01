@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/edit_advance_invoice_schedule"
+    "path": "/subscriptions/fixture_subscription_id/edit_advance_invoice_schedule",
+    "body": {
+      "terms_to_charge": 1
+    }
   }
 }

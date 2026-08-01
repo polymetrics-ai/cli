@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/alerts/fixture_alert_id"
+    "path": "/alerts/fixture_alert_id",
+    "body": {
+      "status": "enabled"
+    }
   }
 }

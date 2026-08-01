@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/view_voucher"
+    "path": "/hosted_pages/view_voucher",
+    "body": {
+      "payment_voucher": {
+        "id": "fixture_id"
+      }
+    }
   }
 }

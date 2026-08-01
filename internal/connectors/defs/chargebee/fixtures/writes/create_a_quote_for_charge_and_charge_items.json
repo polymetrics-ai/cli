@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/quotes/create_for_charge_items_and_charges"
+    "path": "/quotes/create_for_charge_items_and_charges",
+    "body": {
+      "customer_id": "fixture_customer_id"
+    }
   }
 }

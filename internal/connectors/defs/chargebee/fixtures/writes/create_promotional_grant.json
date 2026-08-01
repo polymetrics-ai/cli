@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/promotional_grants"
+    "path": "/promotional_grants",
+    "body": {
+      "amount": "fixture_amount",
+      "expires_at": 1,
+      "subscription_id": "fixture_subscription_id",
+      "unit_id": "fixture_unit_id"
+    }
   }
 }

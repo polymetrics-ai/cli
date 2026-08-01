@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/create_ramp"
+    "path": "/subscriptions/fixture_subscription_id/create_ramp",
+    "body": {
+      "effective_from": 1
+    }
   }
 }

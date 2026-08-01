@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/portal_sessions"
+    "path": "/portal_sessions",
+    "body": {
+      "redirect_url": "https://fixture.example.com/chargebee"
+    }
   }
 }

@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/pc2_migration_item_prices/fixture_pc2_migration_item_price_id"
+    "path": "/pc2_migration_item_prices/fixture_pc2_migration_item_price_id",
+    "body": {
+      "name": "fixture_name"
+    }
   }
 }

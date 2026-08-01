@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/attached_items"
+    "path": "/exports/attached_items",
+    "body": {
+      "item_type": {
+        "is": "plan",
+        "is_not": "plan"
+      }
+    }
   }
 }

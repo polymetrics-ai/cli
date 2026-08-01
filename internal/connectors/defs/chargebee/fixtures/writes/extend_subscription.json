@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/extend_subscription"
+    "path": "/hosted_pages/extend_subscription",
+    "body": {
+      "expiry": 1
+    }
   }
 }

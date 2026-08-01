@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/invoices"
+    "path": "/exports/invoices",
+    "body": {
+      "payment_owner": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      }
+    }
   }
 }

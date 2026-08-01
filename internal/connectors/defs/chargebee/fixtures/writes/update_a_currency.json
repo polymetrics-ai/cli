@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/currencies/fixture_site_currency_id"
+    "path": "/currencies/fixture_site_currency_id",
+    "body": {
+      "forex_type": "manual"
+    }
   }
 }

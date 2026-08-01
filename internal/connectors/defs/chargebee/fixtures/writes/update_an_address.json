@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/addresses"
+    "path": "/addresses",
+    "body": {
+      "label": "fixture_label",
+      "subscription_id": "fixture_subscription_id"
+    }
   }
 }

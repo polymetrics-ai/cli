@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/relationships"
+    "path": "/customers/fixture_customer_id/relationships",
+    "body": {
+      "parent_id": "fixture_parent_id"
+    }
   }
 }

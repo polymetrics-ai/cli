@@ -6,6 +6,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/add_charge"
+    "path": "/invoices/fixture_invoice_id/add_charge",
+    "body": {
+      "amount": 1,
+      "description": "fixture_description"
+    }
   }
 }

@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/copy_card"
+    "path": "/customers/fixture_customer_id/copy_card",
+    "body": {
+      "gateway_account_id": "fixture_gateway_account_id"
+    }
   }
 }

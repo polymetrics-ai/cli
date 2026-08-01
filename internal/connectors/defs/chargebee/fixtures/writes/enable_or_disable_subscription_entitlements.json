@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/subscription_entitlements/set_availability"
+    "path": "/subscriptions/fixture_subscription_id/subscription_entitlements/set_availability",
+    "body": {
+      "is_enabled": false
+    }
   }
 }

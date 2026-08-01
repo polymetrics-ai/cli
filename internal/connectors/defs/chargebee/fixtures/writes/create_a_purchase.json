@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/purchases"
+    "path": "/purchases",
+    "body": {
+      "customer_id": "fixture_customer_id"
+    }
   }
 }

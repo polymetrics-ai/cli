@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/time_machines/fixture_time_machine_name/travel_forward"
+    "path": "/time_machines/fixture_time_machine_name/travel_forward",
+    "body": {
+      "destination_time": 1
+    }
   }
 }

@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/create_using_payment_intent"
+    "path": "/payment_sources/create_using_payment_intent",
+    "body": {
+      "customer_id": "fixture_customer_id"
+    }
   }
 }

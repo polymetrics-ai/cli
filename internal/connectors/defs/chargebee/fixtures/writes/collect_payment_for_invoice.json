@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/inv_fixture_1/collect_payment"
+    "path": "/invoices/inv_fixture_1/collect_payment",
+    "body": {}
   }
 }

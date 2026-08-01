@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/sub_fixture_1/cancel_for_items"
+    "path": "/subscriptions/sub_fixture_1/cancel_for_items",
+    "body": {
+      "cancel_option": "end_of_term"
+    }
   }
 }

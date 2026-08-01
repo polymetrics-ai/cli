@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/non_subscriptions/fixture_non_subscription_app_id/one_time_purchase"
+    "path": "/non_subscriptions/fixture_non_subscription_app_id/one_time_purchase",
+    "body": {
+      "receipt": "fixture_receipt"
+    }
   }
 }

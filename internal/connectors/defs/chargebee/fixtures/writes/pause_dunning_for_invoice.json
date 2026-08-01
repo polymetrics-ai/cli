@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/pause_dunning"
+    "path": "/invoices/fixture_invoice_id/pause_dunning",
+    "body": {
+      "expected_payment_date": 1
+    }
   }
 }

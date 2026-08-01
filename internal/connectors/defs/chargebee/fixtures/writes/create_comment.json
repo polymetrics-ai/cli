@@ -6,6 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/comments"
+    "path": "/comments",
+    "body": {
+      "entity_type": "customer",
+      "entity_id": "cus_fixture_1",
+      "notes": "Fixture comment"
+    }
   }
 }

@@ -849,6 +849,9 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	if want.Path != "" && got.Path != want.Path {
 		return fmt.Sprintf("path = %q, want %q", got.Path, want.Path)
 	}
+	if want.Body != nil && len(want.Body) == 0 && len(got.Body) > 0 {
+		return fmt.Sprintf("body = %v, want empty", got.Body)
+	}
 	for k, wantVal := range want.Body {
 		gotVal, ok := got.Body[k]
 		if !ok {
@@ -866,12 +869,56 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 // captureServer is an httptest.Server that answers every request with a
 // fixed response (200 {} by default, or a fixture-declared response — see
 // newCaptureServer) and records the last request it received (method/path/
-// query/decoded JSON body) for write_request_shape's assertions.
+// query/decoded body) for write_request_shape's assertions.
 type captureServer struct {
 	*httptest.Server
 	mu   sync.Mutex
 	resp *fixtureResponse
 	last *capturedRequest
+}
+
+func captureRequestBody(r *http.Request) map[string]any {
+	contentType := strings.ToLower(r.Header.Get("Content-Type"))
+	if strings.HasPrefix(contentType, "application/x-www-form-urlencoded") {
+		if err := r.ParseForm(); err != nil {
+			return nil
+		}
+		if len(r.PostForm) == 0 {
+			return nil
+		}
+		body := make(map[string]any, len(r.PostForm))
+		for key, values := range r.PostForm {
+			if len(values) == 1 {
+				body[key] = decodeCapturedFormValue(values[0])
+				continue
+			}
+			items := make([]any, 0, len(values))
+			for _, value := range values {
+				items = append(items, decodeCapturedFormValue(value))
+			}
+			body[key] = items
+		}
+		return body
+	}
+
+	var body map[string]any
+	dec := json.NewDecoder(r.Body)
+	dec.UseNumber()
+	_ = dec.Decode(&body)
+	return body
+}
+
+func decodeCapturedFormValue(value string) any {
+	if !json.Valid([]byte(value)) {
+		return value
+	}
+	var decoded any
+	dec := json.NewDecoder(bytes.NewReader([]byte(value)))
+	dec.UseNumber()
+	if err := dec.Decode(&decoded); err != nil {
+		return value
+	}
+	return decoded
 }
 
 // newCaptureServer builds a captureServer. When resp is non-nil, every
@@ -887,10 +934,7 @@ type captureServer struct {
 func newCaptureServer(resp *fixtureResponse) *captureServer {
 	cs := &captureServer{resp: resp}
 	cs.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var body map[string]any
-		dec := json.NewDecoder(r.Body)
-		dec.UseNumber()
-		_ = dec.Decode(&body) // a body-less request (e.g. DELETE) decodes to nil, not an error worth surfacing
+		body := captureRequestBody(r)
 
 		cs.mu.Lock()
 		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body}

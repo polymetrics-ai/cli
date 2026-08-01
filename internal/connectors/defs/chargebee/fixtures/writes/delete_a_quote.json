@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/quotes/fixture_quote_id/delete"
+    "path": "/quotes/fixture_quote_id/delete",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

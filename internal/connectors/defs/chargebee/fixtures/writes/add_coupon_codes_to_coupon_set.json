@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/coupon_sets/fixture_coupon_set_id/add_coupon_codes"
+    "path": "/coupon_sets/fixture_coupon_set_id/add_coupon_codes",
+    "body": {
+      "code": [
+        "fixture_code_item"
+      ]
+    }
   }
 }

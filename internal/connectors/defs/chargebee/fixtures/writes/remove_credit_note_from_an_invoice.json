@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/remove_credit_note"
+    "path": "/invoices/fixture_invoice_id/remove_credit_note",
+    "body": {
+      "credit_note": {
+        "id": "fixture_id"
+      }
+    }
   }
 }

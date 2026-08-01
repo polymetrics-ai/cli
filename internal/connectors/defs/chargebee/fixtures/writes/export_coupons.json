@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/coupons"
+    "path": "/exports/coupons",
+    "body": {
+      "currency_code": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      }
+    }
   }
 }

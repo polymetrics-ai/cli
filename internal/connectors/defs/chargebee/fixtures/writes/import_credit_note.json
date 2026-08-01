@@ -8,6 +8,13 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/credit_notes/import_credit_note"
+    "path": "/credit_notes/import_credit_note",
+    "body": {
+      "create_reason_code": "fixture_create_reason_code",
+      "date": 1,
+      "id": "fixture_id",
+      "reference_invoice_id": "fixture_reference_invoice_id",
+      "type": "adjustment"
+    }
   }
 }

@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/quotes/update_subscription_quote_for_items"
+    "path": "/quotes/update_subscription_quote_for_items",
+    "body": {
+      "name": "fixture_name"
+    }
   }
 }

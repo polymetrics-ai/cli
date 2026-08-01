@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/products/fixture_product_id/update_options"
+    "path": "/products/fixture_product_id/update_options",
+    "body": {
+      "remove_options": [
+        "fixture_remove_options_item"
+      ]
+    }
   }
 }

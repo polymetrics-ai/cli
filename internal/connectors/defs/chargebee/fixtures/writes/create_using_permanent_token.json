@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/create_using_permanent_token"
+    "path": "/payment_sources/create_using_permanent_token",
+    "body": {
+      "customer_id": "fixture_customer_id",
+      "type": "fixture_type"
+    }
   }
 }

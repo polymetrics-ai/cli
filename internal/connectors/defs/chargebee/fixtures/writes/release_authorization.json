@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/ledger_operations/release_authorization"
+    "path": "/ledger_operations/release_authorization",
+    "body": {
+      "authorization_id": "fixture_authorization_id",
+      "ledger_operation_timestamp": 1
+    }
   }
 }

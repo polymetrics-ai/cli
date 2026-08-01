@@ -8,6 +8,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/import_subscription"
+    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/import_subscription",
+    "body": {
+      "subscription": {
+        "id": "fixture_id",
+        "started_at": 1
+      }
+    }
   }
 }

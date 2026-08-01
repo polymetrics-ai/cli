@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/price_variants/fixture_price_variant_id"
+    "path": "/price_variants/fixture_price_variant_id",
+    "body": {
+      "name": "fixture_name"
+    }
   }
 }

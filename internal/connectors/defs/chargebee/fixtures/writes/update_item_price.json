@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/item_prices/ip_fixture_1"
+    "path": "/item_prices/ip_fixture_1",
+    "body": {
+      "name": "Updated Fixture Item Price"
+    }
   }
 }

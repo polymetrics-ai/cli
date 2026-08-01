@@ -9,6 +9,13 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/delete_line_items"
+    "path": "/invoices/fixture_invoice_id/delete_line_items",
+    "body": {
+      "line_items": {
+        "id": [
+          "fixture_id_item"
+        ]
+      }
+    }
   }
 }

@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/entitlements"
+    "path": "/entitlements",
+    "body": {
+      "action": "upsert"
+    }
   }
 }

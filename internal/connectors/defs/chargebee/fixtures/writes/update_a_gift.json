@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/gifts/fixture_gift_id/update_gift"
+    "path": "/gifts/fixture_gift_id/update_gift",
+    "body": {
+      "scheduled_at": 1
+    }
   }
 }

@@ -8,6 +8,13 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders/import_order"
+    "path": "/orders/import_order",
+    "body": {
+      "created_at": 1,
+      "invoice_id": "fixture_invoice_id",
+      "order_date": 1,
+      "shipping_date": 1,
+      "status": "cancelled"
+    }
   }
 }

@@ -7,6 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/exports/item_prices"
+    "path": "/exports/item_prices",
+    "body": {
+      "item_family_id": {
+        "is": "fixture_is",
+        "is_not": "fixture_is_not"
+      }
+    }
   }
 }

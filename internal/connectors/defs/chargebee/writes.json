@@ -162,7 +162,8 @@
         "subscription_id"
       ],
       "redact_fields": [
-        "subscription_id"
+        "subscription_id",
+        "payment_intent"
       ]
     },
     {
@@ -794,7 +795,8 @@
         "subscription_id"
       ],
       "redact_fields": [
-        "subscription_id"
+        "subscription_id",
+        "payment_source_id"
       ]
     },
     {
@@ -1158,7 +1160,8 @@
         "customer_id"
       ],
       "redact_fields": [
-        "customer_id"
+        "customer_id",
+        "payment_source_id"
       ]
     },
     {
@@ -1214,7 +1217,8 @@
         "customer_id"
       ],
       "redact_fields": [
-        "customer_id"
+        "customer_id",
+        "payment_method"
       ]
     },
     {
@@ -1481,7 +1485,9 @@
         "customer_id"
       ],
       "redact_fields": [
-        "customer_id"
+        "customer_id",
+        "payment_source_id",
+        "token_id"
       ]
     },
     {
@@ -1667,7 +1673,11 @@
           "payment_method_type"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "id_at_vault",
+        "additional_information"
+      ]
     },
     {
       "name": "create_a_card_payment_method_token",
@@ -1689,7 +1699,10 @@
         },
         "minProperties": 1
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "card"
+      ]
     },
     {
       "name": "create_using_permanent_token",
@@ -1726,7 +1739,11 @@
           "type"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "reference_id"
+      ]
     },
     {
       "name": "delete_payment_source",
@@ -1799,7 +1816,16 @@
         },
         "additionalProperties": false
       },
-      "risk": "external mutation carrying raw payment-card data; approval required"
+      "risk": "external mutation carrying raw payment-card data; approval required",
+      "redact_fields": [
+        "customer_id",
+        "card[first_name]",
+        "card[last_name]",
+        "card[number]",
+        "card[expiry_month]",
+        "card[expiry_year]",
+        "card[cvv]"
+      ]
     },
     {
       "name": "verify_bank_account_payment_source",
@@ -1861,7 +1887,11 @@
           "customer_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "payment_intent"
+      ]
     },
     {
       "name": "create_a_voucher_payment_method",
@@ -1885,7 +1915,11 @@
           "customer_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "voucher_payment_source"
+      ]
     },
     {
       "name": "create_using_gateway_temporary_token",
@@ -1923,7 +1957,11 @@
           "type"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "tmp_token"
+      ]
     },
     {
       "name": "update_a_card_payment_source",
@@ -1959,7 +1997,10 @@
         "cust_payment_source_id"
       ],
       "redact_fields": [
-        "cust_payment_source_id"
+        "cust_payment_source_id",
+        "gateway_meta_data",
+        "reference_transaction",
+        "card"
       ]
     },
     {
@@ -2019,7 +2060,11 @@
           "token_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "token_id"
+      ]
     },
     {
       "name": "local_delete_a_payment_source",
@@ -2083,7 +2128,11 @@
           "customer_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "bank_account"
+      ]
     },
     {
       "name": "update_a_bank_account_payment_source",
@@ -2113,7 +2162,8 @@
         "cust_payment_source_id"
       ],
       "redact_fields": [
-        "cust_payment_source_id"
+        "cust_payment_source_id",
+        "bank_account"
       ]
     },
     {
@@ -2249,7 +2299,11 @@
           "reference_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "reference_id"
+      ]
     },
     {
       "name": "copy_card",
@@ -2392,7 +2446,12 @@
         "customer_id"
       ],
       "redact_fields": [
-        "customer_id"
+        "customer_id",
+        "expiry_month",
+        "expiry_year",
+        "number",
+        "tmp_token",
+        "first_name"
       ]
     },
     {
@@ -3259,7 +3318,8 @@
       },
       "risk": "external mutation that attempts to charge a payment method; approval required",
       "redact_fields": [
-        "id"
+        "id",
+        "payment_source_id"
       ]
     },
     {
@@ -4357,7 +4417,11 @@
           "customer_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "payment_source_id"
+      ]
     },
     {
       "name": "delete_an_offline_transaction",
@@ -4524,7 +4588,10 @@
         },
         "minProperties": 1
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "payment_voucher"
+      ]
     },
     {
       "name": "collect_now",
@@ -4560,7 +4627,10 @@
         },
         "minProperties": 1
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "card"
+      ]
     },
     {
       "name": "accept_a_quote",
@@ -4784,7 +4854,10 @@
         },
         "minProperties": 1
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "card"
+      ]
     },
     {
       "name": "create_a_quote_for_a_new_subscription_items",
@@ -5812,7 +5885,8 @@
         "portal_session_id"
       ],
       "redact_fields": [
-        "portal_session_id"
+        "portal_session_id",
+        "token"
       ]
     },
     {
@@ -6337,7 +6411,11 @@
           "currency_code"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "customer_id",
+        "reference_id"
+      ]
     },
     {
       "name": "delete_item_family",
@@ -7992,7 +8070,10 @@
           "customer_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "payment_source_id"
+      ]
     },
     {
       "name": "create_a_voucher_for_the_customer_to_initiate_payment",
@@ -8022,7 +8103,11 @@
           "customer_id"
         ]
       },
-      "risk": "external Chargebee mutation; reverse ETL approval required"
+      "risk": "external Chargebee mutation; reverse ETL approval required",
+      "redact_fields": [
+        "payment_source_id",
+        "voucher_payment_source"
+      ]
     },
     {
       "name": "taxes_csv_import",

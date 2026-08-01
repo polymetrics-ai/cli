@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/transactions/fixture_transaction_id/refund"
+    "path": "/transactions/fixture_transaction_id/refund",
+    "body": {
+      "amount": 1
+    }
   }
 }

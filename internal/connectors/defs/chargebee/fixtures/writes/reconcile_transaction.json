@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/transactions/fixture_transaction_id/reconcile"
+    "path": "/transactions/fixture_transaction_id/reconcile",
+    "body": {
+      "id_at_gateway": "fixture_id_at_gateway"
+    }
   }
 }

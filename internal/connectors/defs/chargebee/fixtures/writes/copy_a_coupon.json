@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/coupons/copy"
+    "path": "/coupons/copy",
+    "body": {
+      "from_site": "fixture_from_site",
+      "id_at_from_site": "fixture_id_at_from_site"
+    }
   }
 }

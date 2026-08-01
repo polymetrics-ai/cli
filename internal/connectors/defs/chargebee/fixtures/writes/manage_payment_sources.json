@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/manage_payment_sources"
+    "path": "/hosted_pages/manage_payment_sources",
+    "body": {
+      "business_entity_id": "fixture_business_entity_id"
+    }
   }
 }

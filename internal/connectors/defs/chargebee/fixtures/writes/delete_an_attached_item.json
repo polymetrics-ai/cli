@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/attached_items/fixture_attached_item_id/delete"
+    "path": "/attached_items/fixture_attached_item_id/delete",
+    "body": {
+      "parent_item_id": "fixture_parent_item_id"
+    }
   }
 }

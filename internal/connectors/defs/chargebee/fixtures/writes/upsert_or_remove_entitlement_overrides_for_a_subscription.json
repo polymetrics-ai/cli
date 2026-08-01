@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/entitlement_overrides"
+    "path": "/subscriptions/fixture_subscription_id/entitlement_overrides",
+    "body": {
+      "action": "upsert"
+    }
   }
 }

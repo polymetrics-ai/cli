@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/features/fixture_feature_id/item_entitlements"
+    "path": "/features/fixture_feature_id/item_entitlements",
+    "body": {
+      "action": "upsert"
+    }
   }
 }

@@ -7,6 +7,7 @@
     { "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
     { "method": "GET", "path": "/notes", "covered_by": { "stream": "notes" } },
     { "method": "PATCH", "path": "/widgets/{id}", "covered_by": { "write": "update_widget" } },
+    { "method": "POST", "path": "/widgets/{id}/notes", "covered_by": { "write": "create_widget_note" } },
     { "method": "DELETE", "path": "/widgets/{id}", "covered_by": { "write": "delete_widget" } }
   ]
 }

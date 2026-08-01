@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/hosted_pages/pre_cancel"
+    "path": "/hosted_pages/pre_cancel",
+    "body": {
+      "pass_thru_content": "fixture_pass_thru_content"
+    }
   }
 }

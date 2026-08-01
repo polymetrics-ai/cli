@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/omnichannel_subscriptions/fixture_omnichannel_subscription_id/move"
+    "path": "/omnichannel_subscriptions/fixture_omnichannel_subscription_id/move",
+    "body": {
+      "to_customer_id": "fixture_to_customer_id"
+    }
   }
 }

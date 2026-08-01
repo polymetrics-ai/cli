@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/import_contract_term"
+    "path": "/subscriptions/fixture_subscription_id/import_contract_term",
+    "body": {
+      "contract_term_billing_cycle_on_renewal": 1
+    }
   }
 }

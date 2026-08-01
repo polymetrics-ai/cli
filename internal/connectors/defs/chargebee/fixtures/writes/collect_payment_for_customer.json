@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/collect_payment"
+    "path": "/customers/fixture_customer_id/collect_payment",
+    "body": {
+      "amount": 1
+    }
   }
 }

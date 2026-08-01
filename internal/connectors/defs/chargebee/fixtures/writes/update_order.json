@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders/order_fixture_1"
+    "path": "/orders/order_fixture_1",
+    "body": {
+      "tracking_id": "TRK-FIXTURE-1"
+    }
   }
 }

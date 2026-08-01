@@ -5,6 +5,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/item_families"
+    "path": "/item_families",
+    "body": {
+      "id": "fam_fixture_1",
+      "name": "Fixture Family"
+    }
   }
 }

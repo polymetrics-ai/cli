@@ -6,6 +6,10 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/assign_payment_role"
+    "path": "/customers/fixture_customer_id/assign_payment_role",
+    "body": {
+      "payment_source_id": "fixture_payment_source_id",
+      "role": "primary"
+    }
   }
 }

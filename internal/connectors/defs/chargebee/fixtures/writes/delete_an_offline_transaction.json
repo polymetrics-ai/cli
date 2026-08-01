@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/transactions/fixture_transaction_id/delete_offline_transaction"
+    "path": "/transactions/fixture_transaction_id/delete_offline_transaction",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

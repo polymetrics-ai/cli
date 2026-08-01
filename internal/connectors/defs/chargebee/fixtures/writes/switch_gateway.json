@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/switch_gateway"
+    "path": "/customers/fixture_customer_id/switch_gateway",
+    "body": {
+      "gateway_account_id": "fixture_gateway_account_id"
+    }
   }
 }

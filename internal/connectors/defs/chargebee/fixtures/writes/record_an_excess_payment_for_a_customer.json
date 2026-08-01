@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/fixture_customer_id/record_excess_payment"
+    "path": "/customers/fixture_customer_id/record_excess_payment",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

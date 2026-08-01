@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/resume"
+    "path": "/subscriptions/fixture_subscription_id/resume",
+    "body": {
+      "resume_option": "immediately"
+    }
   }
 }

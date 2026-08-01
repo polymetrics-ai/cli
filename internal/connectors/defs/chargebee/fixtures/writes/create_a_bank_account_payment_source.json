@@ -4,6 +4,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_sources/create_bank_account"
+    "path": "/payment_sources/create_bank_account",
+    "body": {
+      "customer_id": "fixture_customer_id"
+    }
   }
 }

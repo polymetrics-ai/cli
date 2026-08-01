@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/orders/fixture_order_id/resend"
+    "path": "/orders/fixture_order_id/resend",
+    "body": {
+      "shipping_date": 1
+    }
   }
 }

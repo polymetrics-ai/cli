@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/payment_intents/fixture_payment_intent_id"
+    "path": "/payment_intents/fixture_payment_intent_id",
+    "body": {
+      "amount": 1
+    }
   }
 }

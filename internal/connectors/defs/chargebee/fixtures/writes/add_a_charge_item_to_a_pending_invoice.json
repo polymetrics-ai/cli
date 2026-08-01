@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/add_charge_item"
+    "path": "/invoices/fixture_invoice_id/add_charge_item",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

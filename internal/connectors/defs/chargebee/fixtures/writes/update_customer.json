@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/customers/cus_fixture_1"
+    "path": "/customers/cus_fixture_1",
+    "body": {
+      "email": "updated-fixture@example.com"
+    }
   }
 }

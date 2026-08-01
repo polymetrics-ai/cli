@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/refund"
+    "path": "/invoices/fixture_invoice_id/refund",
+    "body": {
+      "refund_amount": 1
+    }
   }
 }

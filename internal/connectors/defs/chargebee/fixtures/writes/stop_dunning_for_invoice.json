@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/invoices/fixture_invoice_id/stop_dunning"
+    "path": "/invoices/fixture_invoice_id/stop_dunning",
+    "body": {
+      "comment": "fixture_comment"
+    }
   }
 }

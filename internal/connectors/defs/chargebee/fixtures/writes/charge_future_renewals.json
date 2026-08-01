@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/charge_future_renewals"
+    "path": "/subscriptions/fixture_subscription_id/charge_future_renewals",
+    "body": {
+      "terms_to_charge": 1
+    }
   }
 }

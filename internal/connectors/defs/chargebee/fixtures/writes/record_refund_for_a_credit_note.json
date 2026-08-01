@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/credit_notes/fixture_credit_note_id/record_refund"
+    "path": "/credit_notes/fixture_credit_note_id/record_refund",
+    "body": {
+      "refund_reason_code": "fixture_refund_reason_code"
+    }
   }
 }

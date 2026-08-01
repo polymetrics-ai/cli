@@ -5,6 +5,9 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/process_purchase_command"
+    "path": "/in_app_subscriptions/fixture_in_app_subscription_app_id/process_purchase_command",
+    "body": {
+      "receipt": "fixture_receipt"
+    }
   }
 }

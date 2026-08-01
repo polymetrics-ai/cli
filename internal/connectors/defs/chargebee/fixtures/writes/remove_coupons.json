@@ -7,6 +7,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/subscriptions/fixture_subscription_id/remove_coupons"
+    "path": "/subscriptions/fixture_subscription_id/remove_coupons",
+    "body": {
+      "coupon_ids": [
+        "fixture_coupon_ids_item"
+      ]
+    }
   }
 }
