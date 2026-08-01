@@ -21,7 +21,7 @@
     },
     "check": {
       "method": "GET",
-      "path": "/common/v1/workers",
+      "path": "/api/common/v1/workers",
       "query": {
         "limit": "1"
       }
