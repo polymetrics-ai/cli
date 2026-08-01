@@ -1,13 +1,13 @@
 {
   "record": {
-    "ids": "project_fixture_1,project_fixture_2"
+    "ids": [
+      "project_fixture_1",
+      "project_fixture_2"
+    ]
   },
   "expect": {
     "method": "DELETE",
-    "path": "/project",
-    "body": {
-      "ids": "project_fixture_1,project_fixture_2"
-    }
+    "path": "/project"
   },
   "response": {
     "status": 200,

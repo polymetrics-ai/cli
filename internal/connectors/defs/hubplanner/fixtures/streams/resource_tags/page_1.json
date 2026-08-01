@@ -11,10 +11,9 @@
     "status": 200,
     "body": [
       {
-        "_id": "resource_tags_fixture_1",
-        "name": "Hubplanner resource tags fixture",
-        "status": "ACTIVE",
-        "createdDate": "2026-01-01T00:00:00Z"
+        "_id": "resource_tag_fixture_1",
+        "value": "Fixture Resource Tag",
+        "category": "resource"
       }
     ]
   }

@@ -1,12 +1,14 @@
 {
   "record": {
-    "name": "Fixture Project Group"
+    "name": "Fixture Project Group",
+    "parentGroupId": "parent_group_fixture_1"
   },
   "expect": {
     "method": "POST",
     "path": "/projectgroup",
     "body": {
-      "name": "Fixture Project Group"
+      "name": "Fixture Project Group",
+      "parentGroupId": "parent_group_fixture_1"
     }
   },
   "response": {

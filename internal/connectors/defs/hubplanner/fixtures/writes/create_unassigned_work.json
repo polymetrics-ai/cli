@@ -1,16 +1,12 @@
 {
   "record": {
-    "project": "project_fixture_1",
-    "start": "2026-01-14T09:00:00Z",
-    "end": "2026-01-14T12:00:00Z"
+    "value": "Fixture unassigned work"
   },
   "expect": {
     "method": "POST",
     "path": "/unassigned-work",
     "body": {
-      "project": "project_fixture_1",
-      "start": "2026-01-14T09:00:00Z",
-      "end": "2026-01-14T12:00:00Z"
+      "value": "Fixture unassigned work"
     }
   },
   "response": {

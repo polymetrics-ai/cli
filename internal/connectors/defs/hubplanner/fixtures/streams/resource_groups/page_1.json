@@ -11,10 +11,18 @@
     "status": 200,
     "body": [
       {
-        "_id": "resource_groups_fixture_1",
-        "name": "Hubplanner resource groups fixture",
-        "status": "ACTIVE",
-        "createdDate": "2026-01-01T00:00:00Z"
+        "_id": "resource_group_fixture_1",
+        "name": "Fixture Resource Group",
+        "resources": [
+          "resource_fixture_1"
+        ],
+        "approvers": [
+          "resource_fixture_2"
+        ],
+        "metadata": "",
+        "parentGroupId": "parent_group_fixture_1",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": "2026-01-02T00:00:00Z"
       }
     ]
   }

@@ -12,37 +12,13 @@
     "_id": {
       "type": "string"
     },
-    "name": {
+    "companyId": {
       "type": [
         "string",
         "null"
       ]
     },
-    "label": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "createdDate": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updatedDate": {
+    "creationDate": {
       "type": [
         "string",
         "null"

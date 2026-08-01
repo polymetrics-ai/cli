@@ -12,25 +12,49 @@
     "_id": {
       "type": "string"
     },
-    "name": {
+    "resource": {
       "type": [
         "string",
         "null"
       ]
     },
-    "label": {
+    "project": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "projectName": {
       "type": [
         "string",
         "null"
       ]
     },
-    "type": {
+    "projectType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "projectStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "note": {
       "type": [
         "string",
         "null"
@@ -43,6 +67,42 @@
       ]
     },
     "updatedDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "creator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "categoryTemplateId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "categoryName": {
       "type": [
         "string",
         "null"

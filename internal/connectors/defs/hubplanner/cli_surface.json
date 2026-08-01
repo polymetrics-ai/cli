@@ -1134,10 +1134,10 @@
       "write": "create_billing_rate",
       "flags": [
         {
-          "name": "name",
+          "name": "label",
           "type": "string",
-          "summary": "Value for record.name.",
-          "maps_to": "record.name",
+          "summary": "Value for record.label.",
+          "maps_to": "record.label",
           "allow_empty": false
         },
         {
@@ -1152,12 +1152,6 @@
           "summary": "Value for record.currency.",
           "maps_to": "record.currency",
           "allow_empty": false
-        },
-        {
-          "name": "default",
-          "type": "boolean",
-          "summary": "Value for record.default.",
-          "maps_to": "record.default"
         }
       ],
       "api_surface": [
@@ -1188,10 +1182,10 @@
           "allow_empty": false
         },
         {
-          "name": "name",
+          "name": "label",
           "type": "string",
-          "summary": "Value for record.name.",
-          "maps_to": "record.name",
+          "summary": "Value for record.label.",
+          "maps_to": "record.label",
           "allow_empty": false
         },
         {
@@ -1206,12 +1200,6 @@
           "summary": "Value for record.currency.",
           "maps_to": "record.currency",
           "allow_empty": false
-        },
-        {
-          "name": "default",
-          "type": "boolean",
-          "summary": "Value for record.default.",
-          "maps_to": "record.default"
         }
       ],
       "api_surface": [
@@ -1270,17 +1258,24 @@
           "allow_empty": false
         },
         {
-          "name": "note",
+          "name": "type",
           "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
+          "summary": "Value for record.type.",
+          "maps_to": "record.type",
           "allow_empty": false
         },
         {
-          "name": "status",
+          "name": "gridColor",
           "type": "string",
-          "summary": "Value for record.status.",
-          "maps_to": "record.status",
+          "summary": "Value for record.gridColor.",
+          "maps_to": "record.gridColor",
+          "allow_empty": false
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "summary": "Value for record.group.",
+          "maps_to": "record.group",
           "allow_empty": false
         }
       ],
@@ -1319,17 +1314,24 @@
           "allow_empty": false
         },
         {
-          "name": "note",
+          "name": "type",
           "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
+          "summary": "Value for record.type.",
+          "maps_to": "record.type",
           "allow_empty": false
         },
         {
-          "name": "status",
+          "name": "gridColor",
           "type": "string",
-          "summary": "Value for record.status.",
-          "maps_to": "record.status",
+          "summary": "Value for record.gridColor.",
+          "maps_to": "record.gridColor",
+          "allow_empty": false
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "summary": "Value for record.group.",
+          "maps_to": "record.group",
           "allow_empty": false
         }
       ],
@@ -2127,13 +2129,6 @@
       "write": "create_event",
       "flags": [
         {
-          "name": "id",
-          "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
           "name": "name",
           "type": "string",
           "summary": "Value for record.name.",
@@ -2141,31 +2136,24 @@
           "allow_empty": false
         },
         {
-          "name": "start",
+          "name": "eventCode",
           "type": "string",
-          "summary": "Value for record.start.",
-          "maps_to": "record.start",
+          "summary": "Value for record.eventCode.",
+          "maps_to": "record.eventCode",
           "allow_empty": false
         },
         {
-          "name": "end",
+          "name": "backgroundColor",
           "type": "string",
-          "summary": "Value for record.end.",
-          "maps_to": "record.end",
+          "summary": "Value for record.backgroundColor.",
+          "maps_to": "record.backgroundColor",
           "allow_empty": false
         },
         {
-          "name": "type",
+          "name": "metadata",
           "type": "string",
-          "summary": "Value for record.type.",
-          "maps_to": "record.type",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
+          "summary": "Value for record.metadata.",
+          "maps_to": "record.metadata",
           "allow_empty": false
         }
       ],
@@ -2204,31 +2192,24 @@
           "allow_empty": false
         },
         {
-          "name": "start",
+          "name": "eventCode",
           "type": "string",
-          "summary": "Value for record.start.",
-          "maps_to": "record.start",
+          "summary": "Value for record.eventCode.",
+          "maps_to": "record.eventCode",
           "allow_empty": false
         },
         {
-          "name": "end",
+          "name": "backgroundColor",
           "type": "string",
-          "summary": "Value for record.end.",
-          "maps_to": "record.end",
+          "summary": "Value for record.backgroundColor.",
+          "maps_to": "record.backgroundColor",
           "allow_empty": false
         },
         {
-          "name": "type",
+          "name": "metadata",
           "type": "string",
-          "summary": "Value for record.type.",
-          "maps_to": "record.type",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
+          "summary": "Value for record.metadata.",
+          "maps_to": "record.metadata",
           "allow_empty": false
         }
       ],
@@ -2281,13 +2262,6 @@
       "write": "create_project_group",
       "flags": [
         {
-          "name": "id",
-          "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
           "name": "name",
           "type": "string",
           "summary": "Value for record.name.",
@@ -2295,18 +2269,17 @@
           "allow_empty": false
         },
         {
-          "name": "groupType",
+          "name": "parentGroupId",
           "type": "string",
-          "summary": "Value for record.groupType.",
-          "maps_to": "record.groupType",
+          "summary": "Value for record.parentGroupId.",
+          "maps_to": "record.parentGroupId",
           "allow_empty": false
         },
         {
-          "name": "parent",
-          "type": "string",
-          "summary": "Value for record.parent.",
-          "maps_to": "record.parent",
-          "allow_empty": false
+          "name": "projects",
+          "type": "string_array",
+          "summary": "Project ids to include in record.projects.",
+          "maps_to": "record.projects"
         }
       ],
       "api_surface": [
@@ -2344,18 +2317,17 @@
           "allow_empty": false
         },
         {
-          "name": "groupType",
+          "name": "parentGroupId",
           "type": "string",
-          "summary": "Value for record.groupType.",
-          "maps_to": "record.groupType",
+          "summary": "Value for record.parentGroupId.",
+          "maps_to": "record.parentGroupId",
           "allow_empty": false
         },
         {
-          "name": "parent",
-          "type": "string",
-          "summary": "Value for record.parent.",
-          "maps_to": "record.parent",
-          "allow_empty": false
+          "name": "projects",
+          "type": "string_array",
+          "summary": "Project ids to include in record.projects.",
+          "maps_to": "record.projects"
         }
       ],
       "api_surface": [
@@ -2561,13 +2533,6 @@
       "write": "create_milestone",
       "flags": [
         {
-          "name": "id",
-          "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
           "name": "name",
           "type": "string",
           "summary": "Value for record.name.",
@@ -2586,13 +2551,6 @@
           "type": "string",
           "summary": "Value for record.project.",
           "maps_to": "record.project",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
           "allow_empty": false
         }
       ],
@@ -2642,13 +2600,6 @@
           "type": "string",
           "summary": "Value for record.project.",
           "maps_to": "record.project",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
           "allow_empty": false
         }
       ],
@@ -2701,31 +2652,10 @@
       "write": "create_cost_category",
       "flags": [
         {
-          "name": "id",
-          "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
           "name": "name",
           "type": "string",
           "summary": "Value for record.name.",
           "maps_to": "record.name",
-          "allow_empty": false
-        },
-        {
-          "name": "code",
-          "type": "string",
-          "summary": "Value for record.code.",
-          "maps_to": "record.code",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
           "allow_empty": false
         }
       ],
@@ -2761,20 +2691,6 @@
           "type": "string",
           "summary": "Value for record.name.",
           "maps_to": "record.name",
-          "allow_empty": false
-        },
-        {
-          "name": "code",
-          "type": "string",
-          "summary": "Value for record.code.",
-          "maps_to": "record.code",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
           "allow_empty": false
         }
       ],
@@ -2827,24 +2743,10 @@
       "write": "create_project_tag",
       "flags": [
         {
-          "name": "id",
+          "name": "value",
           "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Value for record.name.",
-          "maps_to": "record.name",
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Value for record.color.",
-          "maps_to": "record.color",
+          "summary": "Value for record.value.",
+          "maps_to": "record.value",
           "allow_empty": false
         }
       ],
@@ -2876,17 +2778,10 @@
           "allow_empty": false
         },
         {
-          "name": "name",
+          "name": "value",
           "type": "string",
-          "summary": "Value for record.name.",
-          "maps_to": "record.name",
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Value for record.color.",
-          "maps_to": "record.color",
+          "summary": "Value for record.value.",
+          "maps_to": "record.value",
           "allow_empty": false
         }
       ],
@@ -2939,24 +2834,10 @@
       "write": "create_resource_tag",
       "flags": [
         {
-          "name": "id",
+          "name": "value",
           "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Value for record.name.",
-          "maps_to": "record.name",
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Value for record.color.",
-          "maps_to": "record.color",
+          "summary": "Value for record.value.",
+          "maps_to": "record.value",
           "allow_empty": false
         }
       ],
@@ -2988,17 +2869,10 @@
           "allow_empty": false
         },
         {
-          "name": "name",
+          "name": "value",
           "type": "string",
-          "summary": "Value for record.name.",
-          "maps_to": "record.name",
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Value for record.color.",
-          "maps_to": "record.color",
+          "summary": "Value for record.value.",
+          "maps_to": "record.value",
           "allow_empty": false
         }
       ],
@@ -3178,10 +3052,9 @@
       "flags": [
         {
           "name": "ids",
-          "type": "string",
-          "summary": "Comma-separated Hubplanner ids for the fixed bulk-delete target.",
-          "maps_to": "record.ids",
-          "allow_empty": false
+          "type": "string_array",
+          "summary": "Hubplanner ids for the fixed bulk-delete request body.",
+          "maps_to": "record.ids"
         }
       ],
       "api_surface": [
@@ -3348,10 +3221,9 @@
       "flags": [
         {
           "name": "ids",
-          "type": "string",
-          "summary": "Comma-separated Hubplanner ids for the fixed bulk-delete target.",
-          "maps_to": "record.ids",
-          "allow_empty": false
+          "type": "string_array",
+          "summary": "Hubplanner ids for the fixed bulk-delete request body.",
+          "maps_to": "record.ids"
         }
       ],
       "api_surface": [
@@ -3377,13 +3249,6 @@
       "write": "create_time_entry",
       "flags": [
         {
-          "name": "id",
-          "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
           "name": "resource",
           "type": "string",
           "summary": "Value for record.resource.",
@@ -3405,16 +3270,23 @@
           "allow_empty": false
         },
         {
-          "name": "hours",
+          "name": "minutes",
           "type": "integer",
-          "summary": "Value for record.hours.",
-          "maps_to": "record.hours"
+          "summary": "Value for record.minutes.",
+          "maps_to": "record.minutes"
         },
         {
           "name": "note",
           "type": "string",
           "summary": "Value for record.note.",
           "maps_to": "record.note",
+          "allow_empty": false
+        },
+        {
+          "name": "categoryTemplateId",
+          "type": "string",
+          "summary": "Value for record.categoryTemplateId.",
+          "maps_to": "record.categoryTemplateId",
           "allow_empty": false
         }
       ],
@@ -3467,16 +3339,23 @@
           "allow_empty": false
         },
         {
-          "name": "hours",
+          "name": "minutes",
           "type": "integer",
-          "summary": "Value for record.hours.",
-          "maps_to": "record.hours"
+          "summary": "Value for record.minutes.",
+          "maps_to": "record.minutes"
         },
         {
           "name": "note",
           "type": "string",
           "summary": "Value for record.note.",
           "maps_to": "record.note",
+          "allow_empty": false
+        },
+        {
+          "name": "categoryTemplateId",
+          "type": "string",
+          "summary": "Value for record.categoryTemplateId.",
+          "maps_to": "record.categoryTemplateId",
           "allow_empty": false
         }
       ],
@@ -3530,10 +3409,9 @@
       "flags": [
         {
           "name": "ids",
-          "type": "string",
-          "summary": "Comma-separated Hubplanner ids for the fixed bulk-delete target.",
-          "maps_to": "record.ids",
-          "allow_empty": false
+          "type": "string_array",
+          "summary": "Hubplanner ids for the fixed bulk-delete request body.",
+          "maps_to": "record.ids"
         }
       ],
       "api_surface": [
@@ -3559,38 +3437,10 @@
       "write": "create_unassigned_work",
       "flags": [
         {
-          "name": "id",
+          "name": "value",
           "type": "string",
-          "summary": "Value for record.id.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "project",
-          "type": "string",
-          "summary": "Value for record.project.",
-          "maps_to": "record.project",
-          "allow_empty": false
-        },
-        {
-          "name": "start",
-          "type": "string",
-          "summary": "Value for record.start.",
-          "maps_to": "record.start",
-          "allow_empty": false
-        },
-        {
-          "name": "end",
-          "type": "string",
-          "summary": "Value for record.end.",
-          "maps_to": "record.end",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
+          "summary": "Value for record.value.",
+          "maps_to": "record.value",
           "allow_empty": false
         }
       ],
@@ -3622,31 +3472,10 @@
           "allow_empty": false
         },
         {
-          "name": "project",
+          "name": "value",
           "type": "string",
-          "summary": "Value for record.project.",
-          "maps_to": "record.project",
-          "allow_empty": false
-        },
-        {
-          "name": "start",
-          "type": "string",
-          "summary": "Value for record.start.",
-          "maps_to": "record.start",
-          "allow_empty": false
-        },
-        {
-          "name": "end",
-          "type": "string",
-          "summary": "Value for record.end.",
-          "maps_to": "record.end",
-          "allow_empty": false
-        },
-        {
-          "name": "note",
-          "type": "string",
-          "summary": "Value for record.note.",
-          "maps_to": "record.note",
+          "summary": "Value for record.value.",
+          "maps_to": "record.value",
           "allow_empty": false
         }
       ],

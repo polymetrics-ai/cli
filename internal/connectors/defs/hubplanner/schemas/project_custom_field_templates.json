@@ -12,13 +12,72 @@
     "_id": {
       "type": "string"
     },
-    "name": {
+    "filterGrid": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "label": {
       "type": [
         "string",
         "null"
       ]
     },
-    "label": {
+    "instructions": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "defaultValue": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "defaultRadioId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "placeholderText": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "choices": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "canResourceEdit": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "category": {
       "type": [
         "string",
         "null"
@@ -30,9 +89,53 @@
         "null"
       ]
     },
-    "type": {
+    "allowMultipleValues": {
       "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "characterLimit": {
+      "type": [
+        "integer",
+        "number",
         "string",
+        "null"
+      ]
+    },
+    "maxValue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "minValue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "stepValue": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "weekStartOn": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "isRequired": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "isChoicesSortedAlphabetically": {
+      "type": [
+        "boolean",
         "null"
       ]
     },

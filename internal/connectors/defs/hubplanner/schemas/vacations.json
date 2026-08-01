@@ -12,21 +12,45 @@
     "_id": {
       "type": "string"
     },
-    "name": {
+    "title": {
       "type": [
         "string",
         "null"
       ]
     },
-    "label": {
+    "start": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "end": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "minutesPerDay": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "resource": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "approvalInfo": {
+      "type": [
+        "object",
         "null"
       ]
     },
@@ -36,13 +60,25 @@
         "null"
       ]
     },
-    "createdDate": {
+    "resourceType": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updatedDate": {
+    "metadata": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "percentAllocation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creatorId": {
       "type": [
         "string",
         "null"

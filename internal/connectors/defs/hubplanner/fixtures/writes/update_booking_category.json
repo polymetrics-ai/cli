@@ -2,14 +2,16 @@
   "record": {
     "id": "booking_category_fixture_1",
     "name": "Updated Booking Category",
-    "status": "ACTIVE"
+    "type": "CUSTOM",
+    "gridColor": "#663399"
   },
   "expect": {
     "method": "PUT",
     "path": "/categories/booking_category_fixture_1",
     "body": {
       "name": "Updated Booking Category",
-      "status": "ACTIVE"
+      "type": "CUSTOM",
+      "gridColor": "#663399"
     }
   },
   "response": {

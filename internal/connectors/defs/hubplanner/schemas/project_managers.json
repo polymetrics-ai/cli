@@ -12,25 +12,13 @@
     "_id": {
       "type": "string"
     },
-    "name": {
+    "email": {
       "type": [
         "string",
         "null"
       ]
     },
-    "label": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
+    "metadata": {
       "type": [
         "string",
         "null"
@@ -48,6 +36,12 @@
         "null"
       ]
     },
+    "note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "firstName": {
       "type": [
         "string",
@@ -60,9 +54,27 @@
         "null"
       ]
     },
-    "email": {
+    "status": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "role": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isProjectManager": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "links": {
+      "type": [
+        "object",
         "null"
       ]
     }
