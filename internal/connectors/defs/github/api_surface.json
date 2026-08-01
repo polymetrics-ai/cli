@@ -6455,8 +6455,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}",
-      "covered_by": {
-        "write": "repo2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6521,8 +6527,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
-      "covered_by": {
-        "write": "actions_cache_retention_limit2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6537,8 +6549,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
-      "covered_by": {
-        "write": "actions_cache_storage_limit2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6562,15 +6580,27 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/caches",
-      "covered_by": {
-        "write": "actions_caches"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
-      "covered_by": {
-        "write": "actions_caches_cache_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6612,8 +6642,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
-      "covered_by": {
-        "write": "actions_jobs_job_id_rerun"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6628,8 +6664,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
-      "covered_by": {
-        "write": "actions_oidc_customization_sub2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6662,8 +6704,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions",
-      "covered_by": {
-        "write": "actions_permissions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6678,8 +6726,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions/access",
-      "covered_by": {
-        "write": "actions_permissions_access2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6694,8 +6748,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
-      "covered_by": {
-        "write": "actions_permissions_artifact_and_log_retention2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6710,8 +6770,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
-      "covered_by": {
-        "write": "actions_permissions_fork_pr_contributor_approval2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6726,8 +6792,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
-      "covered_by": {
-        "write": "actions_permissions_fork_pr_workflows_private_repos2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6742,8 +6814,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
-      "covered_by": {
-        "write": "actions_permissions_selected_actions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6758,8 +6836,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
-      "covered_by": {
-        "write": "actions_permissions_workflow2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6783,22 +6867,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig",
-      "covered_by": {
-        "write": "actions_runners_generate_jitconfig"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runners/registration-token",
-      "covered_by": {
-        "write": "actions_runners_registration_token"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runners/remove-token",
-      "covered_by": {
-        "write": "actions_runners_remove_token"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6813,8 +6915,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
-      "covered_by": {
-        "write": "actions_runners_runner_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6829,29 +6937,53 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "covered_by": {
-        "write": "actions_runners_runner_id_labels3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "covered_by": {
-        "write": "actions_runners_runner_id_labels4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "covered_by": {
-        "write": "actions_runners_runner_id_labels"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
-      "covered_by": {
-        "write": "actions_runners_runner_id_labels_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6894,8 +7026,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve",
-      "covered_by": {
-        "write": "actions_runs_run_id_approve"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6958,8 +7096,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
-      "covered_by": {
-        "write": "actions_runs_run_id_deployment_protection_rule"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -6996,8 +7140,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
-      "covered_by": {
-        "write": "actions_runs_run_id_logs"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7012,8 +7162,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
-      "covered_by": {
-        "write": "actions_runs_run_id_pending_deployments2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7075,15 +7231,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
-      "covered_by": {
-        "write": "actions_secrets_secret_name3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
-      "covered_by": {
-        "write": "actions_secrets_secret_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7098,8 +7266,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/variables",
-      "covered_by": {
-        "write": "actions_variables2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7114,15 +7288,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/actions/variables/{name}",
-      "covered_by": {
-        "write": "actions_variables_name3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/variables/{name}",
-      "covered_by": {
-        "write": "actions_variables_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7149,8 +7335,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
-      "covered_by": {
-        "write": "actions_workflows_workflow_id_disable"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7163,8 +7355,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
-      "covered_by": {
-        "write": "actions_workflows_workflow_id_enable"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7393,8 +7591,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/attestations",
-      "covered_by": {
-        "write": "attestations"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7416,8 +7620,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/autolinks",
-      "covered_by": {
-        "write": "autolinks"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7437,8 +7647,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
-      "covered_by": {
-        "write": "autolinks_autolink_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7453,15 +7669,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/automated-security-fixes",
-      "covered_by": {
-        "write": "automated_security_fixes3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/automated-security-fixes",
-      "covered_by": {
-        "write": "automated_security_fixes"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7497,15 +7725,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-      "covered_by": {
-        "write": "branches_branch_protection3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-      "covered_by": {
-        "write": "branches_branch_protection"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7520,15 +7760,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "covered_by": {
-        "write": "branches_branch_protection_enforce_admins3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "covered_by": {
-        "write": "branches_branch_protection_enforce_admins"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7543,15 +7795,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "covered_by": {
-        "write": "branches_branch_protection_required_pull_request_reviews3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "covered_by": {
-        "write": "branches_branch_protection_required_pull_request_reviews"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7566,15 +7830,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "covered_by": {
-        "write": "branches_branch_protection_required_signatures3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "covered_by": {
-        "write": "branches_branch_protection_required_signatures"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7589,15 +7865,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "covered_by": {
-        "write": "branches_branch_protection_required_status_checks3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "covered_by": {
-        "write": "branches_branch_protection_required_status_checks"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7612,22 +7900,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "covered_by": {
-        "write": "branches_branch_protection_required_status_checks_contexts3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "covered_by": {
-        "write": "branches_branch_protection_required_status_checks_contexts4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "covered_by": {
-        "write": "branches_branch_protection_required_status_checks_contexts"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7642,8 +7948,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7658,22 +7970,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_apps3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_apps4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_apps"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7688,22 +8018,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_teams3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_teams4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_teams"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7718,36 +8066,66 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_users3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_users4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "covered_by": {
-        "write": "branches_branch_protection_restrictions_users"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/branches/{branch}/rename",
-      "covered_by": {
-        "write": "branches_branch_rename"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/check-runs",
-      "covered_by": {
-        "write": "check_runs"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7762,8 +8140,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
-      "covered_by": {
-        "write": "check_runs_check_run_id2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7778,22 +8162,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
-      "covered_by": {
-        "write": "check_runs_check_run_id_rerequest"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/check-suites",
-      "covered_by": {
-        "write": "check_suites"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/check-suites/preferences",
-      "covered_by": {
-        "write": "check_suites_preferences"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7817,8 +8219,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
-      "covered_by": {
-        "write": "check_suites_check_suite_id_rerequest"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7851,8 +8259,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/code-quality/setup",
-      "covered_by": {
-        "write": "code_quality_setup2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7895,15 +8309,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
-      "covered_by": {
-        "write": "code_scanning_alerts_alert_number_autofix2"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
-      "covered_by": {
-        "write": "code_scanning_alerts_alert_number_autofix_commits"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7936,8 +8362,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
-      "covered_by": {
-        "write": "code_scanning_analyses_analysis_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -7961,15 +8393,27 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
-      "covered_by": {
-        "write": "code_scanning_codeql_databases_language"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
-      "covered_by": {
-        "write": "code_scanning_codeql_variant_analyses"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8002,15 +8446,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
-      "covered_by": {
-        "write": "code_scanning_default_setup2"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/code-scanning/sarifs",
-      "covered_by": {
-        "write": "code_scanning_sarifs"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8052,8 +8508,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/codespaces",
-      "covered_by": {
-        "write": "codespaces2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8122,15 +8584,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-      "covered_by": {
-        "write": "codespaces_secrets_secret_name3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-      "covered_by": {
-        "write": "codespaces_secrets_secret_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8229,15 +8703,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
-      "covered_by": {
-        "write": "comments_comment_id_reactions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
-      "covered_by": {
-        "write": "comments_comment_id_reactions_reaction_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8452,15 +8938,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-      "covered_by": {
-        "write": "dependabot_secrets_secret_name3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-      "covered_by": {
-        "write": "dependabot_secrets_secret_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8502,8 +9000,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/dependency-graph/snapshots",
-      "covered_by": {
-        "write": "dependency_graph_snapshots"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8537,8 +9041,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
-      "covered_by": {
-        "write": "deployments_deployment_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8553,8 +9063,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
-      "covered_by": {
-        "write": "deployments_deployment_id_statuses2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8574,8 +9090,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/dispatches",
-      "covered_by": {
-        "write": "dispatches"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8625,8 +9147,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
-      "covered_by": {
-        "write": "environments_environment_name_deployment_branch_policies2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8641,15 +9169,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-      "covered_by": {
-        "write": "environments_environment_name_deployment_branch_policies_branch_policy_id3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-      "covered_by": {
-        "write": "environments_environment_name_deployment_branch_policies_branch_policy_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8664,8 +9204,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
-      "covered_by": {
-        "write": "environments_environment_name_deployment_protection_rules2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8689,8 +9235,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
-      "covered_by": {
-        "write": "environments_environment_name_deployment_protection_rules_protection_rule_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8723,15 +9275,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-      "covered_by": {
-        "write": "environments_environment_name_secrets_secret_name3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-      "covered_by": {
-        "write": "environments_environment_name_secrets_secret_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8746,8 +9310,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
-      "covered_by": {
-        "write": "environments_environment_name_variables2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8762,15 +9332,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-      "covered_by": {
-        "write": "environments_environment_name_variables_name3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-      "covered_by": {
-        "write": "environments_environment_name_variables_name"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8803,8 +9385,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/git/blobs",
-      "covered_by": {
-        "write": "git_blobs"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8819,8 +9407,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/git/commits",
-      "covered_by": {
-        "write": "git_commits"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -8906,8 +9500,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/git/trees",
-      "covered_by": {
-        "write": "git_trees"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9018,22 +9618,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
-      "covered_by": {
-        "write": "hooks_hook_id_deliveries_delivery_id_attempts"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
-      "covered_by": {
-        "write": "hooks_hook_id_pings"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
-      "covered_by": {
-        "write": "hooks_hook_id_tests"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9048,15 +9666,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/immutable-releases",
-      "covered_by": {
-        "write": "immutable_releases3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/immutable-releases",
-      "covered_by": {
-        "write": "immutable_releases"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9071,22 +9701,40 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/import",
-      "covered_by": {
-        "write": "import4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/import",
-      "covered_by": {
-        "write": "import3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/import",
-      "covered_by": {
-        "write": "import"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9101,8 +9749,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/import/authors/{author_id}",
-      "covered_by": {
-        "write": "import_authors_author_id"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9117,8 +9771,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/import/lfs",
-      "covered_by": {
-        "write": "import_lfs"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9142,15 +9802,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/interaction-limits",
-      "covered_by": {
-        "write": "interaction_limits3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/interaction-limits",
-      "covered_by": {
-        "write": "interaction_limits"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9165,15 +9837,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
-      "covered_by": {
-        "write": "interaction_limits_pulls_bypass_list3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
-      "covered_by": {
-        "write": "interaction_limits_pulls_bypass_list"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9211,15 +9895,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
-      "covered_by": {
-        "write": "invitations_invitation_id2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
-      "covered_by": {
-        "write": "invitations_invitation_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9283,15 +9979,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
-      "covered_by": {
-        "write": "issues_comments_comment_id_pin2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
-      "covered_by": {
-        "write": "issues_comments_comment_id_pin"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9306,15 +10014,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
-      "covered_by": {
-        "write": "issues_comments_comment_id_reactions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
-      "covered_by": {
-        "write": "issues_comments_comment_id_reactions_reaction_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9415,15 +10135,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
-      "covered_by": {
-        "write": "issues_issue_number_dependencies_blocked_by2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
-      "covered_by": {
-        "write": "issues_issue_number_dependencies_blocked_by_issue_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9461,22 +10193,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
-      "covered_by": {
-        "write": "issues_issue_number_issue_field_values2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
-      "covered_by": {
-        "write": "issues_issue_number_issue_field_values3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
-      "covered_by": {
-        "write": "issues_issue_number_issue_field_values_issue_field_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9562,22 +10312,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
-      "covered_by": {
-        "write": "issues_issue_number_reactions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
-      "covered_by": {
-        "write": "issues_issue_number_reactions_reaction_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
-      "covered_by": {
-        "write": "issues_issue_number_sub_issue"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9592,15 +10360,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
-      "covered_by": {
-        "write": "issues_issue_number_sub_issues2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
-      "covered_by": {
-        "write": "issues_issue_number_sub_issues_priority"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9751,8 +10531,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/merge-upstream",
-      "covered_by": {
-        "write": "merge_upstream"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9825,8 +10611,14 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/notifications",
-      "covered_by": {
-        "write": "notifications2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9841,22 +10633,40 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pages",
-      "covered_by": {
-        "write": "pages3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/pages",
-      "covered_by": {
-        "write": "pages4"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/pages",
-      "covered_by": {
-        "write": "pages"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9871,8 +10681,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pages/builds",
-      "covered_by": {
-        "write": "pages_builds2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9896,8 +10712,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pages/deployments",
-      "covered_by": {
-        "write": "pages_deployments"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9912,8 +10734,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
-      "covered_by": {
-        "write": "pages_deployments_pages_deployment_id_cancel"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9937,15 +10765,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
-      "covered_by": {
-        "write": "private_vulnerability_reporting3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
-      "covered_by": {
-        "write": "private_vulnerability_reporting"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -9960,8 +10800,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/properties/values",
-      "covered_by": {
-        "write": "properties_values2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10025,15 +10871,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
-      "covered_by": {
-        "write": "pulls_comments_comment_id_reactions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
-      "covered_by": {
-        "write": "pulls_comments_comment_id_reactions_reaction_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10060,8 +10918,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
-      "covered_by": {
-        "write": "pulls_pull_number_codespaces"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10156,8 +11020,14 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-      "covered_by": {
-        "write": "pulls_pull_number_requested_reviewers"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10304,8 +11174,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/releases/generate-notes",
-      "covered_by": {
-        "write": "releases_generate_notes"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10376,8 +11252,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
-      "covered_by": {
-        "write": "releases_release_id_assets2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10392,15 +11274,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
-      "covered_by": {
-        "write": "releases_release_id_reactions2"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
-      "covered_by": {
-        "write": "releases_release_id_reactions_reaction_id"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10586,8 +11480,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
-      "covered_by": {
-        "write": "secret_scanning_push_protection_bypasses"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10609,15 +11509,27 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/security-advisories",
-      "covered_by": {
-        "write": "security_advisories"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/security-advisories/reports",
-      "covered_by": {
-        "write": "security_advisories_reports"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10637,22 +11549,40 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
-      "covered_by": {
-        "write": "security_advisories_ghsa_id"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
-      "covered_by": {
-        "write": "security_advisories_ghsa_id_cve"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
-      "covered_by": {
-        "write": "security_advisories_ghsa_id_forks"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10773,8 +11703,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/statuses/{sha}",
-      "covered_by": {
-        "write": "statuses_sha"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10796,15 +11732,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/subscription",
-      "covered_by": {
-        "write": "subscription3"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/subscription",
-      "covered_by": {
-        "write": "subscription"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10892,8 +11840,14 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/transfer",
-      "covered_by": {
-        "write": "transfer"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -10908,15 +11862,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
-      "covered_by": {
-        "write": "vulnerability_alerts3"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
-      "covered_by": {
-        "write": "vulnerability_alerts"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official REST DELETE operation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -13239,8 +14205,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/issues/{issue_number} (reopen)",
-      "covered_by": {
-        "write": "reopen_issue"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {
@@ -13253,8 +14225,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number} (reopen)",
-      "covered_by": {
-        "write": "reopen_pull_request"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official REST mutation is in scope, not blanket-excluded; it remains blocked until mapped to a named reverse ETL write with typed schema, bounded inputs, fixture coverage, plan -> preview -> explicit approval -> execute, and typed confirmation when destructive or sensitive.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "notes": "Captain policy: destructive/admin operations are included when implemented with typed confirmation and the existing reverse ETL safety path."
       }
     },
     {

@@ -1,15 +1,15 @@
 # Overview
 
-GitHub reads 37 stream(s), accounts for 231 connector-owned write action(s), and tracks the full
+GitHub reads 37 stream(s), accounts for 68 fixture-backed connector-owned write action(s), and tracks the full
 public GitHub REST, GraphQL, and webhook inventory in `api_surface.json`.
 
 Certification status: this bundle is not certified by this parity slice. The current documented
 ledger contains 1,596 official operations/events (1,216 REST, 305 GraphQL, 75 webhook/changefeed)
 plus 8 connector conformance coverage rows required by the current one-target-per-row schema. The
-440 covered rows map to existing streams, write actions, direct reads, or fixed GraphQL documents;
+277 covered rows map to existing streams, fixture-backed write actions, direct reads, or fixed GraphQL documents;
 remaining rows are blocked/planned ledger entries, not implemented-count claims. Destructive,
-delete, and admin operations are in scope when implemented with typed schemas, idempotency notes,
-plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.
+delete, and admin operations are in scope when implemented with typed schemas, write fixtures,
+idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
 docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to
@@ -40,7 +40,8 @@ Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `update_pull_request_branch`, `update_release_asset`, `delete_release_asset`, `replace_repo_topics`,
 `add_collaborator`, `remove_collaborator`, `create_ref`, `update_ref`, `delete_ref`, `merge_branch`,
 `update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
-`create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`.
+`create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`,
+`repo`.
 
 Service API documentation: https://docs.github.com/en/rest and https://docs.github.com/en/graphql.
 
@@ -531,11 +532,14 @@ actions:
   fields `alert_number`; required record fields `alert_number`, `state`; accepted fields
   `alert_number`, `resolution`, `resolution_comment`, `state`; risk: changes a secret scanning
   alert's triage state, which can suppress a real leaked-credential finding.
+- `repo`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}` - kind `delete`; body type `none`;
+  accepted fields none; risk: critical repository deletion; requires typed `destructive`
+  confirmation.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 440 covered connector rows and 1,164 blocked/planned ledger rows. The
+- API coverage includes 277 covered connector rows and 1,327 blocked/planned ledger rows. The
   official source inventory is 1,596 operations/events; 8 additional rows exist only to satisfy
   connector conformance coverage for write-action reuse and fixed GraphQL documents.
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
@@ -546,9 +550,9 @@ actions:
   reads. Project/discussion mutations, gist, codespaces, organization-wide views, and several status
   or search commands still require additional fixed GraphQL or mixed REST/GraphQL coverage.
 - Secret, variable, destructive, and admin operations are tracked as in-scope ledger rows. They are
-  executable only when a bounded command/write action supplies typed schemas, redaction or
-  idempotency notes as applicable, and the existing plan -> preview -> explicit approval -> execute
-  safety path with typed `destructive` confirmation for destructive actions.
+  executable only when a bounded command/write action supplies typed schemas, write fixtures,
+  redaction or idempotency notes as applicable, and the existing plan -> preview -> explicit approval
+  -> execute safety path with typed `destructive` confirmation for destructive actions.
 - Raw `gh api` and `gh api graphql` style escape hatches remain disallowed unless replaced by
   individually allowlisted operations with connector auth, connector base URLs, bounded methods,
   mutation approval, and secret redaction.

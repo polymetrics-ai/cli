@@ -298,12 +298,11 @@
     {
       "path": "issue reopen",
       "summary": "Reopen an issue",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "reopen_issue",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "gh issue reopen",
       "risk": "Reopens a previously closed issue.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -311,7 +310,8 @@
           "summary": "Issue number to reopen.",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issue comment",
@@ -685,12 +685,11 @@
     {
       "path": "pr reopen",
       "summary": "Reopen a pull request",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "reopen_pull_request",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "gh pr reopen",
       "risk": "Reopens a previously closed pull request.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "pull-number",
@@ -698,7 +697,8 @@
           "summary": "Pull request number to reopen.",
           "maps_to": "record.pull_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pr comment",
@@ -2364,23 +2364,23 @@
       "summary": "DELETE /repos/{owner}/{repo}",
       "intent": "reverse_etl",
       "availability": "implemented",
-      "write": "repo",
       "source_cli_path": "",
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [],
-      "notes": "destructive; requires --allow-destructive + typed confirmation"
+      "notes": "destructive; requires --allow-destructive + typed confirmation",
+      "write": "repo"
     },
     {
       "path": "repo update",
       "summary": "PATCH /repos/{owner}/{repo}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "repo2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "artifact download",
@@ -2414,13 +2414,13 @@
     {
       "path": "actions retention-limit set",
       "summary": "PUT /repos/{owner}/{repo}/actions/cache/retention-limit",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_cache_retention_limit2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions storage-limit view",
@@ -2434,13 +2434,13 @@
     {
       "path": "actions storage-limit set",
       "summary": "PUT /repos/{owner}/{repo}/actions/cache/storage-limit",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_cache_storage_limit2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions usage view",
@@ -2454,13 +2454,13 @@
     {
       "path": "actions caches delete",
       "summary": "DELETE /repos/{owner}/{repo}/actions/caches",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_caches",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions caches view",
@@ -2474,12 +2474,11 @@
     {
       "path": "actions caches delete-2",
       "summary": "DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_caches_cache_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "cache-id",
@@ -2487,7 +2486,8 @@
           "summary": "cache_id path parameter",
           "maps_to": "record.cache_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions concurrency_groups view",
@@ -2546,12 +2546,11 @@
     {
       "path": "actions rerun create",
       "summary": "POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_jobs_job_id_rerun",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "job-id",
@@ -2559,7 +2558,8 @@
           "summary": "job_id path parameter",
           "maps_to": "record.job_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions sub view",
@@ -2573,13 +2573,13 @@
     {
       "path": "actions sub set",
       "summary": "PUT /repos/{owner}/{repo}/actions/oidc/customization/sub",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_oidc_customization_sub2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions organization-secrets view",
@@ -2611,13 +2611,13 @@
     {
       "path": "actions permissions set",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions access view",
@@ -2631,13 +2631,13 @@
     {
       "path": "actions permissions set-2",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions/access",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions_access2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions artifact-and-log-retention view",
@@ -2651,13 +2651,13 @@
     {
       "path": "actions permissions set-3",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions_artifact_and_log_retention2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions fork-pr-contributor-approval view",
@@ -2671,13 +2671,13 @@
     {
       "path": "actions permissions set-4",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions_fork_pr_contributor_approval2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions fork-pr-workflows-private-repos view",
@@ -2691,13 +2691,13 @@
     {
       "path": "actions permissions set-5",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions_fork_pr_workflows_private_repos2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions selected-actions view",
@@ -2711,13 +2711,13 @@
     {
       "path": "actions permissions set-6",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions/selected-actions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions_selected_actions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions workflow view",
@@ -2731,13 +2731,13 @@
     {
       "path": "actions permissions set-7",
       "summary": "PUT /repos/{owner}/{repo}/actions/permissions/workflow",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_permissions_workflow2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions runners view",
@@ -2760,45 +2760,44 @@
     {
       "path": "actions generate-jitconfig create",
       "summary": "POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_generate_jitconfig",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions registration-token create",
       "summary": "POST /repos/{owner}/{repo}/actions/runners/registration-token",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_registration_token",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions remove-token create",
       "summary": "POST /repos/{owner}/{repo}/actions/runners/remove-token",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_remove_token",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions runners delete",
       "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_runner_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "runner-id",
@@ -2806,7 +2805,8 @@
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions runners view-2",
@@ -2826,12 +2826,11 @@
     {
       "path": "actions labels delete",
       "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_runner_id_labels",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "runner-id",
@@ -2839,7 +2838,8 @@
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions labels view",
@@ -2859,12 +2859,11 @@
     {
       "path": "actions labels create",
       "summary": "POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_runner_id_labels3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "runner-id",
@@ -2872,17 +2871,17 @@
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions labels set",
       "summary": "PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_runner_id_labels4",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "runner-id",
@@ -2890,17 +2889,17 @@
           "summary": "runner_id path parameter",
           "maps_to": "record.runner_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions labels delete-2",
       "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runners_runner_id_labels_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "runner-id",
@@ -2914,7 +2913,8 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions approvals view",
@@ -2934,12 +2934,11 @@
     {
       "path": "actions approve create",
       "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runs_run_id_approve",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "run-id",
@@ -2947,7 +2946,8 @@
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions attempts view",
@@ -3027,12 +3027,11 @@
     {
       "path": "actions deployment_protection_rule create",
       "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runs_run_id_deployment_protection_rule",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "run-id",
@@ -3040,7 +3039,8 @@
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions jobs view-3",
@@ -3060,12 +3060,11 @@
     {
       "path": "actions logs delete",
       "summary": "DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runs_run_id_logs",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "critical",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "run-id",
@@ -3074,7 +3073,7 @@
           "maps_to": "record.run_id"
         }
       ],
-      "notes": "destructive; requires --allow-destructive + typed confirmation"
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "run logs view-3",
@@ -3109,12 +3108,11 @@
     {
       "path": "actions pending_deployments create",
       "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_runs_run_id_pending_deployments2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "run-id",
@@ -3122,7 +3120,8 @@
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions timing view",
@@ -3160,12 +3159,11 @@
     {
       "path": "secret delete-2",
       "summary": "DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_secrets_secret_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "secret-name",
@@ -3173,7 +3171,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions secrets view-2",
@@ -3193,12 +3192,11 @@
     {
       "path": "secret set-2",
       "summary": "PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_secrets_secret_name3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "secret-name",
@@ -3206,7 +3204,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions variables view",
@@ -3220,23 +3219,22 @@
     {
       "path": "variable create",
       "summary": "POST /repos/{owner}/{repo}/actions/variables",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_variables2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "variable delete-2",
       "summary": "DELETE /repos/{owner}/{repo}/actions/variables/{name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_variables_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "name",
@@ -3244,7 +3242,8 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions variables view-2",
@@ -3264,12 +3263,11 @@
     {
       "path": "variable update",
       "summary": "PATCH /repos/{owner}/{repo}/actions/variables/{name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_variables_name3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "name",
@@ -3277,17 +3275,17 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions disable set",
       "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_workflows_workflow_id_disable",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "workflow-id",
@@ -3295,17 +3293,17 @@
           "summary": "workflow_id path parameter",
           "maps_to": "record.workflow_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions enable set",
       "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "actions_workflows_workflow_id_enable",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "workflow-id",
@@ -3313,7 +3311,8 @@
           "summary": "workflow_id path parameter",
           "maps_to": "record.workflow_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "actions timing view-2",
@@ -3348,13 +3347,13 @@
     {
       "path": "attestations create",
       "summary": "POST /repos/{owner}/{repo}/attestations",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "attestations",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "attestations view",
@@ -3374,23 +3373,22 @@
     {
       "path": "autolinks create",
       "summary": "POST /repos/{owner}/{repo}/autolinks",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "autolinks",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "autolinks delete",
       "summary": "DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "autolinks_autolink_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "autolink-id",
@@ -3398,18 +3396,19 @@
           "summary": "autolink_id path parameter",
           "maps_to": "record.autolink_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "automated-security-fixes delete",
       "summary": "DELETE /repos/{owner}/{repo}/automated-security-fixes",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "automated_security_fixes",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "automated-security-fixes view",
@@ -3423,23 +3422,22 @@
     {
       "path": "automated-security-fixes set",
       "summary": "PUT /repos/{owner}/{repo}/automated-security-fixes",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "automated_security_fixes3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches protection delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3447,7 +3445,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches protection view",
@@ -3467,12 +3466,11 @@
     {
       "path": "branches protection set",
       "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3480,17 +3478,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches enforce_admins delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_enforce_admins",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3498,7 +3496,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches enforce_admins view",
@@ -3518,12 +3517,11 @@
     {
       "path": "branches enforce_admins create",
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_enforce_admins3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3531,17 +3529,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches required_pull_request_reviews delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_pull_request_reviews",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3549,7 +3547,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches required_pull_request_reviews view",
@@ -3569,12 +3568,11 @@
     {
       "path": "branches required_pull_request_reviews update",
       "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_pull_request_reviews3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3582,17 +3580,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches required_signatures delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_signatures",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3600,7 +3598,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches required_signatures view",
@@ -3620,12 +3619,11 @@
     {
       "path": "branches required_signatures create",
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_signatures3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3633,17 +3631,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches required_status_checks delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_status_checks",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3651,7 +3649,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches required_status_checks view",
@@ -3671,12 +3670,11 @@
     {
       "path": "branches required_status_checks update",
       "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_status_checks3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3684,17 +3682,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches contexts delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_status_checks_contexts",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3702,7 +3700,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches contexts view",
@@ -3722,12 +3721,11 @@
     {
       "path": "branches contexts create",
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_status_checks_contexts3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3735,17 +3733,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches contexts set",
       "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_required_status_checks_contexts4",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3753,17 +3751,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches restrictions delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3771,7 +3769,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches restrictions view",
@@ -3791,12 +3790,11 @@
     {
       "path": "branches apps delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_apps",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3804,7 +3802,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches apps view",
@@ -3824,12 +3823,11 @@
     {
       "path": "branches apps create",
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_apps3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3837,17 +3835,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches apps set",
       "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_apps4",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3855,17 +3853,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches teams delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_teams",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3873,7 +3871,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches teams view",
@@ -3893,12 +3892,11 @@
     {
       "path": "branches teams create",
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_teams3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3906,17 +3904,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches teams set",
       "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_teams4",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3924,17 +3922,17 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches users delete",
       "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_users",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -3942,7 +3940,8 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "branches users view",
@@ -3962,48 +3961,11 @@
     {
       "path": "branches users create",
       "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_users3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": [
-        {
-          "name": "branch",
-          "type": "string",
-          "summary": "branch path parameter",
-          "maps_to": "record.branch"
-        }
-      ]
-    },
-    {
-      "path": "branches users set",
-      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_protection_restrictions_users4",
-      "source_cli_path": "",
-      "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": [
-        {
-          "name": "branch",
-          "type": "string",
-          "summary": "branch path parameter",
-          "maps_to": "record.branch"
-        }
-      ]
-    },
-    {
-      "path": "branches rename create",
-      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/rename",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "branches_branch_rename",
-      "source_cli_path": "",
-      "risk": "critical",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "branch",
@@ -4012,18 +3974,54 @@
           "maps_to": "record.branch"
         }
       ],
-      "notes": "destructive; requires --allow-destructive + typed confirmation"
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
+    },
+    {
+      "path": "branches users set",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "intent": "direct_write",
+      "availability": "planned",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
+    },
+    {
+      "path": "branches rename create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/rename",
+      "intent": "direct_write",
+      "availability": "planned",
+      "source_cli_path": "",
+      "risk": "critical",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "check-runs create",
       "summary": "POST /repos/{owner}/{repo}/check-runs",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "check_runs",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "check-runs view",
@@ -4043,12 +4041,11 @@
     {
       "path": "check-runs update",
       "summary": "PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "check_runs_check_run_id2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "check-run-id",
@@ -4056,7 +4053,8 @@
           "summary": "check_run_id path parameter",
           "maps_to": "record.check_run_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "check-runs annotations view",
@@ -4076,12 +4074,11 @@
     {
       "path": "check-runs rerequest create",
       "summary": "POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "check_runs_check_run_id_rerequest",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "check-run-id",
@@ -4089,29 +4086,30 @@
           "summary": "check_run_id path parameter",
           "maps_to": "record.check_run_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "check-suites create",
       "summary": "POST /repos/{owner}/{repo}/check-suites",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "check_suites",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "check-suites preferences update",
       "summary": "PATCH /repos/{owner}/{repo}/check-suites/preferences",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "check_suites_preferences",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "check-suites view",
@@ -4146,12 +4144,11 @@
     {
       "path": "check-suites rerequest create",
       "summary": "POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "check_suites_check_suite_id_rerequest",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "check-suite-id",
@@ -4159,7 +4156,8 @@
           "summary": "check_suite_id path parameter",
           "maps_to": "record.check_suite_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-quality findings view",
@@ -4197,13 +4195,13 @@
     {
       "path": "code-quality setup update",
       "summary": "PATCH /repos/{owner}/{repo}/code-quality/setup",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_quality_setup2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning autofix view",
@@ -4223,12 +4221,11 @@
     {
       "path": "code-scanning autofix create",
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_alerts_alert_number_autofix2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "alert-number",
@@ -4236,17 +4233,17 @@
           "summary": "alert_number path parameter",
           "maps_to": "record.alert_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning commits create",
       "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_alerts_alert_number_autofix_commits",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "alert-number",
@@ -4254,7 +4251,8 @@
           "summary": "alert_number path parameter",
           "maps_to": "record.alert_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning instances view",
@@ -4283,12 +4281,11 @@
     {
       "path": "code-scanning analyses delete",
       "summary": "DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_analyses_analysis_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "analysis-id",
@@ -4296,7 +4293,8 @@
           "summary": "analysis_id path parameter",
           "maps_to": "record.analysis_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning analyses view-2",
@@ -4325,12 +4323,11 @@
     {
       "path": "code-scanning databases delete",
       "summary": "DELETE /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_codeql_databases_language",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "language",
@@ -4338,7 +4335,8 @@
           "summary": "language path parameter",
           "maps_to": "record.language"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning databases view-2",
@@ -4358,13 +4356,13 @@
     {
       "path": "code-scanning variant-analyses create",
       "summary": "POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_codeql_variant_analyses",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning variant-analyses view",
@@ -4418,24 +4416,24 @@
     {
       "path": "code-scanning default-setup update",
       "summary": "PATCH /repos/{owner}/{repo}/code-scanning/default-setup",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_default_setup2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-sanning upload",
       "summary": "POST /repos/{owner}/{repo}/code-scanning/sarifs",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "code_scanning_sarifs",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "code-scanning sarifs view",
@@ -4482,13 +4480,13 @@
     {
       "path": "codespaces create",
       "summary": "POST /repos/{owner}/{repo}/codespaces",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "codespaces2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "codespaces devcontainers view",
@@ -4547,12 +4545,11 @@
     {
       "path": "secret delete-3",
       "summary": "DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "codespaces_secrets_secret_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "secret-name",
@@ -4560,7 +4557,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "codespaces secrets view-2",
@@ -4580,12 +4578,11 @@
     {
       "path": "secret set-3",
       "summary": "PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "codespaces_secrets_secret_name3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "secret-name",
@@ -4593,7 +4590,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "comments reactions view",
@@ -4613,12 +4611,11 @@
     {
       "path": "comments reactions create",
       "summary": "POST /repos/{owner}/{repo}/comments/{comment_id}/reactions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "comments_comment_id_reactions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -4626,17 +4623,17 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "comments reactions delete",
       "summary": "DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "comments_comment_id_reactions_reaction_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -4650,7 +4647,8 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "commits branches-where-head view",
@@ -4796,12 +4794,11 @@
     {
       "path": "secret delete-4",
       "summary": "DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "dependabot_secrets_secret_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "secret-name",
@@ -4809,7 +4806,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "dependabot secrets view-2",
@@ -4829,12 +4827,11 @@
     {
       "path": "secret set-4",
       "summary": "PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "dependabot_secrets_secret_name3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "secret-name",
@@ -4842,7 +4839,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "dependency-graph compare view",
@@ -4895,23 +4893,22 @@
     {
       "path": "dependency-graph snapshots create",
       "summary": "POST /repos/{owner}/{repo}/dependency-graph/snapshots",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "dependency_graph_snapshots",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "deployments delete",
       "summary": "DELETE /repos/{owner}/{repo}/deployments/{deployment_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "deployments_deployment_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "critical",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "deployment-id",
@@ -4920,7 +4917,7 @@
           "maps_to": "record.deployment_id"
         }
       ],
-      "notes": "destructive; requires --allow-destructive + typed confirmation"
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "deployments statuses view",
@@ -4940,12 +4937,11 @@
     {
       "path": "deployments statuses create",
       "summary": "POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "deployments_deployment_id_statuses2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "deployment-id",
@@ -4953,18 +4949,19 @@
           "summary": "deployment_id path parameter",
           "maps_to": "record.deployment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "dispatches create",
       "summary": "POST /repos/{owner}/{repo}/dispatches",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "dispatches",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments deployment-branch-policies view",
@@ -4984,12 +4981,11 @@
     {
       "path": "environments deployment-branch-policies create",
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_deployment_branch_policies2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -4997,17 +4993,17 @@
           "summary": "environment_name path parameter",
           "maps_to": "record.environment_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments deployment-branch-policies delete",
       "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_deployment_branch_policies_branch_policy_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5021,7 +5017,8 @@
           "summary": "branch_policy_id path parameter",
           "maps_to": "record.branch_policy_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments deployment-branch-policies view-2",
@@ -5046,12 +5043,11 @@
     {
       "path": "environments deployment-branch-policies set",
       "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5065,7 +5061,8 @@
           "summary": "branch_policy_id path parameter",
           "maps_to": "record.branch_policy_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments deployment_protection_rules view",
@@ -5085,12 +5082,11 @@
     {
       "path": "environments deployment_protection_rules create",
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_deployment_protection_rules2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5098,7 +5094,8 @@
           "summary": "environment_name path parameter",
           "maps_to": "record.environment_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments apps view",
@@ -5118,12 +5115,11 @@
     {
       "path": "environments deployment_protection_rules delete",
       "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_deployment_protection_rules_protection_rule_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5137,7 +5133,8 @@
           "summary": "protection_rule_id path parameter",
           "maps_to": "record.protection_rule_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments deployment_protection_rules view-2",
@@ -5192,12 +5189,11 @@
     {
       "path": "secret delete-5",
       "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_secrets_secret_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5211,7 +5207,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments secrets view-2",
@@ -5236,12 +5233,11 @@
     {
       "path": "secret set-5",
       "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_secrets_secret_name3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5255,7 +5251,8 @@
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments variables view",
@@ -5275,12 +5272,11 @@
     {
       "path": "variable create-2",
       "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/variables",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_variables2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5288,17 +5284,17 @@
           "summary": "environment_name path parameter",
           "maps_to": "record.environment_name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "variable delete-3",
       "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_variables_name",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5312,7 +5308,8 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "environments variables view-2",
@@ -5337,12 +5334,11 @@
     {
       "path": "variable update-2",
       "summary": "PATCH /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "environments_environment_name_variables_name3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "environment-name",
@@ -5356,18 +5352,19 @@
           "summary": "name path parameter",
           "maps_to": "record.name"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "git blobs create",
       "summary": "POST /repos/{owner}/{repo}/git/blobs",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "git_blobs",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "git blobs view",
@@ -5387,13 +5384,13 @@
     {
       "path": "git commits create",
       "summary": "POST /repos/{owner}/{repo}/git/commits",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "git_commits",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "git ref view",
@@ -5428,13 +5425,13 @@
     {
       "path": "git trees create",
       "summary": "POST /repos/{owner}/{repo}/git/trees",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "git_trees",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "git trees view",
@@ -5498,12 +5495,11 @@
     {
       "path": "webhook create",
       "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "hooks_hook_id_deliveries_delivery_id_attempts",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "hook-id",
@@ -5517,17 +5513,17 @@
           "summary": "delivery_id path parameter",
           "maps_to": "record.delivery_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "webhook create-2",
       "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/pings",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "hooks_hook_id_pings",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "hook-id",
@@ -5535,17 +5531,17 @@
           "summary": "hook_id path parameter",
           "maps_to": "record.hook_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "webhook create-3",
       "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "hooks_hook_id_tests",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "hook-id",
@@ -5553,18 +5549,19 @@
           "summary": "hook_id path parameter",
           "maps_to": "record.hook_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "immutable-releases delete",
       "summary": "DELETE /repos/{owner}/{repo}/immutable-releases",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "immutable_releases",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "immutable-releases view",
@@ -5578,24 +5575,24 @@
     {
       "path": "immutable-releases set",
       "summary": "PUT /repos/{owner}/{repo}/immutable-releases",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "immutable_releases3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "import delete",
       "summary": "DELETE /repos/{owner}/{repo}/import",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "import view",
@@ -5609,24 +5606,24 @@
     {
       "path": "import update",
       "summary": "PATCH /repos/{owner}/{repo}/import",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "import set",
       "summary": "PUT /repos/{owner}/{repo}/import",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import4",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "import authors view",
@@ -5640,12 +5637,11 @@
     {
       "path": "import authors update",
       "summary": "PATCH /repos/{owner}/{repo}/import/authors/{author_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import_authors_author_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "author-id",
@@ -5653,7 +5649,8 @@
           "summary": "author_id path parameter",
           "maps_to": "record.author_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "import large_files view",
@@ -5667,13 +5664,13 @@
     {
       "path": "import lfs update",
       "summary": "PATCH /repos/{owner}/{repo}/import/lfs",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import_lfs",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "installation view",
@@ -5687,13 +5684,13 @@
     {
       "path": "interaction-limits delete",
       "summary": "DELETE /repos/{owner}/{repo}/interaction-limits",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "interaction_limits",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "interaction-limits view",
@@ -5707,24 +5704,24 @@
     {
       "path": "interaction-limits set",
       "summary": "PUT /repos/{owner}/{repo}/interaction-limits",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "interaction_limits3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "interaction-limits bypass-list delete",
       "summary": "DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "interaction_limits_pulls_bypass_list",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "interaction-limits bypass-list view",
@@ -5738,23 +5735,22 @@
     {
       "path": "interaction-limits bypass-list set",
       "summary": "PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "interaction_limits_pulls_bypass_list3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "invitations delete",
       "summary": "DELETE /repos/{owner}/{repo}/invitations/{invitation_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "invitations_invitation_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "invitation-id",
@@ -5762,17 +5758,17 @@
           "summary": "invitation_id path parameter",
           "maps_to": "record.invitation_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "invitations update",
       "summary": "PATCH /repos/{owner}/{repo}/invitations/{invitation_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "invitations_invitation_id2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "invitation-id",
@@ -5780,7 +5776,8 @@
           "summary": "invitation_id path parameter",
           "maps_to": "record.invitation_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issue-types view",
@@ -5794,12 +5791,11 @@
     {
       "path": "issues pin delete",
       "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_comments_comment_id_pin",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -5807,17 +5803,17 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues pin set",
       "summary": "PUT /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_comments_comment_id_pin2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -5825,7 +5821,8 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues reactions view",
@@ -5845,12 +5842,11 @@
     {
       "path": "issues reactions create",
       "summary": "POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_comments_comment_id_reactions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -5858,17 +5854,17 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues reactions delete",
       "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_comments_comment_id_reactions_reaction_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -5882,7 +5878,8 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues assignees view",
@@ -5922,12 +5919,11 @@
     {
       "path": "issues blocked_by create",
       "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_dependencies_blocked_by2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -5935,17 +5931,17 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues blocked_by delete",
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_dependencies_blocked_by_issue_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -5959,7 +5955,8 @@
           "summary": "issue_id path parameter",
           "maps_to": "record.issue_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues blocking view",
@@ -5994,12 +5991,11 @@
     {
       "path": "issues issue-field-values create",
       "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_issue_field_values2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6007,17 +6003,17 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues issue-field-values set",
       "summary": "PUT /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_issue_field_values3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6025,17 +6021,17 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues issue-field-values delete",
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_issue_field_values_issue_field_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6049,7 +6045,8 @@
           "summary": "issue_field_id path parameter",
           "maps_to": "record.issue_field_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues parent view",
@@ -6084,12 +6081,11 @@
     {
       "path": "issues reactions create-2",
       "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/reactions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_reactions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6097,17 +6093,17 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues reactions delete-2",
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_reactions_reaction_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6121,17 +6117,17 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues sub_issue delete",
       "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_sub_issue",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6139,7 +6135,8 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues sub_issues view",
@@ -6159,12 +6156,11 @@
     {
       "path": "issues sub_issues create",
       "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_sub_issues2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6172,17 +6168,17 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "issues priority update",
       "summary": "PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issues_issue_number_sub_issues_priority",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "issue-number",
@@ -6190,7 +6186,8 @@
           "summary": "issue_number path parameter",
           "maps_to": "record.issue_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "license view",
@@ -6204,13 +6201,13 @@
     {
       "path": "merge-upstream create",
       "summary": "POST /repos/{owner}/{repo}/merge-upstream",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "merge_upstream",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "milestones labels view",
@@ -6239,24 +6236,24 @@
     {
       "path": "notifications set",
       "summary": "PUT /repos/{owner}/{repo}/notifications",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "notifications2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages delete",
       "summary": "DELETE /repos/{owner}/{repo}/pages",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pages",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages view",
@@ -6270,24 +6267,24 @@
     {
       "path": "pages create",
       "summary": "POST /repos/{owner}/{repo}/pages",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pages3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages set",
       "summary": "PUT /repos/{owner}/{repo}/pages",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pages4",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages builds view",
@@ -6301,13 +6298,13 @@
     {
       "path": "pages builds create",
       "summary": "POST /repos/{owner}/{repo}/pages/builds",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pages_builds2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages latest view",
@@ -6336,13 +6333,13 @@
     {
       "path": "pages deployments create",
       "summary": "POST /repos/{owner}/{repo}/pages/deployments",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pages_deployments",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages deployments view",
@@ -6362,12 +6359,11 @@
     {
       "path": "pages cancel create",
       "summary": "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pages_deployments_pages_deployment_id_cancel",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "pages-deployment-id",
@@ -6375,7 +6371,8 @@
           "summary": "pages_deployment_id path parameter",
           "maps_to": "record.pages_deployment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pages health view",
@@ -6389,13 +6386,13 @@
     {
       "path": "private-vulnerability-reporting delete",
       "summary": "DELETE /repos/{owner}/{repo}/private-vulnerability-reporting",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "private_vulnerability_reporting",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "private-vulnerability-reporting view",
@@ -6409,13 +6406,13 @@
     {
       "path": "private-vulnerability-reporting set",
       "summary": "PUT /repos/{owner}/{repo}/private-vulnerability-reporting",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "private_vulnerability_reporting3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "properties values view",
@@ -6429,13 +6426,13 @@
     {
       "path": "properties values update",
       "summary": "PATCH /repos/{owner}/{repo}/properties/values",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "properties_values2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pulls reactions view",
@@ -6455,12 +6452,11 @@
     {
       "path": "pulls reactions create",
       "summary": "POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pulls_comments_comment_id_reactions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -6468,17 +6464,17 @@
           "summary": "comment_id path parameter",
           "maps_to": "record.comment_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pulls reactions delete",
       "summary": "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pulls_comments_comment_id_reactions_reaction_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "comment-id",
@@ -6492,17 +6488,17 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pulls codespaces create",
       "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pulls_pull_number_codespaces",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "pull-number",
@@ -6510,7 +6506,8 @@
           "summary": "pull_number path parameter",
           "maps_to": "record.pull_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pulls commits view",
@@ -6560,12 +6557,11 @@
     {
       "path": "pulls requested_reviewers delete",
       "summary": "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "pulls_pull_number_requested_reviewers",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "pull-number",
@@ -6573,7 +6569,8 @@
           "summary": "pull_number path parameter",
           "maps_to": "record.pull_number"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "pulls reviews view",
@@ -6652,13 +6649,13 @@
     {
       "path": "releases generate-notes view",
       "summary": "POST /repos/{owner}/{repo}/releases/generate-notes",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "releases_generate_notes",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "low",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "releases assets view-2",
@@ -6678,12 +6675,11 @@
     {
       "path": "releases assets view-3",
       "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/assets",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "releases_release_id_assets2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "release-id",
@@ -6691,7 +6687,8 @@
           "summary": "release_id path parameter",
           "maps_to": "record.release_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "releases reactions view",
@@ -6711,12 +6708,11 @@
     {
       "path": "releases reactions create",
       "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/reactions",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "releases_release_id_reactions2",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "release-id",
@@ -6724,17 +6720,17 @@
           "summary": "release_id path parameter",
           "maps_to": "record.release_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "releases reactions delete",
       "summary": "DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "releases_release_id_reactions_reaction_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "release-id",
@@ -6748,7 +6744,8 @@
           "summary": "reaction_id path parameter",
           "maps_to": "record.reaction_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "rulesets rule-suites view",
@@ -6827,13 +6824,13 @@
     {
       "path": "secret-scanning push-protection-bypasses create",
       "summary": "POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "secret_scanning_push_protection_bypasses",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "secret-scanning scan-history view",
@@ -6847,34 +6844,33 @@
     {
       "path": "security-advisories create",
       "summary": "POST /repos/{owner}/{repo}/security-advisories",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "security_advisories",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "security-advisories reports create",
       "summary": "POST /repos/{owner}/{repo}/security-advisories/reports",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "security_advisories_reports",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "security-advisories update",
       "summary": "PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "security_advisories_ghsa_id",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -6882,17 +6878,17 @@
           "summary": "ghsa_id path parameter",
           "maps_to": "record.ghsa_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "security-advisories cve create",
       "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "security_advisories_ghsa_id_cve",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -6900,17 +6896,17 @@
           "summary": "ghsa_id path parameter",
           "maps_to": "record.ghsa_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "security-advisories forks create",
       "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "security_advisories_ghsa_id_forks",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -6918,7 +6914,8 @@
           "summary": "ghsa_id path parameter",
           "maps_to": "record.ghsa_id"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "stats code_frequency view",
@@ -6968,12 +6965,11 @@
     {
       "path": "statuses create",
       "summary": "POST /repos/{owner}/{repo}/statuses/{sha}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "statuses_sha",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [
         {
           "name": "sha",
@@ -6981,18 +6977,19 @@
           "summary": "sha path parameter",
           "maps_to": "record.sha"
         }
-      ]
+      ],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "subscription delete",
       "summary": "DELETE /repos/{owner}/{repo}/subscription",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "subscription",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "subscription view",
@@ -7006,13 +7003,13 @@
     {
       "path": "subscription set",
       "summary": "PUT /repos/{owner}/{repo}/subscription",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "subscription3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "medium",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "repo archive tarball",
@@ -7077,25 +7074,24 @@
     {
       "path": "transfer create",
       "summary": "POST /repos/{owner}/{repo}/transfer",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "transfer",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "critical",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
       "flags": [],
-      "notes": "destructive; requires --allow-destructive + typed confirmation"
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "vulnerability-alerts delete",
       "summary": "DELETE /repos/{owner}/{repo}/vulnerability-alerts",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "vulnerability_alerts",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "vulnerability-alerts view",
@@ -7109,13 +7105,13 @@
     {
       "path": "vulnerability-alerts set",
       "summary": "PUT /repos/{owner}/{repo}/vulnerability-alerts",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "vulnerability_alerts3",
+      "intent": "direct_write",
+      "availability": "planned",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": []
+      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive.",
+      "flags": [],
+      "notes": "Blocked until endpoint-specific typed request schema, fixture coverage, and safety metadata are authored."
     },
     {
       "path": "repo archive zipball",

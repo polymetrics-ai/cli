@@ -73,11 +73,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1604 {
 		t.Fatalf("endpoints = %d, want 1604 (1596 official rows plus 8 connector conformance coverage rows)", len(surface.Endpoints))
 	}
-	if covered != 440 {
-		t.Fatalf("covered endpoints = %d, want 440", covered)
+	if covered != 277 {
+		t.Fatalf("covered endpoints = %d, want 277", covered)
 	}
-	if operations != 1164 {
-		t.Fatalf("operation endpoints = %d, want 1164 blocked/planned rows", operations)
+	if operations != 1327 {
+		t.Fatalf("operation endpoints = %d, want 1327 blocked/planned rows", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -92,43 +92,55 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"WEBHOOK": 75,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE":  67,
+		"DELETE":  19,
 		"GET":     205,
 		"GRAPHQL": 4,
-		"PATCH":   34,
-		"POST":    85,
-		"PUT":     45,
+		"PATCH":   16,
+		"POST":    23,
+		"PUT":     10,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE":  120,
+		"DELETE":  168,
 		"GET":     429,
 		"GRAPHQL": 305,
-		"PATCH":   39,
-		"POST":    108,
-		"PUT":     88,
+		"PATCH":   57,
+		"POST":    170,
+		"PUT":     123,
 		"WEBHOOK": 75,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":     402,
-		"destructive_action":    170,
+		"admin_reverse_etl":     494,
+		"destructive_action":    220,
 		"direct_read":           466,
 		"disallowed":            1,
 		"duplicate":             53,
 		"deprecated":            30,
-		"sensitive_reverse_etl": 42,
+		"sensitive_reverse_etl": 63,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 56,
-		"high":     618,
-		"low":      413,
-		"medium":   77,
+		"critical": 60,
+		"high":     712,
+		"low":      416,
+		"medium":   139,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 1164,
+		"blocked": 1327,
 	})
 }
 
 func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
+	fixtureEntries, err := os.ReadDir("../../internal/connectors/defs/github/fixtures/writes")
+	if err != nil {
+		t.Fatalf("read github write fixtures: %v", err)
+	}
+	writeFixtures := map[string]bool{}
+	for _, entry := range fixtureEntries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+			continue
+		}
+		writeFixtures[strings.TrimSuffix(entry.Name(), ".json")] = true
+	}
+
 	writesRaw, err := os.ReadFile("../../internal/connectors/defs/github/writes.json")
 	if err != nil {
 		t.Fatalf("read github writes.json: %v", err)
@@ -146,6 +158,18 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 		}
 		if githubActionRequiresTypedDestructiveConfirmation(action) && action.Confirm != "destructive" {
 			t.Fatalf("write action %q confirm = %q, want destructive", action.Name, action.Confirm)
+		}
+		if !writeFixtures[action.Name] {
+			t.Fatalf("write action %q lacks connector-owned write fixture", action.Name)
+		}
+		if action.RecordSchema.Type != "object" {
+			t.Fatalf("write action %q record_schema type = %q, want object", action.Name, action.RecordSchema.Type)
+		}
+		if len(action.RecordSchema.Properties) == 0 && action.BodyType != "none" {
+			t.Fatalf("write action %q lacks typed record_schema properties", action.Name)
+		}
+		if action.RecordSchema.AdditionalProperties == nil || *action.RecordSchema.AdditionalProperties {
+			t.Fatalf("write action %q must disable additional record properties", action.Name)
 		}
 		if action.Confirm == "destructive" {
 			destructiveWrites[action.Name] = true
@@ -192,13 +216,21 @@ type githubOperation struct {
 }
 
 type githubWriteAction struct {
-	Name    string              `json:"name"`
-	Kind    string              `json:"kind"`
-	Method  string              `json:"method"`
-	Path    string              `json:"path"`
-	Risk    string              `json:"risk"`
-	Confirm string              `json:"confirm"`
-	Delete  *githubDeletePolicy `json:"delete"`
+	Name         string              `json:"name"`
+	Kind         string              `json:"kind"`
+	Method       string              `json:"method"`
+	Path         string              `json:"path"`
+	Risk         string              `json:"risk"`
+	Confirm      string              `json:"confirm"`
+	BodyType     string              `json:"body_type"`
+	Delete       *githubDeletePolicy `json:"delete"`
+	RecordSchema githubRecordSchema  `json:"record_schema"`
+}
+
+type githubRecordSchema struct {
+	Type                 string                     `json:"type"`
+	Properties           map[string]json.RawMessage `json:"properties"`
+	AdditionalProperties *bool                      `json:"additionalProperties"`
 }
 
 type githubDeletePolicy struct {
