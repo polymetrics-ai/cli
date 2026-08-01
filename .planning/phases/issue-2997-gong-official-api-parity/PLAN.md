@@ -27,7 +27,7 @@ Complete connector-local Gong parity against the official unauthenticated Gong O
 
 Official source fetched unauthenticated for inventory only: `https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=`.
 
-Current source result observed in this worktree: OpenAPI `3.0.1`, `info.version` `V2`, 59 paths and 69 operations:
+Initial source result observed in this worktree: OpenAPI `3.0.1`, `info.version` `V2`, 59 paths and 69 operations:
 
 - GET: 29
 - POST: 28
@@ -35,10 +35,14 @@ Current source result observed in this worktree: OpenAPI `3.0.1`, `info.version`
 - PATCH: 1
 - DELETE: 3
 
-Compared with current connector `api_surface.json` (67 rows), the current official source includes two missing operations:
+Compared with the pre-edit connector `api_surface.json` (67 rows), the official source included two missing operations:
 
 - `GET /v2/targets` (`listTargetDefinitions`) — bounded direct read with required `workspaceId` query flag.
 - `POST /v2/targets/{targetId}/assignments` (`uploadAssignments`) — typed multipart reverse ETL upload with required `targetId`, `workspaceId`, optional `validateOnly`, and required CSV file part `file`.
+
+Review-ready parity checkpoint on 2026-08-01 re-fetched the same official OpenAPI source and matched the connector ledger exactly: 69 official operations, 69 `api_surface.json` rows, 0 missing, 0 extra, 0 excluded/planned/blocked rows. Coverage counts are 12 streams, 30 direct reads, and 27 write actions. The checkpoint fixed connector-local discrepancies found during the re-audit: stale `/v2/` write-action paths under a `/v2` base URL, `{meetingId}`/`{taskId}` write paths that needed engine `{{ record.* }}` interpolation, missing required CRM entity-schema query inputs, missing required calls users-access body fields, and non-empty typed direct-read flags including `targets list --workspaceId`.
+
+Gong's optional `validateOnly` query parameter on `POST /v2/targets/{targetId}/assignments` remains intentionally unexposed because the shared write-action path dialect lacks optional query/default support for write paths. Exposing `{{ record.validateOnly }}` would make the provider-optional parameter mandatory. The canonical upload operation is executable with Gong's default `validateOnly=false`, typed `targetId`/`workspaceId`/CSV inputs, destructive confirmation, and reverse ETL plan -> preview -> explicit approval -> execute.
 
 This does not update GitHub issue count tables. The required captain-policy addendum was appended to #2997 and #2998-#3004 without changing existing counts.
 

@@ -442,7 +442,8 @@
           "name": "id",
           "type": "string",
           "summary": "Gong's unique numeric identifier for the call (up to 20 digits).",
-          "maps_to": "path.id"
+          "maps_to": "path.id",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -467,7 +468,8 @@
           "name": "profileId",
           "type": "string",
           "summary": "Permission profile identifier.",
-          "maps_to": "query.profileId"
+          "maps_to": "query.profileId",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -498,7 +500,8 @@
           "name": "objectType",
           "type": "string",
           "summary": "Type of object to retrieve the schema fields for (case-sensitive). <br>Omitting this parameter returns the schema for all object types.",
-          "maps_to": "query.objectType"
+          "maps_to": "query.objectType",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -529,13 +532,15 @@
           "name": "objectType",
           "type": "string",
           "summary": "Requested objects type",
-          "maps_to": "query.objectType"
+          "maps_to": "query.objectType",
+          "allow_empty": false
         },
         {
           "name": "objectsCrmIds",
           "type": "string",
           "summary": "<b>Request Body:</b> The requested objects crm ids (should be sent in the request body)",
-          "maps_to": "query.objectsCrmIds"
+          "maps_to": "query.objectsCrmIds",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -560,7 +565,8 @@
           "name": "id",
           "type": "string",
           "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
-          "maps_to": "path.id"
+          "maps_to": "path.id",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -585,7 +591,8 @@
           "name": "id",
           "type": "string",
           "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
-          "maps_to": "path.id"
+          "maps_to": "path.id",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -610,7 +617,8 @@
           "name": "profileId",
           "type": "string",
           "summary": "Permission profile identifier.",
-          "maps_to": "query.profileId"
+          "maps_to": "query.profileId",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -635,19 +643,22 @@
           "name": "logType",
           "type": "string",
           "summary": "Type of logs requested.",
-          "maps_to": "query.logType"
+          "maps_to": "query.logType",
+          "allow_empty": false
         },
         {
           "name": "fromDateTime",
           "type": "string",
           "summary": "The time from which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "query.fromDateTime"
+          "maps_to": "query.fromDateTime",
+          "allow_empty": false
         },
         {
           "name": "toDateTime",
           "type": "string",
           "summary": "The time until which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC); if not specified, the lo",
-          "maps_to": "query.toDateTime"
+          "maps_to": "query.toDateTime",
+          "allow_empty": false
         },
         {
           "name": "cursor",
@@ -703,7 +714,8 @@
           "name": "id",
           "type": "string",
           "summary": "",
-          "maps_to": "path.id"
+          "maps_to": "path.id",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -734,25 +746,29 @@
           "name": "briefName",
           "type": "string",
           "summary": "The name of the brief to generate. Briefs are configured in the Agent Studio > AI Briefer.",
-          "maps_to": "query.briefName"
+          "maps_to": "query.briefName",
+          "allow_empty": false
         },
         {
           "name": "crmEntityType",
           "type": "string",
           "summary": "The object type of the entity in the CRM.",
-          "maps_to": "query.crmEntityType"
+          "maps_to": "query.crmEntityType",
+          "allow_empty": false
         },
         {
           "name": "crmEntityId",
           "type": "string",
           "summary": "The CRM Id of the entity the question is asked about.",
-          "maps_to": "query.crmEntityId"
+          "maps_to": "query.crmEntityId",
+          "allow_empty": false
         },
         {
           "name": "timePeriod",
           "type": "string",
           "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
-          "maps_to": "query.timePeriod"
+          "maps_to": "query.timePeriod",
+          "allow_empty": false
         },
         {
           "name": "fromDateTime",
@@ -795,19 +811,22 @@
           "name": "crmEntityType",
           "type": "string",
           "summary": "The object type of the entity in the CRM.",
-          "maps_to": "query.crmEntityType"
+          "maps_to": "query.crmEntityType",
+          "allow_empty": false
         },
         {
           "name": "crmEntityId",
           "type": "string",
           "summary": "The CRM Id of the entity the question is asked about.",
-          "maps_to": "query.crmEntityId"
+          "maps_to": "query.crmEntityId",
+          "allow_empty": false
         },
         {
           "name": "timePeriod",
           "type": "string",
           "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
-          "maps_to": "query.timePeriod"
+          "maps_to": "query.timePeriod",
+          "allow_empty": false
         },
         {
           "name": "fromDateTime",
@@ -825,7 +844,8 @@
           "name": "question",
           "type": "string",
           "summary": "The question to answer.",
-          "maps_to": "query.question"
+          "maps_to": "query.question",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -850,7 +870,8 @@
           "name": "phoneNumber",
           "type": "string",
           "summary": "The phone number.\n\nThis number must start with a + (plus) sign followed by the country code, area code, and local phone number. All other non-digits are ignored.\n\nThe following are",
-          "maps_to": "query.phoneNumber"
+          "maps_to": "query.phoneNumber",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -875,7 +896,8 @@
           "name": "emailAddress",
           "type": "string",
           "summary": "The email address.",
-          "maps_to": "query.emailAddress"
+          "maps_to": "query.emailAddress",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -906,7 +928,8 @@
           "name": "clientRequestId",
           "type": "string",
           "summary": "The client request ID used in the asynchronous endpoint you want to get a status for",
-          "maps_to": "query.clientRequestId"
+          "maps_to": "query.clientRequestId",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -943,13 +966,15 @@
           "name": "from",
           "type": "string",
           "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
-          "maps_to": "query.from"
+          "maps_to": "query.from",
+          "allow_empty": false
         },
         {
           "name": "to",
           "type": "string",
           "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
-          "maps_to": "query.to"
+          "maps_to": "query.to",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -2311,13 +2336,15 @@
           "name": "id",
           "type": "string",
           "summary": "Gong call ID whose media should be uploaded.",
-          "maps_to": "record.id"
+          "maps_to": "record.id",
+          "allow_empty": false
         },
         {
           "name": "media-file-path",
           "type": "string",
           "summary": "Project-relative media file path to upload.",
-          "maps_to": "record.media_file_path"
+          "maps_to": "record.media_file_path",
+          "allow_empty": false
         }
       ]
     },
@@ -2335,7 +2362,8 @@
           "name": "data-file-path",
           "type": "string",
           "summary": "Project-relative CRM data file path to upload.",
-          "maps_to": "record.data_file_path"
+          "maps_to": "record.data_file_path",
+          "allow_empty": false
         }
       ]
     },
@@ -2347,7 +2375,31 @@
       "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
       "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
       "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.",
-      "write": "upload_crm_entity_schema"
+      "write": "upload_crm_entity_schema",
+      "flags": [
+        {
+          "name": "integration-id",
+          "type": "string",
+          "summary": "Integration ID generated when creating the Gong CRM integration.",
+          "maps_to": "record.integrationId",
+          "allow_empty": false
+        },
+        {
+          "name": "object-type",
+          "type": "enum",
+          "values": [
+            "ACCOUNT",
+            "CONTACT",
+            "DEAL",
+            "LEAD"
+          ],
+          "summary": "CRM object type to set the schema for (case-sensitive).",
+          "maps_to": "record.objectType"
+        }
+      ],
+      "examples": [
+        "pm gong crm upload-entity-schema --integration-id 12345678901234567890 --object-type ACCOUNT --preview --confirm destructive"
+      ]
     },
     {
       "path": "targets list",
@@ -2372,7 +2424,8 @@
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
         "pm gong targets list --workspaceId 123 --json --max-bytes 1048576"
-      ]
+      ],
+      "operation": "gong.list_target_definitions"
     },
     {
       "path": "targets upload-assignments",
@@ -2381,32 +2434,29 @@
       "availability": "implemented",
       "risk": "high: uploads target assignment CSV data from a bounded project-local file path; file path/content are redacted in plans",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive confirmation required",
-      "notes": "Uses typed multipart write support with a declared CSV file part; no generic upload command is exposed. Set validateOnly=true to ask Gong to validate without writing data.",
+      "notes": "Uses typed multipart write support with a declared CSV file part; no generic upload command is exposed. Gong defaults validateOnly to false; optional validate-only query mode needs shared optional write-query support before it can be exposed without making the parameter mandatory.",
       "write": "upload_target_assignments",
       "flags": [
         {
           "name": "target-id",
           "type": "string",
           "summary": "Gong target ID from the target definitions list.",
-          "maps_to": "record.targetId"
+          "maps_to": "record.targetId",
+          "allow_empty": false
         },
         {
           "name": "workspace-id",
           "type": "string",
           "summary": "Workspace ID that owns the target.",
-          "maps_to": "record.workspaceId"
-        },
-        {
-          "name": "validate-only",
-          "type": "boolean",
-          "summary": "Validate the CSV without writing assignments when true.",
-          "maps_to": "record.validateOnly"
+          "maps_to": "record.workspaceId",
+          "allow_empty": false
         },
         {
           "name": "assignments-file-path",
           "type": "string",
           "summary": "Project-relative target assignments CSV file path to upload.",
-          "maps_to": "record.assignments_file_path"
+          "maps_to": "record.assignments_file_path",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -2416,7 +2466,7 @@
         }
       ],
       "examples": [
-        "pm gong targets upload-assignments --target-id 12345678901234567890 --workspace-id 123 --validate-only --assignments-file-path internal/connectors/defs/gong/fixtures/files/target_assignments.csv"
+        "pm gong targets upload-assignments --target-id 12345678901234567890 --workspace-id 123 --assignments-file-path internal/connectors/defs/gong/fixtures/files/target_assignments.csv"
       ]
     }
   ],

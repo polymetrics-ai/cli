@@ -48,6 +48,28 @@ FAIL
 
 ## Green evidence
 
+### Red/green checkpoint — 2026-08-01
+
+```bash
+GOCACHE=/tmp/fm-cli-gong-parity-wave01-r1/gocache go test ./cmd/connectorgen -run TestGongFullSurfaceCommandAndOperationCoverage -count=1
+```
+
+Red result after adding stricter connector-owned assertions first: failed on stale `/v2` write path before connector metadata fixes.
+
+```text
+--- FAIL: TestGongFullSurfaceCommandAndOperationCoverage (0.01s)
+    gong_full_surface_test.go:209: write action "upload_call_media" path = "/v2/calls/{{ record.id }}/media", want connector-relative path under base_url /v2
+FAIL
+```
+
+Green result after connector-local fixes: pass.
+
+```text
+ok  	polymetrics.ai/cmd/connectorgen	1.244s
+```
+
+Post-fix source-backed audit script re-fetched the official Gong OpenAPI source and reported: officialOps=69, surface=69, coverage stream=12/write=27/direct_read=30, writeFind=0, directFind=0.
+
 ### Green — 2026-07-30
 
 ```bash

@@ -1766,7 +1766,19 @@
         "method": "POST",
         "path": "/v2/targets/{targetId}/assignments",
         "max_bytes": 52428800,
-        "content_type": "multipart/form-data"
+        "content_type": "multipart/form-data",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string",
+              "description": "CSV file part containing target assignments."
+            }
+          },
+          "required": [
+            "file"
+          ]
+        }
       },
       "destructive": true,
       "sensitive_policy": {

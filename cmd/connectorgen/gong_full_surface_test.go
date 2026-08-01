@@ -31,19 +31,22 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			OutputPolicy string   `json:"output_policy"`
 			Examples     []string `json:"examples"`
 			Flags        []struct {
-				Name   string `json:"name"`
-				MapsTo string `json:"maps_to"`
+				Name       string `json:"name"`
+				MapsTo     string `json:"maps_to"`
+				Type       string `json:"type"`
+				AllowEmpty *bool  `json:"allow_empty"`
 			} `json:"flags"`
 		} `json:"commands"`
 	}](t, "../../internal/connectors/defs/gong/cli_surface.json")
 	writes := loadGongJSON[struct {
 		Actions []struct {
-			Name    string `json:"name"`
-			Kind    string `json:"kind"`
-			Method  string `json:"method"`
-			Path    string `json:"path"`
-			Risk    string `json:"risk"`
-			Confirm string `json:"confirm"`
+			Name         string          `json:"name"`
+			Kind         string          `json:"kind"`
+			Method       string          `json:"method"`
+			Path         string          `json:"path"`
+			Risk         string          `json:"risk"`
+			Confirm      string          `json:"confirm"`
+			RecordSchema json.RawMessage `json:"record_schema"`
 		} `json:"actions"`
 	}](t, "../../internal/connectors/defs/gong/writes.json")
 	ops := loadGongJSON[struct {
@@ -93,16 +96,16 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	commandsByPath := map[string]struct {
 		intent, availability, stream, write, operation, outputPolicy string
 	}{}
-	flagsByPath := map[string]map[string]string{}
+	flagsByPath := map[string]map[string]gongCommandFlag{}
 	examplesByPath := map[string][]string{}
 	for _, cmd := range cli.Commands {
 		commandsByPath[cmd.Path] = struct {
 			intent, availability, stream, write, operation, outputPolicy string
 		}{cmd.Intent, cmd.Availability, cmd.Stream, cmd.Write, cmd.Operation, cmd.OutputPolicy}
-		flagsByPath[cmd.Path] = map[string]string{}
+		flagsByPath[cmd.Path] = map[string]gongCommandFlag{}
 		examplesByPath[cmd.Path] = cmd.Examples
 		for _, flag := range cmd.Flags {
-			flagsByPath[cmd.Path][flag.Name] = flag.MapsTo
+			flagsByPath[cmd.Path][flag.Name] = gongCommandFlag{mapsTo: flag.MapsTo, typeName: flag.Type, allowEmpty: flag.AllowEmpty}
 		}
 		if cmd.Intent == "direct_read" && cmd.Availability != "implemented" {
 			t.Fatalf("direct read command %q availability = %q, want implemented", cmd.Path, cmd.Availability)
@@ -153,11 +156,17 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		}
 	}
 
-	writesByName := map[string]struct{ kind, method, path, risk, confirm string }{}
+	writesByName := map[string]struct {
+		kind, method, path, risk, confirm string
+		recordSchema                      json.RawMessage
+	}{}
 	for _, action := range writes.Actions {
-		writesByName[action.Name] = struct{ kind, method, path, risk, confirm string }{action.Kind, action.Method, action.Path, action.Risk, action.Confirm}
+		writesByName[action.Name] = struct {
+			kind, method, path, risk, confirm string
+			recordSchema                      json.RawMessage
+		}{action.Kind, action.Method, action.Path, action.Risk, action.Confirm, action.RecordSchema}
 	}
-	if got := flagsByPath["calls transcript"]["call-id"]; got != "body.filter.callIds" {
+	if got := flagsByPath["calls transcript"]["call-id"].mapsTo; got != "body.filter.callIds" {
 		t.Fatalf("calls transcript --call-id maps_to = %q, want body.filter.callIds", got)
 	}
 	if _, exists := flagsByPath["calls transcript"]["body"]; exists {
@@ -195,6 +204,23 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	if writesByName["delete_meeting"].confirm != "destructive" || writesByName["purge_phone_number"].confirm != "destructive" {
 		t.Fatalf("destructive Gong writes must require destructive confirmation: %+v %+v", writesByName["delete_meeting"], writesByName["purge_phone_number"])
 	}
+	for name, action := range writesByName {
+		if strings.HasPrefix(action.path, "/v2/") {
+			t.Fatalf("write action %q path = %q, want connector-relative path under base_url /v2", name, action.path)
+		}
+		if strings.Contains(action.path, "{") && !strings.Contains(action.path, "{{") {
+			t.Fatalf("write action %q path = %q, want engine template interpolation with {{ record.<field> }}", name, action.path)
+		}
+	}
+	assertGongWriteRequiredFields(t, "add_calls_users_access", writesByName["add_calls_users_access"].recordSchema, "callAccessList")
+	assertGongWriteRequiredFields(t, "delete_calls_users_access", writesByName["delete_calls_users_access"].recordSchema, "callAccessList")
+	assertGongWriteRequiredFields(t, "upload_crm_entity_schema", writesByName["upload_crm_entity_schema"].recordSchema, "integrationId", "objectType", "selected_fields")
+	if writesByName["upload_crm_entity_schema"].path != "/crm/entity-schema?integrationId={{ record.integrationId }}&objectType={{ record.objectType }}" {
+		t.Fatalf("upload_crm_entity_schema path = %q, want required Gong query parameters", writesByName["upload_crm_entity_schema"].path)
+	}
+	assertGongFlag(t, flagsByPath, "targets list", "workspaceId", "query.workspaceId", "integer", nil)
+	assertGongFlag(t, flagsByPath, "crm upload-entity-schema", "integration-id", "record.integrationId", "string", boolPtr(false))
+	assertGongFlag(t, flagsByPath, "crm upload-entity-schema", "object-type", "record.objectType", "enum", nil)
 
 	opsByID := map[string]struct {
 		kind, risk, approval, outputPolicy, mutationClass string
@@ -218,6 +244,57 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 	if opsByID["gong.calls_media_upload"].mutationClass == "" || len(opsByID["gong.calls_media_upload"].sensitivePolicy) == 0 {
 		t.Fatalf("media upload operation missing mutation class or sensitive policy: %+v", opsByID["gong.calls_media_upload"])
+	}
+}
+
+type gongCommandFlag struct {
+	mapsTo     string
+	typeName   string
+	allowEmpty *bool
+}
+
+func assertGongFlag(t *testing.T, flagsByPath map[string]map[string]gongCommandFlag, commandPath, flagName, mapsTo, typeName string, allowEmpty *bool) {
+	t.Helper()
+	flags, ok := flagsByPath[commandPath]
+	if !ok {
+		t.Fatalf("missing command %q", commandPath)
+	}
+	flag, ok := flags[flagName]
+	if !ok {
+		t.Fatalf("command %q missing flag --%s", commandPath, flagName)
+	}
+	if flag.mapsTo != mapsTo || flag.typeName != typeName {
+		t.Fatalf("command %q flag --%s = maps_to:%q type:%q, want maps_to:%q type:%q", commandPath, flagName, flag.mapsTo, flag.typeName, mapsTo, typeName)
+	}
+	if allowEmpty == nil {
+		if flag.allowEmpty != nil {
+			t.Fatalf("command %q flag --%s allow_empty = %v, want absent", commandPath, flagName, flag.allowEmpty)
+		}
+		return
+	}
+	if flag.allowEmpty == nil || *flag.allowEmpty != *allowEmpty {
+		t.Fatalf("command %q flag --%s allow_empty = %v, want %t", commandPath, flagName, flag.allowEmpty, *allowEmpty)
+	}
+}
+
+func boolPtr(v bool) *bool { return &v }
+
+func assertGongWriteRequiredFields(t *testing.T, action string, raw json.RawMessage, fields ...string) {
+	t.Helper()
+	var schema struct {
+		Required []string `json:"required"`
+	}
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		t.Fatalf("unmarshal %s record_schema: %v", action, err)
+	}
+	seen := map[string]bool{}
+	for _, field := range schema.Required {
+		seen[field] = true
+	}
+	for _, field := range fields {
+		if !seen[field] {
+			t.Fatalf("write action %q record_schema.required = %v, missing %q", action, schema.Required, field)
+		}
 	}
 }
 
