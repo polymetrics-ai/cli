@@ -36,6 +36,7 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 				Model            string `json:"model"`
 				Status           string `json:"status"`
 				BlockedByDefault bool   `json:"blocked_by_default"`
+				Reason           string `json:"reason"`
 				Notes            string `json:"notes"`
 			} `json:"operation"`
 		} `json:"endpoints"`
@@ -50,8 +51,8 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	seen := map[string]bool{}
 	coveredStreams := map[string]bool{}
 	coveredWrites := map[string]bool{}
-	coveredDirect := 0
 	blocked := 0
+	blockedQueries := 0
 	for _, ep := range surface.Endpoints {
 		if ep.Excluded != nil {
 			t.Fatalf("%s %s uses legacy excluded in operation ledger mode", ep.Method, ep.Path)
@@ -89,13 +90,19 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 				coveredWrites[ep.CoveredBy.Write] = true
 			}
 			if ep.CoveredBy.DirectRead != "" {
-				coveredDirect++
+				t.Fatalf("api_surface direct_read coverage %q must stay planned until shared duplicate POST / validation lands", ep.CoveredBy.DirectRead)
 			}
 		}
 		if ep.Operation != nil {
 			blocked++
 			if ep.Operation.Status != "blocked" || !ep.Operation.BlockedByDefault {
 				t.Fatalf("operation row %s must remain blocked_by_default", key)
+			}
+			if strings.HasPrefix(ep.Operation.Notes, "Monday GraphQL query ") {
+				blockedQueries++
+				if !strings.Contains(ep.Operation.Reason, "duplicate Monday POST / query classifiers") || !strings.Contains(ep.Operation.Reason, "errors[]") {
+					t.Fatalf("query operation row %s missing shared blocker evidence", key)
+				}
 			}
 		}
 	}
@@ -104,11 +111,11 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 			t.Fatalf("stream %q is not covered in api_surface.json", stream)
 		}
 	}
-	if coveredDirect == 0 {
-		t.Fatal("no typed direct/provider query operations are covered")
+	if blockedQueries != 61 {
+		t.Fatalf("blocked query operation rows = %d, want 61", blockedQueries)
 	}
-	if blocked == 0 {
-		t.Fatal("expected provider/source/complex-shape operation rows to remain explicitly blocked")
+	if blocked != 147 {
+		t.Fatalf("blocked operation rows = %d, want 147", blocked)
 	}
 
 	var operations struct {
@@ -120,6 +127,10 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 			REST          *struct {
 				Path string `json:"path"`
 			} `json:"rest"`
+			GraphQL *struct {
+				Document      string `json:"document"`
+				OperationName string `json:"operation_name"`
+			} `json:"graphql"`
 		} `json:"operations"`
 	}
 	readJSONFile(t, filepath.Join(root, "operations.json"), &operations)
@@ -129,17 +140,23 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	counts := map[string]int{}
 	for _, op := range operations.Operations {
 		counts[op.Kind]++
-		if op.Kind == "rest_read" {
-			if op.REST == nil {
-				t.Fatalf("rest_read operation %q is missing rest metadata", op.ID)
+		if op.Kind == "rest_read" && strings.HasPrefix(op.ID, "monday.query.") {
+			t.Fatalf("query operation %q must stay planned as graphql_query, not rest_read", op.ID)
+		}
+		if op.Kind == "graphql_query" {
+			if op.GraphQL == nil || strings.TrimSpace(op.GraphQL.Document) == "" || strings.TrimSpace(op.GraphQL.OperationName) == "" {
+				t.Fatalf("graphql_query operation %q is missing fixed GraphQL metadata", op.ID)
 			}
-			if op.REST.Path != "/" {
-				t.Fatalf("rest_read operation %q path = %q, want real Monday GraphQL endpoint /", op.ID, op.REST.Path)
+			if op.REST != nil {
+				t.Fatalf("graphql_query operation %q must not declare executable rest metadata", op.ID)
 			}
 		}
 	}
-	if counts["rest_read"] != 66 {
-		t.Fatalf("rest_read operations = %d, want 66", counts["rest_read"])
+	if counts["graphql_query"] != 66 {
+		t.Fatalf("graphql_query operations = %d, want 66", counts["graphql_query"])
+	}
+	if counts["rest_read"] != 0 {
+		t.Fatalf("rest_read operations = %d, want 0 for Monday query blockers", counts["rest_read"])
 	}
 	if counts["graphql_mutation"] != 188 {
 		t.Fatalf("graphql_mutation operations = %d, want 188", counts["graphql_mutation"])
@@ -183,6 +200,8 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 			Intent       string `json:"intent"`
 			Availability string `json:"availability"`
 			Write        string `json:"write"`
+			Operation    string `json:"operation"`
+			Notes        string `json:"notes"`
 			APISurface   []struct {
 				Path string `json:"path"`
 			} `json:"api_surface"`
@@ -190,15 +209,41 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	}
 	readJSONFile(t, filepath.Join(root, "cli_surface.json"), &cli)
 	var sawDeleteCommand bool
+	var sawPlannedAccountQuery bool
+	implementedDirectReads := 0
+	plannedQueryCommands := 0
 	for _, cmd := range cli.Commands {
 		for _, ep := range cmd.APISurface {
 			if ep.Path != "/" {
 				t.Fatalf("cli command %q api_surface path = %q, want real Monday GraphQL endpoint /", cmd.Path, ep.Path)
 			}
 		}
+		if cmd.Intent == "direct_read" && strings.HasPrefix(cmd.Path, "query ") {
+			if cmd.Availability == "implemented" {
+				implementedDirectReads++
+			}
+			if cmd.Availability == "planned" {
+				plannedQueryCommands++
+			}
+			if cmd.Operation != "" || len(cmd.APISurface) != 0 {
+				t.Fatalf("planned query command %q must not declare executable operation/api_surface metadata", cmd.Path)
+			}
+			if cmd.Path == "query account" && cmd.Availability == "planned" && strings.Contains(cmd.Notes, "errors[]") {
+				sawPlannedAccountQuery = true
+			}
+		}
 		if cmd.Path == "reverse delete-board" && cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write == "delete_board" {
 			sawDeleteCommand = true
 		}
+	}
+	if implementedDirectReads != 0 {
+		t.Fatalf("implemented direct query commands = %d, want 0", implementedDirectReads)
+	}
+	if plannedQueryCommands != 61 {
+		t.Fatalf("planned query commands = %d, want 61", plannedQueryCommands)
+	}
+	if !sawPlannedAccountQuery {
+		t.Fatal("planned query account metadata missing shared GraphQL blocker evidence")
 	}
 	if !sawDeleteCommand {
 		t.Fatal("implemented CLI metadata for reverse delete-board missing")

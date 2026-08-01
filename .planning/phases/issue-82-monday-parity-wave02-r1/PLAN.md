@@ -31,8 +31,8 @@ Implement documented Monday connector parity inside connector-owned surfaces onl
 
 - Public docs inventory found 254 official GraphQL operations: 66 queries and 188 mutations.
 - Implemented ledger representation for all 254 docs operations.
-- Executable with current safe scalar contracts: 5 existing stream reads, 51 bounded scalar direct-read query commands, 102 scalar-input GraphQL write actions.
-- Planned/blocked with evidence: 10 query operations and 86 mutation operations requiring complex arrays/objects, binary/file handling, or live-schema/source work outside this worker scope.
+- Executable with current safe scalar contracts: 5 existing stream reads and 102 scalar-input GraphQL write actions.
+- Planned/blocked with evidence: 61 fixed query commands blocked by shared duplicate `POST /` classifier validation and GraphQL `errors[]` direct-read semantics, plus 86 mutation operations requiring complex arrays/objects, binary/file handling, or live-schema/source work outside this worker scope.
 - Destructive/admin executable writes (for example `delete_board`) require the existing reverse ETL safety path plus `confirm: "destructive"`.
 - Parent issue's r3 count of 292 live-schema operations is preserved in docs/planning as source-blocked reconciliation; this worker did not call `/v2/get_schema`.
 

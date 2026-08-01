@@ -297,7 +297,7 @@
 - [mixmax](mixmax/MANUAL.md): Reads Mixmax code snippets, messages, rules, sequences, and meeting types through the Mixmax REST API.
 - [mixpanel](mixpanel/MANUAL.md): Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.
 - [mode](mode/MANUAL.md): Reads Mode collections (spaces), reports, data sources, groups, and memberships through the Mode REST API.
-- [monday](monday/MANUAL.md): Reads monday.com GraphQL streams and bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.
+- [monday](monday/MANUAL.md): Reads monday.com GraphQL streams and plans fixed bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.
 - [mux](mux/MANUAL.md): Reads Mux Video assets, live streams, direct uploads, and system signing keys through the Mux REST API using HTTP Basic authentication.
 - [my-hours](my-hours/MANUAL.md): Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API.
 - [n8n](n8n/MANUAL.md): Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.

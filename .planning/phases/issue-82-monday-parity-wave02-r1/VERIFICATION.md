@@ -26,7 +26,7 @@ Built binary checks passed:
 
 - `./pm help connectors` exit 0.
 - `./pm connectors inspect monday --json` exit 0; connector write capability true, 5 streams, 102 write actions.
-- `./pm help monday` exit 0; 766-line detailed help includes reverse commands and destructive `delete-board` metadata.
+- `./pm help monday` exit 0; detailed help includes planned query commands, reverse commands, and destructive `delete-board` metadata.
 - `./pm monday` exit 0; bare namespace renders concise contextual help.
 - `./pm monday --help` exit 0; help renders concise contextual help.
 - `./pm monday --bogus` exits 2 with usage error (`error: missing connector command path`).
@@ -34,4 +34,4 @@ Built binary checks passed:
 ## Known non-blocking observations
 
 - No live monday.com provider calls, credentials, writes, certification, pushes, merges, or PRs were performed.
-- The public docs inventory produced 254 operations (66 queries, 188 mutations). The parent issue preserves 292 operations from a live schema source that this worker did not call; absent schema-only operations remain source-blocked/uninvented.
+- The public docs inventory produced 254 operations (66 queries, 188 mutations). Direct query commands are planned pending shared duplicate `POST /` classifier validation and GraphQL `errors[]` direct-read semantics. The parent issue preserves 292 operations from a live schema source that this worker did not call; absent schema-only operations remain source-blocked/uninvented.

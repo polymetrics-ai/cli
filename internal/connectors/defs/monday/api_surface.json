@@ -1840,15 +1840,27 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query account-roles"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/account-roles",
+        "notes": "Monday GraphQL query account_roles"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query account"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/plan",
+        "notes": "Monday GraphQL query account"
       }
     },
     {
@@ -1859,7 +1871,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/aggregate",
         "notes": "Monday GraphQL query aggregate"
       }
@@ -1867,71 +1879,131 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query all-widgets-schema"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/all-widgets-schema",
+        "notes": "Monday GraphQL query all_widgets_schema"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query allowed-sequences-to-enroll"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/sequences",
+        "notes": "Monday GraphQL query allowed_sequences_to_enroll"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query app-installs"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/app-installs",
+        "notes": "Monday GraphQL query app_installs"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query app-subscription-operations"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/app-subscription-operations",
+        "notes": "Monday GraphQL query app_subscription_operations"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query app-subscription"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/app-subscription",
+        "notes": "Monday GraphQL query app_subscription"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query app-subscriptions"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/app-subscriptions",
+        "notes": "Monday GraphQL query app_subscriptions"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query app"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/app-features",
+        "notes": "Monday GraphQL query app"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query apps-monetization-info"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/apps-monetization-info",
+        "notes": "Monday GraphQL query apps_monetization_info"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query apps-monetization-status"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/apps-monetization-status",
+        "notes": "Monday GraphQL query apps_monetization_status"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query article-blocks"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/articles",
+        "notes": "Monday GraphQL query article_blocks"
       }
     },
     {
@@ -1942,7 +2014,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/articles",
         "notes": "Monday GraphQL query articles"
       }
@@ -1950,15 +2022,27 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query ask-developer-docs"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/ask-developer-docs",
+        "notes": "Monday GraphQL query ask_developer_docs"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query audit-event-catalogue"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/audit-event-catalogue",
+        "notes": "Monday GraphQL query audit_event_catalogue"
       }
     },
     {
@@ -1969,7 +2053,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/audit-logs",
         "notes": "Monday GraphQL query audit_logs"
       }
@@ -1984,22 +2068,40 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query complexity"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/complexity",
+        "notes": "Monday GraphQL query complexity"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query connection-board-ids"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/connect",
+        "notes": "Monday GraphQL query connection_board_ids"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query custom-activity"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/custom-activity",
+        "notes": "Monday GraphQL query custom_activity"
       }
     },
     {
@@ -2010,7 +2112,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/departments",
         "notes": "Monday GraphQL query departments"
       }
@@ -2018,22 +2120,40 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query doc-version-diff"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/docs",
+        "notes": "Monday GraphQL query doc_version_diff"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query doc-version-history"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/docs",
+        "notes": "Monday GraphQL query doc_version_history"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query docs"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/blocks",
+        "notes": "Monday GraphQL query docs"
       }
     },
     {
@@ -2044,7 +2164,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/export-markdown-from-doc",
         "notes": "Monday GraphQL query export_markdown_from_doc"
       }
@@ -2052,15 +2172,27 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query favorites"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/favorites",
+        "notes": "Monday GraphQL query favorites"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query fetch-job-status"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/backfill-items-api-reference",
+        "notes": "Monday GraphQL query fetch_job_status"
       }
     },
     {
@@ -2071,7 +2203,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/folders",
         "notes": "Monday GraphQL query folders"
       }
@@ -2079,43 +2211,79 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query form"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/forms-other-types",
+        "notes": "Monday GraphQL query form"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query get-app-lifecycle-subscriptions"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/get-app-lifecycle-subscriptions",
+        "notes": "Monday GraphQL query get_app_lifecycle_subscriptions"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query get-column-type-schema"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/auto-number",
+        "notes": "Monday GraphQL query get_column_type_schema"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query get-directory-resources"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/resource-directory",
+        "notes": "Monday GraphQL query get_directory_resources"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query get-object-schemas"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/object-schemas",
+        "notes": "Monday GraphQL query get_object_schemas"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query get-view-schema-by-type"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/get-view-schema-by-type",
+        "notes": "Monday GraphQL query get_view_schema_by_type"
       }
     },
     {
@@ -2126,7 +2294,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/name",
         "notes": "Monday GraphQL query items_page_by_column_values"
       }
@@ -2141,36 +2309,66 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query job-status"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/ingest-items-api-reference",
+        "notes": "Monday GraphQL query job_status"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query knowledge-base-search"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/articles",
+        "notes": "Monday GraphQL query knowledge_base_search"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query managed-column"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/managed-columns",
+        "notes": "Monday GraphQL query managed_column"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query marketplace-app-discounts"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/marketplace-app-discounts",
+        "notes": "Monday GraphQL query marketplace_app_discounts"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query me"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/me",
+        "notes": "Monday GraphQL query me"
       }
     },
     {
@@ -2181,7 +2379,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/mute-board-settings",
         "notes": "Monday GraphQL query mute_board_settings"
       }
@@ -2189,15 +2387,27 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query next-items-page"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/items-page-by-column-values",
+        "notes": "Monday GraphQL query next_items_page"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query notetaker"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/notetaker",
+        "notes": "Monday GraphQL query notetaker"
       }
     },
     {
@@ -2208,7 +2418,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/notifications-settings",
         "notes": "Monday GraphQL query notifications_settings"
       }
@@ -2216,36 +2426,66 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query notifications"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/notification",
+        "notes": "Monday GraphQL query notifications"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query object-relations"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/object-relations",
+        "notes": "Monday GraphQL query object_relations"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query object-types-unique-keys"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/object-types-unique-keys",
+        "notes": "Monday GraphQL query object_types_unique_keys"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query objects"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/objects",
+        "notes": "Monday GraphQL query objects"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query platform-api"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/app",
+        "notes": "Monday GraphQL query platform_api"
       }
     },
     {
@@ -2256,7 +2496,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally.",
+        "reason": "Official query uses complex array/object GraphQL arguments; existing operation direct-read runner can only safely map bounded scalar body variables connector-locally. Also Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
         "source_url": "https://developer.monday.com/api-reference/reference/replies",
         "notes": "Monday GraphQL query replies"
       }
@@ -2264,8 +2504,14 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query search"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/search",
+        "notes": "Monday GraphQL query search"
       }
     },
     {
@@ -2285,36 +2531,66 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query template-installation-status"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/templates",
+        "notes": "Monday GraphQL query template_installation_status"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query timeline-item"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/timeline-item-ea",
+        "notes": "Monday GraphQL query timeline_item"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query timeline"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/timeline-ea",
+        "notes": "Monday GraphQL query timeline"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query updates"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/updates",
+        "notes": "Monday GraphQL query updates"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query user-configs"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/users",
+        "notes": "Monday GraphQL query user_configs"
       }
     },
     {
@@ -2327,36 +2603,66 @@
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query validations"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/validations",
+        "notes": "Monday GraphQL query validations"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query version"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/version",
+        "notes": "Monday GraphQL query version"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query versions"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/versions",
+        "notes": "Monday GraphQL query versions"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query webhooks"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/webhooks",
+        "notes": "Monday GraphQL query webhooks"
       }
     },
     {
       "method": "POST",
       "path": "/",
-      "covered_by": {
-        "direct_read": "query workspaces"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Shared endpoint coverage currently indexes api_surface rows by method+path, so duplicate Monday POST / query classifiers cannot be matched truthfully; direct GraphQL query execution is also blocked until OperationDirectRead rejects GraphQL errors[] envelopes.",
+        "source_url": "https://developer.monday.com/api-reference/reference/workspaces",
+        "notes": "Monday GraphQL query workspaces"
       }
     }
   ]

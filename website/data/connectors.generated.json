@@ -165562,7 +165562,7 @@
   {
     "slug": "monday",
     "name": "Monday",
-    "description": "Reads monday.com GraphQL streams and bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.",
+    "description": "Reads monday.com GraphQL streams and plans fixed bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.",
     "docs_url": "https://developer.monday.com/api-reference/docs",
     "integration_type": "api",
     "release_stage": "ga",
@@ -166147,7 +166147,7 @@
         },
         {
           "id": "queries",
-          "title": "Bounded GraphQL query commands",
+          "title": "Planned bounded GraphQL query commands",
           "commands": [
             "query"
           ]
@@ -166186,7 +166186,7 @@
         {
           "name": "max-bytes",
           "type": "integer",
-          "summary": "Maximum bytes to return for bounded direct query commands.",
+          "summary": "Maximum bytes to return when planned bounded query commands become executable.",
           "values": [],
           "maps_to": ""
         }
@@ -166194,9 +166194,9 @@
       "commands": [
         {
           "path": "query account",
-          "summary": "Run fixed Monday account query",
+          "summary": "Planned fixed Monday account query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166204,15 +166204,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for account; no raw query text is accepted."
+          "notes": "Planned operation monday.query.account. Fixed GraphQL document for account remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query account-roles",
-          "summary": "Run fixed Monday account_roles query",
+          "summary": "Planned fixed Monday account_roles query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166220,9 +166220,9 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for account_roles; no raw query text is accepted."
+          "notes": "Planned operation monday.query.account_roles. Fixed GraphQL document for account_roles remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query aggregate",
@@ -166236,15 +166236,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.aggregate. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query all-widgets-schema",
-          "summary": "Run fixed Monday all_widgets_schema query",
+          "summary": "Planned fixed Monday all_widgets_schema query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166252,15 +166252,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for all_widgets_schema; no raw query text is accepted."
+          "notes": "Planned operation monday.query.all_widgets_schema. Fixed GraphQL document for all_widgets_schema remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query allowed-sequences-to-enroll",
-          "summary": "Run fixed Monday allowed_sequences_to_enroll query",
+          "summary": "Planned fixed Monday allowed_sequences_to_enroll query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166277,15 +166277,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for allowed_sequences_to_enroll; no raw query text is accepted."
+          "notes": "Planned operation monday.query.allowed_sequences_to_enroll. Fixed GraphQL document for allowed_sequences_to_enroll remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query app",
-          "summary": "Run fixed Monday app query",
+          "summary": "Planned fixed Monday app query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166302,15 +166302,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for app; no raw query text is accepted."
+          "notes": "Planned operation monday.query.app. Fixed GraphQL document for app remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query app-installs",
-          "summary": "Run fixed Monday app_installs query",
+          "summary": "Planned fixed Monday app_installs query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166335,15 +166335,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for app_installs; no raw query text is accepted."
+          "notes": "Planned operation monday.query.app_installs. Fixed GraphQL document for app_installs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query app-subscription",
-          "summary": "Run fixed Monday app_subscription query",
+          "summary": "Planned fixed Monday app_subscription query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166351,15 +166351,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for app_subscription; no raw query text is accepted."
+          "notes": "Planned operation monday.query.app_subscription. Fixed GraphQL document for app_subscription remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query app-subscription-operations",
-          "summary": "Run fixed Monday app_subscription_operations query",
+          "summary": "Planned fixed Monday app_subscription_operations query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166376,15 +166376,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for app_subscription_operations; no raw query text is accepted."
+          "notes": "Planned operation monday.query.app_subscription_operations. Fixed GraphQL document for app_subscription_operations remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query app-subscriptions",
-          "summary": "Run fixed Monday app_subscriptions query",
+          "summary": "Planned fixed Monday app_subscriptions query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166401,15 +166401,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for app_subscriptions; no raw query text is accepted."
+          "notes": "Planned operation monday.query.app_subscriptions. Fixed GraphQL document for app_subscriptions remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query apps-monetization-info",
-          "summary": "Run fixed Monday apps_monetization_info query",
+          "summary": "Planned fixed Monday apps_monetization_info query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166417,15 +166417,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for apps_monetization_info; no raw query text is accepted."
+          "notes": "Planned operation monday.query.apps_monetization_info. Fixed GraphQL document for apps_monetization_info remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query apps-monetization-status",
-          "summary": "Run fixed Monday apps_monetization_status query",
+          "summary": "Planned fixed Monday apps_monetization_status query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166433,15 +166433,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for apps_monetization_status; no raw query text is accepted."
+          "notes": "Planned operation monday.query.apps_monetization_status. Fixed GraphQL document for apps_monetization_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query article-blocks",
-          "summary": "Run fixed Monday article_blocks query",
+          "summary": "Planned fixed Monday article_blocks query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166472,9 +166472,9 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for article_blocks; no raw query text is accepted."
+          "notes": "Planned operation monday.query.article_blocks. Fixed GraphQL document for article_blocks remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query articles",
@@ -166488,15 +166488,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.articles. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query ask-developer-docs",
-          "summary": "Run fixed Monday ask_developer_docs query",
+          "summary": "Planned fixed Monday ask_developer_docs query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166513,15 +166513,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for ask_developer_docs; no raw query text is accepted."
+          "notes": "Planned operation monday.query.ask_developer_docs. Fixed GraphQL document for ask_developer_docs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query audit-event-catalogue",
-          "summary": "Run fixed Monday audit_event_catalogue query",
+          "summary": "Planned fixed Monday audit_event_catalogue query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166529,9 +166529,9 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for audit_event_catalogue; no raw query text is accepted."
+          "notes": "Planned operation monday.query.audit_event_catalogue. Fixed GraphQL document for audit_event_catalogue remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query audit-logs",
@@ -166545,15 +166545,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.audit_logs. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query complexity",
-          "summary": "Run fixed Monday complexity query",
+          "summary": "Planned fixed Monday complexity query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166561,15 +166561,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for complexity; no raw query text is accepted."
+          "notes": "Planned operation monday.query.complexity. Fixed GraphQL document for complexity remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query connection-board-ids",
-          "summary": "Run fixed Monday connection_board_ids query",
+          "summary": "Planned fixed Monday connection_board_ids query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166586,15 +166586,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for connection_board_ids; no raw query text is accepted."
+          "notes": "Planned operation monday.query.connection_board_ids. Fixed GraphQL document for connection_board_ids remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query custom-activity",
-          "summary": "Run fixed Monday custom_activity query",
+          "summary": "Planned fixed Monday custom_activity query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166602,9 +166602,9 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for custom_activity; no raw query text is accepted."
+          "notes": "Planned operation monday.query.custom_activity. Fixed GraphQL document for custom_activity remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query departments",
@@ -166618,15 +166618,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.departments. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query doc-version-diff",
-          "summary": "Run fixed Monday doc_version_diff query",
+          "summary": "Planned fixed Monday doc_version_diff query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166659,15 +166659,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for doc_version_diff; no raw query text is accepted."
+          "notes": "Planned operation monday.query.doc_version_diff. Fixed GraphQL document for doc_version_diff remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query doc-version-history",
-          "summary": "Run fixed Monday doc_version_history query",
+          "summary": "Planned fixed Monday doc_version_history query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166692,15 +166692,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for doc_version_history; no raw query text is accepted."
+          "notes": "Planned operation monday.query.doc_version_history. Fixed GraphQL document for doc_version_history remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query docs",
-          "summary": "Run fixed Monday docs query",
+          "summary": "Planned fixed Monday docs query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166717,9 +166717,9 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for docs; no raw query text is accepted."
+          "notes": "Planned operation monday.query.docs. Fixed GraphQL document for docs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query export-markdown-from-doc",
@@ -166733,15 +166733,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.export_markdown_from_doc. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query favorites",
-          "summary": "Run fixed Monday favorites query",
+          "summary": "Planned fixed Monday favorites query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166749,15 +166749,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for favorites; no raw query text is accepted."
+          "notes": "Planned operation monday.query.favorites. Fixed GraphQL document for favorites remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query fetch-job-status",
-          "summary": "Run fixed Monday fetch_job_status query",
+          "summary": "Planned fixed Monday fetch_job_status query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166774,9 +166774,9 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for fetch_job_status; no raw query text is accepted."
+          "notes": "Planned operation monday.query.fetch_job_status. Fixed GraphQL document for fetch_job_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query folders",
@@ -166790,15 +166790,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.folders. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query form",
-          "summary": "Run fixed Monday form query",
+          "summary": "Planned fixed Monday form query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166815,15 +166815,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for form; no raw query text is accepted."
+          "notes": "Planned operation monday.query.form. Fixed GraphQL document for form remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query get-app-lifecycle-subscriptions",
-          "summary": "Run fixed Monday get_app_lifecycle_subscriptions query",
+          "summary": "Planned fixed Monday get_app_lifecycle_subscriptions query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166848,15 +166848,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for get_app_lifecycle_subscriptions; no raw query text is accepted."
+          "notes": "Planned operation monday.query.get_app_lifecycle_subscriptions. Fixed GraphQL document for get_app_lifecycle_subscriptions remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query get-column-type-schema",
-          "summary": "Run fixed Monday get_column_type_schema query",
+          "summary": "Planned fixed Monday get_column_type_schema query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166864,15 +166864,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for get_column_type_schema; no raw query text is accepted."
+          "notes": "Planned operation monday.query.get_column_type_schema. Fixed GraphQL document for get_column_type_schema remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query get-directory-resources",
-          "summary": "Run fixed Monday get_directory_resources query",
+          "summary": "Planned fixed Monday get_directory_resources query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166888,15 +166888,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for get_directory_resources; no raw query text is accepted."
+          "notes": "Planned operation monday.query.get_directory_resources. Fixed GraphQL document for get_directory_resources remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query get-object-schemas",
-          "summary": "Run fixed Monday get_object_schemas query",
+          "summary": "Planned fixed Monday get_object_schemas query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166919,15 +166919,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for get_object_schemas; no raw query text is accepted."
+          "notes": "Planned operation monday.query.get_object_schemas. Fixed GraphQL document for get_object_schemas remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query get-view-schema-by-type",
-          "summary": "Run fixed Monday get_view_schema_by_type query",
+          "summary": "Planned fixed Monday get_view_schema_by_type query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166935,9 +166935,9 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for get_view_schema_by_type; no raw query text is accepted."
+          "notes": "Planned operation monday.query.get_view_schema_by_type. Fixed GraphQL document for get_view_schema_by_type remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query items-page-by-column-values",
@@ -166951,15 +166951,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.items_page_by_column_values. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query job-status",
-          "summary": "Run fixed Monday job_status query",
+          "summary": "Planned fixed Monday job_status query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -166976,15 +166976,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for job_status; no raw query text is accepted."
+          "notes": "Planned operation monday.query.job_status. Fixed GraphQL document for job_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query knowledge-base-search",
-          "summary": "Run fixed Monday knowledge_base_search query",
+          "summary": "Planned fixed Monday knowledge_base_search query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167008,15 +167008,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for knowledge_base_search; no raw query text is accepted."
+          "notes": "Planned operation monday.query.knowledge_base_search. Fixed GraphQL document for knowledge_base_search remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query managed-column",
-          "summary": "Run fixed Monday managed_column query",
+          "summary": "Planned fixed Monday managed_column query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167024,15 +167024,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for managed_column; no raw query text is accepted."
+          "notes": "Planned operation monday.query.managed_column. Fixed GraphQL document for managed_column remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query marketplace-app-discounts",
-          "summary": "Run fixed Monday marketplace_app_discounts query",
+          "summary": "Planned fixed Monday marketplace_app_discounts query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167049,15 +167049,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for marketplace_app_discounts; no raw query text is accepted."
+          "notes": "Planned operation monday.query.marketplace_app_discounts. Fixed GraphQL document for marketplace_app_discounts remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query me",
-          "summary": "Run fixed Monday me query",
+          "summary": "Planned fixed Monday me query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167065,9 +167065,9 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for me; no raw query text is accepted."
+          "notes": "Planned operation monday.query.me. Fixed GraphQL document for me remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query mute-board-settings",
@@ -167081,15 +167081,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.mute_board_settings. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query next-items-page",
-          "summary": "Run fixed Monday next_items_page query",
+          "summary": "Planned fixed Monday next_items_page query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167113,15 +167113,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for next_items_page; no raw query text is accepted."
+          "notes": "Planned operation monday.query.next_items_page. Fixed GraphQL document for next_items_page remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query notetaker",
-          "summary": "Run fixed Monday notetaker query",
+          "summary": "Planned fixed Monday notetaker query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167129,15 +167129,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for notetaker; no raw query text is accepted."
+          "notes": "Planned operation monday.query.notetaker. Fixed GraphQL document for notetaker remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query notifications",
-          "summary": "Run fixed Monday notifications query",
+          "summary": "Planned fixed Monday notifications query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167153,9 +167153,9 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for notifications; no raw query text is accepted."
+          "notes": "Planned operation monday.query.notifications. Fixed GraphQL document for notifications remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query notifications-settings",
@@ -167169,15 +167169,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.notifications_settings. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query object-relations",
-          "summary": "Run fixed Monday object_relations query",
+          "summary": "Planned fixed Monday object_relations query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167194,15 +167194,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for object_relations; no raw query text is accepted."
+          "notes": "Planned operation monday.query.object_relations. Fixed GraphQL document for object_relations remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query object-types-unique-keys",
-          "summary": "Run fixed Monday object_types_unique_keys query",
+          "summary": "Planned fixed Monday object_types_unique_keys query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167210,15 +167210,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for object_types_unique_keys; no raw query text is accepted."
+          "notes": "Planned operation monday.query.object_types_unique_keys. Fixed GraphQL document for object_types_unique_keys remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query objects",
-          "summary": "Run fixed Monday objects query",
+          "summary": "Planned fixed Monday objects query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167234,15 +167234,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for objects; no raw query text is accepted."
+          "notes": "Planned operation monday.query.objects. Fixed GraphQL document for objects remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query platform-api",
-          "summary": "Run fixed Monday platform_api query",
+          "summary": "Planned fixed Monday platform_api query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167250,9 +167250,9 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for platform_api; no raw query text is accepted."
+          "notes": "Planned operation monday.query.platform_api. Fixed GraphQL document for platform_api remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query replies",
@@ -167266,15 +167266,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "planned bounded GraphQL read",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+          "notes": "Planned operation monday.query.replies. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
         },
         {
           "path": "query search",
-          "summary": "Run fixed Monday search query",
+          "summary": "Planned fixed Monday search query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167282,15 +167282,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for search; no raw query text is accepted."
+          "notes": "Planned operation monday.query.search. Fixed GraphQL document for search remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query template-installation-status",
-          "summary": "Run fixed Monday template_installation_status query",
+          "summary": "Planned fixed Monday template_installation_status query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167307,15 +167307,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for template_installation_status; no raw query text is accepted."
+          "notes": "Planned operation monday.query.template_installation_status. Fixed GraphQL document for template_installation_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query timeline",
-          "summary": "Run fixed Monday timeline query",
+          "summary": "Planned fixed Monday timeline query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167332,15 +167332,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for timeline; no raw query text is accepted."
+          "notes": "Planned operation monday.query.timeline. Fixed GraphQL document for timeline remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query timeline-item",
-          "summary": "Run fixed Monday timeline_item query",
+          "summary": "Planned fixed Monday timeline_item query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167357,15 +167357,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for timeline_item; no raw query text is accepted."
+          "notes": "Planned operation monday.query.timeline_item. Fixed GraphQL document for timeline_item remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query updates",
-          "summary": "Run fixed Monday updates query",
+          "summary": "Planned fixed Monday updates query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167397,15 +167397,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for updates; no raw query text is accepted."
+          "notes": "Planned operation monday.query.updates. Fixed GraphQL document for updates remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query user-configs",
-          "summary": "Run fixed Monday user_configs query",
+          "summary": "Planned fixed Monday user_configs query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167413,15 +167413,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for user_configs; no raw query text is accepted."
+          "notes": "Planned operation monday.query.user_configs. Fixed GraphQL document for user_configs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query validations",
-          "summary": "Run fixed Monday validations query",
+          "summary": "Planned fixed Monday validations query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167438,15 +167438,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for validations; no raw query text is accepted."
+          "notes": "Planned operation monday.query.validations. Fixed GraphQL document for validations remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query version",
-          "summary": "Run fixed Monday version query",
+          "summary": "Planned fixed Monday version query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167454,15 +167454,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for version; no raw query text is accepted."
+          "notes": "Planned operation monday.query.version. Fixed GraphQL document for version remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query versions",
-          "summary": "Run fixed Monday versions query",
+          "summary": "Planned fixed Monday versions query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167470,15 +167470,15 @@
           "flags": [],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for versions; no raw query text is accepted."
+          "notes": "Planned operation monday.query.versions. Fixed GraphQL document for versions remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query webhooks",
-          "summary": "Run fixed Monday webhooks query",
+          "summary": "Planned fixed Monday webhooks query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167495,15 +167495,15 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for webhooks; no raw query text is accepted."
+          "notes": "Planned operation monday.query.webhooks. Fixed GraphQL document for webhooks remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "query workspaces",
-          "summary": "Run fixed Monday workspaces query",
+          "summary": "Planned fixed Monday workspaces query",
           "intent": "direct_read",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
           "write": "",
           "source_cli_path": "",
@@ -167520,9 +167520,9 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded GraphQL read; output is capped and redacted",
+          "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
           "approval": "none",
-          "notes": "Fixed GraphQL document for workspaces; no raw query text is accepted."
+          "notes": "Planned operation monday.query.workspaces. Fixed GraphQL document for workspaces remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
         },
         {
           "path": "reverse activate-form",
@@ -172416,7 +172416,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nThe Monday connector reads monday.com GraphQL data and exposes connector-owned metadata for the official monday.com GraphQL reference. Existing ETL streams remain `boards`, `items`, `users`, `teams`, and `tags`. Additional documented query operations are represented as fixed, bounded direct-query commands when the current connector runtime can safely execute their scalar inputs; complex query shapes remain planned/blocked with source evidence.\n\nThis bundle now records 254 official docs operations from the developer.monday.com sitemap/reference pages: 66 queries and 188 mutations. The parent issue's r3 audit records 292 operations from `monday_graphql_schema_current`; this worker did not fetch `https://api.monday.com/v2/get_schema` because the task forbids live provider calls, so schema-only operations not present in public docs pages remain a recorded source dependency, not fabricated rows.\n\n## Auth setup\n\nConnection fields:\n\n- `api_token` (optional, secret): monday.com personal API token sent verbatim as the `Authorization` header.\n- `access_token` (optional, secret): monday.com OAuth access token sent verbatim as the `Authorization` header.\n- `api_version` (optional): sent as the `API-Version` header when configured.\n- `base_url` (optional): defaults to `https://api.monday.com/v2`; used by fixture replay and proxies.\n- `page_size` (optional): defaults to `50` for hook-backed streams.\n- `max_pages` (optional): positive integer cap for hook-backed stream pagination; empty, `all`, `unlimited`, or non-positive values mean unbounded up to the hook safety cap.\n\nNever pass token values in chat, CLI arguments, docs, fixtures, or logs. Use environment variables or stdin-backed credential loading.\n\n## Streams notes\n\nThe five legacy-parity ETL streams are still handled by the Monday StreamHook because monday.com carries pagination state inside GraphQL POST bodies:\n\n- `boards`, `users`, `teams`, and `tags` use page-number pagination.\n- `items` uses `boards { items_page }` followed by `next_items_page` cursor pagination.\n\nAdditional docs-sourced query operations are modeled in `operations.json` and `cli_surface.json`. Commands with scalar-only arguments can run as bounded fixed-document direct reads through the existing operation direct-read path. Operations with array/object GraphQL arguments stay planned/blocked until a connector-local or shared typed variable contract can pass those inputs without becoming a raw GraphQL escape hatch.\n\n## Write actions & risks\n\nMonday reverse ETL is enabled only through named GraphQL write actions in `writes.json`; no arbitrary GraphQL document, method, path, or body command is exposed. This bundle declares 102 executable scalar-input mutation actions and keeps 86 complex/binary-input mutations planned/blocked with source evidence.\n\nEvery write action uses a fixed GraphQL mutation document, a draft-07 record schema, and the existing reverse ETL safety path: plan -> preview -> explicit approval -> execute. Destructive/admin/delete-class actions (for example `delete_board`) set `confirm: \"destructive\"` so execution requires typed destructive confirmation in addition to approval.\n\nRepresentative fixtures under `fixtures/writes/` prove the GraphQL request shape for `update_board` and destructive `delete_board` without contacting monday.com.\n\n## Known limits\n\n- No live monday.com provider calls, credentials, writes, or certification were performed for this parity slice.\n- The live `/v2/get_schema` source named by #82 was not fetched under the no-live-provider-call gate. The public docs reference inventory currently yields 254 operations, while #82 preserves the previous r3 count of 292; this count divergence is recorded for firstmate/human reconciliation.\n- Complex GraphQL input objects, arrays, and multipart/binary file uploads are not passed through scalar template variables by the existing write/direct-read foundations. Those operations are present as planned/blocked rows instead of an unsafe generic GraphQL or file-upload escape hatch.\n- Direct query command output is capped and redacted with `json_redacted`; binary/file-like operations remain planned/blocked unless represented by a bounded fixed operation.\n- Fixture evidence is not live certification. Certification remains a separate human-gated lane.\n",
+    "docs_md": "# Overview\n\nThe Monday connector reads monday.com GraphQL data and exposes connector-owned metadata for the official monday.com GraphQL reference. Existing ETL streams remain `boards`, `items`, `users`, `teams`, and `tags`. Additional documented query operations are represented as fixed, bounded planned GraphQL operations until shared direct-read error-envelope handling and duplicate POST `/` endpoint classifier validation can make them safely executable.\n\nThis bundle now records 254 official docs operations from the developer.monday.com sitemap/reference pages: 66 queries and 188 mutations. The parent issue's r3 audit records 292 operations from `monday_graphql_schema_current`; this worker did not fetch `https://api.monday.com/v2/get_schema` because the task forbids live provider calls, so schema-only operations not present in public docs pages remain a recorded source dependency, not fabricated rows.\n\n## Auth setup\n\nConnection fields:\n\n- `api_token` (optional, secret): monday.com personal API token sent verbatim as the `Authorization` header.\n- `access_token` (optional, secret): monday.com OAuth access token sent verbatim as the `Authorization` header.\n- `api_version` (optional): sent as the `API-Version` header when configured.\n- `base_url` (optional): defaults to `https://api.monday.com/v2`; used by fixture replay and proxies.\n- `page_size` (optional): defaults to `50` for hook-backed streams.\n- `max_pages` (optional): positive integer cap for hook-backed stream pagination; empty, `all`, `unlimited`, or non-positive values mean unbounded up to the hook safety cap.\n\nNever pass token values in chat, CLI arguments, docs, fixtures, or logs. Use environment variables or stdin-backed credential loading.\n\n## Streams notes\n\nThe five legacy-parity ETL streams are still handled by the Monday StreamHook because monday.com carries pagination state inside GraphQL POST bodies:\n\n- `boards`, `users`, `teams`, and `tags` use page-number pagination.\n- `items` uses `boards { items_page }` followed by `next_items_page` cursor pagination.\n\nAdditional docs-sourced query operations are modeled in `operations.json` and `cli_surface.json` as planned fixed GraphQL documents. Scalar query commands are not advertised as executable in this branch because shared endpoint coverage currently collapses duplicate Monday `POST /` rows by method and path, and the existing operation direct-read path does not fail closed on GraphQL `errors[]` envelopes. Operations with array/object GraphQL arguments also stay planned/blocked until a connector-local or shared typed variable contract can pass those inputs without becoming a raw GraphQL escape hatch.\n\n## Write actions & risks\n\nMonday reverse ETL is enabled only through named GraphQL write actions in `writes.json`; no arbitrary GraphQL document, method, path, or body command is exposed. This bundle declares 102 executable scalar-input mutation actions and keeps 86 complex/binary-input mutations planned/blocked with source evidence.\n\nEvery write action uses a fixed GraphQL mutation document, a draft-07 record schema, and the existing reverse ETL safety path: plan -> preview -> explicit approval -> execute. Destructive/admin/delete-class actions (for example `delete_board`) set `confirm: \"destructive\"` so execution requires typed destructive confirmation in addition to approval.\n\nRepresentative fixtures under `fixtures/writes/` prove the GraphQL request shape for `update_board` and destructive `delete_board` without contacting monday.com.\n\n## Known limits\n\n- No live monday.com provider calls, credentials, writes, or certification were performed for this parity slice.\n- The live `/v2/get_schema` source named by #82 was not fetched under the no-live-provider-call gate. The public docs reference inventory currently yields 254 operations, while #82 preserves the previous r3 count of 292; this count divergence is recorded for firstmate/human reconciliation.\n- Complex GraphQL input objects, arrays, and multipart/binary file uploads are not passed through scalar template variables by the existing write/direct-read foundations. Those operations are present as planned/blocked rows instead of an unsafe generic GraphQL or file-upload escape hatch.\n- Fixed query operations remain capped/redacted `graphql_query` ledger entries, but their CLI commands are planned until shared duplicate GraphQL endpoint classifier matching and GraphQL `errors[]` failure semantics land.\n- Fixture evidence is not live certification. Certification remains a separate human-gated lane.\n",
     "icon": {
       "id": "monday",
       "path": "icons/monday.svg",

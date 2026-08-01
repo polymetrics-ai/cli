@@ -38,10 +38,11 @@
   },
   "implementation": {
     "streams": 5,
-    "bounded_direct_read_commands": 51,
+    "planned_query_commands": 61,
     "write_actions": 102,
-    "blocked_queries": 10,
+    "blocked_queries": 61,
     "blocked_mutations": 86,
+    "query_blockers": "shared duplicate POST / endpoint classifier validation and OperationDirectRead GraphQL errors[] semantics",
     "destructive_confirmation": "confirm: destructive on destructive/admin delete/archive/remove/clear-style executable writes",
     "raw_escape_hatches_exposed": false
   },

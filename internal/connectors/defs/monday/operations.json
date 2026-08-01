@@ -4462,2695 +4462,1058 @@
     },
     {
       "id": "monday.query.account",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query account",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query account",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/plan",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_account { account {\n    plan {\n      max_users\n      period\n      tier\n      version\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.account",
+      "graphql": {
+        "document": "query Monday_account { account {\n    plan {\n      max_users\n      period\n      tier\n      version\n    }\n  } }",
+        "operation_name": "Monday_account"
       }
     },
     {
       "id": "monday.query.account_roles",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query account_roles",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query account_roles",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/account-roles",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_account_roles { account_roles {\n    id\n    name\n    roleType\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.account_roles",
+      "graphql": {
+        "document": "query Monday_account_roles { account_roles {\n    id\n    name\n    roleType\n  } }",
+        "operation_name": "Monday_account_roles"
       }
     },
     {
       "id": "monday.query.aggregate",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query aggregate",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query aggregate",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/aggregate",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_aggregate { aggregate {\n    results {\n      entries {\n        alias\n        value {\n          ... on AggregateBasicAggregationResult { result }\n        }\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.aggregate",
+      "graphql": {
+        "document": "query Monday_aggregate { aggregate {\n    results {\n      entries {\n        alias\n        value {\n          ... on AggregateBasicAggregationResult { result }\n        }\n      }\n    }\n  } }",
+        "operation_name": "Monday_aggregate"
       }
     },
     {
       "id": "monday.query.all_widgets_schema",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query all_widgets_schema",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query all_widgets_schema",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/all-widgets-schema",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_all_widgets_schema { all_widgets_schema {\n    widget_type\n    schema\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.all_widgets_schema",
+      "graphql": {
+        "document": "query Monday_all_widgets_schema { all_widgets_schema {\n    widget_type\n    schema\n  } }",
+        "operation_name": "Monday_all_widgets_schema"
       }
     },
     {
       "id": "monday.query.allowed_sequences_to_enroll",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query allowed_sequences_to_enroll",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query allowed_sequences_to_enroll",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/sequences",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_allowed_sequences_to_enroll($board_id: String!) { allowed_sequences_to_enroll(board_id: $board_id) {\n    id\n    title\n    status\n    context_type\n    context_id\n    user_id\n    step_count\n    duration\n    created_at\n    updated_at\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "board_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "board_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.allowed_sequences_to_enroll",
+      "graphql": {
+        "document": "query Monday_allowed_sequences_to_enroll($board_id: String!) { allowed_sequences_to_enroll(board_id: $board_id) {\n    id\n    title\n    status\n    context_type\n    context_id\n    user_id\n    step_count\n    duration\n    created_at\n    updated_at\n  } }",
+        "operation_name": "Monday_allowed_sequences_to_enroll"
       }
     },
     {
       "id": "monday.query.app",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query app",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query app",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/app-features",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_app($id: ID!) { app(id: $id) {\n    features(limit:2) {\n      created_at\n      data\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.app",
+      "graphql": {
+        "document": "query Monday_app($id: ID!) { app(id: $id) {\n    features(limit:2) {\n      created_at\n      data\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_app"
       }
     },
     {
       "id": "monday.query.app_installs",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query app_installs",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query app_installs",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/app-installs",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_app_installs($app_id: ID!, $account_id: ID!) { app_installs(app_id: $app_id, account_id: $account_id) {\n    app_id\n    timestamp\n    app_install_account {\n      id\n    }\n    app_install_user {\n      id\n    }\n    app_version {\n      major\n      minor\n      patch\n      type\n      text\n    }\n    permissions {\n      approved_scopes\n      required_scopes\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "app_id": {
-                  "type": "string"
-                },
-                "account_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "app_id",
-                "account_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.app_installs",
+      "graphql": {
+        "document": "query Monday_app_installs($app_id: ID!, $account_id: ID!) { app_installs(app_id: $app_id, account_id: $account_id) {\n    app_id\n    timestamp\n    app_install_account {\n      id\n    }\n    app_install_user {\n      id\n    }\n    app_version {\n      major\n      minor\n      patch\n      type\n      text\n    }\n    permissions {\n      approved_scopes\n      required_scopes\n    }\n  } }",
+        "operation_name": "Monday_app_installs"
       }
     },
     {
       "id": "monday.query.app_subscription",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query app_subscription",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query app_subscription",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscription",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_app_subscription { app_subscription {\n    billing_period\n    days_left\n    is_trial\n    max_units\n    renewal_date\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.app_subscription",
+      "graphql": {
+        "document": "query Monday_app_subscription { app_subscription {\n    billing_period\n    days_left\n    is_trial\n    max_units\n    renewal_date\n  } }",
+        "operation_name": "Monday_app_subscription"
       }
     },
     {
       "id": "monday.query.app_subscription_operations",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query app_subscription_operations",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query app_subscription_operations",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscription-operations",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_app_subscription_operations($kind: String!) { app_subscription_operations(kind: $kind) {\n    counter_value\n    period_key\n   } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "kind"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.app_subscription_operations",
+      "graphql": {
+        "document": "query Monday_app_subscription_operations($kind: String!) { app_subscription_operations(kind: $kind) {\n    counter_value\n    period_key\n   } }",
+        "operation_name": "Monday_app_subscription_operations"
       }
     },
     {
       "id": "monday.query.app_subscriptions",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query app_subscriptions",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query app_subscriptions",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscriptions",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_app_subscriptions($app_id: ID!) { app_subscriptions(app_id: $app_id) {\n    cursor\n    total_count \n    subscriptions {\n      account_id\n      monthly_price\n      currency\n      max_units\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "app_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "app_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.app_subscriptions",
+      "graphql": {
+        "document": "query Monday_app_subscriptions($app_id: ID!) { app_subscriptions(app_id: $app_id) {\n    cursor\n    total_count \n    subscriptions {\n      account_id\n      monthly_price\n      currency\n      max_units\n    }\n  } }",
+        "operation_name": "Monday_app_subscriptions"
       }
     },
     {
       "id": "monday.query.apps_monetization_info",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query apps_monetization_info",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query apps_monetization_info",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/apps-monetization-info",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_apps_monetization_info { apps_monetization_info {\n    seats_count\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.apps_monetization_info",
+      "graphql": {
+        "document": "query Monday_apps_monetization_info { apps_monetization_info {\n    seats_count\n  } }",
+        "operation_name": "Monday_apps_monetization_info"
       }
     },
     {
       "id": "monday.query.apps_monetization_status",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query apps_monetization_status",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query apps_monetization_status",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/apps-monetization-status",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_apps_monetization_status { apps_monetization_status {\n    is_supported\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.apps_monetization_status",
+      "graphql": {
+        "document": "query Monday_apps_monetization_status { apps_monetization_status {\n    is_supported\n  } }",
+        "operation_name": "Monday_apps_monetization_status"
       }
     },
     {
       "id": "monday.query.article_blocks",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query article_blocks",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query article_blocks",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_article_blocks($object_id: String!, $limit: Int!, $page: Int!) { article_blocks(object_id: $object_id, limit: $limit, page: $page) {\n    id\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "object_id": {
-                  "type": "string"
-                },
-                "limit": {
-                  "type": "integer"
-                },
-                "page": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "object_id",
-                "limit",
-                "page"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.article_blocks",
+      "graphql": {
+        "document": "query Monday_article_blocks($object_id: String!, $limit: Int!, $page: Int!) { article_blocks(object_id: $object_id, limit: $limit, page: $page) {\n    id\n  } }",
+        "operation_name": "Monday_article_blocks"
       }
     },
     {
       "id": "monday.query.articles",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query articles",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query articles",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_articles($limit: Int!, $page: Int!) { articles(limit: $limit, page: $page) {\n    metadata {\n      object_id\n      name\n      state\n    }\n    blocks {\n      id\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "limit": {
-                  "type": "integer"
-                },
-                "page": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "limit",
-                "page"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.articles",
+      "graphql": {
+        "document": "query Monday_articles($limit: Int!, $page: Int!) { articles(limit: $limit, page: $page) {\n    metadata {\n      object_id\n      name\n      state\n    }\n    blocks {\n      id\n    }\n  } }",
+        "operation_name": "Monday_articles"
       }
     },
     {
       "id": "monday.query.ask_developer_docs",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query ask_developer_docs",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query ask_developer_docs",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/ask-developer-docs",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_ask_developer_docs($query: String!) { ask_developer_docs(query: $query) {\n    id\n    question\n    answer\n    conversation_id\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "query"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.ask_developer_docs",
+      "graphql": {
+        "document": "query Monday_ask_developer_docs($query: String!) { ask_developer_docs(query: $query) {\n    id\n    question\n    answer\n    conversation_id\n  } }",
+        "operation_name": "Monday_ask_developer_docs"
       }
     },
     {
       "id": "monday.query.audit_event_catalogue",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query audit_event_catalogue",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query audit_event_catalogue",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/audit-event-catalogue",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_audit_event_catalogue { audit_event_catalogue {\n    description\n    metadata_details\n    name\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.audit_event_catalogue",
+      "graphql": {
+        "document": "query Monday_audit_event_catalogue { audit_event_catalogue {\n    description\n    metadata_details\n    name\n  } }",
+        "operation_name": "Monday_audit_event_catalogue"
       }
     },
     {
       "id": "monday.query.audit_logs",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query audit_logs",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query audit_logs",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/audit-logs",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_audit_logs($user_id: ID!, $limit: Int!) { audit_logs(user_id: $user_id, limit: $limit) {\n    logs {\n      timestamp\n      event\n      user_agent\n      user {\n        id\n        name\n        email\n      }\n      ip_address\n    }\n    pagination {\n      has_more_pages\n      next_page_number\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "user_id": {
-                  "type": "string"
-                },
-                "limit": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "user_id",
-                "limit"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.audit_logs",
+      "graphql": {
+        "document": "query Monday_audit_logs($user_id: ID!, $limit: Int!) { audit_logs(user_id: $user_id, limit: $limit) {\n    logs {\n      timestamp\n      event\n      user_agent\n      user {\n        id\n        name\n        email\n      }\n      ip_address\n    }\n    pagination {\n      has_more_pages\n      next_page_number\n    }\n  } }",
+        "operation_name": "Monday_audit_logs"
       }
     },
     {
       "id": "monday.query.boards",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query boards",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query boards",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/activity-logs-new",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_boards { boards {\n    activity_logs(\n      from: \"2026-03-01T00:00:00Z\"\n      to: \"2026-04-09T23:59:59Z\"\n      limit: 25\n      page: 1\n    ) {\n      id\n      event\n      entity\n      data\n      user_id\n      created_at\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.boards",
+      "graphql": {
+        "document": "query Monday_boards { boards {\n    activity_logs(\n      from: \"2026-03-01T00:00:00Z\"\n      to: \"2026-04-09T23:59:59Z\"\n      limit: 25\n      page: 1\n    ) {\n      id\n      event\n      entity\n      data\n      user_id\n      created_at\n    }\n  } }",
+        "operation_name": "Monday_boards"
       }
     },
     {
       "id": "monday.query.complexity",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query complexity",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query complexity",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/complexity",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_complexity { complexity {\n    before\n    query\n    after\n    reset_in_x_seconds\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.complexity",
+      "graphql": {
+        "document": "query Monday_complexity { complexity {\n    before\n    query\n    after\n    reset_in_x_seconds\n  } }",
+        "operation_name": "Monday_complexity"
       }
     },
     {
       "id": "monday.query.connection_board_ids",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query connection_board_ids",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query connection_board_ids",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/connect",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_connection_board_ids($connection_id: String!) { connection_board_ids(connection_id: $connection_id) }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "connection_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "connection_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.connection_board_ids",
+      "graphql": {
+        "document": "query Monday_connection_board_ids($connection_id: String!) { connection_board_ids(connection_id: $connection_id) }",
+        "operation_name": "Monday_connection_board_ids"
       }
     },
     {
       "id": "monday.query.custom_activity",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query custom_activity",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query custom_activity",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/custom-activity",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_custom_activity { custom_activity {\n    color\n    icon_id\n    id\n    name\n    type\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.custom_activity",
+      "graphql": {
+        "document": "query Monday_custom_activity { custom_activity {\n    color\n    icon_id\n    id\n    name\n    type\n  } }",
+        "operation_name": "Monday_custom_activity"
       }
     },
     {
       "id": "monday.query.departments",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query departments",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query departments",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/departments",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_departments { departments {\n    id\n    name\n    assigned_seats\n    reserved_seats\n    members {\n      id\n      name\n    }\n    owners {\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.departments",
+      "graphql": {
+        "document": "query Monday_departments { departments {\n    id\n    name\n    assigned_seats\n    reserved_seats\n    members {\n      id\n      name\n    }\n    owners {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_departments"
       }
     },
     {
       "id": "monday.query.doc_version_diff",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query doc_version_diff",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query doc_version_diff",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/docs",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_doc_version_diff($doc_id: String!, $date: String!, $prev_date: String!) { doc_version_diff(doc_id: $doc_id, date: $date, prev_date: $prev_date) {\n    doc_id\n    date\n    prev_date\n    blocks {\n      id\n      type\n      content\n      summary\n      parent_block_id\n      changes {\n        added\n        deleted\n        changed\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "doc_id": {
-                  "type": "string"
-                },
-                "date": {
-                  "type": "string"
-                },
-                "prev_date": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "doc_id",
-                "date",
-                "prev_date"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.doc_version_diff",
+      "graphql": {
+        "document": "query Monday_doc_version_diff($doc_id: String!, $date: String!, $prev_date: String!) { doc_version_diff(doc_id: $doc_id, date: $date, prev_date: $prev_date) {\n    doc_id\n    date\n    prev_date\n    blocks {\n      id\n      type\n      content\n      summary\n      parent_block_id\n      changes {\n        added\n        deleted\n        changed\n      }\n    }\n  } }",
+        "operation_name": "Monday_doc_version_diff"
       }
     },
     {
       "id": "monday.query.doc_version_history",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query doc_version_history",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query doc_version_history",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/docs",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_doc_version_history($doc_id: String!, $since: String!) { doc_version_history(doc_id: $doc_id, since: $since) {\n    doc_id\n    restoring_points {\n      date\n      user_ids\n      type\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "doc_id": {
-                  "type": "string"
-                },
-                "since": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "doc_id",
-                "since"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.doc_version_history",
+      "graphql": {
+        "document": "query Monday_doc_version_history($doc_id: String!, $since: String!) { doc_version_history(doc_id: $doc_id, since: $since) {\n    doc_id\n    restoring_points {\n      date\n      user_ids\n      type\n    }\n  } }",
+        "operation_name": "Monday_doc_version_history"
       }
     },
     {
       "id": "monday.query.docs",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query docs",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query docs",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/blocks",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_docs($ids: ID!) { docs(ids: $ids) { # the ID returned when querying `docs`\n    blocks {\n      id\n      type\n      content\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "ids": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "ids"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.docs",
+      "graphql": {
+        "document": "query Monday_docs($ids: ID!) { docs(ids: $ids) { # the ID returned when querying `docs`\n    blocks {\n      id\n      type\n      content\n    }\n  } }",
+        "operation_name": "Monday_docs"
       }
     },
     {
       "id": "monday.query.export_markdown_from_doc",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query export_markdown_from_doc",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query export_markdown_from_doc",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/export-markdown-from-doc",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_export_markdown_from_doc($docId: ID!) { export_markdown_from_doc(docId: $docId) {\n    error\n    markdown\n    success\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "docId": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "docId"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.export_markdown_from_doc",
+      "graphql": {
+        "document": "query Monday_export_markdown_from_doc($docId: ID!) { export_markdown_from_doc(docId: $docId) {\n    error\n    markdown\n    success\n  } }",
+        "operation_name": "Monday_export_markdown_from_doc"
       }
     },
     {
       "id": "monday.query.favorites",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query favorites",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query favorites",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/favorites",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_favorites { favorites {\n    accountId\n    createdAt\n    folderId\n    hierarchyListData {\n      id\n      type\n    }\n    id\n    object {\n      id\n      type\n    }\n    position\n    updatedAt\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.favorites",
+      "graphql": {
+        "document": "query Monday_favorites { favorites {\n    accountId\n    createdAt\n    folderId\n    hierarchyListData {\n      id\n      type\n    }\n    id\n    object {\n      id\n      type\n    }\n    position\n    updatedAt\n  } }",
+        "operation_name": "Monday_favorites"
       }
     },
     {
       "id": "monday.query.fetch_job_status",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query fetch_job_status",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query fetch_job_status",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/backfill-items-api-reference",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_fetch_job_status($job_id: String!) { fetch_job_status(job_id: $job_id) {\n    ... on ItemsJobStatus {\n      status\n      counts {\n        submitted\n        invalid\n        skipped\n        created\n        updated\n        failed\n      }\n      progress_percentage\n      failure_reason\n      failure_message\n      fully_imported\n      report_created\n      report_url\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "job_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "job_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.fetch_job_status",
+      "graphql": {
+        "document": "query Monday_fetch_job_status($job_id: String!) { fetch_job_status(job_id: $job_id) {\n    ... on ItemsJobStatus {\n      status\n      counts {\n        submitted\n        invalid\n        skipped\n        created\n        updated\n        failed\n      }\n      progress_percentage\n      failure_reason\n      failure_message\n      fully_imported\n      report_created\n      report_url\n    }\n  } }",
+        "operation_name": "Monday_fetch_job_status"
       }
     },
     {
       "id": "monday.query.folders",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query folders",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query folders",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/folders",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_folders { folders {\n    id\n    name\n    children {\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.folders",
+      "graphql": {
+        "document": "query Monday_folders { folders {\n    id\n    name\n    children {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_folders"
       }
     },
     {
       "id": "monday.query.form",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query form",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query form",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/forms-other-types",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_form($formToken: String!) { form(formToken: $formToken) {\n    tags {\n      id\n      name\n      value\n      columnId\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "formToken": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "formToken"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.form",
+      "graphql": {
+        "document": "query Monday_form($formToken: String!) { form(formToken: $formToken) {\n    tags {\n      id\n      name\n      value\n      columnId\n    }\n  } }",
+        "operation_name": "Monday_form"
       }
     },
     {
       "id": "monday.query.get_app_lifecycle_subscriptions",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query get_app_lifecycle_subscriptions",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query get_app_lifecycle_subscriptions",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/get-app-lifecycle-subscriptions",
       "risk": "medium",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_get_app_lifecycle_subscriptions($app_id: String!, $version_id: String!) { get_app_lifecycle_subscriptions(app_id: $app_id, version_id: $version_id) {\n    id\n    entity_id\n    event_type\n    webhook_url\n    is_sync\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "app_id": {
-                  "type": "string"
-                },
-                "version_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "app_id",
-                "version_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.get_app_lifecycle_subscriptions",
+      "graphql": {
+        "document": "query Monday_get_app_lifecycle_subscriptions($app_id: String!, $version_id: String!) { get_app_lifecycle_subscriptions(app_id: $app_id, version_id: $version_id) {\n    id\n    entity_id\n    event_type\n    webhook_url\n    is_sync\n  } }",
+        "operation_name": "Monday_get_app_lifecycle_subscriptions"
       }
     },
     {
       "id": "monday.query.get_column_type_schema",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query get_column_type_schema",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query get_column_type_schema",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/auto-number",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_get_column_type_schema { get_column_type_schema(type: auto_number) }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.get_column_type_schema",
+      "graphql": {
+        "document": "query Monday_get_column_type_schema { get_column_type_schema(type: auto_number) }",
+        "operation_name": "Monday_get_column_type_schema"
       }
     },
     {
       "id": "monday.query.get_directory_resources",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query get_directory_resources",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query get_directory_resources",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/resource-directory",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_get_directory_resources($limit: Int!) { get_directory_resources(limit: $limit) {\n    resources {\n      id\n      name\n      email\n    }\n    cursor\n    id\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "limit": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "limit"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.get_directory_resources",
+      "graphql": {
+        "document": "query Monday_get_directory_resources($limit: Int!) { get_directory_resources(limit: $limit) {\n    resources {\n      id\n      name\n      email\n    }\n    cursor\n    id\n  } }",
+        "operation_name": "Monday_get_directory_resources"
       }
     },
     {
       "id": "monday.query.get_object_schemas",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query get_object_schemas",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query get_object_schemas",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/object-schemas",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_get_object_schemas($limit: Int!, $page: Int!) { get_object_schemas(limit: $limit, page: $page) {\n    id\n    name\n    description\n    revision\n    columns {\n      id\n      title\n      type\n    }\n    connected_boards_count\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "limit": {
-                  "type": "integer"
-                },
-                "page": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "limit",
-                "page"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.get_object_schemas",
+      "graphql": {
+        "document": "query Monday_get_object_schemas($limit: Int!, $page: Int!) { get_object_schemas(limit: $limit, page: $page) {\n    id\n    name\n    description\n    revision\n    columns {\n      id\n      title\n      type\n    }\n    connected_boards_count\n  } }",
+        "operation_name": "Monday_get_object_schemas"
       }
     },
     {
       "id": "monday.query.get_view_schema_by_type",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query get_view_schema_by_type",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query get_view_schema_by_type",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/get-view-schema-by-type",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_get_view_schema_by_type { get_view_schema_by_type(type: TABLE, mutationType: CREATE) }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.get_view_schema_by_type",
+      "graphql": {
+        "document": "query Monday_get_view_schema_by_type { get_view_schema_by_type(type: TABLE, mutationType: CREATE) }",
+        "operation_name": "Monday_get_view_schema_by_type"
       }
     },
     {
       "id": "monday.query.items",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query items",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query items",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/checkbox",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_items { items {\n    name\n    column_values {\n      ... on CheckboxValue {\n        id\n        checked\n        text\n        value\n        updated_at\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.items",
+      "graphql": {
+        "document": "query Monday_items { items {\n    name\n    column_values {\n      ... on CheckboxValue {\n        id\n        checked\n        text\n        value\n        updated_at\n      }\n    }\n  } }",
+        "operation_name": "Monday_items"
       }
     },
     {
       "id": "monday.query.items_page_by_column_values",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query items_page_by_column_values",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query items_page_by_column_values",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/name",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_items_page_by_column_values($board_id: ID!) { items_page_by_column_values(board_id: $board_id) {\n    items {\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "board_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "board_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.items_page_by_column_values",
+      "graphql": {
+        "document": "query Monday_items_page_by_column_values($board_id: ID!) { items_page_by_column_values(board_id: $board_id) {\n    items {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_items_page_by_column_values"
       }
     },
     {
       "id": "monday.query.job_status",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query job_status",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query job_status",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/ingest-items-api-reference",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_job_status($job_id: String!) { job_status(job_id: $job_id) {\n    id\n    status\n    created_at\n    updated_at\n    error\n    result {\n      total\n      succeeded\n      failed\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "job_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "job_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.job_status",
+      "graphql": {
+        "document": "query Monday_job_status($job_id: String!) { job_status(job_id: $job_id) {\n    id\n    status\n    created_at\n    updated_at\n    error\n    result {\n      total\n      succeeded\n      failed\n    }\n  } }",
+        "operation_name": "Monday_job_status"
       }
     },
     {
       "id": "monday.query.knowledge_base_search",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query knowledge_base_search",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query knowledge_base_search",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_knowledge_base_search($query: String!, $limit: Int!) { knowledge_base_search(query: $query, limit: $limit) {\n    answer\n    raw_snippets {\n      id\n      title\n      text\n      url\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "query": {
-                  "type": "string"
-                },
-                "limit": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "query",
-                "limit"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.knowledge_base_search",
+      "graphql": {
+        "document": "query Monday_knowledge_base_search($query: String!, $limit: Int!) { knowledge_base_search(query: $query, limit: $limit) {\n    answer\n    raw_snippets {\n      id\n      title\n      text\n      url\n    }\n  } }",
+        "operation_name": "Monday_knowledge_base_search"
       }
     },
     {
       "id": "monday.query.managed_column",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query managed_column",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query managed_column",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/managed-columns",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_managed_column { managed_column(state: active) {\n    created_by\n    revision\n    settings {\n      ...on StatusColumnSettings { \n        type\n        labels {\n          id\n          description\n        }\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.managed_column",
+      "graphql": {
+        "document": "query Monday_managed_column { managed_column(state: active) {\n    created_by\n    revision\n    settings {\n      ...on StatusColumnSettings { \n        type\n        labels {\n          id\n          description\n        }\n      }\n    }\n  } }",
+        "operation_name": "Monday_managed_column"
       }
     },
     {
       "id": "monday.query.marketplace_app_discounts",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query marketplace_app_discounts",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query marketplace_app_discounts",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/marketplace-app-discounts",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_marketplace_app_discounts($app_id: ID!) { marketplace_app_discounts(app_id: $app_id) {\n    account_slug\n    discount\n    valid_until  \t\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "app_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "app_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.marketplace_app_discounts",
+      "graphql": {
+        "document": "query Monday_marketplace_app_discounts($app_id: ID!) { marketplace_app_discounts(app_id: $app_id) {\n    account_slug\n    discount\n    valid_until  \t\n  } }",
+        "operation_name": "Monday_marketplace_app_discounts"
       }
     },
     {
       "id": "monday.query.me",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query me",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query me",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/me",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_me { me {\n    is_guest\n    created_at\n    name\n    id\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.me",
+      "graphql": {
+        "document": "query Monday_me { me {\n    is_guest\n    created_at\n    name\n    id\n  } }",
+        "operation_name": "Monday_me"
       }
     },
     {
       "id": "monday.query.mute_board_settings",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query mute_board_settings",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query mute_board_settings",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/mute-board-settings",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_mute_board_settings { mute_board_settings {\n    board_id\n    mute_state\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.mute_board_settings",
+      "graphql": {
+        "document": "query Monday_mute_board_settings { mute_board_settings {\n    board_id\n    mute_state\n  } }",
+        "operation_name": "Monday_mute_board_settings"
       }
     },
     {
       "id": "monday.query.next_items_page",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query next_items_page",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query next_items_page",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page-by-column-values",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_next_items_page($cursor: String!, $limit: Int!) { next_items_page(cursor: $cursor, limit: $limit) {\n    cursor\n    items {\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "cursor": {
-                  "type": "string"
-                },
-                "limit": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "cursor",
-                "limit"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.next_items_page",
+      "graphql": {
+        "document": "query Monday_next_items_page($cursor: String!, $limit: Int!) { next_items_page(cursor: $cursor, limit: $limit) {\n    cursor\n    items {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_next_items_page"
       }
     },
     {
       "id": "monday.query.notetaker",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query notetaker",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query notetaker",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/notetaker",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_notetaker { notetaker {\n    meetings(limit: 10, filters: { access: ALL }) {\n      meetings {\n        title\n        start_time\n        end_time\n        recording_duration\n        summary\n        access_type\n        meeting_link\n        participants { email }\n        topics {\n          title\n          talking_points { content }\n        }\n        action_items {\n          content\n          is_completed\n          owner\n          due_date\n        }\n      }\n      page_info {\n        has_next_page\n        cursor\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.notetaker",
+      "graphql": {
+        "document": "query Monday_notetaker { notetaker {\n    meetings(limit: 10, filters: { access: ALL }) {\n      meetings {\n        title\n        start_time\n        end_time\n        recording_duration\n        summary\n        access_type\n        meeting_link\n        participants { email }\n        topics {\n          title\n          talking_points { content }\n        }\n        action_items {\n          content\n          is_completed\n          owner\n          due_date\n        }\n      }\n      page_info {\n        has_next_page\n        cursor\n      }\n    }\n  } }",
+        "operation_name": "Monday_notetaker"
       }
     },
     {
       "id": "monday.query.notifications",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query notifications",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query notifications",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/notification",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_notifications($filter_read: Boolean!) { notifications(filter_read: $filter_read) {\n    text\n    title\n    id\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "filter_read": {
-                  "type": "boolean"
-                }
-              },
-              "required": [
-                "filter_read"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.notifications",
+      "graphql": {
+        "document": "query Monday_notifications($filter_read: Boolean!) { notifications(filter_read: $filter_read) {\n    text\n    title\n    id\n  } }",
+        "operation_name": "Monday_notifications"
       }
     },
     {
       "id": "monday.query.notifications_settings",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query notifications_settings",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query notifications_settings",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/notifications-settings",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_notifications_settings { notifications_settings(scope_type: AccountNewUserDefaults) {\n    kind\n    description\n    is_for_admins_only\n    is_for_non_guests_only\n    channels {\n      name\n      enabled\n      editable_status\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.notifications_settings",
+      "graphql": {
+        "document": "query Monday_notifications_settings { notifications_settings(scope_type: AccountNewUserDefaults) {\n    kind\n    description\n    is_for_admins_only\n    is_for_non_guests_only\n    channels {\n      name\n      enabled\n      editable_status\n    }\n  } }",
+        "operation_name": "Monday_notifications_settings"
       }
     },
     {
       "id": "monday.query.object_relations",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query object_relations",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query object_relations",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/object-relations",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_object_relations($object_id: String!) { object_relations(object_id: $object_id, direction: OUTGOING, kind: DEPENDENCY) {\n    id\n    source_object_id\n    target_id\n    target_object_type\n    kind\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "object_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "object_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.object_relations",
+      "graphql": {
+        "document": "query Monday_object_relations($object_id: String!) { object_relations(object_id: $object_id, direction: OUTGOING, kind: DEPENDENCY) {\n    id\n    source_object_id\n    target_id\n    target_object_type\n    kind\n  } }",
+        "operation_name": "Monday_object_relations"
       }
     },
     {
       "id": "monday.query.object_types_unique_keys",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query object_types_unique_keys",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query object_types_unique_keys",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/object-types-unique-keys",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_object_types_unique_keys { object_types_unique_keys {\n    app_name\n    app_feature_name\n    description\n    object_type_unique_key\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.object_types_unique_keys",
+      "graphql": {
+        "document": "query Monday_object_types_unique_keys { object_types_unique_keys {\n    app_name\n    app_feature_name\n    description\n    object_type_unique_key\n  } }",
+        "operation_name": "Monday_object_types_unique_keys"
       }
     },
     {
       "id": "monday.query.objects",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query objects",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query objects",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/objects",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_objects($limit: Int!) { objects(limit: $limit, state: ACTIVE, order_by: CREATED_AT) {\n    id\n    name\n    owners {\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "limit": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "limit"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.objects",
+      "graphql": {
+        "document": "query Monday_objects($limit: Int!) { objects(limit: $limit, state: ACTIVE, order_by: CREATED_AT) {\n    id\n    name\n    owners {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_objects"
       }
     },
     {
       "id": "monday.query.platform_api",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query platform_api",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query platform_api",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/app",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_platform_api { platform_api {\n    daily_analytics {\n      by_app {\n        app {\n          name\n          features {\n            type\n            name\n          }\n          id\n          api_app_id\n          state\n        }\n        usage\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.platform_api",
+      "graphql": {
+        "document": "query Monday_platform_api { platform_api {\n    daily_analytics {\n      by_app {\n        app {\n          name\n          features {\n            type\n            name\n          }\n          id\n          api_app_id\n          state\n        }\n        usage\n      }\n    }\n  } }",
+        "operation_name": "Monday_platform_api"
       }
     },
     {
       "id": "monday.query.replies",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query replies",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query replies",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/replies",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_replies($created_at_to: String!, $created_at_from: String!) { replies(created_at_to: $created_at_to, created_at_from: $created_at_from) {\n    body\n    created_at\n    edited_at\n    creator {\n      id\n      name\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "created_at_to": {
-                  "type": "string"
-                },
-                "created_at_from": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "created_at_to",
-                "created_at_from"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.replies",
+      "graphql": {
+        "document": "query Monday_replies($created_at_to: String!, $created_at_from: String!) { replies(created_at_to: $created_at_to, created_at_from: $created_at_from) {\n    body\n    created_at\n    edited_at\n    creator {\n      id\n      name\n    }\n  } }",
+        "operation_name": "Monday_replies"
       }
     },
     {
       "id": "monday.query.search",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query search",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query search",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/search",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_search { search {\n    items(query: \"Q1 planning\", limit: 10, board_ids: [\"1234567890\"]) {\n      results {\n        id\n        indexed_data {\n          name\n          board_id\n          url\n        }\n        live_data {\n          id\n          name\n          state\n        }\n      }\n    }\n    boards(query: \"Q1 planning\", limit: 10) {\n      results {\n        id\n        indexed_data {\n          name\n          url\n        }\n      }\n    }\n    docs(query: \"Q1 planning\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n        }\n      }\n    }\n    users(query: \"Ada\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n          email\n        }\n      }\n    }\n    workspaces(query: \"Q1 planning\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n        }\n      }\n    }\n    updates(query: \"Q1 planning\", limit: 5, board_ids: [\"1234567890\"]) {\n      results {\n        id\n        indexed_data {\n          body\n          creator_id\n          item_id\n          board_id\n          created_at\n          updated_at\n        }\n        live_data {\n          id\n          body\n        }\n      }\n    }\n    timeline_items(query: \"kickoff call\", limit: 5, type: email) {\n      results {\n        id\n        indexed_data {\n          title\n          summary\n          type\n          product_kind\n          item_id\n          board_id\n        }\n        live_data {\n          id\n        }\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.search",
+      "graphql": {
+        "document": "query Monday_search { search {\n    items(query: \"Q1 planning\", limit: 10, board_ids: [\"1234567890\"]) {\n      results {\n        id\n        indexed_data {\n          name\n          board_id\n          url\n        }\n        live_data {\n          id\n          name\n          state\n        }\n      }\n    }\n    boards(query: \"Q1 planning\", limit: 10) {\n      results {\n        id\n        indexed_data {\n          name\n          url\n        }\n      }\n    }\n    docs(query: \"Q1 planning\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n        }\n      }\n    }\n    users(query: \"Ada\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n          email\n        }\n      }\n    }\n    workspaces(query: \"Q1 planning\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n        }\n      }\n    }\n    updates(query: \"Q1 planning\", limit: 5, board_ids: [\"1234567890\"]) {\n      results {\n        id\n        indexed_data {\n          body\n          creator_id\n          item_id\n          board_id\n          created_at\n          updated_at\n        }\n        live_data {\n          id\n          body\n        }\n      }\n    }\n    timeline_items(query: \"kickoff call\", limit: 5, type: email) {\n      results {\n        id\n        indexed_data {\n          title\n          summary\n          type\n          product_kind\n          item_id\n          board_id\n        }\n        live_data {\n          id\n        }\n      }\n    }\n  } }",
+        "operation_name": "Monday_search"
       }
     },
     {
       "id": "monday.query.tags",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query tags",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query tags",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/tags",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_tags { tags {\n    id\n    name\n    color\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.tags",
+      "graphql": {
+        "document": "query Monday_tags { tags {\n    id\n    name\n    color\n  } }",
+        "operation_name": "Monday_tags"
       }
     },
     {
       "id": "monday.query.teams",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query teams",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query teams",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/teams",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_teams { teams {\n    name\n    picture_url\n    users {\n      created_at\n      phone\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.teams",
+      "graphql": {
+        "document": "query Monday_teams { teams {\n    name\n    picture_url\n    users {\n      created_at\n      phone\n    }\n  } }",
+        "operation_name": "Monday_teams"
       }
     },
     {
       "id": "monday.query.template_installation_status",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query template_installation_status",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query template_installation_status",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/templates",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_template_installation_status($process_id: String!) { template_installation_status(process_id: $process_id) {\n    process_id\n    status\n    is_complete\n    is_failed\n    board_ids\n    board_ids_map {\n      source_board_id\n      created_board_id\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "process_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "process_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.template_installation_status",
+      "graphql": {
+        "document": "query Monday_template_installation_status($process_id: String!) { template_installation_status(process_id: $process_id) {\n    process_id\n    status\n    is_complete\n    is_failed\n    board_ids\n    board_ids_map {\n      source_board_id\n      created_board_id\n    }\n  } }",
+        "operation_name": "Monday_template_installation_status"
       }
     },
     {
       "id": "monday.query.timeline",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query timeline",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query timeline",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/timeline-ea",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_timeline($id: ID!) { timeline(id: $id) {\n    timeline_items_page {\n      cursor\n      timeline_items {\n        id \n        content\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.timeline",
+      "graphql": {
+        "document": "query Monday_timeline($id: ID!) { timeline(id: $id) {\n    timeline_items_page {\n      cursor\n      timeline_items {\n        id \n        content\n      }\n    }\n  } }",
+        "operation_name": "Monday_timeline"
       }
     },
     {
       "id": "monday.query.timeline_item",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query timeline_item",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query timeline_item",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/timeline-item-ea",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_timeline_item($id: ID!) { timeline_item(id: $id) {\n    board {\n      id\n    }\n    item {\n      name\n    }\n    id\n    user {\n      id\n      name\n    }\n    title\n    type\n    content\n    created_at\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.timeline_item",
+      "graphql": {
+        "document": "query Monday_timeline_item($id: ID!) { timeline_item(id: $id) {\n    board {\n      id\n    }\n    item {\n      name\n    }\n    id\n    user {\n      id\n      name\n    }\n    title\n    type\n    content\n    created_at\n  } }",
+        "operation_name": "Monday_timeline_item"
       }
     },
     {
       "id": "monday.query.updates",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query updates",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query updates",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/updates",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_updates($limit: Int!, $to_date: String!, $from_date: String!) { updates(limit: $limit, to_date: $to_date, from_date: $from_date) {\n    body\n      id\n      created_at\n      creator {\n        name\n        id\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "limit": {
-                  "type": "integer"
-                },
-                "to_date": {
-                  "type": "string"
-                },
-                "from_date": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "limit",
-                "to_date",
-                "from_date"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.updates",
+      "graphql": {
+        "document": "query Monday_updates($limit: Int!, $to_date: String!, $from_date: String!) { updates(limit: $limit, to_date: $to_date, from_date: $from_date) {\n    body\n      id\n      created_at\n      creator {\n        name\n        id\n    }\n  } }",
+        "operation_name": "Monday_updates"
       }
     },
     {
       "id": "monday.query.user_configs",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query user_configs",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query user_configs",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/users",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_user_configs { user_configs {\n    kind\n    role_id\n    visibility\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.user_configs",
+      "graphql": {
+        "document": "query Monday_user_configs { user_configs {\n    kind\n    role_id\n    visibility\n  } }",
+        "operation_name": "Monday_user_configs"
       }
     },
     {
       "id": "monday.query.users",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query users",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Complex array/object arguments are represented as planned metadata until a safe GraphQL variable contract exists.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query users",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/activity-logs-new",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_users { users {\n    id\n    activity_logs(from: $from, to: $to, limit: $limit) {\n      cursor\n      logs {\n        id\n        account_id\n        user_id\n        event\n        entity\n        data\n        created_at\n      }\n    }\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.users",
+      "graphql": {
+        "document": "query Monday_users { users {\n    id\n    activity_logs(from: $from, to: $to, limit: $limit) {\n      cursor\n      logs {\n        id\n        account_id\n        user_id\n        event\n        entity\n        data\n        created_at\n      }\n    }\n  } }",
+        "operation_name": "Monday_users"
       }
     },
     {
       "id": "monday.query.validations",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query validations",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query validations",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/validations",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_validations($id: ID!) { validations(id: $id) {\n    required_column_ids\n    rules\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.validations",
+      "graphql": {
+        "document": "query Monday_validations($id: ID!) { validations(id: $id) {\n    required_column_ids\n    rules\n  } }",
+        "operation_name": "Monday_validations"
       }
     },
     {
       "id": "monday.query.version",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query version",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query version",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/version",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_version { version {\n    kind\n    value\n    display_name\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.version",
+      "graphql": {
+        "document": "query Monday_version { version {\n    kind\n    value\n    display_name\n  } }",
+        "operation_name": "Monday_version"
       }
     },
     {
       "id": "monday.query.versions",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query versions",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query versions",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/versions",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_versions { versions {\n    kind\n    value\n    display_name\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "query"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.versions",
+      "graphql": {
+        "document": "query Monday_versions { versions {\n    kind\n    value\n    display_name\n  } }",
+        "operation_name": "Monday_versions"
       }
     },
     {
       "id": "monday.query.webhooks",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query webhooks",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query webhooks",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/webhooks",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_webhooks($board_id: ID!) { webhooks(board_id: $board_id) {\n    id\n    event\n    board_id\n    config\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "board_id": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "board_id"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.webhooks",
+      "graphql": {
+        "document": "query Monday_webhooks($board_id: ID!) { webhooks(board_id: $board_id) {\n    id\n    event\n    board_id\n    config\n  } }",
+        "operation_name": "Monday_webhooks"
       }
     },
     {
       "id": "monday.query.workspaces",
-      "kind": "rest_read",
-      "summary": "Run Monday GraphQL query workspaces",
-      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Executable as a typed direct_read command when referenced by cli_surface metadata.",
+      "kind": "graphql_query",
+      "summary": "Planned Monday GraphQL query workspaces",
+      "description": "Fixed, bounded Monday GraphQL query operation sourced from official docs. Planned until shared OperationDirectRead applies GraphQL errors[] failure semantics and shared endpoint coverage tracks duplicate POST / classifiers separately.",
       "source_url": "https://developer.monday.com/api-reference/reference/workspaces",
       "risk": "low",
-      "approval": "none: read-only fixed GraphQL query with bounded redacted output",
+      "approval": "planned; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "output_policy": "json_redacted",
-      "audit_event": "monday.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "/",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "query": "query Monday_workspaces($ids: ID!) { workspaces(ids: $ids) {\n    id\n    name\n    kind\n    description\n  } }"
-        },
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "variables": {
-              "type": "object",
-              "properties": {
-                "ids": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "ids"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "required": [
-            "query",
-            "variables"
-          ],
-          "additionalProperties": false
-        }
+      "audit_event": "monday.graphql_query.workspaces",
+      "graphql": {
+        "document": "query Monday_workspaces($ids: ID!) { workspaces(ids: $ids) {\n    id\n    name\n    kind\n    description\n  } }",
+        "operation_name": "Monday_workspaces"
       }
     }
   ]

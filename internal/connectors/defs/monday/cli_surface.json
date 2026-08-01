@@ -17,7 +17,7 @@
     },
     {
       "id": "queries",
-      "title": "Bounded GraphQL query commands",
+      "title": "Planned bounded GraphQL query commands",
       "commands": [
         "query"
       ]
@@ -51,85 +51,62 @@
     {
       "name": "max-bytes",
       "type": "integer",
-      "summary": "Maximum bytes to return for bounded direct query commands."
+      "summary": "Maximum bytes to return when planned bounded query commands become executable."
     }
   ],
   "commands": [
     {
       "path": "query account",
-      "summary": "Run fixed Monday account query",
+      "summary": "Planned fixed Monday account query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.account",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/plan",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for account; no raw query text is accepted."
+      "notes": "Planned operation monday.query.account. Fixed GraphQL document for account remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query account-roles",
-      "summary": "Run fixed Monday account_roles query",
+      "summary": "Planned fixed Monday account_roles query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.account_roles",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/account-roles",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for account_roles; no raw query text is accepted."
+      "notes": "Planned operation monday.query.account_roles. Fixed GraphQL document for account_roles remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query aggregate",
       "summary": "Planned fixed Monday aggregate query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.aggregate",
       "source_url": "https://developer.monday.com/api-reference/reference/aggregate",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.aggregate. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query all-widgets-schema",
-      "summary": "Run fixed Monday all_widgets_schema query",
+      "summary": "Planned fixed Monday all_widgets_schema query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.all_widgets_schema",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/all-widgets-schema",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for all_widgets_schema; no raw query text is accepted."
+      "notes": "Planned operation monday.query.all_widgets_schema. Fixed GraphQL document for all_widgets_schema remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query allowed-sequences-to-enroll",
-      "summary": "Run fixed Monday allowed_sequences_to_enroll query",
+      "summary": "Planned fixed Monday allowed_sequences_to_enroll query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.allowed_sequences_to_enroll",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/sequences",
       "flags": [
         {
@@ -140,23 +117,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for allowed_sequences_to_enroll; no raw query text is accepted."
+      "notes": "Planned operation monday.query.allowed_sequences_to_enroll. Fixed GraphQL document for allowed_sequences_to_enroll remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query app",
-      "summary": "Run fixed Monday app query",
+      "summary": "Planned fixed Monday app query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.app",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/app-features",
       "flags": [
         {
@@ -167,23 +137,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for app; no raw query text is accepted."
+      "notes": "Planned operation monday.query.app. Fixed GraphQL document for app remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query app-installs",
-      "summary": "Run fixed Monday app_installs query",
+      "summary": "Planned fixed Monday app_installs query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.app_installs",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/app-installs",
       "flags": [
         {
@@ -201,42 +164,28 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for app_installs; no raw query text is accepted."
+      "notes": "Planned operation monday.query.app_installs. Fixed GraphQL document for app_installs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query app-subscription",
-      "summary": "Run fixed Monday app_subscription query",
+      "summary": "Planned fixed Monday app_subscription query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.app_subscription",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscription",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for app_subscription; no raw query text is accepted."
+      "notes": "Planned operation monday.query.app_subscription. Fixed GraphQL document for app_subscription remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query app-subscription-operations",
-      "summary": "Run fixed Monday app_subscription_operations query",
+      "summary": "Planned fixed Monday app_subscription_operations query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.app_subscription_operations",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscription-operations",
       "flags": [
         {
@@ -247,23 +196,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for app_subscription_operations; no raw query text is accepted."
+      "notes": "Planned operation monday.query.app_subscription_operations. Fixed GraphQL document for app_subscription_operations remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query app-subscriptions",
-      "summary": "Run fixed Monday app_subscriptions query",
+      "summary": "Planned fixed Monday app_subscriptions query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.app_subscriptions",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscriptions",
       "flags": [
         {
@@ -274,61 +216,40 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for app_subscriptions; no raw query text is accepted."
+      "notes": "Planned operation monday.query.app_subscriptions. Fixed GraphQL document for app_subscriptions remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query apps-monetization-info",
-      "summary": "Run fixed Monday apps_monetization_info query",
+      "summary": "Planned fixed Monday apps_monetization_info query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.apps_monetization_info",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/apps-monetization-info",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for apps_monetization_info; no raw query text is accepted."
+      "notes": "Planned operation monday.query.apps_monetization_info. Fixed GraphQL document for apps_monetization_info remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query apps-monetization-status",
-      "summary": "Run fixed Monday apps_monetization_status query",
+      "summary": "Planned fixed Monday apps_monetization_status query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.apps_monetization_status",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/apps-monetization-status",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for apps_monetization_status; no raw query text is accepted."
+      "notes": "Planned operation monday.query.apps_monetization_status. Fixed GraphQL document for apps_monetization_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query article-blocks",
-      "summary": "Run fixed Monday article_blocks query",
+      "summary": "Planned fixed Monday article_blocks query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.article_blocks",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "flags": [
         {
@@ -351,35 +272,27 @@
           "maps_to": "body.variables.page"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for article_blocks; no raw query text is accepted."
+      "notes": "Planned operation monday.query.article_blocks. Fixed GraphQL document for article_blocks remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query articles",
       "summary": "Planned fixed Monday articles query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.articles",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.articles. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query ask-developer-docs",
-      "summary": "Run fixed Monday ask_developer_docs query",
+      "summary": "Planned fixed Monday ask_developer_docs query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.ask_developer_docs",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/ask-developer-docs",
       "flags": [
         {
@@ -390,73 +303,51 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for ask_developer_docs; no raw query text is accepted."
+      "notes": "Planned operation monday.query.ask_developer_docs. Fixed GraphQL document for ask_developer_docs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query audit-event-catalogue",
-      "summary": "Run fixed Monday audit_event_catalogue query",
+      "summary": "Planned fixed Monday audit_event_catalogue query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.audit_event_catalogue",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/audit-event-catalogue",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for audit_event_catalogue; no raw query text is accepted."
+      "notes": "Planned operation monday.query.audit_event_catalogue. Fixed GraphQL document for audit_event_catalogue remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query audit-logs",
       "summary": "Planned fixed Monday audit_logs query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.audit_logs",
       "source_url": "https://developer.monday.com/api-reference/reference/audit-logs",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.audit_logs. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query complexity",
-      "summary": "Run fixed Monday complexity query",
+      "summary": "Planned fixed Monday complexity query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.complexity",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/complexity",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for complexity; no raw query text is accepted."
+      "notes": "Planned operation monday.query.complexity. Fixed GraphQL document for complexity remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query connection-board-ids",
-      "summary": "Run fixed Monday connection_board_ids query",
+      "summary": "Planned fixed Monday connection_board_ids query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.connection_board_ids",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/connect",
       "flags": [
         {
@@ -467,54 +358,39 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for connection_board_ids; no raw query text is accepted."
+      "notes": "Planned operation monday.query.connection_board_ids. Fixed GraphQL document for connection_board_ids remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query custom-activity",
-      "summary": "Run fixed Monday custom_activity query",
+      "summary": "Planned fixed Monday custom_activity query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.custom_activity",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/custom-activity",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for custom_activity; no raw query text is accepted."
+      "notes": "Planned operation monday.query.custom_activity. Fixed GraphQL document for custom_activity remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query departments",
       "summary": "Planned fixed Monday departments query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.departments",
       "source_url": "https://developer.monday.com/api-reference/reference/departments",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.departments. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query doc-version-diff",
-      "summary": "Run fixed Monday doc_version_diff query",
+      "summary": "Planned fixed Monday doc_version_diff query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.doc_version_diff",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/docs",
       "flags": [
         {
@@ -539,23 +415,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for doc_version_diff; no raw query text is accepted."
+      "notes": "Planned operation monday.query.doc_version_diff. Fixed GraphQL document for doc_version_diff remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query doc-version-history",
-      "summary": "Run fixed Monday doc_version_history query",
+      "summary": "Planned fixed Monday doc_version_history query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.doc_version_history",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/docs",
       "flags": [
         {
@@ -573,23 +442,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for doc_version_history; no raw query text is accepted."
+      "notes": "Planned operation monday.query.doc_version_history. Fixed GraphQL document for doc_version_history remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query docs",
-      "summary": "Run fixed Monday docs query",
+      "summary": "Planned fixed Monday docs query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.docs",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/blocks",
       "flags": [
         {
@@ -600,54 +462,39 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for docs; no raw query text is accepted."
+      "notes": "Planned operation monday.query.docs. Fixed GraphQL document for docs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query export-markdown-from-doc",
       "summary": "Planned fixed Monday export_markdown_from_doc query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.export_markdown_from_doc",
       "source_url": "https://developer.monday.com/api-reference/reference/export-markdown-from-doc",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.export_markdown_from_doc. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query favorites",
-      "summary": "Run fixed Monday favorites query",
+      "summary": "Planned fixed Monday favorites query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.favorites",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/favorites",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for favorites; no raw query text is accepted."
+      "notes": "Planned operation monday.query.favorites. Fixed GraphQL document for favorites remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query fetch-job-status",
-      "summary": "Run fixed Monday fetch_job_status query",
+      "summary": "Planned fixed Monday fetch_job_status query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.fetch_job_status",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/backfill-items-api-reference",
       "flags": [
         {
@@ -658,35 +505,27 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for fetch_job_status; no raw query text is accepted."
+      "notes": "Planned operation monday.query.fetch_job_status. Fixed GraphQL document for fetch_job_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query folders",
       "summary": "Planned fixed Monday folders query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.folders",
       "source_url": "https://developer.monday.com/api-reference/reference/folders",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.folders. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query form",
-      "summary": "Run fixed Monday form query",
+      "summary": "Planned fixed Monday form query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.form",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/forms-other-types",
       "flags": [
         {
@@ -697,23 +536,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for form; no raw query text is accepted."
+      "notes": "Planned operation monday.query.form. Fixed GraphQL document for form remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query get-app-lifecycle-subscriptions",
-      "summary": "Run fixed Monday get_app_lifecycle_subscriptions query",
+      "summary": "Planned fixed Monday get_app_lifecycle_subscriptions query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.get_app_lifecycle_subscriptions",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/get-app-lifecycle-subscriptions",
       "flags": [
         {
@@ -731,42 +563,28 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for get_app_lifecycle_subscriptions; no raw query text is accepted."
+      "notes": "Planned operation monday.query.get_app_lifecycle_subscriptions. Fixed GraphQL document for get_app_lifecycle_subscriptions remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query get-column-type-schema",
-      "summary": "Run fixed Monday get_column_type_schema query",
+      "summary": "Planned fixed Monday get_column_type_schema query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.get_column_type_schema",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/auto-number",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for get_column_type_schema; no raw query text is accepted."
+      "notes": "Planned operation monday.query.get_column_type_schema. Fixed GraphQL document for get_column_type_schema remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query get-directory-resources",
-      "summary": "Run fixed Monday get_directory_resources query",
+      "summary": "Planned fixed Monday get_directory_resources query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.get_directory_resources",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/resource-directory",
       "flags": [
         {
@@ -776,23 +594,16 @@
           "maps_to": "body.variables.limit"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for get_directory_resources; no raw query text is accepted."
+      "notes": "Planned operation monday.query.get_directory_resources. Fixed GraphQL document for get_directory_resources remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query get-object-schemas",
-      "summary": "Run fixed Monday get_object_schemas query",
+      "summary": "Planned fixed Monday get_object_schemas query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.get_object_schemas",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/object-schemas",
       "flags": [
         {
@@ -808,54 +619,39 @@
           "maps_to": "body.variables.page"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for get_object_schemas; no raw query text is accepted."
+      "notes": "Planned operation monday.query.get_object_schemas. Fixed GraphQL document for get_object_schemas remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query get-view-schema-by-type",
-      "summary": "Run fixed Monday get_view_schema_by_type query",
+      "summary": "Planned fixed Monday get_view_schema_by_type query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.get_view_schema_by_type",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/get-view-schema-by-type",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for get_view_schema_by_type; no raw query text is accepted."
+      "notes": "Planned operation monday.query.get_view_schema_by_type. Fixed GraphQL document for get_view_schema_by_type remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query items-page-by-column-values",
       "summary": "Planned fixed Monday items_page_by_column_values query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.items_page_by_column_values",
       "source_url": "https://developer.monday.com/api-reference/reference/name",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.items_page_by_column_values. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query job-status",
-      "summary": "Run fixed Monday job_status query",
+      "summary": "Planned fixed Monday job_status query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.job_status",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/ingest-items-api-reference",
       "flags": [
         {
@@ -866,23 +662,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for job_status; no raw query text is accepted."
+      "notes": "Planned operation monday.query.job_status. Fixed GraphQL document for job_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query knowledge-base-search",
-      "summary": "Run fixed Monday knowledge_base_search query",
+      "summary": "Planned fixed Monday knowledge_base_search query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.knowledge_base_search",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "flags": [
         {
@@ -899,42 +688,28 @@
           "maps_to": "body.variables.limit"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for knowledge_base_search; no raw query text is accepted."
+      "notes": "Planned operation monday.query.knowledge_base_search. Fixed GraphQL document for knowledge_base_search remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query managed-column",
-      "summary": "Run fixed Monday managed_column query",
+      "summary": "Planned fixed Monday managed_column query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.managed_column",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/managed-columns",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for managed_column; no raw query text is accepted."
+      "notes": "Planned operation monday.query.managed_column. Fixed GraphQL document for managed_column remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query marketplace-app-discounts",
-      "summary": "Run fixed Monday marketplace_app_discounts query",
+      "summary": "Planned fixed Monday marketplace_app_discounts query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.marketplace_app_discounts",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/marketplace-app-discounts",
       "flags": [
         {
@@ -945,54 +720,39 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for marketplace_app_discounts; no raw query text is accepted."
+      "notes": "Planned operation monday.query.marketplace_app_discounts. Fixed GraphQL document for marketplace_app_discounts remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query me",
-      "summary": "Run fixed Monday me query",
+      "summary": "Planned fixed Monday me query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.me",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/me",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for me; no raw query text is accepted."
+      "notes": "Planned operation monday.query.me. Fixed GraphQL document for me remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query mute-board-settings",
       "summary": "Planned fixed Monday mute_board_settings query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.mute_board_settings",
       "source_url": "https://developer.monday.com/api-reference/reference/mute-board-settings",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.mute_board_settings. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query next-items-page",
-      "summary": "Run fixed Monday next_items_page query",
+      "summary": "Planned fixed Monday next_items_page query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.next_items_page",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page-by-column-values",
       "flags": [
         {
@@ -1009,42 +769,28 @@
           "maps_to": "body.variables.limit"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for next_items_page; no raw query text is accepted."
+      "notes": "Planned operation monday.query.next_items_page. Fixed GraphQL document for next_items_page remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query notetaker",
-      "summary": "Run fixed Monday notetaker query",
+      "summary": "Planned fixed Monday notetaker query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.notetaker",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/notetaker",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for notetaker; no raw query text is accepted."
+      "notes": "Planned operation monday.query.notetaker. Fixed GraphQL document for notetaker remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query notifications",
-      "summary": "Run fixed Monday notifications query",
+      "summary": "Planned fixed Monday notifications query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.notifications",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/notification",
       "flags": [
         {
@@ -1054,35 +800,27 @@
           "maps_to": "body.variables.filter_read"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for notifications; no raw query text is accepted."
+      "notes": "Planned operation monday.query.notifications. Fixed GraphQL document for notifications remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query notifications-settings",
       "summary": "Planned fixed Monday notifications_settings query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.notifications_settings",
       "source_url": "https://developer.monday.com/api-reference/reference/notifications-settings",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.notifications_settings. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query object-relations",
-      "summary": "Run fixed Monday object_relations query",
+      "summary": "Planned fixed Monday object_relations query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.object_relations",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/object-relations",
       "flags": [
         {
@@ -1093,42 +831,28 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for object_relations; no raw query text is accepted."
+      "notes": "Planned operation monday.query.object_relations. Fixed GraphQL document for object_relations remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query object-types-unique-keys",
-      "summary": "Run fixed Monday object_types_unique_keys query",
+      "summary": "Planned fixed Monday object_types_unique_keys query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.object_types_unique_keys",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/object-types-unique-keys",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for object_types_unique_keys; no raw query text is accepted."
+      "notes": "Planned operation monday.query.object_types_unique_keys. Fixed GraphQL document for object_types_unique_keys remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query objects",
-      "summary": "Run fixed Monday objects query",
+      "summary": "Planned fixed Monday objects query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.objects",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/objects",
       "flags": [
         {
@@ -1138,73 +862,51 @@
           "maps_to": "body.variables.limit"
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for objects; no raw query text is accepted."
+      "notes": "Planned operation monday.query.objects. Fixed GraphQL document for objects remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query platform-api",
-      "summary": "Run fixed Monday platform_api query",
+      "summary": "Planned fixed Monday platform_api query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.platform_api",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/app",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for platform_api; no raw query text is accepted."
+      "notes": "Planned operation monday.query.platform_api. Fixed GraphQL document for platform_api remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query replies",
       "summary": "Planned fixed Monday replies query",
       "intent": "direct_read",
       "availability": "planned",
-      "operation": "monday.query.replies",
       "source_url": "https://developer.monday.com/api-reference/reference/replies",
       "output_policy": "json_redacted",
-      "risk": "planned bounded GraphQL read",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch."
+      "notes": "Planned operation monday.query.replies. Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch. Also blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation."
     },
     {
       "path": "query search",
-      "summary": "Run fixed Monday search query",
+      "summary": "Planned fixed Monday search query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.search",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/search",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for search; no raw query text is accepted."
+      "notes": "Planned operation monday.query.search. Fixed GraphQL document for search remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query template-installation-status",
-      "summary": "Run fixed Monday template_installation_status query",
+      "summary": "Planned fixed Monday template_installation_status query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.template_installation_status",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/templates",
       "flags": [
         {
@@ -1215,23 +917,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for template_installation_status; no raw query text is accepted."
+      "notes": "Planned operation monday.query.template_installation_status. Fixed GraphQL document for template_installation_status remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query timeline",
-      "summary": "Run fixed Monday timeline query",
+      "summary": "Planned fixed Monday timeline query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.timeline",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/timeline-ea",
       "flags": [
         {
@@ -1242,23 +937,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for timeline; no raw query text is accepted."
+      "notes": "Planned operation monday.query.timeline. Fixed GraphQL document for timeline remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query timeline-item",
-      "summary": "Run fixed Monday timeline_item query",
+      "summary": "Planned fixed Monday timeline_item query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.timeline_item",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/timeline-item-ea",
       "flags": [
         {
@@ -1269,23 +957,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for timeline_item; no raw query text is accepted."
+      "notes": "Planned operation monday.query.timeline_item. Fixed GraphQL document for timeline_item remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query updates",
-      "summary": "Run fixed Monday updates query",
+      "summary": "Planned fixed Monday updates query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.updates",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/updates",
       "flags": [
         {
@@ -1309,42 +990,28 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for updates; no raw query text is accepted."
+      "notes": "Planned operation monday.query.updates. Fixed GraphQL document for updates remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query user-configs",
-      "summary": "Run fixed Monday user_configs query",
+      "summary": "Planned fixed Monday user_configs query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.user_configs",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/users",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for user_configs; no raw query text is accepted."
+      "notes": "Planned operation monday.query.user_configs. Fixed GraphQL document for user_configs remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query validations",
-      "summary": "Run fixed Monday validations query",
+      "summary": "Planned fixed Monday validations query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.validations",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/validations",
       "flags": [
         {
@@ -1355,61 +1022,40 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for validations; no raw query text is accepted."
+      "notes": "Planned operation monday.query.validations. Fixed GraphQL document for validations remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query version",
-      "summary": "Run fixed Monday version query",
+      "summary": "Planned fixed Monday version query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.version",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/version",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for version; no raw query text is accepted."
+      "notes": "Planned operation monday.query.version. Fixed GraphQL document for version remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query versions",
-      "summary": "Run fixed Monday versions query",
+      "summary": "Planned fixed Monday versions query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.versions",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/versions",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for versions; no raw query text is accepted."
+      "notes": "Planned operation monday.query.versions. Fixed GraphQL document for versions remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query webhooks",
-      "summary": "Run fixed Monday webhooks query",
+      "summary": "Planned fixed Monday webhooks query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.webhooks",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/webhooks",
       "flags": [
         {
@@ -1420,23 +1066,16 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for webhooks; no raw query text is accepted."
+      "notes": "Planned operation monday.query.webhooks. Fixed GraphQL document for webhooks remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "query workspaces",
-      "summary": "Run fixed Monday workspaces query",
+      "summary": "Planned fixed Monday workspaces query",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "monday.query.workspaces",
+      "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/workspaces",
       "flags": [
         {
@@ -1447,16 +1086,10 @@
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/"
-        }
-      ],
       "output_policy": "json_redacted",
-      "risk": "bounded GraphQL read; output is capped and redacted",
+      "risk": "planned bounded GraphQL read; blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation",
       "approval": "none",
-      "notes": "Fixed GraphQL document for workspaces; no raw query text is accepted."
+      "notes": "Planned operation monday.query.workspaces. Fixed GraphQL document for workspaces remains in operations.json; execution is blocked by shared OperationDirectRead GraphQL errors[] failure semantics and duplicate POST / endpoint classifier validation. No raw query text is accepted."
     },
     {
       "path": "reverse activate-form",

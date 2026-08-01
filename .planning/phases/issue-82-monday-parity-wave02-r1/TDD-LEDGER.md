@@ -23,8 +23,8 @@ Assertions:
 
 - Monday metadata enables write capability and keeps read/check enabled.
 - `api_surface.json` is operation-ledger mode with 254 docs-sourced operation rows.
-- Ledger counts: 66 `rest_read` query operations and 188 `graphql_mutation` operations.
-- Direct reads include stream coverage for legacy read streams and bounded command coverage for scalar query operations.
+- Ledger counts: 66 planned `graphql_query` operations and 188 `graphql_mutation` operations.
+- Direct reads include stream coverage for legacy read streams; fixed query commands remain planned until shared duplicate `POST /` classifier validation and GraphQL `errors[]` direct-read semantics land.
 - Mutations include typed scalar GraphQL writes and planned/blocked rows for unsupported complex/binary/admin/destructive operations.
 - `delete_board` exists as a destructive write action with `confirm: "destructive"`, fixed GraphQL document, no secret literals, and typed record schema.
 - `cli_surface.json` exposes read/query/reverse command metadata without raw GraphQL/HTTP escape hatches.
@@ -36,7 +36,7 @@ Initial red run failed on Monday `metadata.capabilities.write=false`, confirming
 Implemented connector-local Monday parity metadata:
 
 - Generated docs-sourced operation ledger (`operations.json`) for 254 official public-reference GraphQL operations.
-- Expanded `api_surface.json` into a full operation ledger with 5 stream reads, 51 bounded scalar direct-read commands, 102 typed scalar GraphQL write actions, and 96 planned/blocked complex/binary/admin/destructive rows.
+- Expanded `api_surface.json` into a full operation ledger with 5 stream reads, 102 typed scalar GraphQL write actions, and 147 planned/blocked query/complex/binary/admin/destructive rows.
 - Added `writes.json` with fixed GraphQL mutation documents, draft-07 record schemas, and `confirm: "destructive"` for delete/archive/clear/remove-style or admin/destructive actions.
 - Added `cli_surface.json` command metadata for `stream`, `query`, and `reverse` groups.
 - Updated Monday `metadata.json`, `docs.md`, Monday connector manual/skill, connector catalog, and CLI golden transcripts.
