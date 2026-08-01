@@ -1,6 +1,6 @@
 # Intercom official API inventory
 
-Official sources inventoried on 2026-07-30:
+Official sources inventoried on 2026-08-01:
 
 - Intercom REST page data: `https://developers.intercom.com/page-data/docs/references/rest-api/api.intercom.io/data.json`
 - Intercom OpenAPI shared JSON: `https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json`
@@ -10,13 +10,13 @@ Official sources inventoried on 2026-07-30:
 
 | etl_read | reverse_etl_write | direct_read_query_search | binary_file | cdc_changefeed | excluded_not_applicable | total |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 55 | 113 | 42 | 7 | 12 | 1 | 230 |
+| 55 | 114 | 42 | 7 | 12 | 1 | 231 |
 
 ## Connector-local implementation disposition
 
 | implemented ETL streams | typed write actions declared | blocked/planned operation-ledger rows | live certified |
 | ---: | ---: | ---: | ---: |
-| 5 | 113 | 112 | 0 |
+| 5 | 114 | 112 | 0 |
 
 Destructive/delete operations are included in the official operation inventory. They are not blanket-excluded as unsafe; implemented destructive write actions declare `confirm: "destructive"` and remain behind reverse ETL plan -> preview -> explicit approval -> execute. Direct, binary, and CDC-like operation rows remain blocked by default until their shared execution foundations and fixture evidence are present.
 
@@ -167,90 +167,91 @@ Destructive/delete operations are included in the official operation inventory. 
 | 141 | `etl_read` | `GET` | `/export/reporting_data/get_datasets` | `not-recorded` | List available datasets and attributes | operation-ledger blocked/planned |
 | 142 | `binary_file` | `GET` | `/export/reporting_data/{job_identifier}` | `not-recorded` | Get export job status | operation-ledger blocked/planned |
 | 143 | `binary_file` | `GET` | `/export/workflows/{id}` | `exportWorkflow` | Export a workflow | operation-ledger blocked/planned |
-| 144 | `reverse_etl_write` | `POST` | `/fin/reply` | `replyToFin` | Reply to Fin | covered_by write `reply_to_fin` |
-| 145 | `reverse_etl_write` | `POST` | `/fin/start` | `startFinConversation` | Start a conversation with Fin | covered_by write `start_fin_conversation` |
-| 146 | `direct_read_query_search` | `GET` | `/fin_voice/collect/{id}` | `collectFinVoiceCallById` | Collect Fin Voice call by ID | operation-ledger blocked/planned |
-| 147 | `direct_read_query_search` | `GET` | `/fin_voice/conversation/{conversation_id}` | `collectFinVoiceCallsByConversationId` | Collect Fin Voice calls by conversation ID | operation-ledger blocked/planned |
-| 148 | `direct_read_query_search` | `GET` | `/fin_voice/external_id/{external_id}` | `collectFinVoiceCallByExternalId` | Collect Fin Voice call by external ID | operation-ledger blocked/planned |
-| 149 | `direct_read_query_search` | `GET` | `/fin_voice/phone_number/{phone_number}` | `collectFinVoiceCallByPhoneNumber` | Collect Fin Voice call by phone number | operation-ledger blocked/planned |
-| 150 | `reverse_etl_write` | `POST` | `/fin_voice/register` | `registerFinVoiceCall` | Register a Fin Voice call | covered_by write `register_fin_voice_call` |
-| 151 | `etl_read` | `GET` | `/help_center/collections` | `listAllCollections` | List all collections | operation-ledger blocked/planned |
-| 152 | `reverse_etl_write` | `POST` | `/help_center/collections` | `createCollection` | Create a collection | covered_by write `create_collection` |
-| 153 | `reverse_etl_write` | `DELETE` | `/help_center/collections/{collection_id}` | `deleteCollection` | Delete a collection | covered_by write `delete_collection` |
-| 154 | `direct_read_query_search` | `GET` | `/help_center/collections/{collection_id}` | `retrieveCollection` | Retrieve a collection | operation-ledger blocked/planned |
-| 155 | `reverse_etl_write` | `PUT` | `/help_center/collections/{collection_id}` | `updateCollection` | Update a collection | covered_by write `update_collection` |
-| 156 | `etl_read` | `GET` | `/help_center/help_centers` | `listHelpCenters` | List all Help Centers | operation-ledger blocked/planned |
-| 157 | `direct_read_query_search` | `GET` | `/help_center/help_centers/{help_center_id}` | `retrieveHelpCenter` | Retrieve a Help Center | operation-ledger blocked/planned |
-| 158 | `etl_read` | `GET` | `/help_center/help_centers/{help_center_id}/redirects` | `listHelpCenterRedirects` | List all redirects for a help center | operation-ledger blocked/planned |
-| 159 | `reverse_etl_write` | `POST` | `/help_center/help_centers/{help_center_id}/redirects` | `createHelpCenterRedirect` | Create a redirect | covered_by write `create_help_center_redirect` |
-| 160 | `reverse_etl_write` | `DELETE` | `/help_center/help_centers/{help_center_id}/redirects/{id}` | `deleteHelpCenterRedirect` | Delete a redirect | covered_by write `delete_help_center_redirect` |
-| 161 | `direct_read_query_search` | `GET` | `/help_center/help_centers/{help_center_id}/redirects/{id}` | `retrieveHelpCenterRedirect` | Retrieve a redirect | operation-ledger blocked/planned |
-| 162 | `etl_read` | `GET` | `/internal_articles` | `listInternalArticles` | List all articles | operation-ledger blocked/planned |
-| 163 | `reverse_etl_write` | `POST` | `/internal_articles` | `createInternalArticle` | Create an internal article | covered_by write `create_internal_article` |
-| 164 | `etl_read` | `GET` | `/internal_articles/search` | `searchInternalArticles` | Search for internal articles | operation-ledger blocked/planned |
-| 165 | `reverse_etl_write` | `DELETE` | `/internal_articles/{internal_article_id}` | `deleteInternalArticle` | Delete an internal article | covered_by write `delete_internal_article` |
-| 166 | `direct_read_query_search` | `GET` | `/internal_articles/{internal_article_id}` | `retrieveInternalArticle` | Retrieve an internal article | operation-ledger blocked/planned |
-| 167 | `reverse_etl_write` | `PUT` | `/internal_articles/{internal_article_id}` | `updateInternalArticle` | Update an internal article | covered_by write `update_internal_article` |
-| 168 | `reverse_etl_write` | `POST` | `/internal_articles/{internal_article_id}/tags` | `attachTagToInternalArticle` | Add a tag to an internal article | covered_by write `attach_tag_to_internal_article` |
-| 169 | `reverse_etl_write` | `DELETE` | `/internal_articles/{internal_article_id}/tags/{id}` | `detachTagFromInternalArticle` | Remove a tag from an internal article | covered_by write `detach_tag_from_internal_article` |
-| 170 | `direct_read_query_search` | `GET` | `/ip_allowlist` | `getIpAllowlist` | Get IP allowlist settings | operation-ledger blocked/planned |
-| 171 | `reverse_etl_write` | `PUT` | `/ip_allowlist` | `updateIpAllowlist` | Update IP allowlist settings | covered_by write `update_ip_allowlist` |
-| 172 | `cdc_changefeed` | `GET` | `/jobs/status/{job_id}` | `jobsStatus` | Retrieve job status | operation-ledger blocked/planned |
-| 173 | `etl_read` | `GET` | `/macros` | `listMacros` | List all macros | operation-ledger blocked/planned |
-| 174 | `direct_read_query_search` | `GET` | `/macros/{id}` | `getMacro` | Retrieve a macro | operation-ledger blocked/planned |
-| 175 | `excluded_not_applicable` | `GET` | `/me` | `identifyAdmin` | Identify an admin | operation-ledger duplicate of `GET /admins` |
-| 176 | `reverse_etl_write` | `POST` | `/messages` | `createMessage` | Create a message | covered_by write `create_message` |
-| 177 | `cdc_changefeed` | `GET` | `/messages/status` | `getWhatsAppMessageStatus` | Get statuses of all messages sent based on the specified ruleset_id | operation-ledger blocked/planned |
-| 178 | `direct_read_query_search` | `GET` | `/messages/whatsapp/status` | `RetrieveWhatsAppMessageStatus` | Retrieve WhatsApp message delivery status | operation-ledger blocked/planned |
-| 179 | `etl_read` | `GET` | `/news/news_items` | `listNewsItems` | List all news items | operation-ledger blocked/planned |
-| 180 | `reverse_etl_write` | `POST` | `/news/news_items` | `createNewsItem` | Create a news item | covered_by write `create_news_item` |
-| 181 | `reverse_etl_write` | `DELETE` | `/news/news_items/{news_item_id}` | `deleteNewsItem` | Delete a news item | covered_by write `delete_news_item` |
-| 182 | `direct_read_query_search` | `GET` | `/news/news_items/{news_item_id}` | `retrieveNewsItem` | Retrieve a news item | operation-ledger blocked/planned |
-| 183 | `reverse_etl_write` | `PUT` | `/news/news_items/{news_item_id}` | `updateNewsItem` | Update a news item | covered_by write `update_news_item` |
-| 184 | `etl_read` | `GET` | `/news/newsfeeds` | `listNewsfeeds` | List all newsfeeds | operation-ledger blocked/planned |
-| 185 | `direct_read_query_search` | `GET` | `/news/newsfeeds/{newsfeed_id}` | `retrieveNewsfeed` | Retrieve a newsfeed | operation-ledger blocked/planned |
-| 186 | `etl_read` | `GET` | `/news/newsfeeds/{newsfeed_id}/items` | `listLiveNewsfeedItems` | List all live newsfeed items | operation-ledger blocked/planned |
-| 187 | `direct_read_query_search` | `GET` | `/notes/{note_id}` | `retrieveNote` | Retrieve a note | operation-ledger blocked/planned |
-| 188 | `etl_read` | `GET` | `/office_hours_schedules` | `listOfficeHoursSchedules` | List all office hours schedules | operation-ledger blocked/planned |
-| 189 | `reverse_etl_write` | `POST` | `/office_hours_schedules` | `createOfficeHoursSchedule` | Create an office hours schedule | covered_by write `create_office_hours_schedule` |
-| 190 | `reverse_etl_write` | `DELETE` | `/office_hours_schedules/{id}` | `deleteOfficeHoursSchedule` | Delete an office hours schedule | covered_by write `delete_office_hours_schedule` |
-| 191 | `direct_read_query_search` | `GET` | `/office_hours_schedules/{id}` | `getOfficeHoursSchedule` | Retrieve an office hours schedule | operation-ledger blocked/planned |
-| 192 | `reverse_etl_write` | `PUT` | `/office_hours_schedules/{id}` | `updateOfficeHoursSchedule` | Update an office hours schedule | covered_by write `update_office_hours_schedule` |
-| 193 | `etl_read` | `GET` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions` | `listOfficeHoursExceptions` | List all office hours exceptions | operation-ledger blocked/planned |
-| 194 | `reverse_etl_write` | `POST` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions` | `createOfficeHoursException` | Create an office hours exception | covered_by write `create_office_hours_exception` |
-| 195 | `reverse_etl_write` | `DELETE` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}` | `deleteOfficeHoursException` | Delete an office hours exception | covered_by write `delete_office_hours_exception` |
-| 196 | `direct_read_query_search` | `GET` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}` | `getOfficeHoursException` | Retrieve an office hours exception | operation-ledger blocked/planned |
-| 197 | `reverse_etl_write` | `PUT` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}` | `updateOfficeHoursException` | Update an office hours exception | covered_by write `update_office_hours_exception` |
-| 198 | `reverse_etl_write` | `POST` | `/phone_call_redirects` | `createPhoneSwitch` | Create a phone Switch | covered_by write `create_phone_switch` |
-| 199 | `etl_read` | `GET` | `/segments` | `listSegments` | List all segments | operation-ledger blocked/planned |
-| 200 | `direct_read_query_search` | `GET` | `/segments/{segment_id}` | `retrieveSegment` | Retrieve a segment | operation-ledger blocked/planned |
-| 201 | `etl_read` | `GET` | `/subscription_types` | `listSubscriptionTypes` | List subscription types | operation-ledger blocked/planned |
-| 202 | `etl_read` | `GET` | `/tags` | `listTags` | List all tags | covered_by stream `tags` |
-| 203 | `reverse_etl_write` | `POST` | `/tags` | `createTag` | Create or update a tag, Tag or untag companies, Tag contacts | covered_by write `create_tag` |
-| 204 | `reverse_etl_write` | `DELETE` | `/tags/{tag_id}` | `deleteTag` | Delete tag | covered_by write `delete_tag` |
-| 205 | `direct_read_query_search` | `GET` | `/tags/{tag_id}` | `findTag` | Find a specific tag | operation-ledger blocked/planned |
-| 206 | `etl_read` | `GET` | `/teams` | `listTeams` | List all teams | operation-ledger blocked/planned |
-| 207 | `direct_read_query_search` | `GET` | `/teams/{team_id}` | `retrieveTeam` | Retrieve a team | operation-ledger blocked/planned |
-| 208 | `direct_read_query_search` | `GET` | `/teams/{team_id}/metrics` | `getTeamMetrics` | Retrieve team metrics | operation-ledger blocked/planned |
-| 209 | `etl_read` | `GET` | `/ticket_states` | `listTicketStates` | List all ticket states | operation-ledger blocked/planned |
-| 210 | `etl_read` | `GET` | `/ticket_types` | `listTicketTypes` | List all ticket types | operation-ledger blocked/planned |
-| 211 | `reverse_etl_write` | `POST` | `/ticket_types` | `createTicketType` | Create a ticket type | covered_by write `create_ticket_type` |
-| 212 | `direct_read_query_search` | `GET` | `/ticket_types/{ticket_type_id}` | `getTicketType` | Retrieve a ticket type | operation-ledger blocked/planned |
-| 213 | `reverse_etl_write` | `PUT` | `/ticket_types/{ticket_type_id}` | `updateTicketType` | Update a ticket type | covered_by write `update_ticket_type` |
-| 214 | `reverse_etl_write` | `POST` | `/ticket_types/{ticket_type_id}/attributes` | `createTicketTypeAttribute` | Create a new attribute for a ticket type | covered_by write `create_ticket_type_attribute` |
-| 215 | `reverse_etl_write` | `PUT` | `/ticket_types/{ticket_type_id}/attributes/{attribute_id}` | `updateTicketTypeAttribute` | Update an existing attribute for a ticket type | covered_by write `update_ticket_type_attribute` |
-| 216 | `reverse_etl_write` | `POST` | `/tickets` | `createTicket` | Create a ticket | covered_by write `create_ticket` |
-| 217 | `reverse_etl_write` | `POST` | `/tickets/enqueue` | `enqueueCreateTicket` | Enqueue create ticket | covered_by write `enqueue_create_ticket` |
-| 218 | `etl_read` | `POST` | `/tickets/search` | `searchTickets` | Search tickets | operation-ledger blocked/planned |
-| 219 | `reverse_etl_write` | `DELETE` | `/tickets/{ticket_id}` | `deleteTicket` | Delete a ticket | covered_by write `delete_ticket` |
-| 220 | `direct_read_query_search` | `GET` | `/tickets/{ticket_id}` | `getTicket` | Retrieve a ticket | operation-ledger blocked/planned |
-| 221 | `reverse_etl_write` | `PUT` | `/tickets/{ticket_id}` | `updateTicket` | Update a ticket | covered_by write `update_ticket` |
-| 222 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/change_type` | `changeTicketType` | Change ticket type | covered_by write `change_ticket_type` |
-| 223 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/linked_conversations` | `linkConversationToTicket` | Link a conversation to a ticket | covered_by write `link_conversation_to_ticket` |
-| 224 | `reverse_etl_write` | `DELETE` | `/tickets/{ticket_id}/linked_conversations/{id}` | `unlinkConversationFromTicket` | Unlink a conversation from a ticket | covered_by write `unlink_conversation_from_ticket` |
-| 225 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/reply` | `replyTicket` | Reply to a ticket | covered_by write `reply_ticket` |
-| 226 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/tags` | `attachTagToTicket` | Add tag to a ticket | covered_by write `attach_tag_to_ticket` |
-| 227 | `reverse_etl_write` | `DELETE` | `/tickets/{ticket_id}/tags/{tag_id}` | `detachTagFromTicket` | Remove tag from a ticket | covered_by write `detach_tag_from_ticket` |
-| 228 | `direct_read_query_search` | `GET` | `/visitors` | `retrieveVisitorWithUserId` | Retrieve a visitor with User ID | operation-ledger blocked/planned |
-| 229 | `reverse_etl_write` | `PUT` | `/visitors` | `updateVisitor` | Update a visitor | covered_by write `update_visitor` |
-| 230 | `reverse_etl_write` | `POST` | `/visitors/convert` | `convertVisitor` | Convert a visitor | covered_by write `convert_visitor` |
+| 144 | `reverse_etl_write` | `POST` | `/fin/csat` | `submitFinCsat` | Submit a CSAT rating | covered_by write `submit_fin_csat` |
+| 145 | `reverse_etl_write` | `POST` | `/fin/reply` | `replyToFin` | Reply to Fin | covered_by write `reply_to_fin` |
+| 146 | `reverse_etl_write` | `POST` | `/fin/start` | `startFinConversation` | Start a conversation with Fin | covered_by write `start_fin_conversation` |
+| 147 | `direct_read_query_search` | `GET` | `/fin_voice/collect/{id}` | `collectFinVoiceCallById` | Collect Fin Voice call by ID | operation-ledger blocked/planned |
+| 148 | `direct_read_query_search` | `GET` | `/fin_voice/conversation/{conversation_id}` | `collectFinVoiceCallsByConversationId` | Collect Fin Voice calls by conversation ID | operation-ledger blocked/planned |
+| 149 | `direct_read_query_search` | `GET` | `/fin_voice/external_id/{external_id}` | `collectFinVoiceCallByExternalId` | Collect Fin Voice call by external ID | operation-ledger blocked/planned |
+| 150 | `direct_read_query_search` | `GET` | `/fin_voice/phone_number/{phone_number}` | `collectFinVoiceCallByPhoneNumber` | Collect Fin Voice call by phone number | operation-ledger blocked/planned |
+| 151 | `reverse_etl_write` | `POST` | `/fin_voice/register` | `registerFinVoiceCall` | Register a Fin Voice call | covered_by write `register_fin_voice_call` |
+| 152 | `etl_read` | `GET` | `/help_center/collections` | `listAllCollections` | List all collections | operation-ledger blocked/planned |
+| 153 | `reverse_etl_write` | `POST` | `/help_center/collections` | `createCollection` | Create a collection | covered_by write `create_collection` |
+| 154 | `reverse_etl_write` | `DELETE` | `/help_center/collections/{collection_id}` | `deleteCollection` | Delete a collection | covered_by write `delete_collection` |
+| 155 | `direct_read_query_search` | `GET` | `/help_center/collections/{collection_id}` | `retrieveCollection` | Retrieve a collection | operation-ledger blocked/planned |
+| 156 | `reverse_etl_write` | `PUT` | `/help_center/collections/{collection_id}` | `updateCollection` | Update a collection | covered_by write `update_collection` |
+| 157 | `etl_read` | `GET` | `/help_center/help_centers` | `listHelpCenters` | List all Help Centers | operation-ledger blocked/planned |
+| 158 | `direct_read_query_search` | `GET` | `/help_center/help_centers/{help_center_id}` | `retrieveHelpCenter` | Retrieve a Help Center | operation-ledger blocked/planned |
+| 159 | `etl_read` | `GET` | `/help_center/help_centers/{help_center_id}/redirects` | `listHelpCenterRedirects` | List all redirects for a help center | operation-ledger blocked/planned |
+| 160 | `reverse_etl_write` | `POST` | `/help_center/help_centers/{help_center_id}/redirects` | `createHelpCenterRedirect` | Create a redirect | covered_by write `create_help_center_redirect` |
+| 161 | `reverse_etl_write` | `DELETE` | `/help_center/help_centers/{help_center_id}/redirects/{id}` | `deleteHelpCenterRedirect` | Delete a redirect | covered_by write `delete_help_center_redirect` |
+| 162 | `direct_read_query_search` | `GET` | `/help_center/help_centers/{help_center_id}/redirects/{id}` | `retrieveHelpCenterRedirect` | Retrieve a redirect | operation-ledger blocked/planned |
+| 163 | `etl_read` | `GET` | `/internal_articles` | `listInternalArticles` | List all articles | operation-ledger blocked/planned |
+| 164 | `reverse_etl_write` | `POST` | `/internal_articles` | `createInternalArticle` | Create an internal article | covered_by write `create_internal_article` |
+| 165 | `etl_read` | `GET` | `/internal_articles/search` | `searchInternalArticles` | Search for internal articles | operation-ledger blocked/planned |
+| 166 | `reverse_etl_write` | `DELETE` | `/internal_articles/{internal_article_id}` | `deleteInternalArticle` | Delete an internal article | covered_by write `delete_internal_article` |
+| 167 | `direct_read_query_search` | `GET` | `/internal_articles/{internal_article_id}` | `retrieveInternalArticle` | Retrieve an internal article | operation-ledger blocked/planned |
+| 168 | `reverse_etl_write` | `PUT` | `/internal_articles/{internal_article_id}` | `updateInternalArticle` | Update an internal article | covered_by write `update_internal_article` |
+| 169 | `reverse_etl_write` | `POST` | `/internal_articles/{internal_article_id}/tags` | `attachTagToInternalArticle` | Add a tag to an internal article | covered_by write `attach_tag_to_internal_article` |
+| 170 | `reverse_etl_write` | `DELETE` | `/internal_articles/{internal_article_id}/tags/{id}` | `detachTagFromInternalArticle` | Remove a tag from an internal article | covered_by write `detach_tag_from_internal_article` |
+| 171 | `direct_read_query_search` | `GET` | `/ip_allowlist` | `getIpAllowlist` | Get IP allowlist settings | operation-ledger blocked/planned |
+| 172 | `reverse_etl_write` | `PUT` | `/ip_allowlist` | `updateIpAllowlist` | Update IP allowlist settings | covered_by write `update_ip_allowlist` |
+| 173 | `cdc_changefeed` | `GET` | `/jobs/status/{job_id}` | `jobsStatus` | Retrieve job status | operation-ledger blocked/planned |
+| 174 | `etl_read` | `GET` | `/macros` | `listMacros` | List all macros | operation-ledger blocked/planned |
+| 175 | `direct_read_query_search` | `GET` | `/macros/{id}` | `getMacro` | Retrieve a macro | operation-ledger blocked/planned |
+| 176 | `excluded_not_applicable` | `GET` | `/me` | `identifyAdmin` | Identify an admin | operation-ledger duplicate of `GET /admins` |
+| 177 | `reverse_etl_write` | `POST` | `/messages` | `createMessage` | Create a message | covered_by write `create_message` |
+| 178 | `cdc_changefeed` | `GET` | `/messages/status` | `getWhatsAppMessageStatus` | Get statuses of all messages sent based on the specified ruleset_id | operation-ledger blocked/planned |
+| 179 | `direct_read_query_search` | `GET` | `/messages/whatsapp/status` | `RetrieveWhatsAppMessageStatus` | Retrieve WhatsApp message delivery status | operation-ledger blocked/planned |
+| 180 | `etl_read` | `GET` | `/news/news_items` | `listNewsItems` | List all news items | operation-ledger blocked/planned |
+| 181 | `reverse_etl_write` | `POST` | `/news/news_items` | `createNewsItem` | Create a news item | covered_by write `create_news_item` |
+| 182 | `reverse_etl_write` | `DELETE` | `/news/news_items/{news_item_id}` | `deleteNewsItem` | Delete a news item | covered_by write `delete_news_item` |
+| 183 | `direct_read_query_search` | `GET` | `/news/news_items/{news_item_id}` | `retrieveNewsItem` | Retrieve a news item | operation-ledger blocked/planned |
+| 184 | `reverse_etl_write` | `PUT` | `/news/news_items/{news_item_id}` | `updateNewsItem` | Update a news item | covered_by write `update_news_item` |
+| 185 | `etl_read` | `GET` | `/news/newsfeeds` | `listNewsfeeds` | List all newsfeeds | operation-ledger blocked/planned |
+| 186 | `direct_read_query_search` | `GET` | `/news/newsfeeds/{newsfeed_id}` | `retrieveNewsfeed` | Retrieve a newsfeed | operation-ledger blocked/planned |
+| 187 | `etl_read` | `GET` | `/news/newsfeeds/{newsfeed_id}/items` | `listLiveNewsfeedItems` | List all live newsfeed items | operation-ledger blocked/planned |
+| 188 | `direct_read_query_search` | `GET` | `/notes/{note_id}` | `retrieveNote` | Retrieve a note | operation-ledger blocked/planned |
+| 189 | `etl_read` | `GET` | `/office_hours_schedules` | `listOfficeHoursSchedules` | List all office hours schedules | operation-ledger blocked/planned |
+| 190 | `reverse_etl_write` | `POST` | `/office_hours_schedules` | `createOfficeHoursSchedule` | Create an office hours schedule | covered_by write `create_office_hours_schedule` |
+| 191 | `reverse_etl_write` | `DELETE` | `/office_hours_schedules/{id}` | `deleteOfficeHoursSchedule` | Delete an office hours schedule | covered_by write `delete_office_hours_schedule` |
+| 192 | `direct_read_query_search` | `GET` | `/office_hours_schedules/{id}` | `getOfficeHoursSchedule` | Retrieve an office hours schedule | operation-ledger blocked/planned |
+| 193 | `reverse_etl_write` | `PUT` | `/office_hours_schedules/{id}` | `updateOfficeHoursSchedule` | Update an office hours schedule | covered_by write `update_office_hours_schedule` |
+| 194 | `etl_read` | `GET` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions` | `listOfficeHoursExceptions` | List all office hours exceptions | operation-ledger blocked/planned |
+| 195 | `reverse_etl_write` | `POST` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions` | `createOfficeHoursException` | Create an office hours exception | covered_by write `create_office_hours_exception` |
+| 196 | `reverse_etl_write` | `DELETE` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}` | `deleteOfficeHoursException` | Delete an office hours exception | covered_by write `delete_office_hours_exception` |
+| 197 | `direct_read_query_search` | `GET` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}` | `getOfficeHoursException` | Retrieve an office hours exception | operation-ledger blocked/planned |
+| 198 | `reverse_etl_write` | `PUT` | `/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}` | `updateOfficeHoursException` | Update an office hours exception | covered_by write `update_office_hours_exception` |
+| 199 | `reverse_etl_write` | `POST` | `/phone_call_redirects` | `createPhoneSwitch` | Create a phone Switch | covered_by write `create_phone_switch` |
+| 200 | `etl_read` | `GET` | `/segments` | `listSegments` | List all segments | operation-ledger blocked/planned |
+| 201 | `direct_read_query_search` | `GET` | `/segments/{segment_id}` | `retrieveSegment` | Retrieve a segment | operation-ledger blocked/planned |
+| 202 | `etl_read` | `GET` | `/subscription_types` | `listSubscriptionTypes` | List subscription types | operation-ledger blocked/planned |
+| 203 | `etl_read` | `GET` | `/tags` | `listTags` | List all tags | covered_by stream `tags` |
+| 204 | `reverse_etl_write` | `POST` | `/tags` | `createTag` | Create or update a tag, Tag or untag companies, Tag contacts | covered_by write `create_tag` |
+| 205 | `reverse_etl_write` | `DELETE` | `/tags/{tag_id}` | `deleteTag` | Delete tag | covered_by write `delete_tag` |
+| 206 | `direct_read_query_search` | `GET` | `/tags/{tag_id}` | `findTag` | Find a specific tag | operation-ledger blocked/planned |
+| 207 | `etl_read` | `GET` | `/teams` | `listTeams` | List all teams | operation-ledger blocked/planned |
+| 208 | `direct_read_query_search` | `GET` | `/teams/{team_id}` | `retrieveTeam` | Retrieve a team | operation-ledger blocked/planned |
+| 209 | `direct_read_query_search` | `GET` | `/teams/{team_id}/metrics` | `getTeamMetrics` | Retrieve team metrics | operation-ledger blocked/planned |
+| 210 | `etl_read` | `GET` | `/ticket_states` | `listTicketStates` | List all ticket states | operation-ledger blocked/planned |
+| 211 | `etl_read` | `GET` | `/ticket_types` | `listTicketTypes` | List all ticket types | operation-ledger blocked/planned |
+| 212 | `reverse_etl_write` | `POST` | `/ticket_types` | `createTicketType` | Create a ticket type | covered_by write `create_ticket_type` |
+| 213 | `direct_read_query_search` | `GET` | `/ticket_types/{ticket_type_id}` | `getTicketType` | Retrieve a ticket type | operation-ledger blocked/planned |
+| 214 | `reverse_etl_write` | `PUT` | `/ticket_types/{ticket_type_id}` | `updateTicketType` | Update a ticket type | covered_by write `update_ticket_type` |
+| 215 | `reverse_etl_write` | `POST` | `/ticket_types/{ticket_type_id}/attributes` | `createTicketTypeAttribute` | Create a new attribute for a ticket type | covered_by write `create_ticket_type_attribute` |
+| 216 | `reverse_etl_write` | `PUT` | `/ticket_types/{ticket_type_id}/attributes/{attribute_id}` | `updateTicketTypeAttribute` | Update an existing attribute for a ticket type | covered_by write `update_ticket_type_attribute` |
+| 217 | `reverse_etl_write` | `POST` | `/tickets` | `createTicket` | Create a ticket | covered_by write `create_ticket` |
+| 218 | `reverse_etl_write` | `POST` | `/tickets/enqueue` | `enqueueCreateTicket` | Enqueue create ticket | covered_by write `enqueue_create_ticket` |
+| 219 | `etl_read` | `POST` | `/tickets/search` | `searchTickets` | Search tickets | operation-ledger blocked/planned |
+| 220 | `reverse_etl_write` | `DELETE` | `/tickets/{ticket_id}` | `deleteTicket` | Delete a ticket | covered_by write `delete_ticket` |
+| 221 | `direct_read_query_search` | `GET` | `/tickets/{ticket_id}` | `getTicket` | Retrieve a ticket | operation-ledger blocked/planned |
+| 222 | `reverse_etl_write` | `PUT` | `/tickets/{ticket_id}` | `updateTicket` | Update a ticket | covered_by write `update_ticket` |
+| 223 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/change_type` | `changeTicketType` | Change ticket type | covered_by write `change_ticket_type` |
+| 224 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/linked_conversations` | `linkConversationToTicket` | Link a conversation to a ticket | covered_by write `link_conversation_to_ticket` |
+| 225 | `reverse_etl_write` | `DELETE` | `/tickets/{ticket_id}/linked_conversations/{id}` | `unlinkConversationFromTicket` | Unlink a conversation from a ticket | covered_by write `unlink_conversation_from_ticket` |
+| 226 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/reply` | `replyTicket` | Reply to a ticket | covered_by write `reply_ticket` |
+| 227 | `reverse_etl_write` | `POST` | `/tickets/{ticket_id}/tags` | `attachTagToTicket` | Add tag to a ticket | covered_by write `attach_tag_to_ticket` |
+| 228 | `reverse_etl_write` | `DELETE` | `/tickets/{ticket_id}/tags/{tag_id}` | `detachTagFromTicket` | Remove tag from a ticket | covered_by write `detach_tag_from_ticket` |
+| 229 | `direct_read_query_search` | `GET` | `/visitors` | `retrieveVisitorWithUserId` | Retrieve a visitor with User ID | operation-ledger blocked/planned |
+| 230 | `reverse_etl_write` | `PUT` | `/visitors` | `updateVisitor` | Update a visitor | covered_by write `update_visitor` |
+| 231 | `reverse_etl_write` | `POST` | `/visitors/convert` | `convertVisitor` | Convert a visitor | covered_by write `convert_visitor` |

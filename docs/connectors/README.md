@@ -234,7 +234,7 @@
 - [insightly](insightly/MANUAL.md): Reads Insightly CRM contacts, organisations, opportunities, leads, projects, and tasks through the Insightly REST API v3.1.
 - [instagram](instagram/MANUAL.md): Reads Instagram Business/Creator account profile, media, and stories through the Facebook Graph API.
 - [instatus](instatus/MANUAL.md): Reads and manages Instatus status pages, components, incidents, maintenances, templates, subscribers, metrics, monitors, and related status-page resources through the Instatus REST API.
-- [intercom](intercom/MANUAL.md): Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.
+- [intercom](intercom/MANUAL.md): Reads Intercom contacts, companies, conversations, admins, and tags; declares typed reverse-ETL write actions for official Intercom API mutations.
 - [interzoid](interzoid/MANUAL.md): Reads Interzoid data-matching lookups: company-name, individual-name, and street-address similarity keys, plus organization-name standardization, via the Interzoid REST API.
 - [intruder](intruder/MANUAL.md): Reads Intruder issues, issue occurrences, scans, and targets through the Intruder REST API (read-only, full refresh).
 - [invoiced](invoiced/MANUAL.md): Reads and writes the documented Invoiced REST API surface for billing, payments, subscriptions, events, and related resources.
