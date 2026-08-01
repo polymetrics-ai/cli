@@ -3542,6 +3542,9 @@
           "maps_to": "record.data.archived"
         }
       ],
+      "redact_fields": [
+        "gid"
+      ],
       "api_surface": [
         {
           "method": "PUT",
@@ -3567,6 +3570,9 @@
           "maps_to": "record.gid",
           "allow_empty": false
         }
+      ],
+      "redact_fields": [
+        "gid"
       ],
       "api_surface": [
         {
@@ -4470,6 +4476,9 @@
           "allow_empty": false
         }
       ],
+      "redact_fields": [
+        "gid"
+      ],
       "api_surface": [
         {
           "method": "PUT",
@@ -4495,6 +4504,9 @@
           "maps_to": "record.gid",
           "allow_empty": false
         }
+      ],
+      "redact_fields": [
+        "gid"
       ],
       "api_surface": [
         {
@@ -4553,6 +4565,9 @@
           "maps_to": "record.data.name",
           "allow_empty": false
         }
+      ],
+      "redact_fields": [
+        "project_gid"
       ],
       "api_surface": [
         {
@@ -4875,6 +4890,9 @@
           "allow_empty": false
         }
       ],
+      "redact_fields": [
+        "task_gid"
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -5033,6 +5051,9 @@
           "allow_empty": false
         }
       ],
+      "redact_fields": [
+        "gid"
+      ],
       "api_surface": [
         {
           "method": "PUT",
@@ -5058,6 +5079,9 @@
           "maps_to": "record.gid",
           "allow_empty": false
         }
+      ],
+      "redact_fields": [
+        "gid"
       ],
       "api_surface": [
         {
@@ -5357,6 +5381,9 @@
           "maps_to": "record.data.completed"
         }
       ],
+      "redact_fields": [
+        "gid"
+      ],
       "api_surface": [
         {
           "method": "PUT",
@@ -5382,6 +5409,9 @@
           "maps_to": "record.gid",
           "allow_empty": false
         }
+      ],
+      "redact_fields": [
+        "gid"
       ],
       "api_surface": [
         {
