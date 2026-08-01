@@ -658,32 +658,17 @@
     },
     {
       "id": "zendesk-support.update_brand_logo",
-      "kind": "rest_write",
+      "kind": "file_upload",
       "summary": "Update a Brand Logo (PUT /api/v2/brands/{brand_id}/logo)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "update",
-      "rest": {
-        "method": "PUT",
+      "approval": "blocked pending bounded file upload approval binding",
+      "output_policy": "none",
+      "file": {
+        "direction": "upload",
         "path": "/api/v2/brands/{brand_id}/logo",
-        "max_bytes": 1048576,
-        "content_type": "multipart/form-data",
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "brand[logo][uploaded_data]": {
-              "type": "string",
-              "format": "binary",
-              "description": "Brand logo image file"
-            }
-          },
-          "required": [
-            "brand[logo][uploaded_data]"
-          ]
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -1420,32 +1405,17 @@
     },
     {
       "id": "zendesk-support.create_custom_object_record_attachment",
-      "kind": "rest_write",
+      "kind": "file_upload",
       "summary": "Create Custom Object Record Attachment (POST /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
+      "approval": "blocked pending bounded file upload approval binding",
+      "output_policy": "none",
+      "file": {
+        "direction": "upload",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
-        "max_bytes": 1048576,
-        "content_type": "multipart/form-data",
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "uploaded_data": {
-              "type": "string",
-              "format": "binary",
-              "description": "The file to upload as an attachment"
-            }
-          },
-          "required": [
-            "uploaded_data"
-          ]
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -1494,7 +1464,7 @@
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
+      "output_policy": "binary_file_bounded",
       "binary": {
         "method": "GET",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download",
@@ -3800,17 +3770,17 @@
     },
     {
       "id": "zendesk-support.create_associated_macro_attachment",
-      "kind": "rest_write",
+      "kind": "file_upload",
       "summary": "Create Macro Attachment (POST /api/v2/macros/{macro_id}/attachments)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/macros/{macro_id}/attachments"
+      "approval": "blocked pending bounded file upload approval binding",
+      "output_policy": "none",
+      "file": {
+        "direction": "upload",
+        "path": "/api/v2/macros/{macro_id}/attachments",
+        "max_bytes": 10485760
       }
     },
     {
@@ -3845,17 +3815,17 @@
     },
     {
       "id": "zendesk-support.create_macro_attachment",
-      "kind": "rest_write",
+      "kind": "file_upload",
       "summary": "Create Unassociated Macro Attachment (POST /api/v2/macros/attachments)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/macros/attachments"
+      "approval": "blocked pending bounded file upload approval binding",
+      "output_policy": "none",
+      "file": {
+        "direction": "upload",
+        "path": "/api/v2/macros/attachments",
+        "max_bytes": 10485760
       }
     },
     {
@@ -6079,13 +6049,13 @@
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
-        "path": "/api/v2/suspended_tickets/attachments"
+        "path": "/api/v2/suspended_tickets/attachments",
+        "max_bytes": 1048576
       }
     },
     {
@@ -7749,26 +7719,17 @@
     },
     {
       "id": "zendesk-support.upload_files",
-      "kind": "rest_write",
+      "kind": "file_upload",
       "summary": "Upload Files (POST /api/v2/uploads)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/uploads"
+      "risk": "high",
+      "approval": "blocked pending bounded file upload approval binding",
+      "output_policy": "none",
+      "file": {
+        "direction": "upload",
+        "path": "/api/v2/uploads?filename={filename}",
+        "max_bytes": 10485760
       }
     },
     {
