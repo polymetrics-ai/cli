@@ -444,7 +444,7 @@ REVERSE ETL ACTIONS
     endpoint: POST /messages
     required fields: message_type, from, to
     optional fields: subject, body, template, cc, bcc, components, created_at, create_conversation_without_contact_reply
-    risk: Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; inapp requires body/from/to; whatsapp requires template/components/from/to.
+    risk: Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; in_app requires body/from/to; whatsapp requires template/components/from/to.
   create_news_item:
     endpoint: POST /news/news_items
     required fields: title, sender_id

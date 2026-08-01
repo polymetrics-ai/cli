@@ -20499,7 +20499,7 @@
               "type": "string",
               "enum": [
                 "email",
-                "inapp",
+                "in_app",
                 "whatsapp"
               ]
             },

@@ -69330,7 +69330,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/messages",
-        "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; inapp requires body/from/to; whatsapp requires template/components/from/to."
+        "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; in_app requires body/from/to; whatsapp requires template/components/from/to."
       },
       {
         "name": "create_news_item",

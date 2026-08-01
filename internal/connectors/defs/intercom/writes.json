@@ -14014,6 +14014,10 @@
         "into",
         "skip_duplicate_validation"
       ],
+      "redact_fields": [
+        "from",
+        "into"
+      ],
       "confirm": "destructive"
     },
     {
@@ -14678,6 +14682,9 @@
         "availability",
         "audience",
         "tags"
+      ],
+      "redact_fields": [
+        "content_ids"
       ],
       "confirm": "destructive"
     },
@@ -19951,6 +19958,9 @@
         "enabled",
         "ip_allowlist"
       ],
+      "redact_fields": [
+        "ip_allowlist"
+      ],
       "confirm": "destructive"
     },
     {
@@ -19966,7 +19976,7 @@
             "description": "The kind of message being created.",
             "enum": [
               "email",
-              "inapp",
+              "in_app",
               "whatsapp"
             ]
           },
@@ -20128,7 +20138,7 @@
             "properties": {
               "message_type": {
                 "enum": [
-                  "inapp"
+                  "in_app"
                 ]
               }
             }
@@ -20151,7 +20161,7 @@
           }
         ]
       },
-      "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; inapp requires body/from/to; whatsapp requires template/components/from/to.",
+      "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; in_app requires body/from/to; whatsapp requires template/components/from/to.",
       "body_fields": [
         "message_type",
         "subject",
@@ -20167,9 +20177,9 @@
       ],
       "redact_fields": [
         "from.id",
-        "to.id",
-        "cc.id",
-        "bcc.id"
+        "to",
+        "cc",
+        "bcc"
       ]
     },
     {

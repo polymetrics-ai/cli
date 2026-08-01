@@ -1,6 +1,6 @@
 {
   "record": {
-    "message_type": "inapp",
+    "message_type": "in_app",
     "from": {
       "type": "admin",
       "id": "394051"
@@ -15,7 +15,7 @@
     "method": "POST",
     "path": "/messages",
     "body": {
-      "message_type": "inapp",
+      "message_type": "in_app",
       "from": {
         "type": "admin",
         "id": "394051"
