@@ -1,0 +1,21 @@
+{
+  "record": {
+    "job_id": "job_id_fixture",
+    "job": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/team-members/jobs/job_id_fixture",
+    "body": {
+      "job": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

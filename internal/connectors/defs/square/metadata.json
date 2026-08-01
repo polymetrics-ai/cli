@@ -1,23 +1,25 @@
 {
   "name": "square",
   "display_name": "Square",
-  "description": "Reads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.",
+  "description": "Reads 110 Square API streams, exposes 31 bounded direct reads/searches, and declares 153 typed reverse-ETL write actions from the official Square OpenAPI ledger.",
   "integration_type": "api",
   "docs_url": "https://developer.squareup.com/reference/square",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Square API read of payments, refunds, customer, and location data",
-    "approval": "none; read-only"
+    "read": "external Square API reads through typed streams and bounded direct-read operations",
+    "write": "typed Square API mutations only through reverse ETL plan, preview, approval, execute",
+    "approval": "reverse ETL writes require explicit approval; destructive actions carry destructive confirmation metadata"
   }
 }

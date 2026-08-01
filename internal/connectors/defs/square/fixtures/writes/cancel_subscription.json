@@ -1,0 +1,13 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/subscriptions/subscription_id_fixture/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

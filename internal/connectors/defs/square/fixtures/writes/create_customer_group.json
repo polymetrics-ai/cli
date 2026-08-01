@@ -1,0 +1,20 @@
+{
+  "record": {
+    "group": {
+      "name": "name_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/customers/groups",
+    "body": {
+      "group": {
+        "name": "name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

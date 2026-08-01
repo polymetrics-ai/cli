@@ -1,0 +1,21 @@
+{
+  "record": {
+    "key": "key_fixture",
+    "custom_attribute_definition": {
+      "key": "key_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/merchants/custom-attribute-definitions/key_fixture",
+    "body": {
+      "custom_attribute_definition": {
+        "key": "key_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

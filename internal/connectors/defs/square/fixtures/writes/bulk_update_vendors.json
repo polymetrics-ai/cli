@@ -1,0 +1,16 @@
+{
+  "record": {
+    "vendors": {}
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/vendors/bulk-update",
+    "body": {
+      "vendors": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

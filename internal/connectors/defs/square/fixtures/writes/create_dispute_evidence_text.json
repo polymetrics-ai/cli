@@ -1,0 +1,19 @@
+{
+  "record": {
+    "dispute_id": "dispute_id_fixture",
+    "idempotency_key": "idem_fixture",
+    "evidence_text": "evidence_text_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/disputes/dispute_id_fixture/evidence-text",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "evidence_text": "evidence_text_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

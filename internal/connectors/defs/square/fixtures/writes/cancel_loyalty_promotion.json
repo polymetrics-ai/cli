@@ -1,0 +1,14 @@
+{
+  "record": {
+    "promotion_id": "promotion_id_fixture",
+    "program_id": "program_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/loyalty/programs/program_id_fixture/promotions/promotion_id_fixture/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

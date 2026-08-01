@@ -1,0 +1,16 @@
+{
+  "record": {
+    "scheduled_shifts": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/labor/scheduled-shifts/bulk-publish",
+    "body": {
+      "scheduled_shifts": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

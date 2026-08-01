@@ -1,0 +1,14 @@
+{
+  "record": {
+    "dispute_id": "dispute_id_fixture",
+    "evidence_id": "evidence_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/disputes/dispute_id_fixture/evidence/evidence_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

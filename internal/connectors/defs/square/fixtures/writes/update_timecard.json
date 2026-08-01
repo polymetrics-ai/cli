@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "timecard": {
+      "location_id": "location_id_fixture",
+      "start_at": "2026-01-01T00:00:00Z",
+      "team_member_id": "team_member_id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/labor/timecards/id_fixture",
+    "body": {
+      "timecard": {
+        "location_id": "location_id_fixture",
+        "start_at": "2026-01-01T00:00:00Z",
+        "team_member_id": "team_member_id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

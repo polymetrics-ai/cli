@@ -1,0 +1,13 @@
+{
+  "record": {
+    "site_id": "site_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/sites/site_id_fixture/snippet"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

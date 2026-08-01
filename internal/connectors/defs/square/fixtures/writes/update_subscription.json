@@ -1,0 +1,21 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "subscription": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/subscriptions/subscription_id_fixture",
+    "body": {
+      "subscription": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

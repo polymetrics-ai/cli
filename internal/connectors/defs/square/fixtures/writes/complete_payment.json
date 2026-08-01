@@ -1,0 +1,17 @@
+{
+  "record": {
+    "payment_id": "payment_id_fixture",
+    "version_token": "version_token_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/payments/payment_id_fixture/complete",
+    "body": {
+      "version_token": "version_token_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

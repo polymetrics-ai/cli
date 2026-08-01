@@ -1,0 +1,26 @@
+{
+  "record": {
+    "break_type": {
+      "location_id": "location_id_fixture",
+      "break_name": "break_name_fixture",
+      "expected_duration": "expected_duration_fixture",
+      "is_paid": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/labor/break-types",
+    "body": {
+      "break_type": {
+        "location_id": "location_id_fixture",
+        "break_name": "break_name_fixture",
+        "expected_duration": "expected_duration_fixture",
+        "is_paid": true
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "workweek_config": {
+      "start_of_week": "UNKNOWN_WEEKDAY",
+      "start_of_day_local_time": "2026-01-01T00:00:00Z"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/labor/workweek-configs/id_fixture",
+    "body": {
+      "workweek_config": {
+        "start_of_week": "UNKNOWN_WEEKDAY",
+        "start_of_day_local_time": "2026-01-01T00:00:00Z"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

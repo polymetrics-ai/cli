@@ -1,0 +1,20 @@
+{
+  "record": {
+    "booking": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/bookings",
+    "body": {
+      "booking": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

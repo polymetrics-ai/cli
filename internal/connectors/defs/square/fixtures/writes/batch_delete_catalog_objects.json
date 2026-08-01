@@ -1,0 +1,20 @@
+{
+  "record": {
+    "object_ids": [
+      "object_id_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/catalog/batch-delete",
+    "body": {
+      "object_ids": [
+        "object_id_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

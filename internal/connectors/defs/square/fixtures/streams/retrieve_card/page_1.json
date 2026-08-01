@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/cards/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "card": {
+        "id": "retrieve_card_fixture_1",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:05:00Z",
+        "name": "RetrieveCard fixture",
+        "status": "ACTIVE",
+        "source_operation": "RetrieveCard"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "adjustment": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/inventory/adjustments/update",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "adjustment": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

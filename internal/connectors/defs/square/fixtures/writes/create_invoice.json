@@ -1,0 +1,20 @@
+{
+  "record": {
+    "invoice": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/invoices",
+    "body": {
+      "invoice": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

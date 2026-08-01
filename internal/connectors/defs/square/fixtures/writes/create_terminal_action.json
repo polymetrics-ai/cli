@@ -1,0 +1,22 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "action": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/terminals/actions",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "action": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "action_id": "action_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/terminals/actions/action_id_fixture/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "account_id": "account_id_fixture",
+    "idempotency_key": "idem_fixture",
+    "adjust_points": {
+      "points": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/loyalty/accounts/account_id_fixture/adjust",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "adjust_points": {
+        "points": 1
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

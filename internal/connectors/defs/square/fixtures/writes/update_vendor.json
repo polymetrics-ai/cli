@@ -1,0 +1,21 @@
+{
+  "record": {
+    "vendor_id": "vendor_id_fixture",
+    "vendor": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/vendors/vendor_id_fixture",
+    "body": {
+      "vendor": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "customers": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/customers/bulk-create",
+    "body": {
+      "customers": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

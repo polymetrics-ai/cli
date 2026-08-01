@@ -1,0 +1,20 @@
+{
+  "record": {
+    "scheduled_shift": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/labor/scheduled-shifts",
+    "body": {
+      "scheduled_shift": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

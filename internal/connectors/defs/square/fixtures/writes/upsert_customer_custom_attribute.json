@@ -1,0 +1,22 @@
+{
+  "record": {
+    "customer_id": "customer_id_fixture",
+    "key": "key_fixture",
+    "custom_attribute": {
+      "key": "key_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/customers/customer_id_fixture/custom-attributes/key_fixture",
+    "body": {
+      "custom_attribute": {
+        "key": "key_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

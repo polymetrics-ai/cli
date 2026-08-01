@@ -1,0 +1,24 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "gift_card_activity": {
+      "type": "TYPE_DO_NOT_USE",
+      "location_id": "location_id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/gift-cards/activities",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "gift_card_activity": {
+        "type": "TYPE_DO_NOT_USE",
+        "location_id": "location_id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

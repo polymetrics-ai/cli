@@ -1,0 +1,14 @@
+{
+  "record": {
+    "booking_id": "booking_id_fixture",
+    "key": "key_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/bookings/booking_id_fixture/custom-attributes/key_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

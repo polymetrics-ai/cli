@@ -3,69 +3,1302 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "headers": {
-      "Square-Version": "2024-01-18"
+      "Square-Version": "2026-07-15"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "cursor",
-      "token_path": "cursor"
+      "token_path": "cursor",
+      "page_size": 100,
+      "max_pages": 10
     },
-    "check": { "method": "GET", "path": "/locations" },
+    "check": {
+      "method": "GET",
+      "path": "/v2/locations"
+    },
     "error_map": [
-      { "status": 401, "hint": "square access token is missing or invalid; re-run pm credentials add square" },
-      { "status": 403, "hint": "square account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "square rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "square access token is missing or invalid; re-run pm credentials add square"
+      },
+      {
+        "status": 403,
+        "hint": "square account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "square rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "payments",
-      "path": "/payments",
+      "path": "/v2/payments",
+      "records": {
+        "path": "payments"
+      },
+      "schema": "schemas/payments.json",
       "query": {
         "limit": "100",
-        "begin_time": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+        "updated_at_begin_time": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "payments" },
       "incremental": {
         "cursor_field": "updated_at",
+        "request_param": "updated_at_begin_time",
+        "param_format": "rfc3339",
         "start_config_key": "start_date"
-      },
-      "schema": "schemas/payments.json"
+      }
     },
     {
       "name": "refunds",
-      "path": "/refunds",
+      "path": "/v2/refunds",
+      "records": {
+        "path": "refunds"
+      },
+      "schema": "schemas/refunds.json",
       "query": {
         "limit": "100",
-        "begin_time": { "template": "{{ incremental.lower_bound }}", "omit_when_absent": true }
+        "updated_at_begin_time": {
+          "template": "{{ incremental.lower_bound }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "refunds" },
       "incremental": {
         "cursor_field": "updated_at",
+        "request_param": "updated_at_begin_time",
+        "param_format": "rfc3339",
         "start_config_key": "start_date"
-      },
-      "schema": "schemas/refunds.json"
+      }
     },
     {
       "name": "customers",
-      "path": "/customers",
+      "path": "/v2/customers",
+      "records": {
+        "path": "customers"
+      },
+      "schema": "schemas/customers.json",
       "query": {
         "limit": "100"
-      },
-      "records": { "path": "customers" },
-      "schema": "schemas/customers.json"
+      }
     },
     {
       "name": "locations",
-      "path": "/locations",
+      "path": "/v2/locations",
+      "records": {
+        "path": "locations"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "v1_retrieve_business",
+      "path": "/v1/me",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/v1_retrieve_business.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "v1_list_locations",
+      "path": "/v1/me/locations",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/v1_list_locations.json"
+    },
+    {
+      "name": "v1_list_payments",
+      "path": "/v1/{{ config.location_id }}/payments",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/v1_list_payments.json",
       "query": {
         "limit": "100"
+      }
+    },
+    {
+      "name": "v1_retrieve_payment",
+      "path": "/v1/{{ config.location_id }}/payments/{{ config.payment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
       },
-      "records": { "path": "locations" },
-      "schema": "schemas/locations.json"
+      "schema": "schemas/v1_retrieve_payment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "v1_list_refunds",
+      "path": "/v1/{{ config.location_id }}/refunds",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/v1_list_refunds.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "v1_list_settlements",
+      "path": "/v1/{{ config.location_id }}/settlements",
+      "records": {
+        "path": "."
+      },
+      "schema": "schemas/v1_list_settlements.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "v1_retrieve_settlement",
+      "path": "/v1/{{ config.location_id }}/settlements/{{ config.settlement_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/v1_retrieve_settlement.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_bank_accounts",
+      "path": "/v2/bank-accounts",
+      "records": {
+        "path": "bank_accounts"
+      },
+      "schema": "schemas/list_bank_accounts.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_bank_account_by_v1_id",
+      "path": "/v2/bank-accounts/by-v1-id/{{ config.v1_bank_account_id }}",
+      "records": {
+        "path": "bank_account",
+        "single_object": true
+      },
+      "schema": "schemas/get_bank_account_by_v1_id.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_bank_account",
+      "path": "/v2/bank-accounts/{{ config.bank_account_id }}",
+      "records": {
+        "path": "bank_account",
+        "single_object": true
+      },
+      "schema": "schemas/get_bank_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_bookings",
+      "path": "/v2/bookings",
+      "records": {
+        "path": "bookings"
+      },
+      "schema": "schemas/list_bookings.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_business_booking_profile",
+      "path": "/v2/bookings/business-booking-profile",
+      "records": {
+        "path": "business_booking_profile",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_business_booking_profile.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_booking_custom_attribute_definitions",
+      "path": "/v2/bookings/custom-attribute-definitions",
+      "records": {
+        "path": "custom_attribute_definitions"
+      },
+      "schema": "schemas/list_booking_custom_attribute_definitions.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_booking_custom_attribute_definition",
+      "path": "/v2/bookings/custom-attribute-definitions/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute_definition",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_booking_custom_attribute_definition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_location_booking_profiles",
+      "path": "/v2/bookings/location-booking-profiles",
+      "records": {
+        "path": "location_booking_profiles"
+      },
+      "schema": "schemas/list_location_booking_profiles.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_location_booking_profile",
+      "path": "/v2/bookings/location-booking-profiles/{{ config.location_id }}",
+      "records": {
+        "path": "location_booking_profile",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_location_booking_profile.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_team_member_booking_profiles",
+      "path": "/v2/bookings/team-member-booking-profiles",
+      "records": {
+        "path": "team_member_booking_profiles"
+      },
+      "schema": "schemas/list_team_member_booking_profiles.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_team_member_booking_profile",
+      "path": "/v2/bookings/team-member-booking-profiles/{{ config.team_member_id }}",
+      "records": {
+        "path": "team_member_booking_profile",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_team_member_booking_profile.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_booking",
+      "path": "/v2/bookings/{{ config.booking_id }}",
+      "records": {
+        "path": "booking",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_booking.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_booking_custom_attributes",
+      "path": "/v2/bookings/{{ config.booking_id }}/custom-attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "schema": "schemas/list_booking_custom_attributes.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_booking_custom_attribute",
+      "path": "/v2/bookings/{{ config.booking_id }}/custom-attributes/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_booking_custom_attribute.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_cards",
+      "path": "/v2/cards",
+      "records": {
+        "path": "cards"
+      },
+      "schema": "schemas/list_cards.json"
+    },
+    {
+      "name": "retrieve_card",
+      "path": "/v2/cards/{{ config.card_id }}",
+      "records": {
+        "path": "card",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_card.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_cash_drawer_shifts",
+      "path": "/v2/cash-drawers/shifts",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/list_cash_drawer_shifts.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_cash_drawer_shift",
+      "path": "/v2/cash-drawers/shifts/{{ config.shift_id }}",
+      "records": {
+        "path": "cash_drawer_shift",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_cash_drawer_shift.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "catalog_info",
+      "path": "/v2/catalog/info",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/catalog_info.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_catalog",
+      "path": "/v2/catalog/list",
+      "records": {
+        "path": "objects"
+      },
+      "schema": "schemas/list_catalog.json"
+    },
+    {
+      "name": "retrieve_catalog_object",
+      "path": "/v2/catalog/object/{{ config.object_id }}",
+      "records": {
+        "path": "object",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_catalog_object.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_channels",
+      "path": "/v2/channels",
+      "records": {
+        "path": "channels"
+      },
+      "schema": "schemas/list_channels.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_channel",
+      "path": "/v2/channels/{{ config.channel_id }}",
+      "records": {
+        "path": "channel",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_channel.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_customer_custom_attribute_definitions",
+      "path": "/v2/customers/custom-attribute-definitions",
+      "records": {
+        "path": "custom_attribute_definitions"
+      },
+      "schema": "schemas/list_customer_custom_attribute_definitions.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_customer_custom_attribute_definition",
+      "path": "/v2/customers/custom-attribute-definitions/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute_definition",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_customer_custom_attribute_definition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_customer_groups",
+      "path": "/v2/customers/groups",
+      "records": {
+        "path": "groups"
+      },
+      "schema": "schemas/list_customer_groups.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_customer_group",
+      "path": "/v2/customers/groups/{{ config.group_id }}",
+      "records": {
+        "path": "group",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_customer_group.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_customer_segments",
+      "path": "/v2/customers/segments",
+      "records": {
+        "path": "segments"
+      },
+      "schema": "schemas/list_customer_segments.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_customer_segment",
+      "path": "/v2/customers/segments/{{ config.segment_id }}",
+      "records": {
+        "path": "segment",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_customer_segment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_customer",
+      "path": "/v2/customers/{{ config.customer_id }}",
+      "records": {
+        "path": "customer",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_customer.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_customer_custom_attributes",
+      "path": "/v2/customers/{{ config.customer_id }}/custom-attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "schema": "schemas/list_customer_custom_attributes.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_customer_custom_attribute",
+      "path": "/v2/customers/{{ config.customer_id }}/custom-attributes/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_customer_custom_attribute.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_devices",
+      "path": "/v2/devices",
+      "records": {
+        "path": "devices"
+      },
+      "schema": "schemas/list_devices.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_device_codes",
+      "path": "/v2/devices/codes",
+      "records": {
+        "path": "device_codes"
+      },
+      "schema": "schemas/list_device_codes.json"
+    },
+    {
+      "name": "get_device_code",
+      "path": "/v2/devices/codes/{{ config.id }}",
+      "records": {
+        "path": "device_code",
+        "single_object": true
+      },
+      "schema": "schemas/get_device_code.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_device",
+      "path": "/v2/devices/{{ config.device_id }}",
+      "records": {
+        "path": "device",
+        "single_object": true
+      },
+      "schema": "schemas/get_device.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_disputes",
+      "path": "/v2/disputes",
+      "records": {
+        "path": "disputes"
+      },
+      "schema": "schemas/list_disputes.json"
+    },
+    {
+      "name": "retrieve_dispute",
+      "path": "/v2/disputes/{{ config.dispute_id }}",
+      "records": {
+        "path": "dispute",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_dispute.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_dispute_evidence",
+      "path": "/v2/disputes/{{ config.dispute_id }}/evidence",
+      "records": {
+        "path": "evidence"
+      },
+      "schema": "schemas/list_dispute_evidence.json"
+    },
+    {
+      "name": "retrieve_dispute_evidence",
+      "path": "/v2/disputes/{{ config.dispute_id }}/evidence/{{ config.evidence_id }}",
+      "records": {
+        "path": "evidence",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_dispute_evidence.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_gift_cards",
+      "path": "/v2/gift-cards",
+      "records": {
+        "path": "gift_cards"
+      },
+      "schema": "schemas/list_gift_cards.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_gift_card_activities",
+      "path": "/v2/gift-cards/activities",
+      "records": {
+        "path": "gift_card_activities"
+      },
+      "schema": "schemas/list_gift_card_activities.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_gift_card",
+      "path": "/v2/gift-cards/{{ config.id }}",
+      "records": {
+        "path": "gift_card",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_gift_card.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_inventory_adjustment_reasons",
+      "path": "/v2/inventory/adjustment-reasons",
+      "records": {
+        "path": "adjustment_reasons"
+      },
+      "schema": "schemas/list_inventory_adjustment_reasons.json"
+    },
+    {
+      "name": "retrieve_inventory_adjustment",
+      "path": "/v2/inventory/adjustments/{{ config.adjustment_id }}",
+      "records": {
+        "path": "adjustment",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_inventory_adjustment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_inventory_physical_count",
+      "path": "/v2/inventory/physical-counts/{{ config.physical_count_id }}",
+      "records": {
+        "path": "count",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_inventory_physical_count.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_inventory_transfer",
+      "path": "/v2/inventory/transfers/{{ config.transfer_id }}",
+      "records": {
+        "path": "transfer",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_inventory_transfer.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_inventory_count",
+      "path": "/v2/inventory/{{ config.catalog_object_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_inventory_count.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_invoices",
+      "path": "/v2/invoices",
+      "records": {
+        "path": "invoices"
+      },
+      "schema": "schemas/list_invoices.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_invoice",
+      "path": "/v2/invoices/{{ config.invoice_id }}",
+      "records": {
+        "path": "invoice",
+        "single_object": true
+      },
+      "schema": "schemas/get_invoice.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_break_types",
+      "path": "/v2/labor/break-types",
+      "records": {
+        "path": "break_types"
+      },
+      "schema": "schemas/list_break_types.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_break_type",
+      "path": "/v2/labor/break-types/{{ config.id }}",
+      "records": {
+        "path": "break_type",
+        "single_object": true
+      },
+      "schema": "schemas/get_break_type.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_scheduled_shift",
+      "path": "/v2/labor/scheduled-shifts/{{ config.id }}",
+      "records": {
+        "path": "scheduled_shift",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_scheduled_shift.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_team_member_wages",
+      "path": "/v2/labor/team-member-wages",
+      "records": {
+        "path": "team_member_wages"
+      },
+      "schema": "schemas/list_team_member_wages.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_team_member_wage",
+      "path": "/v2/labor/team-member-wages/{{ config.id }}",
+      "records": {
+        "path": "team_member_wage",
+        "single_object": true
+      },
+      "schema": "schemas/get_team_member_wage.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_timecard",
+      "path": "/v2/labor/timecards/{{ config.id }}",
+      "records": {
+        "path": "timecard",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_timecard.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_workweek_configs",
+      "path": "/v2/labor/workweek-configs",
+      "records": {
+        "path": "workweek_configs"
+      },
+      "schema": "schemas/list_workweek_configs.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "list_location_custom_attribute_definitions",
+      "path": "/v2/locations/custom-attribute-definitions",
+      "records": {
+        "path": "custom_attribute_definitions"
+      },
+      "schema": "schemas/list_location_custom_attribute_definitions.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_location_custom_attribute_definition",
+      "path": "/v2/locations/custom-attribute-definitions/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute_definition",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_location_custom_attribute_definition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_location",
+      "path": "/v2/locations/{{ config.location_id }}",
+      "records": {
+        "path": "location",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_location.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_location_custom_attributes",
+      "path": "/v2/locations/{{ config.location_id }}/custom-attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "schema": "schemas/list_location_custom_attributes.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_location_custom_attribute",
+      "path": "/v2/locations/{{ config.location_id }}/custom-attributes/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_location_custom_attribute.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_loyalty_account",
+      "path": "/v2/loyalty/accounts/{{ config.account_id }}",
+      "records": {
+        "path": "loyalty_account",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_loyalty_account.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_loyalty_program",
+      "path": "/v2/loyalty/programs/{{ config.program_id }}",
+      "records": {
+        "path": "program",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_loyalty_program.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_loyalty_promotions",
+      "path": "/v2/loyalty/programs/{{ config.program_id }}/promotions",
+      "records": {
+        "path": "loyalty_promotions"
+      },
+      "schema": "schemas/list_loyalty_promotions.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_loyalty_promotion",
+      "path": "/v2/loyalty/programs/{{ config.program_id }}/promotions/{{ config.promotion_id }}",
+      "records": {
+        "path": "loyalty_promotion",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_loyalty_promotion.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_loyalty_reward",
+      "path": "/v2/loyalty/rewards/{{ config.reward_id }}",
+      "records": {
+        "path": "reward",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_loyalty_reward.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_merchants",
+      "path": "/v2/merchants",
+      "records": {
+        "path": "merchant"
+      },
+      "schema": "schemas/list_merchants.json"
+    },
+    {
+      "name": "list_merchant_custom_attribute_definitions",
+      "path": "/v2/merchants/custom-attribute-definitions",
+      "records": {
+        "path": "custom_attribute_definitions"
+      },
+      "schema": "schemas/list_merchant_custom_attribute_definitions.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_merchant_custom_attribute_definition",
+      "path": "/v2/merchants/custom-attribute-definitions/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute_definition",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_merchant_custom_attribute_definition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_merchant",
+      "path": "/v2/merchants/{{ config.merchant_id }}",
+      "records": {
+        "path": "merchant",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_merchant.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_merchant_custom_attributes",
+      "path": "/v2/merchants/{{ config.merchant_id }}/custom-attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "schema": "schemas/list_merchant_custom_attributes.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_merchant_custom_attribute",
+      "path": "/v2/merchants/{{ config.merchant_id }}/custom-attributes/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_merchant_custom_attribute.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_location_settings",
+      "path": "/v2/online-checkout/location-settings/{{ config.location_id }}",
+      "records": {
+        "path": "location_settings",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_location_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_merchant_settings",
+      "path": "/v2/online-checkout/merchant-settings",
+      "records": {
+        "path": "merchant_settings",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_merchant_settings.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_payment_links",
+      "path": "/v2/online-checkout/payment-links",
+      "records": {
+        "path": "payment_links"
+      },
+      "schema": "schemas/list_payment_links.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_payment_link",
+      "path": "/v2/online-checkout/payment-links/{{ config.id }}",
+      "records": {
+        "path": "payment_link",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_payment_link.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_order_custom_attribute_definitions",
+      "path": "/v2/orders/custom-attribute-definitions",
+      "records": {
+        "path": "custom_attribute_definitions"
+      },
+      "schema": "schemas/list_order_custom_attribute_definitions.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_order_custom_attribute_definition",
+      "path": "/v2/orders/custom-attribute-definitions/{{ config.key }}",
+      "records": {
+        "path": "custom_attribute_definition",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_order_custom_attribute_definition.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_order",
+      "path": "/v2/orders/{{ config.order_id }}",
+      "records": {
+        "path": "order",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_order.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_order_custom_attributes",
+      "path": "/v2/orders/{{ config.order_id }}/custom-attributes",
+      "records": {
+        "path": "custom_attributes"
+      },
+      "schema": "schemas/list_order_custom_attributes.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "retrieve_order_custom_attribute",
+      "path": "/v2/orders/{{ config.order_id }}/custom-attributes/{{ config.custom_attribute_key }}",
+      "records": {
+        "path": "custom_attribute",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_order_custom_attribute.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_payment",
+      "path": "/v2/payments/{{ config.payment_id }}",
+      "records": {
+        "path": "payment",
+        "single_object": true
+      },
+      "schema": "schemas/get_payment.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_payouts",
+      "path": "/v2/payouts",
+      "records": {
+        "path": "payouts"
+      },
+      "schema": "schemas/list_payouts.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_payout",
+      "path": "/v2/payouts/{{ config.payout_id }}",
+      "records": {
+        "path": "payout",
+        "single_object": true
+      },
+      "schema": "schemas/get_payout.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_payout_entries",
+      "path": "/v2/payouts/{{ config.payout_id }}/payout-entries",
+      "records": {
+        "path": "payout_entries"
+      },
+      "schema": "schemas/list_payout_entries.json",
+      "query": {
+        "limit": "100"
+      }
+    },
+    {
+      "name": "get_payment_refund",
+      "path": "/v2/refunds/{{ config.refund_id }}",
+      "records": {
+        "path": "refund",
+        "single_object": true
+      },
+      "schema": "schemas/get_payment_refund.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_sites",
+      "path": "/v2/sites",
+      "records": {
+        "path": "sites"
+      },
+      "schema": "schemas/list_sites.json"
+    },
+    {
+      "name": "retrieve_snippet",
+      "path": "/v2/sites/{{ config.site_id }}/snippet",
+      "records": {
+        "path": "snippet",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_snippet.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_subscription",
+      "path": "/v2/subscriptions/{{ config.subscription_id }}",
+      "records": {
+        "path": "subscription",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_subscription.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "list_jobs",
+      "path": "/v2/team-members/jobs",
+      "records": {
+        "path": "jobs"
+      },
+      "schema": "schemas/list_jobs.json"
+    },
+    {
+      "name": "retrieve_job",
+      "path": "/v2/team-members/jobs/{{ config.job_id }}",
+      "records": {
+        "path": "job",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_job.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_team_member",
+      "path": "/v2/team-members/{{ config.team_member_id }}",
+      "records": {
+        "path": "team_member",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_team_member.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_wage_setting",
+      "path": "/v2/team-members/{{ config.team_member_id }}/wage-setting",
+      "records": {
+        "path": "wage_setting",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_wage_setting.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_terminal_action",
+      "path": "/v2/terminals/actions/{{ config.action_id }}",
+      "records": {
+        "path": "action",
+        "single_object": true
+      },
+      "schema": "schemas/get_terminal_action.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_terminal_checkout",
+      "path": "/v2/terminals/checkouts/{{ config.checkout_id }}",
+      "records": {
+        "path": "checkout",
+        "single_object": true
+      },
+      "schema": "schemas/get_terminal_checkout.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "get_terminal_refund",
+      "path": "/v2/terminals/refunds/{{ config.terminal_refund_id }}",
+      "records": {
+        "path": "refund",
+        "single_object": true
+      },
+      "schema": "schemas/get_terminal_refund.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_transfer_order",
+      "path": "/v2/transfer-orders/{{ config.transfer_order_id }}",
+      "records": {
+        "path": "transfer_order",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_transfer_order.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "retrieve_vendor",
+      "path": "/v2/vendors/{{ config.vendor_id }}",
+      "records": {
+        "path": "vendor",
+        "single_object": true
+      },
+      "schema": "schemas/retrieve_vendor.json",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

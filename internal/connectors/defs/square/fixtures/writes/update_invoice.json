@@ -1,0 +1,21 @@
+{
+  "record": {
+    "invoice_id": "invoice_id_fixture",
+    "invoice": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/invoices/invoice_id_fixture",
+    "body": {
+      "invoice": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

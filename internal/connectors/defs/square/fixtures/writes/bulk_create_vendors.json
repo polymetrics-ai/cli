@@ -1,0 +1,16 @@
+{
+  "record": {
+    "vendors": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/vendors/bulk-create",
+    "body": {
+      "vendors": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "monthly_billing_anchor_date": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/subscriptions/subscription_id_fixture/billing-anchor",
+    "body": {
+      "monthly_billing_anchor_date": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "job": {
+      "id": "id_fixture"
+    },
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/team-members/jobs",
+    "body": {
+      "job": {
+        "id": "id_fixture"
+      },
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

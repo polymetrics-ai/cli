@@ -1,0 +1,20 @@
+{
+  "record": {
+    "custom_attribute_definition": {
+      "key": "key_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/customers/custom-attribute-definitions",
+    "body": {
+      "custom_attribute_definition": {
+        "key": "key_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

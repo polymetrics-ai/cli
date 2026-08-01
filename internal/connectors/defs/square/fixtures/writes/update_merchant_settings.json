@@ -1,0 +1,20 @@
+{
+  "record": {
+    "merchant_settings": {
+      "payment_methods": {}
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/online-checkout/merchant-settings",
+    "body": {
+      "merchant_settings": {
+        "payment_methods": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

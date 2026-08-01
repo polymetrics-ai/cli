@@ -1,0 +1,21 @@
+{
+  "record": {
+    "location_id": "location_id_fixture",
+    "payment_id": "payment_id_fixture",
+    "type": "FULL",
+    "reason": "reason_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/location_id_fixture/refunds",
+    "body": {
+      "payment_id": "payment_id_fixture",
+      "type": "FULL",
+      "reason": "reason_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

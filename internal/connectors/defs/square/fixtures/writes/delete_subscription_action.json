@@ -1,0 +1,14 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "action_id": "action_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/subscriptions/subscription_id_fixture/actions/action_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

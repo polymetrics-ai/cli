@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/labor/scheduled-shifts/id_fixture/publish",
+    "body": {
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

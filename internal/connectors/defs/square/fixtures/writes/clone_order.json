@@ -1,0 +1,16 @@
+{
+  "record": {
+    "order_id": "order_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orders/clone",
+    "body": {
+      "order_id": "order_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

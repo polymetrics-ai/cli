@@ -1,0 +1,22 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "amount_money": {
+      "amount": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/refunds",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "amount_money": {
+        "amount": 1
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

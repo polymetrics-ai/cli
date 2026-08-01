@@ -1,0 +1,14 @@
+{
+  "record": {
+    "location_id": "location_id_fixture",
+    "key": "key_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/locations/location_id_fixture/custom-attributes/key_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "booking_id": "booking_id_fixture",
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/bookings/booking_id_fixture/cancel",
+    "body": {
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "team_member_id": "team_member_id_fixture",
+    "wage_setting": {
+      "team_member_id": "team_member_id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/team-members/team_member_id_fixture/wage-setting",
+    "body": {
+      "wage_setting": {
+        "team_member_id": "team_member_id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

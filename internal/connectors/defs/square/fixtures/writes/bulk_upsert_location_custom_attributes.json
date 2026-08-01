@@ -1,0 +1,16 @@
+{
+  "record": {
+    "values": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/locations/custom-attributes/bulk-upsert",
+    "body": {
+      "values": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

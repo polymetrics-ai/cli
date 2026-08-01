@@ -1,0 +1,21 @@
+{
+  "record": {
+    "order_id": "order_id_fixture",
+    "order": {
+      "location_id": "location_id_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/orders/order_id_fixture",
+    "body": {
+      "order": {
+        "location_id": "location_id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "new_plan_variation_id": "new_plan_variation_id_fixture",
+    "old_plan_variation_id": "old_plan_variation_id_fixture",
+    "location_id": "location_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/subscriptions/bulk-swap-plan",
+    "body": {
+      "new_plan_variation_id": "new_plan_variation_id_fixture",
+      "old_plan_variation_id": "old_plan_variation_id_fixture",
+      "location_id": "location_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
