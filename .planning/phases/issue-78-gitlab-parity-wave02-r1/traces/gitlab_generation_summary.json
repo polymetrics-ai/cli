@@ -3,10 +3,10 @@
   "api_surface_endpoints": 1147,
   "lane_counts": {
     "etl_read": 308,
-    "reverse_etl_write": 640,
+    "reverse_etl_write": 637,
     "cdc_changefeed": 15,
     "binary_file": 178,
-    "direct_read_query_search": 3,
+    "direct_read_query_search": 6,
     "excluded_not_applicable": 2
   },
   "covered_streams": [

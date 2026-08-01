@@ -4,7 +4,7 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4 
 
 Implemented fixture-backed streams: `projects`, `groups`, `users`, `issues`.
 
-The complete official ledger has 1,146 operations: 308 ETL/read, 640 reverse-ETL write/mutation, 3 direct/provider query/search, 178 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.
+The complete official ledger has 1,146 operations: 308 ETL/read, 637 reverse-ETL write/mutation, 6 direct/provider query/search/metadata, 178 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.
 
 Only the four streams are executable in this wave. `api_surface.json`, `operations.json`, and `cli_surface.json` keep every other operation represented as typed planned/blocked metadata until a future connector-local stream/action/command adds fixtures and execution evidence.
 
@@ -42,7 +42,7 @@ Planned ETL/read rows in `operations.json` are metadata only. They are not adver
 
 No `writes.json` actions are executable in this wave, and connector metadata keeps `capabilities.write=false` until named actions and fixtures are added.
 
-The official ledger still includes all 640 mutation operations, including DELETE, destructive, admin, token/key/variable, hook, runner, package delete, and other high-risk operations. These are not blanket-excluded as unsafe. They are represented as planned/blocked typed metadata with risk, source URL, bounded request schemas where available, and approval notes.
+The official ledger still includes all 637 mutation operations, including DELETE, destructive, admin, token/key/variable, hook, runner, package delete, and other high-risk operations. These are not blanket-excluded as unsafe. They are represented as planned/blocked typed metadata with risk, source URL, bounded request schemas where available, and approval notes.
 
 Before any GitLab mutation can execute it must become a named reverse-ETL action with:
 
@@ -59,10 +59,10 @@ No generic HTTP method/path/body, arbitrary GraphQL, shell, file, SQL write/read
 
 - Fixture-backed implementation remains limited to 4 streams; all other official operations are planned/blocked metadata.
 - This connector is not live-certified; fixture success must not be reported as provider certification.
-- Direct/provider search/query rows depend on shared foundation #2985 before execution can be claimed.
+- Direct/provider search/query/metadata rows depend on shared foundation #2985 before execution can be claimed.
 - Binary/file transfer rows depend on shared foundation #2987 before bounded download/upload execution can be claimed.
 - CDC/changefeed/audit/webhook rows depend on shared foundations #2986 and #2988 before CDC/changefeed claims can be made.
 - Destructive/admin write rows depend on per-action schemas, redaction, fixtures, and typed confirmation evidence before execution can be claimed.
 - The current top-level `/users` stream is fixture-backed legacy behavior; the pinned OpenAPI source omits that exact row, so api surface coverage uses a connector-local supplemental row and does not mark project-scoped users as implemented.
 - The two excluded rows are GitLab Slack integration callback endpoints (`/integrations/slack/interactions` and `/integrations/slack/options`), not user-invoked connector operations.
-- Generated lane counts: etl_read=308, reverse_etl_write=640, direct_read_query_search=3, binary_file=178, cdc_changefeed=15, excluded_not_applicable=2.
+- Generated lane counts: etl_read=308, reverse_etl_write=637, direct_read_query_search=6, binary_file=178, cdc_changefeed=15, excluded_not_applicable=2.

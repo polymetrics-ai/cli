@@ -26,8 +26,8 @@ MASTER_BRANCH_URL = "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repo
 METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 PARENT_COUNTS = {
     "etl_read": 308,
-    "reverse_etl_write": 640,
-    "direct_read_query_search": 3,
+    "reverse_etl_write": 637,
+    "direct_read_query_search": 6,
     "binary_file": 178,
     "cdc_changefeed": 15,
     "excluded_not_applicable": 2,
@@ -172,6 +172,8 @@ def lane_for(op: dict[str, Any]) -> str:
         return "reverse_etl_write"
     if key in DIRECT:
         return "direct_read_query_search"
+    if op["method"] == "HEAD":
+        return "direct_read_query_search"
     blob = op_blob(op)
     if "event" in blob or "hook" in blob:
         if not op["path"].startswith("/api/v4/usage_data/") and key != (
@@ -302,8 +304,63 @@ def clean_schema(schema: Any, spec: dict[str, Any], depth: int = 0) -> Any:
     return out or {"type": "object"}
 
 
-def parameter_contract(op: dict[str, Any], spec: dict[str, Any]) -> tuple[dict[str, str], dict[str, Any] | None]:
-    query_contract: dict[str, str] = {}
+def cli_type_for_schema(schema: dict[str, Any]) -> str:
+    if schema.get("enum"):
+        return "enum"
+    typ = schema.get("type", "string")
+    if typ == "boolean":
+        return "boolean"
+    if typ == "integer":
+        return "integer"
+    if typ == "array":
+        return "string_array"
+    return "string"
+
+
+def cli_flag_name(location: str, name: str) -> str:
+    normalized = re.sub(r"([a-z0-9])([A-Z])", r"\1-\2", name).lower()
+    normalized = normalized.replace("_", "-")
+    normalized = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-") or "value"
+    return f"{location}-{normalized}"
+
+
+def cli_flag_for_param(location: str, name: str, param: dict[str, Any], schema: dict[str, Any], required: bool) -> dict[str, Any]:
+    flag: dict[str, Any] = {
+        "name": cli_flag_name(location, name),
+        "type": cli_type_for_schema(schema),
+        "summary": clean_text(param.get("description"), f"{location} parameter {name}"),
+        "maps_to": f"{location}.{name}",
+    }
+    if schema.get("enum"):
+        flag["values"] = [str(value) for value in schema["enum"]]
+    if schema.get("format") == "date-time":
+        flag["format"] = "date-time"
+    if required:
+        flag["allow_empty"] = False
+    return flag
+
+
+def add_cli_flag(flags: list[dict[str, Any]], flag: dict[str, Any], seen_maps_to: set[str], seen_names: set[str]) -> None:
+    maps_to = str(flag.get("maps_to"))
+    if maps_to in seen_maps_to:
+        return
+    base_name = str(flag["name"])
+    name = base_name
+    i = 2
+    while name in seen_names:
+        name = f"{base_name}-{i}"
+        i += 1
+    flag["name"] = name
+    seen_maps_to.add(maps_to)
+    seen_names.add(name)
+    flags.append(flag)
+
+
+def parameter_contract(op: dict[str, Any], spec: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, Any] | None]:
+    flags: list[dict[str, Any]] = []
+    fixed_query: dict[str, str] = {}
+    seen_maps_to: set[str] = set()
+    seen_names: set[str] = set()
     body_schema: dict[str, Any] | None = None
     form_props: dict[str, Any] = {}
     form_required: list[str] = []
@@ -314,20 +371,26 @@ def parameter_contract(op: dict[str, Any], spec: dict[str, Any]) -> tuple[dict[s
         name = param.get("name")
         if location in {"path", "query"} and name:
             schema = json_type_for_param(param)
-            typ = schema.get("type", "string")
-            required = "required" if location == "path" or param.get("required") else "optional"
-            query_contract[f"{location}.{name}"] = f"{typ}|{required}"
+            enum = schema.get("enum")
+            if location == "query" and isinstance(enum, list) and len(enum) == 1:
+                fixed_query[str(name)] = str(enum[0])
+                continue
+            required = location == "path" or bool(param.get("required"))
+            add_cli_flag(flags, cli_flag_for_param(location, str(name), param, schema, required), seen_maps_to, seen_names)
         elif location == "body":
             body_schema = clean_schema(param.get("schema") or {"type": "object"}, spec)
         elif location == "formData" and name:
-            form_props[name] = json_type_for_param(param)
-            if param.get("required"):
-                form_required.append(name)
+            schema = json_type_for_param(param)
+            form_props[str(name)] = schema
+            required = bool(param.get("required"))
+            if required:
+                form_required.append(str(name))
+            add_cli_flag(flags, cli_flag_for_param("body", str(name), param, schema, required), seen_maps_to, seen_names)
     if form_props:
         body_schema = {"type": "object", "properties": form_props}
         if form_required:
             body_schema["required"] = sorted(form_required)
-    return dict(sorted(query_contract.items())), body_schema
+    return flags, dict(sorted(fixed_query.items())), body_schema
 
 
 def collect_operations(spec: dict[str, Any]) -> list[dict[str, Any]]:
@@ -348,6 +411,16 @@ def collect_operations(spec: dict[str, Any]) -> list[dict[str, Any]]:
             rows.append(op)
     # Preserve official path order while making repeated runs deterministic.
     return rows
+
+
+def api_operation_notes(lane: str) -> str:
+    if lane == "reverse_etl_write":
+        return "DELETE/destructive/admin operations stay in scope; execution requires a named action with destructive confirmation plus plan -> preview -> explicit approval -> execute evidence."
+    if lane == "binary_file":
+        return "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+    if lane == "cdc_changefeed":
+        return "Changefeed/audit/webhook rows stay blocked until connector-local CDC or webhook fixtures and delivery semantics are verified."
+    return "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
 
 
 def api_surface_row(op: dict[str, Any], lane: str, op_id: str) -> dict[str, Any]:
@@ -376,7 +449,7 @@ def api_surface_row(op: dict[str, Any], lane: str, op_id: str) -> dict[str, Any]
         "blocked_by_default": True,
         "reason": f"planned GitLab {lane} operation; connector-local typed metadata exists as {op_id}, but no verified executable stream/action/command is claimed in this wave",
         "source_url": source_url,
-        "notes": "DELETE/destructive/admin operations stay in scope; execution requires a named action with destructive confirmation plus plan -> preview -> explicit approval -> execute evidence.",
+        "notes": api_operation_notes(lane),
     }
     return row
 
@@ -393,30 +466,34 @@ def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any
         approval = "typed_confirmation + plan_preview_approval_execute" if destructive or admin else "plan_preview_approval_execute"
     else:
         approval = "none; planned bounded connector command/stream required before execution"
-    output_policy = "binary_bounded" if lane == "binary_file" else "json_redacted"
-    if lane == "excluded_not_applicable" or op["method"] == "HEAD":
+    output_policy = "binary_file_bounded" if lane == "binary_file" else "json_redacted"
+    if lane == "excluded_not_applicable":
         kind = "composite"
+    elif lane == "binary_file" and op["method"] == "GET":
+        kind = "binary_download"
     elif is_write_method(op) and not (lane == "direct_read_query_search" and op["method"] == "POST"):
         kind = "rest_write"
     else:
         kind = "rest_read"
-    query_contract, body_schema = parameter_contract(op, spec)
-    rest: dict[str, Any] = {
-        "method": op["method"],
-        "path": relative_path(op["path"]),
-        "max_bytes": 16 * 1024 * 1024 if lane == "binary_file" else (10 * 1024 * 1024 if lane in {"direct_read_query_search", "cdc_changefeed"} else 1024 * 1024),
-    }
-    consumes = list(op.get("consumes") or [])
-    if consumes:
-        rest["content_type"] = consumes[0]
-    elif body_schema is not None or (kind == "rest_read" and op["method"] == "POST"):
-        rest["content_type"] = "application/json"
-    if query_contract:
-        rest["query"] = query_contract
-    if body_schema is not None:
-        rest["body_schema"] = body_schema
-    elif kind == "rest_read" and op["method"] == "POST":
-        rest["body_schema"] = {"type": "object"}
+    _flags, fixed_query, body_schema = parameter_contract(op, spec)
+    rest: dict[str, Any] | None = None
+    if kind in {"rest_read", "rest_write"}:
+        rest = {
+            "method": op["method"],
+            "path": relative_path(op["path"]),
+            "max_bytes": 10 * 1024 * 1024 if lane in {"direct_read_query_search", "cdc_changefeed"} else 1024 * 1024,
+        }
+        consumes = list(op.get("consumes") or [])
+        if consumes:
+            rest["content_type"] = consumes[0]
+        elif body_schema is not None or (kind == "rest_read" and op["method"] == "POST"):
+            rest["content_type"] = "application/json"
+        if fixed_query:
+            rest["query"] = fixed_query
+        if body_schema is not None:
+            rest["body_schema"] = body_schema
+        elif kind == "rest_read" and op["method"] == "POST":
+            rest["body_schema"] = {"type": "object"}
     row: dict[str, Any] = {
         "id": op_id,
         "kind": kind,
@@ -432,6 +509,14 @@ def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any
     }
     if kind == "composite":
         row["composite"] = {"steps": [f"{op['method']} {relative_path(op['path'])} planned metadata only"]}
+    elif kind == "binary_download":
+        row["binary"] = {
+            "method": op["method"],
+            "path": relative_path(op["path"]),
+            "max_bytes": 16 * 1024 * 1024,
+            "allow_overwrite": False,
+            "extract_archives": False,
+        }
     else:
         row["rest"] = rest
     if destructive:
@@ -462,7 +547,7 @@ def cli_command_for_stream(stream: str, method: str, path: str, source_url: str 
     }
 
 
-def cli_command_for_operation(op: dict[str, Any], lane: str, op_id: str) -> dict[str, Any]:
+def cli_command_for_operation(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any]) -> dict[str, Any]:
     method = op["method"].lower()
     slug = re.sub(r"[^a-z0-9]+", "-", relative_path(op["path"]).lower()).strip("-") or "root"
     if lane == "etl_read":
@@ -489,20 +574,27 @@ def cli_command_for_operation(op: dict[str, Any], lane: str, op_id: str) -> dict
     key = (op["method"], op["path"])
     if key in STREAM_COVERAGE:
         stream = STREAM_COVERAGE[key]
-        cmd = cli_command_for_stream(stream, op["method"], relative_path(op["path"]))
-    elif lane != "excluded_not_applicable":
+        return cli_command_for_stream(stream, op["method"], relative_path(op["path"]))
+    if lane != "excluded_not_applicable":
         cmd["api_surface"] = [{"method": op["method"], "path": relative_path(op["path"])}]
+    flags, _fixed_query, _body_schema = parameter_contract(op, spec)
+    if flags:
+        cmd["flags"] = flags
     if intent == "reverse_etl":
         cmd["risk"] = "Planned GitLab mutation; execution requires a named reverse-ETL action with typed schema, redaction, and safety evidence."
         cmd["approval"] = "Reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive/admin writes also require typed confirmation."
     if intent == "direct_read":
-        cmd["output_policy"] = "json_redacted"
-        cmd["risk"] = "Planned bounded read/query/binary metadata; no live provider call is made by this metadata."
+        if lane == "binary_file":
+            cmd["output_policy"] = "binary_file_bounded"
+            cmd["risk"] = "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+        else:
+            cmd["output_policy"] = "json_redacted"
+            cmd["risk"] = "Planned bounded read/query/metadata; no live provider call is made by this metadata."
     return cmd
 
 
-def build_cli_surface(ops: list[dict[str, Any]], lanes: dict[tuple[str, str], str], ids: dict[tuple[str, str], str]) -> dict[str, Any]:
-    commands = [cli_command_for_operation(op, lanes[(op["method"], op["path"])], ids[(op["method"], op["path"])]) for op in ops]
+def build_cli_surface(ops: list[dict[str, Any]], lanes: dict[tuple[str, str], str], ids: dict[tuple[str, str], str], spec: dict[str, Any]) -> dict[str, Any]:
+    commands = [cli_command_for_operation(op, lanes[(op["method"], op["path"])], ids[(op["method"], op["path"])], spec) for op in ops]
     for row in SUPPLEMENTAL_STREAM_ROWS:
         commands.append(
             cli_command_for_stream(
@@ -552,7 +644,7 @@ def build_docs(counts: Counter[str]) -> str:
         "",
         "Implemented fixture-backed streams: `projects`, `groups`, `users`, `issues`.",
         "",
-        f"The complete official ledger has 1,146 operations: {counts['etl_read']} ETL/read, {counts['reverse_etl_write']} reverse-ETL write/mutation, {counts['direct_read_query_search']} direct/provider query/search, {counts['binary_file']} binary/file read/transfer, {counts['cdc_changefeed']} CDC/changefeed/audit/webhook, and {counts['excluded_not_applicable']} excluded/not-applicable callback endpoints.",
+        f"The complete official ledger has 1,146 operations: {counts['etl_read']} ETL/read, {counts['reverse_etl_write']} reverse-ETL write/mutation, {counts['direct_read_query_search']} direct/provider query/search/metadata, {counts['binary_file']} binary/file read/transfer, {counts['cdc_changefeed']} CDC/changefeed/audit/webhook, and {counts['excluded_not_applicable']} excluded/not-applicable callback endpoints.",
         "",
         "Only the four streams are executable in this wave. `api_surface.json`, `operations.json`, and `cli_surface.json` keep every other operation represented as typed planned/blocked metadata until a future connector-local stream/action/command adds fixtures and execution evidence.",
         "",
@@ -607,7 +699,7 @@ def build_docs(counts: Counter[str]) -> str:
         "",
         "- Fixture-backed implementation remains limited to 4 streams; all other official operations are planned/blocked metadata.",
         "- This connector is not live-certified; fixture success must not be reported as provider certification.",
-        "- Direct/provider search/query rows depend on shared foundation #2985 before execution can be claimed.",
+        "- Direct/provider search/query/metadata rows depend on shared foundation #2985 before execution can be claimed.",
         "- Binary/file transfer rows depend on shared foundation #2987 before bounded download/upload execution can be claimed.",
         "- CDC/changefeed/audit/webhook rows depend on shared foundations #2986 and #2988 before CDC/changefeed claims can be made.",
         "- Destructive/admin write rows depend on per-action schemas, redaction, fixtures, and typed confirmation evidence before execution can be claimed.",
@@ -666,7 +758,7 @@ def main() -> None:
         "endpoints": api_rows_with_supplemental,
     }
     operations = {"operations": operation_rows}
-    cli_surface = build_cli_surface(ops, lanes, ids)
+    cli_surface = build_cli_surface(ops, lanes, ids, spec)
     certification = {
         "schema_version": 1,
         "source": {

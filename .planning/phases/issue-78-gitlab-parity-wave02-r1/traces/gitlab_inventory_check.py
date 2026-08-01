@@ -49,6 +49,10 @@ def operation_keys(rows: list[dict[str, object]]) -> set[tuple[str, str]]:
         if isinstance(rest, dict):
             keys.add((str(rest.get("method")), str(rest.get("path"))))
             continue
+        binary = row.get("binary")
+        if isinstance(binary, dict):
+            keys.add((str(binary.get("method")), str(binary.get("path"))))
+            continue
         composite = row.get("composite")
         if isinstance(composite, dict):
             steps = composite.get("steps")

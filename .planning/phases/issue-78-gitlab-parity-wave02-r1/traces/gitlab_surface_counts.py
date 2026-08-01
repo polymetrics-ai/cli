@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[4]
 DEF_DIR = ROOT / "internal/connectors/defs/gitlab"
 EXPECTED = {
     "gitlab.etl_read": 308,
-    "gitlab.reverse_etl_write": 640,
-    "gitlab.direct_read_query_search": 3,
+    "gitlab.reverse_etl_write": 637,
+    "gitlab.direct_read_query_search": 6,
     "gitlab.binary_file": 178,
     "gitlab.cdc_changefeed": 15,
     "gitlab.excluded_not_applicable": 2,
@@ -26,6 +26,9 @@ def row_key(row: dict[str, Any]) -> tuple[str, str] | None:
     rest = row.get("rest")
     if isinstance(rest, dict):
         return str(rest.get("method")), str(rest.get("path"))
+    binary = row.get("binary")
+    if isinstance(binary, dict):
+        return str(binary.get("method")), str(binary.get("path"))
     composite = row.get("composite")
     if isinstance(composite, dict):
         steps = composite.get("steps")
@@ -94,22 +97,53 @@ def main() -> int:
     for op in operations:
         key = row_key(op)
         if key is None:
-            problems.append(f"{op.get('id')} has no REST/composite key")
+            problems.append(f"{op.get('id')} has no REST/binary/composite key")
             continue
         method, _ = key
         audit_event = op.get("audit_event")
+        command = cli_by_operation.get(op.get("id"), {})
+        rest = op.get("rest")
+        if isinstance(rest, dict):
+            query = rest.get("query")
+            if isinstance(query, dict):
+                for query_key, query_value in query.items():
+                    if str(query_key).startswith(("path.", "query.", "body.")) or "|required" in str(query_value) or "|optional" in str(query_value):
+                        problems.append(f"{op.get('id')} rest.query contains parameter contract {query_key}={query_value}")
+                        break
         if method in WRITE_METHODS and audit_event not in {"gitlab.reverse_etl_write", "gitlab.excluded_not_applicable"}:
             problems.append(f"{op.get('id')} write method classified as {audit_event}")
+        if method == "HEAD":
+            if audit_event != "gitlab.direct_read_query_search":
+                problems.append(f"{op.get('id')} HEAD audit_event={audit_event}")
+            if op.get("kind") != "rest_read":
+                problems.append(f"{op.get('id')} HEAD kind={op.get('kind')}")
+            if command.get("intent") != "direct_read":
+                problems.append(f"{op.get('id')} HEAD cli intent={command.get('intent')!r}")
+            if "Reverse ETL" in str(command.get("approval", "")) or "mutation" in str(command.get("risk", "")):
+                problems.append(f"{op.get('id')} HEAD still has write safety text")
+        if audit_event == "gitlab.binary_file":
+            binary = op.get("binary")
+            if op.get("kind") != "binary_download":
+                problems.append(f"{op.get('id')} binary kind={op.get('kind')}")
+            if not isinstance(binary, dict):
+                problems.append(f"{op.get('id')} missing binary block")
+            elif binary.get("method") != "GET" or not binary.get("path"):
+                problems.append(f"{op.get('id')} invalid binary block {binary}")
+            if op.get("rest") is not None:
+                problems.append(f"{op.get('id')} binary row still has rest block")
+            if op.get("output_policy") != "binary_file_bounded":
+                problems.append(f"{op.get('id')} binary output_policy={op.get('output_policy')!r}")
+            if command.get("output_policy") != "binary_file_bounded":
+                problems.append(f"{op.get('id')} binary cli output_policy={command.get('output_policy')!r}")
         if method == "DELETE":
-            command = cli_by_operation.get(op.get("id"), {})
             if op.get("destructive") is not True:
                 problems.append(f"{op.get('id')} DELETE missing destructive=true")
             if op.get("approval") != TYPED_DESTRUCTIVE_APPROVAL:
                 problems.append(f"{op.get('id')} DELETE approval={op.get('approval')!r}")
             if audit_event != "gitlab.reverse_etl_write":
                 problems.append(f"{op.get('id')} DELETE audit_event={audit_event}")
-            if op.get("output_policy") == "binary_bounded":
-                problems.append(f"{op.get('id')} DELETE still uses binary_bounded output")
+            if op.get("output_policy") in {"binary_bounded", "binary_file_bounded"}:
+                problems.append(f"{op.get('id')} DELETE uses binary output policy")
             if command.get("intent") != "reverse_etl":
                 problems.append(f"{op.get('id')} DELETE cli intent={command.get('intent')!r}")
     if problems:
