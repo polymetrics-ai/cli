@@ -3,7 +3,7 @@
   "docs": "https://community.workday.com/sites/default/files/file-hosting/restapi/index.html",
   "reviewed_at": "2026-08-01",
   "operation_ledger_version": 1,
-  "scope": "Generated from the official Workday REST services2026.30.json productionConfidenceLevel manifest (52 services). Archived services are not counted. HTTP operation counts: total=920, GET=655, POST=154, PATCH=58, PUT=20, DELETE=33. Post-change connector dispositions: streams=463, direct_read=174, writes=252, blocked_binary_or_contract_gap=31.",
+  "scope": "Generated from the official Workday REST services2026.30.json productionConfidenceLevel manifest (52 services). Archived services are not counted. HTTP operation counts: total=920, GET=655, POST=154, PATCH=58, PUT=20, DELETE=33. Post-change connector dispositions: streams=463, direct_read=174, writes=251, blocked_binary_or_contract_gap=32.",
   "endpoints": [
     {
       "method": "GET",
@@ -6606,8 +6606,14 @@
     {
       "method": "POST",
       "path": "/wql/v1/data",
-      "covered_by": {
-        "write": "create_wql_v1_wql_v1_data"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "POST /wql/v1/data accepts a free-form WQL query string and is blocked as a generic query passthrough until named, bounded, typed direct-read or query actions are reviewed.",
+        "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/wql_v1_20260727_oas2.json",
+        "notes": "official_lane=generic_query_contract_gap; service=WQL v1; spec_file=wql_v1_20260727_oas2.json; summary=WQL Query; consumes=application/json; produces=application/json"
       }
     },
     {

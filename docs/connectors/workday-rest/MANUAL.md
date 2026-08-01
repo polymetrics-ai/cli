@@ -2411,9 +2411,6 @@ REVERSE ETL ACTIONS
   create_worktag_v1_worktag_v1_validate_worktags:
     endpoint: POST /worktag/v1/validateWorktags
     risk: POST /worktag/v1/validateWorktags against Workday REST Worktag v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/worktag_v1_20260727_oas2.json
-  create_wql_v1_wql_v1_data:
-    endpoint: POST /wql/v1/data
-    risk: POST /wql/v1/data against Workday REST Wql v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/wql_v1_20260727_oas2.json
 
 SECURITY
   read risk: external Workday REST reads can include HR, recruiting, procurement, and financial tenant data; fixtures are synthetic and live reads require caller-provided credentials

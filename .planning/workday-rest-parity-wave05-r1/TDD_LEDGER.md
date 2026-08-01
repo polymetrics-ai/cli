@@ -10,7 +10,7 @@
 
 - First generated bundle failed conformance because `spec.json` used root `additionalProperties`, which the repo-local spec meta-schema rejects.
 - First generated fixtures failed conformance because stream fixtures were not wrapped in the recorded `request`/`response` shape and the check fixture omitted `request.query.limit=1`.
-- First generated write fixtures exposed path mismatches where body fields named `id` overwrote path-field samples; generation now preserves path-field values and skips duplicate body properties.
+- First generated write fixtures exposed path mismatches where body fields named `id` overwrote path-field samples; generation now preserves path-field values and skips duplicate body properties. Review blocked the generated `POST /wql/v1/data` WQL free-form query action as a generic query passthrough, so that operation is now a blocked ledger row instead of a write action.
 
 ## Green checks after implementation
 

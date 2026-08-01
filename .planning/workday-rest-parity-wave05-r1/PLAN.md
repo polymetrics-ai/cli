@@ -23,9 +23,9 @@ Allowed files are the Workday REST bundle under `internal/connectors/defs/workda
 2. `api_surface.json` partitions all 920 current production operations exactly once using service `basePath + path` for disambiguation.
 3. Implemented 463 JSON resource GET operations as fixture-backed streams.
 4. Implemented 174 Workday values/search GET operations as bounded direct reads with `clinical_json_redacted` output policy and 1 MiB caps.
-5. Implemented 252 non-binary/non-fixed-query mutation operations as typed write actions with closed root record schemas, path-field redaction, risk text, and destructive delete confirmation/idempotent 404 handling.
-6. Marked 31 binary/file/fixed-query current-contract gaps as blocked operation-ledger rows with official source evidence. No raw query/path/body or binary passthrough was added.
-7. Added 463 stream fixtures, 252 write request-shape fixtures, Workday CLI direct-read metadata, fixture-only certification metadata, generated connector docs/catalog/website data, and updated CLI golden transcripts.
+5. Implemented 251 non-binary/non-generic-query mutation operations as typed write actions with closed root record schemas, path-field redaction, risk text, and destructive delete confirmation/idempotent 404 handling.
+6. Marked 32 binary/file/fixed-query/generic-query current-contract gaps as blocked operation-ledger rows with official source evidence. No raw query/path/body or binary passthrough was added.
+7. Added 463 stream fixtures, 251 write request-shape fixtures, Workday CLI direct-read metadata, fixture-only certification metadata, generated connector docs/catalog/website data, and updated CLI golden transcripts.
 
 ## Safety constraints
 

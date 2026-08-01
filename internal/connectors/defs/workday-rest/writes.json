@@ -40997,24 +40997,6 @@
       },
       "risk": "POST /worktag/v1/validateWorktags against Workday REST Worktag v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/worktag_v1_20260727_oas2.json",
       "redact_fields": []
-    },
-    {
-      "name": "create_wql_v1_wql_v1_data",
-      "kind": "create",
-      "method": "POST",
-      "path": "/wql/v1/data",
-      "record_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "query": {
-            "type": "string",
-            "description": "WQL Query."
-          }
-        }
-      },
-      "risk": "POST /wql/v1/data against Workday REST Wql v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/wql_v1_20260727_oas2.json",
-      "redact_fields": []
     }
   ]
 }

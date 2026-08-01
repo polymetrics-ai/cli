@@ -3,7 +3,7 @@
 Completed verification:
 
 - [x] Official inventory generation summary from fetched Workday 2026.30 docs: 52 production services, 920 HTTP operations (`GET` 655, `POST` 154, `PATCH` 58, `PUT` 20, `DELETE` 33).
-- [x] Post-change Workday counts from generated files: `api_surface` rows 920; streams 463; direct read operations/commands 174; writes 252; blocked binary/file or current-contract gaps 31; stream fixtures 463; write fixtures 252; certified 0.
+- [x] Post-change Workday counts from generated files: `api_surface` rows 920; streams 463; direct read operations/commands 174; writes 251; blocked binary/file or current-contract gaps 32; stream fixtures 463; write fixtures 251; certified 0.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` filtered for `workday-rest`: 0 findings.
 - [x] `go test ./internal/connectors/conformance -run 'TestConformance/workday-rest' -count=1`: pass.
 - [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1 -timeout=10m`: pass.
