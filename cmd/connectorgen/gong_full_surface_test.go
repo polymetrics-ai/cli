@@ -193,9 +193,24 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 
 	minimumExampleFlags := map[string][]string{
+		"calls get":                          {"id"},
 		"permissions profiles list":          {"workspaceId"},
+		"permissions profile get":            {"profileId"},
+		"permissions profile-users list":     {"profileId"},
+		"crm entity-schema get":              {"integrationId", "objectType"},
+		"crm entities get":                   {"integrationId", "objectType", "objectsCrmIds"},
+		"crm request-status get":             {"integrationId", "clientRequestId"},
+		"users get":                          {"id"},
+		"users settings-history":             {"id"},
 		"flows list":                         {"flowOwnerEmail"},
 		"flows folders list":                 {"flowFolderOwnerEmail"},
+		"flows bulk-assignment get":          {"id"},
+		"entities get-brief":                 {"workspaceId", "briefName", "crmEntityType", "crmEntityId", "timePeriod"},
+		"entities ask":                       {"workspaceId", "crmEntityType", "crmEntityId", "timePeriod", "question"},
+		"privacy find-phone":                 {"phoneNumber"},
+		"privacy find-email":                 {"emailAddress"},
+		"logs list":                          {"logType", "fromDateTime"},
+		"coaching list":                      {"workspace-id", "manager-id", "from", "to"},
 		"targets list":                       {"workspaceId"},
 		"calls extensive":                    {"call-id"},
 		"calls users-access get":             {"call-id"},
@@ -251,6 +266,53 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 	assertGongFlag(t, flagsByPath, "permissions profiles list", "workspaceId", "query.workspaceId", "integer", nil)
 	assertGongRequiredConstraint(t, constraintsByPath, "permissions profiles list", "query.workspaceId")
+	assertGongFlag(t, flagsByPath, "permissions profile get", "profileId", "query.profileId", "string", boolPtr(false))
+	assertGongRequiredConstraint(t, constraintsByPath, "permissions profile get", "query.profileId")
+	assertGongFlag(t, flagsByPath, "permissions profile-users list", "profileId", "query.profileId", "string", boolPtr(false))
+	assertGongRequiredConstraint(t, constraintsByPath, "permissions profile-users list", "query.profileId")
+	assertGongFlag(t, flagsByPath, "crm entity-schema get", "integrationId", "query.integrationId", "integer", nil)
+	assertGongFlag(t, flagsByPath, "crm entity-schema get", "objectType", "query.objectType", "enum", boolPtr(false))
+	assertGongRequiredConstraint(t, constraintsByPath, "crm entity-schema get", "query.integrationId")
+	assertGongRequiredConstraint(t, constraintsByPath, "crm entity-schema get", "query.objectType")
+	assertGongFlag(t, flagsByPath, "crm entities get", "integrationId", "query.integrationId", "integer", nil)
+	assertGongFlag(t, flagsByPath, "crm entities get", "objectType", "query.objectType", "enum", boolPtr(false))
+	assertGongFlag(t, flagsByPath, "crm entities get", "objectsCrmIds", "query.objectsCrmIds", "string", boolPtr(false))
+	assertGongRequiredConstraint(t, constraintsByPath, "crm entities get", "query.integrationId")
+	assertGongRequiredConstraint(t, constraintsByPath, "crm entities get", "query.objectType")
+	assertGongRequiredConstraint(t, constraintsByPath, "crm entities get", "query.objectsCrmIds")
+	assertGongFlag(t, flagsByPath, "logs list", "logType", "query.logType", "enum", boolPtr(false))
+	assertGongFlagFormat(t, flagsByPath, "logs list", "fromDateTime", "date-time")
+	assertGongRequiredConstraint(t, constraintsByPath, "logs list", "query.logType")
+	assertGongRequiredConstraint(t, constraintsByPath, "logs list", "query.fromDateTime")
+	assertGongFlag(t, flagsByPath, "entities get-brief", "workspaceId", "query.workspaceId", "integer", nil)
+	assertGongFlag(t, flagsByPath, "entities get-brief", "crmEntityType", "query.crmEntityType", "enum", boolPtr(false))
+	assertGongFlag(t, flagsByPath, "entities get-brief", "timePeriod", "query.timePeriod", "enum", boolPtr(false))
+	assertGongFlagFormat(t, flagsByPath, "entities get-brief", "fromDateTime", "date-time")
+	for _, target := range []string{"query.workspaceId", "query.briefName", "query.crmEntityType", "query.crmEntityId", "query.timePeriod"} {
+		assertGongRequiredConstraint(t, constraintsByPath, "entities get-brief", target)
+	}
+	assertGongFlag(t, flagsByPath, "entities ask", "workspaceId", "query.workspaceId", "integer", nil)
+	assertGongFlag(t, flagsByPath, "entities ask", "crmEntityType", "query.crmEntityType", "enum", boolPtr(false))
+	assertGongFlag(t, flagsByPath, "entities ask", "timePeriod", "query.timePeriod", "enum", boolPtr(false))
+	assertGongFlagFormat(t, flagsByPath, "entities ask", "fromDateTime", "date-time")
+	for _, target := range []string{"query.workspaceId", "query.crmEntityType", "query.crmEntityId", "query.timePeriod", "query.question"} {
+		assertGongRequiredConstraint(t, constraintsByPath, "entities ask", target)
+	}
+	assertGongFlag(t, flagsByPath, "privacy find-phone", "phoneNumber", "query.phoneNumber", "string", boolPtr(false))
+	assertGongRequiredConstraint(t, constraintsByPath, "privacy find-phone", "query.phoneNumber")
+	assertGongFlag(t, flagsByPath, "privacy find-email", "emailAddress", "query.emailAddress", "string", boolPtr(false))
+	assertGongFlagFormat(t, flagsByPath, "privacy find-email", "emailAddress", "email")
+	assertGongRequiredConstraint(t, constraintsByPath, "privacy find-email", "query.emailAddress")
+	assertGongFlag(t, flagsByPath, "crm request-status get", "integrationId", "query.integrationId", "integer", nil)
+	assertGongRequiredConstraint(t, constraintsByPath, "crm request-status get", "query.integrationId")
+	assertGongRequiredConstraint(t, constraintsByPath, "crm request-status get", "query.clientRequestId")
+	assertGongFlag(t, flagsByPath, "coaching list", "workspace-id", "query.workspace-id", "integer", nil)
+	assertGongFlag(t, flagsByPath, "coaching list", "manager-id", "query.manager-id", "integer", nil)
+	assertGongFlagFormat(t, flagsByPath, "coaching list", "from", "date-time")
+	assertGongFlagFormat(t, flagsByPath, "coaching list", "to", "date-time")
+	for _, target := range []string{"query.workspace-id", "query.manager-id", "query.from", "query.to"} {
+		assertGongRequiredConstraint(t, constraintsByPath, "coaching list", target)
+	}
 	assertGongFlag(t, flagsByPath, "flows list", "flowOwnerEmail", "query.flowOwnerEmail", "string", boolPtr(false))
 	assertGongFlagFormat(t, flagsByPath, "flows list", "flowOwnerEmail", "email")
 	assertGongRequiredConstraint(t, constraintsByPath, "flows list", "query.flowOwnerEmail")

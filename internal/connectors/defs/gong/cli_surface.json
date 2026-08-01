@@ -504,7 +504,7 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong calls get --json --max-bytes 1048576"
+        "pm gong calls get --id call-id --json --max-bytes 1048576"
       ]
     },
     {
@@ -530,7 +530,14 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong permissions profile get --json --max-bytes 1048576"
+        "pm gong permissions profile get --profileId profile-id --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.profileId",
+          "message": "--profileId is required for Gong permissions profile get"
+        }
       ]
     },
     {
@@ -547,10 +554,16 @@
         },
         {
           "name": "objectType",
-          "type": "string",
-          "summary": "Type of object to retrieve the schema fields for (case-sensitive). <br>Omitting this parameter returns the schema for all object types.",
+          "type": "enum",
+          "summary": "Type of object to retrieve the schema fields for (case-sensitive).",
           "maps_to": "query.objectType",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "ACCOUNT",
+            "CONTACT",
+            "DEAL",
+            "LEAD"
+          ]
         }
       ],
       "api_surface": [
@@ -562,7 +575,19 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong crm entity-schema get --json --max-bytes 1048576"
+        "pm gong crm entity-schema get --integrationId 123 --objectType ACCOUNT --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.integrationId",
+          "message": "--integrationId is required for Gong crm entity-schema get"
+        },
+        {
+          "kind": "required",
+          "left": "query.objectType",
+          "message": "--objectType is required for Gong crm entity-schema get"
+        }
       ]
     },
     {
@@ -579,10 +604,16 @@
         },
         {
           "name": "objectType",
-          "type": "string",
+          "type": "enum",
           "summary": "Requested objects type",
           "maps_to": "query.objectType",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "ACCOUNT",
+            "CONTACT",
+            "DEAL",
+            "LEAD"
+          ]
         },
         {
           "name": "objectsCrmIds",
@@ -601,7 +632,24 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong crm entities get --json --max-bytes 1048576"
+        "pm gong crm entities get --integrationId 123 --objectType ACCOUNT --objectsCrmIds account-1 --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.integrationId",
+          "message": "--integrationId is required for Gong crm entities get"
+        },
+        {
+          "kind": "required",
+          "left": "query.objectType",
+          "message": "--objectType is required for Gong crm entities get"
+        },
+        {
+          "kind": "required",
+          "left": "query.objectsCrmIds",
+          "message": "--objectsCrmIds is required for Gong crm entities get"
+        }
       ]
     },
     {
@@ -627,7 +675,7 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong users get --json --max-bytes 1048576"
+        "pm gong users get --id user-id --json --max-bytes 1048576"
       ]
     },
     {
@@ -653,7 +701,7 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong users settings-history --json --max-bytes 1048576"
+        "pm gong users settings-history --id user-id --json --max-bytes 1048576"
       ]
     },
     {
@@ -679,7 +727,14 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong permissions profile-users list --json --max-bytes 1048576"
+        "pm gong permissions profile-users list --profileId profile-id --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.profileId",
+          "message": "--profileId is required for Gong permissions profile-users list"
+        }
       ]
     },
     {
@@ -690,24 +745,33 @@
       "flags": [
         {
           "name": "logType",
-          "type": "string",
+          "type": "enum",
           "summary": "Type of logs requested.",
           "maps_to": "query.logType",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "AccessLog",
+            "UserActivityLog",
+            "UserCallPlay",
+            "ExternallySharedCallAccess",
+            "ExternallySharedCallPlay"
+          ]
         },
         {
           "name": "fromDateTime",
           "type": "string",
           "summary": "The time from which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
           "maps_to": "query.fromDateTime",
-          "allow_empty": false
+          "allow_empty": false,
+          "format": "date-time"
         },
         {
           "name": "toDateTime",
           "type": "string",
           "summary": "The time until which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC); if not specified, the lo",
           "maps_to": "query.toDateTime",
-          "allow_empty": false
+          "allow_empty": false,
+          "format": "date-time"
         },
         {
           "name": "cursor",
@@ -725,7 +789,19 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong logs list --json --max-bytes 1048576"
+        "pm gong logs list --logType AccessLog --fromDateTime 2026-01-01T00:00:00Z --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.logType",
+          "message": "--logType is required for Gong logs list"
+        },
+        {
+          "kind": "required",
+          "left": "query.fromDateTime",
+          "message": "--fromDateTime is required for Gong logs list"
+        }
       ]
     },
     {
@@ -776,7 +852,7 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong flows bulk-assignment get --json --max-bytes 1048576"
+        "pm gong flows bulk-assignment get --id assignment-id --json --max-bytes 1048576"
       ]
     },
     {
@@ -800,10 +876,16 @@
         },
         {
           "name": "crmEntityType",
-          "type": "string",
+          "type": "enum",
           "summary": "The object type of the entity in the CRM.",
           "maps_to": "query.crmEntityType",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "ACCOUNT",
+            "CONTACT",
+            "DEAL",
+            "LEAD"
+          ]
         },
         {
           "name": "crmEntityId",
@@ -814,22 +896,38 @@
         },
         {
           "name": "timePeriod",
-          "type": "string",
+          "type": "enum",
           "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
           "maps_to": "query.timePeriod",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "LAST_7DAYS",
+            "LAST_30DAYS",
+            "LAST_90DAYS",
+            "LAST_90_DAYS_SINCE_LAST_ACTIVITY",
+            "LAST_YEAR_SINCE_LAST_ACTIVITY",
+            "LAST_YEAR",
+            "THIS_WEEK",
+            "THIS_MONTH",
+            "THIS_YEAR",
+            "THIS_QUARTER",
+            "CUSTOM_RANGE",
+            "ALL_CONVERSATIONS"
+          ]
         },
         {
           "name": "fromDateTime",
           "type": "string",
           "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.fromDateTime"
+          "maps_to": "query.fromDateTime",
+          "format": "date-time"
         },
         {
           "name": "toDateTime",
           "type": "string",
           "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.toDateTime"
+          "maps_to": "query.toDateTime",
+          "format": "date-time"
         }
       ],
       "api_surface": [
@@ -841,7 +939,34 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong entities get-brief --json --max-bytes 1048576"
+        "pm gong entities get-brief --workspaceId 123 --briefName executive-summary --crmEntityType ACCOUNT --crmEntityId account-1 --timePeriod LAST_30DAYS --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.workspaceId",
+          "message": "--workspaceId is required for Gong entities get-brief"
+        },
+        {
+          "kind": "required",
+          "left": "query.briefName",
+          "message": "--briefName is required for Gong entities get-brief"
+        },
+        {
+          "kind": "required",
+          "left": "query.crmEntityType",
+          "message": "--crmEntityType is required for Gong entities get-brief"
+        },
+        {
+          "kind": "required",
+          "left": "query.crmEntityId",
+          "message": "--crmEntityId is required for Gong entities get-brief"
+        },
+        {
+          "kind": "required",
+          "left": "query.timePeriod",
+          "message": "--timePeriod is required for Gong entities get-brief"
+        }
       ]
     },
     {
@@ -858,10 +983,16 @@
         },
         {
           "name": "crmEntityType",
-          "type": "string",
+          "type": "enum",
           "summary": "The object type of the entity in the CRM.",
           "maps_to": "query.crmEntityType",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "ACCOUNT",
+            "CONTACT",
+            "DEAL",
+            "LEAD"
+          ]
         },
         {
           "name": "crmEntityId",
@@ -872,22 +1003,38 @@
         },
         {
           "name": "timePeriod",
-          "type": "string",
+          "type": "enum",
           "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified ",
           "maps_to": "query.timePeriod",
-          "allow_empty": false
+          "allow_empty": false,
+          "values": [
+            "LAST_7DAYS",
+            "LAST_30DAYS",
+            "LAST_90DAYS",
+            "LAST_90_DAYS_SINCE_LAST_ACTIVITY",
+            "LAST_YEAR_SINCE_LAST_ACTIVITY",
+            "LAST_YEAR",
+            "THIS_WEEK",
+            "THIS_MONTH",
+            "THIS_YEAR",
+            "THIS_QUARTER",
+            "CUSTOM_RANGE",
+            "ALL_CONVERSATIONS"
+          ]
         },
         {
           "name": "fromDateTime",
           "type": "string",
           "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.fromDateTime"
+          "maps_to": "query.fromDateTime",
+          "format": "date-time"
         },
         {
           "name": "toDateTime",
           "type": "string",
           "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
-          "maps_to": "query.toDateTime"
+          "maps_to": "query.toDateTime",
+          "format": "date-time"
         },
         {
           "name": "question",
@@ -906,7 +1053,34 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong entities ask --json --max-bytes 1048576"
+        "pm gong entities ask --workspaceId 123 --crmEntityType ACCOUNT --crmEntityId account-1 --timePeriod LAST_30DAYS --question \"Summarize account risk\" --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.workspaceId",
+          "message": "--workspaceId is required for Gong entities ask"
+        },
+        {
+          "kind": "required",
+          "left": "query.crmEntityType",
+          "message": "--crmEntityType is required for Gong entities ask"
+        },
+        {
+          "kind": "required",
+          "left": "query.crmEntityId",
+          "message": "--crmEntityId is required for Gong entities ask"
+        },
+        {
+          "kind": "required",
+          "left": "query.timePeriod",
+          "message": "--timePeriod is required for Gong entities ask"
+        },
+        {
+          "kind": "required",
+          "left": "query.question",
+          "message": "--question is required for Gong entities ask"
+        }
       ]
     },
     {
@@ -932,7 +1106,14 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong privacy find-phone --json --max-bytes 1048576"
+        "pm gong privacy find-phone --phoneNumber +15551234567 --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.phoneNumber",
+          "message": "--phoneNumber is required for Gong privacy find-phone"
+        }
       ]
     },
     {
@@ -946,7 +1127,8 @@
           "type": "string",
           "summary": "The email address.",
           "maps_to": "query.emailAddress",
-          "allow_empty": false
+          "allow_empty": false,
+          "format": "email"
         }
       ],
       "api_surface": [
@@ -958,7 +1140,14 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong privacy find-email --json --max-bytes 1048576"
+        "pm gong privacy find-email --emailAddress user.fixture@example.com --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.emailAddress",
+          "message": "--emailAddress is required for Gong privacy find-email"
+        }
       ]
     },
     {
@@ -990,7 +1179,19 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong crm request-status get --json --max-bytes 1048576"
+        "pm gong crm request-status get --integrationId 123 --clientRequestId request-1 --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.integrationId",
+          "message": "--integrationId is required for Gong crm request-status get"
+        },
+        {
+          "kind": "required",
+          "left": "query.clientRequestId",
+          "message": "--clientRequestId is required for Gong crm request-status get"
+        }
       ]
     },
     {
@@ -1016,14 +1217,16 @@
           "type": "string",
           "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
           "maps_to": "query.from",
-          "allow_empty": false
+          "allow_empty": false,
+          "format": "date-time"
         },
         {
           "name": "to",
           "type": "string",
           "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
           "maps_to": "query.to",
-          "allow_empty": false
+          "allow_empty": false,
+          "format": "date-time"
         }
       ],
       "api_surface": [
@@ -1035,7 +1238,29 @@
       "output_policy": "json_redacted",
       "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
       "examples": [
-        "pm gong coaching list --json --max-bytes 1048576"
+        "pm gong coaching list --workspace-id 123 --manager-id 456 --from 2026-01-01T00:00:00Z --to 2026-01-31T00:00:00Z --json --max-bytes 1048576"
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.workspace-id",
+          "message": "--workspace-id is required for Gong coaching list"
+        },
+        {
+          "kind": "required",
+          "left": "query.manager-id",
+          "message": "--manager-id is required for Gong coaching list"
+        },
+        {
+          "kind": "required",
+          "left": "query.from",
+          "message": "--from is required for Gong coaching list"
+        },
+        {
+          "kind": "required",
+          "left": "query.to",
+          "message": "--to is required for Gong coaching list"
+        }
       ]
     },
     {

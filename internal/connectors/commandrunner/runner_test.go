@@ -5,9 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -531,10 +534,30 @@ func TestGongRequiredQueryCommandsRejectMissingOrInvalidFlagsBeforeHTTP(t *testi
 		want  string
 	}{
 		{name: "permissions profiles missing workspace", path: []string{"permissions", "profiles", "list"}, want: "--workspaceId is required"},
+		{name: "permissions profile missing profile", path: []string{"permissions", "profile", "get"}, want: "--profileId is required"},
+		{name: "permissions profile-users missing profile", path: []string{"permissions", "profile-users", "list"}, want: "--profileId is required"},
+		{name: "crm entity schema missing integration", path: []string{"crm", "entity-schema", "get"}, want: "--integrationId is required"},
+		{name: "crm entity schema missing object type", path: []string{"crm", "entity-schema", "get"}, flags: map[string][]string{"integrationId": {"123"}}, want: "--objectType is required"},
+		{name: "crm entities missing crm ids", path: []string{"crm", "entities", "get"}, flags: map[string][]string{"integrationId": {"123"}, "objectType": {"ACCOUNT"}}, want: "--objectsCrmIds is required"},
+		{name: "logs missing log type", path: []string{"logs", "list"}, want: "--logType is required"},
+		{name: "logs missing from", path: []string{"logs", "list"}, flags: map[string][]string{"logType": {"AccessLog"}}, want: "--fromDateTime is required"},
+		{name: "entities get brief missing workspace", path: []string{"entities", "get-brief"}, want: "--workspaceId is required"},
+		{name: "entities get brief missing time period", path: []string{"entities", "get-brief"}, flags: map[string][]string{"workspaceId": {"123"}, "briefName": {"brief"}, "crmEntityType": {"ACCOUNT"}, "crmEntityId": {"account-1"}}, want: "--timePeriod is required"},
+		{name: "entities ask missing question", path: []string{"entities", "ask"}, flags: map[string][]string{"workspaceId": {"123"}, "crmEntityType": {"ACCOUNT"}, "crmEntityId": {"account-1"}, "timePeriod": {"LAST_30DAYS"}}, want: "--question is required"},
+		{name: "privacy phone missing phone", path: []string{"privacy", "find-phone"}, want: "--phoneNumber is required"},
+		{name: "privacy email missing email", path: []string{"privacy", "find-email"}, want: "--emailAddress is required"},
+		{name: "crm request status missing integration", path: []string{"crm", "request-status", "get"}, want: "--integrationId is required"},
+		{name: "crm request status missing client request", path: []string{"crm", "request-status", "get"}, flags: map[string][]string{"integrationId": {"123"}}, want: "--clientRequestId is required"},
+		{name: "coaching missing workspace", path: []string{"coaching", "list"}, want: "--workspace-id is required"},
+		{name: "coaching missing to", path: []string{"coaching", "list"}, flags: map[string][]string{"workspace-id": {"123"}, "manager-id": {"456"}, "from": {"2026-01-01T00:00:00Z"}}, want: "--to is required"},
 		{name: "flows missing owner", path: []string{"flows", "list"}, want: "--flowOwnerEmail is required"},
 		{name: "flow folders missing owner", path: []string{"flows", "folders", "list"}, want: "--flowFolderOwnerEmail is required"},
 		{name: "targets missing workspace", path: []string{"targets", "list"}, want: "--workspaceId is required"},
 		{name: "permissions profiles invalid workspace", path: []string{"permissions", "profiles", "list"}, flags: map[string][]string{"workspaceId": {"abc"}}, want: "invalid --workspaceId"},
+		{name: "crm entity schema invalid object type", path: []string{"crm", "entity-schema", "get"}, flags: map[string][]string{"integrationId": {"123"}, "objectType": {"CASE"}}, want: "invalid --objectType"},
+		{name: "logs invalid date", path: []string{"logs", "list"}, flags: map[string][]string{"logType": {"AccessLog"}, "fromDateTime": {"2026-01-01"}}, want: "invalid --fromDateTime"},
+		{name: "privacy email invalid email", path: []string{"privacy", "find-email"}, flags: map[string][]string{"emailAddress": {"not-an-email"}}, want: "invalid --emailAddress"},
+		{name: "coaching invalid date", path: []string{"coaching", "list"}, flags: map[string][]string{"workspace-id": {"123"}, "manager-id": {"456"}, "from": {"2026-01-01"}, "to": {"2026-01-31T00:00:00Z"}}, want: "invalid --from"},
 		{name: "flows invalid email", path: []string{"flows", "list"}, flags: map[string][]string{"flowOwnerEmail": {"not-an-email"}}, want: "invalid --flowOwnerEmail"},
 	}
 
@@ -567,11 +590,12 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 
 	tests := []struct {
-		name      string
-		path      []string
-		flags     map[string][]string
-		wantPath  string
-		wantQuery map[string]string
+		name       string
+		path       []string
+		flags      map[string][]string
+		wantPath   string
+		wantQuery  map[string]string
+		directRead bool
 	}{
 		{
 			name:      "permissions profiles workspace",
@@ -579,6 +603,94 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 			flags:     map[string][]string{"workspaceId": {"123"}},
 			wantPath:  "/v2/all-permission-profiles",
 			wantQuery: map[string]string{"workspaceId": "123"},
+		},
+		{
+			name:       "permissions profile id",
+			path:       []string{"permissions", "profile", "get"},
+			flags:      map[string][]string{"profileId": {"profile-1"}},
+			wantPath:   "/v2/permission-profile",
+			wantQuery:  map[string]string{"profileId": "profile-1"},
+			directRead: true,
+		},
+		{
+			name:       "permission profile users id",
+			path:       []string{"permissions", "profile-users", "list"},
+			flags:      map[string][]string{"profileId": {"profile-1"}},
+			wantPath:   "/v2/permission-profile/users",
+			wantQuery:  map[string]string{"profileId": "profile-1"},
+			directRead: true,
+		},
+		{
+			name:       "crm entity schema required query",
+			path:       []string{"crm", "entity-schema", "get"},
+			flags:      map[string][]string{"integrationId": {"123"}, "objectType": {"ACCOUNT"}},
+			wantPath:   "/v2/crm/entity-schema",
+			wantQuery:  map[string]string{"integrationId": "123", "objectType": "ACCOUNT"},
+			directRead: true,
+		},
+		{
+			name:       "crm entities required query",
+			path:       []string{"crm", "entities", "get"},
+			flags:      map[string][]string{"integrationId": {"123"}, "objectType": {"ACCOUNT"}, "objectsCrmIds": {"account-1"}},
+			wantPath:   "/v2/crm/entities",
+			wantQuery:  map[string]string{"integrationId": "123", "objectType": "ACCOUNT", "objectsCrmIds": "account-1"},
+			directRead: true,
+		},
+		{
+			name:       "logs required query",
+			path:       []string{"logs", "list"},
+			flags:      map[string][]string{"logType": {"AccessLog"}, "fromDateTime": {"2026-01-01T00:00:00Z"}},
+			wantPath:   "/v2/logs",
+			wantQuery:  map[string]string{"logType": "AccessLog", "fromDateTime": "2026-01-01T00:00:00Z"},
+			directRead: true,
+		},
+		{
+			name:       "entities get brief required query",
+			path:       []string{"entities", "get-brief"},
+			flags:      map[string][]string{"workspaceId": {"123"}, "briefName": {"brief"}, "crmEntityType": {"ACCOUNT"}, "crmEntityId": {"account-1"}, "timePeriod": {"LAST_30DAYS"}},
+			wantPath:   "/v2/entities/get-brief",
+			wantQuery:  map[string]string{"workspaceId": "123", "briefName": "brief", "crmEntityType": "ACCOUNT", "crmEntityId": "account-1", "timePeriod": "LAST_30DAYS"},
+			directRead: true,
+		},
+		{
+			name:       "entities ask required query",
+			path:       []string{"entities", "ask"},
+			flags:      map[string][]string{"workspaceId": {"123"}, "crmEntityType": {"ACCOUNT"}, "crmEntityId": {"account-1"}, "timePeriod": {"LAST_30DAYS"}, "question": {"Summarize account risk"}},
+			wantPath:   "/v2/entities/ask-entity",
+			wantQuery:  map[string]string{"workspaceId": "123", "crmEntityType": "ACCOUNT", "crmEntityId": "account-1", "timePeriod": "LAST_30DAYS", "question": "Summarize account risk"},
+			directRead: true,
+		},
+		{
+			name:       "privacy phone required query",
+			path:       []string{"privacy", "find-phone"},
+			flags:      map[string][]string{"phoneNumber": {"15551234567"}},
+			wantPath:   "/v2/data-privacy/data-for-phone-number",
+			wantQuery:  map[string]string{"phoneNumber": "15551234567"},
+			directRead: true,
+		},
+		{
+			name:       "privacy email required query",
+			path:       []string{"privacy", "find-email"},
+			flags:      map[string][]string{"emailAddress": {"user.fixture@example.com"}},
+			wantPath:   "/v2/data-privacy/data-for-email-address",
+			wantQuery:  map[string]string{"emailAddress": "user.fixture@example.com"},
+			directRead: true,
+		},
+		{
+			name:       "crm request status required query",
+			path:       []string{"crm", "request-status", "get"},
+			flags:      map[string][]string{"integrationId": {"123"}, "clientRequestId": {"request-1"}},
+			wantPath:   "/v2/crm/request-status",
+			wantQuery:  map[string]string{"integrationId": "123", "clientRequestId": "request-1"},
+			directRead: true,
+		},
+		{
+			name:       "coaching required query",
+			path:       []string{"coaching", "list"},
+			flags:      map[string][]string{"workspace-id": {"123"}, "manager-id": {"456"}, "from": {"2026-01-01T00:00:00Z"}, "to": {"2026-01-31T00:00:00Z"}},
+			wantPath:   "/v2/coaching",
+			wantQuery:  map[string]string{"workspace-id": "123", "manager-id": "456", "from": "2026-01-01T00:00:00Z", "to": "2026-01-31T00:00:00Z"},
+			directRead: true,
 		},
 		{
 			name:      "flows owner",
@@ -595,11 +707,12 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 			wantQuery: map[string]string{"flowFolderOwnerEmail": "owner.fixture@example.com"},
 		},
 		{
-			name:      "targets workspace",
-			path:      []string{"targets", "list"},
-			flags:     map[string][]string{"workspaceId": {"123"}},
-			wantPath:  "/v2/targets",
-			wantQuery: map[string]string{"workspaceId": "123"},
+			name:       "targets workspace",
+			path:       []string{"targets", "list"},
+			flags:      map[string][]string{"workspaceId": {"123"}},
+			wantPath:   "/v2/targets",
+			wantQuery:  map[string]string{"workspaceId": "123"},
+			directRead: true,
 		},
 	}
 
@@ -632,9 +745,9 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Run: %v", err)
 			}
-			if tt.wantPath == "/v2/targets" {
+			if tt.directRead {
 				if result.DirectRead == nil {
-					t.Fatalf("targets result DirectRead = nil, want direct read result")
+					t.Fatalf("DirectRead = nil, want direct read result")
 				}
 				return
 			}
@@ -642,6 +755,73 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 				t.Fatalf("count/result records = %d/%d, want 1/1", result.Count, len(records))
 			}
 		})
+	}
+}
+
+func TestGongUploadTargetAssignmentsSendsWorkspaceQueryAndMultipartFile(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+	dir := t.TempDir()
+	assignmentPath := filepath.Join(dir, "target_assignments.csv")
+	assignmentBody := "userId,targetId\nuser-1,987\n"
+	if err := os.WriteFile(assignmentPath, []byte(assignmentBody), 0o600); err != nil {
+		t.Fatalf("write target assignments fixture: %v", err)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/targets/987/assignments" {
+			t.Fatalf("request = %s %s, want POST /v2/targets/987/assignments", r.Method, r.URL.Path)
+		}
+		if got := r.URL.Query().Get("workspaceId"); got != "123" {
+			t.Fatalf("workspaceId query = %q, want 123 (full query %v)", got, r.URL.Query())
+		}
+		if got := r.Header.Get("Content-Type"); !strings.HasPrefix(got, "multipart/form-data; boundary=") {
+			t.Fatalf("Content-Type = %q, want multipart/form-data boundary", got)
+		}
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		if len(r.MultipartForm.Value) != 0 {
+			t.Fatalf("multipart fields = %v, want no extra scalar fields", r.MultipartForm.Value)
+		}
+		files := r.MultipartForm.File["file"]
+		if len(files) != 1 {
+			t.Fatalf("multipart file parts named file = %d, want 1 (all parts %v)", len(files), r.MultipartForm.File)
+		}
+		fileHeader := files[0]
+		if fileHeader.Filename != "target_assignments.csv" {
+			t.Fatalf("file part filename = %q, want target_assignments.csv", fileHeader.Filename)
+		}
+		if got := fileHeader.Header.Get("Content-Type"); got != "text/csv" {
+			t.Fatalf("file part Content-Type = %q, want text/csv", got)
+		}
+		file, err := fileHeader.Open()
+		if err != nil {
+			t.Fatalf("open multipart file: %v", err)
+		}
+		defer file.Close()
+		body, err := io.ReadAll(file)
+		if err != nil {
+			t.Fatalf("read multipart file: %v", err)
+		}
+		if string(body) != assignmentBody {
+			t.Fatalf("multipart file body = %q, want %q", string(body), assignmentBody)
+		}
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	cfg := gongCommandRunnerTestConfig(server.URL, nil)
+	cfg.ProjectDir = dir
+	result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: "upload_target_assignments", Config: cfg}, []connectors.Record{{
+		"targetId":              "987",
+		"workspaceId":           "123",
+		"assignments_file_path": assignmentPath,
+	}})
+	if err != nil {
+		t.Fatalf("Write upload_target_assignments: %v", err)
+	}
+	if result.RecordsWritten != 1 {
+		t.Fatalf("RecordsWritten = %d, want 1", result.RecordsWritten)
 	}
 }
 
