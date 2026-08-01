@@ -12,21 +12,24 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[4]
 DEF_DIR = ROOT / "internal/connectors/defs/gitlab"
 EXPECTED = {
-    "gitlab.etl_read": 397,
+    "gitlab.etl_read": 399,
     "gitlab.reverse_etl_write": 637,
     "gitlab.direct_read_query_search": 6,
-    "gitlab.binary_file": 89,
+    "gitlab.binary_file": 87,
     "gitlab.cdc_changefeed": 15,
     "gitlab.excluded_not_applicable": 2,
 }
 WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 TYPED_DESTRUCTIVE_APPROVAL = "typed_confirmation + plan_preview_approval_execute"
+ROUTE_GRAMMAR_PATTERN = re.compile(r"\(-/\)|\(/\)\(\{[A-Za-z0-9_]+\}\)|\\[()]")
 METADATA_REST_ROWS = {
     ("GET", "/groups/{id}/registry/repositories"),
     ("GET", "/projects/{id}/registry/repositories"),
     ("GET", "/groups/{id}/uploads"),
     ("GET", "/projects/{id}/uploads"),
     ("GET", "/projects/{id}/packages/{package_id}/package_files"),
+    ("GET", "/projects/{id}/packages/nuget/download/{package_name}/index"),
+    ("GET", "/projects/{id}/repository/blobs/{sha}"),
     ("GET", "/group/{id}/-/packages/composer/packages"),
     ("GET", "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}"),
     ("GET", "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}"),
@@ -135,6 +138,15 @@ def main() -> int:
         problems.append(f"operations has unresolved splat paths {splat_ops}")
     if splat_cli:
         problems.append(f"cli_surface has unresolved splat paths {splat_cli}")
+    grammar_api = sorted(path for _, path in api_keys if isinstance(path, str) and ROUTE_GRAMMAR_PATTERN.search(path))[:5]
+    grammar_ops = sorted(path for _, path in operation_keys if ROUTE_GRAMMAR_PATTERN.search(path))[:5]
+    grammar_cli = sorted(path for path in cli_api_surface_paths(cli) if ROUTE_GRAMMAR_PATTERN.search(path))[:5]
+    if grammar_api:
+        problems.append(f"api_surface has unresolved route grammar paths {grammar_api}")
+    if grammar_ops:
+        problems.append(f"operations has unresolved route grammar paths {grammar_ops}")
+    if grammar_cli:
+        problems.append(f"cli_surface has unresolved route grammar paths {grammar_cli}")
     missing_api = sorted(operation_keys - api_keys)[:5]
     if missing_api:
         problems.append(f"operations paths missing from api_surface {missing_api}")

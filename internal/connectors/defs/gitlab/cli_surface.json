@@ -8247,7 +8247,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/(-/)search"
+          "path": "/groups/{id}/search"
         }
       ],
       "flags": [
@@ -27425,11 +27425,11 @@
     {
       "path": "operation get projects-id-packages-nuget-download-package-name-index",
       "summary": "The NuGet Content Service - index request",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-download-package-name-index",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27451,9 +27451,7 @@
           "maps_to": "path.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-download-package-name-package-version-package-filename",
@@ -27683,7 +27681,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById\\(\\)"
+          "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById()"
         }
       ],
       "flags": [
@@ -27714,7 +27712,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(\\)"
+          "path": "/projects/{project_id}/packages/nuget/v2/Packages()"
         }
       ],
       "flags": [
@@ -27745,7 +27743,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='{package_name}',Version='{package_version}'\\)"
+          "path": "/projects/{project_id}/packages/nuget/v2/Packages(Id='{package_name}',Version='{package_version}')"
         }
       ],
       "flags": [
@@ -35454,7 +35452,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/releases/permalink/latest(/)({suffix_path})"
+          "path": "/projects/{id}/releases/permalink/latest/{suffix_path}"
         }
       ],
       "flags": [
@@ -36029,11 +36027,11 @@
     {
       "path": "operation get projects-id-repository-blobs-sha",
       "summary": "Retrieve a blob from a repository",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-repository-blobs-sha",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -36055,9 +36053,7 @@
           "maps_to": "path.sha",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-repository-archive",
@@ -36974,7 +36970,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/(-/)search"
+          "path": "/projects/{id}/search"
         }
       ],
       "flags": [

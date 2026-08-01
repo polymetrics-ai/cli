@@ -17,7 +17,7 @@ git diff --check
 ## Results
 
 - PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py`: `PASS GitLab inventory parity: 1146 official operations plus 1 supplemental stream row represented`.
-- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py`: generated counts match connector-local ledger: 397 ETL/read, 637 reverse ETL write, 6 direct/query/search/metadata, 89 binary/file, 15 CDC/changefeed, 2 excluded/not-applicable; operations total 1,146, api/CLI rows total 1,147.
+- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py`: generated counts match connector-local ledger: 399 ETL/read, 637 reverse ETL write, 6 direct/query/search/metadata, 87 binary/file, 15 CDC/changefeed, 2 excluded/not-applicable; operations total 1,146, api/CLI rows total 1,147.
 - PASS — `go run ./cmd/connectorgen validate internal/connectors/defs --json`: 0 total findings, 0 GitLab findings.
 - PASS — `go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1`: `ok polymetrics.ai/internal/connectors/conformance`.
 - PASS — `go test ./internal/cli -run TestGoldenTranscripts -count=1 -timeout=10m`: regenerated and verified GitLab-influenced root command golden transcripts.
@@ -34,7 +34,7 @@ git diff --check
 - PASS — `go run ./cmd/pm docs generate --dir .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/generated-docs-work/cli --connectors-dir .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/generated-docs-work/connectors`: regenerated connector docs into a phase-local temp tree, then copied the GitLab manual/skill plus connector catalog/index artifacts.
 - PASS — `node website/scripts/gen-connector-bundles.mjs && node website/scripts/gen-connector-catalog.mjs && node website/scripts/gen-connectors.mjs`: regenerated website connector data/catalog artifacts from the updated GitLab bundle; GitLab now carries 1,147 provider command metadata rows in website data.
 - PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py` plus focused GitLab docs/website JSON checks: HEAD rows are blocked composite metadata and generated GitLab docs/website data are fresh.
-- PASS — focused review-fix verification: GitLab surface count checks cover path-prefix parity, normalized splat path parameters, HEAD composite metadata, secret-sensitive read/body risk, secure-file sensitivity, registry/package/upload REST metadata, Terraform module metadata classification, and Geo retrieve binary classification.
+- PASS — focused review-fix verification: GitLab surface count checks cover path-prefix parity, normalized route grammar and splat path parameters, HEAD composite metadata, secret-sensitive read/body risk, secure-file sensitivity, registry/package/upload/NuGet/blob REST metadata, Terraform module metadata classification, and Geo retrieve binary classification.
 
 ## Safety verification
 

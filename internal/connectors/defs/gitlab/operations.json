@@ -9121,7 +9121,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/groups/{id}/(-/)search",
+        "path": "/groups/{id}/search",
         "max_bytes": 10485760
       }
     },
@@ -29077,24 +29077,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-download-package-name-index",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Content Service - index request",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/download/{package_name}/index",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -29287,7 +29285,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById\\(\\)",
+        "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById()",
         "max_bytes": 1048576
       }
     },
@@ -29307,7 +29305,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(\\)",
+        "path": "/projects/{project_id}/packages/nuget/v2/Packages()",
         "max_bytes": 1048576
       }
     },
@@ -29327,7 +29325,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='{package_name}',Version='{package_version}'\\)",
+        "path": "/projects/{project_id}/packages/nuget/v2/Packages(Id='{package_name}',Version='{package_version}')",
         "max_bytes": 1048576
       }
     },
@@ -37878,7 +37876,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/releases/permalink/latest(/)({suffix_path})",
+        "path": "/projects/{id}/releases/permalink/latest/{suffix_path}",
         "max_bytes": 1048576
       }
     },
@@ -38396,24 +38394,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-repository-blobs-sha",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a blob from a repository",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/repository/blobs/{sha}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -39051,7 +39047,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/(-/)search",
+        "path": "/projects/{id}/search",
         "max_bytes": 10485760
       }
     },

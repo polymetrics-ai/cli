@@ -24,8 +24,13 @@ SUPPLEMENTAL_SURFACE = {("GET", "/users")}
 
 
 def normalize_gitlab_path(path: str) -> str:
+    path = path.replace("\\(", "(").replace("\\)", ")")
+    path = path.replace("(-/)", "")
+    path = re.sub(r"\(/\)\(\*([A-Za-z0-9_]+)\)", r"/{\1}", path)
+    path = re.sub(r"\(/\)\(\{([A-Za-z0-9_]+)\}\)", r"/{\1}", path)
     path = re.sub(r"\(\*([A-Za-z0-9_]+)/\)", r"{\1}/", path)
-    return re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
+    path = re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
+    return re.sub(r"/{2,}", "/", path)
 
 
 def relative_path(path: str) -> str:

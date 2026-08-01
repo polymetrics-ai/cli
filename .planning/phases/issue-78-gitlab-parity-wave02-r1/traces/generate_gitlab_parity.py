@@ -25,10 +25,10 @@ OPENAPI_URL = "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e
 MASTER_BRANCH_URL = "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master"
 METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 PARENT_COUNTS = {
-    "etl_read": 397,
+    "etl_read": 399,
     "reverse_etl_write": 637,
     "direct_read_query_search": 6,
-    "binary_file": 89,
+    "binary_file": 87,
     "cdc_changefeed": 15,
     "excluded_not_applicable": 2,
 }
@@ -38,8 +38,8 @@ EXCLUDED = {
     ("POST", "/api/v4/integrations/slack/options"),
 }
 DIRECT = {
-    ("GET", "/api/v4/groups/{id}/(-/)search"),
-    ("GET", "/api/v4/projects/{id}/(-/)search"),
+    ("GET", "/api/v4/groups/{id}/search"),
+    ("GET", "/api/v4/projects/{id}/search"),
     ("GET", "/api/v4/search"),
 }
 FORCE_ETL = {
@@ -48,11 +48,11 @@ FORCE_ETL = {
     ("GET", "/api/v4/projects/{id}/packages/{package_id}"),
     ("GET", "/api/v4/projects/{id}/packages/{package_id}/pipelines"),
     ("GET", "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}"),
-    ("GET", "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version"),
+    ("GET", "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}"),
     ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/download"),
     ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}"),
-    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version/download"),
-    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version"),
+    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/download"),
+    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}"),
 }
 FORCE_BINARY = {
     ("GET", "/api/v4/geo/retrieve/{replicable_name}/{replicable_id}"),
@@ -74,7 +74,6 @@ BINARY_TERMS = (
     "artifact",
     "archive",
     "raw",
-    "blobs",
     "dependency_proxy",
 )
 METADATA_READ_SUMMARY_PATTERNS = tuple(
@@ -87,6 +86,7 @@ METADATA_READ_SUMMARY_PATTERNS = tuple(
         r"\bmetadata service\b",
         r"\bfeed service index\b",
         r"\bservice index\b",
+        r"\bindex request\b",
         r"\bfeed enumerate\b",
         r"\bfind packages\b",
         r"\bsearch\b",
@@ -174,7 +174,7 @@ def clean_text(value: Any, fallback: str) -> str:
 
 
 def operation_id(method: str, path: str, used: set[str]) -> str:
-    normalized = path.lower()
+    normalized = normalize_gitlab_path(path).lower()
     normalized = normalized.replace("/api/v4", "api-v4", 1)
     normalized = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
     base = f"gitlab.{method.lower()}-{normalized}"
@@ -190,8 +190,13 @@ def operation_id(method: str, path: str, used: set[str]) -> str:
 
 
 def normalize_gitlab_path(path: str) -> str:
+    path = path.replace("\\(", "(").replace("\\)", ")")
+    path = path.replace("(-/)", "")
+    path = re.sub(r"\(/\)\(\*([A-Za-z0-9_]+)\)", r"/{\1}", path)
+    path = re.sub(r"\(/\)\(\{([A-Za-z0-9_]+)\}\)", r"/{\1}", path)
     path = re.sub(r"\(\*([A-Za-z0-9_]+)/\)", r"{\1}/", path)
-    return re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
+    path = re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
+    return re.sub(r"/{2,}", "/", path)
 
 
 def relative_path(path: str) -> str:
@@ -222,9 +227,13 @@ def path_has_file_payload(path: str, summary: str) -> bool:
     lowered_summary = summary.lower()
     if normalized.endswith("/artifacts/tree") or "/artifacts/tree/" in normalized:
         return False
+    if "/repository/blobs/" in normalized and not re.search(r"/repository/blobs/\{[^}]+\}/raw(?:$|/)", normalized):
+        return False
+    if "/packages/nuget/download/" in normalized and "index request" in lowered_summary:
+        return False
     if re.search(r"/(download|raw|archive|snapshot)(/|$)", normalized):
         return True
-    if "/blobs/" in normalized or "/artifact" in normalized or "/artifacts/" in normalized:
+    if "/artifact" in normalized or "/artifacts/" in normalized:
         return True
     if "/uploads/" in normalized and re.search(r"\{(upload_id|secret|filename)\}", normalized):
         return True
@@ -545,7 +554,7 @@ def collect_operations(spec: dict[str, Any]) -> list[dict[str, Any]]:
                 continue
             op = deepcopy(operation)
             op["method"] = method.upper()
-            op["path"] = path
+            op["path"] = normalize_gitlab_path(path)
             op["parameters"] = common_params + (op.get("parameters") or [])
             op["produces"] = tuple(op.get("produces") or item.get("produces") or spec.get("produces") or [])
             op["consumes"] = tuple(op.get("consumes") or item.get("consumes") or spec.get("consumes") or [])

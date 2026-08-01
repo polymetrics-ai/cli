@@ -2614,7 +2614,7 @@
     },
     {
       "method": "GET",
-      "path": "/groups/{id}/(-/)search",
+      "path": "/groups/{id}/search",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -8973,13 +8973,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/download/{package_name}/index",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-download-package-name-index, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-download-package-name-index, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9075,7 +9075,7 @@
     },
     {
       "method": "GET",
-      "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById\\(\\)",
+      "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById()",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -9088,7 +9088,7 @@
     },
     {
       "method": "GET",
-      "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(\\)",
+      "path": "/projects/{project_id}/packages/nuget/v2/Packages()",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -9101,7 +9101,7 @@
     },
     {
       "method": "GET",
-      "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='{package_name}',Version='{package_version}'\\)",
+      "path": "/projects/{project_id}/packages/nuget/v2/Packages(Id='{package_name}',Version='{package_version}')",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11058,7 +11058,7 @@
     },
     {
       "method": "GET",
-      "path": "/projects/{id}/releases/permalink/latest(/)({suffix_path})",
+      "path": "/projects/{id}/releases/permalink/latest/{suffix_path}",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11268,13 +11268,13 @@
       "method": "GET",
       "path": "/projects/{id}/repository/blobs/{sha}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-repository-blobs-sha, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-repository-blobs-sha, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -11591,7 +11591,7 @@
     },
     {
       "method": "GET",
-      "path": "/projects/{id}/(-/)search",
+      "path": "/projects/{id}/search",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
