@@ -1223,7 +1223,7 @@
         }
       ],
       "examples": [
-        "pm freshchat reports extract --event Conversation-Resolved --format csv --preview --json"
+        "pm freshchat reports extract --start 2024-01-01T00:00:00Z --end 2024-01-02T00:00:00Z --event Conversation-Resolved --format csv --preview --json"
       ]
     },
     {
