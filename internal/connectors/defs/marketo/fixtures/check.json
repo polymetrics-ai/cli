@@ -1,7 +1,16 @@
 {
-  "request": { "method": "GET", "path": "/leads.json", "query": { "batchSize": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/leads.json",
+    "query": {
+      "batchSize": "1"
+    }
+  },
   "response": {
     "status": 200,
-    "body": { "success": true, "result": [] }
+    "body": {
+      "success": true,
+      "result": []
+    }
   }
 }

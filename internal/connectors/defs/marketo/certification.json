@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "get_all_channels",
+    "live_unavailable": [
+      {
+        "kind": "missing_credentials",
+        "contains": [
+          "access_token",
+          "base_url"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

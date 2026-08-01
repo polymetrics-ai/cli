@@ -1,23 +1,28 @@
 {
   "name": "marketo",
   "display_name": "Marketo",
-  "description": "Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not refresh OAuth tokens internally.",
+  "description": "Reads Marketo REST records, exposes bounded direct reads for lookup/content endpoints, and plans typed Marketo reverse-ETL mutations from the official AdobeDocs Swagger assets.",
   "integration_type": "api",
   "docs_url": "https://developers.marketo.com/rest-api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 300
+    "read_page_size": 300,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
   },
   "risk": {
-    "read": "external Marketo REST API read of lead, program, and activity data",
-    "approval": "none; read-only Marketo REST API"
+    "read": "external Marketo REST API reads through fixture-backed ETL streams and bounded redacted direct reads",
+    "write": "external Marketo mutations through typed reverse ETL only; no generic raw API command is exposed",
+    "approval": "reverse ETL writes require plan, preview, approval token, and execute; destructive actions also require typed confirmation"
   }
 }

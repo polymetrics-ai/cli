@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/asset/v1/emailTemplates/synthetic-conformance-value/usedBy.json",
+    "query": {
+      "maxReturn": "200",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_email_template_used_by-fixture-1",
+          "pm_operation": "getEmailTemplateUsedByUsingGET",
+          "name": "get_email_template_used_by fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}
