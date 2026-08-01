@@ -14,6 +14,15 @@
       ],
       "mutation_class": "create",
       "destructive": false,
+      "sensitive_policy": {
+        "input_mode": "stdin",
+        "redact_fields": [
+          "formToken"
+        ],
+        "preflight": "scope and target-resource availability check without reading secrets",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
       "audit_event": "monday.mutation.activate_form",
       "graphql": {
         "document": "mutation Monday_activate_form($formToken: String!) { activate_form(formToken: $formToken) }",
@@ -3616,6 +3625,15 @@
       ],
       "mutation_class": "update",
       "destructive": false,
+      "sensitive_policy": {
+        "input_mode": "stdin",
+        "redact_fields": [
+          "formToken"
+        ],
+        "preflight": "scope and target-resource availability check without reading secrets",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
       "audit_event": "monday.mutation.shorten_form_url",
       "graphql": {
         "document": "mutation Monday_shorten_form_url($formToken: String!) { shorten_form_url(formToken: $formToken) {\n    enabled\n    url\n  } }",

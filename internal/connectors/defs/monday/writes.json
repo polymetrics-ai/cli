@@ -26,6 +26,9 @@
         ],
         "additionalProperties": false
       },
+      "redact_fields": [
+        "formToken"
+      ],
       "risk": "medium: runs Monday mutation activate_form; reverse ETL approval required"
     },
     {
@@ -3186,6 +3189,9 @@
         ],
         "additionalProperties": false
       },
+      "redact_fields": [
+        "formToken"
+      ],
       "risk": "medium: runs Monday mutation shorten_form_url; reverse ETL approval required"
     },
     {
