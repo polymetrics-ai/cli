@@ -1,0 +1,13 @@
+{
+  "record": {
+    "segment": "fixture_value"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/pay-grades-and-bands/levels/fixture_value"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

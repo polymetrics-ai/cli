@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "file_id": "fixture_id",
+    "name": "Fixture Name",
+    "categoryId": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employees/fixture_id/files/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "categoryId": 1001
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

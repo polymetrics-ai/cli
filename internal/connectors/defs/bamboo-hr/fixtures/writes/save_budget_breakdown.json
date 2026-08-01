@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/budgets/breakdown"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

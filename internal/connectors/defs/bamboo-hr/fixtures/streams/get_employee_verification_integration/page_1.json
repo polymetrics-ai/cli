@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employee-verifications/integration"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "integration": {
+        "enabled": true,
+        "integrationType": "fixture_value"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/planning_cycles/synthetic-conformance-value/employees"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "name": "Fixture Name"
+    }
+  }
+}

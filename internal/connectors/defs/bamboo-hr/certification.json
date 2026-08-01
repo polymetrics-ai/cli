@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "employees",
+    "source_credential_defaults": {},
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "status 401",
+          "status 403",
+          "select auth",
+          "rate_limited"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

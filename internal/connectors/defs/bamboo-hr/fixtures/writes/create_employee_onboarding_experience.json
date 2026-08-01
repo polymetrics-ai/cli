@@ -1,0 +1,17 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "sentDateTime": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employees/fixture_id/onboarding-experiences",
+    "body": {
+      "sentDateTime": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

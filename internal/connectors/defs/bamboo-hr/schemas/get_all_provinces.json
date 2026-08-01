@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "countryId": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "iso": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_all_provinces"
+}

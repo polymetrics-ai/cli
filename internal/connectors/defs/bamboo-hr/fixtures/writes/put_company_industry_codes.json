@@ -1,0 +1,20 @@
+{
+  "record": {
+    "industryIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/company-profile-data/industry-codes",
+    "body": {
+      "industryIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

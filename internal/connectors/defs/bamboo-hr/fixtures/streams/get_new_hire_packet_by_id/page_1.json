@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/new-hire-packets/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "employeeId": 1001,
+      "contactEmployeeId": "fixture_id",
+      "requiresPersonalInformation": true,
+      "requiresPhoto": true,
+      "requiresPersonalQuestions": true,
+      "arriveByTime": "fixture_value",
+      "location": "fixture_value"
+    }
+  }
+}

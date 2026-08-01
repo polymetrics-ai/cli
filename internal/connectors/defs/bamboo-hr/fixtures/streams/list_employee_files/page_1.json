@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/synthetic-conformance-value/files/view"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        {
+          "id": 1001,
+          "name": "Fixture Name",
+          "canRenameCategory": "yes",
+          "canDeleteCategory": "yes",
+          "canUploadFiles": "yes",
+          "displayIfEmpty": "yes",
+          "files": [
+            {
+              "id": 1001,
+              "name": "Fixture Name",
+              "originalFileName": "Fixture Name",
+              "size": 1001,
+              "dateCreated": "2026-01-01T00:00:00Z",
+              "createdBy": "fixture_value",
+              "shareWithEmployee": "yes",
+              "canRenameFile": "yes"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

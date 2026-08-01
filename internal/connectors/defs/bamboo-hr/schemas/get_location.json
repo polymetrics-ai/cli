@@ -1,0 +1,149 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "manageable": {
+      "type": "boolean"
+    },
+    "address": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "address1": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "address2": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "city": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "stateId": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "state": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "abbreviation": {
+              "type": "string"
+            }
+          }
+        },
+        "zipcode": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "countryId": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "country": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "isoCode": {
+              "type": "string"
+            }
+          }
+        },
+        "timezone": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "remoteLocation": {
+          "type": "boolean"
+        }
+      }
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "archivedAt": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_location"
+}

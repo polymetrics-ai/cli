@@ -1,0 +1,310 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "jobDetails": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "locationDetails": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "country": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      }
+    },
+    "isRemote": {
+      "type": "boolean"
+    },
+    "benchmarks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "median": {
+                "type": "number"
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "currencyCode": {
+                "type": "string"
+              },
+              "originalMedian": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "object",
+                  "array",
+                  "null"
+                ]
+              },
+              "originalMin": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "object",
+                  "array",
+                  "null"
+                ]
+              },
+              "originalMax": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "object",
+                  "array",
+                  "null"
+                ]
+              },
+              "originalCurrencyCode": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "object",
+                  "array",
+                  "null"
+                ]
+              }
+            }
+          },
+          "sourceId": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "sourceColor": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "isMercer": {
+            "type": "boolean"
+          },
+          "dataYear": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "employees": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "currencyCode": {
+                "type": "string"
+              }
+            }
+          },
+          "photoUrl": {
+            "type": "string"
+          },
+          "managerName": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "managerTitle": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "division": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "department": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          },
+          "paidPer": {
+            "type": "string"
+          },
+          "currencyConversionFailed": {
+            "type": "boolean"
+          },
+          "annualizationFailed": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "internalJobPayBand": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "jobId": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "median": {
+              "type": "number"
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "currencyCode": {
+              "type": "string"
+            },
+            "originalMedian": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "originalMin": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "originalMax": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "originalCurrencyCode": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_compensation_benchmarks"
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "start": "2026-01-01T00:00:00Z",
+    "end": "fixture_value",
+    "timezone": "fixture_value"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/time-tracking/clock-entries/fixture_id",
+    "body": {
+      "start": "2026-01-01T00:00:00Z",
+      "end": "fixture_value",
+      "timezone": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

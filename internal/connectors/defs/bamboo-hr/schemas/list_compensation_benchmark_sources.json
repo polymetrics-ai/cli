@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "sort": {
+      "type": "string"
+    },
+    "count": {
+      "type": "string"
+    },
+    "colorCode": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_compensation_benchmark_sources"
+}

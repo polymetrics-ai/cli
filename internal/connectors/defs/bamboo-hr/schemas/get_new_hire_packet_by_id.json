@@ -1,0 +1,198 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "employeeId": {
+      "type": "integer"
+    },
+    "contactEmployeeId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "requiresPersonalInformation": {
+      "type": "boolean"
+    },
+    "requiresPhoto": {
+      "type": "boolean"
+    },
+    "requiresPersonalQuestions": {
+      "type": "boolean"
+    },
+    "arriveByTime": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "sentDatetime": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "viewedDatetime": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "completedDatetime": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "createdByUserId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "createdDatetime": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "sendGetToKnowYouEmail": {
+      "type": "boolean"
+    },
+    "getToKnowYouEmailSent": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "showPayrollState": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "showPayrollFederal": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "showPayrollDirectDeposit": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "nhpConfigurationId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "nhpTemplateId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "countNhpGtkySent": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "cancelled": {
+      "type": "boolean"
+    },
+    "includePhotoOption": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "cancelled",
+        "completed",
+        "sent",
+        "draft"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_new_hire_packet_by_id"
+}

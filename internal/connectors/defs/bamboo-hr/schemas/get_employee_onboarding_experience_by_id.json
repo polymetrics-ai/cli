@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "employeeId": {
+      "type": "integer"
+    },
+    "newHirePacketId": {
+      "type": "integer"
+    },
+    "nhpTemplateId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "nhpConfigurationId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "cancelled",
+        "completed",
+        "sent",
+        "draft"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_employee_onboarding_experience_by_id"
+}

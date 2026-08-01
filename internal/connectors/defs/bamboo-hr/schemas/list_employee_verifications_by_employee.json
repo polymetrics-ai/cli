@@ -1,0 +1,85 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "employeeId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "integrationType": {
+      "type": "string"
+    },
+    "verificationType": {
+      "type": "string"
+    },
+    "verificationStatus": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "verificationStatusNotes": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "remoteAccessUrl": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "eVerifyStatus": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "billingProcessed": {
+      "type": "boolean"
+    },
+    "createdByUserId": {
+      "type": "integer"
+    },
+    "createdYmdt": {
+      "type": "string"
+    },
+    "lastModifiedYmdt": {
+      "type": "string"
+    },
+    "startDateYmdt": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_employee_verifications_by_employee"
+}

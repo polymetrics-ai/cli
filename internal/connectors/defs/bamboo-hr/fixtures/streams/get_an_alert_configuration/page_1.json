@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/alert-configurations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1001,
+      "bambooAlertId": 1001,
+      "schedule": "daily",
+      "dueWithin": "fixture_value",
+      "dueInterval": "fixture_value",
+      "sendToEmployee": true,
+      "sendToManager": true,
+      "sendToAdmin": true
+    }
+  }
+}

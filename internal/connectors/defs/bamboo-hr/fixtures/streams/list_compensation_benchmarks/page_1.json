@@ -1,0 +1,65 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/benchmarks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "jobLocationPairs": [
+        {
+          "jobDetails": {
+            "id": "fixture_id",
+            "title": "fixture_value"
+          },
+          "locationDetails": {
+            "id": "fixture_id",
+            "name": "Fixture Name",
+            "location": "fixture_value"
+          },
+          "isRemote": true,
+          "benchmarks": [
+            {
+              "id": "fixture_id",
+              "values": {
+                "median": 12.34,
+                "min": 12.34,
+                "max": 12.34
+              },
+              "sourceId": "fixture_id",
+              "sourceColor": "fixture_value",
+              "isMercer": true,
+              "dataYear": "fixture_value"
+            }
+          ],
+          "employees": [
+            {
+              "id": "fixture_id",
+              "name": "Fixture Name",
+              "salary": {
+                "amount": 12.34,
+                "currencyCode": "fixture_value"
+              },
+              "photoUrl": "https://example.invalid/fixture",
+              "managerName": "Fixture Name",
+              "managerTitle": "fixture_value",
+              "division": {
+                "id": "fixture_id",
+                "value": "fixture_value"
+              },
+              "department": {
+                "id": "fixture_id",
+                "value": "fixture_value"
+              }
+            }
+          ],
+          "internalJobPayBand": {
+            "jobId": "fixture_id",
+            "group": "fixture_value",
+            "level": "fixture_value"
+          }
+        }
+      ]
+    }
+  }
+}

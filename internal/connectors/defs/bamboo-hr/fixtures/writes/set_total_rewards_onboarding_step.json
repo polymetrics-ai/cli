@@ -1,0 +1,17 @@
+{
+  "record": {
+    "step_name": "Fixture Name",
+    "completed": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/total_rewards/onboarding/Fixture Name",
+    "body": {
+      "completed": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/total_rewards/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "fixture_value",
+      "title": "fixture_value",
+      "status": 1001,
+      "detail": "fixture_value",
+      "instance": "fixture_value",
+      "code": "fixture_value",
+      "fields": {
+        "id": "fixture_id",
+        "name": "Fixture Name"
+      }
+    }
+  }
+}

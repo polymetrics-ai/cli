@@ -1,0 +1,22 @@
+{
+  "record": {
+    "employeeId": 1001,
+    "contactEmployeeId": "fixture_id",
+    "requiresPersonalInformation": true,
+    "requiresPhoto": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/new-hire-packets",
+    "body": {
+      "employeeId": 1001,
+      "contactEmployeeId": "fixture_id",
+      "requiresPersonalInformation": true,
+      "requiresPhoto": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

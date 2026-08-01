@@ -1,0 +1,16 @@
+{
+  "record": {
+    "customDisclaimer": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
+    "body": {
+      "customDisclaimer": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

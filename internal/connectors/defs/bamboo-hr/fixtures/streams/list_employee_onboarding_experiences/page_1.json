@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/synthetic-conformance-value/onboarding-experiences"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "onboardingExperiences": [
+        {
+          "id": 1001,
+          "employeeId": 1001,
+          "newHirePacketId": 1001,
+          "nhpTemplateId": "fixture_id",
+          "nhpConfigurationId": "fixture_id",
+          "status": "cancelled"
+        }
+      ]
+    }
+  }
+}

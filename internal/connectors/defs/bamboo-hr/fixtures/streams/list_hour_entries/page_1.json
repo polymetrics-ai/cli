@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/hour-entries"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "employeeId": 1001,
+          "timesheetId": 1001,
+          "date": "2026-01-01T00:00:00Z",
+          "hours": 12.34,
+          "note": "fixture_value",
+          "projectId": "fixture_id",
+          "taskId": "fixture_id"
+        }
+      ]
+    }
+  }
+}

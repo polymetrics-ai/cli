@@ -1,0 +1,46 @@
+{
+  "phase": "issue-3215-bamboohr-parity",
+  "branch": "fm/cli-bamboohr-parity-wave05-r1",
+  "gsdCommand": "scripts/gsd prompt gsd-quick \"Implement BambooHR connector parity from issue 3215\"",
+  "programmingLoopFallback": "scripts/gsd prompt programming-loop is unavailable in this repo-local adapter (unknown command); manual GSD PLAN/TDD/VERIFICATION artifacts created before production edits",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single BambooHR connector-local final wave in isolated worktree; no mutating subagent spawn needed"
+    },
+    {
+      "cycle": "scope_control",
+      "decision": "no_shared_runtime_changes",
+      "reason": "unsupported binary/file/inbound-webhook operations are tracked as typed blocked ledger rows rather than implemented with shared runtime behavior"
+    },
+    {
+      "cycle": "safety",
+      "decision": "fixture_only_no_live_calls",
+      "reason": "all validation used synthetic fixtures and local checks; no BambooHR credentials or live provider calls"
+    }
+  ],
+  "officialInventory": {
+    "openapiUrl": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+    "pathOperations": 310,
+    "webhookOperations": 6,
+    "totalOperations": 316,
+    "missingOfficialRows": 0,
+    "staleExtraRows": 0
+  },
+  "coverage": {
+    "streams": 138,
+    "directReads": 9,
+    "writes": 149,
+    "blocked": 20,
+    "excluded": 0,
+    "blockedModels": {
+      "binary_read": 6,
+      "admin_reverse_etl": 7,
+      "disallowed": 1,
+      "local_workflow": 6
+    }
+  },
+  "verificationPassed": true,
+  "status": "verified_pending_issue_update_and_commit"
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "label": "fixture_value",
+    "address": {
+      "address1": "fixture_value",
+      "address2": "fixture_value",
+      "city": "fixture_value"
+    },
+    "archived": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/hris/org/locations",
+    "body": {
+      "label": "fixture_value",
+      "address": {
+        "address1": "fixture_value",
+        "address2": "fixture_value",
+        "city": "fixture_value"
+      },
+      "archived": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

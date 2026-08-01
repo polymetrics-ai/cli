@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "type": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "type": "integer"
+    },
+    "detail": {
+      "type": "string"
+    },
+    "instance": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "check_total_rewards_profile"
+}

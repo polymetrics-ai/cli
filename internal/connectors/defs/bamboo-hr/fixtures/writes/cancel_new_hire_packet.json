@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/new-hire-packets/fixture_id/cancel"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

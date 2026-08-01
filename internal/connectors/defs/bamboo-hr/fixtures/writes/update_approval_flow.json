@@ -1,0 +1,30 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "template_id": "fixture_id",
+    "assignees": [
+      "fixture_value"
+    ],
+    "flowData": {
+      "id": "fixture_id",
+      "name": "Fixture Name"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/approvals/fixture_id",
+    "body": {
+      "assignees": [
+        "fixture_value"
+      ],
+      "flowData": {
+        "id": "fixture_id",
+        "name": "Fixture Name"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

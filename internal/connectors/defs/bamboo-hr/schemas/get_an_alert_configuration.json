@@ -1,0 +1,161 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "bambooAlertId": {
+      "type": "integer"
+    },
+    "schedule": {
+      "type": "string",
+      "enum": [
+        "daily",
+        "weekly",
+        "monthly",
+        "quarterly"
+      ]
+    },
+    "dueWithin": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "dueInterval": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "sendToEmployee": {
+      "type": "boolean"
+    },
+    "sendToManager": {
+      "type": "boolean"
+    },
+    "sendToAdmin": {
+      "type": "boolean"
+    },
+    "editorUserId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "lastEdited": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "customMessage": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "customSubject": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "groupBy": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "limitTrainingToRequired": {
+      "type": "boolean"
+    },
+    "runAtTime": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "runAtTimeZone": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "includePosition": {
+      "type": "boolean"
+    },
+    "includeLocation": {
+      "type": "boolean"
+    },
+    "additionalRecipientEmails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "employeeIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "listValueIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "filterListValueIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "userIds": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_an_alert_configuration"
+}

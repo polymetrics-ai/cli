@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employee-verifications/employees/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employeeVerifications": [
+        {
+          "id": 1001,
+          "employeeId": "fixture_id",
+          "integrationType": "fixture_value",
+          "verificationType": "fixture_value",
+          "verificationStatus": "fixture_value",
+          "verificationStatusNotes": "fixture_value",
+          "remoteAccessUrl": "https://example.invalid/fixture",
+          "eVerifyStatus": "fixture_value"
+        }
+      ]
+    }
+  }
+}

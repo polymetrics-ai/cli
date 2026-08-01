@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/tools"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "tools": {
+        "levelsAndBands": true,
+        "compensationBenchmarking": true,
+        "compensationPlanning": true
+      },
+      "upsell": {
+        "accountOwnerName": "Fixture Name",
+        "canRequestDemo": true,
+        "userPermissions": {
+          "isAdmin": true,
+          "isBillingContact": true,
+          "isOwner": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,444 @@
+{
+  "tagline": "Read BambooHR streams, run bounded JSON direct reads, and safely plan typed BambooHR write actions without generic API passthrough.",
+  "usage": "pm bamboo-hr <command> [flags]",
+  "source_cli": {
+    "name": "BambooHR API",
+    "docs": "https://documentation.bamboohr.com/reference/list-employees",
+    "reference": "OpenAPI 3.1 public-openapi.yaml",
+    "source": "provider_openapi"
+  },
+  "groups": [
+    {
+      "id": "break",
+      "title": "Break",
+      "commands": [
+        "break"
+      ]
+    },
+    {
+      "id": "countries",
+      "title": "Countries",
+      "commands": [
+        "countries"
+      ]
+    },
+    {
+      "id": "custom",
+      "title": "Custom",
+      "commands": [
+        "custom"
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Data",
+      "commands": [
+        "data"
+      ]
+    },
+    {
+      "id": "employee",
+      "title": "Employee",
+      "commands": [
+        "employee"
+      ]
+    },
+    {
+      "id": "field",
+      "title": "Field",
+      "commands": [
+        "field"
+      ]
+    },
+    {
+      "id": "webhook",
+      "title": "Webhook",
+      "commands": [
+        "webhook"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Stored BambooHR credential name."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Additional key=value connector config overrides."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records for stream commands."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum bytes for bounded direct reads."
+    }
+  ],
+  "commands": [
+    {
+      "path": "break policy suggestions get",
+      "summary": "Get Break Policy Suggestions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "bamboo_hr.get_break_policy_suggestions",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/time-tracking/break-policies/suggestions"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "prompt",
+          "type": "string",
+          "summary": "prompt body field",
+          "maps_to": "body.prompt"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr break policy suggestions get --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+    },
+    {
+      "path": "countries options get",
+      "summary": "Get Countries",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/meta/countries/options"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [],
+      "examples": [
+        "pm bamboo-hr countries options get --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough."
+    },
+    {
+      "path": "data from dataset get-v1",
+      "summary": "Get Data from Dataset (v1)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "bamboo_hr.get_data_from_dataset_v1",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/datasets/{datasetName}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "dataset-name",
+          "type": "string",
+          "summary": "datasetName path parameter",
+          "maps_to": "path.datasetName"
+        },
+        {
+          "name": "fields",
+          "type": "string_array",
+          "summary": "fields body field",
+          "maps_to": "body.fields"
+        },
+        {
+          "name": "aggregations",
+          "type": "string",
+          "summary": "aggregations body field",
+          "maps_to": "body.aggregations"
+        },
+        {
+          "name": "sort-by",
+          "type": "string_array",
+          "summary": "sortBy body field",
+          "maps_to": "body.sortBy"
+        },
+        {
+          "name": "filters",
+          "type": "string",
+          "summary": "filters body field",
+          "maps_to": "body.filters"
+        },
+        {
+          "name": "group-by",
+          "type": "string_array",
+          "summary": "groupBy body field",
+          "maps_to": "body.groupBy"
+        },
+        {
+          "name": "show-history",
+          "type": "string_array",
+          "summary": "showHistory body field",
+          "maps_to": "body.showHistory"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr data from dataset get-v1 --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+    },
+    {
+      "path": "data from dataset get-v2",
+      "summary": "Get Data from Dataset (v2)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "bamboo_hr.get_data_from_dataset_v2",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/datasets/{datasetName}/data"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "dataset-name",
+          "type": "string",
+          "summary": "datasetName path parameter",
+          "maps_to": "path.datasetName"
+        },
+        {
+          "name": "fields",
+          "type": "string_array",
+          "summary": "fields body field",
+          "maps_to": "body.fields"
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "filter body field",
+          "maps_to": "body.filter"
+        },
+        {
+          "name": "order-by",
+          "type": "string",
+          "summary": "orderBy body field",
+          "maps_to": "body.orderBy"
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "summary": "page body field",
+          "maps_to": "body.page"
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "pageSize body field",
+          "maps_to": "body.pageSize"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr data from dataset get-v2 --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+    },
+    {
+      "path": "field options get-v1",
+      "summary": "Get Field Options (v1)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "bamboo_hr.get_field_options_v1",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/datasets/{datasetName}/field-options"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "dataset-name",
+          "type": "string",
+          "summary": "datasetName path parameter",
+          "maps_to": "path.datasetName"
+        },
+        {
+          "name": "fields",
+          "type": "string_array",
+          "summary": "fields body field",
+          "maps_to": "body.fields"
+        },
+        {
+          "name": "dependent-fields",
+          "type": "string",
+          "summary": "dependentFields body field",
+          "maps_to": "body.dependentFields"
+        },
+        {
+          "name": "filters",
+          "type": "string",
+          "summary": "filters body field",
+          "maps_to": "body.filters"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr field options get-v1 --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+    },
+    {
+      "path": "field options v1 2 get",
+      "summary": "Get Field Options (v1.2)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "bamboo_hr.get_field_options_v1_2",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1_2/datasets/{datasetName}/field-options"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "dataset-name",
+          "type": "string",
+          "summary": "datasetName path parameter",
+          "maps_to": "path.datasetName"
+        },
+        {
+          "name": "fields",
+          "type": "string_array",
+          "summary": "fields body field",
+          "maps_to": "body.fields"
+        },
+        {
+          "name": "dependent-fields",
+          "type": "string",
+          "summary": "dependentFields body field",
+          "maps_to": "body.dependentFields"
+        },
+        {
+          "name": "filters",
+          "type": "string",
+          "summary": "filters body field",
+          "maps_to": "body.filters"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr field options v1 2 get --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+    },
+    {
+      "path": "employee trainings list",
+      "summary": "List Employee Training Records",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/training/record/employee/{employeeId}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "employee-id",
+          "type": "string",
+          "summary": "employeeId path parameter",
+          "maps_to": "path.employeeId"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr employee trainings list --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough."
+    },
+    {
+      "path": "webhook logs list",
+      "summary": "List Webhook Logs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/webhooks/{id}/log"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id path parameter",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr webhook logs list --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough."
+    },
+    {
+      "path": "custom report request",
+      "summary": "Request Custom Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "bamboo_hr.request_custom_report",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/reports/custom"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "title body field",
+          "maps_to": "body.title"
+        },
+        {
+          "name": "fields",
+          "type": "string_array",
+          "summary": "fields body field",
+          "maps_to": "body.fields"
+        },
+        {
+          "name": "filters",
+          "type": "string",
+          "summary": "filters body field",
+          "maps_to": "body.filters"
+        },
+        {
+          "name": "filter-duplicates",
+          "type": "string",
+          "summary": "filterDuplicates body field",
+          "maps_to": "body.filterDuplicates"
+        }
+      ],
+      "examples": [
+        "pm bamboo-hr custom report request --credential <name> --json"
+      ],
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "auth",
+      "summary": "Use a stored BambooHR API key for Basic auth; OAuth-scoped operations may also require an access token secret."
+    },
+    {
+      "name": "safety",
+      "summary": "No command exposes raw method, path, body, query, shell, file, or passthrough access."
+    }
+  ]
+}

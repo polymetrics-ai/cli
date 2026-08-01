@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "useGuidelines": true,
+    "softMin": 12.34,
+    "softMax": 12.34
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/budgets/guidelines",
+    "body": {
+      "useGuidelines": true,
+      "softMin": 12.34,
+      "softMax": 12.34
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

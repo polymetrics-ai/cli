@@ -1,0 +1,63 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "employeeId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "jobTitle": {
+      "type": "string"
+    },
+    "photoUrl": {
+      "type": "string"
+    },
+    "adminType": {
+      "type": "string",
+      "enum": [
+        "FULL_ACCOUNT_ADMIN",
+        "CYCLE_ADMIN"
+      ]
+    },
+    "isRemovable": {
+      "type": "boolean"
+    },
+    "addedAt": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "addedByEmployeeId": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_compensation_planning_cycle_admins"
+}

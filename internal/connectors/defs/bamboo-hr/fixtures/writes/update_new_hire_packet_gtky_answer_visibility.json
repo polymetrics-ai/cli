@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "hidden": true,
+    "questionIds": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/new-hire-packets/fixture_id/question-visibility",
+    "body": {
+      "hidden": true,
+      "questionIds": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

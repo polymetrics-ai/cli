@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/planning_cycles/synthetic-conformance-value/admins"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "admins": [
+        {
+          "employeeId": "fixture_id",
+          "displayName": "Fixture Name",
+          "firstName": "Fixture Name",
+          "lastName": "Fixture Name",
+          "jobTitle": "fixture_value",
+          "photoUrl": "https://example.invalid/fixture",
+          "adminType": "FULL_ACCOUNT_ADMIN",
+          "isRemovable": true
+        }
+      ]
+    }
+  }
+}

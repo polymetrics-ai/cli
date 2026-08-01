@@ -1,0 +1,69 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "canUploadFiles": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no"
+      ]
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "originalFileName": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "dateCreated": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "shareWithEmployees": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          },
+          "canRenameFile": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          },
+          "canDeleteFile": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_company_files"
+}

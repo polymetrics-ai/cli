@@ -1,0 +1,38 @@
+{
+  "record": {
+    "payBands": [
+      {
+        "levelId": 1001,
+        "min": "fixture_value",
+        "mid": "fixture_id",
+        "max": "fixture_value",
+        "percentageRange": "fixture_value",
+        "currencyCode": "fixture_value",
+        "compensationType": "fixture_value"
+      }
+    ],
+    "payBandType": "percentRange"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/pay-grades-and-bands/pay-bands",
+    "body": {
+      "payBands": [
+        {
+          "levelId": 1001,
+          "min": "fixture_value",
+          "mid": "fixture_id",
+          "max": "fixture_value",
+          "percentageRange": "fixture_value",
+          "currencyCode": "fixture_value",
+          "compensationType": "fixture_value"
+        }
+      ],
+      "payBandType": "percentRange"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

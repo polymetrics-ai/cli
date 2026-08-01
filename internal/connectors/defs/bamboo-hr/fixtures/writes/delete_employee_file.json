@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "file_id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/employees/fixture_id/files/fixture_id"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "user_id": "fixture_id",
+    "emailType": "signup_survey"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employee-verifications/users/fixture_id/send-email",
+    "body": {
+      "emailType": "signup_survey"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

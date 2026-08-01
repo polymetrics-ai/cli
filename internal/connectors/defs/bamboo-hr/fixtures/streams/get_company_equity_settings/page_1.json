@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/equity/settings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "calculationType": "fixture_value",
+      "companyValuation": "fixture_value",
+      "outstandingShares": "fixture_value",
+      "pricePerShare": "fixture_value",
+      "currencyCode": "fixture_value",
+      "sliderMin": "fixture_value",
+      "sliderMax": "fixture_value",
+      "vestingConditions": "fixture_value"
+    }
+  }
+}

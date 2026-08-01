@@ -1,0 +1,28 @@
+{
+  "record": {
+    "legalName": "Fixture Name",
+    "phone": "fixture_value",
+    "address": {
+      "line1": "fixture_value",
+      "line2": "fixture_value",
+      "city": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/company-profile-data/company-information",
+    "body": {
+      "legalName": "Fixture Name",
+      "phone": "fixture_value",
+      "address": {
+        "line1": "fixture_value",
+        "line2": "fixture_value",
+        "city": "fixture_value"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

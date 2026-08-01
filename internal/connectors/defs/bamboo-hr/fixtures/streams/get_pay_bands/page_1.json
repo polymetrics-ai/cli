@@ -1,0 +1,67 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/pay-grades-and-bands/pay-bands"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "groups": [
+        {
+          "groupId": "fixture_id",
+          "groupName": "Fixture Name",
+          "levels": [
+            {
+              "levelId": "fixture_id",
+              "levelName": "Fixture Name",
+              "min": {
+                "value": "fixture_value",
+                "errors": [
+                  "fixture_value"
+                ],
+                "warnings": [
+                  "fixture_value"
+                ]
+              },
+              "mid": {
+                "value": "fixture_value",
+                "errors": [
+                  "fixture_value"
+                ],
+                "warnings": [
+                  "fixture_value"
+                ]
+              },
+              "max": {
+                "value": "fixture_value",
+                "errors": [
+                  "fixture_value"
+                ],
+                "warnings": [
+                  "fixture_value"
+                ]
+              },
+              "percentageRange": {
+                "value": "fixture_value",
+                "errors": [
+                  "fixture_value"
+                ],
+                "warnings": [
+                  "fixture_value"
+                ]
+              },
+              "currencyCode": "fixture_value",
+              "compensationType": "Salary"
+            }
+          ],
+          "errors": [
+            "fixture_value"
+          ],
+          "warnings": [
+            "fixture_value"
+          ]
+        }
+      ]
+    }
+  }
+}

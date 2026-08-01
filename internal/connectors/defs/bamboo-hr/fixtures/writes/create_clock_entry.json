@@ -1,0 +1,22 @@
+{
+  "record": {
+    "employeeId": 1001,
+    "start": "2026-01-01T00:00:00Z",
+    "end": "2026-01-01T00:00:00Z",
+    "timezone": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time-tracking/clock-entries",
+    "body": {
+      "employeeId": 1001,
+      "start": "2026-01-01T00:00:00Z",
+      "end": "2026-01-01T00:00:00Z",
+      "timezone": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

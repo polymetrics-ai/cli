@@ -1,0 +1,77 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "preferredFirstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "hireDate": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "profilePictureUrl": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "department": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "canSeeEmployee": {
+      "type": "boolean"
+    },
+    "getToKnowYou": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "preferredFirstName",
+    "lastName",
+    "hireDate",
+    "canSeeEmployee"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_welcome_new_hires_widget"
+}

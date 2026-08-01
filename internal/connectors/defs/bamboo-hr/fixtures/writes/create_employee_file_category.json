@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employees/files/categories"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
