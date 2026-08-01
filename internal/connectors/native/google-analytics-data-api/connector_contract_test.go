@@ -247,6 +247,48 @@ func TestOperationDirectReadLiveUsesFixedGETEndpoints(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadLiveNormalizesBearerSecretAliases(t *testing.T) {
+	ctx := context.Background()
+	for _, key := range []string{
+		"credentials.access_token",
+		"access_token",
+		"credentials",
+		"credentials.api_key",
+		"api_key",
+	} {
+		key := key
+		t.Run(key, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if got := r.Header.Get("Authorization"); got != "Bearer fixture-access-token" {
+					t.Fatalf("Authorization = %q", got)
+				}
+				if r.Method != http.MethodGet || r.URL.Path != "/v1beta/properties/123456/metadata" {
+					t.Fatalf("request = %s %s", r.Method, r.URL.RequestURI())
+				}
+				writeJSON(t, w, map[string]any{"name": "properties/123456/metadata"})
+			}))
+			defer server.Close()
+
+			c := New()
+			c.Client = server.Client()
+			secrets := map[string]string{key: "fixture-access-token"}
+			_, err := c.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
+				Operation:    "google-analytics-data-api.get_metadata",
+				Config:       connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL, "property_ids": "123456"}, Secrets: secrets},
+				OutputPolicy: "json_redacted",
+			})
+			if err != nil {
+				t.Fatalf("OperationDirectRead(%s): %v", key, err)
+			}
+			if key != "access_token" {
+				if _, ok := secrets["access_token"]; ok {
+					t.Fatalf("original secrets map was mutated for %s", key)
+				}
+			}
+		})
+	}
+}
+
 func assertNumber(t *testing.T, value any, want float64) {
 	t.Helper()
 	got, ok := value.(float64)

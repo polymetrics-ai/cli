@@ -736,6 +736,40 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_CLISurfaceOperationRequiresOutputPolicy(t *testing.T) {
+	cliSurface := strings.Replace(validOperationCLISurfaceJSON(), "\n\t\t\t\t\"output_policy\": \"json_redacted\",", "", 1)
+	report, err := validateDir(operationCLISurfaceBundleFS(cliSurface, validOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceOperationAPISurfaceMustMatchRESTEndpoint(t *testing.T) {
+	cliSurface := strings.Replace(
+		validOperationCLISurfaceJSON(),
+		`{ "method": "GET", "path": "/widgets/{id}" }`,
+		`{ "method": "GET", "path": "/widgets/{other_id}" }`,
+		1,
+	)
+	fsys := operationCLISurfaceBundleFS(cliSurface, validOperationsJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/widgets/{id}", "operation": { "model": "direct_read", "status": "blocked", "risk": "low", "blocked_by_default": true, "reason": "typed operation metadata" } },
+			{ "method": "GET", "path": "/widgets/{other_id}", "operation": { "model": "direct_read", "status": "blocked", "risk": "low", "blocked_by_default": true, "reason": "other typed operation metadata" } }
+		]
+	}`)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",
