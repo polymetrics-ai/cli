@@ -20,7 +20,7 @@ The connector uses bounded page-number pagination for paginated streams and fixt
 
 ## Write actions & risks
 
-This bundle declares 73 named reverse-ETL write actions for safely expressible Chatwoot application/platform mutations. Every write must follow plan -> preview -> explicit approval token -> execute. 47 DELETE/destructive/admin/elevated actions carry `confirm: destructive` and require the typed `--confirm destructive` challenge before execution. Delete actions are modeled as idempotent for 404 responses where the resource is already absent.
+This bundle declares 73 named reverse-ETL write actions for safely expressible Chatwoot application/platform mutations. Every write must follow plan -> preview -> explicit approval token -> execute. 49 DELETE/destructive/admin/elevated actions carry `confirm: destructive` and require the typed `--confirm destructive` challenge before execution. Delete actions are modeled as idempotent for 404 responses where the resource is already absent.
 
 Public client writes and write endpoints requiring query-parameter execution support remain planned/blocked rather than exposed through a raw API escape hatch. There is no generic HTTP method/path/body tool.
 

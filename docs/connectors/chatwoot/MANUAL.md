@@ -24,7 +24,7 @@ IMPLEMENTED STREAMS
   conversations, contacts, inboxes, agents, teams, labels, messages
 
 REVERSE ETL ACTIONS
-  73 named actions are declared in writes.json; destructive/admin count: 47. Inspect structured connector JSON for the full action list.
+  73 named actions are declared in writes.json; destructive/admin count: 49. Inspect structured connector JSON for the full action list.
 
 KNOWN LIMITS
   Public client API, write-query gaps, and non-fixture-backed read/report/changefeed operations remain planned/blocked in api_surface.json with evidence. No live certification is claimed.

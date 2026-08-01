@@ -7,7 +7,12 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/api/v1/accounts/synthetic-conformance-value/teams/1/team_members"
+    "path": "/api/v1/accounts/synthetic-conformance-value/teams/1/team_members",
+    "body": {
+      "user_ids": [
+        1
+      ]
+    }
   },
   "response": {
     "status": 200,

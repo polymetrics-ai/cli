@@ -156,7 +156,8 @@
       "id": "messages",
       "title": "Messages",
       "commands": [
-        "messages list"
+        "messages list",
+        "messages create"
       ]
     },
     {
@@ -453,8 +454,8 @@
           "path": "/api/v1/accounts/{account_id}/actions/contact_merge"
         }
       ],
-      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/actions/contact_merge); reverse ETL plan, preview, explicit approval, and execute are required",
-      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "risk": "destructive Chatwoot mutation (POST /api/v1/accounts/{account_id}/actions/contact_merge); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
       "examples": [
         "pm chatwoot actions create --credential chatwoot-prod --preview --json"
       ]
@@ -997,8 +998,8 @@
           "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes"
         }
       ],
-      "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes); reverse ETL plan, preview, explicit approval, and execute are required",
-      "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
+      "risk": "destructive Chatwoot mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/destroy_custom_attributes); requires reverse ETL plan, preview, explicit approval, and typed --confirm destructive before execute",
+      "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.",
       "examples": [
         "pm chatwoot conversations create conversation --credential chatwoot-prod --preview --json"
       ]
@@ -1024,7 +1025,7 @@
       ]
     },
     {
-      "path": "conversations create conversation",
+      "path": "messages create",
       "summary": "Plan Create New Message through a named Chatwoot reverse ETL action.",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1040,7 +1041,7 @@
       "risk": "Chatwoot application API mutation (POST /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages); reverse ETL plan, preview, explicit approval, and execute are required",
       "approval": "Plan first, inspect preview output, then execute only with the generated approval token.",
       "examples": [
-        "pm chatwoot conversations create conversation --credential chatwoot-prod --preview --json"
+        "pm chatwoot messages create --credential chatwoot-prod --conversation-id 1 --content 'Hello from Polymetrics' --preview --json"
       ],
       "flags": [
         {

@@ -7,7 +7,13 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/api/v1/accounts/synthetic-conformance-value/inbox_members"
+    "path": "/api/v1/accounts/synthetic-conformance-value/inbox_members",
+    "body": {
+      "inbox_id": "fixture-id",
+      "user_ids": [
+        1
+      ]
+    }
   },
   "response": {
     "status": 200,
