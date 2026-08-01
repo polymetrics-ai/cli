@@ -15077,7 +15077,11 @@
             ]
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "data_type"
+        ]
       },
       "risk": "Create a conversation attribute: live Intercom mutation against /conversations/attributes; reverse ETL requires plan, preview, explicit approval, execute",
       "body_fields": [
@@ -15331,7 +15335,8 @@
             "type": "string",
             "description": "The type of resource being redacted.",
             "enum": [
-              "conversation_part"
+              "conversation_part",
+              "source"
             ]
           },
           "conversation_id": {
@@ -15347,7 +15352,12 @@
             "description": "The id of the source."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "conversation_id"
+        ],
+        "minProperties": 3
       },
       "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
       "body_fields": [
@@ -15356,7 +15366,12 @@
         "conversation_part_id",
         "source_id"
       ],
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "redact_fields": [
+        "conversation_id",
+        "conversation_part_id",
+        "source_id"
+      ]
     },
     {
       "name": "delete_conversation",
@@ -15615,13 +15630,17 @@
           "message_type": {
             "type": "string",
             "enum": [
-              "close"
+              "close",
+              "snoozed",
+              "open",
+              "assignment"
             ]
           },
           "type": {
             "type": "string",
             "enum": [
-              "admin"
+              "admin",
+              "team"
             ]
           },
           "admin_id": {
@@ -15644,7 +15663,9 @@
         },
         "additionalProperties": false,
         "required": [
-          "conversation_id"
+          "conversation_id",
+          "message_type",
+          "admin_id"
         ]
       },
       "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute",
@@ -15678,13 +15699,16 @@
           "message_type": {
             "type": "string",
             "enum": [
-              "comment"
+              "comment",
+              "note",
+              "quick_reply"
             ]
           },
           "type": {
             "type": "string",
             "enum": [
-              "user"
+              "user",
+              "admin"
             ]
           },
           "body": {
@@ -15770,7 +15794,9 @@
         },
         "additionalProperties": false,
         "required": [
-          "conversation_id"
+          "conversation_id",
+          "message_type",
+          "type"
         ]
       },
       "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute",
@@ -16063,7 +16089,13 @@
           "data_type": {
             "type": "string",
             "enum": [
-              "options"
+              "options",
+              "string",
+              "integer",
+              "float",
+              "boolean",
+              "datetime",
+              "date"
             ]
           },
           "options": {
@@ -16077,12 +16109,41 @@
                 }
               }
             }
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the data attribute."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "contact",
+              "company"
+            ],
+            "description": "The model this data attribute belongs to."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the data attribute."
+          },
+          "messenger_writable": {
+            "type": "boolean",
+            "description": "Whether the attribute can be updated from the Messenger."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "model",
+          "data_type"
+        ]
       },
       "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute",
       "body_fields": [
+        "name",
+        "model",
+        "description",
+        "messenger_writable",
         "data_type",
         "options"
       ]
@@ -16110,6 +16171,18 @@
                 }
               }
             }
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "Whether the data attribute is archived."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the data attribute."
+          },
+          "messenger_writable": {
+            "type": "boolean",
+            "description": "Whether the attribute can be updated from the Messenger."
           }
         },
         "additionalProperties": false,
@@ -16125,6 +16198,9 @@
         "data_attribute_id"
       ],
       "body_fields": [
+        "archived",
+        "description",
+        "messenger_writable",
         "options"
       ]
     },
@@ -19603,8 +19679,8 @@
             "type": "string",
             "description": "The kind of message being created.",
             "enum": [
-              "in_app",
               "email",
+              "inapp",
               "whatsapp"
             ]
           },
@@ -20403,7 +20479,10 @@
             }
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ]
       },
       "risk": "Create or update a tag, Tag or untag companies, Tag contacts: live Intercom mutation against /tags; reverse ETL requires plan, preview, explicit approval, execute",
       "body_fields": [
@@ -21146,13 +21225,16 @@
           "message_type": {
             "type": "string",
             "enum": [
-              "comment"
+              "comment",
+              "note",
+              "quick_reply"
             ]
           },
           "type": {
             "type": "string",
             "enum": [
-              "user"
+              "user",
+              "admin"
             ]
           },
           "body": {
@@ -21234,11 +21316,17 @@
           "cross_post": {
             "type": "boolean",
             "description": "If set to true, the note will be cross-posted to all linked conversations. Only applicable to note message types on back-office tickets."
+          },
+          "skip_notifications": {
+            "type": "boolean",
+            "description": "Option to disable notifications when replying to a Ticket."
           }
         },
         "additionalProperties": false,
         "required": [
-          "ticket_id"
+          "ticket_id",
+          "message_type",
+          "type"
         ]
       },
       "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute",
@@ -21260,7 +21348,8 @@
         "email",
         "admin_id",
         "attachment_files",
-        "cross_post"
+        "cross_post",
+        "skip_notifications"
       ]
     },
     {

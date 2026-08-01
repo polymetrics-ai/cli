@@ -1,12 +1,16 @@
 {
   "record": {
-    "data_type": "options"
+    "name": "data_attribute_fixture",
+    "model": "contact",
+    "data_type": "string"
   },
   "expect": {
     "method": "POST",
     "path": "/data_attributes",
     "body": {
-      "data_type": "options"
+      "name": "data_attribute_fixture",
+      "model": "contact",
+      "data_type": "string"
     }
   },
   "response": {

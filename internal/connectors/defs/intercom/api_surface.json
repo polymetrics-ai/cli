@@ -3,7 +3,7 @@
   "docs": "https://developers.intercom.com/docs/references/2.16/rest-api/api.intercom.io; https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json; https://developers.intercom.com/page-data/docs/references/rest-api/api.intercom.io/data.json",
   "reviewed_at": "2026-07-30",
   "operation_ledger_version": 1,
-  "scope": "Complete official Intercom OpenAPI 2.16 inventory: 230 documented operations from the official shared OpenAPI JSON. Existing read streams remain fixture-backed; reverse-ETL write actions are connector-local typed actions with plan/preview/approval/execute and destructive confirmation where applicable. Direct/binary/CDC operations are ledgered as blocked-by-default typed command candidates until shared execution foundations and fixtures prove them.",
+  "scope": "Complete official Intercom OpenAPI 2.16 inventory: 231 documented operations from the official shared OpenAPI JSON. Existing read streams remain fixture-backed; reverse-ETL write actions are connector-local typed actions with plan/preview/approval/execute and destructive confirmation where applicable. Direct/binary/CDC operations are ledgered as blocked-by-default typed command candidates until shared execution foundations and fixtures prove them.",
   "endpoints": [
     {
       "method": "GET",

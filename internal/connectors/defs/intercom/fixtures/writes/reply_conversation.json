@@ -1,13 +1,19 @@
 {
   "record": {
     "conversation_id": "conversation_id_fixture",
-    "message_type": "comment"
+    "message_type": "comment",
+    "type": "user",
+    "body": "Hello from fixture",
+    "email": "contact@example.com"
   },
   "expect": {
     "method": "POST",
     "path": "/conversations/conversation_id_fixture/reply",
     "body": {
-      "message_type": "comment"
+      "message_type": "comment",
+      "type": "user",
+      "body": "Hello from fixture",
+      "email": "contact@example.com"
     }
   },
   "response": {

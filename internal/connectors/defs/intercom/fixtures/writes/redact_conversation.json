@@ -1,12 +1,16 @@
 {
   "record": {
-    "type": "conversation_part"
+    "type": "conversation_part",
+    "conversation_id": "conversation_id_fixture",
+    "conversation_part_id": "conversation_part_id_fixture"
   },
   "expect": {
     "method": "POST",
     "path": "/conversations/redact",
     "body": {
-      "type": "conversation_part"
+      "type": "conversation_part",
+      "conversation_id": "conversation_id_fixture",
+      "conversation_part_id": "conversation_part_id_fixture"
     }
   },
   "response": {

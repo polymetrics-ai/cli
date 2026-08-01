@@ -15493,7 +15493,12 @@
                 "type"
               ]
             }
-          }
+          },
+          "required": [
+            "name",
+            "data_type"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -15711,7 +15716,8 @@
               "type": "string",
               "description": "The type of resource being redacted.",
               "enum": [
-                "conversation_part"
+                "conversation_part",
+                "source"
               ]
             },
             "conversation_id": {
@@ -15726,7 +15732,13 @@
               "type": "string",
               "description": "The id of the source."
             }
-          }
+          },
+          "required": [
+            "type",
+            "conversation_id"
+          ],
+          "minProperties": 3,
+          "additionalProperties": false
         }
       }
     },
@@ -16023,13 +16035,17 @@
             "message_type": {
               "type": "string",
               "enum": [
-                "close"
+                "close",
+                "snoozed",
+                "open",
+                "assignment"
               ]
             },
             "type": {
               "type": "string",
               "enum": [
-                "admin"
+                "admin",
+                "team"
               ]
             },
             "admin_id": {
@@ -16049,7 +16065,12 @@
               "type": "string",
               "description": "The `id` of the `admin` or `team` which will be assigned the conversation. A conversation can be assigned both an admin and a team.\\nSet `0` if you want this assign to no admin or team (ie. Unassigned)."
             }
-          }
+          },
+          "required": [
+            "message_type",
+            "admin_id"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -16074,13 +16095,16 @@
             "message_type": {
               "type": "string",
               "enum": [
-                "comment"
+                "comment",
+                "note",
+                "quick_reply"
               ]
             },
             "type": {
               "type": "string",
               "enum": [
-                "user"
+                "user",
+                "admin"
               ]
             },
             "body": {
@@ -16163,7 +16187,12 @@
               "type": "boolean",
               "description": "Option to disable notifications when replying to a conversation."
             }
-          }
+          },
+          "required": [
+            "message_type",
+            "type"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -16442,7 +16471,13 @@
             "data_type": {
               "type": "string",
               "enum": [
-                "options"
+                "options",
+                "string",
+                "integer",
+                "float",
+                "boolean",
+                "datetime",
+                "date"
               ]
             },
             "options": {
@@ -16456,8 +16491,34 @@
                   }
                 }
               }
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the data attribute."
+            },
+            "model": {
+              "type": "string",
+              "enum": [
+                "contact",
+                "company"
+              ],
+              "description": "The model this data attribute belongs to."
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the data attribute."
+            },
+            "messenger_writable": {
+              "type": "boolean",
+              "description": "Whether the attribute can be updated from the Messenger."
             }
-          }
+          },
+          "required": [
+            "name",
+            "model",
+            "data_type"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -16490,8 +16551,21 @@
                   }
                 }
               }
+            },
+            "archived": {
+              "type": "boolean",
+              "description": "Whether the data attribute is archived."
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the data attribute."
+            },
+            "messenger_writable": {
+              "type": "boolean",
+              "description": "Whether the attribute can be updated from the Messenger."
             }
-          }
+          },
+          "additionalProperties": false
         }
       }
     },
@@ -20424,8 +20498,8 @@
             "message_type": {
               "type": "string",
               "enum": [
-                "in_app",
                 "email",
+                "inapp",
                 "whatsapp"
               ]
             },
@@ -20498,7 +20572,8 @@
             "from",
             "to"
           ],
-          "minProperties": 4
+          "minProperties": 4,
+          "additionalProperties": false
         }
       }
     },
@@ -21312,7 +21387,11 @@
                 }
               }
             }
-          }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -22124,13 +22203,16 @@
             "message_type": {
               "type": "string",
               "enum": [
-                "comment"
+                "comment",
+                "note",
+                "quick_reply"
               ]
             },
             "type": {
               "type": "string",
               "enum": [
-                "user"
+                "user",
+                "admin"
               ]
             },
             "body": {
@@ -22212,8 +22294,17 @@
             "cross_post": {
               "type": "boolean",
               "description": "If set to true, the note will be cross-posted to all linked conversations. Only applicable to note message types on back-office tickets."
+            },
+            "skip_notifications": {
+              "type": "boolean",
+              "description": "Option to disable notifications when replying to a Ticket."
             }
-          }
+          },
+          "required": [
+            "message_type",
+            "type"
+          ],
+          "additionalProperties": false
         }
       }
     },

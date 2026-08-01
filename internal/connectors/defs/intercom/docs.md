@@ -58,5 +58,5 @@ Fixture-backed write request-shape evidence is connector-local and does not cert
 - No live Intercom credentials, provider calls, writes, binary downloads, or certification were used for this inventory.
 - Direct read/query/search, binary/export, and CDC/changefeed-like operations are blocked by default in `api_surface.json`/`operations.json` until shared foundations and fixtures prove safe execution.
 - CDC/changefeed truthfulness and state handling depend on #2986 and #2988 before this connector can claim CDC execution.
-- The generated write schemas are simplified to the engine's supported draft-07 subset (`type`, `properties`, `required`, `items`, `enum`, `format`, `description`, `additionalProperties`). OpenAPI `oneOf`/`anyOf` request variants are merged into a typed property vocabulary without variant-specific validation.
+- The generated write schemas are simplified to the engine's supported draft-07 subset (`type`, `properties`, `required`, `items`, `enum`, `format`, `description`, `minProperties`, `additionalProperties`). OpenAPI `oneOf`/`anyOf` request variants are merged into typed property vocabularies with common required fields; variant-specific alternatives remain approximated by bounded properties where the engine lacks `oneOf`.
 - Certification metadata is fixture-only; `certification.json` intentionally has no live write pairings.

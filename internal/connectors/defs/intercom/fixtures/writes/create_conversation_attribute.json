@@ -1,12 +1,14 @@
 {
   "record": {
-    "name": "name_fixture"
+    "name": "name_fixture",
+    "data_type": "string"
   },
   "expect": {
     "method": "POST",
     "path": "/conversations/attributes",
     "body": {
-      "name": "name_fixture"
+      "name": "name_fixture",
+      "data_type": "string"
     }
   },
   "response": {
