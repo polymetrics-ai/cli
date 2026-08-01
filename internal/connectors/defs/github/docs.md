@@ -499,13 +499,13 @@ actions:
   repository forked from this one, under the caller's account or a target organization.
 - `create_repo_ruleset`: POST `/repos/{{ config.owner }}/{{ config.repo }}/rulesets` - kind
   `create`; body type `json`; required record fields `name`, `enforcement`; accepted fields
-  `bypass_actors`, `conditions`, `enforcement`, `name`, `rules`, `target`; risk: creates a
-  repository ruleset that can block pushes, merges, or deletions repo-wide once active.
+  `enforcement`, `name`, `target`; risk: creates a repository ruleset that can block pushes,
+  merges, or deletions repo-wide once active.
 - `update_repo_ruleset`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
   record.ruleset_id }}` - kind `update`; body type `json`; path fields `ruleset_id`; required record
-  fields `ruleset_id`; accepted fields `bypass_actors`, `conditions`, `enforcement`, `name`,
-  `rules`, `ruleset_id`, `target`; risk: changes an existing repository ruleset's enforcement or
-  rule set, which can block pushes, merges, or deletions repo-wide.
+  fields `ruleset_id`; accepted fields `enforcement`, `name`, `ruleset_id`, `target`; risk: changes
+  an existing repository ruleset's enforcement or rule set, which can block pushes, merges, or
+  deletions repo-wide.
 - `delete_repo_ruleset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
   record.ruleset_id }}` - kind `delete`; body type `none`; path fields `ruleset_id`; required record
   fields `ruleset_id`; accepted fields `ruleset_id`; risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it
