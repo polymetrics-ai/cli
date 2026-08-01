@@ -2,6 +2,7 @@ package conformance
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -106,6 +107,29 @@ func TestCheckSurfaceComplete_AllowsPOSTBackedReadStreamWhenWriteFalse(t *testin
 
 	if err := checkSurfaceComplete(b); err != nil {
 		t.Fatalf("checkSurfaceComplete rejected a POST-backed read stream with write=false: %v", err)
+	}
+}
+
+func TestCheckSurfaceComplete_RejectsUnsafeCoveredReadWhenWriteFalse(t *testing.T) {
+	for _, method := range []string{"PUT", "PATCH", "DELETE"} {
+		method := method
+		t.Run(method, func(t *testing.T) {
+			b := engine.Bundle{
+				Name: "acme",
+				Metadata: engine.Metadata{
+					Capabilities: engine.Capabilities{Read: true, Write: false},
+				},
+				Streams: []engine.StreamSpec{{Name: "reports"}},
+				Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{
+					{Method: method, Path: "/reports:run", CoveredBy: &engine.SurfaceCoverage{Stream: "reports"}},
+				}},
+			}
+
+			err := checkSurfaceComplete(b)
+			if err == nil || !strings.Contains(err.Error(), "capabilities.write is false") {
+				t.Fatalf("checkSurfaceComplete(%s) error = %v, want capabilities.write failure", method, err)
+			}
+		})
 	}
 }
 

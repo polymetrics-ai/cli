@@ -272,10 +272,8 @@ func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadReque
 	if req.Config.Config == nil {
 		req.Config.Config = map[string]string{}
 	}
-	if strings.TrimSpace(req.Config.Secrets["access_token"]) == "" {
-		if token := gaSecret(req.Config); strings.TrimSpace(token) != "" {
-			req.Config.Secrets["access_token"] = token
-		}
+	if token := gaSecret(req.Config); strings.TrimSpace(token) != "" {
+		req.Config.Secrets["access_token"] = token
 	}
 	if req.PathParams["property_id"] == "" {
 		if property := firstNonEmpty(req.Config.Config["property_id"], firstPropertyID(req.Config.Config["property_ids"])); property != "" {

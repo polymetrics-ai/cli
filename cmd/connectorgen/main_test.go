@@ -7,6 +7,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -259,6 +260,51 @@ func TestValidate_APISurfaceAllowsPOSTBackedReadStreamWhenWriteFalse(t *testing.
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for POST-backed read stream with write=false, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_APISurfaceRejectsUnsafeReadStreamWhenWriteFalse(t *testing.T) {
+	for _, method := range []string{"PUT", "PATCH", "DELETE"} {
+		method := method
+		t.Run(method, func(t *testing.T) {
+			fsys := cliSurfaceBundleFS(fmt.Sprintf(`{
+		"tagline": "Read reports.",
+		"usage": "pm cli-surface reports list [flags]",
+		"commands": [
+			{
+				"path": "reports list",
+				"summary": "List report rows",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"api_surface": [
+					{ "method": %q, "path": "/widgets:runReport" }
+				]
+			}
+		]
+	}`, method))
+			fsys["cli-surface/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "cli-surface",
+		"display_name": "CLI Surface",
+		"description": "test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+			fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": %q, "path": "/widgets:runReport", "covered_by": { "stream": "widgets" } }
+		]
+	}`, method))}
+			delete(fsys, "cli-surface/writes.json")
+
+			report, err := validateDir(fsys)
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			assertFindingRule(t, report, "cli-surface", ruleSurfaceFailFirstRun)
+		})
 	}
 }
 
@@ -678,6 +724,41 @@ func TestValidate_CLISurfaceOperationAPISurfaceMustMatchRESTEndpoint(t *testing.
 		t.Fatalf("validateDir: %v", err)
 	}
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceOperationRequiresExactlyOneAPISurfaceEndpoint(t *testing.T) {
+	tests := []struct {
+		name       string
+		cliSurface string
+	}{
+		{
+			name: "missing",
+			cliSurface: strings.Replace(validOperationCLISurfaceJSON(), `
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets/{id}" }
+				],
+`, "", 1),
+		},
+		{
+			name: "multiple",
+			cliSurface: strings.Replace(
+				validOperationCLISurfaceJSON(),
+				`{ "method": "GET", "path": "/widgets/{id}" }`,
+				`{ "method": "GET", "path": "/widgets/{id}" },
+					{ "method": "GET", "path": "/widgets/{id}" }`,
+				1,
+			),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			report, err := validateDir(operationCLISurfaceBundleFS(tt.cliSurface, validOperationsJSON()))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+		})
+	}
 }
 
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
