@@ -1,6 +1,6 @@
 {
   "record": {
-    "id1": 1001
+    "carrier_service_id": 1001
   },
   "expect": {
     "method": "DELETE",

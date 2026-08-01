@@ -1,6 +1,6 @@
 {
   "record": {
-    "id1": 1001
+    "theme_id": 1001
   },
   "expect": {
     "method": "DELETE",

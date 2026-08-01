@@ -1,11 +1,11 @@
 {
   "record": {
-    "blog_id": 1001,
+    "product_image_id": 1001,
     "metafield_id": 1002
   },
   "expect": {
     "method": "DELETE",
-    "path": "/admin/api/latest/blogs/1001/metafields/1002.json"
+    "path": "/admin/api/latest/product_images/1001/metafields/1002.json"
   },
   "response": {
     "status": 200,

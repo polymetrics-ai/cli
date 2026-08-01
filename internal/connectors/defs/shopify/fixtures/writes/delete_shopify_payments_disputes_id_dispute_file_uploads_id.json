@@ -1,7 +1,7 @@
 {
   "record": {
-    "id1": 1001,
-    "id2": 1002
+    "dispute_id": 1001,
+    "dispute_file_upload_id": 1002
   },
   "expect": {
     "method": "DELETE",
