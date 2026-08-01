@@ -272,11 +272,11 @@ func ValidateConnectorGuide(c Connector) error {
 func RenderGuideManual(guide ConnectorGuide) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName))
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName)
 	b.WriteString("SYNOPSIS\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s --json\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name))
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s\n", guide.Name)
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s --json\n", guide.Name)
+	_, _ = fmt.Fprintf(&b, "  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name)
 	b.WriteString("DESCRIPTION\n")
 	for _, line := range splitParagraphs(guide.Summary) {
 		b.WriteString("  " + line + "\n")
@@ -322,7 +322,7 @@ func RenderGuideManual(guide ConnectorGuide) string {
 	if len(guide.Links) > 0 {
 		b.WriteString("SEE ALSO\n")
 		for _, link := range guide.Links {
-			b.WriteString(fmt.Sprintf("  %s: %s\n", link.Label, link.URL))
+			_, _ = fmt.Fprintf(&b, "  %s: %s\n", link.Label, link.URL)
 		}
 		b.WriteString("\n")
 	}

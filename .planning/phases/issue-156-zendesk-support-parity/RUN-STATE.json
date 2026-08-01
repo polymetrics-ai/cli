@@ -46,7 +46,8 @@
     "live_credentials": false,
     "provider_calls": false,
     "live_writes": false,
-    "shared_runtime_edits": false,
+    "shared_runtime_edits": true,
+    "shared_runtime_edit_scope": "lint-only close-error handling and docs rendering cleanup; no behavior-changing connector execution change",
     "certification": false
   },
   "verification": {

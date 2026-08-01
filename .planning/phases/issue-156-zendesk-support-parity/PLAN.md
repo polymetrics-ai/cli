@@ -4,7 +4,7 @@
 
 - Parent: https://github.com/polymetrics-ai/cli/issues/156; subissues #157-#163.
 - Branch: `fm/cli-zendesk-support-parity-wave01-r1` in isolated treehouse worktree.
-- Write scope: connector-local Zendesk Support bundle metadata and fixtures under `internal/connectors/defs/zendesk-support/**`, plus required GSD artifacts.
+- Write scope: connector-local Zendesk Support bundle metadata and fixtures under `internal/connectors/defs/zendesk-support/**`, plus required GSD artifacts, generated docs/website surfaces needed to expose connector-owned operation metadata, and lint-only shared Go housekeeping from the documentation/lint pass.
 - Official sources inventoried: Zendesk Support introduction and Support API OAS 2.0.0 at `https://developer.zendesk.com/zendesk/oas.yaml`.
 - Current local snapshot before edits: 33 streams, 27 write actions, no `operations.json`, no `cli_surface.json`, 76 api-surface rows. Official OAS has 625 operations.
 
@@ -65,7 +65,7 @@
 
 ## Safety gates
 
-- No live credentials, provider calls, external writes, certification, VPS/Thaalam, dependencies, shared runtime edits, or merges.
+- No live credentials, provider calls, external writes, certification, VPS/Thaalam, dependencies, behavior-changing shared runtime edits, or merges.
 - No secrets in fixtures, docs, metadata, command examples, or GitHub issue edits.
 - Reverse ETL remains plan → preview → explicit approval → execute; destructive operations require typed `destructive` confirmation before execution.
 - Shared executor gaps are recorded as blocked operation metadata rather than claimed as implemented. File-upload rows are limited to the currently supported connector-local `direction`/`path`/`max_bytes` metadata, with source-backed method/query/content-type/body contracts recorded in operation descriptions pending a shared file-operation schema/validator.
