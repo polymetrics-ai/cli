@@ -171,6 +171,9 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 		if action.RecordSchema.AdditionalProperties == nil || *action.RecordSchema.AdditionalProperties {
 			t.Fatalf("write action %q must disable additional record properties", action.Name)
 		}
+		if action.Name == "create_repo_ruleset" || action.Name == "update_repo_ruleset" {
+			githubAssertRulesetSchemaBlocksUnmodeledFields(t, action)
+		}
 		sensitiveFields := githubSensitiveSchemaPaths(action.RecordSchema.Properties)
 		if len(sensitiveFields) > 0 {
 			if action.Confirm != "destructive" {
@@ -261,6 +264,7 @@ func TestGitHubImplementedDirectReadOperationsAreRunnable(t *testing.T) {
 		if op.REST.MaxBytes <= 0 {
 			t.Fatalf("command %q operation %q rest.max_bytes = %d, want positive bound", cmd.Path, op.ID, op.REST.MaxBytes)
 		}
+		githubAssertOperationDirectReadMetadata(t, cmd, op)
 		if !githubSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
 			t.Fatalf("command %q output_policy = %q, want supported direct-read policy", cmd.Path, cmd.OutputPolicy)
 		}
@@ -340,7 +344,10 @@ type githubOperationSpec struct {
 }
 
 type githubOperationRESTSpec struct {
-	MaxBytes int `json:"max_bytes"`
+	Method   string            `json:"method"`
+	Path     string            `json:"path"`
+	Query    map[string]string `json:"query"`
+	MaxBytes int               `json:"max_bytes"`
 }
 
 type githubSurfaceCoverage struct {
@@ -349,16 +356,30 @@ type githubSurfaceCoverage struct {
 }
 
 type githubCLICommand struct {
-	Path         string `json:"path"`
-	Intent       string `json:"intent"`
-	Availability string `json:"availability"`
-	Operation    string `json:"operation"`
-	OutputPolicy string `json:"output_policy"`
-	Write        string `json:"write"`
-	Approval     string `json:"approval"`
+	Path         string                     `json:"path"`
+	Intent       string                     `json:"intent"`
+	Availability string                     `json:"availability"`
+	Operation    string                     `json:"operation"`
+	APISurface   []githubCLISurfaceEndpoint `json:"api_surface"`
+	OutputPolicy string                     `json:"output_policy"`
+	Flags        []githubCLIFlag            `json:"flags"`
+	Write        string                     `json:"write"`
+	Approval     string                     `json:"approval"`
+}
+
+type githubCLISurfaceEndpoint struct {
+	Method string `json:"method"`
+	Path   string `json:"path"`
+}
+
+type githubCLIFlag struct {
+	Name   string `json:"name"`
+	MapsTo string `json:"maps_to"`
 }
 
 var githubSingleBracePathParamRE = regexp.MustCompile(`(^|[^{])\{[A-Za-z0-9_]+\}([^}]|$)`)
+
+var githubPathParamRE = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
 
 var githubDestructiveRiskPhrases = []string{
 	"irreversibly",
@@ -368,6 +389,7 @@ var githubDestructiveRiskPhrases = []string{
 	"deploy access",
 	"protection rules",
 	"replaces every",
+	"entire topic list",
 	"clearing its approval",
 	"merge commit",
 	"discarding history",
@@ -426,6 +448,63 @@ func githubSupportedDirectReadOutputPolicy(policy string) bool {
 		return true
 	default:
 		return false
+	}
+}
+
+func githubAssertRulesetSchemaBlocksUnmodeledFields(t *testing.T, action githubWriteAction) {
+	t.Helper()
+	for _, field := range []string{"bypass_actors", "conditions", "rules"} {
+		if _, ok := action.RecordSchema.Properties[field]; ok {
+			t.Fatalf("write action %q exposes unmodeled ruleset field %q", action.Name, field)
+		}
+	}
+}
+
+func githubAssertOperationDirectReadMetadata(t *testing.T, cmd githubCLICommand, op githubOperationSpec) {
+	t.Helper()
+	if len(cmd.APISurface) != 1 {
+		t.Fatalf("command %q operation direct_read api_surface endpoints = %d, want 1", cmd.Path, len(cmd.APISurface))
+	}
+	endpoint := cmd.APISurface[0]
+	if !strings.EqualFold(endpoint.Method, op.REST.Method) || endpoint.Path != op.REST.Path {
+		t.Fatalf("command %q api_surface = %s %s, want %s %s", cmd.Path, endpoint.Method, endpoint.Path, op.REST.Method, op.REST.Path)
+	}
+
+	pathParams := map[string]bool{}
+	for _, match := range githubPathParamRE.FindAllStringSubmatch(op.REST.Path, -1) {
+		pathParams[match[1]] = true
+	}
+	mappedPathParams := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		if flag.MapsTo == "" {
+			t.Fatalf("command %q flag --%s is missing maps_to", cmd.Path, flag.Name)
+		}
+		switch {
+		case strings.HasPrefix(flag.MapsTo, "path."):
+			target := strings.TrimPrefix(flag.MapsTo, "path.")
+			if !pathParams[target] {
+				t.Fatalf("command %q flag --%s maps to non-path target %q for operation %q", cmd.Path, flag.Name, flag.MapsTo, op.ID)
+			}
+			mappedPathParams[target] = true
+		case strings.HasPrefix(flag.MapsTo, "query."):
+			if strings.TrimPrefix(flag.MapsTo, "query.") == "" {
+				t.Fatalf("command %q flag --%s maps to empty query target", cmd.Path, flag.Name)
+			}
+		case strings.HasPrefix(flag.MapsTo, "body."):
+			if !strings.EqualFold(op.REST.Method, "POST") || strings.TrimPrefix(flag.MapsTo, "body.") == "" {
+				t.Fatalf("command %q flag --%s maps to unsupported body target %q", cmd.Path, flag.Name, flag.MapsTo)
+			}
+		default:
+			t.Fatalf("command %q flag --%s maps to unsupported target %q", cmd.Path, flag.Name, flag.MapsTo)
+		}
+	}
+	for pathParam := range pathParams {
+		if pathParam == "owner" || pathParam == "repo" {
+			continue
+		}
+		if !mappedPathParams[pathParam] {
+			t.Fatalf("command %q operation %q path parameter %q has no mapped flag", cmd.Path, op.ID, pathParam)
+		}
 	}
 }
 

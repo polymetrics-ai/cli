@@ -1914,7 +1914,8 @@
         },
         "additionalProperties": false
       },
-      "risk": "replaces the repository's entire topic list, removing any topic not listed"
+      "risk": "replaces the repository's entire topic list, removing any topic not listed",
+      "confirm": "destructive"
     },
     {
       "name": "add_collaborator",
@@ -2291,15 +2292,6 @@
               "active",
               "evaluate"
             ]
-          },
-          "bypass_actors": {
-            "type": "array"
-          },
-          "conditions": {
-            "type": "object"
-          },
-          "rules": {
-            "type": "array"
           }
         },
         "additionalProperties": false
@@ -2345,15 +2337,6 @@
               "active",
               "evaluate"
             ]
-          },
-          "bypass_actors": {
-            "type": "array"
-          },
-          "conditions": {
-            "type": "object"
-          },
-          "rules": {
-            "type": "array"
           }
         },
         "additionalProperties": false
