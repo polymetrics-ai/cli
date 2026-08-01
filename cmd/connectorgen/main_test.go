@@ -607,6 +607,71 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget preview",
+				"summary": "Preview widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.preview",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets:preview" }
+				],
+				"output_policy": "json_redacted",
+				"examples": ["pm cli-surface widget preview --json"]
+			}
+		]
+	}`
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.preview",
+				"kind": "rest_read",
+				"summary": "Preview widget metadata",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"rest": {
+					"method": "POST",
+					"path": "/widgets:preview",
+					"content_type": "application/json",
+					"max_bytes": 1024,
+					"body_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["payload"],
+						"properties": {
+							"payload": { "type": "string" }
+						}
+					},
+					"body": {}
+				}
+			}
+		]
+	}`
+	apiSurface := `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/widgets:preview", "covered_by": { "direct_read": "widget preview" } }
+		]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
 	cliSurface := strings.Replace(validOperationCLISurfaceJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)
 	operations := strings.Replace(validOperationsJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)

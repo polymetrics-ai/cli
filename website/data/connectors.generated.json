@@ -55551,7 +55551,7 @@
             }
           ],
           "examples": [
-            "pm google-ads customers asset-generations generate-text --json"
+            "pm google-ads customers asset-generations generate-text --asset-field-types UNSPECIFIED --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -55584,194 +55584,7 @@
             }
           ],
           "examples": [
-            "pm google-ads customers generate-ad-group-themes --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-audience-composition-insights",
-          "summary": "Read Google Ads customers.generateAudienceCompositionInsights.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceCompositionInsights",
-          "flags": [
-            {
-              "name": "customer-insights-group",
-              "type": "string",
-              "summary": "Google Ads request field customerInsightsGroup.",
-              "values": [],
-              "maps_to": "body.customerInsightsGroup"
-            },
-            {
-              "name": "data-month",
-              "type": "string",
-              "summary": "Google Ads request field dataMonth.",
-              "values": [],
-              "maps_to": "body.dataMonth"
-            },
-            {
-              "name": "dimensions",
-              "type": "string_array",
-              "summary": "Google Ads request field dimensions.",
-              "values": [
-                "UNSPECIFIED",
-                "UNKNOWN",
-                "CATEGORY",
-                "KNOWLEDGE_GRAPH",
-                "GEO_TARGET_COUNTRY",
-                "SUB_COUNTRY_LOCATION",
-                "YOUTUBE_CHANNEL",
-                "AFFINITY_USER_INTEREST",
-                "IN_MARKET_USER_INTEREST",
-                "PARENTAL_STATUS",
-                "INCOME_RANGE",
-                "AGE_RANGE",
-                "GENDER",
-                "YOUTUBE_VIDEO",
-                "DEVICE",
-                "YOUTUBE_LINEUP",
-                "USER_LIST"
-              ],
-              "maps_to": "body.dimensions"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-audience-composition-insights --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-audience-overlap-insights",
-          "summary": "Read Google Ads customers.generateAudienceOverlapInsights.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceOverlapInsights",
-          "flags": [
-            {
-              "name": "customer-insights-group",
-              "type": "string",
-              "summary": "Google Ads request field customerInsightsGroup.",
-              "values": [],
-              "maps_to": "body.customerInsightsGroup"
-            },
-            {
-              "name": "dimensions",
-              "type": "string_array",
-              "summary": "Google Ads request field dimensions.",
-              "values": [
-                "UNSPECIFIED",
-                "UNKNOWN",
-                "CATEGORY",
-                "KNOWLEDGE_GRAPH",
-                "GEO_TARGET_COUNTRY",
-                "SUB_COUNTRY_LOCATION",
-                "YOUTUBE_CHANNEL",
-                "AFFINITY_USER_INTEREST",
-                "IN_MARKET_USER_INTEREST",
-                "PARENTAL_STATUS",
-                "INCOME_RANGE",
-                "AGE_RANGE",
-                "GENDER",
-                "YOUTUBE_VIDEO",
-                "DEVICE",
-                "YOUTUBE_LINEUP",
-                "USER_LIST"
-              ],
-              "maps_to": "body.dimensions"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-audience-overlap-insights --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-creator-insights",
-          "summary": "Read Google Ads customers.generateCreatorInsights.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateCreatorInsights",
-          "flags": [
-            {
-              "name": "customer-insights-group",
-              "type": "string",
-              "summary": "Google Ads request field customerInsightsGroup.",
-              "values": [],
-              "maps_to": "body.customerInsightsGroup"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-creator-insights --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-insights-finder-report",
-          "summary": "Read Google Ads customers.generateInsightsFinderReport.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateInsightsFinderReport",
-          "flags": [
-            {
-              "name": "customer-insights-group",
-              "type": "string",
-              "summary": "Google Ads request field customerInsightsGroup.",
-              "values": [],
-              "maps_to": "body.customerInsightsGroup"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-insights-finder-report --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-keyword-forecast-metrics",
-          "summary": "Read Google Ads customers.generateKeywordForecastMetrics.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordForecastMetrics",
-          "flags": [
-            {
-              "name": "currency-code",
-              "type": "string",
-              "summary": "Google Ads request field currencyCode.",
-              "values": [],
-              "maps_to": "body.currencyCode"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-keyword-forecast-metrics --json"
+            "pm google-ads customers generate-ad-group-themes --ad-groups fixture_value --keywords fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -55915,71 +55728,6 @@
           "notes": ""
         },
         {
-          "path": "customers generate-reach-forecast",
-          "summary": "Read Google Ads customers.generateReachForecast.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateReachForecast",
-          "flags": [
-            {
-              "name": "cookie-frequency-cap",
-              "type": "integer",
-              "summary": "Google Ads request field cookieFrequencyCap.",
-              "values": [],
-              "maps_to": "body.cookieFrequencyCap"
-            },
-            {
-              "name": "currency-code",
-              "type": "string",
-              "summary": "Google Ads request field currencyCode.",
-              "values": [],
-              "maps_to": "body.currencyCode"
-            },
-            {
-              "name": "customer-reach-group",
-              "type": "string",
-              "summary": "Google Ads request field customerReachGroup.",
-              "values": [],
-              "maps_to": "body.customerReachGroup"
-            },
-            {
-              "name": "min-effective-frequency",
-              "type": "integer",
-              "summary": "Google Ads request field minEffectiveFrequency.",
-              "values": [],
-              "maps_to": "body.minEffectiveFrequency"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-reach-forecast --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-shareable-previews",
-          "summary": "Read Google Ads customers.generateShareablePreviews.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateShareablePreviews",
-          "flags": [],
-          "examples": [
-            "pm google-ads customers generate-shareable-previews --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
           "path": "customers generate-suggested-targeting-insights",
           "summary": "Read Google Ads customers.generateSuggestedTargetingInsights.",
           "intent": "direct_read",
@@ -55999,58 +55747,6 @@
           ],
           "examples": [
             "pm google-ads customers generate-suggested-targeting-insights --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-targeting-suggestion-metrics",
-          "summary": "Read Google Ads customers.generateTargetingSuggestionMetrics.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTargetingSuggestionMetrics",
-          "flags": [
-            {
-              "name": "customer-insights-group",
-              "type": "string",
-              "summary": "Google Ads request field customerInsightsGroup.",
-              "values": [],
-              "maps_to": "body.customerInsightsGroup"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-targeting-suggestion-metrics --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers generate-trending-insights",
-          "summary": "Read Google Ads customers.generateTrendingInsights.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTrendingInsights",
-          "flags": [
-            {
-              "name": "customer-insights-group",
-              "type": "string",
-              "summary": "Google Ads request field customerInsightsGroup.",
-              "values": [],
-              "maps_to": "body.customerInsightsGroup"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers generate-trending-insights --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56293,7 +55989,7 @@
             }
           ],
           "examples": [
-            "pm google-ads customers recommendations generate --json"
+            "pm google-ads customers recommendations generate --advertising-channel-type UNSPECIFIED --recommendation-types UNSPECIFIED --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56351,7 +56047,7 @@
             }
           ],
           "examples": [
-            "pm google-ads customers search-audience-insights-attributes --json"
+            "pm google-ads customers search-audience-insights-attributes --dimensions UNSPECIFIED --query-text fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56384,69 +56080,7 @@
             }
           ],
           "examples": [
-            "pm google-ads customers suggest-brands --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers suggest-keyword-themes",
-          "summary": "Read Google Ads customers.suggestKeywordThemes.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestKeywordThemes",
-          "flags": [],
-          "examples": [
-            "pm google-ads customers suggest-keyword-themes --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers suggest-smart-campaign-ad",
-          "summary": "Read Google Ads customers.suggestSmartCampaignAd.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignAd",
-          "flags": [],
-          "examples": [
-            "pm google-ads customers suggest-smart-campaign-ad --json"
-          ],
-          "output_policy": "json_redacted",
-          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-          "approval": "none",
-          "notes": ""
-        },
-        {
-          "path": "customers suggest-smart-campaign-budget-options",
-          "summary": "Read Google Ads customers.suggestSmartCampaignBudgetOptions.",
-          "intent": "direct_read",
-          "availability": "implemented",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignBudgetOptions",
-          "flags": [
-            {
-              "name": "campaign",
-              "type": "string",
-              "summary": "Google Ads request field campaign.",
-              "values": [],
-              "maps_to": "body.campaign"
-            }
-          ],
-          "examples": [
-            "pm google-ads customers suggest-smart-campaign-budget-options --json"
+            "pm google-ads customers suggest-brands --brand-prefix fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56479,7 +56113,7 @@
             }
           ],
           "examples": [
-            "pm google-ads customers suggest-travel-assets --json"
+            "pm google-ads customers suggest-travel-assets --language-option fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56518,22 +56152,6 @@
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
           "approval": "none",
           "notes": ""
-        },
-        {
-          "path": "google-ads-fields search",
-          "summary": "Google Ads googleAdsFields.search raw GAQL query",
-          "intent": "raw_api",
-          "availability": "unsafe_or_disallowed",
-          "stream": "",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#googleAdsFields.search",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "",
-          "approval": "",
-          "notes": "Free-form GAQL query text is a raw query escape hatch; use fixed connector-owned streams such as campaigns and ad_groups instead."
         },
         {
           "path": "keyword-theme-constants suggest",
@@ -56601,7 +56219,7 @@
             }
           ],
           "examples": [
-            "pm google-ads v22 generate-conversion-rates --json"
+            "pm google-ads v22 generate-conversion-rates --customer-id fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56645,7 +56263,7 @@
             }
           ],
           "examples": [
-            "pm google-ads v22 list-plannable-products --json"
+            "pm google-ads v22 list-plannable-products --plannable-location-id fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56700,7 +56318,7 @@
             }
           ],
           "examples": [
-            "pm google-ads v22 list-plannable-user-interests --json"
+            "pm google-ads v22 list-plannable-user-interests --customer-id fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56733,7 +56351,7 @@
             }
           ],
           "examples": [
-            "pm google-ads v22 list-plannable-user-lists --json"
+            "pm google-ads v22 list-plannable-user-lists --customer-id fixture_value --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56743,7 +56361,7 @@
       ],
       "help_topics": []
     },
-    "docs_md": "# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a connector-owned fixture-only parity slice against the public Google Ads API v22 REST discovery document. This wave does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.\n\nPublic source audit:\n\n- Source: `https://googleads.googleapis.com/$discovery/rest?version=v22`\n- API version: `v22`\n- Discovery revision: `20260721`\n- Raw discovery method count: `163` (`POST=151`, `GET=11`, `DELETE=1`)\n- Local operation ledger rows: `164`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `33` fixed connector-owned operations with JSON-redacted output and bounded response size.\n\n## Write actions & risks\n\nReverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `121` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, and raw GAQL query commands remain blocked.\n\nGoogle Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n",
+    "docs_md": "# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave is fixture-only: it does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.\n\nPublic source audit:\n\n- Source: `https://googleads.googleapis.com/$discovery/rest?version=v22`\n- API version: `v22`\n- Discovery revision: `20260721`\n- Raw discovery method count: `163` (`POST=151`, `GET=11`, `DELETE=1`)\n- Local operation ledger rows: `164`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body fields where a POST body is required.\n\n## Write actions & risks\n\nReverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `133` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.\n\nGoogle Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n",
     "icon": {
       "id": "google-adwords",
       "path": "icons/google-adwords.svg",

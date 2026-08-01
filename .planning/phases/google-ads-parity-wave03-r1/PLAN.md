@@ -110,7 +110,7 @@ Implemented and locally verified on 2026-07-31:
 
 - Official source audit preserved in `SOURCE-AUDIT.md` / `SOURCE-AUDIT.json`.
 - Google Ads aligned to public v22 discovery paths with fixture-only validation.
-- Added 33 fixed direct-read operations, 7 guarded write actions, and 7 sanitized write fixtures.
-- Replaced coarse legacy `api_surface.json` with v22 operation-ledger rows: 164 local rows (3 streams, 33 direct reads, 7 writes, 121 blocked/planned). The local row count is one greater than raw discovery because one official `customers.googleAds.search` method backs two fixed connector streams.
+- Added 21 fixed direct-read operations, 7 guarded write actions, and 7 sanitized write fixtures.
+- Replaced coarse legacy `api_surface.json` with v22 operation-ledger rows: 164 local rows (3 streams, 21 direct reads, 7 writes, 133 blocked/planned). The local row count is one greater than raw discovery because one official `customers.googleAds.search` method backs two fixed connector streams.
 - Added a generic `connectorgen validate` path compatibility fix so the required single-connector validation gate checks one bundle instead of treating `fixtures/` and `schemas/` as sibling connectors.
 - Regenerated Google Ads connector manual/skill, connector catalogs, website connector data, and CLI golden transcripts.

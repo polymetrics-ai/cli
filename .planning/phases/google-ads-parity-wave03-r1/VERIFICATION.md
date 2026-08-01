@@ -6,7 +6,7 @@ Credential-free only. No live Google Ads API calls or provider writes were made.
 
 - [x] Source inventory script: official v22 methods counted and local surface partition summarized.
   - `python3 .planning/phases/google-ads-parity-wave03-r1/generate_google_ads_parity.py`
-  - Generated counts: `api_surface_rows=164`, `streams=3`, `direct_reads=33`, `write_actions=7`, `write_fixtures=7`, `blocked_rows=121`.
+  - Generated counts: `api_surface_rows=164`, `streams=3`, `direct_reads=21`, `write_actions=7`, `write_fixtures=7`, `blocked_rows=133`.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/google-ads`
   - `connectorgen validate: 1 connector(s) checked, 0 findings`
 - [x] `go test ./internal/connectors/conformance -run 'TestConformance/google-ads' -count=1`

@@ -885,6 +885,8 @@ func checkCLISurfaceOperationSafety(
 		}
 		if len(op.REST.BodySchema) == 0 {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare body_schema", i, cmd.Path, cmd.Operation)})
+		} else {
+			findings = append(findings, checkCLISurfaceOperationBodyMappings(b, i, cmd, op)...)
 		}
 	}
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
@@ -907,6 +909,69 @@ func checkCLISurfaceOperationSafety(
 		}
 	}
 	return findings
+}
+
+func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil || len(op.REST.BodySchema) == 0 {
+		return nil
+	}
+	schema, err := parseCLIRecordSchema(op.REST.BodySchema)
+	if err != nil {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for CLI validation: %v", op.ID, err)}}
+	}
+	requiredPaths := schema.requiredMappingPaths("")
+	if len(requiredPaths) == 0 {
+		return nil
+	}
+	mappedTargets := make([]string, 0, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
+		if ok && target != "" {
+			mappedTargets = append(mappedTargets, target)
+		}
+	}
+	var findings []Finding
+	for _, requiredPath := range requiredPaths {
+		if operationStaticBodyProvidesPath(op.REST.Body, requiredPath) {
+			continue
+		}
+		if commandBodyFlagCoversRequiredPath(schema, mappedTargets, requiredPath) {
+			continue
+		}
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
+	}
+	return findings
+}
+
+func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
+	if len(body) == 0 || strings.TrimSpace(path) == "" {
+		return false
+	}
+	var current any = body
+	for _, part := range strings.Split(path, ".") {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return false
+		}
+		current, ok = object[part]
+		if !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func commandBodyFlagCoversRequiredPath(schema *cliRecordSchemaNode, mappedTargets []string, requiredPath string) bool {
+	requiredNode, err := schema.recordPath(requiredPath)
+	for _, target := range mappedTargets {
+		if target == requiredPath {
+			return true
+		}
+		if err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, target) {
+			return true
+		}
+	}
+	return false
 }
 
 func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {

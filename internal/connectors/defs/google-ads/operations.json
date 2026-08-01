@@ -43,29 +43,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "advertisingChannelType": {
-              "type": "string",
-              "enum": [
-                "UNSPECIFIED",
-                "UNKNOWN",
-                "SEARCH",
-                "DISPLAY",
-                "SHOPPING",
-                "HOTEL",
-                "VIDEO",
-                "MULTI_CHANNEL",
-                "LOCAL",
-                "SMART",
-                "PERFORMANCE_MAX",
-                "LOCAL_SERVICES",
-                "TRAVEL",
-                "DEMAND_GEN"
-              ]
-            },
-            "productRecontextGeneration": {
-              "type": "object",
-              "additionalProperties": true
-            },
             "finalUrlGeneration": {
               "type": "object",
               "additionalProperties": true
@@ -112,6 +89,29 @@
                 ]
               }
             },
+            "advertisingChannelType": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ]
+            },
+            "productRecontextGeneration": {
+              "type": "object",
+              "additionalProperties": true
+            },
             "freeformGeneration": {
               "type": "object",
               "additionalProperties": true
@@ -138,15 +138,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "keywords": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "finalUrl": {
-              "type": "string"
-            },
             "existingGenerationContext": {
               "type": "object",
               "additionalProperties": true
@@ -169,6 +160,12 @@
                 "TRAVEL",
                 "DEMAND_GEN"
               ]
+            },
+            "finalUrl": {
+              "type": "string"
+            },
+            "freeformPrompt": {
+              "type": "string"
             },
             "assetFieldTypes": {
               "type": "array",
@@ -212,10 +209,16 @@
                 ]
               }
             },
-            "freeformPrompt": {
-              "type": "string"
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
-          }
+          },
+          "required": [
+            "assetFieldTypes"
+          ]
         },
         "body": {}
       }
@@ -249,259 +252,11 @@
                 "type": "string"
               }
             }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.audience.composition.insights",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateAudienceCompositionInsights with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceCompositionInsights",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "audience": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "dataMonth": {
-              "type": "string"
-            },
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "UNSPECIFIED",
-                  "UNKNOWN",
-                  "CATEGORY",
-                  "KNOWLEDGE_GRAPH",
-                  "GEO_TARGET_COUNTRY",
-                  "SUB_COUNTRY_LOCATION",
-                  "YOUTUBE_CHANNEL",
-                  "AFFINITY_USER_INTEREST",
-                  "IN_MARKET_USER_INTEREST",
-                  "PARENTAL_STATUS",
-                  "INCOME_RANGE",
-                  "AGE_RANGE",
-                  "GENDER",
-                  "YOUTUBE_VIDEO",
-                  "DEVICE",
-                  "YOUTUBE_LINEUP",
-                  "USER_LIST"
-                ]
-              }
-            },
-            "customerInsightsGroup": {
-              "type": "string"
-            },
-            "baselineAudience": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.audience.overlap.insights",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateAudienceOverlapInsights with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceOverlapInsights",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "UNSPECIFIED",
-                  "UNKNOWN",
-                  "CATEGORY",
-                  "KNOWLEDGE_GRAPH",
-                  "GEO_TARGET_COUNTRY",
-                  "SUB_COUNTRY_LOCATION",
-                  "YOUTUBE_CHANNEL",
-                  "AFFINITY_USER_INTEREST",
-                  "IN_MARKET_USER_INTEREST",
-                  "PARENTAL_STATUS",
-                  "INCOME_RANGE",
-                  "AGE_RANGE",
-                  "GENDER",
-                  "YOUTUBE_VIDEO",
-                  "DEVICE",
-                  "YOUTUBE_LINEUP",
-                  "USER_LIST"
-                ]
-              }
-            },
-            "countryLocation": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "primaryAttribute": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "customerInsightsGroup": {
-              "type": "string"
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.creator.insights",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateCreatorInsights with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateCreatorInsights",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateCreatorInsights",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "searchBrand": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "subCountryLocations": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            },
-            "searchAttributes": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "searchChannels": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "customerInsightsGroup": {
-              "type": "string"
-            },
-            "countryLocations": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.insights.finder.report",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateInsightsFinderReport with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateInsightsFinderReport",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateInsightsFinderReport",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "customerInsightsGroup": {
-              "type": "string"
-            },
-            "baselineAudience": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "specificAudience": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.keyword.forecast.metrics",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateKeywordForecastMetrics with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordForecastMetrics",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "campaign": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "forecastPeriod": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "currencyCode": {
-              "type": "string"
-            }
-          }
+          },
+          "required": [
+            "adGroups",
+            "keywords"
+          ]
         },
         "body": {}
       }
@@ -523,8 +278,16 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "historicalMetricsOptions": {
+              "type": "object",
+              "additionalProperties": true
+            },
             "language": {
               "type": "string"
+            },
+            "aggregateMetrics": {
+              "type": "object",
+              "additionalProperties": true
             },
             "keywordPlanNetwork": {
               "type": "string",
@@ -534,10 +297,6 @@
                 "GOOGLE_SEARCH",
                 "GOOGLE_SEARCH_AND_PARTNERS"
               ]
-            },
-            "aggregateMetrics": {
-              "type": "object",
-              "additionalProperties": true
             },
             "keywords": {
               "type": "array",
@@ -553,10 +312,6 @@
               "items": {
                 "type": "string"
               }
-            },
-            "historicalMetricsOptions": {
-              "type": "object",
-              "additionalProperties": true
             }
           }
         },
@@ -580,28 +335,8 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "language": {
+            "pageToken": {
               "type": "string"
-            },
-            "keywordPlanNetwork": {
-              "type": "string",
-              "enum": [
-                "UNSPECIFIED",
-                "UNKNOWN",
-                "GOOGLE_SEARCH",
-                "GOOGLE_SEARCH_AND_PARTNERS"
-              ]
-            },
-            "keywordAndUrlSeed": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "urlSeed": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "includeAdultKeywords": {
-              "type": "boolean"
             },
             "keywordAnnotation": {
               "type": "array",
@@ -614,17 +349,14 @@
                 ]
               }
             },
-            "pageSize": {
-              "type": "integer"
-            },
-            "pageToken": {
+            "language": {
               "type": "string"
             },
-            "keywordSeed": {
+            "keywordAndUrlSeed": {
               "type": "object",
               "additionalProperties": true
             },
-            "siteSeed": {
+            "urlSeed": {
               "type": "object",
               "additionalProperties": true
             },
@@ -638,103 +370,32 @@
               "type": "object",
               "additionalProperties": true
             },
+            "pageSize": {
+              "type": "integer"
+            },
+            "keywordSeed": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "siteSeed": {
+              "type": "object",
+              "additionalProperties": true
+            },
             "historicalMetricsOptions": {
               "type": "object",
               "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.reach.forecast",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateReachForecast with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateReachForecast",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateReachForecast",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "effectiveFrequencyLimit": {
-              "type": "object",
-              "additionalProperties": true
             },
-            "reachApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
+            "includeAdultKeywords": {
+              "type": "boolean"
             },
-            "currencyCode": {
-              "type": "string"
-            },
-            "minEffectiveFrequency": {
-              "type": "integer"
-            },
-            "forecastMetricOptions": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "plannedProducts": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            },
-            "cookieFrequencyCapSetting": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "customerReachGroup": {
-              "type": "string"
-            },
-            "cookieFrequencyCap": {
-              "type": "integer"
-            },
-            "campaignDuration": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "targeting": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.shareable.previews",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateShareablePreviews with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateShareablePreviews",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateShareablePreviews",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "shareablePreviews": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              }
+            "keywordPlanNetwork": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "GOOGLE_SEARCH",
+                "GOOGLE_SEARCH_AND_PARTNERS"
+              ]
             }
           }
         },
@@ -758,95 +419,18 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "customerInsightsGroup": {
-              "type": "string"
-            },
-            "audienceDescription": {
+            "insightsApplicationInfo": {
               "type": "object",
               "additionalProperties": true
+            },
+            "customerInsightsGroup": {
+              "type": "string"
             },
             "audienceDefinition": {
               "type": "object",
               "additionalProperties": true
             },
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.targeting.suggestion.metrics",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateTargetingSuggestionMetrics with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTargetingSuggestionMetrics",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "audiences": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              }
-            },
-            "customerInsightsGroup": {
-              "type": "string"
-            },
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.generate.trending.insights",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.generateTrendingInsights with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTrendingInsights",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:generateTrendingInsights",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "customerInsightsGroup": {
-              "type": "string"
-            },
-            "searchTopics": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "searchAudience": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "insightsApplicationInfo": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "countryLocation": {
+            "audienceDescription": {
               "type": "object",
               "additionalProperties": true
             }
@@ -914,37 +498,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "languageCodes": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "advertisingChannelType": {
-              "type": "string",
-              "enum": [
-                "UNSPECIFIED",
-                "UNKNOWN",
-                "SEARCH",
-                "DISPLAY",
-                "SHOPPING",
-                "HOTEL",
-                "VIDEO",
-                "MULTI_CHANNEL",
-                "LOCAL",
-                "SMART",
-                "PERFORMANCE_MAX",
-                "LOCAL_SERVICES",
-                "TRAVEL",
-                "DEMAND_GEN"
-              ]
-            },
-            "negativeLocationsIds": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
             "conversionTrackingStatus": {
               "type": "string",
               "enum": [
@@ -956,10 +509,21 @@
                 "CONVERSION_TRACKING_MANAGED_BY_ANOTHER_MANAGER"
               ]
             },
-            "campaignImageAssetCount": {
-              "type": "integer"
+            "positiveLocationsIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "seedInfo": {
+              "type": "object",
+              "additionalProperties": true
             },
             "budgetInfo": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "biddingInfo": {
               "type": "object",
               "additionalProperties": true
             },
@@ -969,10 +533,23 @@
                 "type": "string"
               }
             },
-            "positiveLocationsIds": {
+            "negativeLocationsIds": {
               "type": "array",
               "items": {
                 "type": "string"
+              }
+            },
+            "targetPartnerSearchNetwork": {
+              "type": "boolean"
+            },
+            "campaignSitelinkCount": {
+              "type": "integer"
+            },
+            "adGroupInfo": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
               }
             },
             "assetGroupInfo": {
@@ -982,19 +559,20 @@
                 "additionalProperties": true
               }
             },
-            "targetPartnerSearchNetwork": {
-              "type": "boolean"
-            },
-            "biddingInfo": {
-              "type": "object",
-              "additionalProperties": true
-            },
-            "adGroupInfo": {
+            "languageCodes": {
               "type": "array",
               "items": {
-                "type": "object",
-                "additionalProperties": true
+                "type": "string"
               }
+            },
+            "targetContentNetwork": {
+              "type": "boolean"
+            },
+            "campaignImageAssetCount": {
+              "type": "integer"
+            },
+            "merchantCenterAccountId": {
+              "type": "string"
             },
             "recommendationTypes": {
               "type": "array",
@@ -1060,23 +638,33 @@
                 ]
               }
             },
-            "merchantCenterAccountId": {
-              "type": "string"
-            },
-            "campaignSitelinkCount": {
-              "type": "integer"
-            },
-            "seedInfo": {
-              "type": "object",
-              "additionalProperties": true
+            "advertisingChannelType": {
+              "type": "string",
+              "enum": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ]
             },
             "campaignCallAssetCount": {
               "type": "integer"
-            },
-            "targetContentNetwork": {
-              "type": "boolean"
             }
-          }
+          },
+          "required": [
+            "recommendationTypes",
+            "advertisingChannelType"
+          ]
         },
         "body": {}
       }
@@ -1098,9 +686,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "customerInsightsGroup": {
-              "type": "string"
-            },
             "insightsApplicationInfo": {
               "type": "object",
               "additionalProperties": true
@@ -1108,6 +693,16 @@
             "youtubeReachLocation": {
               "type": "object",
               "additionalProperties": true
+            },
+            "customerInsightsGroup": {
+              "type": "string"
+            },
+            "locationCountryFilters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
             },
             "dimensions": {
               "type": "array",
@@ -1136,15 +731,12 @@
             },
             "queryText": {
               "type": "string"
-            },
-            "locationCountryFilters": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": true
-              }
             }
-          }
+          },
+          "required": [
+            "dimensions",
+            "queryText"
+          ]
         },
         "body": {}
       }
@@ -1166,97 +758,19 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "brandPrefix": {
-              "type": "string"
-            },
             "selectedBrands": {
               "type": "array",
               "items": {
                 "type": "string"
               }
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.suggest.keyword.themes",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.suggestKeywordThemes with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestKeywordThemes",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "suggestionInfo": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.suggest.smart.campaign.ad",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.suggestSmartCampaignAd with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignAd",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "suggestionInfo": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
-      "id": "google_ads.customers.suggest.smart.campaign.budget.options",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method customers.suggestSmartCampaignBudgetOptions with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignBudgetOptions",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "suggestionInfo": {
-              "type": "object",
-              "additionalProperties": true
             },
-            "campaign": {
+            "brandPrefix": {
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "brandPrefix"
+          ]
         },
         "body": {}
       }
@@ -1278,16 +792,19 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "languageOption": {
+              "type": "string"
+            },
             "placeIds": {
               "type": "array",
               "items": {
                 "type": "string"
               }
-            },
-            "languageOption": {
-              "type": "string"
             }
-          }
+          },
+          "required": [
+            "languageOption"
+          ]
         },
         "body": {}
       }
@@ -1309,6 +826,9 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "countryCode": {
+              "type": "string"
+            },
             "locationNames": {
               "type": "object",
               "additionalProperties": true
@@ -1316,9 +836,6 @@
             "geoTargets": {
               "type": "object",
               "additionalProperties": true
-            },
-            "countryCode": {
-              "type": "string"
             },
             "locale": {
               "type": "string"
@@ -1345,10 +862,10 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "queryText": {
+            "countryCode": {
               "type": "string"
             },
-            "countryCode": {
+            "queryText": {
               "type": "string"
             },
             "languageCode": {
@@ -1386,7 +903,10 @@
               "type": "object",
               "additionalProperties": true
             }
-          }
+          },
+          "required": [
+            "customerId"
+          ]
         },
         "body": {}
       }
@@ -1441,7 +961,10 @@
               "type": "object",
               "additionalProperties": true
             }
-          }
+          },
+          "required": [
+            "plannableLocationId"
+          ]
         },
         "body": {}
       }
@@ -1463,9 +986,15 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "customerId": {
+              "type": "string"
+            },
             "reachApplicationInfo": {
               "type": "object",
               "additionalProperties": true
+            },
+            "pathQuery": {
+              "type": "string"
             },
             "userInterestTaxonomyTypes": {
               "type": "array",
@@ -1482,16 +1011,13 @@
                 ]
               }
             },
-            "pathQuery": {
-              "type": "string"
-            },
-            "customerId": {
-              "type": "string"
-            },
             "nameQuery": {
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "customerId"
+          ]
         },
         "body": {}
       }
@@ -1523,7 +1049,10 @@
             "customerReachGroup": {
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "customerId"
+          ]
         },
         "body": {}
       }

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Google Ads is implemented as a connector-owned fixture-only parity slice against the public Google Ads API v22 REST discovery document. This wave does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.
+Google Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave is fixture-only: it does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.
 
 Public source audit:
 
@@ -20,7 +20,7 @@ Provide `access_token` and `developer_token` through the credentials layer or en
 
 Implemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.
 
-Direct reads: `33` fixed connector-owned operations with JSON-redacted output and bounded response size.
+Direct reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body fields where a POST body is required.
 
 ## Write actions & risks
 
@@ -33,6 +33,6 @@ Reverse/write actions: `7` guarded write actions whose request schemas are close
 
 ## Known limits
 
-Blocked/planned operations: `121` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, and raw GAQL query commands remain blocked.
+Blocked/planned operations: `133` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.
 
 Google Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.

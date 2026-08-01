@@ -34,10 +34,10 @@
     "rawMethods": 163,
     "localLedgerRows": 164,
     "streams": 3,
-    "directReads": 33,
+    "directReads": 21,
     "writeActions": 7,
     "writeFixtures": 7,
-    "blockedRows": 121
+    "blockedRows": 133
   },
   "verificationPassed": true,
   "safety": {
