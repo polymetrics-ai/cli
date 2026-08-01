@@ -20,6 +20,14 @@
 - Shared foundation gap recorded: `scripts/gsd prompt programming-loop ...` is unavailable in this adapter (`unknown GSD command: programming-loop`), so this used the manual GSD fallback plus `plan-phase` and `quick` prompts.
 - Shared executor dependencies remain blocked, not claimed complete: provider direct/query/search (#2985), CDC truthfulness/state (#2986/#2988), and bounded binary/file executor/output policy.
 
+## Parity checkpoint re-audit (2026-08-01)
+
+- Re-fetched the official Zendesk Support OAS from `https://developer.zendesk.com/zendesk/oas.yaml` with a browser-style user agent and parsed OpenAPI 3.0.3 / `info.version` 2.0.0.
+- Official operation totals remain 625 unique method/path rows across 434 paths: GET 325, POST 111, PUT 89, PATCH 14, DELETE 86.
+- Local ledger totals after the checkpoint: 631 `api_surface.json` rows = 625 official + 6 supplemental existing-bundle rows; 571 blocked operation rows; 33 stream-covered rows; 27 write-covered rows; 0 missing official, 0 stale official, 0 duplicate endpoint keys, 0 unclassified, 0 multi-disposition.
+- Command/operation parity remains exact: 571 `operations.json` entries match blocked rows, and 631 `cli_surface.json` commands reference 631 unique endpoint rows with 0 missing/stale refs.
+- Delete/destructive safety remains explicit: 86 official DELETE operations = 9 covered delete writes with `confirm: "destructive"` + 77 blocked typed operation rows; 95 blocked destructive-action rows include the 77 DELETE rows plus 18 non-DELETE destructive mutations; 22 sensitive/secret mutations also require typed destructive confirmation.
+
 ## Verification run
 
 - `go run ./cmd/connectorgen validate internal/connectors/defs` — passed, 548 connectors, 0 findings.

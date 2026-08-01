@@ -14,6 +14,7 @@
 - `scripts/gsd prompt plan-phase issue-156-zendesk-support-parity --skip-research` generated the planning prompt used here.
 - Required `scripts/gsd prompt programming-loop init --phase issue-156-zendesk-support-parity --dry-run` was attempted first, but this repo-local adapter currently reports `unknown GSD command: programming-loop`. Manual GSD programming-loop fallback is recorded here and in the ledger; do not claim the unavailable command ran.
 - `scripts/gsd prompt quick "issue-156 Zendesk Support parity connector-local implementation"` generated the execution prompt used as the local critical-path fallback.
+- `scripts/gsd prompt quick "issue-156 Zendesk Support parity checkpoint re-audit"` generated the checkpoint prompt for the 2026-08-01 source-backed re-audit.
 
 ## Required skills loaded
 
@@ -56,6 +57,11 @@
    - Update `docs.md` overview/known limits with official ledger counts and blocked-by-default safety.
    - Preserve existing stream/write fixtures; add fixtures only if new executable streams or write actions are introduced.
    - Run connector-local validation and conformance.
+
+5. **Parity checkpoint re-audit**
+   - Re-fetch the official Zendesk Support OAS with a browser-style user agent, parse OpenAPI 3.0.3 / `info.version` 2.0.0, and compare method/path keys against `api_surface.json`, `operations.json`, `cli_surface.json`, streams, and writes.
+   - Treat missing, stale, duplicate, unclassified, unknown covered refs, missing command refs, missing blocked-operation metadata, or destructive/delete safety gaps as findings to fix before review-ready.
+   - Record truthful post-audit counts without claiming live certification or additional implemented operations.
 
 ## Safety gates
 
