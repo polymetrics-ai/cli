@@ -1,0 +1,20 @@
+{
+  "record": {
+    "conversation_id": "ext-conversation-123",
+    "rating": "amazing",
+    "remark": "Fin solved my problem in seconds."
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/fin/csat",
+    "body": {
+      "conversation_id": "ext-conversation-123",
+      "rating": "amazing",
+      "remark": "Fin solved my problem in seconds."
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

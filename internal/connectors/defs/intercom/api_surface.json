@@ -1422,6 +1422,13 @@
     },
     {
       "method": "POST",
+      "path": "/fin/csat",
+      "covered_by": {
+        "write": "submit_fin_csat"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/fin/reply",
       "covered_by": {
         "write": "reply_to_fin"

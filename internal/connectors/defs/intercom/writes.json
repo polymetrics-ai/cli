@@ -16562,6 +16562,47 @@
       "confirm": "destructive"
     },
     {
+      "name": "submit_fin_csat",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/fin/csat",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "Your external conversation ID — the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
+          },
+          "rating": {
+            "type": "string",
+            "description": "The rating the user selected — one of the `key` values from the `csat_requested` event's options.",
+            "enum": [
+              "terrible",
+              "bad",
+              "ok",
+              "good",
+              "amazing"
+            ]
+          },
+          "remark": {
+            "type": "string",
+            "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once — the rating locks after a remark is recorded."
+          }
+        },
+        "required": [
+          "conversation_id",
+          "rating"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "Submit a CSAT rating: live Intercom mutation against /fin/csat; reverse ETL requires plan, preview, explicit approval, execute",
+      "body_fields": [
+        "conversation_id",
+        "rating",
+        "remark"
+      ]
+    },
+    {
       "name": "reply_to_fin",
       "kind": "custom",
       "method": "POST",
@@ -19542,12 +19583,13 @@
         },
         "additionalProperties": false
       },
-      "risk": "Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
       "body_fields": [
         "type",
         "enabled",
         "ip_allowlist"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "create_message",

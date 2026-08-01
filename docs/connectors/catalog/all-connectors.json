@@ -66412,15 +66412,15 @@
   {
     "name": "intercom",
     "display_name": "Intercom",
-    "description": "Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.",
+    "description": "Reads Intercom contacts, companies, conversations, admins, and tags; declares typed reverse-ETL write actions for official Intercom API mutations.",
     "integration_type": "api",
-    "docs_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes",
+    "docs_url": "https://developers.intercom.com/docs/references/2.16/rest-api/api.intercom.io",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -66513,9 +66513,850 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "set_away_admin",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/admins/{{ record.admin_id }}/away",
+        "risk": "Set an admin to away: live Intercom mutation against /admins/{admin_id}/away; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_content_import_source",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ai/content_import_sources",
+        "risk": "Create a content import source: live Intercom mutation against /ai/content_import_sources; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_content_import_source",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ai/content_import_sources/{{ record.source_id }}",
+        "risk": "Delete a content import source: live Intercom mutation against /ai/content_import_sources/{source_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_content_import_source",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ai/content_import_sources/{{ record.source_id }}",
+        "risk": "Update a content import source: live Intercom mutation against /ai/content_import_sources/{source_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_external_page",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ai/external_pages",
+        "risk": "Create an external page (or update an external page by external ID): live Intercom mutation against /ai/external_pages; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_external_page",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ai/external_pages/{{ record.page_id }}",
+        "risk": "Delete an external page: live Intercom mutation against /ai/external_pages/{page_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_external_page",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ai/external_pages/{{ record.page_id }}",
+        "risk": "Update an external page: live Intercom mutation against /ai/external_pages/{page_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_article",
+        "kind": "create",
+        "method": "POST",
+        "path": "/articles",
+        "risk": "Create an article: live Intercom mutation against /articles; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_article",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/articles/{{ record.article_id }}",
+        "risk": "Delete an article: live Intercom mutation against /articles/{article_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_article",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/articles/{{ record.article_id }}",
+        "risk": "Update an article: live Intercom mutation against /articles/{article_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_tag_to_article",
+        "kind": "create",
+        "method": "POST",
+        "path": "/articles/{{ record.article_id }}/tags",
+        "risk": "Add a tag to an article: live Intercom mutation against /articles/{article_id}/tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_tag_from_article",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/articles/{{ record.article_id }}/tags/{{ record.id }}",
+        "risk": "Remove a tag from an article: live Intercom mutation against /articles/{article_id}/tags/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "stage_article_draft",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/articles/{{ record.id }}/draft",
+        "risk": "Stage an article draft: live Intercom mutation against /articles/{id}/draft; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "publish_article_draft",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/articles/{{ record.id }}/draft/publish",
+        "risk": "Publish an article draft: live Intercom mutation against /articles/{id}/draft/publish; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_audience",
+        "kind": "create",
+        "method": "POST",
+        "path": "/audiences",
+        "risk": "Create an audience: live Intercom mutation against /audiences; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_audience",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/audiences/{{ record.id }}",
+        "risk": "Delete an audience: live Intercom mutation against /audiences/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_audience",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/audiences/{{ record.id }}",
+        "risk": "Update an audience: live Intercom mutation against /audiences/{id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_or_update_company",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/companies",
+        "risk": "Create or Update a company: live Intercom mutation against /companies; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_company",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/companies/{{ record.company_id }}",
+        "risk": "Delete a company: live Intercom mutation against /companies/{company_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_company",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/companies/{{ record.company_id }}",
+        "risk": "Update a company: live Intercom mutation against /companies/{company_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_company_note",
+        "kind": "create",
+        "method": "POST",
+        "path": "/companies/{{ record.company_id }}/notes",
+        "risk": "Create a company note: live Intercom mutation against /companies/{company_id}/notes; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_contact",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts",
+        "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "merge_contact",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/contacts/merge",
+        "risk": "Merge a lead and a user: live Intercom mutation against /contacts/merge; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_contact",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contacts/{{ record.contact_id }}",
+        "risk": "Delete a contact: live Intercom mutation against /contacts/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_contact",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/contacts/{{ record.contact_id }}",
+        "risk": "Update a contact: live Intercom mutation against /contacts/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "archive_contact",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/archive",
+        "risk": "Archive contact: live Intercom mutation against /contacts/{contact_id}/archive; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "block_contact",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/block",
+        "risk": "Block contact: live Intercom mutation against /contacts/{contact_id}/block; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "attach_contact_to_acompany",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/companies",
+        "risk": "Attach a Contact to a Company: live Intercom mutation against /contacts/{contact_id}/companies; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_contact_from_acompany",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contacts/{{ record.contact_id }}/companies/{{ record.company_id }}",
+        "risk": "Detach a contact from a company: live Intercom mutation against /contacts/{contact_id}/companies/{company_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_note",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/notes",
+        "risk": "Create a note: live Intercom mutation against /contacts/{contact_id}/notes; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_subscription_type_to_contact",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/subscriptions",
+        "risk": "Add subscription to a contact: live Intercom mutation against /contacts/{contact_id}/subscriptions; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_subscription_type_to_contact",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contacts/{{ record.contact_id }}/subscriptions/{{ record.subscription_id }}",
+        "risk": "Remove subscription from a contact: live Intercom mutation against /contacts/{contact_id}/subscriptions/{subscription_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "attach_tag_to_contact",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/tags",
+        "risk": "Add tag to a contact: live Intercom mutation against /contacts/{contact_id}/tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_tag_from_contact",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contacts/{{ record.contact_id }}/tags/{{ record.tag_id }}",
+        "risk": "Remove tag from a contact: live Intercom mutation against /contacts/{contact_id}/tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unarchive_contact",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/unarchive",
+        "risk": "Unarchive contact: live Intercom mutation against /contacts/{contact_id}/unarchive; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "dismiss_contact_banner",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/contacts/{{ record.id }}/banners/{{ record.view_id }}/dismiss",
+        "risk": "Dismiss a banner for a contact: live Intercom mutation against /contacts/{id}/banners/{view_id}/dismiss; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "bulk_content_actions",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/content/bulk_actions",
+        "risk": "Run a bulk action on Knowledge Hub content: live Intercom mutation against /content/bulk_actions; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_content_snippet",
+        "kind": "create",
+        "method": "POST",
+        "path": "/content_snippets",
+        "risk": "Create a content snippet: live Intercom mutation against /content_snippets; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_tag_to_content_snippet",
+        "kind": "create",
+        "method": "POST",
+        "path": "/content_snippets/{{ record.content_snippet_id }}/tags",
+        "risk": "Add a tag to a content snippet: live Intercom mutation against /content_snippets/{content_snippet_id}/tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_tag_from_content_snippet",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/content_snippets/{{ record.content_snippet_id }}/tags/{{ record.id }}",
+        "risk": "Remove a tag from a content snippet: live Intercom mutation against /content_snippets/{content_snippet_id}/tags/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_content_snippet",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/content_snippets/{{ record.id }}",
+        "risk": "Delete a content snippet: live Intercom mutation against /content_snippets/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_content_snippet",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/content_snippets/{{ record.id }}",
+        "risk": "Update a content snippet: live Intercom mutation against /content_snippets/{id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_conversation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations",
+        "risk": "Creates a conversation: live Intercom mutation against /conversations; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_conversation_attribute",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/attributes",
+        "risk": "Create a conversation attribute: live Intercom mutation against /conversations/attributes; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_conversation_attribute",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/attributes/{{ record.id }}",
+        "risk": "Delete (archive) a conversation attribute: live Intercom mutation against /conversations/attributes/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_conversation_attribute",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/conversations/attributes/{{ record.id }}",
+        "risk": "Update a conversation attribute: live Intercom mutation against /conversations/attributes/{id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_conversation_attribute_option",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/attributes/{{ record.id }}/options",
+        "risk": "Add an option to a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_conversation_attribute_option",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/attributes/{{ record.id }}/options/{{ record.option_id }}",
+        "risk": "Archive an option on a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options/{option_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_conversation_attribute_option",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/conversations/attributes/{{ record.id }}/options/{{ record.option_id }}",
+        "risk": "Update an option on a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options/{option_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "redact_conversation",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/conversations/redact",
+        "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_conversation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}",
+        "risk": "Delete a conversation: live Intercom mutation against /conversations/{conversation_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_conversation",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/conversations/{{ record.conversation_id }}",
+        "risk": "Update a conversation: live Intercom mutation against /conversations/{conversation_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "convert_conversation_to_ticket",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/convert",
+        "risk": "Convert a conversation to a ticket: live Intercom mutation against /conversations/{conversation_id}/convert; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_contact_to_conversation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/customers",
+        "risk": "Attach a contact to a conversation: live Intercom mutation against /conversations/{conversation_id}/customers; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_contact_from_conversation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}/customers/{{ record.contact_id }}",
+        "risk": "Detach a contact from a group conversation: live Intercom mutation against /conversations/{conversation_id}/customers/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "manage_conversation",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/parts",
+        "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "reply_conversation",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/reply",
+        "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_tag_to_conversation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/tags",
+        "risk": "Add tag to a conversation: live Intercom mutation against /conversations/{conversation_id}/tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_tag_from_conversation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}/tags/{{ record.tag_id }}",
+        "risk": "Remove tag from a conversation: live Intercom mutation against /conversations/{conversation_id}/tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "merge_conversation",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/conversations/{{ record.id }}/merge",
+        "risk": "Merge a conversation: live Intercom mutation against /conversations/{id}/merge; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_custom_object_instances_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/custom_object_instances/{{ record.custom_object_type_identifier }}",
+        "risk": "Delete a Custom Object Instance by External ID: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_custom_object_instances",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/custom_object_instances/{{ record.custom_object_type_identifier }}",
+        "risk": "Create or Update a Custom Object Instance: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_custom_object_instances_by_external_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/custom_object_instances/{{ record.custom_object_type_identifier }}/{{ record.custom_object_instance_id }}",
+        "risk": "Delete a Custom Object Instance by ID: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_data_attribute",
+        "kind": "create",
+        "method": "POST",
+        "path": "/data_attributes",
+        "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "update_data_attribute",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/data_attributes/{{ record.data_attribute_id }}",
+        "risk": "Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_data_connector",
+        "kind": "create",
+        "method": "POST",
+        "path": "/data_connectors",
+        "risk": "Create a data connector: live Intercom mutation against /data_connectors; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_data_connector",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/data_connectors/{{ record.id }}",
+        "risk": "Delete a data connector: live Intercom mutation against /data_connectors/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_data_connector",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/data_connectors/{{ record.id }}",
+        "risk": "Update a data connector: live Intercom mutation against /data_connectors/{id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_data_event",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/events",
+        "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "cancel_data_export",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/export/cancel/{{ record.job_identifier }}",
+        "risk": "Cancel content data export: live Intercom mutation against /export/cancel/{job_identifier}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "submit_fin_csat",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/fin/csat",
+        "risk": "Submit a CSAT rating: live Intercom mutation against /fin/csat; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "reply_to_fin",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/fin/reply",
+        "risk": "Reply to Fin: live Intercom mutation against /fin/reply; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "start_fin_conversation",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/fin/start",
+        "risk": "Start a conversation with Fin: live Intercom mutation against /fin/start; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "register_fin_voice_call",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/fin_voice/register",
+        "risk": "Register a Fin Voice call: live Intercom mutation against /fin_voice/register; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_collection",
+        "kind": "create",
+        "method": "POST",
+        "path": "/help_center/collections",
+        "risk": "Create a collection: live Intercom mutation against /help_center/collections; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_collection",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/help_center/collections/{{ record.collection_id }}",
+        "risk": "Delete a collection: live Intercom mutation against /help_center/collections/{collection_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_collection",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/help_center/collections/{{ record.collection_id }}",
+        "risk": "Update a collection: live Intercom mutation against /help_center/collections/{collection_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_help_center_redirect",
+        "kind": "create",
+        "method": "POST",
+        "path": "/help_center/help_centers/{{ record.help_center_id }}/redirects",
+        "risk": "Create a redirect: live Intercom mutation against /help_center/help_centers/{help_center_id}/redirects; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_help_center_redirect",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/help_center/help_centers/{{ record.help_center_id }}/redirects/{{ record.id }}",
+        "risk": "Delete a redirect: live Intercom mutation against /help_center/help_centers/{help_center_id}/redirects/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_internal_article",
+        "kind": "create",
+        "method": "POST",
+        "path": "/internal_articles",
+        "risk": "Create an internal article: live Intercom mutation against /internal_articles; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_internal_article",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/internal_articles/{{ record.internal_article_id }}",
+        "risk": "Delete an internal article: live Intercom mutation against /internal_articles/{internal_article_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_internal_article",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/internal_articles/{{ record.internal_article_id }}",
+        "risk": "Update an internal article: live Intercom mutation against /internal_articles/{internal_article_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_tag_to_internal_article",
+        "kind": "create",
+        "method": "POST",
+        "path": "/internal_articles/{{ record.internal_article_id }}/tags",
+        "risk": "Add a tag to an internal article: live Intercom mutation against /internal_articles/{internal_article_id}/tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_tag_from_internal_article",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/internal_articles/{{ record.internal_article_id }}/tags/{{ record.id }}",
+        "risk": "Remove a tag from an internal article: live Intercom mutation against /internal_articles/{internal_article_id}/tags/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_ip_allowlist",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ip_allowlist",
+        "risk": "Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/messages",
+        "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_news_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "/news/news_items",
+        "risk": "Create a news item: live Intercom mutation against /news/news_items; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_news_item",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/news/news_items/{{ record.news_item_id }}",
+        "risk": "Delete a news item: live Intercom mutation against /news/news_items/{news_item_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_news_item",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/news/news_items/{{ record.news_item_id }}",
+        "risk": "Update a news item: live Intercom mutation against /news/news_items/{news_item_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_office_hours_schedule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/office_hours_schedules",
+        "risk": "Create an office hours schedule: live Intercom mutation against /office_hours_schedules; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_office_hours_schedule",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/office_hours_schedules/{{ record.id }}",
+        "risk": "Delete an office hours schedule: live Intercom mutation against /office_hours_schedules/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_office_hours_schedule",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/office_hours_schedules/{{ record.id }}",
+        "risk": "Update an office hours schedule: live Intercom mutation against /office_hours_schedules/{id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_office_hours_exception",
+        "kind": "create",
+        "method": "POST",
+        "path": "/office_hours_schedules/{{ record.office_hours_schedule_id }}/office_hours_exceptions",
+        "risk": "Create an office hours exception: live Intercom mutation against /office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_office_hours_exception",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/office_hours_schedules/{{ record.office_hours_schedule_id }}/office_hours_exceptions/{{ record.id }}",
+        "risk": "Delete an office hours exception: live Intercom mutation against /office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_office_hours_exception",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/office_hours_schedules/{{ record.office_hours_schedule_id }}/office_hours_exceptions/{{ record.id }}",
+        "risk": "Update an office hours exception: live Intercom mutation against /office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_phone_switch",
+        "kind": "create",
+        "method": "POST",
+        "path": "/phone_call_redirects",
+        "risk": "Create a phone Switch: live Intercom mutation against /phone_call_redirects; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_tag",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/tags",
+        "risk": "Create or update a tag, Tag or untag companies, Tag contacts: live Intercom mutation against /tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tags/{{ record.tag_id }}",
+        "risk": "Delete tag: live Intercom mutation against /tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_ticket_type",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ticket_types",
+        "risk": "Create a ticket type: live Intercom mutation against /ticket_types; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "update_ticket_type",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ticket_types/{{ record.ticket_type_id }}",
+        "risk": "Update a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_ticket_type_attribute",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ticket_types/{{ record.ticket_type_id }}/attributes",
+        "risk": "Create a new attribute for a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}/attributes; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "update_ticket_type_attribute",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ticket_types/{{ record.ticket_type_id }}/attributes/{{ record.attribute_id }}",
+        "risk": "Update an existing attribute for a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}/attributes/{attribute_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "create_ticket",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tickets",
+        "risk": "Create a ticket: live Intercom mutation against /tickets; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "enqueue_create_ticket",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tickets/enqueue",
+        "risk": "Enqueue create ticket: live Intercom mutation against /tickets/enqueue; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "delete_ticket",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.ticket_id }}",
+        "risk": "Delete a ticket: live Intercom mutation against /tickets/{ticket_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_ticket",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tickets/{{ record.ticket_id }}",
+        "risk": "Update a ticket: live Intercom mutation against /tickets/{ticket_id}; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "change_ticket_type",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/tickets/{{ record.ticket_id }}/change_type",
+        "risk": "Change ticket type: live Intercom mutation against /tickets/{ticket_id}/change_type; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "link_conversation_to_ticket",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/tickets/{{ record.ticket_id }}/linked_conversations",
+        "risk": "Link a conversation to a ticket: live Intercom mutation against /tickets/{ticket_id}/linked_conversations; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "unlink_conversation_from_ticket",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.ticket_id }}/linked_conversations/{{ record.id }}",
+        "risk": "Unlink a conversation from a ticket: live Intercom mutation against /tickets/{ticket_id}/linked_conversations/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reply_ticket",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/tickets/{{ record.ticket_id }}/reply",
+        "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "attach_tag_to_ticket",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tickets/{{ record.ticket_id }}/tags",
+        "risk": "Add tag to a ticket: live Intercom mutation against /tickets/{ticket_id}/tags; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "detach_tag_from_ticket",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.ticket_id }}/tags/{{ record.tag_id }}",
+        "risk": "Remove tag from a ticket: live Intercom mutation against /tickets/{ticket_id}/tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_visitor",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/visitors",
+        "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute"
+      },
+      {
+        "name": "convert_visitor",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/visitors/convert",
+        "risk": "Convert a visitor: live Intercom mutation against /visitors/convert; reverse ETL requires plan, preview, explicit approval, execute"
+      }
+    ],
     "risk": {
-      "read": "external Intercom API read of contact and conversation data",
-      "approval": "none; read-only source"
+      "read": "external Intercom API read of contact, company, conversation, admin, tag, and operational data",
+      "write": "Intercom mutations can create, update, archive, block, merge, redact, detach, or delete provider data; reverse ETL requires plan, preview, explicit approval, execute, and destructive confirmation where declared",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive actions require typed confirmation value `destructive`"
     },
     "icon": {
       "id": "intercom",

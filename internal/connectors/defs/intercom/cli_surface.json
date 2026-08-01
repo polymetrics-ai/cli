@@ -90,57 +90,6 @@
   ],
   "commands": [
     {
-      "path": "contacts list",
-      "summary": "List Intercom contacts as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "contacts",
-      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/contacts"
-        }
-      ],
-      "examples": [
-        "pm intercom contacts list --json --limit 25"
-      ]
-    },
-    {
-      "path": "companies list",
-      "summary": "List Intercom companies as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "companies",
-      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/companies"
-        }
-      ],
-      "examples": [
-        "pm intercom companies list --json --limit 25"
-      ]
-    },
-    {
-      "path": "conversations list",
-      "summary": "List Intercom conversations as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "conversations",
-      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/conversations"
-        }
-      ],
-      "examples": [
-        "pm intercom conversations list --json --limit 25"
-      ]
-    },
-    {
       "path": "admins list",
       "summary": "List Intercom admins as ETL records.",
       "intent": "etl",
@@ -155,23 +104,6 @@
       ],
       "examples": [
         "pm intercom admins list --json --limit 25"
-      ]
-    },
-    {
-      "path": "tags list",
-      "summary": "List Intercom tags as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "tags",
-      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/tags"
-        }
-      ],
-      "examples": [
-        "pm intercom tags list --json --limit 25"
       ]
     },
     {
@@ -830,6 +762,23 @@
       "operation": "intercom.calls.show_call_transcript"
     },
     {
+      "path": "companies list",
+      "summary": "List Intercom companies as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ],
+      "examples": [
+        "pm intercom companies list --json --limit 25"
+      ]
+    },
+    {
       "path": "companies create or update a company",
       "summary": "Create or Update a company",
       "intent": "reverse_etl",
@@ -986,6 +935,23 @@
       ],
       "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
       "operation": "intercom.companies.list_attached_segments_for_companies"
+    },
+    {
+      "path": "contacts list",
+      "summary": "List Intercom contacts as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "examples": [
+        "pm intercom contacts list --json --limit 25"
+      ]
     },
     {
       "path": "contacts create contact",
@@ -1538,6 +1504,23 @@
       "write": "update_content_snippet",
       "risk": "Update a content snippet: live Intercom mutation against /content_snippets/{id}; reverse ETL requires plan, preview, explicit approval, execute",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations list",
+      "summary": "List Intercom conversations as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations"
+        }
+      ],
+      "examples": [
+        "pm intercom conversations list --json --limit 25"
+      ]
     },
     {
       "path": "conversations creates a conversation",
@@ -2434,6 +2417,23 @@
       "approval": "No live binary execution in this connector-local slice."
     },
     {
+      "path": "fin agent submit a CSAT rating",
+      "summary": "Submit a CSAT rating",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fin/csat"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "submit_fin_csat",
+      "risk": "Submit a CSAT rating: live Intercom mutation against /fin/csat; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
       "path": "fin agent reply to fin",
       "summary": "Reply to Fin",
       "intent": "reverse_etl",
@@ -2878,8 +2878,8 @@
       ],
       "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
       "write": "update_ip_allowlist",
-      "risk": "Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+      "risk": "Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
     },
     {
       "path": "jobs retrieve job status",
@@ -3356,6 +3356,23 @@
       ],
       "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
       "operation": "intercom.subscription_types.list_subscription_types"
+    },
+    {
+      "path": "tags list",
+      "summary": "List Intercom tags as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
+      "examples": [
+        "pm intercom tags list --json --limit 25"
+      ]
     },
     {
       "path": "tags create or update a tag tag or untag companies tag contacts",

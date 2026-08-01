@@ -40,6 +40,7 @@ Issue scope: parent #164 and subissues #165-#171 for `internal/connectors/defs/i
 1. Official-source inventory
    - Fetch and parse Intercom OpenAPI 2.16 and the Intercom REST page-data source named by #164.
    - Reconcile 230 documented operations with lane counts from #164 without changing issue counts.
+   - Recovery re-audit on 2026-08-01 found the current official OpenAPI 2.16 shared JSON now documents 231 operations. The stale local ledger omitted `POST /fin/csat` (`submitFinCsat`). Treat this as a required fix, not a waiver.
 2. Operation ledger
    - Replace the legacy 10-row Intercom `api_surface.json` with operation-ledger-mode rows for all official operations.
    - Keep existing implemented stream mappings honest and classify every other official operation as typed blocked/planned or connector-local executable only when supported.
@@ -58,13 +59,13 @@ Issue scope: parent #164 and subissues #165-#171 for `internal/connectors/defs/i
 | Slice | Red/validation before production edit | Green target |
 | --- | --- | --- |
 | Baseline | `go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1` passed; `go run ./cmd/connectorgen validate internal/connectors/defs/intercom` fails because validate treats `fixtures/` and `schemas/` as connector dirs, so root validation will be used for final evidence. | Intercom conformance remains green; root validation has no Intercom findings. |
-| Ledger completeness | Generated OpenAPI inventory reports 230 operations (GET 108, POST 67, PUT 23, PATCH 1, DELETE 31). | `api_surface.json` contains 230 official rows and no duplicate method/path pairs. |
-| Destructive safety | Existing Intercom bundle has no write actions and excludes DELETE as unsafe/destructive. | Any implemented DELETE/destructive write action has `confirm: "destructive"`; unimplemented destructive operations are operation-ledger blocked/planned, not excluded as unsafe. |
-| Docs/commands | Existing docs say read-only and only 5 endpoint groups. | Docs/command metadata describe implemented vs planned/blocked coverage without claiming live certification. |
+| Ledger completeness | Recovery re-audit script fetches the official OpenAPI 2.16 shared JSON and reports 231 operations (GET 108, POST 68, PUT 23, PATCH 1, DELETE 31); stale local state has 230 rows and omits `POST /fin/csat`. | `operations.json`, `api_surface.json`, `cli_surface.json`, `writes.json`, fixtures, and docs contain 231 official rows / 114 typed writes / 112 blocked-planned rows with no duplicate method/path pairs and no missing official operations. |
+| Destructive safety | Current branch still has `update_ip_allowlist` without `confirm: "destructive"`. | All 40 destructive/admin-dangerous write actions, including 31 DELETEs and `update_ip_allowlist`, declare `confirm: "destructive"`; destructive/delete operations are canonical typed commands behind reverse ETL plan -> preview -> explicit approval -> execute. |
+| Docs/commands | Generated connector manual/skill still say read-only/write=false and only 5 endpoint groups. | Connector-owned generated/manual docs describe implemented vs planned/blocked coverage without claiming live certification and reflect write=true, 231 operations, 114 writes, and 112 blocked/planned rows. |
 
 ## Verification checklist
 
-- [x] `node`/script inventory confirms 230 official Intercom operations and lane classifications (`OFFICIAL_INVENTORY.md`: 55 read, 113 write, 42 direct, 7 binary, 12 CDC/changefeed-like, 1 duplicate/not-applicable).
+- [x] Recovery `node`/script inventory confirms current official Intercom OpenAPI 2.16 has 231 operations and lane classifications (`OFFICIAL_INVENTORY.md`: 55 read, 114 write, 42 direct, 7 binary, 12 CDC/changefeed-like, 1 duplicate/not-applicable); no missing/extra local `operations.json` or `api_surface.json` rows.
 - [x] `go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1`.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json`.
 - [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1`.
@@ -72,5 +73,12 @@ Issue scope: parent #164 and subissues #165-#171 for `internal/connectors/defs/i
 - [x] `go build ./cmd/pm`.
 - [x] `make connector-boundary`.
 - [x] `git diff --check`.
-- [x] CLI help parity smoke checks: `./pm help intercom`, `./pm intercom --help`, `./pm intercom contacts list --help`, `./pm intercom ai content create content import source --help`.
+- [x] CLI help parity smoke checks: `./pm help intercom`, `./pm intercom --help`, `./pm intercom contacts list --help`, `./pm intercom ai content create content import source --help`, `.tmp/pm intercom fin agent submit a CSAT rating --help`, `.tmp/pm intercom ip allowlist update ip allowlist settings --help`.
 - [x] `gh-axi` captain-policy addendum applied once to #164-#171; marker `intercom-captain-policy-addendum-destructive-r1` appears exactly once per issue.
+
+## Recovery verification evidence (2026-08-01)
+
+- Official OpenAPI 2.16 current total: 231 operations across 164 paths; method counts GET 108, POST 68, PUT 23, DELETE 31, PATCH 1.
+- Connector totals after fix: 231 `operations.json` rows, 231 `api_surface.json` rows, 231 CLI command metadata rows, 114 write actions, 119 covered rows, 112 blocked/planned operation rows, 40 destructive confirmations, and 0 missing write fixtures.
+- Added `POST /fin/csat` / `submitFinCsat` as typed write `submit_fin_csat`; updated `update_ip_allowlist` to typed destructive confirmation in write, operation, CLI, and generated docs metadata.
+- Validation passed with isolated `GOCACHE=$PWD/.cache/go-build`: Intercom conformance, `connectorgen validate internal/connectors/defs --json`, targeted `go test ./internal/cli -run 'Connector|Dynamic|Golden|Docs'`, `go vet ./internal/connectors/... ./internal/cli/...`, `go build -o .tmp/pm ./cmd/pm`, `.tmp/pm docs validate --connectors-dir docs/connectors`, `make connector-boundary`, and `git diff --check`.
