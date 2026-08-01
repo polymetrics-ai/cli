@@ -1,9 +1,9 @@
 {
   "api": "Shopify Admin GraphQL latest full index + Admin REST latest resource pages",
   "docs": "https://shopify.dev/docs/api/admin-graphql/latest/full-index",
-  "reviewed_at": "2026-07-30",
+  "reviewed_at": "2026-08-01",
   "operation_ledger_version": 1,
-  "scope": "Official source inventory from Shopify docs on 2026-07-30: 287 GraphQL queries, 518 GraphQL mutations, 264 REST non-delete rows, and 34 REST DELETE rows. DELETE/destructive rows are in scope under the captain policy addendum; rows without executable connector-owned schemas remain blocked operation-ledger entries rather than unsafe exclusions.",
+  "scope": "Official source inventory from Shopify docs on 2026-08-01: 287 GraphQL queries, 518 GraphQL mutations, 317 REST non-delete rows, and 44 REST DELETE rows. DELETE/destructive rows are in scope under the captain policy addendum; rows without executable connector-owned schemas remain blocked operation-ledger entries rather than unsafe exclusions.",
   "endpoints": [
     {
       "method": "POST",
@@ -175,18 +175,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.articleTags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/articleTags"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.articles",
       "operation": {
         "model": "direct_read",
@@ -195,6 +183,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/articles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.articleTags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/articleTags"
       }
     },
     {
@@ -247,18 +247,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.automaticDiscountSavedSearches",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscountSavedSearches"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.automaticDiscounts",
       "operation": {
         "model": "direct_read",
@@ -267,6 +255,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.automaticDiscountSavedSearches",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscountSavedSearches"
       }
     },
     {
@@ -647,7 +647,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutProfile"
@@ -659,7 +659,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutProfiles"
@@ -799,18 +799,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.collectionSavedSearches",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collectionSavedSearches"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.collections",
       "operation": {
         "model": "direct_read",
@@ -819,6 +807,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.collectionSavedSearches",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collectionSavedSearches"
       }
     },
     {
@@ -1087,6 +1087,18 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Query.customers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customers"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Query.customerSavedSearches",
       "operation": {
         "model": "direct_read",
@@ -1095,6 +1107,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customerSavedSearches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.customersCount",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customersCount"
       }
     },
     {
@@ -1111,18 +1135,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.customerSegmentMembersQuery",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customerSegmentMembersQuery"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.customerSegmentMembership",
       "operation": {
         "model": "direct_read",
@@ -1135,26 +1147,14 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.customers",
+      "path": "GraphQL Query.customerSegmentMembersQuery",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customers"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.customersCount",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customersCount"
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customerSegmentMembersQuery"
       }
     },
     {
@@ -1199,7 +1199,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/deliveryProfile"
@@ -1211,7 +1211,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/deliveryProfiles"
@@ -1411,30 +1411,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.draftOrderSavedSearches",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/draftOrderSavedSearches"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.draftOrderTag",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/draftOrderTag"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.draftOrders",
       "operation": {
         "model": "direct_read",
@@ -1447,6 +1423,18 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Query.draftOrderSavedSearches",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/draftOrderSavedSearches"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Query.draftOrdersCount",
       "operation": {
         "model": "direct_read",
@@ -1455,6 +1443,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/draftOrdersCount"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.draftOrderTag",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/draftOrderTag"
       }
     },
     {
@@ -1495,26 +1495,26 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.fileSavedSearches",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/fileSavedSearches"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.files",
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.fileSavedSearches",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/fileSavedSearches"
       }
     },
     {
@@ -1799,7 +1799,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/locationsAvailableForDeliveryProfiles"
@@ -1811,7 +1811,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/locationsAvailableForDeliveryProfilesConnection"
@@ -1867,42 +1867,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.marketLocalizableResource",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketLocalizableResource"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.marketLocalizableResources",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketLocalizableResources"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.marketLocalizableResourcesByIds",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketLocalizableResourcesByIds"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.marketingActivities",
       "operation": {
         "model": "direct_read",
@@ -1947,6 +1911,42 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketingEvents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.marketLocalizableResource",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketLocalizableResource"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.marketLocalizableResources",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketLocalizableResources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.marketLocalizableResourcesByIds",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketLocalizableResourcesByIds"
       }
     },
     {
@@ -2011,18 +2011,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.metafieldDefinitionTypes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/metafieldDefinitionTypes"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.metafieldDefinitions",
       "operation": {
         "model": "direct_read",
@@ -2031,6 +2019,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/metafieldDefinitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.metafieldDefinitionTypes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/metafieldDefinitionTypes"
       }
     },
     {
@@ -2227,18 +2227,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.orderSavedSearches",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/orderSavedSearches"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.orders",
       "operation": {
         "model": "direct_read",
@@ -2247,6 +2235,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.orderSavedSearches",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/orderSavedSearches"
       }
     },
     {
@@ -2527,6 +2527,18 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Query.products",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/products"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Query.productSavedSearches",
       "operation": {
         "model": "direct_read",
@@ -2535,6 +2547,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/productSavedSearches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.productsCount",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/productsCount"
       }
     },
     {
@@ -2623,30 +2647,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.products",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/products"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.productsCount",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/productsCount"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.publicApiVersions",
       "operation": {
         "model": "direct_read",
@@ -2731,30 +2731,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.returnCalculate",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/returnCalculate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.returnReasonDefinitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/returnReasonDefinitions"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.returnableFulfillment",
       "operation": {
         "model": "direct_read",
@@ -2775,6 +2751,30 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/returnableFulfillments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.returnCalculate",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/returnCalculate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.returnReasonDefinitions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/returnReasonDefinitions"
       }
     },
     {
@@ -2839,18 +2839,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.segmentFilterSuggestions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentFilterSuggestions"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.segmentFilters",
       "operation": {
         "model": "direct_read",
@@ -2863,6 +2851,18 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Query.segmentFilterSuggestions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentFilterSuggestions"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Query.segmentMigrations",
       "operation": {
         "model": "direct_read",
@@ -2871,18 +2871,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentMigrations"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.segmentValueSuggestions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentValueSuggestions"
       }
     },
     {
@@ -2907,6 +2895,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentsCount"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.segmentValueSuggestions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentValueSuggestions"
       }
     },
     {
@@ -2983,42 +2983,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Query.shopLocales",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopLocales"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.shopPayPaymentRequestReceipt",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopPayPaymentRequestReceipt"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.shopPayPaymentRequestReceipts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopPayPaymentRequestReceipts"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Query.shopifyFunction",
       "operation": {
         "model": "direct_read",
@@ -3063,6 +3027,42 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopifyqlQuery"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.shopLocales",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopLocales"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.shopPayPaymentRequestReceipt",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopPayPaymentRequestReceipt"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.shopPayPaymentRequestReceipts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/shopPayPaymentRequestReceipts"
       }
     },
     {
@@ -3311,7 +3311,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/urlRedirect"
@@ -3323,22 +3323,10 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/urlRedirectImport"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.urlRedirectSavedSearches",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/urlRedirectSavedSearches"
       }
     },
     {
@@ -3347,10 +3335,22 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/urlRedirects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.urlRedirectSavedSearches",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/urlRedirectSavedSearches"
       }
     },
     {
@@ -3359,7 +3359,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/urlRedirectsCount"
@@ -3387,30 +3387,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/validations"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.webPixel",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/webPixel"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Query.webPresences",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/webPresences"
       }
     },
     {
@@ -3447,6 +3423,30 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/webhookSubscriptionsCount"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.webPixel",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/webPixel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Query.webPresences",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/webPresences"
       }
     },
     {
@@ -4312,18 +4312,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.companyContactUpdate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactUpdate"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Mutation.companyContactsDelete",
       "operation": {
         "model": "destructive_action",
@@ -4333,6 +4321,18 @@
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactsDelete",
         "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.companyContactUpdate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactUpdate"
       }
     },
     {
@@ -4499,6 +4499,19 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Mutation.companyLocationsDelete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationsDelete",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Mutation.companyLocationTaxSettingsUpdate",
       "operation": {
         "model": "admin_reverse_etl",
@@ -4519,19 +4532,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationUpdate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.companyLocationsDelete",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4573,18 +4573,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.customerAddTaxExemptions",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddTaxExemptions"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Mutation.customerAddressCreate",
       "operation": {
         "model": "admin_reverse_etl",
@@ -4618,6 +4606,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddressUpdate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.customerAddTaxExemptions",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddTaxExemptions"
       }
     },
     {
@@ -4940,13 +4940,12 @@
       "method": "POST",
       "path": "GraphQL Mutation.delegateAccessTokenDestroy",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/delegateAccessTokenDestroy",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/delegateAccessTokenDestroy"
       }
     },
     {
@@ -5259,13 +5258,12 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeActivate",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeActivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeActivate"
       }
     },
     {
@@ -5837,12 +5835,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderClose"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderClose",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5922,12 +5921,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderRejectFulfillmentRequest",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectFulfillmentRequest"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectFulfillmentRequest",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5980,6 +5980,30 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Mutation.fulfillmentOrdersReroute",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrdersReroute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.fulfillmentOrdersSetFulfillmentDeadline",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrdersSetFulfillmentDeadline"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderSubmitCancellationRequest",
       "operation": {
         "model": "destructive_action",
@@ -6001,30 +6025,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderSubmitFulfillmentRequest"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.fulfillmentOrdersReroute",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrdersReroute"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.fulfillmentOrdersSetFulfillmentDeadline",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrdersSetFulfillmentDeadline"
       }
     },
     {
@@ -6640,6 +6640,117 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Mutation.marketingActivitiesDeleteAllExternal",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivitiesDeleteAllExternal",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingActivityCreate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityCreate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingActivityCreateExternal",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityCreateExternal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingActivityDeleteExternal",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityDeleteExternal",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingActivityUpdate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpdate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingActivityUpdateExternal",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpdateExternal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingActivityUpsertExternal",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpsertExternal"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingEngagementCreate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementCreate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.marketingEngagementsDelete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementsDelete",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Mutation.marketLocalizationsRegister",
       "operation": {
         "model": "admin_reverse_etl",
@@ -6748,117 +6859,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceUpdate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivitiesDeleteAllExternal",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivitiesDeleteAllExternal",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivityCreate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityCreate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivityCreateExternal",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityCreateExternal"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivityDeleteExternal",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityDeleteExternal",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivityUpdate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpdate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivityUpdateExternal",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpdateExternal"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingActivityUpsertExternal",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpsertExternal"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingEngagementCreate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementCreate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.marketingEngagementsDelete",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7174,12 +7174,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderClose"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderClose",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7638,12 +7639,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.pointOfSaleDevicePaymentSessionClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDevicePaymentSessionClose"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDevicePaymentSessionClose",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7929,18 +7931,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.productOptionUpdate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionUpdate"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Mutation.productOptionsCreate",
       "operation": {
         "model": "admin_reverse_etl",
@@ -7974,6 +7964,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionsReorder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.productOptionUpdate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionUpdate"
       }
     },
     {
@@ -8064,13 +8066,12 @@
       "method": "POST",
       "path": "GraphQL Mutation.productVariantDetachMedia",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantDetachMedia",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantDetachMedia"
       }
     },
     {
@@ -8160,42 +8161,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.pubSubServerPixelUpdate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubServerPixelUpdate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.pubSubWebhookSubscriptionCreate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionCreate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.pubSubWebhookSubscriptionUpdate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionUpdate"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Mutation.publicationCreate",
       "operation": {
         "model": "admin_reverse_etl",
@@ -8281,6 +8246,42 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Mutation.pubSubServerPixelUpdate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubServerPixelUpdate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.pubSubWebhookSubscriptionCreate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionCreate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.pubSubWebhookSubscriptionUpdate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionUpdate"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Mutation.quantityPricingByVariantUpdate",
       "operation": {
         "model": "admin_reverse_etl",
@@ -8332,13 +8333,12 @@
       "method": "POST",
       "path": "GraphQL Mutation.removeFromReturn",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/removeFromReturn",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/removeFromReturn"
       }
     },
     {
@@ -8370,12 +8370,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.returnClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnClose"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnClose",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8612,18 +8613,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.sellingPlanGroupAddProductVariants",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupAddProductVariants"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Mutation.sellingPlanGroupAddProducts",
       "operation": {
         "model": "admin_reverse_etl",
@@ -8632,6 +8621,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupAddProducts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.sellingPlanGroupAddProductVariants",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupAddProductVariants"
       }
     },
     {
@@ -8661,19 +8662,6 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.sellingPlanGroupRemoveProductVariants",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProductVariants",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
-      }
-    },
-    {
-      "method": "POST",
       "path": "GraphQL Mutation.sellingPlanGroupRemoveProducts",
       "operation": {
         "model": "destructive_action",
@@ -8682,6 +8670,19 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProducts",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.sellingPlanGroupRemoveProductVariants",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProductVariants",
         "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
@@ -8773,6 +8774,18 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Mutation.shopifyPaymentsPayoutAlternateCurrencyCreate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shopifyPaymentsPayoutAlternateCurrencyCreate"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Mutation.shopLocaleDisable",
       "operation": {
         "model": "admin_reverse_etl",
@@ -8833,14 +8846,14 @@
     },
     {
       "method": "POST",
-      "path": "GraphQL Mutation.shopifyPaymentsPayoutAlternateCurrencyCreate",
+      "path": "GraphQL Mutation.stagedUploadsCreate",
       "operation": {
         "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shopifyPaymentsPayoutAlternateCurrencyCreate"
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadsCreate"
       }
     },
     {
@@ -8865,18 +8878,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadTargetsGenerate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.stagedUploadsCreate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadsCreate"
       }
     },
     {
@@ -9505,12 +9506,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.transactionVoid",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/transactionVoid"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/transactionVoid",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9690,6 +9692,43 @@
     },
     {
       "method": "POST",
+      "path": "GraphQL Mutation.webhookSubscriptionCreate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionCreate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.webhookSubscriptionDelete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionDelete",
+        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "GraphQL Mutation.webhookSubscriptionUpdate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionUpdate"
+      }
+    },
+    {
+      "method": "POST",
       "path": "GraphQL Mutation.webPixelCreate",
       "operation": {
         "model": "admin_reverse_etl",
@@ -9763,288 +9802,321 @@
       }
     },
     {
-      "method": "POST",
-      "path": "GraphQL Mutation.webhookSubscriptionCreate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionCreate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.webhookSubscriptionDelete",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "GraphQL Mutation.webhookSubscriptionUpdate",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionUpdate"
+      "method": "DELETE",
+      "path": "/admin/api/latest/articles/{article_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_articles_id_metafields_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/blogs/{id1}.json",
+      "path": "/admin/api/latest/blogs/{blog_id}.json",
       "covered_by": {
         "write": "delete_blogs_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/blogs/{id1}/articles/{id2}.json",
+      "path": "/admin/api/latest/blogs/{blog_id}/articles/{article_id}.json",
       "covered_by": {
         "write": "delete_blogs_id_articles_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/blogs/{id1}/metafields/{id2}.json",
+      "path": "/admin/api/latest/blogs/{blog_id}/metafields/{metafield_id}.json",
       "covered_by": {
         "write": "delete_blogs_id_metafields_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/carrier_services/{id1}.json",
+      "path": "/admin/api/latest/carrier_services/{carrier_service_id}.json",
       "covered_by": {
         "write": "delete_carrier_services_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/collection_listings/{id1}.json",
+      "path": "/admin/api/latest/collection_listings/{collection_listing_id}.json",
       "covered_by": {
         "write": "delete_collection_listings_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/collects/{id1}.json",
+      "path": "/admin/api/latest/collections/{collection_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_collections_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/collects/{collect_id}.json",
       "covered_by": {
         "write": "delete_collects_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/countries/{id1}.json",
+      "path": "/admin/api/latest/countries/{country_id}.json",
       "covered_by": {
         "write": "delete_countries_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/custom_collections/{id1}.json",
+      "path": "/admin/api/latest/custom_collections/{custom_collection_id}.json",
       "covered_by": {
         "write": "delete_custom_collections_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/customers/{id1}.json",
+      "path": "/admin/api/latest/customers/{customer_id}.json",
       "covered_by": {
         "write": "delete_customers_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/customers/{id1}/addresses/{id2}.json",
+      "path": "/admin/api/latest/customers/{customer_id}/addresses/{address_id}.json",
       "covered_by": {
         "write": "delete_customers_id_addresses_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/draft_orders/{id1}.json",
+      "path": "/admin/api/latest/customers/{customer_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_customers_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}.json",
       "covered_by": {
         "write": "delete_draft_orders_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/fulfillment_services/{id1}.json",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_draft_orders_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/fulfillment_services/{fulfillment_service_id}.json",
       "covered_by": {
         "write": "delete_fulfillment_services_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/inventory_levels.json",
+      "path": "/admin/api/latest/inventory_levels.json?inventory_item_id={inventory_item_id}&location_id={location_id}",
       "operation": {
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "destructive REST DELETE is in scope but blocked because this documented shape requires query/body identifiers that connector-local writes cannot express without shared write-query support; do not blanket-exclude as unsafe",
+        "reason": "destructive REST DELETE is in scope but blocked because this documented shape requires query identifiers that connector-local writes cannot express without shared write-query support; do not blanket-exclude as unsafe",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel",
-        "notes": "requires shared connector write query/body-identifier foundation before implementation"
+        "notes": "requires shared connector write query-parameter foundation before implementation"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/marketing_events/{id1}.json",
+      "path": "/admin/api/latest/marketing_events/{marketing_event_id}.json",
       "covered_by": {
         "write": "delete_marketing_events_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/mobile_platform_applications/{id1}.json",
+      "path": "/admin/api/latest/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/mobile_platform_applications/{mobile_platform_application_id}.json",
       "covered_by": {
         "write": "delete_mobile_platform_applications_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/orders/{id1}.json",
+      "path": "/admin/api/latest/orders/{order_id}.json",
       "covered_by": {
         "write": "delete_orders_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/orders/{id1}/fulfillments/{id2}/events/{id3}.json",
+      "path": "/admin/api/latest/orders/{order_id}/fulfillments/{fulfillment_id}/events/{event_id}.json",
       "covered_by": {
         "write": "delete_orders_id_fulfillments_id_events_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/orders/{id1}/risks/{id2}.json",
+      "path": "/admin/api/latest/orders/{order_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_orders_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/orders/{order_id}/risks/{risk_id}.json",
       "covered_by": {
         "write": "delete_orders_id_risks_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/pages/{id1}.json",
+      "path": "/admin/api/latest/pages/{page_id}.json",
       "covered_by": {
         "write": "delete_pages_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/price_rules/{id1}.json",
+      "path": "/admin/api/latest/pages/{page_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_pages_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/price_rules/{price_rule_id}.json",
       "covered_by": {
         "write": "delete_price_rules_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/price_rules/{id1}/discount_codes/{id2}.json",
+      "path": "/admin/api/latest/price_rules/{price_rule_id}/discount_codes/{discount_code_id}.json",
       "covered_by": {
         "write": "delete_price_rules_id_discount_codes_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/product_listings/{id1}.json",
+      "path": "/admin/api/latest/product_images/{product_image_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_product_images_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/product_listings/{product_listing_id}.json",
       "covered_by": {
         "write": "delete_product_listings_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/products/{id1}.json",
+      "path": "/admin/api/latest/products/{product_id}.json",
       "covered_by": {
         "write": "delete_products_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/products/{id1}/images/{id2}.json",
+      "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
       "covered_by": {
         "write": "delete_products_id_images_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/products/{id1}/variants/{id2}.json",
+      "path": "/admin/api/latest/products/{product_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_products_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/products/{product_id}/variants/{variant_id}.json",
       "covered_by": {
         "write": "delete_products_id_variants_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/recurring_application_charges/{id1}.json",
+      "path": "/admin/api/latest/recurring_application_charges/{recurring_application_charge_id}.json",
       "covered_by": {
         "write": "delete_recurring_application_charges_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/redirects/{id1}.json",
+      "path": "/admin/api/latest/redirects/{redirect_id}.json",
       "covered_by": {
         "write": "delete_redirects_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/script_tags/{id1}.json",
+      "path": "/admin/api/latest/script_tags/{script_tag_id}.json",
       "covered_by": {
         "write": "delete_script_tags_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/shopify_payments/disputes/{id1}/dispute_file_uploads/{id2}.json",
+      "path": "/admin/api/latest/shopify_payments/disputes/{dispute_id}/dispute_file_uploads/{dispute_file_upload_id}.json",
       "covered_by": {
         "write": "delete_shopify_payments_disputes_id_dispute_file_uploads_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/smart_collections/{id1}.json",
+      "path": "/admin/api/latest/smart_collections/{smart_collection_id}.json",
       "covered_by": {
         "write": "delete_smart_collections_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/storefront_access_tokens/{id1}.json",
+      "path": "/admin/api/latest/storefront_access_tokens/{storefront_access_token_id}.json",
       "covered_by": {
         "write": "delete_storefront_access_tokens_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/themes/{id1}.json",
+      "path": "/admin/api/latest/themes/{theme_id}.json",
       "covered_by": {
         "write": "delete_themes_id"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/themes/{id1}/assets.json",
+      "path": "/admin/api/latest/themes/{theme_id}/assets.json?asset[key]={asset_key}",
       "operation": {
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "destructive REST DELETE is in scope but blocked because this documented shape requires query/body identifiers that connector-local writes cannot express without shared write-query support; do not blanket-exclude as unsafe",
+        "reason": "destructive REST DELETE is in scope but blocked because this documented shape requires query identifiers that connector-local writes cannot express without shared write-query support; do not blanket-exclude as unsafe",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/asset",
-        "notes": "requires shared connector write query/body-identifier foundation before implementation"
+        "notes": "requires shared connector write query-parameter foundation before implementation"
       }
     },
     {
       "method": "DELETE",
-      "path": "/admin/api/latest/webhooks/{id1}.json",
+      "path": "/admin/api/latest/variants/{variant_id}/metafields/{metafield_id}.json",
+      "covered_by": {
+        "write": "delete_variants_id_metafields_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/api/latest/webhooks/{webhook_id}.json",
       "covered_by": {
         "write": "delete_webhooks_id"
       }
@@ -10099,6 +10171,42 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/articles/{article_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/articles/{article_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/articles/{article_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/articles/authors.json",
       "operation": {
         "model": "direct_read",
@@ -10147,18 +10255,6 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/blogs/count.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/blog"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/admin/api/latest/blogs/{blog_id}.json",
       "operation": {
         "model": "direct_read",
@@ -10172,6 +10268,18 @@
     {
       "method": "GET",
       "path": "/admin/api/latest/blogs/{blog_id}/articles.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/blogs/{blog_id}/articles/{article_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10207,19 +10315,19 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/blogs/{blog_id}/articles/{article_id}.json",
+      "path": "/admin/api/latest/blogs/{blog_id}/metafields.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/article"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/blogs/{blog_id}/metafields.json",
+      "path": "/admin/api/latest/blogs/{blog_id}/metafields/{metafield_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10243,14 +10351,14 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/blogs/{blog_id}/metafields/{metafield_id}.json",
+      "path": "/admin/api/latest/blogs/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/blog"
       }
     },
     {
@@ -10339,6 +10447,42 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/collections/{collection_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/collections/{collection_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/collections/{collection_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/collections/{collection_id}/products.json",
       "operation": {
         "model": "direct_read",
@@ -10363,7 +10507,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/collects/count.json",
+      "path": "/admin/api/latest/collects/{collect_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10375,7 +10519,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/collects/{collect_id}.json",
+      "path": "/admin/api/latest/collects/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10399,18 +10543,6 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/comments/count.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/comment"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/admin/api/latest/comments/{comment_id}.json",
       "operation": {
         "model": "direct_read",
@@ -10423,19 +10555,19 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/countries.json",
+      "path": "/admin/api/latest/comments/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/country"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/comment"
       }
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/countries/count.json",
+      "path": "/admin/api/latest/countries.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10471,6 +10603,18 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/countries/{country_id}/provinces/{province_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/province"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/countries/{country_id}/provinces/count.json",
       "operation": {
         "model": "direct_read",
@@ -10483,14 +10627,14 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/countries/{country_id}/provinces/{province_id}.json",
+      "path": "/admin/api/latest/countries/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/province"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/country"
       }
     },
     {
@@ -10519,18 +10663,6 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/custom_collections/count.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customcollection"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/admin/api/latest/custom_collections/{custom_collection_id}.json",
       "operation": {
         "model": "direct_read",
@@ -10543,31 +10675,19 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/custom_collections/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customcollection"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/customers.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/admin/api/latest/customers/count.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/admin/api/latest/customers/search.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10615,7 +10735,67 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/customers/{customer_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/customers/{customer_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/customers/{customer_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/customers/{customer_id}/orders.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/customers/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/customers/search.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10675,7 +10855,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/draft_orders/count.json",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10687,7 +10867,43 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/draft_orders/{draft_order_id}.json",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/draft_orders/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10711,7 +10927,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/events/count.json",
+      "path": "/admin/api/latest/events/{event_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10723,7 +10939,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/events/{event_id}.json",
+      "path": "/admin/api/latest/events/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10807,6 +11023,18 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/gift_cards/{gift_card_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/gift-card"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/gift_cards/count.json",
       "operation": {
         "model": "direct_read",
@@ -10820,18 +11048,6 @@
     {
       "method": "GET",
       "path": "/admin/api/latest/gift_cards/search.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/gift-card"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/admin/api/latest/gift_cards/{gift_card_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10891,18 +11107,6 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/locations/count.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/location"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/admin/api/latest/locations/{location_id}.json",
       "operation": {
         "model": "direct_read",
@@ -10927,7 +11131,31 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/locations/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/location"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/marketing_events.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/marketingevent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/marketing_events/{marketing_event_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -10951,14 +11179,38 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/marketing_events/{marketing_event_id}.json",
+      "path": "/admin/api/latest/metafields.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/marketingevent"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -10999,7 +11251,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/orders/count.json",
+      "path": "/admin/api/latest/orders/{order_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11011,14 +11263,14 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/orders/{order_id}.json",
+      "path": "/admin/api/latest/orders/{order_id}/events.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/event"
       }
     },
     {
@@ -11036,18 +11288,6 @@
     {
       "method": "GET",
       "path": "/admin/api/latest/orders/{order_id}/fulfillments.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillment"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/admin/api/latest/orders/{order_id}/fulfillments/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11091,6 +11331,54 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentevent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/orders/{order_id}/fulfillments/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/orders/{order_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/orders/{order_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/orders/{order_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -11155,6 +11443,18 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/orders/{order_id}/transactions/{transaction_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/transaction"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/orders/{order_id}/transactions/count.json",
       "operation": {
         "model": "direct_read",
@@ -11167,14 +11467,14 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/orders/{order_id}/transactions/{transaction_id}.json",
+      "path": "/admin/api/latest/orders/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/transaction"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order"
       }
     },
     {
@@ -11191,7 +11491,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/pages/count.json",
+      "path": "/admin/api/latest/pages/{page_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11203,7 +11503,43 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/pages/{page_id}.json",
+      "path": "/admin/api/latest/pages/{page_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/pages/{page_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/pages/{page_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/pages/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11228,18 +11564,6 @@
     {
       "method": "GET",
       "path": "/admin/api/latest/price_rules.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/pricerule"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/admin/api/latest/price_rules/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11311,7 +11635,67 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/price_rules/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/pricerule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/product_images/{product_image_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/product_images/{product_image_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/product_images/{product_image_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/product_listings.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/productlisting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/product_listings/{product_listing_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11347,31 +11731,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/product_listings/{product_listing_id}.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/productlisting"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/admin/api/latest/products.json",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/admin/api/latest/products/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11395,7 +11755,31 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/products/{product_id}/events.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/event"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/products/{product_id}/images.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-image"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
       "operation": {
         "model": "binary_read",
         "status": "blocked",
@@ -11419,14 +11803,38 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
+      "path": "/admin/api/latest/products/{product_id}/metafields.json",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-image"
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/products/{product_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/products/{product_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -11463,6 +11871,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-variant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/products/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product"
       }
     },
     {
@@ -11527,7 +11947,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/redirects/count.json",
+      "path": "/admin/api/latest/redirects/{redirect_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11539,7 +11959,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/redirects/{redirect_id}.json",
+      "path": "/admin/api/latest/redirects/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11575,7 +11995,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/script_tags/count.json",
+      "path": "/admin/api/latest/script_tags/{script_tag_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11587,7 +12007,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/script_tags/{script_tag_id}.json",
+      "path": "/admin/api/latest/script_tags/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11702,7 +12122,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/smart_collections/count.json",
+      "path": "/admin/api/latest/smart_collections/{smart_collection_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11714,7 +12134,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/smart_collections/{smart_collection_id}.json",
+      "path": "/admin/api/latest/smart_collections/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11798,7 +12218,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/users/current.json",
+      "path": "/admin/api/latest/users/{user_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11810,7 +12230,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/users/{user_id}.json",
+      "path": "/admin/api/latest/users/current.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11834,6 +12254,42 @@
     },
     {
       "method": "GET",
+      "path": "/admin/api/latest/variants/{variant_id}/metafields.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/variants/{variant_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/api/latest/variants/{variant_id}/metafields/count.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/admin/api/latest/webhooks.json",
       "operation": {
         "model": "direct_read",
@@ -11846,7 +12302,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/webhooks/count.json",
+      "path": "/admin/api/latest/webhooks/{webhook_id}.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11858,7 +12314,7 @@
     },
     {
       "method": "GET",
-      "path": "/admin/api/latest/webhooks/{webhook_id}.json",
+      "path": "/admin/api/latest/webhooks/count.json",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -11890,6 +12346,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/applicationcharge"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/api/latest/articles/{article_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -11938,6 +12406,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/carrierservice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/api/latest/collections/{collection_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -12086,6 +12566,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/customers/{customer_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/customers/{customer_id}/send_invite.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12110,6 +12602,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/draft_orders/{draft_order_id}/send_invoice.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12118,18 +12622,6 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/draftorder"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/admin/api/latest/fulfillment_orders/set_fulfillment_orders_deadline.json",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder"
       }
     },
     {
@@ -12290,6 +12782,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/fulfillment_orders/set_fulfillment_orders_deadline.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/fulfillment_services.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12422,6 +12926,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/mobile_platform_applications.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12478,6 +12994,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentevent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/api/latest/orders/{order_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -12554,6 +13082,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/pages/{page_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/price_rules.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12590,6 +13130,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/product_images/{product_image_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/products.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12610,6 +13162,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-image"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/api/latest/products/{product_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -12746,6 +13310,18 @@
     },
     {
       "method": "POST",
+      "path": "/admin/api/latest/variants/{variant_id}/metafields.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/admin/api/latest/webhooks.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12754,6 +13330,30 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/articles/{article_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/article"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/articles/{article_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -12818,6 +13418,18 @@
     },
     {
       "method": "PUT",
+      "path": "/admin/api/latest/collections/{collection_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "PUT",
       "path": "/admin/api/latest/comments/{comment_id}.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12878,18 +13490,6 @@
     },
     {
       "method": "PUT",
-      "path": "/admin/api/latest/customers/{customer_id}/addresses/set.json",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer-address"
-      }
-    },
-    {
-      "method": "PUT",
       "path": "/admin/api/latest/customers/{customer_id}/addresses/{address_id}.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12914,6 +13514,30 @@
     },
     {
       "method": "PUT",
+      "path": "/admin/api/latest/customers/{customer_id}/addresses/set.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer-address"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/customers/{customer_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "PUT",
       "path": "/admin/api/latest/draft_orders/{draft_order_id}.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -12934,6 +13558,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/draftorder"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/draft_orders/{draft_order_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -12986,6 +13622,18 @@
     },
     {
       "method": "PUT",
+      "path": "/admin/api/latest/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "PUT",
       "path": "/admin/api/latest/mobile_platform_applications/{mobile_platform_application_id}.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -13006,6 +13654,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/orders/{order_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -13034,6 +13694,18 @@
     },
     {
       "method": "PUT",
+      "path": "/admin/api/latest/pages/{page_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
+      }
+    },
+    {
+      "method": "PUT",
       "path": "/admin/api/latest/price_rules/{price_rule_id}.json",
       "operation": {
         "model": "admin_reverse_etl",
@@ -13054,6 +13726,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/discountcode"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/product_images/{product_image_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -13090,6 +13774,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-image"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/products/{product_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {
@@ -13198,6 +13894,18 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-variant"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/api/latest/variants/{variant_id}/metafields/{metafield_id}.json",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield"
       }
     },
     {

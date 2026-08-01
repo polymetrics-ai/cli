@@ -21,6 +21,7 @@
 - `golang-structs-interfaces`
 - `golang-safety`
 - `golang-graphql`
+- `golang-lint`
 - `no-mistakes`
 
 ## Scope
@@ -53,6 +54,12 @@ Do not edit shared runtime, engine, CLI dispatcher, hook/native registries, depe
    - Run conformance if validation permits: `go test ./internal/connectors/conformance -run 'TestConformance/shopify' -count=1`.
    - Run `git diff --check` and path-scope guard.
    - Record any shared-foundation blocker exactly if connector-local work cannot claim full implementation.
+
+5. **Parity checkpoint re-audit before review-ready**
+   - Re-fetch official Shopify Admin GraphQL full index and Admin REST latest resource pages from the sitemap.
+   - Compare fresh operation sets against `api_surface.json`; treat missing/stale rows and non-canonical DELETE path placeholders as findings, not waivers.
+   - Update connector-local ledger, typed DELETE write schemas/fixtures, source inventory, docs, and verification evidence with truthful post-fix counts.
+   - Keep DELETE/destructive operations in scope: executable only when represented by fixed write actions with `confirm: "destructive"`; query-identifier DELETE shapes remain blocked with the exact shared write-query dependency.
 
 ## TDD/validation approach
 

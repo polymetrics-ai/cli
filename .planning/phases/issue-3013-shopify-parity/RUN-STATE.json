@@ -13,8 +13,10 @@
     }
   ],
   "verification": [
+    "public Shopify docs re-audit: officialDocsTotal=1166 ledgerTotal=1166 missing=0 stale=0 noncanonicalDeleteRows=0",
     "go run ./cmd/connectorgen validate internal/connectors/defs",
     "go test ./internal/connectors/conformance -run 'TestConformance/shopify' -count=1",
+    "go run ./cmd/pm docs validate --connectors-dir docs/connectors",
     "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
     "go vet ./internal/connectors/... ./internal/cli/...",
     "go build ./cmd/pm",

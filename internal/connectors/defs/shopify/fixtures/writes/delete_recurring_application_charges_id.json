@@ -1,6 +1,6 @@
 {
   "record": {
-    "id1": 1001
+    "recurring_application_charge_id": 1001
   },
   "expect": {
     "method": "DELETE",

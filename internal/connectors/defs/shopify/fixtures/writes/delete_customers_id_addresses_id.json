@@ -1,7 +1,7 @@
 {
   "record": {
-    "id1": 1001,
-    "id2": 1002
+    "customer_id": 1001,
+    "address_id": 1002
   },
   "expect": {
     "method": "DELETE",

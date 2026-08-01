@@ -1,8 +1,8 @@
 {
   "record": {
-    "id1": 1001,
-    "id2": 1002,
-    "id3": 1003
+    "order_id": 1001,
+    "fulfillment_id": 1002,
+    "event_id": 1003
   },
   "expect": {
     "method": "DELETE",

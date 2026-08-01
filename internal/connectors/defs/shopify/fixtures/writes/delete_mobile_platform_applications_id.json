@@ -1,6 +1,6 @@
 {
   "record": {
-    "id1": 1001
+    "mobile_platform_application_id": 1001
   },
   "expect": {
     "method": "DELETE",
