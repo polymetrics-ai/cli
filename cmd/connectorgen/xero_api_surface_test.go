@@ -107,6 +107,8 @@ func TestXeroExecutableFixtureCoverage(t *testing.T) {
 	var writes struct {
 		Actions []struct {
 			Name         string         `json:"name"`
+			Path         string         `json:"path"`
+			BodyType     string         `json:"body_type"`
 			RecordSchema map[string]any `json:"record_schema"`
 			Confirm      string         `json:"confirm"`
 			Kind         string         `json:"kind"`
@@ -116,6 +118,7 @@ func TestXeroExecutableFixtureCoverage(t *testing.T) {
 	if len(writes.Actions) != 87 {
 		t.Fatalf("write actions = %d, want 87", len(writes.Actions))
 	}
+	historyWrites := 0
 	for _, action := range writes.Actions {
 		if _, err := os.Stat(filepath.Join(root, "fixtures", "writes", action.Name+".json")); err != nil {
 			t.Fatalf("write %q missing fixture: %v", action.Name, err)
@@ -123,9 +126,24 @@ func TestXeroExecutableFixtureCoverage(t *testing.T) {
 		if got := action.RecordSchema["additionalProperties"]; !reflect.DeepEqual(got, false) {
 			t.Fatalf("write %q record_schema additionalProperties = %v, want false", action.Name, got)
 		}
+		if strings.HasSuffix(action.Path, "/History") {
+			historyWrites++
+			if action.BodyType != "json" {
+				t.Fatalf("history write %q body_type = %q, want json", action.Name, action.BodyType)
+			}
+			if !schemaRequiredIncludes(action.RecordSchema, "HistoryRecords") {
+				t.Fatalf("history write %q record_schema required missing HistoryRecords", action.Name)
+			}
+			if !schemaPropertiesIncludes(action.RecordSchema, "HistoryRecords") {
+				t.Fatalf("history write %q record_schema properties missing HistoryRecords", action.Name)
+			}
+		}
 		if action.Kind == "delete" && action.Confirm != "destructive" {
 			t.Fatalf("delete write %q confirm = %q, want destructive", action.Name, action.Confirm)
 		}
+	}
+	if historyWrites != 16 {
+		t.Fatalf("history writes = %d, want 16", historyWrites)
 	}
 }
 
@@ -151,6 +169,29 @@ func TestXeroOperationsLedgerMetrics(t *testing.T) {
 		kinds[op.Kind]++
 	}
 	assertStringIntMap(t, "xero operation kinds", kinds, map[string]int{"binary_download": 26, "file_upload": 22, "rest_read": 22})
+}
+
+func schemaRequiredIncludes(schema map[string]any, field string) bool {
+	required, ok := schema["required"].([]any)
+	if !ok {
+		return false
+	}
+	for _, item := range required {
+		name, ok := item.(string)
+		if ok && name == field {
+			return true
+		}
+	}
+	return false
+}
+
+func schemaPropertiesIncludes(schema map[string]any, field string) bool {
+	properties, ok := schema["properties"].(map[string]any)
+	if !ok {
+		return false
+	}
+	_, ok = properties[field]
+	return ok
 }
 
 func isXeroBinaryPath(path string) bool {

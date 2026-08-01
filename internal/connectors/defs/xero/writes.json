@@ -324,16 +324,50 @@
       "path_fields": [
         "bank_transaction_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "bank_transaction_id"
+          "bank_transaction_id",
+          "HistoryRecords"
         ],
         "properties": {
           "bank_transaction_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -447,16 +481,50 @@
       "path_fields": [
         "bank_transfer_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "bank_transfer_id"
+          "bank_transfer_id",
+          "HistoryRecords"
         ],
         "properties": {
           "bank_transfer_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -563,16 +631,50 @@
       "path_fields": [
         "batch_payment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "batch_payment_id"
+          "batch_payment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "batch_payment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -910,16 +1012,50 @@
       "path_fields": [
         "contact_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "contact_id"
+          "contact_id",
+          "HistoryRecords"
         ],
         "properties": {
           "contact_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -1123,16 +1259,50 @@
       "path_fields": [
         "credit_note_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "credit_note_id"
+          "credit_note_id",
+          "HistoryRecords"
         ],
         "properties": {
           "credit_note_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -1233,16 +1403,50 @@
       "path_fields": [
         "expense_claim_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "expense_claim_id"
+          "expense_claim_id",
+          "HistoryRecords"
         ],
         "properties": {
           "expense_claim_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -1406,16 +1610,50 @@
       "path_fields": [
         "invoice_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "invoice_id"
+          "invoice_id",
+          "HistoryRecords"
         ],
         "properties": {
           "invoice_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -1544,16 +1782,50 @@
       "path_fields": [
         "item_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "item_id"
+          "item_id",
+          "HistoryRecords"
         ],
         "properties": {
           "item_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -1833,16 +2105,50 @@
       "path_fields": [
         "manual_journal_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "manual_journal_id"
+          "manual_journal_id",
+          "HistoryRecords"
         ],
         "properties": {
           "manual_journal_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -1933,16 +2239,50 @@
       "path_fields": [
         "overpayment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "overpayment_id"
+          "overpayment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "overpayment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -2216,16 +2556,50 @@
       "path_fields": [
         "payment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "payment_id"
+          "payment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "payment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -2338,16 +2712,50 @@
       "path_fields": [
         "prepayment_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "prepayment_id"
+          "prepayment_id",
+          "HistoryRecords"
         ],
         "properties": {
           "prepayment_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -2478,16 +2886,50 @@
       "path_fields": [
         "purchase_order_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "purchase_order_id"
+          "purchase_order_id",
+          "HistoryRecords"
         ],
         "properties": {
           "purchase_order_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -2582,16 +3024,50 @@
       "path_fields": [
         "quote_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "quote_id"
+          "quote_id",
+          "HistoryRecords"
         ],
         "properties": {
           "quote_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -2664,16 +3140,50 @@
       "path_fields": [
         "receipt_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "receipt_id"
+          "receipt_id",
+          "HistoryRecords"
         ],
         "properties": {
           "receipt_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false
@@ -2768,16 +3278,50 @@
       "path_fields": [
         "repeating_invoice_id"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "repeating_invoice_id"
+          "repeating_invoice_id",
+          "HistoryRecords"
         ],
         "properties": {
           "repeating_invoice_id": {
             "type": "string"
+          },
+          "HistoryRecords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Details": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "Changes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "User": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "DateUTC": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "additionalProperties": false

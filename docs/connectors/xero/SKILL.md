@@ -399,7 +399,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero bank transaction resources in the connected tenant; approval required
 - create_bank_transaction_history_record:
   - endpoint: PUT BankTransactions/{{ record.bank_transaction_id }}/History
-  - required fields: bank_transaction_id
+  - required fields: bank_transaction_id, HistoryRecords
   - risk: creates Xero bank transaction history record resources in the connected tenant; approval required
 - create_bank_transfer:
   - endpoint: PUT BankTransfers
@@ -414,7 +414,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.
 - create_bank_transfer_history_record:
   - endpoint: PUT BankTransfers/{{ record.bank_transfer_id }}/History
-  - required fields: bank_transfer_id
+  - required fields: bank_transfer_id, HistoryRecords
   - risk: creates Xero bank transfer history record resources in the connected tenant; approval required
 - delete_batch_payment:
   - endpoint: POST BatchPayments
@@ -429,7 +429,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: deletes Xero batch payment by url param resources in the connected tenant; approval required
 - create_batch_payment_history_record:
   - endpoint: PUT BatchPayments/{{ record.batch_payment_id }}/History
-  - required fields: batch_payment_id
+  - required fields: batch_payment_id, HistoryRecords
   - risk: creates Xero batch payment history record resources in the connected tenant; approval required
 - create_branding_theme_payment_services:
   - endpoint: POST BrandingThemes/{{ record.branding_theme_id }}/PaymentServices
@@ -466,7 +466,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero contact resources in the connected tenant; approval required
 - create_contact_history:
   - endpoint: PUT Contacts/{{ record.contact_id }}/History
-  - required fields: contact_id
+  - required fields: contact_id, HistoryRecords
   - risk: creates Xero contact history resources in the connected tenant; approval required
 - upsert_credit_notes:
   - endpoint: POST CreditNotes
@@ -488,7 +488,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: deletes Xero credit note allocations resources in the connected tenant; approval required
 - create_credit_note_history:
   - endpoint: PUT CreditNotes/{{ record.credit_note_id }}/History
-  - required fields: credit_note_id
+  - required fields: credit_note_id, HistoryRecords
   - risk: creates Xero credit note history resources in the connected tenant; approval required
 - create_currency:
   - endpoint: PUT Currencies
@@ -502,7 +502,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero expense claim resources in the connected tenant; approval required
 - create_expense_claim_history:
   - endpoint: PUT ExpenseClaims/{{ record.expense_claim_id }}/History
-  - required fields: expense_claim_id
+  - required fields: expense_claim_id, HistoryRecords
   - risk: creates Xero expense claim history resources in the connected tenant; approval required
 - upsert_invoices:
   - endpoint: POST Invoices
@@ -520,7 +520,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: executes Xero email invoice resources in the connected tenant; approval required
 - create_invoice_history:
   - endpoint: PUT Invoices/{{ record.invoice_id }}/History
-  - required fields: invoice_id
+  - required fields: invoice_id, HistoryRecords
   - risk: creates Xero invoice history resources in the connected tenant; approval required
 - upsert_items:
   - endpoint: POST Items
@@ -538,7 +538,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero item resources in the connected tenant; approval required
 - create_item_history:
   - endpoint: PUT Items/{{ record.item_id }}/History
-  - required fields: item_id
+  - required fields: item_id, HistoryRecords
   - risk: creates Xero item history resources in the connected tenant; approval required
 - create_linked_transaction:
   - endpoint: PUT LinkedTransactions
@@ -563,7 +563,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero manual journal resources in the connected tenant; approval required
 - create_manual_journal_history_record:
   - endpoint: PUT ManualJournals/{{ record.manual_journal_id }}/History
-  - required fields: manual_journal_id
+  - required fields: manual_journal_id, HistoryRecords
   - risk: creates Xero manual journal history record resources in the connected tenant; approval required
 - create_overpayment_allocations:
   - endpoint: PUT Overpayments/{{ record.overpayment_id }}/Allocations
@@ -575,7 +575,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: deletes Xero overpayment allocations resources in the connected tenant; approval required
 - create_overpayment_history:
   - endpoint: PUT Overpayments/{{ record.overpayment_id }}/History
-  - required fields: overpayment_id
+  - required fields: overpayment_id, HistoryRecords
   - risk: creates Xero overpayment history resources in the connected tenant; approval required
 - create_payment:
   - endpoint: POST Payments
@@ -589,7 +589,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: deletes Xero payment resources in the connected tenant; approval required
 - create_payment_history:
   - endpoint: PUT Payments/{{ record.payment_id }}/History
-  - required fields: payment_id
+  - required fields: payment_id, HistoryRecords
   - risk: creates Xero payment history resources in the connected tenant; approval required
 - create_payment_service:
   - endpoint: PUT PaymentServices
@@ -604,7 +604,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: deletes Xero prepayment allocations resources in the connected tenant; approval required
 - create_prepayment_history:
   - endpoint: PUT Prepayments/{{ record.prepayment_id }}/History
-  - required fields: prepayment_id
+  - required fields: prepayment_id, HistoryRecords
   - risk: creates Xero prepayment history resources in the connected tenant; approval required
 - upsert_purchase_orders:
   - endpoint: POST PurchaseOrders
@@ -618,7 +618,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero purchase order resources in the connected tenant; approval required
 - create_purchase_order_history:
   - endpoint: PUT PurchaseOrders/{{ record.purchase_order_id }}/History
-  - required fields: purchase_order_id
+  - required fields: purchase_order_id, HistoryRecords
   - risk: creates Xero purchase order history resources in the connected tenant; approval required
 - upsert_quotes:
   - endpoint: POST Quotes
@@ -632,7 +632,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero quote resources in the connected tenant; approval required
 - create_quote_history:
   - endpoint: PUT Quotes/{{ record.quote_id }}/History
-  - required fields: quote_id
+  - required fields: quote_id, HistoryRecords
   - risk: creates Xero quote history resources in the connected tenant; approval required
 - create_receipt:
   - endpoint: PUT Receipts
@@ -643,7 +643,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero receipt resources in the connected tenant; approval required
 - create_receipt_history:
   - endpoint: PUT Receipts/{{ record.receipt_id }}/History
-  - required fields: receipt_id
+  - required fields: receipt_id, HistoryRecords
   - risk: creates Xero receipt history resources in the connected tenant; approval required
 - upsert_repeating_invoices:
   - endpoint: POST RepeatingInvoices
@@ -657,7 +657,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - risk: mutates Xero repeating invoice resources in the connected tenant; approval required
 - create_repeating_invoice_history:
   - endpoint: PUT RepeatingInvoices/{{ record.repeating_invoice_id }}/History
-  - required fields: repeating_invoice_id
+  - required fields: repeating_invoice_id, HistoryRecords
   - risk: creates Xero repeating invoice history resources in the connected tenant; approval required
 - setup_organisation:
   - endpoint: POST Setup
