@@ -36,6 +36,7 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 				Model            string `json:"model"`
 				Status           string `json:"status"`
 				BlockedByDefault bool   `json:"blocked_by_default"`
+				Notes            string `json:"notes"`
 			} `json:"operation"`
 		} `json:"endpoints"`
 	}
@@ -55,9 +56,29 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 		if ep.Excluded != nil {
 			t.Fatalf("%s %s uses legacy excluded in operation ledger mode", ep.Method, ep.Path)
 		}
-		key := strings.ToUpper(ep.Method) + " " + ep.Path
+		if ep.Path != "/" {
+			t.Fatalf("%s path = %q, want real Monday GraphQL endpoint /", ep.Method, ep.Path)
+		}
+		classifier := ""
+		if ep.CoveredBy != nil {
+			switch {
+			case ep.CoveredBy.Stream != "":
+				classifier = "stream:" + ep.CoveredBy.Stream
+			case ep.CoveredBy.Write != "":
+				classifier = "write:" + ep.CoveredBy.Write
+			case ep.CoveredBy.DirectRead != "":
+				classifier = "direct_read:" + ep.CoveredBy.DirectRead
+			}
+		}
+		if ep.Operation != nil {
+			if strings.TrimSpace(ep.Operation.Notes) == "" {
+				t.Fatalf("operation row %s %s is missing non-routing operation notes", ep.Method, ep.Path)
+			}
+			classifier = "operation:" + ep.Operation.Notes
+		}
+		key := strings.ToUpper(ep.Method) + " " + ep.Path + " " + classifier
 		if seen[key] {
-			t.Fatalf("duplicate api_surface endpoint %s", key)
+			t.Fatalf("duplicate api_surface endpoint classifier %s", key)
 		}
 		seen[key] = true
 		if ep.CoveredBy != nil {
@@ -96,6 +117,9 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 			Kind          string `json:"kind"`
 			MutationClass string `json:"mutation_class"`
 			Destructive   bool   `json:"destructive"`
+			REST          *struct {
+				Path string `json:"path"`
+			} `json:"rest"`
 		} `json:"operations"`
 	}
 	readJSONFile(t, filepath.Join(root, "operations.json"), &operations)
@@ -105,6 +129,14 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	counts := map[string]int{}
 	for _, op := range operations.Operations {
 		counts[op.Kind]++
+		if op.Kind == "rest_read" {
+			if op.REST == nil {
+				t.Fatalf("rest_read operation %q is missing rest metadata", op.ID)
+			}
+			if op.REST.Path != "/" {
+				t.Fatalf("rest_read operation %q path = %q, want real Monday GraphQL endpoint /", op.ID, op.REST.Path)
+			}
+		}
 	}
 	if counts["rest_read"] != 66 {
 		t.Fatalf("rest_read operations = %d, want 66", counts["rest_read"])
@@ -151,11 +183,19 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 			Intent       string `json:"intent"`
 			Availability string `json:"availability"`
 			Write        string `json:"write"`
+			APISurface   []struct {
+				Path string `json:"path"`
+			} `json:"api_surface"`
 		} `json:"commands"`
 	}
 	readJSONFile(t, filepath.Join(root, "cli_surface.json"), &cli)
 	var sawDeleteCommand bool
 	for _, cmd := range cli.Commands {
+		for _, ep := range cmd.APISurface {
+			if ep.Path != "/" {
+				t.Fatalf("cli command %q api_surface path = %q, want real Monday GraphQL endpoint /", cmd.Path, ep.Path)
+			}
+		}
 		if cmd.Path == "reverse delete-board" && cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write == "delete_board" {
 			sawDeleteCommand = true
 		}

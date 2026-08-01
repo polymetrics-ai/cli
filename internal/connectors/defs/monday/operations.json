@@ -4473,7 +4473,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: account)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4506,7 +4506,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: account_roles)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4539,7 +4539,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: aggregate)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4572,7 +4572,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: all_widgets_schema)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4605,7 +4605,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: allowed_sequences_to_enroll)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4651,7 +4651,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: app)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4697,7 +4697,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: app_installs)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4747,7 +4747,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: app_subscription)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4780,7 +4780,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: app_subscription_operations)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4826,7 +4826,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: app_subscriptions)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4872,7 +4872,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: apps_monetization_info)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4905,7 +4905,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: apps_monetization_status)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4938,7 +4938,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: article_blocks)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -4992,7 +4992,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: articles)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5042,7 +5042,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: ask_developer_docs)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5088,7 +5088,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: audit_event_catalogue)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5121,7 +5121,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: audit_logs)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5171,7 +5171,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: boards)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5204,7 +5204,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: complexity)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5237,7 +5237,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: connection_board_ids)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5283,7 +5283,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: custom_activity)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5316,7 +5316,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: departments)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5349,7 +5349,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: doc_version_diff)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5403,7 +5403,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: doc_version_history)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5453,7 +5453,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: docs)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5499,7 +5499,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: export_markdown_from_doc)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5545,7 +5545,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: favorites)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5578,7 +5578,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: fetch_job_status)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5624,7 +5624,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: folders)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5657,7 +5657,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: form)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5703,7 +5703,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: get_app_lifecycle_subscriptions)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5753,7 +5753,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: get_column_type_schema)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5786,7 +5786,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: get_directory_resources)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5832,7 +5832,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: get_object_schemas)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5882,7 +5882,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: get_view_schema_by_type)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5915,7 +5915,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: items)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5948,7 +5948,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: items_page_by_column_values)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -5994,7 +5994,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: job_status)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6040,7 +6040,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: knowledge_base_search)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6090,7 +6090,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: managed_column)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6123,7 +6123,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: marketplace_app_discounts)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6169,7 +6169,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: me)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6202,7 +6202,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: mute_board_settings)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6235,7 +6235,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: next_items_page)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6285,7 +6285,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: notetaker)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6318,7 +6318,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: notifications)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6364,7 +6364,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: notifications_settings)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6397,7 +6397,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: object_relations)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6443,7 +6443,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: object_types_unique_keys)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6476,7 +6476,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: objects)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6522,7 +6522,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: platform_api)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6555,7 +6555,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: replies)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6605,7 +6605,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: search)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6638,7 +6638,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: tags)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6671,7 +6671,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: teams)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6704,7 +6704,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: template_installation_status)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6750,7 +6750,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: timeline)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6796,7 +6796,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: timeline_item)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6842,7 +6842,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: updates)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6896,7 +6896,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: user_configs)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6929,7 +6929,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: users)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -6962,7 +6962,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: validations)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -7008,7 +7008,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: version)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -7041,7 +7041,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: versions)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -7074,7 +7074,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: webhooks)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {
@@ -7120,7 +7120,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "POST",
-        "path": "/v2 (query: workspaces)",
+        "path": "/",
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body": {

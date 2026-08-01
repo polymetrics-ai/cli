@@ -66,7 +66,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: account)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -85,7 +85,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: account_roles)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -116,7 +116,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: all_widgets_schema)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -143,7 +143,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: allowed_sequences_to_enroll)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -170,7 +170,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: app)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -204,7 +204,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: app_installs)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -223,7 +223,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: app_subscription)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -250,7 +250,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: app_subscription_operations)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -277,7 +277,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: app_subscriptions)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -296,7 +296,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: apps_monetization_info)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -315,7 +315,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: apps_monetization_status)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -354,7 +354,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: article_blocks)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -393,7 +393,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: ask_developer_docs)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -412,7 +412,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: audit_event_catalogue)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -443,7 +443,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: complexity)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -470,7 +470,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: connection_board_ids)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -489,7 +489,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: custom_activity)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -542,7 +542,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: doc_version_diff)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -576,7 +576,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: doc_version_history)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -603,7 +603,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: docs)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -634,7 +634,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: favorites)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -661,7 +661,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: fetch_job_status)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -700,7 +700,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: form)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -734,7 +734,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: get_app_lifecycle_subscriptions)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -753,7 +753,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: get_column_type_schema)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -779,7 +779,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: get_directory_resources)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -811,7 +811,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: get_object_schemas)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -830,7 +830,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: get_view_schema_by_type)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -869,7 +869,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: job_status)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -902,7 +902,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: knowledge_base_search)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -921,7 +921,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: managed_column)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -948,7 +948,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: marketplace_app_discounts)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -967,7 +967,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: me)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1012,7 +1012,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: next_items_page)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1031,7 +1031,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: notetaker)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1057,7 +1057,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: notifications)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1096,7 +1096,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: object_relations)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1115,7 +1115,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: object_types_unique_keys)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1141,7 +1141,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: objects)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1160,7 +1160,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: platform_api)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1191,7 +1191,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: search)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1218,7 +1218,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: template_installation_status)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1245,7 +1245,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: timeline)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1272,7 +1272,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: timeline_item)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1312,7 +1312,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: updates)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1331,7 +1331,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: user_configs)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1358,7 +1358,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: validations)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1377,7 +1377,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: version)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1396,7 +1396,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: versions)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1423,7 +1423,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: webhooks)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
@@ -1450,7 +1450,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/v2 (query: workspaces)"
+          "path": "/"
         }
       ],
       "output_policy": "json_redacted",
