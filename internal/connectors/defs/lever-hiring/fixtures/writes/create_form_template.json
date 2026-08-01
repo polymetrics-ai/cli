@@ -6,8 +6,10 @@
     "secretByDefault": false,
     "fields": [
       {
-        "id": "field_fixture_1",
-        "value": "Fixture value"
+        "type": "date",
+        "text": "Start Date",
+        "description": "Please enter a desired start date.",
+        "required": true
       }
     ]
   },
@@ -21,8 +23,10 @@
       "secretByDefault": false,
       "fields": [
         {
-          "id": "field_fixture_1",
-          "value": "Fixture value"
+          "type": "date",
+          "text": "Start Date",
+          "description": "Please enter a desired start date.",
+          "required": true
         }
       ]
     }

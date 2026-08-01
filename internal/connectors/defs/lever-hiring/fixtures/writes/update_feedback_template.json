@@ -6,8 +6,9 @@
     "group": "Fixture group",
     "fields": [
       {
-        "id": "field_fixture_1",
-        "value": "Fixture value"
+        "type": "score-system",
+        "text": "Rating",
+        "required": true
       }
     ]
   },
@@ -20,8 +21,9 @@
       "group": "Fixture group",
       "fields": [
         {
-          "id": "field_fixture_1",
-          "value": "Fixture value"
+          "type": "score-system",
+          "text": "Rating",
+          "required": true
         }
       ]
     }

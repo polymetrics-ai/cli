@@ -54,6 +54,29 @@
       "risk": "high",
       "approval": "none: read-only fixed-target operation with bounded redacted output",
       "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "eeoResponses",
+          "applicationArchivedAt",
+          "applicationArchivedBy",
+          "appliedAt",
+          "currentStage",
+          "contact",
+          "gender",
+          "race",
+          "veteran",
+          "disability",
+          "disabilitySignatureDate",
+          "eeoSurveyRespondedAt",
+          "hiredDate",
+          "hiringManager",
+          "opportunityId",
+          "origin",
+          "posting",
+          "requisitionCodes",
+          "source"
+        ]
+      },
       "rest": {
         "method": "GET",
         "path": "/v1/eeo/responses/pii",
@@ -309,6 +332,23 @@
       "risk": "high",
       "approval": "none: read-only fixed-target operation with bounded redacted output",
       "output_policy": "clinical_json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "candidateLocations",
+          "countryCodes",
+          "fields",
+          "instructions",
+          "text",
+          "options",
+          "gender",
+          "ethnicity",
+          "race",
+          "veteran",
+          "disability",
+          "sexualOrientation",
+          "genderIdentity"
+        ]
+      },
       "rest": {
         "method": "GET",
         "path": "/surveys/diversity/{posting}",
