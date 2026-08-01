@@ -1,0 +1,24 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "checkout": {
+      "amount_money": {},
+      "device_options": {}
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/terminals/checkouts",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "checkout": {
+        "amount_money": {},
+        "device_options": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "device_code": {
+      "product_type": "UNKNOWN"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/devices/codes",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "device_code": {
+        "product_type": "UNKNOWN"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

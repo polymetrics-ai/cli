@@ -1,0 +1,27 @@
+{
+  "record": {
+    "program_id": "program_id_fixture",
+    "loyalty_promotion": {
+      "name": "name_fixture",
+      "incentive": {},
+      "available_time": {}
+    },
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/loyalty/programs/program_id_fixture/promotions",
+    "body": {
+      "loyalty_promotion": {
+        "name": "name_fixture",
+        "incentive": {},
+        "available_time": {}
+      },
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

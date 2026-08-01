@@ -1,0 +1,20 @@
+{
+  "record": {
+    "item_ids": [
+      "item_id_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/catalog/update-item-modifier-lists",
+    "body": {
+      "item_ids": [
+        "item_id_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

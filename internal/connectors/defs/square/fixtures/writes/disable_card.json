@@ -1,0 +1,13 @@
+{
+  "record": {
+    "card_id": "card_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/cards/card_id_fixture/disable"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

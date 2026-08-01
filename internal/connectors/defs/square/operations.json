@@ -1,0 +1,2491 @@
+{
+  "operations": [
+    {
+      "id": "square.search-availability",
+      "kind": "rest_read",
+      "summary": "SearchAvailability using a fixed Square API request.",
+      "description": "Searches for availabilities for booking.\n\nTo call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.\nTo call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/bookings/availability/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "filter"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.bulk-retrieve-bookings",
+      "kind": "rest_read",
+      "summary": "BulkRetrieveBookings using a fixed Square API request.",
+      "description": "Bulk-Retrieves a list of bookings by booking IDs.\n\nTo call this endpoint with buyer-level permissions, set `APPOINTMENTS_READ` for the OAuth scope.\nTo call this endpoint with seller-level permissions, set `APPOINTMENTS_ALL_READ` and `APPOINTMENTS_READ` for the OAuth scope.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/bookings/bulk-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "booking_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "booking_ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.bulk-retrieve-team-member-booking-profiles",
+      "kind": "rest_read",
+      "summary": "BulkRetrieveTeamMemberBookingProfiles using a fixed Square API request.",
+      "description": "Retrieves one or more team members' booking profiles.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/bookings/team-member-booking-profiles/bulk-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "team_member_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "team_member_ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.batch-retrieve-catalog-objects",
+      "kind": "rest_read",
+      "summary": "BatchRetrieveCatalogObjects using a fixed Square API request.",
+      "description": "Returns a set of objects based on the provided ID.\nEach [CatalogItem](entity:CatalogItem) returned in the set includes all of its\nchild information including: all of its\n[CatalogItemVariation](entity:CatalogItemVariation) objects, references to\nits [CatalogModifierList](entity:CatalogModifierList) o",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/catalog/batch-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "object_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "include_related_objects": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "catalog_version": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "include_deleted_objects": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "include_category_path_to_root": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "object_ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.search-catalog-objects",
+      "kind": "rest_read",
+      "summary": "SearchCatalogObjects using a fixed Square API request.",
+      "description": "Searches for [CatalogObject](entity:CatalogObject) of any type by matching supported search attribute values,\nexcluding custom attribute values on items or item variations, against one or more of the specified query filters.\n\nThis (`SearchCatalogObjects`) endpoint differs from the [SearchCatalogItem",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/catalog/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "object_types": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "CATALOG_OBJECT_TYPE_DO_NOT_USE",
+                  "ITEM",
+                  "IMAGE",
+                  "PAGE_TILE",
+                  "CATEGORY",
+                  "ITEM_VARIATION",
+                  "TAX",
+                  "PLACEHOLDER",
+                  "DISCOUNT",
+                  "MODIFIER_LIST",
+                  "MODIFIER",
+                  "DINING_OPTION",
+                  "TAX_EXEMPTION",
+                  "CONFIGURATION",
+                  "TICKET_GROUP",
+                  "TICKET_TEMPLATE",
+                  "PAGE",
+                  "MENU",
+                  "TAG",
+                  "FLOOR_PLAN",
+                  "FLOOR_PLAN_TILE",
+                  "VOID_REASON",
+                  "FAVORITES_LIST_POSITION",
+                  "MENU_GROUP",
+                  "ITEM_VARIATION_VENDOR_INFO",
+                  "SERVICE_CHARGE",
+                  "PRICING_RULE",
+                  "PRODUCT_SET",
+                  "TIME_PERIOD",
+                  "MEASUREMENT_UNIT",
+                  "SUBSCRIPTION_PLAN_VARIATION",
+                  "ITEM_OPTION",
+                  "ITEM_OPTION_VAL",
+                  "CUSTOM_ATTRIBUTE_DEFINITION",
+                  "QUICK_AMOUNTS_SETTINGS",
+                  "COMPONENT",
+                  "COMPOSITION",
+                  "RESOURCE",
+                  "CHECKOUT_LINK",
+                  "ADDRESS",
+                  "SETTINGS",
+                  "SUBSCRIPTION_PLAN",
+                  "AVAILABILITY_PERIOD",
+                  "CREDIT_REDEMPTION_POLICY",
+                  "AGE_RESTRICTION",
+                  "SALE_PRICE",
+                  "TRANSLATIONS",
+                  "CREDIT_CARD_SURCHARGE"
+                ]
+              }
+            },
+            "include_deleted_objects": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "include_related_objects": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "begin_time": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "sorted_attribute_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "exact_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "set_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "prefix_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "range_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "text_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "items_for_tax_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "items_for_modifier_list_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "items_for_item_options_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "item_variations_for_item_option_values_query": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "include_category_path_to_root": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-catalog-items",
+      "kind": "rest_read",
+      "summary": "SearchCatalogItems using a fixed Square API request.",
+      "description": "Searches for catalog items or item variations by matching supported search attribute values, including\ncustom attribute values, against one or more of the specified query filters.\n\nThis (`SearchCatalogItems`) endpoint differs from the [SearchCatalogObjects](api-endpoint:Catalog-SearchCatalogObjects)",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/catalog/search-catalog-items",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "text_filter": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "category_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "stock_levels": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "STOCK_LEVEL_DO_NOT_USE",
+                  "OUT",
+                  "LOW"
+                ]
+              }
+            },
+            "enabled_location_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "sort_order": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "DESC",
+                "ASC"
+              ]
+            },
+            "product_types": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "REGULAR",
+                  "GIFT_CARD",
+                  "APPOINTMENTS_SERVICE",
+                  "CLASS_TICKET",
+                  "FOOD_AND_BEV",
+                  "EVENT",
+                  "DIGITAL",
+                  "DONATION",
+                  "MEMBERSHIP",
+                  "CREDIT_PACKAGE",
+                  "COMBO",
+                  "LEGACY_SQUARE_ONLINE_SERVICE",
+                  "LEGACY_SQUARE_ONLINE_MEMBERSHIP",
+                  "APPOINTMENTS_MEMBERSHIP"
+                ]
+              }
+            },
+            "custom_attribute_filters": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            },
+            "archived_state": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "ARCHIVED_STATE_DO_NOT_USE",
+                "ARCHIVED_STATE_NOT_ARCHIVED",
+                "ARCHIVED_STATE_ARCHIVED",
+                "ARCHIVED_STATE_ALL"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.bulk-retrieve-channels",
+      "kind": "rest_read",
+      "summary": "BulkRetrieveChannels using a fixed Square API request.",
+      "description": "BulkRetrieveChannels",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/channels/bulk-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "channel_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "channel_ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.bulk-retrieve-customers",
+      "kind": "rest_read",
+      "summary": "BulkRetrieveCustomers using a fixed Square API request.",
+      "description": "Retrieves multiple customer profiles.\n\nThis endpoint takes a list of customer IDs and returns a map of responses.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/bulk-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "customer_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "customer_ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.search-customers",
+      "kind": "rest_read",
+      "summary": "SearchCustomers using a fixed Square API request.",
+      "description": "Searches the customer profiles associated with a Square account using one or more supported query filters.\n\nCalling `SearchCustomers` without any explicit query filter returns all\ncustomer profiles ordered alphabetically based on `given_name` and\n`family_name`.\n\nUnder normal operating conditions, ne",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "count": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.retrieve-gift-card-from-gan",
+      "kind": "rest_read",
+      "summary": "RetrieveGiftCardFromGAN using a fixed Square API request.",
+      "description": "Retrieves a gift card using the gift card account number (GAN).",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/gift-cards/from-gan",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "gan": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "gan"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.retrieve-gift-card-from-nonce",
+      "kind": "rest_read",
+      "summary": "RetrieveGiftCardFromNonce using a fixed Square API request.",
+      "description": "Retrieves a gift card using a secure payment token that represents the gift card.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/gift-cards/from-nonce",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "nonce": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "nonce"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.retrieve-inventory-adjustment-reason",
+      "kind": "rest_read",
+      "summary": "RetrieveInventoryAdjustmentReason using a fixed Square API request.",
+      "description": "Returns the inventory adjustment reason identified by the provided\n`reason_id`. Deleted custom reasons can be retrieved by ID.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/inventory/adjustment-reasons/retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "reason_id": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "type": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "INVENTORY_ADJUSTMENT_REASON_TYPE_DO_NOT_USE",
+                    "RECEIVED",
+                    "DAMAGED",
+                    "THEFT",
+                    "LOST",
+                    "RETURNED",
+                    "SPOILAGE_WASTE",
+                    "SAMPLES_PROMOTIONAL",
+                    "INTERNAL_USE",
+                    "VENDOR_RETURN",
+                    "PRODUCTION_WASTE",
+                    "SALE",
+                    "RECOUNT",
+                    "TRANSFER",
+                    "IN_TRANSIT",
+                    "CANCELED_SALE",
+                    "CUSTOM"
+                  ]
+                },
+                "custom_reason_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "reason_id"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.batch-retrieve-inventory-changes",
+      "kind": "rest_read",
+      "summary": "BatchRetrieveInventoryChanges using a fixed Square API request.",
+      "description": "Returns historical physical counts and adjustments based on the\nprovided filter criteria.\n\nResults are paginated and sorted in ascending order according their\n`occurred_at` timestamp (oldest first).\n\nBatchRetrieveInventoryChanges is a catch-all query endpoint for queries\nthat cannot be handled by ot",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/inventory/changes/batch-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "catalog_object_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "location_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "types": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "INVENTORY_CHANGE_TYPE_DO_NOT_USE",
+                  "PHYSICAL_COUNT",
+                  "ADJUSTMENT",
+                  "TRANSFER",
+                  "AVAILABILITY"
+                ]
+              }
+            },
+            "statuses": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "INVENTORY_STATE_DO_NOT_USE",
+                  "CUSTOM",
+                  "IN_STOCK",
+                  "SOLD",
+                  "RETURNED_BY_CUSTOMER",
+                  "RESERVED_FOR_SALE",
+                  "SOLD_ONLINE",
+                  "ORDERED_FROM_VENDOR",
+                  "RECEIVED_FROM_VENDOR",
+                  "IN_TRANSIT_TO",
+                  "NONE",
+                  "WASTE",
+                  "UNLINKED_RETURN",
+                  "COMPOSED",
+                  "DECOMPOSED",
+                  "SUPPORTED_BY_NEWER_VERSION",
+                  "IN_TRANSIT",
+                  "UNTRACKED"
+                ]
+              }
+            },
+            "states": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "INVENTORY_STATE_DO_NOT_USE",
+                  "CUSTOM",
+                  "IN_STOCK",
+                  "SOLD",
+                  "RETURNED_BY_CUSTOMER",
+                  "RESERVED_FOR_SALE",
+                  "SOLD_ONLINE",
+                  "ORDERED_FROM_VENDOR",
+                  "RECEIVED_FROM_VENDOR",
+                  "IN_TRANSIT_TO",
+                  "NONE",
+                  "WASTE",
+                  "UNLINKED_RETURN",
+                  "COMPOSED",
+                  "DECOMPOSED",
+                  "SUPPORTED_BY_NEWER_VERSION",
+                  "IN_TRANSIT",
+                  "UNTRACKED"
+                ]
+              }
+            },
+            "updated_after": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "updated_before": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "sort": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "field": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "OCCURRED_AT"
+                  ]
+                },
+                "order": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "DESC",
+                    "ASC"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "reason_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.batch-retrieve-inventory-counts",
+      "kind": "rest_read",
+      "summary": "BatchRetrieveInventoryCounts using a fixed Square API request.",
+      "description": "Returns current counts for the provided\n[CatalogObject](entity:CatalogObject)s at the requested\n[Location](entity:Location)s.\n\nResults are paginated and sorted in descending order according to their\n`calculated_at` timestamp (newest first).\n\nWhen `updated_after` is specified, only counts that have c",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/inventory/counts/batch-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "catalog_object_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "location_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "updated_after": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "states": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "INVENTORY_STATE_DO_NOT_USE",
+                  "CUSTOM",
+                  "IN_STOCK",
+                  "SOLD",
+                  "RETURNED_BY_CUSTOMER",
+                  "RESERVED_FOR_SALE",
+                  "SOLD_ONLINE",
+                  "ORDERED_FROM_VENDOR",
+                  "RECEIVED_FROM_VENDOR",
+                  "IN_TRANSIT_TO",
+                  "NONE",
+                  "WASTE",
+                  "UNLINKED_RETURN",
+                  "COMPOSED",
+                  "DECOMPOSED",
+                  "SUPPORTED_BY_NEWER_VERSION",
+                  "IN_TRANSIT",
+                  "UNTRACKED"
+                ]
+              }
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-invoices",
+      "kind": "rest_read",
+      "summary": "SearchInvoices using a fixed Square API request.",
+      "description": "Searches for invoices from a location specified in \nthe filter. You can optionally specify customers in the filter for whom to \nretrieve invoices. In the current implementation, you can only specify one location and \noptionally one customer.\n\nThe response is paginated. If truncated, the response inc",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/invoices/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "filter"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.search-scheduled-shifts",
+      "kind": "rest_read",
+      "summary": "SearchScheduledShifts using a fixed Square API request.",
+      "description": "Returns a paginated list of scheduled shifts, with optional filter and sort settings.\nBy default, results are sorted by `start_at` in ascending order.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/labor/scheduled-shifts/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-timecards",
+      "kind": "rest_read",
+      "summary": "SearchTimecards using a fixed Square API request.",
+      "description": "Returns a paginated list of `Timecard` records for a business.\nThe list to be returned can be filtered by:\n- Location IDs\n- Team member IDs\n- Timecard status (`OPEN` or `CLOSED`)\n- Timecard start\n- Timecard end\n- Workday details\n\nThe list can be sorted by:\n- `START_AT`\n- `END_AT`\n- `CREATED_AT`\n- `U",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/labor/timecards/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-loyalty-accounts",
+      "kind": "rest_read",
+      "summary": "SearchLoyaltyAccounts using a fixed Square API request.",
+      "description": "Searches for loyalty accounts in a loyalty program.\n\nYou can search for a loyalty account using the phone number or customer ID associated with the account. To return all loyalty accounts, specify an empty `query` object or omit it entirely.\n\nSearch results are sorted by `created_at` in ascending or",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/loyalty/accounts/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "mappings": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "customer_ids": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.calculate-loyalty-points",
+      "kind": "rest_read",
+      "summary": "CalculateLoyaltyPoints using a fixed Square API request.",
+      "description": "Calculates the number of points a buyer can earn from a purchase. Applications might call this endpoint\nto display the points to the buyer.\n\n- If you are using the Orders API to manage orders, provide the `order_id` and (optional) `loyalty_account_id`.\nSquare reads the order to compute the points ea",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/loyalty/programs/{program_id}/calculate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "order_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "transaction_amount_money": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "amount": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "currency": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "UNKNOWN_CURRENCY",
+                    "AED",
+                    "AFN",
+                    "ALL",
+                    "AMD",
+                    "ANG",
+                    "AOA",
+                    "ARS",
+                    "AUD",
+                    "AWG",
+                    "AZN",
+                    "BAM",
+                    "BBD",
+                    "BDT",
+                    "BGN",
+                    "BHD",
+                    "BIF",
+                    "BMD",
+                    "BND",
+                    "BOB",
+                    "BOV",
+                    "BRL",
+                    "BSD",
+                    "BTN",
+                    "BWP",
+                    "BYR",
+                    "BZD",
+                    "CAD",
+                    "CDF",
+                    "CHE",
+                    "CHF",
+                    "CHW",
+                    "CLF",
+                    "CLP",
+                    "CNY",
+                    "COP",
+                    "COU",
+                    "CRC",
+                    "CUC",
+                    "CUP",
+                    "CVE",
+                    "CZK",
+                    "DJF",
+                    "DKK",
+                    "DOP",
+                    "DZD",
+                    "EGP",
+                    "ERN",
+                    "ETB",
+                    "EUR",
+                    "FJD",
+                    "FKP",
+                    "GBP",
+                    "GEL",
+                    "GHS",
+                    "GIP",
+                    "GMD",
+                    "GNF",
+                    "GTQ",
+                    "GYD",
+                    "HKD",
+                    "HNL",
+                    "HRK",
+                    "HTG",
+                    "HUF",
+                    "IDR",
+                    "ILS",
+                    "INR",
+                    "IQD",
+                    "IRR",
+                    "ISK",
+                    "JMD",
+                    "JOD",
+                    "JPY",
+                    "KES",
+                    "KGS",
+                    "KHR",
+                    "KMF",
+                    "KPW",
+                    "KRW",
+                    "KWD",
+                    "KYD",
+                    "KZT",
+                    "LAK",
+                    "LBP",
+                    "LKR",
+                    "LRD",
+                    "LSL",
+                    "LTL",
+                    "LVL",
+                    "LYD",
+                    "MAD",
+                    "MDL",
+                    "MGA",
+                    "MKD",
+                    "MMK",
+                    "MNT",
+                    "MOP",
+                    "MRO",
+                    "MUR"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "loyalty_account_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-loyalty-rewards",
+      "kind": "rest_read",
+      "summary": "SearchLoyaltyRewards using a fixed Square API request.",
+      "description": "Searches for loyalty rewards. This endpoint accepts a request with no query filters and returns results for all loyalty accounts.\nIf you include a `query` object, `loyalty_account_id` is required and `status` is  optional.\n\nIf you know a reward ID, use the\n[RetrieveLoyaltyReward](api-endpoint:Loyalt",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/loyalty/rewards/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "loyalty_account_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "STATUS_DO_NOT_USE",
+                    "ISSUED",
+                    "REDEEMED",
+                    "DELETED"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "loyalty_account_id"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.batch-retrieve-orders",
+      "kind": "rest_read",
+      "summary": "BatchRetrieveOrders using a fixed Square API request.",
+      "description": "Retrieves a set of [orders](entity:Order) by their IDs.\n\nIf a given order ID does not exist, the ID is ignored instead of generating an error.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orders/batch-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "location_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "order_ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.calculate-order",
+      "kind": "rest_read",
+      "summary": "CalculateOrder using a fixed Square API request.",
+      "description": "Enables applications to preview order pricing without creating an order.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orders/calculate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "order": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "location_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "reference_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "source": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "customer_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "line_items": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "taxes": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "discounts": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "service_charges": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "fulfillments": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "returns": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "return_amounts": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "net_amounts": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "rounding_adjustment": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "tenders": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "refunds": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "metadata": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "created_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "updated_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "closed_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "state": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "DO_NOT_USE",
+                    "OPEN",
+                    "COMPLETED",
+                    "CANCELED",
+                    "DRAFT"
+                  ]
+                },
+                "version": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "total_money": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "total_tax_money": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "total_discount_money": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "total_tip_money": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "total_service_charge_money": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "ticket_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pricing_options": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "rewards": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "net_amount_due_money": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "location_id"
+              ]
+            },
+            "proposed_rewards": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "order"
+          ]
+        }
+      }
+    },
+    {
+      "id": "square.search-orders",
+      "kind": "rest_read",
+      "summary": "SearchOrders using a fixed Square API request.",
+      "description": "Search all orders for one or more locations. Orders include all sales,\nreturns, and exchanges regardless of how or when they entered the Square\necosystem (such as Point of Sale, Invoices, and Connect APIs).\n\n`SearchOrders` requests need to specify which locations to search and define a\n[SearchOrders",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orders/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "location_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "return_entries": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-subscriptions",
+      "kind": "rest_read",
+      "summary": "SearchSubscriptions using a fixed Square API request.",
+      "description": "Searches for subscriptions.\n\nResults are ordered chronologically by subscription creation date. If\nthe request specifies more than one location ID,\nthe endpoint orders the result\nby location ID, and then by creation date within each location. If no locations are given\nin the query, all locations are",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/subscriptions/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "include": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-team-members",
+      "kind": "rest_read",
+      "summary": "SearchTeamMembers using a fixed Square API request.",
+      "description": "Returns a paginated list of `TeamMember` objects for a business. \nThe list can be filtered by location IDs, `ACTIVE` or `INACTIVE` status, or whether\nthe team member is the Square account owner.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/team-members/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-terminal-actions",
+      "kind": "rest_read",
+      "summary": "SearchTerminalActions using a fixed Square API request.",
+      "description": "Retrieves a filtered list of Terminal action requests created by the account making the request. Terminal action requests are available for 30 days.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/terminals/actions/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-terminal-checkouts",
+      "kind": "rest_read",
+      "summary": "SearchTerminalCheckouts using a fixed Square API request.",
+      "description": "Returns a filtered list of Terminal checkout requests created by the application making the request. Only Terminal checkout requests created for the merchant scoped to the OAuth token are returned. Terminal checkout requests are available for 30 days.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/terminals/checkouts/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-terminal-refunds",
+      "kind": "rest_read",
+      "summary": "SearchTerminalRefunds using a fixed Square API request.",
+      "description": "Retrieves a filtered list of Interac Terminal refund requests created by the seller making the request. Terminal refund requests are available for 30 days.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/terminals/refunds/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-transfer-orders",
+      "kind": "rest_read",
+      "summary": "SearchTransferOrders using a fixed Square API request.",
+      "description": "Searches for transfer orders using filters. Returns a paginated list of matching\n[TransferOrder](entity:TransferOrder)s sorted by creation date.\n\nCommon search scenarios:\n- Find orders for a source [Location](entity:Location)\n- Find orders for a destination [Location](entity:Location)\n- Find orders ",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/transfer-orders/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "query": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "filter": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sort": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limit": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.bulk-retrieve-vendors",
+      "kind": "rest_read",
+      "summary": "BulkRetrieveVendors using a fixed Square API request.",
+      "description": "Retrieves one or more vendors of specified [Vendor](entity:Vendor) IDs.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/vendors/bulk-retrieve",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "vendor_ids": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "square.search-vendors",
+      "kind": "rest_read",
+      "summary": "SearchVendors using a fixed Square API request.",
+      "description": "Searches for vendors using a filter against supported [Vendor](entity:Vendor) properties and a supported sorter.",
+      "source_url": "https://developer.squareup.com/reference/square",
+      "risk": "low",
+      "approval": "none; bounded JSON direct read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/vendors/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "filter": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "name": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "status": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "DO_NOT_USE",
+                      "ACTIVE",
+                      "INACTIVE"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "sort": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "field": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "NAME",
+                    "CREATED_AT"
+                  ]
+                },
+                "order": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "DESC",
+                    "ASC"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

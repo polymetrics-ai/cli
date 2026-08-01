@@ -1,0 +1,20 @@
+{
+  "record": {
+    "location": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/locations",
+    "body": {
+      "location": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

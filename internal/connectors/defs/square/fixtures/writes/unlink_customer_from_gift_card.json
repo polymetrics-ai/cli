@@ -1,0 +1,17 @@
+{
+  "record": {
+    "gift_card_id": "gift_card_id_fixture",
+    "customer_id": "customer_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/gift-cards/gift_card_id_fixture/unlink-customer",
+    "body": {
+      "customer_id": "customer_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

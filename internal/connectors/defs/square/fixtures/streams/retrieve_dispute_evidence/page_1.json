@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/disputes/synthetic-conformance-value/evidence/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "evidence": {
+        "id": "retrieve_dispute_evidence_fixture_1",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:05:00Z",
+        "name": "RetrieveDisputeEvidence fixture",
+        "status": "ACTIVE",
+        "source_operation": "RetrieveDisputeEvidence"
+      }
+    }
+  }
+}

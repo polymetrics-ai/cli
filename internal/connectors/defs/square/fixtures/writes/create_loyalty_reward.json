@@ -1,0 +1,24 @@
+{
+  "record": {
+    "reward": {
+      "loyalty_account_id": "loyalty_account_id_fixture",
+      "reward_tier_id": "reward_tier_id_fixture"
+    },
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/loyalty/rewards",
+    "body": {
+      "reward": {
+        "loyalty_account_id": "loyalty_account_id_fixture",
+        "reward_tier_id": "reward_tier_id_fixture"
+      },
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

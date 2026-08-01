@@ -1,0 +1,15 @@
+{
+  "record": {
+    "customer_ids": [
+      "customer_id_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/customers/bulk-delete"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

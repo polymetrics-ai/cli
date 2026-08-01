@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "locations",
+    "source_credential_defaults": {
+      "base_url": "https://connect.squareup.com"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "INSUFFICIENT_SCOPES",
+          "ACCESS_TOKEN_EXPIRED",
+          "UNAUTHORIZED"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

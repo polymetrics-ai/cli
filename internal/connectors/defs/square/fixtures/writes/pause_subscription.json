@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "pause_effective_date": "2026-01-01"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/subscriptions/subscription_id_fixture/pause",
+    "body": {
+      "pause_effective_date": "2026-01-01"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

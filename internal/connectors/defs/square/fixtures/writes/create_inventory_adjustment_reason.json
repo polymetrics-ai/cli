@@ -1,0 +1,22 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "adjustment_reason": {
+      "id": {}
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/inventory/adjustment-reasons/create",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "adjustment_reason": {
+        "id": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

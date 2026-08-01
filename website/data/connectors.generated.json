@@ -197249,14 +197249,14 @@
   {
     "slug": "square",
     "name": "Square",
-    "description": "Reads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.",
+    "description": "Reads 110 Square API streams, exposes 31 bounded direct reads/searches, and declares 153 typed reverse-ETL write actions from the official Square OpenAPI ledger.",
     "docs_url": "https://developer.squareup.com/reference/square",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -197283,7 +197283,7 @@
         "primary_key": [
           "id"
         ],
-        "cursor": "updated_at",
+        "cursor": "",
         "incremental": false
       },
       {
@@ -197293,11 +197293,4354 @@
         ],
         "cursor": "",
         "incremental": false
+      },
+      {
+        "name": "v1_retrieve_business",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "v1_list_locations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "v1_list_payments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "v1_retrieve_payment",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "v1_list_refunds",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "v1_list_settlements",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "v1_retrieve_settlement",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_bank_accounts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_bank_account_by_v1_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_bank_account",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_bookings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_business_booking_profile",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_booking_custom_attribute_definitions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_booking_custom_attribute_definition",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_location_booking_profiles",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_location_booking_profile",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_team_member_booking_profiles",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_team_member_booking_profile",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_booking",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_booking_custom_attributes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_booking_custom_attribute",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_cards",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_card",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_cash_drawer_shifts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_cash_drawer_shift",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "catalog_info",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_catalog",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_catalog_object",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_channels",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_channel",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_customer_custom_attribute_definitions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_customer_custom_attribute_definition",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_customer_groups",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_customer_group",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_customer_segments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_customer_segment",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_customer",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_customer_custom_attributes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_customer_custom_attribute",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_devices",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_device_codes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_device_code",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_device",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_disputes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_dispute",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_dispute_evidence",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_dispute_evidence",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_gift_cards",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_gift_card_activities",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_gift_card",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_inventory_adjustment_reasons",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_inventory_adjustment",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_inventory_physical_count",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_inventory_transfer",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_inventory_count",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_invoice",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_break_types",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_break_type",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_scheduled_shift",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_team_member_wages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_team_member_wage",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_timecard",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_workweek_configs",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_location_custom_attribute_definitions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_location_custom_attribute_definition",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_location",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_location_custom_attributes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_location_custom_attribute",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_loyalty_account",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_loyalty_program",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_loyalty_promotions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_loyalty_promotion",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_loyalty_reward",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_merchants",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_merchant_custom_attribute_definitions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_merchant_custom_attribute_definition",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_merchant",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_merchant_custom_attributes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_merchant_custom_attribute",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_location_settings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_merchant_settings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_payment_links",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_payment_link",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_order_custom_attribute_definitions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_order_custom_attribute_definition",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_order",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_order_custom_attributes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_order_custom_attribute",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_payment",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_payouts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_payout",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_payout_entries",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_payment_refund",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_sites",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_snippet",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_subscription",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_jobs",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_job",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_team_member",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_wage_setting",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_terminal_action",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_terminal_checkout",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_terminal_refund",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_transfer_order",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "retrieve_vendor",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.\n\nReadable streams: `payments`, `refunds`, `customers`, `locations`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developer.squareup.com/reference/square.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret, string); Square access token (API key or OAuth access token). Used\n  only for Bearer auth; never logged.\n- `base_url` (optional, string); default `https://connect.squareup.com/v2`; format `uri`; Square API\n  base URL. Set explicitly to https://connect.squareupsandbox.com/v2 for sandbox testing.\n- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust\n  the stream.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; Records per page (1-100).\n- `start_date` (optional, string); Lower bound (YYYY-MM-DD or RFC3339) for\n  payments/refunds/customers time filtering; only objects at or after this time are read.\n\nSecret fields are redacted in logs and write previews: `api_key`.\n\nDefault configuration values: `base_url=https://connect.squareup.com/v2`, `max_pages=0`,\n`page_size=100`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.api_key`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/locations`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `cursor`; next token from `cursor`.\n\nIncremental streams use their declared cursor fields and send lower-bound parameters only when a\nlower bound is available.\n\n- `payments`: GET `/payments` - records path `payments`; query `begin_time` from template `{{\n  incremental.lower_bound }}`, omitted when absent; `limit`=`100`; cursor pagination; cursor\n  parameter `cursor`; next token from `cursor`; incremental cursor `updated_at`; formatted as\n  `rfc3339`; initial lower bound from `start_date`.\n- `refunds`: GET `/refunds` - records path `refunds`; query `begin_time` from template `{{\n  incremental.lower_bound }}`, omitted when absent; `limit`=`100`; cursor pagination; cursor\n  parameter `cursor`; next token from `cursor`; incremental cursor `updated_at`; formatted as\n  `rfc3339`; initial lower bound from `start_date`.\n- `customers`: GET `/customers` - records path `customers`; query `limit`=`100`; cursor pagination;\n  cursor parameter `cursor`; next token from `cursor`.\n- `locations`: GET `/locations` - records path `locations`; query `limit`=`100`; cursor pagination;\n  cursor parameter `cursor`; next token from `cursor`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Square API read of payments, refunds, customer,\nand location data.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 4 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=7.\n",
+    "write_actions": [
+      {
+        "name": "v1_create_refund",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "register_domain",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_bank_account",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "disable_bank_account",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_booking",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_booking_custom_attribute_definition",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_booking_custom_attribute_definition",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_booking_custom_attribute_definition",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "bulk_delete_booking_custom_attributes",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "bulk_upsert_booking_custom_attributes",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "update_booking",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "cancel_booking",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "delete_booking_custom_attribute",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upsert_booking_custom_attribute",
+        "method": "PUT",
+        "kind": "upsert"
+      },
+      {
+        "name": "create_card",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "disable_card",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "batch_delete_catalog_objects",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "batch_upsert_catalog_objects",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "upsert_catalog_object",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "delete_catalog_object",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_item_modifier_lists",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_item_taxes",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_customer",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "bulk_create_customers",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "bulk_delete_customers",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "bulk_update_customers",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_customer_custom_attribute_definition",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_customer_custom_attribute_definition",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_customer_custom_attribute_definition",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "bulk_upsert_customer_custom_attributes",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "create_customer_group",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_customer_group",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_customer_group",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_customer",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_customer",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_customer_custom_attribute",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upsert_customer_custom_attribute",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "remove_group_from_customer",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "add_group_to_customer",
+        "method": "PUT",
+        "kind": "custom"
+      },
+      {
+        "name": "create_device_code",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "accept_dispute",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_dispute_evidence_text",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_dispute_evidence",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "submit_evidence",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_gift_card",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_gift_card_activity",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "link_customer_to_gift_card",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "unlink_customer_from_gift_card",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_inventory_adjustment_reason",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_inventory_adjustment_reason",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "restore_inventory_adjustment_reason",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_inventory_adjustment_reason",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_inventory_adjustment",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "batch_change_inventory",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_invoice",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_invoice",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_invoice",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "cancel_invoice",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "publish_invoice",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_break_type",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_break_type",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_break_type",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_scheduled_shift",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "bulk_publish_scheduled_shifts",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_scheduled_shift",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "publish_scheduled_shift",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_timecard",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_timecard",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_timecard",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_workweek_config",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_location",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_location_custom_attribute_definition",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_location_custom_attribute_definition",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_location_custom_attribute_definition",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "bulk_delete_location_custom_attributes",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "bulk_upsert_location_custom_attributes",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "update_location",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_location_custom_attribute",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upsert_location_custom_attribute",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "create_loyalty_account",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "accumulate_loyalty_points",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "adjust_loyalty_points",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_loyalty_promotion",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "cancel_loyalty_promotion",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_loyalty_reward",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_loyalty_reward",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "redeem_loyalty_reward",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_merchant_custom_attribute_definition",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_merchant_custom_attribute_definition",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_merchant_custom_attribute_definition",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "bulk_delete_merchant_custom_attributes",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "bulk_upsert_merchant_custom_attributes",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "delete_merchant_custom_attribute",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upsert_merchant_custom_attribute",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "update_location_settings",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_merchant_settings",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_payment_link",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_payment_link",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_payment_link",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_order",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "clone_order",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_order_custom_attribute_definition",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_order_custom_attribute_definition",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_order_custom_attribute_definition",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "bulk_delete_order_custom_attributes",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "bulk_upsert_order_custom_attributes",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "update_order",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_order_custom_attribute",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upsert_order_custom_attribute",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "pay_order",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_payment",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "cancel_payment_by_idempotency_key",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_payment",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "cancel_payment",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "complete_payment",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "refund_payment",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "delete_snippet",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upsert_snippet",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "create_subscription",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "bulk_swap_plan",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_subscription",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_subscription_action",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "change_billing_anchor_date",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "cancel_subscription",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "pause_subscription",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "resume_subscription",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "swap_plan",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_team_member",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "bulk_create_team_members",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "bulk_update_team_members",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_job",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_job",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_team_member",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_wage_setting",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_terminal_action",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "cancel_terminal_action",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "dismiss_terminal_action",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_terminal_checkout",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "cancel_terminal_checkout",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "dismiss_terminal_checkout",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_terminal_refund",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "cancel_terminal_refund",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "dismiss_terminal_refund",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "create_transfer_order",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_transfer_order",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_transfer_order",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "cancel_transfer_order",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "receive_transfer_order",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "start_transfer_order",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "bulk_create_vendors",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "bulk_update_vendors",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_vendor",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_vendor",
+        "method": "PUT",
+        "kind": "update"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect and move Square business data with typed connector surfaces.",
+      "usage": "pm square <stream|direct> <operation> [flags]",
+      "source_cli": {
+        "name": "Square API",
+        "docs": "https://developer.squareup.com/reference/square",
+        "reference": "https://developer.squareup.com/api/devs-content/content/open-api-3/latest",
+        "source": "official OpenAPI"
+      },
+      "groups": [
+        {
+          "id": "streams",
+          "title": "Fixture-backed ETL streams",
+          "commands": [
+            "stream"
+          ]
+        },
+        {
+          "id": "direct",
+          "title": "Bounded direct reads and searches",
+          "commands": [
+            "bookings",
+            "catalog",
+            "channels",
+            "customers",
+            "gift-cards",
+            "inventory",
+            "invoices",
+            "labor",
+            "loyalty",
+            "orders",
+            "subscriptions",
+            "team",
+            "terminal",
+            "transfer-order",
+            "vendors"
+          ]
+        },
+        {
+          "id": "reverse",
+          "title": "Reverse ETL writes",
+          "commands": [
+            "pm reverse plan/preview/approve/execute"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Write machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Use a saved Square connector credential.",
+          "values": [],
+          "maps_to": "connection"
+        }
+      ],
+      "commands": [
+        {
+          "path": "stream payments",
+          "summary": "Read Square stream `payments`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "payments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream payments --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream refunds",
+          "summary": "Read Square stream `refunds`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "refunds",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream refunds --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream customers",
+          "summary": "Read Square stream `customers`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "customers",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream customers --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream locations",
+          "summary": "Read Square stream `locations`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "locations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream locations --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-retrieve-business",
+          "summary": "Read Square stream `v1_retrieve_business`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_retrieve_business",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-retrieve-business --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-list-locations",
+          "summary": "Read Square stream `v1_list_locations`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_list_locations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-list-locations --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-list-payments",
+          "summary": "Read Square stream `v1_list_payments`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_list_payments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-list-payments --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-retrieve-payment",
+          "summary": "Read Square stream `v1_retrieve_payment`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_retrieve_payment",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-retrieve-payment --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-list-refunds",
+          "summary": "Read Square stream `v1_list_refunds`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_list_refunds",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-list-refunds --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-list-settlements",
+          "summary": "Read Square stream `v1_list_settlements`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_list_settlements",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-list-settlements --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream v1-retrieve-settlement",
+          "summary": "Read Square stream `v1_retrieve_settlement`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "v1_retrieve_settlement",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream v1-retrieve-settlement --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-bank-accounts",
+          "summary": "Read Square stream `list_bank_accounts`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_bank_accounts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-bank-accounts --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-bank-account-by-v1-id",
+          "summary": "Read Square stream `get_bank_account_by_v1_id`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_bank_account_by_v1_id",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-bank-account-by-v1-id --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-bank-account",
+          "summary": "Read Square stream `get_bank_account`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_bank_account",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-bank-account --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-bookings",
+          "summary": "Read Square stream `list_bookings`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_bookings",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-bookings --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-business-booking-profile",
+          "summary": "Read Square stream `retrieve_business_booking_profile`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_business_booking_profile",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-business-booking-profile --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-booking-custom-attribute-definitions",
+          "summary": "Read Square stream `list_booking_custom_attribute_definitions`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_booking_custom_attribute_definitions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-booking-custom-attribute-definitions --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-booking-custom-attribute-definition",
+          "summary": "Read Square stream `retrieve_booking_custom_attribute_definition`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_booking_custom_attribute_definition",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-booking-custom-attribute-definition --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-location-booking-profiles",
+          "summary": "Read Square stream `list_location_booking_profiles`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_location_booking_profiles",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-location-booking-profiles --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-location-booking-profile",
+          "summary": "Read Square stream `retrieve_location_booking_profile`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_location_booking_profile",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-location-booking-profile --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-team-member-booking-profiles",
+          "summary": "Read Square stream `list_team_member_booking_profiles`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_team_member_booking_profiles",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-team-member-booking-profiles --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-team-member-booking-profile",
+          "summary": "Read Square stream `retrieve_team_member_booking_profile`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_team_member_booking_profile",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-team-member-booking-profile --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-booking",
+          "summary": "Read Square stream `retrieve_booking`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_booking",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-booking --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-booking-custom-attributes",
+          "summary": "Read Square stream `list_booking_custom_attributes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_booking_custom_attributes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-booking-custom-attributes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-booking-custom-attribute",
+          "summary": "Read Square stream `retrieve_booking_custom_attribute`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_booking_custom_attribute",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-booking-custom-attribute --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-cards",
+          "summary": "Read Square stream `list_cards`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_cards",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-cards --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-card",
+          "summary": "Read Square stream `retrieve_card`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_card",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-card --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-cash-drawer-shifts",
+          "summary": "Read Square stream `list_cash_drawer_shifts`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_cash_drawer_shifts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-cash-drawer-shifts --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-cash-drawer-shift",
+          "summary": "Read Square stream `retrieve_cash_drawer_shift`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_cash_drawer_shift",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-cash-drawer-shift --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream catalog-info",
+          "summary": "Read Square stream `catalog_info`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "catalog_info",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream catalog-info --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-catalog",
+          "summary": "Read Square stream `list_catalog`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_catalog",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-catalog --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-catalog-object",
+          "summary": "Read Square stream `retrieve_catalog_object`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_catalog_object",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-catalog-object --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-channels",
+          "summary": "Read Square stream `list_channels`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_channels",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-channels --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-channel",
+          "summary": "Read Square stream `retrieve_channel`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_channel",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-channel --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-customer-custom-attribute-definitions",
+          "summary": "Read Square stream `list_customer_custom_attribute_definitions`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_customer_custom_attribute_definitions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-customer-custom-attribute-definitions --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-customer-custom-attribute-definition",
+          "summary": "Read Square stream `retrieve_customer_custom_attribute_definition`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_customer_custom_attribute_definition",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-customer-custom-attribute-definition --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-customer-groups",
+          "summary": "Read Square stream `list_customer_groups`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_customer_groups",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-customer-groups --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-customer-group",
+          "summary": "Read Square stream `retrieve_customer_group`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_customer_group",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-customer-group --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-customer-segments",
+          "summary": "Read Square stream `list_customer_segments`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_customer_segments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-customer-segments --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-customer-segment",
+          "summary": "Read Square stream `retrieve_customer_segment`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_customer_segment",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-customer-segment --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-customer",
+          "summary": "Read Square stream `retrieve_customer`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_customer",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-customer --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-customer-custom-attributes",
+          "summary": "Read Square stream `list_customer_custom_attributes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_customer_custom_attributes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-customer-custom-attributes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-customer-custom-attribute",
+          "summary": "Read Square stream `retrieve_customer_custom_attribute`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_customer_custom_attribute",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-customer-custom-attribute --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-devices",
+          "summary": "Read Square stream `list_devices`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_devices",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-devices --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-device-codes",
+          "summary": "Read Square stream `list_device_codes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_device_codes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-device-codes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-device-code",
+          "summary": "Read Square stream `get_device_code`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_device_code",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-device-code --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-device",
+          "summary": "Read Square stream `get_device`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_device",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-device --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-disputes",
+          "summary": "Read Square stream `list_disputes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_disputes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-disputes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-dispute",
+          "summary": "Read Square stream `retrieve_dispute`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_dispute",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-dispute --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-dispute-evidence",
+          "summary": "Read Square stream `list_dispute_evidence`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_dispute_evidence",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-dispute-evidence --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-dispute-evidence",
+          "summary": "Read Square stream `retrieve_dispute_evidence`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_dispute_evidence",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-dispute-evidence --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-gift-cards",
+          "summary": "Read Square stream `list_gift_cards`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_gift_cards",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-gift-cards --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-gift-card-activities",
+          "summary": "Read Square stream `list_gift_card_activities`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_gift_card_activities",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-gift-card-activities --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-gift-card",
+          "summary": "Read Square stream `retrieve_gift_card`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_gift_card",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-gift-card --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-inventory-adjustment-reasons",
+          "summary": "Read Square stream `list_inventory_adjustment_reasons`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_inventory_adjustment_reasons",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-inventory-adjustment-reasons --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-inventory-adjustment",
+          "summary": "Read Square stream `retrieve_inventory_adjustment`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_inventory_adjustment",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-inventory-adjustment --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-inventory-physical-count",
+          "summary": "Read Square stream `retrieve_inventory_physical_count`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_inventory_physical_count",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-inventory-physical-count --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-inventory-transfer",
+          "summary": "Read Square stream `retrieve_inventory_transfer`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_inventory_transfer",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-inventory-transfer --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-inventory-count",
+          "summary": "Read Square stream `retrieve_inventory_count`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_inventory_count",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-inventory-count --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-invoices",
+          "summary": "Read Square stream `list_invoices`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_invoices",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-invoices --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-invoice",
+          "summary": "Read Square stream `get_invoice`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_invoice",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-invoice --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-break-types",
+          "summary": "Read Square stream `list_break_types`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_break_types",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-break-types --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-break-type",
+          "summary": "Read Square stream `get_break_type`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_break_type",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-break-type --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-scheduled-shift",
+          "summary": "Read Square stream `retrieve_scheduled_shift`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_scheduled_shift",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-scheduled-shift --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-team-member-wages",
+          "summary": "Read Square stream `list_team_member_wages`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_team_member_wages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-team-member-wages --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-team-member-wage",
+          "summary": "Read Square stream `get_team_member_wage`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_team_member_wage",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-team-member-wage --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-timecard",
+          "summary": "Read Square stream `retrieve_timecard`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_timecard",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-timecard --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-workweek-configs",
+          "summary": "Read Square stream `list_workweek_configs`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_workweek_configs",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-workweek-configs --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-location-custom-attribute-definitions",
+          "summary": "Read Square stream `list_location_custom_attribute_definitions`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_location_custom_attribute_definitions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-location-custom-attribute-definitions --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-location-custom-attribute-definition",
+          "summary": "Read Square stream `retrieve_location_custom_attribute_definition`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_location_custom_attribute_definition",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-location-custom-attribute-definition --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-location",
+          "summary": "Read Square stream `retrieve_location`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_location",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-location --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-location-custom-attributes",
+          "summary": "Read Square stream `list_location_custom_attributes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_location_custom_attributes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-location-custom-attributes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-location-custom-attribute",
+          "summary": "Read Square stream `retrieve_location_custom_attribute`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_location_custom_attribute",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-location-custom-attribute --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-loyalty-account",
+          "summary": "Read Square stream `retrieve_loyalty_account`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_loyalty_account",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-loyalty-account --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-loyalty-program",
+          "summary": "Read Square stream `retrieve_loyalty_program`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_loyalty_program",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-loyalty-program --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-loyalty-promotions",
+          "summary": "Read Square stream `list_loyalty_promotions`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_loyalty_promotions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-loyalty-promotions --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-loyalty-promotion",
+          "summary": "Read Square stream `retrieve_loyalty_promotion`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_loyalty_promotion",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-loyalty-promotion --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-loyalty-reward",
+          "summary": "Read Square stream `retrieve_loyalty_reward`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_loyalty_reward",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-loyalty-reward --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-merchants",
+          "summary": "Read Square stream `list_merchants`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_merchants",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-merchants --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-merchant-custom-attribute-definitions",
+          "summary": "Read Square stream `list_merchant_custom_attribute_definitions`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_merchant_custom_attribute_definitions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-merchant-custom-attribute-definitions --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-merchant-custom-attribute-definition",
+          "summary": "Read Square stream `retrieve_merchant_custom_attribute_definition`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_merchant_custom_attribute_definition",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-merchant-custom-attribute-definition --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-merchant",
+          "summary": "Read Square stream `retrieve_merchant`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_merchant",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-merchant --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-merchant-custom-attributes",
+          "summary": "Read Square stream `list_merchant_custom_attributes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_merchant_custom_attributes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-merchant-custom-attributes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-merchant-custom-attribute",
+          "summary": "Read Square stream `retrieve_merchant_custom_attribute`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_merchant_custom_attribute",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-merchant-custom-attribute --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-location-settings",
+          "summary": "Read Square stream `retrieve_location_settings`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_location_settings",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-location-settings --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-merchant-settings",
+          "summary": "Read Square stream `retrieve_merchant_settings`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_merchant_settings",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-merchant-settings --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-payment-links",
+          "summary": "Read Square stream `list_payment_links`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_payment_links",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-payment-links --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-payment-link",
+          "summary": "Read Square stream `retrieve_payment_link`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_payment_link",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-payment-link --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-order-custom-attribute-definitions",
+          "summary": "Read Square stream `list_order_custom_attribute_definitions`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_order_custom_attribute_definitions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-order-custom-attribute-definitions --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-order-custom-attribute-definition",
+          "summary": "Read Square stream `retrieve_order_custom_attribute_definition`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_order_custom_attribute_definition",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-order-custom-attribute-definition --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-order",
+          "summary": "Read Square stream `retrieve_order`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_order",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-order --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-order-custom-attributes",
+          "summary": "Read Square stream `list_order_custom_attributes`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_order_custom_attributes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-order-custom-attributes --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-order-custom-attribute",
+          "summary": "Read Square stream `retrieve_order_custom_attribute`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_order_custom_attribute",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-order-custom-attribute --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-payment",
+          "summary": "Read Square stream `get_payment`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_payment",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-payment --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-payouts",
+          "summary": "Read Square stream `list_payouts`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_payouts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-payouts --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-payout",
+          "summary": "Read Square stream `get_payout`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_payout",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-payout --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-payout-entries",
+          "summary": "Read Square stream `list_payout_entries`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_payout_entries",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-payout-entries --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-payment-refund",
+          "summary": "Read Square stream `get_payment_refund`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_payment_refund",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-payment-refund --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-sites",
+          "summary": "Read Square stream `list_sites`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_sites",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-sites --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-snippet",
+          "summary": "Read Square stream `retrieve_snippet`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_snippet",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-snippet --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-subscription",
+          "summary": "Read Square stream `retrieve_subscription`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_subscription",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-subscription --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream list-jobs",
+          "summary": "Read Square stream `list_jobs`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_jobs",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream list-jobs --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-job",
+          "summary": "Read Square stream `retrieve_job`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_job",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-job --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-team-member",
+          "summary": "Read Square stream `retrieve_team_member`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_team_member",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-team-member --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-wage-setting",
+          "summary": "Read Square stream `retrieve_wage_setting`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_wage_setting",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-wage-setting --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-terminal-action",
+          "summary": "Read Square stream `get_terminal_action`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_terminal_action",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-terminal-action --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-terminal-checkout",
+          "summary": "Read Square stream `get_terminal_checkout`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_terminal_checkout",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-terminal-checkout --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream get-terminal-refund",
+          "summary": "Read Square stream `get_terminal_refund`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_terminal_refund",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream get-terminal-refund --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-transfer-order",
+          "summary": "Read Square stream `retrieve_transfer_order`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_transfer_order",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-transfer-order --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stream retrieve-vendor",
+          "summary": "Read Square stream `retrieve_vendor`.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "retrieve_vendor",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square stream retrieve-vendor --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "bookings search-availability",
+          "summary": "SearchAvailability",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "query",
+              "type": "string",
+              "summary": "Required JSON body field `query`.",
+              "values": [],
+              "maps_to": "body.query",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square bookings search-availability --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "bookings bulk-retrieve-bookings",
+          "summary": "BulkRetrieveBookings",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "booking-ids",
+              "type": "string",
+              "summary": "Required JSON body field `booking_ids`.",
+              "values": [],
+              "maps_to": "body.booking_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square bookings bulk-retrieve-bookings --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "bookings bulk-retrieve-team-member-booking-profiles",
+          "summary": "BulkRetrieveTeamMemberBookingProfiles",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "team-member-ids",
+              "type": "string",
+              "summary": "Required JSON body field `team_member_ids`.",
+              "values": [],
+              "maps_to": "body.team_member_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square bookings bulk-retrieve-team-member-booking-profiles --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "catalog batch-retrieve-catalog-objects",
+          "summary": "BatchRetrieveCatalogObjects",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "object-ids",
+              "type": "string",
+              "summary": "Required JSON body field `object_ids`.",
+              "values": [],
+              "maps_to": "body.object_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square catalog batch-retrieve-catalog-objects --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "catalog search-catalog-objects",
+          "summary": "SearchCatalogObjects",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square catalog search-catalog-objects --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "catalog search-catalog-items",
+          "summary": "SearchCatalogItems",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square catalog search-catalog-items --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "channels bulk-retrieve-channels",
+          "summary": "BulkRetrieveChannels",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "channel-ids",
+              "type": "string",
+              "summary": "Required JSON body field `channel_ids`.",
+              "values": [],
+              "maps_to": "body.channel_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square channels bulk-retrieve-channels --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers bulk-retrieve-customers",
+          "summary": "BulkRetrieveCustomers",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "customer-ids",
+              "type": "string",
+              "summary": "Required JSON body field `customer_ids`.",
+              "values": [],
+              "maps_to": "body.customer_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square customers bulk-retrieve-customers --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers search-customers",
+          "summary": "SearchCustomers",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square customers search-customers --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "gift-cards retrieve-gift-card-from-gan",
+          "summary": "RetrieveGiftCardFromGAN",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "gan",
+              "type": "string",
+              "summary": "Required JSON body field `gan`.",
+              "values": [],
+              "maps_to": "body.gan",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square gift-cards retrieve-gift-card-from-gan --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "gift-cards retrieve-gift-card-from-nonce",
+          "summary": "RetrieveGiftCardFromNonce",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "nonce",
+              "type": "string",
+              "summary": "Required JSON body field `nonce`.",
+              "values": [],
+              "maps_to": "body.nonce",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square gift-cards retrieve-gift-card-from-nonce --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "inventory retrieve-inventory-adjustment-reason",
+          "summary": "RetrieveInventoryAdjustmentReason",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "reason-id",
+              "type": "string",
+              "summary": "Required JSON body field `reason_id`.",
+              "values": [],
+              "maps_to": "body.reason_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square inventory retrieve-inventory-adjustment-reason --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "inventory batch-retrieve-inventory-changes",
+          "summary": "BatchRetrieveInventoryChanges",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square inventory batch-retrieve-inventory-changes --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "inventory batch-retrieve-inventory-counts",
+          "summary": "BatchRetrieveInventoryCounts",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square inventory batch-retrieve-inventory-counts --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "invoices search-invoices",
+          "summary": "SearchInvoices",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "query",
+              "type": "string",
+              "summary": "Required JSON body field `query`.",
+              "values": [],
+              "maps_to": "body.query",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square invoices search-invoices --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "labor search-scheduled-shifts",
+          "summary": "SearchScheduledShifts",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square labor search-scheduled-shifts --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "labor search-timecards",
+          "summary": "SearchTimecards",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square labor search-timecards --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "loyalty search-loyalty-accounts",
+          "summary": "SearchLoyaltyAccounts",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square loyalty search-loyalty-accounts --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "loyalty calculate-loyalty-points",
+          "summary": "CalculateLoyaltyPoints",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "program-id",
+              "type": "string",
+              "summary": "Square path parameter `program_id`.",
+              "values": [],
+              "maps_to": "path.program_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square loyalty calculate-loyalty-points --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "loyalty search-loyalty-rewards",
+          "summary": "SearchLoyaltyRewards",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square loyalty search-loyalty-rewards --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "orders batch-retrieve-orders",
+          "summary": "BatchRetrieveOrders",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "order-ids",
+              "type": "string",
+              "summary": "Required JSON body field `order_ids`.",
+              "values": [],
+              "maps_to": "body.order_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square orders batch-retrieve-orders --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "orders calculate-order",
+          "summary": "CalculateOrder",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [
+            {
+              "name": "order",
+              "type": "string",
+              "summary": "Required JSON body field `order`.",
+              "values": [],
+              "maps_to": "body.order",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm square orders calculate-order --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "orders search-orders",
+          "summary": "SearchOrders",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square orders search-orders --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "subscriptions search-subscriptions",
+          "summary": "SearchSubscriptions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square subscriptions search-subscriptions --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "team search-team-members",
+          "summary": "SearchTeamMembers",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square team search-team-members --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "terminal search-terminal-actions",
+          "summary": "SearchTerminalActions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square terminal search-terminal-actions --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "terminal search-terminal-checkouts",
+          "summary": "SearchTerminalCheckouts",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square terminal search-terminal-checkouts --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "terminal search-terminal-refunds",
+          "summary": "SearchTerminalRefunds",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square terminal search-terminal-refunds --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "transfer-order search-transfer-orders",
+          "summary": "SearchTransferOrders",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square transfer-order search-transfer-orders --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "vendors bulk-retrieve-vendors",
+          "summary": "BulkRetrieveVendors",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square vendors bulk-retrieve-vendors --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "vendors search-vendors",
+          "summary": "SearchVendors",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.squareup.com/reference/square",
+          "flags": [],
+          "examples": [
+            "pm square vendors search-vendors --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Square JSON direct read",
+          "approval": "none",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "square-auth",
+          "summary": "Square uses Bearer token auth from the secret api_key field."
+        },
+        {
+          "name": "square-writes",
+          "summary": "Square reverse ETL actions use existing plan, preview, approval, execute gates."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nSquare connector parity was refreshed against the official Square OpenAPI 3 latest document (`info.version` 2.0) from developer.squareup.com on 2026-08-01. The latest Square-Version list entry at review time was `2026-07-15`.\n\nImplemented fixture-backed surfaces:\n\n- Streams: 110 GET operations.\n- Bounded direct reads/searches: 31 POST search/bulk-retrieve/calculate/retrieve operations through fixed `operations.json` entries and `json_redacted` output policy.\n- Reverse ETL writes: 153 typed actions in `writes.json`; execution remains the existing plan -> preview -> approval -> execute flow.\n\nThe complete operation ledger is `api_surface.json` and contains all 346 official operations exactly once. Blocked rows remain blocked by default and carry official-source or shared-runtime dependency evidence.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret): Square access token or OAuth access token. It is used only for Bearer authentication and is never logged.\n- `base_url` (optional, default `https://connect.squareup.com`): set to `https://connect.squareupsandbox.com` for sandbox fixtures or approved live checks.\n- `start_date` (optional RFC3339): lower bound for incremental payment/refund reads.\n\nRequests send the `Square-Version: 2026-07-15` header. Connection checks call `GET /v2/locations`.\n\n## Streams notes\n\nStreams are generated from official GET operations and are fixture-backed under `fixtures/streams/<stream>/page_1.json`. Parameterized streams use explicit connection spec fields for their path parameters; no raw path or query escape hatch is exposed. Cursor pagination is bounded (`max_pages: 10`) and list streams include `limit=100` when the official operation documents a `limit` query parameter.\n\nHistorical high-value streams keep their stable names: `payments`, `refunds`, `customers`, and `locations`. Other streams use snake_case operation IDs.\n\n## Write actions & risks\n\n`writes.json` declares 153 typed Square reverse-ETL actions. Each action has a closed root `record_schema`; path parameters are explicit `path_fields`; DELETE actions use `body_type: none`, `confirm: destructive`, and idempotent 404 handling. Other destructive-style actions (cancel/disable/refund/capture/pay/void/etc.) carry `confirm: destructive` and path-field redaction when they put identifiers in URLs.\n\nNo action executes during connector inspection, validation, conformance, or docs generation. Runtime execution remains plan -> preview -> explicit approval -> execute. No arbitrary method/path/body/raw query/shell/file passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operation counts in this fixture-only parity slice:\n\n- Deprecated official operations: 25 (official OpenAPI `deprecated: true` / `x-deprecation`).\n- OAuth/mobile authorization lifecycle: 6 (credential/token exchange and revocation are outside the connector data-plane contract).\n- Generic V1 batch passthrough: 1 (would permit arbitrary nested API requests).\n- Webhook/event/changefeed lifecycle: 15 (requires shared CDC foundations #2986/#2988).\n- Multipart/file/attachment operations: 5 (requires a reviewed bounded binary/file executor and redaction policy).\n\nFixture-only parity is not Square certification. `certification.json` intentionally declares no live write pairings, direct-read candidates, or binary candidates.\n",
     "icon": {
       "id": "square",
       "path": "icons/square.svg",

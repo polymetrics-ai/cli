@@ -1,0 +1,22 @@
+{
+  "record": {
+    "booking_id": "booking_id_fixture",
+    "key": "key_fixture",
+    "custom_attribute": {
+      "key": "key_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/bookings/booking_id_fixture/custom-attributes/key_fixture",
+    "body": {
+      "custom_attribute": {
+        "key": "key_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

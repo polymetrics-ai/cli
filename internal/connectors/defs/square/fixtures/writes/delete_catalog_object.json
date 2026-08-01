@@ -1,0 +1,13 @@
+{
+  "record": {
+    "object_id": "object_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/catalog/object/object_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -2,36 +2,189 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Square Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Square access token (API key or OAuth access token). Used only for Bearer auth; never logged."
+      "description": "Square access token or OAuth access token. Used only for Bearer auth and never logged."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://connect.squareup.com/v2",
-      "description": "Square API base URL. Set explicitly to https://connect.squareupsandbox.com/v2 for sandbox testing."
+      "default": "https://connect.squareup.com",
+      "description": "Square API base URL. Use https://connect.squareupsandbox.com for sandbox testing."
     },
     "start_date": {
       "type": "string",
-      "description": "Lower bound (YYYY-MM-DD or RFC3339) for payments/refunds/customers time filtering; only objects at or after this time are read."
+      "format": "date-time",
+      "description": "Optional RFC3339 lower bound for incremental payment and refund streams."
     },
-    "page_size": {
+    "location_id": {
       "type": "string",
-      "default": "100",
-      "description": "Records per page (1-100)."
+      "description": "Square path parameter `location_id` used by parameterized streams."
     },
-    "max_pages": {
+    "payment_id": {
       "type": "string",
-      "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "Square path parameter `payment_id` used by parameterized streams."
     },
-    "mode": {
+    "settlement_id": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Square path parameter `settlement_id` used by parameterized streams."
+    },
+    "v1_bank_account_id": {
+      "type": "string",
+      "description": "Square path parameter `v1_bank_account_id` used by parameterized streams."
+    },
+    "bank_account_id": {
+      "type": "string",
+      "description": "Square path parameter `bank_account_id` used by parameterized streams."
+    },
+    "key": {
+      "type": "string",
+      "description": "Square path parameter `key` used by parameterized streams."
+    },
+    "team_member_id": {
+      "type": "string",
+      "description": "Square path parameter `team_member_id` used by parameterized streams."
+    },
+    "booking_id": {
+      "type": "string",
+      "description": "Square path parameter `booking_id` used by parameterized streams."
+    },
+    "card_id": {
+      "type": "string",
+      "description": "Square path parameter `card_id` used by parameterized streams."
+    },
+    "shift_id": {
+      "type": "string",
+      "description": "Square path parameter `shift_id` used by parameterized streams."
+    },
+    "object_id": {
+      "type": "string",
+      "description": "Square path parameter `object_id` used by parameterized streams."
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "Square path parameter `channel_id` used by parameterized streams."
+    },
+    "group_id": {
+      "type": "string",
+      "description": "Square path parameter `group_id` used by parameterized streams."
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "Square path parameter `segment_id` used by parameterized streams."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Square path parameter `customer_id` used by parameterized streams."
+    },
+    "id": {
+      "type": "string",
+      "description": "Square path parameter `id` used by parameterized streams."
+    },
+    "device_id": {
+      "type": "string",
+      "description": "Square path parameter `device_id` used by parameterized streams."
+    },
+    "dispute_id": {
+      "type": "string",
+      "description": "Square path parameter `dispute_id` used by parameterized streams."
+    },
+    "evidence_id": {
+      "type": "string",
+      "description": "Square path parameter `evidence_id` used by parameterized streams."
+    },
+    "adjustment_id": {
+      "type": "string",
+      "description": "Square path parameter `adjustment_id` used by parameterized streams."
+    },
+    "physical_count_id": {
+      "type": "string",
+      "description": "Square path parameter `physical_count_id` used by parameterized streams."
+    },
+    "transfer_id": {
+      "type": "string",
+      "description": "Square path parameter `transfer_id` used by parameterized streams."
+    },
+    "catalog_object_id": {
+      "type": "string",
+      "description": "Square path parameter `catalog_object_id` used by parameterized streams."
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Square path parameter `invoice_id` used by parameterized streams."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Square path parameter `account_id` used by parameterized streams."
+    },
+    "program_id": {
+      "type": "string",
+      "description": "Square path parameter `program_id` used by parameterized streams."
+    },
+    "promotion_id": {
+      "type": "string",
+      "description": "Square path parameter `promotion_id` used by parameterized streams."
+    },
+    "reward_id": {
+      "type": "string",
+      "description": "Square path parameter `reward_id` used by parameterized streams."
+    },
+    "merchant_id": {
+      "type": "string",
+      "description": "Square path parameter `merchant_id` used by parameterized streams."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Square path parameter `order_id` used by parameterized streams."
+    },
+    "custom_attribute_key": {
+      "type": "string",
+      "description": "Square path parameter `custom_attribute_key` used by parameterized streams."
+    },
+    "payout_id": {
+      "type": "string",
+      "description": "Square path parameter `payout_id` used by parameterized streams."
+    },
+    "refund_id": {
+      "type": "string",
+      "description": "Square path parameter `refund_id` used by parameterized streams."
+    },
+    "site_id": {
+      "type": "string",
+      "description": "Square path parameter `site_id` used by parameterized streams."
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Square path parameter `subscription_id` used by parameterized streams."
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Square path parameter `job_id` used by parameterized streams."
+    },
+    "action_id": {
+      "type": "string",
+      "description": "Square path parameter `action_id` used by parameterized streams."
+    },
+    "checkout_id": {
+      "type": "string",
+      "description": "Square path parameter `checkout_id` used by parameterized streams."
+    },
+    "terminal_refund_id": {
+      "type": "string",
+      "description": "Square path parameter `terminal_refund_id` used by parameterized streams."
+    },
+    "transfer_order_id": {
+      "type": "string",
+      "description": "Square path parameter `transfer_order_id` used by parameterized streams."
+    },
+    "vendor_id": {
+      "type": "string",
+      "description": "Square path parameter `vendor_id` used by parameterized streams."
     }
   }
 }

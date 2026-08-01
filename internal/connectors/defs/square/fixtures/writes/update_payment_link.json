@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "payment_link": {
+      "version": 1
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/online-checkout/payment-links/id_fixture",
+    "body": {
+      "payment_link": {
+        "version": 1
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

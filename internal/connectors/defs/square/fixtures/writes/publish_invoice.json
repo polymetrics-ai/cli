@@ -1,0 +1,17 @@
+{
+  "record": {
+    "invoice_id": "invoice_id_fixture",
+    "version": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/invoices/invoice_id_fixture/publish",
+    "body": {
+      "version": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

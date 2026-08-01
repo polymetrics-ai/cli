@@ -1,0 +1,15 @@
+{
+  "record": {
+    "reason_id": {
+      "type": "INVENTORY_ADJUSTMENT_REASON_TYPE_DO_NOT_USE"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/inventory/adjustment-reasons/delete"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,69 +1,45 @@
 # Overview
 
-Reads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.
+Square connector parity was refreshed against the official Square OpenAPI 3 latest document (`info.version` 2.0) from developer.squareup.com on 2026-08-01. The latest Square-Version list entry at review time was `2026-07-15`.
 
-Readable streams: `payments`, `refunds`, `customers`, `locations`.
+Implemented fixture-backed surfaces:
 
-This connector is read-only; no write actions are declared.
+- Streams: 110 GET operations.
+- Bounded direct reads/searches: 31 POST search/bulk-retrieve/calculate/retrieve operations through fixed `operations.json` entries and `json_redacted` output policy.
+- Reverse ETL writes: 153 typed actions in `writes.json`; execution remains the existing plan -> preview -> approval -> execute flow.
 
-Service API documentation: https://developer.squareup.com/reference/square.
+The complete operation ledger is `api_surface.json` and contains all 346 official operations exactly once. Blocked rows remain blocked by default and carry official-source or shared-runtime dependency evidence.
 
 ## Auth setup
 
 Connection fields:
 
-- `api_key` (required, secret, string); Square access token (API key or OAuth access token). Used
-  only for Bearer auth; never logged.
-- `base_url` (optional, string); default `https://connect.squareup.com/v2`; format `uri`; Square API
-  base URL. Set explicitly to https://connect.squareupsandbox.com/v2 for sandbox testing.
-- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
-  the stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `100`; Records per page (1-100).
-- `start_date` (optional, string); Lower bound (YYYY-MM-DD or RFC3339) for
-  payments/refunds/customers time filtering; only objects at or after this time are read.
+- `api_key` (required, secret): Square access token or OAuth access token. It is used only for Bearer authentication and is never logged.
+- `base_url` (optional, default `https://connect.squareup.com`): set to `https://connect.squareupsandbox.com` for sandbox fixtures or approved live checks.
+- `start_date` (optional RFC3339): lower bound for incremental payment/refund reads.
 
-Secret fields are redacted in logs and write previews: `api_key`.
-
-Default configuration values: `base_url=https://connect.squareup.com/v2`, `max_pages=0`,
-`page_size=100`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.api_key`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/locations`.
+Requests send the `Square-Version: 2026-07-15` header. Connection checks call `GET /v2/locations`.
 
 ## Streams notes
 
-Default pagination: cursor pagination; cursor parameter `cursor`; next token from `cursor`.
+Streams are generated from official GET operations and are fixture-backed under `fixtures/streams/<stream>/page_1.json`. Parameterized streams use explicit connection spec fields for their path parameters; no raw path or query escape hatch is exposed. Cursor pagination is bounded (`max_pages: 10`) and list streams include `limit=100` when the official operation documents a `limit` query parameter.
 
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `payments`: GET `/payments` - records path `payments`; query `begin_time` from template `{{
-  incremental.lower_bound }}`, omitted when absent; `limit`=`100`; cursor pagination; cursor
-  parameter `cursor`; next token from `cursor`; incremental cursor `updated_at`; formatted as
-  `rfc3339`; initial lower bound from `start_date`.
-- `refunds`: GET `/refunds` - records path `refunds`; query `begin_time` from template `{{
-  incremental.lower_bound }}`, omitted when absent; `limit`=`100`; cursor pagination; cursor
-  parameter `cursor`; next token from `cursor`; incremental cursor `updated_at`; formatted as
-  `rfc3339`; initial lower bound from `start_date`.
-- `customers`: GET `/customers` - records path `customers`; query `limit`=`100`; cursor pagination;
-  cursor parameter `cursor`; next token from `cursor`.
-- `locations`: GET `/locations` - records path `locations`; query `limit`=`100`; cursor pagination;
-  cursor parameter `cursor`; next token from `cursor`.
+Historical high-value streams keep their stable names: `payments`, `refunds`, `customers`, and `locations`. Other streams use snake_case operation IDs.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Square API read of payments, refunds, customer,
-and location data.
+`writes.json` declares 153 typed Square reverse-ETL actions. Each action has a closed root `record_schema`; path parameters are explicit `path_fields`; DELETE actions use `body_type: none`, `confirm: destructive`, and idempotent 404 handling. Other destructive-style actions (cancel/disable/refund/capture/pay/void/etc.) carry `confirm: destructive` and path-field redaction when they put identifiers in URLs.
+
+No action executes during connector inspection, validation, conformance, or docs generation. Runtime execution remains plan -> preview -> explicit approval -> execute. No arbitrary method/path/body/raw query/shell/file passthrough is exposed.
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 4 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=7.
+Blocked/planned operation counts in this fixture-only parity slice:
+
+- Deprecated official operations: 25 (official OpenAPI `deprecated: true` / `x-deprecation`).
+- OAuth/mobile authorization lifecycle: 6 (credential/token exchange and revocation are outside the connector data-plane contract).
+- Generic V1 batch passthrough: 1 (would permit arbitrary nested API requests).
+- Webhook/event/changefeed lifecycle: 15 (requires shared CDC foundations #2986/#2988).
+- Multipart/file/attachment operations: 5 (requires a reviewed bounded binary/file executor and redaction policy).
+
+Fixture-only parity is not Square certification. `certification.json` intentionally declares no live write pairings, direct-read candidates, or binary candidates.

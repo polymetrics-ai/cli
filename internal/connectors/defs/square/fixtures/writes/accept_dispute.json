@@ -1,0 +1,13 @@
+{
+  "record": {
+    "dispute_id": "dispute_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/disputes/dispute_id_fixture/accept"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

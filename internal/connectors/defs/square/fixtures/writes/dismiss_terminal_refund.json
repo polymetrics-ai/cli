@@ -1,0 +1,13 @@
+{
+  "record": {
+    "terminal_refund_id": "terminal_refund_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/terminals/refunds/terminal_refund_id_fixture/dismiss"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "group_id": "group_id_fixture",
+    "group": {
+      "name": "name_fixture"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/customers/groups/group_id_fixture",
+    "body": {
+      "group": {
+        "name": "name_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

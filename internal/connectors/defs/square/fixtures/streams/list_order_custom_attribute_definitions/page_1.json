@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/orders/custom-attribute-definitions",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "custom_attribute_definitions": [
+        {
+          "id": "list_order_custom_attribute_definitions_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "name": "ListOrderCustomAttributeDefinitions fixture",
+          "status": "ACTIVE",
+          "source_operation": "ListOrderCustomAttributeDefinitions"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "customer_id": "customer_id_fixture",
+    "key": "key_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/customers/customer_id_fixture/custom-attributes/key_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

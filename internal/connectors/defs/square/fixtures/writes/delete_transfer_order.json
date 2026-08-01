@@ -1,0 +1,13 @@
+{
+  "record": {
+    "transfer_order_id": "transfer_order_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/transfer-orders/transfer_order_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

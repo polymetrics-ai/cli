@@ -1,0 +1,26 @@
+{
+  "record": {
+    "reason_id": {
+      "type": "INVENTORY_ADJUSTMENT_REASON_TYPE_DO_NOT_USE"
+    },
+    "adjustment_reason": {
+      "id": {}
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/inventory/adjustment-reasons/update",
+    "body": {
+      "reason_id": {
+        "type": "INVENTORY_ADJUSTMENT_REASON_TYPE_DO_NOT_USE"
+      },
+      "adjustment_reason": {
+        "id": {}
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

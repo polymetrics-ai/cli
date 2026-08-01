@@ -1,0 +1,13 @@
+{
+  "record": {
+    "values": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orders/custom-attributes/bulk-delete"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

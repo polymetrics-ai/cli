@@ -1,0 +1,16 @@
+{
+  "record": {
+    "domain_name": "domain_name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/apple-pay/domains",
+    "body": {
+      "domain_name": "domain_name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

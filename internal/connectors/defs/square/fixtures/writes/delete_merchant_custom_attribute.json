@@ -1,0 +1,14 @@
+{
+  "record": {
+    "merchant_id": "merchant_id_fixture",
+    "key": "key_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/merchants/merchant_id_fixture/custom-attributes/key_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "subscription_id": "subscription_id_fixture",
+    "new_plan_id": "new_plan_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/subscriptions/subscription_id_fixture/swap-plan",
+    "body": {
+      "new_plan_id": "new_plan_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

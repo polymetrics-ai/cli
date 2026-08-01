@@ -1,0 +1,16 @@
+{
+  "record": {
+    "team_members": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/team-members/bulk-create",
+    "body": {
+      "team_members": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

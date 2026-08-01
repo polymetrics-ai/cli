@@ -1,0 +1,14 @@
+{
+  "record": {
+    "order_id": "order_id_fixture",
+    "custom_attribute_key": "custom_attribute_key_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/orders/order_id_fixture/custom-attributes/custom_attribute_key_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

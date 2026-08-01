@@ -1,21 +1,577 @@
 {
-  "api": "Square Connect v2 API (https://connect.squareup.com/v2)",
+  "api": "Square OpenAPI 3 latest (info.version 2.0)",
   "docs": "https://developer.squareup.com/reference/square",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (payments, refunds, customers, locations); Square is read-only in legacy (no reverse-ETL write surface) and the full Square surface (orders, catalog, invoices, team members, disputes, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-08-01",
+  "operation_ledger_version": 1,
+  "scope": "Complete official Square OpenAPI inventory from https://developer.squareup.com/api/devs-content/content/open-api-3/latest; latest Square-Version list entry 2026-07-15. Live provider calls, credentials, OAuth token lifecycle, generic batch passthrough, CDC/webhook lifecycle, deprecated operations, and binary/multipart file transfer are not executed in this fixture-only parity slice.",
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/v2/payments",
-      "covered_by": {
-        "stream": "payments"
+      "method": "POST",
+      "path": "/mobile/authorization-code",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Square OAuth/mobile authorization token lifecycle operations exchange or revoke credentials and are outside the connector data-plane contract.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No credentials or token-issuance flows are exposed by this fixture-only connector parity slice."
       }
     },
     {
       "method": "GET",
-      "path": "/v2/refunds",
+      "path": "/oauth2/authorize",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Square OAuth/mobile authorization token lifecycle operations exchange or revoke credentials and are outside the connector data-plane contract.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No credentials or token-issuance flows are exposed by this fixture-only connector parity slice."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/clients/{client_id}/access-token/renew",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Square OAuth/mobile authorization token lifecycle operations exchange or revoke credentials and are outside the connector data-plane contract.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No credentials or token-issuance flows are exposed by this fixture-only connector parity slice."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/revoke",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Square OAuth/mobile authorization token lifecycle operations exchange or revoke credentials and are outside the connector data-plane contract.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No credentials or token-issuance flows are exposed by this fixture-only connector parity slice."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/token",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Square OAuth/mobile authorization token lifecycle operations exchange or revoke credentials and are outside the connector data-plane contract.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No credentials or token-issuance flows are exposed by this fixture-only connector parity slice."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/token/status",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Square OAuth/mobile authorization token lifecycle operations exchange or revoke credentials and are outside the connector data-plane contract.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No credentials or token-issuance flows are exposed by this fixture-only connector parity slice."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/batch",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Square V1SubmitBatch accepts arbitrary nested API requests and would be a generic method/path/body escape hatch.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Project rules forbid generic HTTP passthrough surfaces."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
       "covered_by": {
-        "stream": "refunds"
+        "stream": "v1_retrieve_business"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/locations",
+      "covered_by": {
+        "stream": "v1_list_locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/payments",
+      "covered_by": {
+        "stream": "v1_list_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/payments/{payment_id}",
+      "covered_by": {
+        "stream": "v1_retrieve_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/refunds",
+      "covered_by": {
+        "stream": "v1_list_refunds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{location_id}/refunds",
+      "covered_by": {
+        "write": "v1_create_refund"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/settlements",
+      "covered_by": {
+        "stream": "v1_list_settlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/settlements/{settlement_id}",
+      "covered_by": {
+        "stream": "v1_retrieve_settlement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/webhooks",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{location_id}/webhooks",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/apple-pay/domains",
+      "covered_by": {
+        "write": "register_domain"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bank-accounts",
+      "covered_by": {
+        "stream": "list_bank_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bank-accounts",
+      "covered_by": {
+        "write": "create_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bank-accounts/by-v1-id/{v1_bank_account_id}",
+      "covered_by": {
+        "stream": "get_bank_account_by_v1_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bank-accounts/{bank_account_id}",
+      "covered_by": {
+        "stream": "get_bank_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bank-accounts/{bank_account_id}/disable",
+      "covered_by": {
+        "write": "disable_bank_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings",
+      "covered_by": {
+        "stream": "list_bookings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings",
+      "covered_by": {
+        "write": "create_booking"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/availability/search",
+      "covered_by": {
+        "direct_read": "bookings search-availability"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/bulk-retrieve",
+      "covered_by": {
+        "direct_read": "bookings bulk-retrieve-bookings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/business-booking-profile",
+      "covered_by": {
+        "stream": "retrieve_business_booking_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/custom-attribute-definitions",
+      "covered_by": {
+        "stream": "list_booking_custom_attribute_definitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/custom-attribute-definitions",
+      "covered_by": {
+        "write": "create_booking_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/bookings/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "delete_booking_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "stream": "retrieve_booking_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bookings/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "update_booking_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/custom-attributes/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_booking_custom_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/custom-attributes/bulk-upsert",
+      "covered_by": {
+        "write": "bulk_upsert_booking_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/location-booking-profiles",
+      "covered_by": {
+        "stream": "list_location_booking_profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/location-booking-profiles/{location_id}",
+      "covered_by": {
+        "stream": "retrieve_location_booking_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/team-member-booking-profiles",
+      "covered_by": {
+        "stream": "list_team_member_booking_profiles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/team-member-booking-profiles/bulk-retrieve",
+      "covered_by": {
+        "direct_read": "bookings bulk-retrieve-team-member-booking-profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/team-member-booking-profiles/{team_member_id}",
+      "covered_by": {
+        "stream": "retrieve_team_member_booking_profile"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/{booking_id}",
+      "covered_by": {
+        "stream": "retrieve_booking"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bookings/{booking_id}",
+      "covered_by": {
+        "write": "update_booking"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/{booking_id}/cancel",
+      "covered_by": {
+        "write": "cancel_booking"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/{booking_id}/custom-attributes",
+      "covered_by": {
+        "stream": "list_booking_custom_attributes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "delete_booking_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+      "covered_by": {
+        "stream": "retrieve_booking_custom_attribute"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "upsert_booking_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cards",
+      "covered_by": {
+        "stream": "list_cards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cards",
+      "covered_by": {
+        "write": "create_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cards/{card_id}",
+      "covered_by": {
+        "stream": "retrieve_card"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cards/{card_id}/disable",
+      "covered_by": {
+        "write": "disable_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cash-drawers/shifts",
+      "covered_by": {
+        "stream": "list_cash_drawer_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cash-drawers/shifts/{shift_id}",
+      "covered_by": {
+        "stream": "retrieve_cash_drawer_shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cash-drawers/shifts/{shift_id}/events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/batch-delete",
+      "covered_by": {
+        "write": "batch_delete_catalog_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/batch-retrieve",
+      "covered_by": {
+        "direct_read": "catalog batch-retrieve-catalog-objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/batch-upsert",
+      "covered_by": {
+        "write": "batch_upsert_catalog_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/images",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Multipart/file/attachment operation requires a reviewed bounded binary/file executor and redaction policy before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No local file upload/download or arbitrary file path handling is exposed."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/catalog/images/{image_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Multipart/file/attachment operation requires a reviewed bounded binary/file executor and redaction policy before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No local file upload/download or arbitrary file path handling is exposed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/info",
+      "covered_by": {
+        "stream": "catalog_info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/list",
+      "covered_by": {
+        "stream": "list_catalog"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/object",
+      "covered_by": {
+        "write": "upsert_catalog_object"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/catalog/object/{object_id}",
+      "covered_by": {
+        "write": "delete_catalog_object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/object/{object_id}",
+      "covered_by": {
+        "stream": "retrieve_catalog_object"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/search",
+      "covered_by": {
+        "direct_read": "catalog search-catalog-objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/search-catalog-items",
+      "covered_by": {
+        "direct_read": "catalog search-catalog-items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/update-item-modifier-lists",
+      "covered_by": {
+        "write": "update_item_modifier_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/update-item-taxes",
+      "covered_by": {
+        "write": "update_item_taxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/channels",
+      "covered_by": {
+        "stream": "list_channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/channels/bulk-retrieve",
+      "covered_by": {
+        "direct_read": "channels bulk-retrieve-channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/channels/{channel_id}",
+      "covered_by": {
+        "stream": "retrieve_channel"
       }
     },
     {
@@ -26,6 +582,962 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/v2/customers",
+      "covered_by": {
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-create",
+      "covered_by": {
+        "write": "bulk_create_customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-retrieve",
+      "covered_by": {
+        "direct_read": "customers bulk-retrieve-customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-update",
+      "covered_by": {
+        "write": "bulk_update_customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/custom-attribute-definitions",
+      "covered_by": {
+        "stream": "list_customer_custom_attribute_definitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/custom-attribute-definitions",
+      "covered_by": {
+        "write": "create_customer_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "delete_customer_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "stream": "retrieve_customer_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "update_customer_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/custom-attributes/bulk-upsert",
+      "covered_by": {
+        "write": "bulk_upsert_customer_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/groups",
+      "covered_by": {
+        "stream": "list_customer_groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/groups",
+      "covered_by": {
+        "write": "create_customer_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/groups/{group_id}",
+      "covered_by": {
+        "write": "delete_customer_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/groups/{group_id}",
+      "covered_by": {
+        "stream": "retrieve_customer_group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/groups/{group_id}",
+      "covered_by": {
+        "write": "update_customer_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/search",
+      "covered_by": {
+        "direct_read": "customers search-customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/segments",
+      "covered_by": {
+        "stream": "list_customer_segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/segments/{segment_id}",
+      "covered_by": {
+        "stream": "retrieve_customer_segment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer_id}",
+      "covered_by": {
+        "stream": "retrieve_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customer_id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer_id}/cards",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}/cards/{card_id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer_id}/custom-attributes",
+      "covered_by": {
+        "stream": "list_customer_custom_attributes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "delete_customer_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+      "covered_by": {
+        "stream": "retrieve_customer_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "upsert_customer_custom_attribute"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}/groups/{group_id}",
+      "covered_by": {
+        "write": "remove_group_from_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customer_id}/groups/{group_id}",
+      "covered_by": {
+        "write": "add_group_to_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices",
+      "covered_by": {
+        "stream": "list_devices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices/codes",
+      "covered_by": {
+        "stream": "list_device_codes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/devices/codes",
+      "covered_by": {
+        "write": "create_device_code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices/codes/{id}",
+      "covered_by": {
+        "stream": "get_device_code"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices/{device_id}",
+      "covered_by": {
+        "stream": "get_device"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes",
+      "covered_by": {
+        "stream": "list_disputes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes/{dispute_id}",
+      "covered_by": {
+        "stream": "retrieve_dispute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/accept",
+      "covered_by": {
+        "write": "accept_dispute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes/{dispute_id}/evidence",
+      "covered_by": {
+        "stream": "list_dispute_evidence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/evidence-files",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Multipart/file/attachment operation requires a reviewed bounded binary/file executor and redaction policy before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No local file upload/download or arbitrary file path handling is exposed."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/evidence-text",
+      "covered_by": {
+        "write": "create_dispute_evidence_text"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+      "covered_by": {
+        "write": "delete_dispute_evidence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+      "covered_by": {
+        "stream": "retrieve_dispute_evidence"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/submit-evidence",
+      "covered_by": {
+        "write": "submit_evidence"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/employees",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/employees/{id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/events/disable",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/events/enable",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/events/types",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gift-cards",
+      "covered_by": {
+        "stream": "list_gift_cards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards",
+      "covered_by": {
+        "write": "create_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gift-cards/activities",
+      "covered_by": {
+        "stream": "list_gift_card_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/activities",
+      "covered_by": {
+        "write": "create_gift_card_activity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/from-gan",
+      "covered_by": {
+        "direct_read": "gift-cards retrieve-gift-card-from-gan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/from-nonce",
+      "covered_by": {
+        "direct_read": "gift-cards retrieve-gift-card-from-nonce"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/{gift_card_id}/link-customer",
+      "covered_by": {
+        "write": "link_customer_to_gift_card"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/{gift_card_id}/unlink-customer",
+      "covered_by": {
+        "write": "unlink_customer_from_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gift-cards/{id}",
+      "covered_by": {
+        "stream": "retrieve_gift_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/adjustment-reasons",
+      "covered_by": {
+        "stream": "list_inventory_adjustment_reasons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/create",
+      "covered_by": {
+        "write": "create_inventory_adjustment_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/delete",
+      "covered_by": {
+        "write": "delete_inventory_adjustment_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/restore",
+      "covered_by": {
+        "write": "restore_inventory_adjustment_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/retrieve",
+      "covered_by": {
+        "direct_read": "inventory retrieve-inventory-adjustment-reason"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/inventory/adjustment-reasons/update",
+      "covered_by": {
+        "write": "update_inventory_adjustment_reason"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/adjustment/{adjustment_id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/inventory/adjustments/update",
+      "covered_by": {
+        "write": "update_inventory_adjustment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/adjustments/{adjustment_id}",
+      "covered_by": {
+        "stream": "retrieve_inventory_adjustment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/batch-change",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/batch-retrieve-changes",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/batch-retrieve-counts",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/changes/batch-create",
+      "covered_by": {
+        "write": "batch_change_inventory"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/changes/batch-retrieve",
+      "covered_by": {
+        "direct_read": "inventory batch-retrieve-inventory-changes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/counts/batch-retrieve",
+      "covered_by": {
+        "direct_read": "inventory batch-retrieve-inventory-counts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/physical-count/{physical_count_id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/physical-counts/{physical_count_id}",
+      "covered_by": {
+        "stream": "retrieve_inventory_physical_count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/transfers/{transfer_id}",
+      "covered_by": {
+        "stream": "retrieve_inventory_transfer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/{catalog_object_id}",
+      "covered_by": {
+        "stream": "retrieve_inventory_count"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/{catalog_object_id}/changes",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices",
+      "covered_by": {
+        "stream": "list_invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices",
+      "covered_by": {
+        "write": "create_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/search",
+      "covered_by": {
+        "direct_read": "invoices search-invoices"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoices/{invoice_id}",
+      "covered_by": {
+        "write": "delete_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice_id}",
+      "covered_by": {
+        "stream": "get_invoice"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/invoices/{invoice_id}",
+      "covered_by": {
+        "write": "update_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice_id}/attachments",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Multipart/file/attachment operation requires a reviewed bounded binary/file executor and redaction policy before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No local file upload/download or arbitrary file path handling is exposed."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoices/{invoice_id}/attachments/{attachment_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Multipart/file/attachment operation requires a reviewed bounded binary/file executor and redaction policy before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "No local file upload/download or arbitrary file path handling is exposed."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice_id}/cancel",
+      "covered_by": {
+        "write": "cancel_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice_id}/publish",
+      "covered_by": {
+        "write": "publish_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/break-types",
+      "covered_by": {
+        "stream": "list_break_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/break-types",
+      "covered_by": {
+        "write": "create_break_type"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/labor/break-types/{id}",
+      "covered_by": {
+        "write": "delete_break_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/break-types/{id}",
+      "covered_by": {
+        "stream": "get_break_type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/break-types/{id}",
+      "covered_by": {
+        "write": "update_break_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/employee-wages",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/employee-wages/{id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts",
+      "covered_by": {
+        "write": "create_scheduled_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts/bulk-publish",
+      "covered_by": {
+        "write": "bulk_publish_scheduled_shifts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts/search",
+      "covered_by": {
+        "direct_read": "labor search-scheduled-shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/scheduled-shifts/{id}",
+      "covered_by": {
+        "stream": "retrieve_scheduled_shift"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/scheduled-shifts/{id}",
+      "covered_by": {
+        "write": "update_scheduled_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts/{id}/publish",
+      "covered_by": {
+        "write": "publish_scheduled_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/shifts",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/shifts/search",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/labor/shifts/{id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/shifts/{id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/shifts/{id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/team-member-wages",
+      "covered_by": {
+        "stream": "list_team_member_wages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/team-member-wages/{id}",
+      "covered_by": {
+        "stream": "get_team_member_wage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/timecards",
+      "covered_by": {
+        "write": "create_timecard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/timecards/search",
+      "covered_by": {
+        "direct_read": "labor search-timecards"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/labor/timecards/{id}",
+      "covered_by": {
+        "write": "delete_timecard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/timecards/{id}",
+      "covered_by": {
+        "stream": "retrieve_timecard"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/timecards/{id}",
+      "covered_by": {
+        "write": "update_timecard"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/workweek-configs",
+      "covered_by": {
+        "stream": "list_workweek_configs"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/workweek-configs/{id}",
+      "covered_by": {
+        "write": "update_workweek_config"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v2/locations",
       "covered_by": {
@@ -33,59 +1545,1198 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/v2/locations",
+      "covered_by": {
+        "write": "create_location"
+      }
+    },
+    {
       "method": "GET",
+      "path": "/v2/locations/custom-attribute-definitions",
+      "covered_by": {
+        "stream": "list_location_custom_attribute_definitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/custom-attribute-definitions",
+      "covered_by": {
+        "write": "create_location_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/locations/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "delete_location_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "stream": "retrieve_location_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/locations/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "update_location_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/custom-attributes/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_location_custom_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/custom-attributes/bulk-upsert",
+      "covered_by": {
+        "write": "bulk_upsert_location_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/{location_id}",
+      "covered_by": {
+        "stream": "retrieve_location"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/locations/{location_id}",
+      "covered_by": {
+        "write": "update_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/checkouts",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/{location_id}/custom-attributes",
+      "covered_by": {
+        "stream": "list_location_custom_attributes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "delete_location_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+      "covered_by": {
+        "stream": "retrieve_location_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "upsert_location_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/{location_id}/transactions",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/{location_id}/transactions/{transaction_id}",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/transactions/{transaction_id}/capture",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/transactions/{transaction_id}/void",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts",
+      "covered_by": {
+        "write": "create_loyalty_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts/search",
+      "covered_by": {
+        "direct_read": "loyalty search-loyalty-accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/accounts/{account_id}",
+      "covered_by": {
+        "stream": "retrieve_loyalty_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts/{account_id}/accumulate",
+      "covered_by": {
+        "write": "accumulate_loyalty_points"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts/{account_id}/adjust",
+      "covered_by": {
+        "write": "adjust_loyalty_points"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/events/search",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "The official Square OpenAPI marks this operation deprecated; it is tracked but not exposed as a new connector surface.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "OpenAPI operation has deprecated: true / x-deprecation metadata."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs/{program_id}",
+      "covered_by": {
+        "stream": "retrieve_loyalty_program"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/programs/{program_id}/calculate",
+      "covered_by": {
+        "direct_read": "loyalty calculate-loyalty-points"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs/{program_id}/promotions",
+      "covered_by": {
+        "stream": "list_loyalty_promotions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/programs/{program_id}/promotions",
+      "covered_by": {
+        "write": "create_loyalty_promotion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}",
+      "covered_by": {
+        "stream": "retrieve_loyalty_promotion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}/cancel",
+      "covered_by": {
+        "write": "cancel_loyalty_promotion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/rewards",
+      "covered_by": {
+        "write": "create_loyalty_reward"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/rewards/search",
+      "covered_by": {
+        "direct_read": "loyalty search-loyalty-rewards"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/loyalty/rewards/{reward_id}",
+      "covered_by": {
+        "write": "delete_loyalty_reward"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/rewards/{reward_id}",
+      "covered_by": {
+        "stream": "retrieve_loyalty_reward"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/rewards/{reward_id}/redeem",
+      "covered_by": {
+        "write": "redeem_loyalty_reward"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants",
+      "covered_by": {
+        "stream": "list_merchants"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/custom-attribute-definitions",
+      "covered_by": {
+        "stream": "list_merchant_custom_attribute_definitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/custom-attribute-definitions",
+      "covered_by": {
+        "write": "create_merchant_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/merchants/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "delete_merchant_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "stream": "retrieve_merchant_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/merchants/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "update_merchant_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/custom-attributes/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_merchant_custom_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/custom-attributes/bulk-upsert",
+      "covered_by": {
+        "write": "bulk_upsert_merchant_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/{merchant_id}",
+      "covered_by": {
+        "stream": "retrieve_merchant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes",
+      "covered_by": {
+        "stream": "list_merchant_custom_attributes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "delete_merchant_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+      "covered_by": {
+        "stream": "retrieve_merchant_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+      "covered_by": {
+        "write": "upsert_merchant_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/location-settings/{location_id}",
+      "covered_by": {
+        "stream": "retrieve_location_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/online-checkout/location-settings/{location_id}",
+      "covered_by": {
+        "write": "update_location_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/merchant-settings",
+      "covered_by": {
+        "stream": "retrieve_merchant_settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/online-checkout/merchant-settings",
+      "covered_by": {
+        "write": "update_merchant_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/payment-links",
+      "covered_by": {
+        "stream": "list_payment_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/online-checkout/payment-links",
+      "covered_by": {
+        "write": "create_payment_link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/online-checkout/payment-links/{id}",
+      "covered_by": {
+        "write": "delete_payment_link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/payment-links/{id}",
+      "covered_by": {
+        "stream": "retrieve_payment_link"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/online-checkout/payment-links/{id}",
+      "covered_by": {
+        "write": "update_payment_link"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/v2/orders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/orders is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "covered_by": {
+        "write": "create_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/batch-retrieve",
+      "covered_by": {
+        "direct_read": "orders batch-retrieve-orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/calculate",
+      "covered_by": {
+        "direct_read": "orders calculate-order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/clone",
+      "covered_by": {
+        "write": "clone_order"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/catalog/list",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/catalog/list is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/orders/custom-attribute-definitions",
+      "covered_by": {
+        "stream": "list_order_custom_attribute_definitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/custom-attribute-definitions",
+      "covered_by": {
+        "write": "create_order_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orders/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "delete_order_custom_attribute_definition"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/invoices",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/invoices is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/orders/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "stream": "retrieve_order_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orders/custom-attribute-definitions/{key}",
+      "covered_by": {
+        "write": "update_order_custom_attribute_definition"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/custom-attributes/bulk-delete",
+      "covered_by": {
+        "write": "bulk_delete_order_custom_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/custom-attributes/bulk-upsert",
+      "covered_by": {
+        "write": "bulk_upsert_order_custom_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/search",
+      "covered_by": {
+        "direct_read": "orders search-orders"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/team-members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/team-members is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/orders/{order_id}",
+      "covered_by": {
+        "stream": "retrieve_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orders/{order_id}",
+      "covered_by": {
+        "write": "update_order"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/disputes",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/disputes is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/orders/{order_id}/custom-attributes",
+      "covered_by": {
+        "stream": "list_order_custom_attributes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+      "covered_by": {
+        "write": "delete_order_custom_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+      "covered_by": {
+        "stream": "retrieve_order_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+      "covered_by": {
+        "write": "upsert_order_custom_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order_id}/pay",
+      "covered_by": {
+        "write": "pay_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments",
+      "covered_by": {
+        "stream": "payments"
       }
     },
     {
       "method": "POST",
       "path": "/v2/payments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector is read-only"
+      "covered_by": {
+        "write": "create_payment"
       }
     },
     {
       "method": "POST",
-      "path": "/v2/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector is read-only"
+      "path": "/v2/payments/cancel",
+      "covered_by": {
+        "write": "cancel_payment_by_idempotency_key"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments/{payment_id}",
+      "covered_by": {
+        "stream": "get_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/payments/{payment_id}",
+      "covered_by": {
+        "write": "update_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/{payment_id}/cancel",
+      "covered_by": {
+        "write": "cancel_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/{payment_id}/complete",
+      "covered_by": {
+        "write": "complete_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payouts",
+      "covered_by": {
+        "stream": "list_payouts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payouts/{payout_id}",
+      "covered_by": {
+        "stream": "get_payout"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payouts/{payout_id}/payout-entries",
+      "covered_by": {
+        "stream": "list_payout_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/refunds",
+      "covered_by": {
+        "stream": "refunds"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/refunds",
+      "covered_by": {
+        "write": "refund_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/refunds/{refund_id}",
+      "covered_by": {
+        "stream": "get_payment_refund"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sites",
+      "covered_by": {
+        "stream": "list_sites"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/sites/{site_id}/snippet",
+      "covered_by": {
+        "write": "delete_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sites/{site_id}/snippet",
+      "covered_by": {
+        "stream": "retrieve_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sites/{site_id}/snippet",
+      "covered_by": {
+        "write": "upsert_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions",
+      "covered_by": {
+        "write": "create_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/bulk-swap-plan",
+      "covered_by": {
+        "write": "bulk_swap_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/search",
+      "covered_by": {
+        "direct_read": "subscriptions search-subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription_id}",
+      "covered_by": {
+        "stream": "retrieve_subscription"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/subscriptions/{subscription_id}",
+      "covered_by": {
+        "write": "update_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/subscriptions/{subscription_id}/actions/{action_id}",
+      "covered_by": {
+        "write": "delete_subscription_action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/billing-anchor",
+      "covered_by": {
+        "write": "change_billing_anchor_date"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/cancel",
+      "covered_by": {
+        "write": "cancel_subscription"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription_id}/events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/pause",
+      "covered_by": {
+        "write": "pause_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/resume",
+      "covered_by": {
+        "write": "resume_subscription"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/swap-plan",
+      "covered_by": {
+        "write": "swap_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members",
+      "covered_by": {
+        "write": "create_team_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/bulk-create",
+      "covered_by": {
+        "write": "bulk_create_team_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/bulk-update",
+      "covered_by": {
+        "write": "bulk_update_team_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/jobs",
+      "covered_by": {
+        "stream": "list_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/jobs",
+      "covered_by": {
+        "write": "create_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/jobs/{job_id}",
+      "covered_by": {
+        "stream": "retrieve_job"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team-members/jobs/{job_id}",
+      "covered_by": {
+        "write": "update_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/search",
+      "covered_by": {
+        "direct_read": "team search-team-members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/{team_member_id}",
+      "covered_by": {
+        "stream": "retrieve_team_member"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team-members/{team_member_id}",
+      "covered_by": {
+        "write": "update_team_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/{team_member_id}/wage-setting",
+      "covered_by": {
+        "stream": "retrieve_wage_setting"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team-members/{team_member_id}/wage-setting",
+      "covered_by": {
+        "write": "update_wage_setting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions",
+      "covered_by": {
+        "write": "create_terminal_action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions/search",
+      "covered_by": {
+        "direct_read": "terminal search-terminal-actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/terminals/actions/{action_id}",
+      "covered_by": {
+        "stream": "get_terminal_action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions/{action_id}/cancel",
+      "covered_by": {
+        "write": "cancel_terminal_action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions/{action_id}/dismiss",
+      "covered_by": {
+        "write": "dismiss_terminal_action"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts",
+      "covered_by": {
+        "write": "create_terminal_checkout"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts/search",
+      "covered_by": {
+        "direct_read": "terminal search-terminal-checkouts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/terminals/checkouts/{checkout_id}",
+      "covered_by": {
+        "stream": "get_terminal_checkout"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts/{checkout_id}/cancel",
+      "covered_by": {
+        "write": "cancel_terminal_checkout"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts/{checkout_id}/dismiss",
+      "covered_by": {
+        "write": "dismiss_terminal_checkout"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds",
+      "covered_by": {
+        "write": "create_terminal_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds/search",
+      "covered_by": {
+        "direct_read": "terminal search-terminal-refunds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/terminals/refunds/{terminal_refund_id}",
+      "covered_by": {
+        "stream": "get_terminal_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds/{terminal_refund_id}/cancel",
+      "covered_by": {
+        "write": "cancel_terminal_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds/{terminal_refund_id}/dismiss",
+      "covered_by": {
+        "write": "dismiss_terminal_refund"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders",
+      "covered_by": {
+        "write": "create_transfer_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/search",
+      "covered_by": {
+        "direct_read": "transfer-order search-transfer-orders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/transfer-orders/{transfer_order_id}",
+      "covered_by": {
+        "write": "delete_transfer_order"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transfer-orders/{transfer_order_id}",
+      "covered_by": {
+        "stream": "retrieve_transfer_order"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/transfer-orders/{transfer_order_id}",
+      "covered_by": {
+        "write": "update_transfer_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/{transfer_order_id}/cancel",
+      "covered_by": {
+        "write": "cancel_transfer_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/{transfer_order_id}/receive",
+      "covered_by": {
+        "write": "receive_transfer_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/{transfer_order_id}/start",
+      "covered_by": {
+        "write": "start_transfer_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/bulk-create",
+      "covered_by": {
+        "write": "bulk_create_vendors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/bulk-retrieve",
+      "covered_by": {
+        "direct_read": "vendors bulk-retrieve-vendors"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/vendors/bulk-update",
+      "covered_by": {
+        "write": "bulk_update_vendors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/create",
+      "covered_by": {
+        "write": "create_vendor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/search",
+      "covered_by": {
+        "direct_read": "vendors search-vendors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vendors/{vendor_id}",
+      "covered_by": {
+        "stream": "retrieve_vendor"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/vendors/{vendor_id}",
+      "covered_by": {
+        "write": "update_vendor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/event-types",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/subscriptions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/subscriptions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}/signature-key",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}/test",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Webhook/event/changefeed operations require the shared CDC truthfulness/state foundations (#2986/#2988) before exposure.",
+        "source_url": "https://developer.squareup.com/reference/square",
+        "notes": "Tracked as changefeed parity only; no live webhook lifecycle calls are made."
       }
     }
   ]

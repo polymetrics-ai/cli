@@ -1,0 +1,25 @@
+{
+  "record": {
+    "account_id": "account_id_fixture",
+    "accumulate_points": {
+      "loyalty_program_id": "loyalty_program_id_fixture"
+    },
+    "idempotency_key": "idem_fixture",
+    "location_id": "location_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/loyalty/accounts/account_id_fixture/accumulate",
+    "body": {
+      "accumulate_points": {
+        "loyalty_program_id": "loyalty_program_id_fixture"
+      },
+      "idempotency_key": "idem_fixture",
+      "location_id": "location_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

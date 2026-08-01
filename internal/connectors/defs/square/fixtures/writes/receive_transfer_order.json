@@ -1,0 +1,27 @@
+{
+  "record": {
+    "transfer_order_id": "transfer_order_id_fixture",
+    "idempotency_key": "idem_fixture",
+    "receipt": {
+      "line_items": [
+        {}
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/transfer-orders/transfer_order_id_fixture/receive",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "receipt": {
+        "line_items": [
+          {}
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

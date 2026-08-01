@@ -1,0 +1,21 @@
+{
+  "record": {
+    "site_id": "site_id_fixture",
+    "snippet": {
+      "content": "content_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/sites/site_id_fixture/snippet",
+    "body": {
+      "snippet": {
+        "content": "content_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

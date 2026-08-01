@@ -1,0 +1,22 @@
+{
+  "record": {
+    "loyalty_account": {
+      "program_id": "program_id_fixture"
+    },
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/loyalty/accounts",
+    "body": {
+      "loyalty_account": {
+        "program_id": "program_id_fixture"
+      },
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/labor/workweek-configs",
+    "query": {
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "workweek_configs": [
+        {
+          "id": "list_workweek_configs_fixture_1",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "name": "ListWorkweekConfigs fixture",
+          "status": "ACTIVE",
+          "source_operation": "ListWorkweekConfigs"
+        }
+      ]
+    }
+  }
+}

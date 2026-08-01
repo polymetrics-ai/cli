@@ -1,0 +1,17 @@
+{
+  "record": {
+    "order_id": "order_id_fixture",
+    "idempotency_key": "idem_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/orders/order_id_fixture/pay",
+    "body": {
+      "idempotency_key": "idem_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "customer_id": "customer_id_fixture",
+    "given_name": "given_name_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/v2/customers/customer_id_fixture",
+    "body": {
+      "given_name": "given_name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

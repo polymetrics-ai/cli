@@ -1,0 +1,13 @@
+{
+  "record": {
+    "reward_id": "reward_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/loyalty/rewards/reward_id_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

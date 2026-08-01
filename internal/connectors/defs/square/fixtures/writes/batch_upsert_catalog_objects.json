@@ -1,0 +1,22 @@
+{
+  "record": {
+    "idempotency_key": "idem_fixture",
+    "batches": [
+      {}
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/catalog/batch-upsert",
+    "body": {
+      "idempotency_key": "idem_fixture",
+      "batches": [
+        {}
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
