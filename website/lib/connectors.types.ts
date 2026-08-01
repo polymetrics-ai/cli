@@ -75,6 +75,7 @@ export type ConnectorCliCommand = {
   availability: string;
   stream: string;
   write: string;
+  operation?: string;
   sourceCliPath: string;
   sourceUrl: string;
   flags: ConnectorCliFlag[];
