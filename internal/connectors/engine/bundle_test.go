@@ -1716,6 +1716,19 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 					"reason": "point lookup candidate, not yet modeled as a stream",
 					"source_url": "https://example.invalid/rest/widgets"
 				}
+			},
+			{
+				"method": "DELETE",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "destructive_action",
+					"status": "blocked",
+					"risk": "critical",
+					"confirm": "destructive",
+					"blocked_by_default": true,
+					"reason": "delete candidate, not yet modeled as a typed write",
+					"source_url": "https://example.invalid/rest/widgets"
+				}
 			}
 		]
 	}`)}
@@ -1727,8 +1740,8 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 	if b.Surface.OperationLedgerVersion != 1 {
 		t.Fatalf("OperationLedgerVersion = %d, want 1", b.Surface.OperationLedgerVersion)
 	}
-	if len(b.Surface.Endpoints) != 2 {
-		t.Fatalf("endpoints = %d, want 2", len(b.Surface.Endpoints))
+	if len(b.Surface.Endpoints) != 3 {
+		t.Fatalf("endpoints = %d, want 3", len(b.Surface.Endpoints))
 	}
 	op := b.Surface.Endpoints[1].Operation
 	if op == nil {
@@ -1739,6 +1752,13 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 	}
 	if !op.BlockedByDefault {
 		t.Fatalf("BlockedByDefault = false, want true")
+	}
+	destructive := b.Surface.Endpoints[2].Operation
+	if destructive == nil {
+		t.Fatalf("destructive Operation = nil, want operation metadata")
+	}
+	if destructive.Model != "destructive_action" || destructive.Risk != "critical" || destructive.Confirm != "destructive" {
+		t.Fatalf("destructive Operation = %+v, want destructive_action/critical/destructive", destructive)
 	}
 }
 

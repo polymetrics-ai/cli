@@ -7,7 +7,7 @@ description: Shopify connector knowledge and safe action guide.
 
 ## Purpose
 
-Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream and typed destructive REST delete actions; remaining official operations are blocked/planned with source evidence.
+Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream, typed destructive REST delete actions, and critical blocked destructive dispositions for state-destroying official operations.
 
 ## Icon
 
@@ -214,7 +214,7 @@ Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop strea
 ## Security
 
 - read risk: Fixed Shopify Admin REST/GraphQL reads only; no raw query or arbitrary API passthrough.
-- write risk: Typed reverse-ETL actions only; destructive deletes require `destructive` confirmation and preview approval.
+- write risk: Typed reverse-ETL actions only; executable deletes and state-destroying blocked operation rows require `destructive` confirmation and preview approval before execution.
 - approval: Reverse ETL remains plan -> preview -> explicit approval -> execute; fixture-only evidence is not certification.
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
@@ -227,14 +227,14 @@ Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop strea
 - Typed writes
 - Ledger metadata
 - Other Commands
-  - ledger inspect - Inspect the connector-owned Shopify operation ledger and source inventory. [intent=docs_only availability=planned]; notes: Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows.
+  - ledger inspect - Inspect the connector-owned Shopify operation ledger and source inventory. [intent=docs_only availability=planned]; notes: Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows, including 154 blocked state-destroying rows marked `destructive_action` with `confirm: destructive`.
   - shop read - Read the fixed Shopify Shop REST resource through the ETL stream. [intent=etl availability=implemented stream=shop]; notes: Uses the fixed `shop` stream; no arbitrary REST path is accepted.
   - delete <fixed-delete-action> - Run one of 42 connector-owned typed Shopify REST DELETE actions after preview and destructive confirmation. [intent=reverse_etl availability=planned]; approval: plan -> preview -> explicit approval -> execute with typed destructive confirmation; risk: Destructive deletes require action-specific record schemas and `destructive` typed confirmation.; notes: Individual implemented delete actions are exposed through reverse ETL action names; this metadata is not a raw method/path command. Inventory-level and theme-asset DELETE shapes remain planned until shared write-query support exists.
   - graphql query <fixed-operation> - Future fixed Shopify Admin GraphQL query commands generated only from reviewed operation documents. [intent=direct_read availability=planned]; notes: No arbitrary GraphQL document, variables blob, or passthrough is accepted.
-  - graphql mutation <fixed-operation> - Future fixed Shopify Admin GraphQL mutations generated only from reviewed typed write schemas. [intent=reverse_etl availability=planned]; approval: plan -> preview -> explicit approval -> execute; risk: Mutations require action-specific schemas, redaction, preview, approval, and destructive confirmation where applicable.; notes: No arbitrary GraphQL mutation passthrough is accepted.
+  - graphql mutation <fixed-operation> - Future fixed Shopify Admin GraphQL mutations generated only from reviewed typed write schemas. [intent=reverse_etl availability=planned]; approval: plan -> preview -> explicit approval -> execute; state-destroying operations require typed destructive confirmation; risk: Mutations require action-specific schemas, redaction, preview, approval, and `destructive` confirmation for state-destroying operations.; notes: No arbitrary GraphQL mutation passthrough is accepted.
 - Help topics:
-  - shopify safety - No Shopify writes execute without plan, preview, explicit approval, and typed destructive confirmation where applicable.
-  - shopify ledger - Operation ledger rows are source-linked and blocked/planned unless covered by a stream or typed write action.
+  - shopify safety - No Shopify writes execute without plan, preview, explicit approval, and typed destructive confirmation for state-destroying operations.
+  - shopify ledger - Operation ledger rows are source-linked and blocked/planned unless covered by a stream or typed write action; destructive rows carry critical risk and `confirm: destructive`.
 
 ## Commands
 

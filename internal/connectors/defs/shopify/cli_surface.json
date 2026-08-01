@@ -37,7 +37,7 @@
       "summary": "Inspect the connector-owned Shopify operation ledger and source inventory.",
       "intent": "docs_only",
       "availability": "planned",
-      "notes": "Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows."
+      "notes": "Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows, including 154 blocked state-destroying rows marked `destructive_action` with `confirm: destructive`."
     },
     {
       "path": "shop read",
@@ -71,19 +71,19 @@
       "summary": "Future fixed Shopify Admin GraphQL mutations generated only from reviewed typed write schemas.",
       "intent": "reverse_etl",
       "availability": "planned",
-      "risk": "Mutations require action-specific schemas, redaction, preview, approval, and destructive confirmation where applicable.",
-      "approval": "plan -> preview -> explicit approval -> execute",
+      "risk": "Mutations require action-specific schemas, redaction, preview, approval, and `destructive` confirmation for state-destroying operations.",
+      "approval": "plan -> preview -> explicit approval -> execute; state-destroying operations require typed destructive confirmation",
       "notes": "No arbitrary GraphQL mutation passthrough is accepted."
     }
   ],
   "help_topics": [
     {
       "name": "shopify safety",
-      "summary": "No Shopify writes execute without plan, preview, explicit approval, and typed destructive confirmation where applicable."
+      "summary": "No Shopify writes execute without plan, preview, explicit approval, and typed destructive confirmation for state-destroying operations."
     },
     {
       "name": "shopify ledger",
-      "summary": "Operation ledger rows are source-linked and blocked/planned unless covered by a stream or typed write action."
+      "summary": "Operation ledger rows are source-linked and blocked/planned unless covered by a stream or typed write action; destructive rows carry critical risk and `confirm: destructive`."
     }
   ]
 }

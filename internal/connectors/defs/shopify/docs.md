@@ -4,7 +4,7 @@
 
 This bundle records Shopify Admin API parity for parent issue #3013 using official Shopify documentation. The current source inventory reviewed on 2026-08-01 contains 1166 `api_surface.json` rows: 287 GraphQL queries, 518 GraphQL mutations, 317 REST non-delete rows, and 44 REST DELETE rows.
 
-The connector implements a fixture-backed `shop` read stream and typed REST path-parameter delete actions that the current engine can express safely (42 executable DELETE actions). All other official rows are present as blocked operation-ledger entries with source URLs. Blocked rows are in scope for future fixed streams, fixed direct reads, fixed binary reads, CDC/changefeed surfaces, or typed reverse-ETL write actions; they are not blanket unsafe exclusions.
+The connector implements a fixture-backed `shop` read stream and typed REST path-parameter delete actions that the current engine can express safely (42 executable DELETE actions). All other official rows are present as blocked operation-ledger entries with source URLs. Blocked rows are in scope for future fixed streams, fixed direct reads, fixed binary reads, CDC/changefeed surfaces, or typed reverse-ETL write actions; they are not blanket unsafe exclusions. State-destroying blocked rows are classified as `destructive_action` with critical risk and `confirm: "destructive"`.
 
 ## Auth setup
 
@@ -20,7 +20,8 @@ Configure `shop_domain` with the Shopify shop host and provide the Admin API tok
 
 - Implemented REST DELETE actions are `kind: delete`, `body_type: none`, idempotent for `404`, use the official documented path variables (for example `{blog_id}` rather than generic `{id1}`), and declare `confirm: "destructive"`. They still execute only through the existing reverse ETL plan -> preview -> explicit approval -> execute path.
 - REST DELETE rows that require query identifiers, such as inventory levels (`inventory_item_id` + `location_id`) and theme assets (`asset[key]`), are blocked with an exact shared write-query foundation dependency instead of being excluded as unsafe.
-- GraphQL mutations and REST POST/PUT rows are in scope but blocked until operation-specific typed schemas, redaction, fixtures, and approval text are added.
+- State-destroying GraphQL mutations and REST operations that destroy, remove, cancel, close, disable, revoke, archive, deactivate, uninstall, or erase data are blocked as `destructive_action` with critical risk and `confirm: "destructive"`; non-destructive mutations such as activation remain `admin_reverse_etl`.
+- Other GraphQL mutations and REST POST/PUT rows are in scope but blocked until operation-specific typed schemas, redaction, fixtures, and approval text are added.
 
 ## Known limits
 

@@ -434,7 +434,7 @@
 - [sharetribe](sharetribe/MANUAL.md): Reads and writes Sharetribe listings, users, transactions, availability, stock, and marketplace data through the Sharetribe Integration API.
 - [shippo](shippo/MANUAL.md): Reads Shippo addresses, parcels, shipments, and transactions through the Shippo REST API.
 - [shipstation](shipstation/MANUAL.md): Reads ShipStation orders, shipments, products, and customers through the ShipStation REST API.
-- [shopify](shopify/MANUAL.md): Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream and typed destructive REST delete actions; remaining official operations are blocked/planned with source evidence.
+- [shopify](shopify/MANUAL.md): Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream, typed destructive REST delete actions, and critical blocked destructive dispositions for state-destroying official operations.
 - [shopwired](shopwired/MANUAL.md): Reads and writes ShopWired v1 catalog, order, customer, content, marketing, shipping, theme, webhook, wishlist, and payment resources through the documented REST API.
 - [shortcut](shortcut/MANUAL.md): Reads Shortcut stories, epics, projects, and iterations through the Shortcut REST API.
 - [shortio](shortio/MANUAL.md): Reads Short.io links and domains through the Short.io REST API.

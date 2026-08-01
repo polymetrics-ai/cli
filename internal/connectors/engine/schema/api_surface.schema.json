@@ -77,6 +77,10 @@
                 "type": "string",
                 "enum": ["low", "medium", "high", "critical"]
               },
+              "confirm": {
+                "type": "string",
+                "enum": ["destructive"]
+              },
               "blocked_by_default": { "type": "boolean", "enum": [true] },
               "reason": { "type": "string" },
               "source_url": { "type": "string" },

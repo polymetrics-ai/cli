@@ -3492,10 +3492,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appRevokeAccessScopes",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3505,10 +3506,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3554,10 +3556,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appUninstall",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3591,10 +3594,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/articleDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3640,10 +3644,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/blogDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3665,10 +3670,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/bulkOperationCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3726,10 +3732,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/carrierServiceDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3763,10 +3770,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cartTransformDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3824,10 +3832,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cashManagementReasonCodeDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3861,10 +3870,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/catalogDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3898,10 +3908,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/channelDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -3995,10 +4006,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionConditionsSourceDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4032,10 +4044,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4069,10 +4082,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionRemoveProducts",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4142,10 +4156,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/commentDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4179,10 +4194,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companiesDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4192,10 +4208,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyAddressDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4265,10 +4282,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4278,10 +4296,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRemoveFromCompany",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4291,10 +4310,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRole",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4304,10 +4324,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRoles",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4317,10 +4338,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4354,10 +4376,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4439,10 +4462,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4452,10 +4476,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRemoveStaffMembers",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4465,10 +4490,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeRoles",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4478,10 +4504,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxExemptions",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4491,10 +4518,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxRegistration",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4504,10 +4532,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4541,10 +4570,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyRevokeMainContact",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4590,10 +4620,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddressDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4627,10 +4658,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerCancelDataErasure",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4652,10 +4684,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4773,10 +4806,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerPaymentMethodRevoke",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4798,10 +4832,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerRemoveTaxExemptions",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4820,12 +4855,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerRequestDataErasure",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerRequestDataErasure"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerRequestDataErasure",
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4940,12 +4977,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.delegateAccessTokenDestroy",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/delegateAccessTokenDestroy"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/delegateAccessTokenDestroy",
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -4979,10 +5018,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryCustomizationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5016,10 +5056,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryProfileRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5149,10 +5190,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticBulkDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5186,10 +5228,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDeactivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5199,10 +5242,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5248,10 +5292,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountBulkTagsRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5333,10 +5378,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDeactivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5346,10 +5392,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5383,10 +5430,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDeactivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5396,10 +5444,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5433,10 +5482,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeRedeemCodeBulkDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5482,10 +5532,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5495,10 +5546,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkRemoveTags",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5556,10 +5608,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5677,10 +5730,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5714,10 +5768,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5739,10 +5794,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentConstraintRuleDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5800,10 +5856,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderAcceptCancellationRequest",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5825,10 +5882,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5838,10 +5896,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderClose",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5911,10 +5970,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectCancellationRequest",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -5924,10 +5984,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectFulfillmentRequest",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6009,10 +6070,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderSubmitCancellationRequest",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6046,10 +6108,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentServiceDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6119,10 +6182,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardDeactivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6228,10 +6292,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryDeactivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6325,10 +6390,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6362,10 +6428,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentRemoveItems",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6411,10 +6478,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6448,10 +6516,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6497,10 +6566,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferRemoveItems",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6546,10 +6616,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDeactivate",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6559,10 +6630,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6581,12 +6653,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.locationLocalPickupDisable",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationLocalPickupDisable"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationLocalPickupDisable",
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6632,10 +6706,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6645,10 +6720,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivitiesDeleteAllExternal",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6682,10 +6758,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityDeleteExternal",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6743,10 +6820,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6768,10 +6846,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketLocalizationsRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6781,10 +6860,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6806,10 +6886,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6843,10 +6924,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6880,10 +6962,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/menuDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6917,10 +7000,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldDefinitionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6966,10 +7050,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -6991,10 +7076,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectBulkDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7028,10 +7114,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDefinitionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7053,10 +7140,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7102,10 +7190,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/mobilePlatformApplicationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7127,10 +7216,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderAttributionDefinitionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7152,10 +7242,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7177,10 +7268,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderClose",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7226,10 +7318,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCustomerRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7251,10 +7344,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7336,10 +7430,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveDiscount",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7349,10 +7444,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveLineItemDiscount",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7362,10 +7458,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveShippingLine",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7483,10 +7580,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pageDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7532,10 +7630,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentCustomizationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7593,10 +7692,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentTermsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7642,10 +7742,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDevicePaymentSessionClose",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7691,10 +7792,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7728,10 +7830,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7762,12 +7865,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.privacyFeaturesDisable",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/privacyFeaturesDisable"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/privacyFeaturesDisable",
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7837,10 +7942,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7850,10 +7956,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDeleteMedia",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7887,10 +7994,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productFeedDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -7948,10 +8056,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8129,10 +8238,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantsBulkDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8178,10 +8288,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publicationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8311,10 +8422,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/quantityRulesDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8333,12 +8445,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.removeFromReturn",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/removeFromReturn"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/removeFromReturn",
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8360,10 +8474,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8373,10 +8488,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnClose",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8410,10 +8526,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnLineItemRemoveFromReturn",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8519,10 +8636,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/savedSearchDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8556,10 +8674,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/scriptTagDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8593,10 +8712,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/segmentDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8654,10 +8774,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8667,10 +8788,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProducts",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8680,10 +8802,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProductVariants",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8717,10 +8840,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/serverPixelDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8742,10 +8866,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shippingPackageDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8788,12 +8913,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.shopLocaleDisable",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shopLocaleDisable"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shopLocaleDisable",
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -8947,10 +9074,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/storefrontAccessTokenDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9044,10 +9172,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9057,10 +9186,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditsDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9130,10 +9260,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractCancel",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9155,10 +9286,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractExpire",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9264,10 +9396,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftDiscountRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9325,10 +9458,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftLineRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9374,10 +9508,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/tagsRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9423,10 +9558,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9460,10 +9596,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeFilesDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9509,10 +9646,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/transactionVoid",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9534,10 +9672,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/translationsRemove",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9547,10 +9686,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteAll",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9560,10 +9700,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteByIds",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9573,10 +9714,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySavedSearch",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9586,10 +9728,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySearch",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9611,10 +9754,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9672,10 +9816,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/validationDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9709,10 +9854,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9746,10 +9892,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPixelDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9783,10 +9930,11 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPresenceDelete",
-        "notes": "destructive/delete-class mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
       }
     },
     {
@@ -9920,8 +10068,9 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "destructive REST DELETE is in scope but blocked because this documented shape requires query identifiers that connector-local writes cannot express without shared write-query support; do not blanket-exclude as unsafe",
+        "reason": "destructive REST DELETE is in scope but blocked until shared write-query support and `destructive` typed confirmation are declared; do not blanket-exclude as unsafe",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel",
         "notes": "requires shared connector write query-parameter foundation before implementation"
       }
@@ -10101,8 +10250,9 @@
         "model": "destructive_action",
         "status": "blocked",
         "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "destructive REST DELETE is in scope but blocked because this documented shape requires query identifiers that connector-local writes cannot express without shared write-query support; do not blanket-exclude as unsafe",
+        "reason": "destructive REST DELETE is in scope but blocked until shared write-query support and `destructive` typed confirmation are declared; do not blanket-exclude as unsafe",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/asset",
         "notes": "requires shared connector write query-parameter foundation before implementation"
       }
@@ -12472,12 +12622,14 @@
       "method": "POST",
       "path": "/admin/api/latest/comments/{comment_id}/remove.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/comment"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/comment",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
@@ -12628,60 +12780,70 @@
       "method": "POST",
       "path": "/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancel.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
       "method": "POST",
       "path": "/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancellation_request.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/cancellationrequest"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/cancellationrequest",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
       "method": "POST",
       "path": "/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancellation_request/accept.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/cancellationrequest"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/cancellationrequest",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
       "method": "POST",
       "path": "/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancellation_request/reject.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/cancellationrequest"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/cancellationrequest",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
       "method": "POST",
       "path": "/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/close.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
@@ -12820,12 +12982,14 @@
       "method": "POST",
       "path": "/admin/api/latest/fulfillments/{fulfillment_id}/cancel.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillment"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillment",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
@@ -12856,12 +13020,14 @@
       "method": "POST",
       "path": "/admin/api/latest/gift_cards/{gift_card_id}/disable.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/gift-card"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/gift-card",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
@@ -12964,24 +13130,28 @@
       "method": "POST",
       "path": "/admin/api/latest/orders/{order_id}/cancel.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {
       "method": "POST",
       "path": "/admin/api/latest/orders/{order_id}/close.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order",
+        "notes": "state-destroying REST operations remain in scope; no raw passthrough or blanket unsafe exclusion is applied"
       }
     },
     {

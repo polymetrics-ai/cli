@@ -464,6 +464,7 @@ type SurfaceOperation struct {
 	Model            string `json:"model"`
 	Status           string `json:"status"`
 	Risk             string `json:"risk"`
+	Confirm          string `json:"confirm,omitempty"`
 	BlockedByDefault bool   `json:"blocked_by_default"`
 	Reason           string `json:"reason"`
 	SourceURL        string `json:"source_url,omitempty"`
