@@ -12,7 +12,43 @@
     "id": {
       "type": "string"
     },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "incentive": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "available_time": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "trigger_limit": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "canceled_at": {
       "type": [
         "string",
         "null"
@@ -24,23 +60,41 @@
         "null"
       ]
     },
-    "name": {
+    "loyalty_program_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "minimum_spend_amount_money": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
-    "source_operation": {
+    "qualifying_item_variation_ids": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "qualifying_category_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
     }
   }
 }

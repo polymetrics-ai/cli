@@ -8,12 +8,17 @@
     "body": {
       "device_codes": [
         {
-          "id": "list_device_codes_fixture_1",
+          "id": "list_device_codes_id_1",
+          "name": "list_device_codes_name_1",
+          "code": "list_device_codes_code_1",
+          "device_id": "list_device_codes_device_id_1",
+          "product_type": "TERMINAL_API",
+          "location_id": "list_device_codes_location_id_1",
+          "status": "UNKNOWN",
+          "pair_by": "list_device_codes_pair_by_1",
           "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListDeviceCodes fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListDeviceCodes"
+          "status_changed_at": "2026-01-01T00:00:00Z",
+          "paired_at": "2026-01-01T00:00:00Z"
         }
       ]
     }

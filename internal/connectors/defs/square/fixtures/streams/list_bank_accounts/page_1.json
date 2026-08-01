@@ -11,12 +11,24 @@
     "body": {
       "bank_accounts": [
         {
-          "id": "list_bank_accounts_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListBankAccounts fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListBankAccounts"
+          "id": "list_bank_accounts_id_1",
+          "account_number_suffix": "list_bank_accounts_account_number_suffix_1",
+          "country": "ZZ",
+          "currency": "UNKNOWN_CURRENCY",
+          "account_type": "CHECKING",
+          "holder_name": "list_bank_accounts_holder_name_1",
+          "primary_bank_identification_number": "list_bank_accounts_primary_bank_identification_number_1",
+          "secondary_bank_identification_number": "list_bank_accounts_secondary_bank_identification_number_1",
+          "debit_mandate_reference_id": "list_bank_accounts_debit_mandate_reference_id_1",
+          "reference_id": "list_bank_accounts_reference_id_1",
+          "location_id": "list_bank_accounts_location_id_1",
+          "status": "VERIFICATION_IN_PROGRESS",
+          "creditable": true,
+          "debitable": true,
+          "fingerprint": "list_bank_accounts_fingerprint_1",
+          "version": 1,
+          "bank_name": "list_bank_accounts_bank_name_1",
+          "customer_id": "list_bank_accounts_customer_id_1"
         }
       ]
     }

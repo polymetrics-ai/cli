@@ -7,12 +7,38 @@
     "status": 200,
     "body": {
       "booking": {
-        "id": "retrieve_booking_fixture_1",
+        "id": "retrieve_booking_id_1",
+        "version": 1,
+        "status": "PENDING",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveBooking fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveBooking"
+        "start_at": "2026-01-01T00:00:00Z",
+        "location_id": "retrieve_booking_location_id_1",
+        "customer_id": "retrieve_booking_customer_id_1",
+        "customer_note": "retrieve_booking_customer_note_1",
+        "seller_note": "retrieve_booking_seller_note_1",
+        "appointment_segments": [
+          {
+            "team_member_id": "retrieve_booking_team_member_id_1",
+            "duration_minutes": 101,
+            "service_variation_id": "retrieve_booking_service_variation_id_1",
+            "service_variation_version": 1
+          }
+        ],
+        "transition_time_minutes": 101,
+        "all_day": true,
+        "location_type": "BUSINESS_LOCATION",
+        "creator_details": {
+          "creator_type": "TEAM_MEMBER",
+          "team_member_id": "retrieve_booking_team_member_id_1",
+          "customer_id": "retrieve_booking_customer_id_1"
+        },
+        "source": "FIRST_PARTY_MERCHANT",
+        "address": {
+          "address_line_1": "retrieve_booking_address_line_1_1",
+          "address_line_2": "retrieve_booking_address_line_2_1",
+          "address_line_3": "retrieve_booking_address_line_3_1"
+        }
       }
     }
   }

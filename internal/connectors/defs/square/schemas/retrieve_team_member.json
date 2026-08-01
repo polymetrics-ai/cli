@@ -12,6 +12,48 @@
     "id": {
       "type": "string"
     },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_owner": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "given_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "family_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,21 +66,15 @@
         "null"
       ]
     },
-    "name": {
+    "assigned_locations": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
-    "status": {
+    "wage_setting": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "object",
         "null"
       ]
     }

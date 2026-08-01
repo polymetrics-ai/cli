@@ -7,12 +7,14 @@
     "status": 200,
     "body": {
       "merchant": {
-        "id": "retrieve_merchant_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveMerchant fixture",
+        "id": "retrieve_merchant_id_1",
+        "business_name": "retrieve_merchant_business_name_1",
+        "country": "ZZ",
+        "language_code": "retrieve_merchant_language_code_1",
+        "currency": "UNKNOWN_CURRENCY",
         "status": "ACTIVE",
-        "source_operation": "RetrieveMerchant"
+        "main_location_id": "retrieve_merchant_main_location_id_1",
+        "created_at": "2026-01-01T00:00:00Z"
       }
     }
   }

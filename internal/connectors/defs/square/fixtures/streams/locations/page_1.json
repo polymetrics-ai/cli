@@ -8,12 +8,52 @@
     "body": {
       "locations": [
         {
-          "id": "list_locations_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListLocations fixture",
+          "id": "locations_id_1",
+          "name": "locations_name_1",
+          "address": {
+            "address_line_1": "locations_address_line_1_1",
+            "address_line_2": "locations_address_line_2_1",
+            "address_line_3": "locations_address_line_3_1"
+          },
+          "timezone": "2026-01-01T00:00:00Z",
+          "capabilities": [
+            "CREDIT_CARD_PROCESSING"
+          ],
           "status": "ACTIVE",
-          "source_operation": "ListLocations"
+          "created_at": "2026-01-01T00:00:00Z",
+          "merchant_id": "locations_merchant_id_1",
+          "country": "ZZ",
+          "language_code": "locations_language_code_1",
+          "currency": "UNKNOWN_CURRENCY",
+          "phone_number": "+15550100",
+          "business_name": "locations_business_name_1",
+          "type": "PHYSICAL",
+          "website_url": "https://example.invalid/locations/1",
+          "business_hours": {
+            "periods": [
+              {
+                "fixture": "locations_period_1"
+              }
+            ]
+          },
+          "business_email": "locations_1@example.invalid",
+          "description": "locations_description_1",
+          "twitter_username": "locations_twitter_username_1",
+          "instagram_username": "locations_instagram_username_1",
+          "facebook_url": "https://example.invalid/locations/1",
+          "coordinates": {
+            "latitude": 101.5,
+            "longitude": 101.5
+          },
+          "logo_url": "https://example.invalid/locations/1",
+          "pos_background_url": "https://example.invalid/locations/1",
+          "mcc": "locations_mcc_1",
+          "full_format_logo_url": "https://example.invalid/locations/1",
+          "tax_ids": {
+            "eu_vat": "locations_eu_vat_1",
+            "fr_siret": "locations_fr_siret_1",
+            "fr_naf": "locations_fr_naf_1"
+          }
         }
       ]
     }

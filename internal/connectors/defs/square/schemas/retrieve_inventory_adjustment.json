@@ -12,33 +12,141 @@
     "id": {
       "type": "string"
     },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "from_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "from_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "catalog_object_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "catalog_object_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "quantity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "total_price_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "employee_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "team_member_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "transaction_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "refund_id": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "purchase_order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "goods_receipt_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "adjustment_group": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cost_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "vendor_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "physical_count_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reason_id": {
+      "type": [
+        "object",
         "null"
       ]
     }

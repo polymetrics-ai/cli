@@ -12,35 +12,41 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "status": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "total_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "initiated_at": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "bank_account_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "entries": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
     }
   }
 }

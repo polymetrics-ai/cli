@@ -12,6 +12,24 @@
     "id": {
       "type": "string"
     },
+    "site_title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "domain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_published": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -19,24 +37,6 @@
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
       "type": [
         "string",
         "null"

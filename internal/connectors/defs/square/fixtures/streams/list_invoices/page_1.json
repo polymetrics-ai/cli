@@ -11,12 +11,60 @@
     "body": {
       "invoices": [
         {
-          "id": "list_invoices_fixture_1",
+          "id": "list_invoices_id_1",
+          "version": 1,
+          "location_id": "list_invoices_location_id_1",
+          "order_id": "list_invoices_order_id_1",
+          "primary_recipient": {
+            "customer_id": "list_invoices_customer_id_1",
+            "given_name": "list_invoices_given_name_1",
+            "family_name": "list_invoices_family_name_1"
+          },
+          "payment_requests": [
+            {
+              "uid": "list_invoices_uid_1",
+              "request_method": "EMAIL",
+              "request_type": "BALANCE"
+            }
+          ],
+          "delivery_method": "EMAIL",
+          "invoice_number": "list_invoices_invoice_number_1",
+          "title": "list_invoices_title_1",
+          "description": "list_invoices_description_1",
+          "scheduled_at": "2026-01-01T00:00:00Z",
+          "public_url": "https://example.invalid/list_invoices/1",
+          "next_payment_amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "status": "DRAFT",
+          "timezone": "2026-01-01T00:00:00Z",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListInvoices fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListInvoices"
+          "accepted_payment_methods": {
+            "card": true,
+            "square_gift_card": true,
+            "bank_account": true
+          },
+          "custom_fields": [
+            {
+              "label": "list_invoices_label_1",
+              "value": "list_invoices_value_1",
+              "placement": "ABOVE_LINE_ITEMS"
+            }
+          ],
+          "subscription_id": "list_invoices_subscription_id_1",
+          "sale_or_service_date": "2026-01-01T00:00:00Z",
+          "payment_conditions": "list_invoices_payment_conditions_1",
+          "store_payment_method_enabled": true,
+          "attachments": [
+            {
+              "id": "list_invoices_id_1",
+              "filename": "list_invoices_filename_1",
+              "description": "list_invoices_description_1"
+            }
+          ],
+          "creator_team_member_id": "list_invoices_creator_team_member_id_1"
         }
       ]
     }

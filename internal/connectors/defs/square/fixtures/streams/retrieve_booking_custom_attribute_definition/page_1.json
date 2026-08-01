@@ -7,12 +7,16 @@
     "status": 200,
     "body": {
       "custom_attribute_definition": {
-        "id": "retrieve_booking_custom_attribute_definition_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
+        "key": "retrieve_booking_custom_attribute_definition_key_1",
+        "schema": {
+          "fixture": "retrieve_booking_custom_attribute_definition_schema_1"
+        },
+        "name": "retrieve_booking_custom_attribute_definition_name_1",
+        "description": "retrieve_booking_custom_attribute_definition_description_1",
+        "visibility": "VISIBILITY_HIDDEN",
+        "version": 1,
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveBookingCustomAttributeDefinition fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveBookingCustomAttributeDefinition"
+        "created_at": "2026-01-01T00:00:00Z"
       }
     }
   }

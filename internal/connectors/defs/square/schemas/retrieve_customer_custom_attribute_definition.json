@@ -3,24 +3,21 @@
   "title": "retrieve_customer_custom_attribute_definition",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "key"
   ],
   "required": [
-    "id"
+    "key"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "created_at": {
+    "key": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "schema": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
@@ -30,13 +27,31 @@
         "null"
       ]
     },
-    "status": {
+    "description": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
       "type": [
         "string",
         "null"

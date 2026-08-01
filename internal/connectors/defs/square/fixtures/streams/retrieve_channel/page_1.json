@@ -7,12 +7,17 @@
     "status": 200,
     "body": {
       "channel": {
-        "id": "retrieve_channel_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveChannel fixture",
+        "id": "retrieve_channel_id_1",
+        "merchant_id": "retrieve_channel_merchant_id_1",
+        "name": "retrieve_channel_name_1",
+        "version": 1,
+        "reference": {
+          "type": "UNKNOWN_TYPE",
+          "id": "retrieve_channel_id_1"
+        },
         "status": "ACTIVE",
-        "source_operation": "RetrieveChannel"
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:05:00Z"
       }
     }
   }

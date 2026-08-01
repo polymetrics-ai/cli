@@ -11,12 +11,107 @@
     "body": {
       "payout_entries": [
         {
-          "id": "list_payout_entries_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListPayoutEntries fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListPayoutEntries"
+          "id": "list_payout_entries_id_1",
+          "payout_id": "list_payout_entries_payout_id_1",
+          "effective_at": "2026-01-01T00:00:00Z",
+          "type": "ADJUSTMENT",
+          "gross_amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "fee_amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "net_amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "type_app_fee_revenue_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "location_id": "list_payout_entries_location_id_1"
+          },
+          "type_app_fee_refund_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "refund_id": "list_payout_entries_refund_id_1",
+            "location_id": "list_payout_entries_location_id_1"
+          },
+          "type_automatic_savings_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "payout_id": "list_payout_entries_payout_id_1"
+          },
+          "type_automatic_savings_reversed_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "payout_id": "list_payout_entries_payout_id_1"
+          },
+          "type_charge_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_deposit_fee_details": {
+            "payout_id": "list_payout_entries_payout_id_1"
+          },
+          "type_deposit_fee_reversed_details": {
+            "payout_id": "list_payout_entries_payout_id_1"
+          },
+          "type_dispute_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "dispute_id": "list_payout_entries_dispute_id_1"
+          },
+          "type_fee_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_free_processing_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_hold_adjustment_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_open_dispute_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "dispute_id": "list_payout_entries_dispute_id_1"
+          },
+          "type_other_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_other_adjustment_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_refund_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "refund_id": "list_payout_entries_refund_id_1"
+          },
+          "type_release_adjustment_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_reserve_hold_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_reserve_release_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_square_capital_payment_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_square_capital_reversed_payment_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_tax_on_fee_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "tax_rate_description": "list_payout_entries_tax_rate_description_1"
+          },
+          "type_third_party_fee_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_third_party_fee_refund_details": {
+            "payment_id": "list_payout_entries_payment_id_1",
+            "refund_id": "list_payout_entries_refund_id_1"
+          },
+          "type_square_payroll_transfer_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          },
+          "type_square_payroll_transfer_reversed_details": {
+            "payment_id": "list_payout_entries_payment_id_1"
+          }
         }
       ]
     }

@@ -7,12 +7,29 @@
     "status": 200,
     "body": {
       "dispute": {
-        "id": "retrieve_dispute_fixture_1",
+        "dispute_id": "retrieve_dispute_dispute_id_1",
+        "id": "retrieve_dispute_id_1",
+        "amount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "reason": "AMOUNT_DIFFERS",
+        "state": "INQUIRY_EVIDENCE_REQUIRED",
+        "due_at": "2026-01-01T00:00:00Z",
+        "disputed_payment": {
+          "payment_id": "retrieve_dispute_payment_id_1"
+        },
+        "evidence_ids": [
+          "retrieve_dispute_evidence_id_1"
+        ],
+        "card_brand": "OTHER_BRAND",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveDispute fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveDispute"
+        "brand_dispute_id": "retrieve_dispute_brand_dispute_id_1",
+        "reported_date": "2026-01-01T00:00:00Z",
+        "reported_at": "2026-01-01T00:00:00Z",
+        "version": 1,
+        "location_id": "retrieve_dispute_location_id_1"
       }
     }
   }

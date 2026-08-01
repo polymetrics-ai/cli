@@ -12,6 +12,24 @@
     "id": {
       "type": "string"
     },
+    "source_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "destination_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,21 +42,51 @@
         "null"
       ]
     },
-    "name": {
+    "expected_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "completed_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "notes": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "tracking_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_by_team_member_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "line_items": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "version": {
+      "type": [
+        "integer",
         "null"
       ]
     }

@@ -7,12 +7,53 @@
     "status": 200,
     "body": {
       "cash_drawer_shift": {
-        "id": "retrieve_cash_drawer_shift_fixture_1",
+        "id": "retrieve_cash_drawer_shift_id_1",
+        "state": "OPEN",
+        "opened_at": "2026-01-01T00:00:00Z",
+        "ended_at": "2026-01-01T00:00:00Z",
+        "closed_at": "2026-01-01T00:00:00Z",
+        "description": "retrieve_cash_drawer_shift_description_1",
+        "opened_cash_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "cash_payment_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "cash_refunds_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "cash_paid_in_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "cash_paid_out_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "expected_cash_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "closed_cash_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "device": {
+          "id": "retrieve_cash_drawer_shift_id_1",
+          "name": "retrieve_cash_drawer_shift_name_1"
+        },
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveCashDrawerShift fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveCashDrawerShift"
+        "location_id": "retrieve_cash_drawer_shift_location_id_1",
+        "team_member_ids": [
+          "retrieve_cash_drawer_shift_team_member_id_1"
+        ],
+        "opening_team_member_id": "retrieve_cash_drawer_shift_opening_team_member_id_1",
+        "ending_team_member_id": "retrieve_cash_drawer_shift_ending_team_member_id_1",
+        "closing_team_member_id": "retrieve_cash_drawer_shift_closing_team_member_id_1"
       }
     }
   }

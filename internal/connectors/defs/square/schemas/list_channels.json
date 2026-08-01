@@ -12,13 +12,7 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updated_at": {
+    "merchant_id": {
       "type": [
         "string",
         "null"
@@ -30,13 +24,31 @@
         "null"
       ]
     },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "reference": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
     "status": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
       "type": [
         "string",
         "null"

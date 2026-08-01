@@ -12,33 +12,129 @@
     "id": {
       "type": "string"
     },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "gift_card_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "gift_card_gan": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "gift_card_balance_money": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
-    "source_operation": {
+    "load_activity_details": {
       "type": [
-        "string",
+        "object",
+        "null"
+      ]
+    },
+    "activate_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "redeem_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "clear_balance_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "deactivate_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "adjust_increment_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "adjust_decrement_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refund_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "unlinked_activity_refund_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "import_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "block_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "unblock_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "import_reversal_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "transfer_balance_to_activity_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "transfer_balance_from_activity_details": {
+      "type": [
+        "object",
         "null"
       ]
     }

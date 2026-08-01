@@ -11,12 +11,21 @@
     "body": {
       "custom_attributes": [
         {
-          "id": "list_booking_custom_attributes_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
+          "key": "list_booking_custom_attributes_key_1",
+          "value": {
+            "fixture": "list_booking_custom_attributes_value_1"
+          },
+          "version": 1,
+          "visibility": "VISIBILITY_HIDDEN",
+          "definition": {
+            "key": "list_booking_custom_attributes_key_1",
+            "schema": {
+              "fixture": "list_booking_custom_attributes_schema_1"
+            },
+            "name": "list_booking_custom_attributes_name_1"
+          },
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListBookingCustomAttributes fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListBookingCustomAttributes"
+          "created_at": "2026-01-01T00:00:00Z"
         }
       ]
     }

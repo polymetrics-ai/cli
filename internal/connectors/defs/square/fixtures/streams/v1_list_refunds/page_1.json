@@ -8,15 +8,53 @@
   },
   "response": {
     "status": 200,
-    "body": [
-      {
-        "id": "v1_list_refunds_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "V1ListRefunds fixture",
-        "status": "ACTIVE",
-        "source_operation": "V1ListRefunds"
-      }
-    ]
+    "body": {
+      "id": "v1_list_refunds_id_1",
+      "type": "FIXTURE",
+      "reason": "v1_list_refunds_reason_1",
+      "refunded_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "refunded_processing_fee_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "refunded_tax_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "refunded_additive_tax_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "refunded_additive_tax": [
+        {
+          "fixture": "v1_list_refunds_refunded_additive_tax_1"
+        }
+      ],
+      "refunded_inclusive_tax_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "refunded_inclusive_tax": [
+        {
+          "fixture": "v1_list_refunds_refunded_inclusive_tax_1"
+        }
+      ],
+      "refunded_tip_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "refunded_discount_money": {
+        "amount": 1001,
+        "currency": "USD"
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "processed_at": "2026-01-01T00:00:00Z",
+      "payment_id": "v1_list_refunds_payment_id_1",
+      "merchant_id": "v1_list_refunds_merchant_id_1",
+      "is_exchange": true
+    }
   }
 }

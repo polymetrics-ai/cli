@@ -12,6 +12,30 @@
     "id": {
       "type": "string"
     },
+    "device_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deadline_duration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cancel_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +48,79 @@
         "null"
       ]
     },
-    "name": {
+    "app_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "location_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "qr_code_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "save_card_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "signature_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "confirmation_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "receipt_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "data_collection_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "select_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "device_metadata": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "await_next_action": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "await_next_action_duration": {
       "type": [
         "string",
         "null"

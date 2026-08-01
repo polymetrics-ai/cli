@@ -10,7 +10,19 @@
   ],
   "properties": {
     "id": {
-      "type": "string"
+      "type": "object"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "direction": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "created_at": {
       "type": [
@@ -24,21 +36,9 @@
         "null"
       ]
     },
-    "name": {
+    "is_deleted": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "boolean",
         "null"
       ]
     }

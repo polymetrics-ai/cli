@@ -7,12 +7,12 @@
     "status": 200,
     "body": {
       "job": {
-        "id": "retrieve_job_fixture_1",
+        "id": "retrieve_job_id_1",
+        "title": "retrieve_job_title_1",
+        "is_tip_eligible": true,
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveJob fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveJob"
+        "version": 1
       }
     }
   }

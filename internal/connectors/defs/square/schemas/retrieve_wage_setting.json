@@ -2,15 +2,36 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "retrieve_wage_setting",
   "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
-  "required": [
-    "id"
-  ],
   "properties": {
-    "id": {
-      "type": "string"
+    "team_member_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "job_assignments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "is_overtime_exempt": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
     },
     "created_at": {
       "type": [
@@ -19,24 +40,6 @@
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
       "type": [
         "string",
         "null"

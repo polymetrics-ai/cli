@@ -7,12 +7,77 @@
     "status": 200,
     "body": {
       "action": {
-        "id": "get_terminal_action_fixture_1",
+        "id": "get_terminal_action_id_1",
+        "device_id": "get_terminal_action_device_id_1",
+        "deadline_duration": "get_terminal_action_deadline_duration_1",
+        "status": "ACTIVE",
+        "cancel_reason": "BUYER_CANCELED",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetTerminalAction fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetTerminalAction"
+        "app_id": "get_terminal_action_app_id_1",
+        "location_id": "get_terminal_action_location_id_1",
+        "type": "QR_CODE",
+        "qr_code_options": {
+          "title": "get_terminal_action_title_1",
+          "body": "get_terminal_action_body_1",
+          "barcode_contents": "get_terminal_action_barcode_contents_1"
+        },
+        "save_card_options": {
+          "customer_id": "get_terminal_action_customer_id_1",
+          "card_id": "get_terminal_action_card_id_1",
+          "reference_id": "get_terminal_action_reference_id_1"
+        },
+        "signature_options": {
+          "title": "get_terminal_action_title_1",
+          "body": "get_terminal_action_body_1",
+          "signature": [
+            {
+              "fixture": "get_terminal_action_signature_1"
+            }
+          ]
+        },
+        "confirmation_options": {
+          "title": "get_terminal_action_title_1",
+          "body": "get_terminal_action_body_1",
+          "agree_button_text": "get_terminal_action_agree_button_text_1",
+          "disagree_button_text": "get_terminal_action_disagree_button_text_1",
+          "decision": {
+            "has_agreed": true
+          }
+        },
+        "receipt_options": {
+          "payment_id": "get_terminal_action_payment_id_1",
+          "print_only": true,
+          "is_duplicate": true
+        },
+        "data_collection_options": {
+          "title": "get_terminal_action_title_1",
+          "body": "get_terminal_action_body_1",
+          "input_type": "EMAIL",
+          "collected_data": {
+            "input_text": "get_terminal_action_input_text_1"
+          }
+        },
+        "select_options": {
+          "title": "get_terminal_action_title_1",
+          "body": "get_terminal_action_body_1",
+          "options": [
+            {
+              "fixture": "get_terminal_action_option_1"
+            }
+          ],
+          "selected_option": {
+            "reference_id": "get_terminal_action_reference_id_1",
+            "title": "get_terminal_action_title_1"
+          }
+        },
+        "device_metadata": {
+          "battery_percentage": "get_terminal_action_battery_percentage_1",
+          "charging_state": "get_terminal_action_charging_state_1",
+          "location_id": "get_terminal_action_location_id_1"
+        },
+        "await_next_action": true,
+        "await_next_action_duration": "get_terminal_action_await_next_action_duration_1"
       }
     }
   }

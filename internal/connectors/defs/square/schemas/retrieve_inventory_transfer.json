@@ -12,31 +12,73 @@
     "id": {
       "type": "string"
     },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "from_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "catalog_object_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "catalog_object_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "quantity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "employee_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "team_member_id": {
       "type": [
         "string",
         "null"

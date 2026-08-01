@@ -12,6 +12,18 @@
     "id": {
       "type": "string"
     },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +36,49 @@
         "null"
       ]
     },
-    "name": {
+    "amount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "destination": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "type": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "payout_fee": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "arrival_date": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "end_to_end_id": {
       "type": [
         "string",
         "null"

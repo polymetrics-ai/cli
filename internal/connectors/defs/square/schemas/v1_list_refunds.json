@@ -12,33 +12,111 @@
     "id": {
       "type": "string"
     },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "refunded_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_processing_fee_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_tax_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_additive_tax_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_additive_tax": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "refunded_inclusive_tax_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_inclusive_tax": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "refunded_tip_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_discount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "processed_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "payment_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "merchant_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "is_exchange": {
       "type": [
-        "string",
+        "boolean",
         "null"
       ]
     }

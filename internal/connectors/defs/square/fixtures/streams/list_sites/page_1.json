@@ -8,12 +8,12 @@
     "body": {
       "sites": [
         {
-          "id": "list_sites_fixture_1",
+          "id": "list_sites_id_1",
+          "site_title": "list_sites_site_title_1",
+          "domain": "list_sites_domain_1",
+          "is_published": true,
           "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListSites fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListSites"
+          "updated_at": "2026-01-01T00:05:00Z"
         }
       ]
     }

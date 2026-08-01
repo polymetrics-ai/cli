@@ -12,6 +12,150 @@
     "id": {
       "type": "string"
     },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "line_items": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "taxes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "discounts": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "service_charges": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "fulfillments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "returns": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "return_amounts": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "net_amounts": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rounding_adjustment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tenders": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "refunds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "metadata": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,21 +168,81 @@
         "null"
       ]
     },
-    "name": {
+    "closed_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "state": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "total_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "total_tax_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "total_discount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "total_tip_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "total_service_charge_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ticket_name": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "pricing_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rewards": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "net_amount_due_money": {
+      "type": [
+        "object",
         "null"
       ]
     }

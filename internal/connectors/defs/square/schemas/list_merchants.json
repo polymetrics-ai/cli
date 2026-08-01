@@ -12,19 +12,25 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "business_name": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "country": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "language_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
       "type": [
         "string",
         "null"
@@ -36,7 +42,13 @@
         "null"
       ]
     },
-    "source_operation": {
+    "main_location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
       "type": [
         "string",
         "null"

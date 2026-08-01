@@ -12,19 +12,37 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "location_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "plan_variation_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "canceled_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "charged_through_date": {
       "type": [
         "string",
         "null"
@@ -36,7 +54,91 @@
         "null"
       ]
     },
-    "source_operation": {
+    "tax_percentage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "invoice_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "price_override_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "card_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "actions": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "monthly_billing_anchor_date": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "phases": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "completed_date": {
       "type": [
         "string",
         "null"

@@ -12,33 +12,33 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "team_member_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "title": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "hourly_rate": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "job_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "tip_eligible": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "boolean",
         "null"
       ]
     }

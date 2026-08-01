@@ -7,12 +7,37 @@
     "status": 200,
     "body": {
       "customer": {
-        "id": "retrieve_customer_fixture_1",
+        "id": "retrieve_customer_id_1",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveCustomer fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveCustomer"
+        "given_name": "retrieve_customer_given_name_1",
+        "family_name": "retrieve_customer_family_name_1",
+        "nickname": "retrieve_customer_nickname_1",
+        "company_name": "retrieve_customer_company_name_1",
+        "email_address": "retrieve_customer_1@example.invalid",
+        "address": {
+          "address_line_1": "retrieve_customer_address_line_1_1",
+          "address_line_2": "retrieve_customer_address_line_2_1",
+          "address_line_3": "retrieve_customer_address_line_3_1"
+        },
+        "phone_number": "+15550100",
+        "birthday": "2026-01-01T00:00:00Z",
+        "reference_id": "retrieve_customer_reference_id_1",
+        "note": "retrieve_customer_note_1",
+        "preferences": {
+          "email_unsubscribed": true
+        },
+        "creation_source": "OTHER",
+        "group_ids": [
+          "retrieve_customer_group_id_1"
+        ],
+        "segment_ids": [
+          "retrieve_customer_segment_id_1"
+        ],
+        "version": 1,
+        "tax_ids": {
+          "eu_vat": "retrieve_customer_eu_vat_1"
+        }
       }
     }
   }

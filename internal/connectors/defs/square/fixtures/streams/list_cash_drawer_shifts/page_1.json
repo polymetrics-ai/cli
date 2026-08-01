@@ -18,6 +18,31 @@
           "status": "ACTIVE",
           "source_operation": "ListCashDrawerShifts"
         }
+      ],
+      "cash_drawer_shifts": [
+        {
+          "id": "list_cash_drawer_shifts_id_1",
+          "state": "OPEN",
+          "opened_at": "2026-01-01T00:00:00Z",
+          "ended_at": "2026-01-01T00:00:00Z",
+          "closed_at": "2026-01-01T00:00:00Z",
+          "description": "list_cash_drawer_shifts_description_1",
+          "opened_cash_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "expected_cash_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "closed_cash_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z",
+          "location_id": "list_cash_drawer_shifts_location_id_1"
+        }
       ]
     }
   }

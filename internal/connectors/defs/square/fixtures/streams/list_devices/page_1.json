@@ -11,12 +11,31 @@
     "body": {
       "devices": [
         {
-          "id": "list_devices_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListDevices fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListDevices"
+          "id": "list_devices_id_1",
+          "attributes": {
+            "type": "TERMINAL",
+            "manufacturer": "list_devices_manufacturer_1",
+            "model": "list_devices_model_1",
+            "name": "list_devices_name_1",
+            "manufacturers_id": "list_devices_manufacturers_id_1"
+          },
+          "components": [
+            {
+              "type": "APPLICATION",
+              "application_details": {
+                "fixture": "list_devices_application_details_1"
+              },
+              "card_reader_details": {
+                "fixture": "list_devices_card_reader_details_1"
+              },
+              "battery_details": {
+                "fixture": "list_devices_battery_details_1"
+              }
+            }
+          ],
+          "status": {
+            "category": "AVAILABLE"
+          }
         }
       ]
     }

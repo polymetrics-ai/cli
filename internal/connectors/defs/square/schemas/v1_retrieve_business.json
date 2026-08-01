@@ -12,31 +12,31 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "name": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "business_name": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "country": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
       "type": [
         "string",
         "null"

@@ -1937,10 +1937,33 @@
       "source_url": "https://developer.squareup.com/reference/square",
       "flags": [
         {
-          "name": "query",
+          "name": "start-at",
           "type": "string",
-          "summary": "Required JSON body field `query`.",
-          "maps_to": "body.query",
+          "summary": "Availability search start time (RFC3339).",
+          "maps_to": "body.query.filter.start_at_range.start_at",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "end-at",
+          "type": "string",
+          "summary": "Availability search end time (RFC3339).",
+          "maps_to": "body.query.filter.start_at_range.end_at",
+          "format": "date-time",
+          "allow_empty": false
+        },
+        {
+          "name": "location-id",
+          "type": "string",
+          "summary": "Square location ID to search.",
+          "maps_to": "body.query.filter.location_id",
+          "allow_empty": false
+        },
+        {
+          "name": "booking-id",
+          "type": "string",
+          "summary": "Existing booking ID to exclude or reschedule around.",
+          "maps_to": "body.query.filter.booking_id",
           "allow_empty": false
         }
       ],
@@ -1955,7 +1978,17 @@
       ],
       "output_policy": "json_redacted",
       "risk": "bounded Square JSON direct read",
-      "approval": "none"
+      "approval": "none",
+      "constraints": [
+        {
+          "kind": "order",
+          "op": "lt",
+          "left": "body.query.filter.start_at_range.start_at",
+          "right": "body.query.filter.start_at_range.end_at",
+          "value_type": "date-time",
+          "message": "--start-at must be before --end-at"
+        }
+      ]
     },
     {
       "path": "bookings bulk-retrieve-bookings",
@@ -1967,10 +2000,9 @@
       "flags": [
         {
           "name": "booking-ids",
-          "type": "string",
+          "type": "string_array",
           "summary": "Required JSON body field `booking_ids`.",
-          "maps_to": "body.booking_ids",
-          "allow_empty": false
+          "maps_to": "body.booking_ids"
         }
       ],
       "examples": [
@@ -1996,10 +2028,9 @@
       "flags": [
         {
           "name": "team-member-ids",
-          "type": "string",
+          "type": "string_array",
           "summary": "Required JSON body field `team_member_ids`.",
-          "maps_to": "body.team_member_ids",
-          "allow_empty": false
+          "maps_to": "body.team_member_ids"
         }
       ],
       "examples": [
@@ -2025,10 +2056,9 @@
       "flags": [
         {
           "name": "object-ids",
-          "type": "string",
+          "type": "string_array",
           "summary": "Required JSON body field `object_ids`.",
-          "maps_to": "body.object_ids",
-          "allow_empty": false
+          "maps_to": "body.object_ids"
         }
       ],
       "examples": [
@@ -2096,10 +2126,9 @@
       "flags": [
         {
           "name": "channel-ids",
-          "type": "string",
+          "type": "string_array",
           "summary": "Required JSON body field `channel_ids`.",
-          "maps_to": "body.channel_ids",
-          "allow_empty": false
+          "maps_to": "body.channel_ids"
         }
       ],
       "examples": [
@@ -2125,10 +2154,9 @@
       "flags": [
         {
           "name": "customer-ids",
-          "type": "string",
+          "type": "string_array",
           "summary": "Required JSON body field `customer_ids`.",
-          "maps_to": "body.customer_ids",
-          "allow_empty": false
+          "maps_to": "body.customer_ids"
         }
       ],
       "examples": [
@@ -2232,10 +2260,34 @@
       "source_url": "https://developer.squareup.com/reference/square",
       "flags": [
         {
-          "name": "reason-id",
+          "name": "reason-type",
+          "type": "enum",
+          "summary": "Inventory adjustment reason type.",
+          "maps_to": "body.reason_id.type",
+          "values": [
+            "RECEIVED",
+            "DAMAGED",
+            "THEFT",
+            "LOST",
+            "RETURNED",
+            "SPOILAGE_WASTE",
+            "SAMPLES_PROMOTIONAL",
+            "INTERNAL_USE",
+            "VENDOR_RETURN",
+            "PRODUCTION_WASTE",
+            "SALE",
+            "RECOUNT",
+            "TRANSFER",
+            "IN_TRANSIT",
+            "CANCELED_SALE",
+            "CUSTOM"
+          ]
+        },
+        {
+          "name": "custom-reason-id",
           "type": "string",
-          "summary": "Required JSON body field `reason_id`.",
-          "maps_to": "body.reason_id",
+          "summary": "Custom inventory adjustment reason ID when reason type is CUSTOM.",
+          "maps_to": "body.reason_id.custom_reason_id",
           "allow_empty": false
         }
       ],
@@ -2303,10 +2355,47 @@
       "source_url": "https://developer.squareup.com/reference/square",
       "flags": [
         {
-          "name": "query",
+          "name": "location-ids",
+          "type": "string_array",
+          "summary": "Comma-separated Square location IDs.",
+          "maps_to": "body.query.filter.location_ids"
+        },
+        {
+          "name": "customer-ids",
+          "type": "string_array",
+          "summary": "Comma-separated Square customer IDs.",
+          "maps_to": "body.query.filter.customer_ids"
+        },
+        {
+          "name": "sort-field",
+          "type": "enum",
+          "summary": "Invoice sort field.",
+          "maps_to": "body.query.sort.field",
+          "values": [
+            "INVOICE_SORT_DATE"
+          ]
+        },
+        {
+          "name": "sort-order",
+          "type": "enum",
+          "summary": "Invoice sort order.",
+          "maps_to": "body.query.sort.order",
+          "values": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum invoices to return.",
+          "maps_to": "body.limit"
+        },
+        {
+          "name": "cursor",
           "type": "string",
-          "summary": "Required JSON body field `query`.",
-          "maps_to": "body.query",
+          "summary": "Square pagination cursor.",
+          "maps_to": "body.cursor",
           "allow_empty": false
         }
       ],
@@ -2446,10 +2535,9 @@
       "flags": [
         {
           "name": "order-ids",
-          "type": "string",
+          "type": "string_array",
           "summary": "Required JSON body field `order_ids`.",
-          "maps_to": "body.order_ids",
-          "allow_empty": false
+          "maps_to": "body.order_ids"
         }
       ],
       "examples": [
@@ -2474,10 +2562,38 @@
       "source_url": "https://developer.squareup.com/reference/square",
       "flags": [
         {
-          "name": "order",
+          "name": "location-id",
           "type": "string",
-          "summary": "Required JSON body field `order`.",
-          "maps_to": "body.order",
+          "summary": "Square location ID for the order calculation.",
+          "maps_to": "body.order.location_id",
+          "allow_empty": false
+        },
+        {
+          "name": "order-id",
+          "type": "string",
+          "summary": "Optional Square order ID.",
+          "maps_to": "body.order.id",
+          "allow_empty": false
+        },
+        {
+          "name": "reference-id",
+          "type": "string",
+          "summary": "Optional application reference ID.",
+          "maps_to": "body.order.reference_id",
+          "allow_empty": false
+        },
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Optional Square customer ID.",
+          "maps_to": "body.order.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "ticket-name",
+          "type": "string",
+          "summary": "Optional order ticket name.",
+          "maps_to": "body.order.ticket_name",
           "allow_empty": false
         }
       ],

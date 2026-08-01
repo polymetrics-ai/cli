@@ -12,6 +12,24 @@
     "id": {
       "type": "string"
     },
+    "draft_shift_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "published_shift_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -19,24 +37,6 @@
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
       "type": [
         "string",
         "null"

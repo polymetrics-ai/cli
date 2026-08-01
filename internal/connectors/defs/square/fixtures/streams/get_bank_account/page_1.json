@@ -7,12 +7,24 @@
     "status": 200,
     "body": {
       "bank_account": {
-        "id": "get_bank_account_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetBankAccount fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetBankAccount"
+        "id": "get_bank_account_id_1",
+        "account_number_suffix": "get_bank_account_account_number_suffix_1",
+        "country": "ZZ",
+        "currency": "UNKNOWN_CURRENCY",
+        "account_type": "CHECKING",
+        "holder_name": "get_bank_account_holder_name_1",
+        "primary_bank_identification_number": "get_bank_account_primary_bank_identification_number_1",
+        "secondary_bank_identification_number": "get_bank_account_secondary_bank_identification_number_1",
+        "debit_mandate_reference_id": "get_bank_account_debit_mandate_reference_id_1",
+        "reference_id": "get_bank_account_reference_id_1",
+        "location_id": "get_bank_account_location_id_1",
+        "status": "VERIFICATION_IN_PROGRESS",
+        "creditable": true,
+        "debitable": true,
+        "fingerprint": "get_bank_account_fingerprint_1",
+        "version": 1,
+        "bank_name": "get_bank_account_bank_name_1",
+        "customer_id": "get_bank_account_customer_id_1"
       }
     }
   }

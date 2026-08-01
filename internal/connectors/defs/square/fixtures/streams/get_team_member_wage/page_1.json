@@ -7,12 +7,15 @@
     "status": 200,
     "body": {
       "team_member_wage": {
-        "id": "get_team_member_wage_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetTeamMemberWage fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetTeamMemberWage"
+        "id": "get_team_member_wage_id_1",
+        "team_member_id": "get_team_member_wage_team_member_id_1",
+        "title": "get_team_member_wage_title_1",
+        "hourly_rate": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "job_id": "get_team_member_wage_job_id_1",
+        "tip_eligible": true
       }
     }
   }

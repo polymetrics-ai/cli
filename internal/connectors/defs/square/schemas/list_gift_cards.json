@@ -12,35 +12,53 @@
     "id": {
       "type": "string"
     },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gan_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "balance_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gan": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "customer_ids": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
     }
   }
 }

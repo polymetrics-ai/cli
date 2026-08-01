@@ -11,12 +11,16 @@
     "body": {
       "custom_attribute_definitions": [
         {
-          "id": "list_merchant_custom_attribute_definitions_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
+          "key": "list_merchant_custom_attribute_definitions_key_1",
+          "schema": {
+            "fixture": "list_merchant_custom_attribute_definitions_schema_1"
+          },
+          "name": "list_merchant_custom_attribute_definitions_name_1",
+          "description": "list_merchant_custom_attribute_definitions_description_1",
+          "visibility": "VISIBILITY_HIDDEN",
+          "version": 1,
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListMerchantCustomAttributeDefinitions fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListMerchantCustomAttributeDefinitions"
+          "created_at": "2026-01-01T00:00:00Z"
         }
       ]
     }

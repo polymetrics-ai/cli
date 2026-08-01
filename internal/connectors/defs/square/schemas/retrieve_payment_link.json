@@ -12,6 +12,48 @@
     "id": {
       "type": "string"
     },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "checkout_options": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "pre_populated_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "long_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +66,7 @@
         "null"
       ]
     },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "payment_note": {
       "type": [
         "string",
         "null"

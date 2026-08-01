@@ -12,23 +12,35 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "name": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "address": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "capabilities": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
     },
     "status": {
       "type": [
@@ -36,9 +48,129 @@
         "null"
       ]
     },
-    "source_operation": {
+    "created_at": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "merchant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "country": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "business_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "website_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "business_hours": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "business_email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "twitter_username": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instagram_username": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "facebook_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coordinates": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "logo_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pos_background_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mcc": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_format_logo_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tax_ids": {
+      "type": [
+        "object",
         "null"
       ]
     }

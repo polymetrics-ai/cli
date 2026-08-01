@@ -12,6 +12,60 @@
     "id": {
       "type": "string"
     },
+    "refund_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payment_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "amount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "device_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "deadline_duration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cancel_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +78,13 @@
         "null"
       ]
     },
-    "name": {
+    "app_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "location_id": {
       "type": [
         "string",
         "null"

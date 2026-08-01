@@ -12,6 +12,36 @@
     "id": {
       "type": "string"
     },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "loyalty_account_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reward_tier_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "points": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +54,7 @@
         "null"
       ]
     },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "redeemed_at": {
       "type": [
         "string",
         "null"

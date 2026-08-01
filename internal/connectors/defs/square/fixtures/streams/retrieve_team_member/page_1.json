@@ -7,12 +7,31 @@
     "status": 200,
     "body": {
       "team_member": {
-        "id": "retrieve_team_member_fixture_1",
+        "id": "retrieve_team_member_id_1",
+        "reference_id": "retrieve_team_member_reference_id_1",
+        "is_owner": true,
+        "status": "ACTIVE",
+        "given_name": "retrieve_team_member_given_name_1",
+        "family_name": "retrieve_team_member_family_name_1",
+        "email_address": "retrieve_team_member_1@example.invalid",
+        "phone_number": "+15550100",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveTeamMember fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveTeamMember"
+        "assigned_locations": {
+          "assignment_type": "ALL_CURRENT_AND_FUTURE_LOCATIONS",
+          "location_ids": [
+            "retrieve_team_member_location_id_1"
+          ]
+        },
+        "wage_setting": {
+          "team_member_id": "retrieve_team_member_team_member_id_1",
+          "job_assignments": [
+            {
+              "fixture": "retrieve_team_member_job_assignment_1"
+            }
+          ],
+          "is_overtime_exempt": true
+        }
       }
     }
   }

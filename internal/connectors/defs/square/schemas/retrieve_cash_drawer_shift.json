@@ -12,6 +12,84 @@
     "id": {
       "type": "string"
     },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "opened_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ended_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "opened_cash_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cash_payment_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cash_refunds_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cash_paid_in_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cash_paid_out_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "expected_cash_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "closed_cash_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "device": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +102,37 @@
         "null"
       ]
     },
-    "name": {
+    "location_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "team_member_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "opening_team_member_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "ending_team_member_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closing_team_member_id": {
       "type": [
         "string",
         "null"

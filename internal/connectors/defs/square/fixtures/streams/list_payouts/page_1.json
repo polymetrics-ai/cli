@@ -11,12 +11,33 @@
     "body": {
       "payouts": [
         {
-          "id": "list_payouts_fixture_1",
+          "id": "list_payouts_id_1",
+          "status": "SENT",
+          "location_id": "list_payouts_location_id_1",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListPayouts fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListPayouts"
+          "amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "destination": {
+            "type": "BANK_ACCOUNT",
+            "id": "list_payouts_id_1"
+          },
+          "version": 1,
+          "type": "BATCH",
+          "payout_fee": [
+            {
+              "amount_money": {
+                "amount": 1001,
+                "currency": "USD"
+              },
+              "effective_at": "2026-01-01T00:00:00Z",
+              "type": "TRANSFER_FEE"
+            }
+          ],
+          "arrival_date": "2026-01-01T00:00:00Z",
+          "end_to_end_id": "list_payouts_end_to_end_id_1"
         }
       ]
     }

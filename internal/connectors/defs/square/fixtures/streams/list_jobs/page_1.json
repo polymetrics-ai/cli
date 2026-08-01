@@ -8,12 +8,12 @@
     "body": {
       "jobs": [
         {
-          "id": "list_jobs_fixture_1",
+          "id": "list_jobs_id_1",
+          "title": "list_jobs_title_1",
+          "is_tip_eligible": true,
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListJobs fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListJobs"
+          "version": 1
         }
       ]
     }

@@ -12,6 +12,36 @@
     "id": {
       "type": "string"
     },
+    "program_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "balance": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "lifetime_points": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enrolled_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,23 +54,23 @@
         "null"
       ]
     },
-    "name": {
+    "mapping": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
-    "status": {
+    "expiring_point_deadlines": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
     }
   }
 }

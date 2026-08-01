@@ -12,6 +12,60 @@
     "id": {
       "type": "string"
     },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "wage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "breaks": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,21 +78,15 @@
         "null"
       ]
     },
-    "name": {
+    "team_member_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "declared_cash_tip_money": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "object",
         "null"
       ]
     }

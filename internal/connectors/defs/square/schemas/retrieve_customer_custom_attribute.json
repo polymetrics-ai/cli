@@ -3,18 +3,39 @@
   "title": "retrieve_customer_custom_attribute",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "key"
   ],
   "required": [
-    "id"
+    "key"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "created_at": {
+    "key": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "value": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "visibility": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "definition": {
+      "type": [
+        "object",
         "null"
       ]
     },
@@ -24,19 +45,7 @@
         "null"
       ]
     },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "created_at": {
       "type": [
         "string",
         "null"

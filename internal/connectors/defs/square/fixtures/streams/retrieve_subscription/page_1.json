@@ -7,12 +7,45 @@
     "status": 200,
     "body": {
       "subscription": {
-        "id": "retrieve_subscription_fixture_1",
+        "id": "retrieve_subscription_id_1",
+        "location_id": "retrieve_subscription_location_id_1",
+        "plan_variation_id": "retrieve_subscription_plan_variation_id_1",
+        "customer_id": "retrieve_subscription_customer_id_1",
+        "start_date": "2026-01-01T00:00:00Z",
+        "canceled_date": "2026-01-01T00:00:00Z",
+        "charged_through_date": "2026-01-01T00:00:00Z",
+        "status": "PENDING",
+        "tax_percentage": "retrieve_subscription_tax_percentage_1",
+        "invoice_ids": [
+          "retrieve_subscription_invoice_id_1"
+        ],
+        "price_override_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "version": 1,
         "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveSubscription fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveSubscription"
+        "card_id": "retrieve_subscription_card_id_1",
+        "timezone": "2026-01-01T00:00:00Z",
+        "source": {
+          "name": "retrieve_subscription_name_1"
+        },
+        "actions": [
+          {
+            "id": "retrieve_subscription_id_1",
+            "type": "CANCEL",
+            "effective_date": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "monthly_billing_anchor_date": 101,
+        "phases": [
+          {
+            "uid": "retrieve_subscription_uid_1",
+            "ordinal": 101,
+            "order_template_id": "retrieve_subscription_order_template_id_1"
+          }
+        ],
+        "completed_date": "2026-01-01T00:00:00Z"
       }
     }
   }

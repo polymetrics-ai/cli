@@ -7,12 +7,51 @@
     "status": 200,
     "body": {
       "checkout": {
-        "id": "get_terminal_checkout_fixture_1",
+        "id": "get_terminal_checkout_id_1",
+        "amount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "reference_id": "get_terminal_checkout_reference_id_1",
+        "note": "get_terminal_checkout_note_1",
+        "order_id": "get_terminal_checkout_order_id_1",
+        "payment_options": {
+          "autocomplete": true,
+          "delay_duration": "get_terminal_checkout_delay_duration_1",
+          "accept_partial_authorization": true
+        },
+        "device_options": {
+          "device_id": "get_terminal_checkout_device_id_1",
+          "skip_receipt_screen": true,
+          "collect_signature": true,
+          "tip_settings": {
+            "allow_tipping": true,
+            "separate_tip_screen": true,
+            "custom_tip_field": true
+          }
+        },
+        "deadline_duration": "get_terminal_checkout_deadline_duration_1",
+        "status": "ACTIVE",
+        "cancel_reason": "BUYER_CANCELED",
+        "payment_ids": [
+          "get_terminal_checkout_payment_id_1"
+        ],
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetTerminalCheckout fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetTerminalCheckout"
+        "app_id": "get_terminal_checkout_app_id_1",
+        "location_id": "get_terminal_checkout_location_id_1",
+        "payment_type": "CARD_PRESENT",
+        "team_member_id": "get_terminal_checkout_team_member_id_1",
+        "customer_id": "get_terminal_checkout_customer_id_1",
+        "app_fee_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "statement_description_identifier": "get_terminal_checkout_statement_description_identifier_1",
+        "tip_money": {
+          "amount": 1001,
+          "currency": "USD"
+        }
       }
     }
   }

@@ -7,12 +7,32 @@
     "status": 200,
     "body": {
       "card": {
-        "id": "retrieve_card_fixture_1",
+        "id": "retrieve_card_id_1",
+        "card_brand": "OTHER_BRAND",
+        "last_4": "retrieve_card_last_4_1",
+        "exp_month": 101,
+        "exp_year": 101,
+        "cardholder_name": "retrieve_card_cardholder_name_1",
+        "billing_address": {
+          "address_line_1": "retrieve_card_address_line_1_1",
+          "address_line_2": "retrieve_card_address_line_2_1",
+          "address_line_3": "retrieve_card_address_line_3_1"
+        },
+        "fingerprint": "retrieve_card_fingerprint_1",
+        "customer_id": "retrieve_card_customer_id_1",
+        "merchant_id": "retrieve_card_merchant_id_1",
+        "reference_id": "retrieve_card_reference_id_1",
+        "enabled": true,
+        "card_type": "UNKNOWN_CARD_TYPE",
+        "prepaid_type": "UNKNOWN_PREPAID_TYPE",
+        "bin": "retrieve_card_bin_1",
         "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveCard fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveCard"
+        "disabled_at": "2026-01-01T00:00:00Z",
+        "version": 1,
+        "card_co_brand": "UNKNOWN",
+        "issuer_alert": "ISSUER_ALERT_CARD_CLOSED",
+        "issuer_alert_at": "2026-01-01T00:00:00Z",
+        "hsa_fsa": true
       }
     }
   }

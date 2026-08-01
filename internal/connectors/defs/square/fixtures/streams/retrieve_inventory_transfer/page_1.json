@@ -7,12 +7,21 @@
     "status": 200,
     "body": {
       "transfer": {
-        "id": "retrieve_inventory_transfer_fixture_1",
+        "id": "retrieve_inventory_transfer_id_1",
+        "reference_id": "retrieve_inventory_transfer_reference_id_1",
+        "state": "ACTIVE",
+        "from_location_id": "retrieve_inventory_transfer_from_location_id_1",
+        "to_location_id": "retrieve_inventory_transfer_to_location_id_1",
+        "catalog_object_id": "retrieve_inventory_transfer_catalog_object_id_1",
+        "catalog_object_type": "FIXTURE",
+        "quantity": "1",
+        "occurred_at": "2026-01-01T00:00:00Z",
         "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveInventoryTransfer fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveInventoryTransfer"
+        "source": {
+          "fixture": "retrieve_inventory_transfer_source_1"
+        },
+        "employee_id": "retrieve_inventory_transfer_employee_id_1",
+        "team_member_id": "retrieve_inventory_transfer_team_member_id_1"
       }
     }
   }

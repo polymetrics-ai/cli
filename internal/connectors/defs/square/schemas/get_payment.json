@@ -24,9 +24,63 @@
         "null"
       ]
     },
-    "name": {
+    "amount_money": {
       "type": [
-        "string",
+        "object",
+        "null"
+      ]
+    },
+    "tip_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "total_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "app_fee_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "app_fee_allocations": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "approved_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "processing_fee": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "refunded_money": {
+      "type": [
+        "object",
         "null"
       ]
     },
@@ -36,7 +90,223 @@
         "null"
       ]
     },
-    "source_operation": {
+    "delay_duration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delay_action": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delayed_until": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "card_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "cash_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "bank_account_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "electronic_money_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "external_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "wallet_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "buy_now_pay_later_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "square_account_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "employee_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "team_member_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "refund_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "risk_evaluation": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "terminal_checkout_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "buyer_email_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "billing_address": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "shipping_address": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "statement_description_identifier": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "capabilities": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "receipt_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "receipt_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "device_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "application_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "buyer_currency_exchange": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "is_offline_payment": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "offline_payment_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "version_token": {
       "type": [
         "string",
         "null"

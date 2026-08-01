@@ -11,12 +11,15 @@
     "body": {
       "team_member_wages": [
         {
-          "id": "list_team_member_wages_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListTeamMemberWages fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListTeamMemberWages"
+          "id": "list_team_member_wages_id_1",
+          "team_member_id": "list_team_member_wages_team_member_id_1",
+          "title": "list_team_member_wages_title_1",
+          "hourly_rate": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "job_id": "list_team_member_wages_job_id_1",
+          "tip_eligible": true
         }
       ]
     }

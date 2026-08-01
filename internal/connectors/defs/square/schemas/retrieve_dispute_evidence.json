@@ -9,34 +9,40 @@
     "id"
   ],
   "properties": {
+    "evidence_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "dispute_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "evidence_file": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "evidence_text": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "uploaded_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "evidence_type": {
       "type": [
         "string",
         "null"

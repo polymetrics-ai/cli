@@ -11,12 +11,65 @@
     "body": {
       "refunds": [
         {
-          "id": "list_payment_refunds_fixture_1",
+          "id": "refunds_id_1",
+          "status": "ACTIVE",
+          "location_id": "refunds_location_id_1",
+          "unlinked": true,
+          "destination_type": "FIXTURE",
+          "destination_details": {
+            "card_details": {
+              "card": {
+                "fixture": "refunds_card_1"
+              },
+              "entry_method": "refunds_entry_method_1",
+              "auth_result_code": "refunds_auth_result_code_1"
+            },
+            "cash_details": {
+              "seller_supplied_money": {
+                "amount": 1001,
+                "currency": "USD"
+              },
+              "change_back_money": {
+                "amount": 1001,
+                "currency": "USD"
+              }
+            },
+            "external_details": {
+              "type": "FIXTURE",
+              "source": "refunds_source_1",
+              "source_id": "refunds_source_id_1"
+            }
+          },
+          "amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "app_fee_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "app_fee_allocations": [
+            {
+              "fixture": "refunds_app_fee_allocation_1"
+            }
+          ],
+          "processing_fee": [
+            {
+              "effective_at": "2026-01-01T00:00:00Z",
+              "type": "FIXTURE",
+              "amount_money": {
+                "amount": 1001,
+                "currency": "USD"
+              }
+            }
+          ],
+          "payment_id": "refunds_payment_id_1",
+          "order_id": "refunds_order_id_1",
+          "reason": "refunds_reason_1",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListPaymentRefunds fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListPaymentRefunds"
+          "team_member_id": "refunds_team_member_id_1",
+          "terminal_refund_id": "refunds_terminal_refund_id_1"
         }
       ]
     }

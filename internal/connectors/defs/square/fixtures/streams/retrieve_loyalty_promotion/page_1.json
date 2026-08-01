@@ -7,12 +7,44 @@
     "status": 200,
     "body": {
       "loyalty_promotion": {
-        "id": "retrieve_loyalty_promotion_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveLoyaltyPromotion fixture",
+        "id": "retrieve_loyalty_promotion_id_1",
+        "name": "retrieve_loyalty_promotion_name_1",
+        "incentive": {
+          "type": "POINTS_MULTIPLIER",
+          "points_multiplier_data": {
+            "points_multiplier": 101,
+            "multiplier": "retrieve_loyalty_promotion_multiplier_1"
+          },
+          "points_addition_data": {
+            "points_addition": 101
+          }
+        },
+        "available_time": {
+          "time_periods": [
+            "2026-01-01T00:00:00Z"
+          ],
+          "start_date": "2026-01-01T00:00:00Z",
+          "end_date": "2026-01-01T00:00:00Z"
+        },
+        "trigger_limit": {
+          "times": 101,
+          "interval": "ALL_TIME"
+        },
         "status": "ACTIVE",
-        "source_operation": "RetrieveLoyaltyPromotion"
+        "created_at": "2026-01-01T00:00:00Z",
+        "canceled_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-01T00:05:00Z",
+        "loyalty_program_id": "retrieve_loyalty_promotion_loyalty_program_id_1",
+        "minimum_spend_amount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "qualifying_item_variation_ids": [
+          "retrieve_loyalty_promotion_qualifying_item_variation_id_1"
+        ],
+        "qualifying_category_ids": [
+          "retrieve_loyalty_promotion_qualifying_category_id_1"
+        ]
       }
     }
   }

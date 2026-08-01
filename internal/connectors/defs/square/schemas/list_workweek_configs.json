@@ -12,6 +12,24 @@
     "id": {
       "type": "string"
     },
+    "start_of_week": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_of_day_local_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -19,24 +37,6 @@
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
       "type": [
         "string",
         "null"

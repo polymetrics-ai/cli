@@ -7,12 +7,33 @@
     "status": 200,
     "body": {
       "payment_link": {
-        "id": "retrieve_payment_link_fixture_1",
+        "id": "retrieve_payment_link_id_1",
+        "version": 1,
+        "description": "retrieve_payment_link_description_1",
+        "order_id": "retrieve_payment_link_order_id_1",
+        "checkout_options": {
+          "allow_tipping": true,
+          "custom_fields": [
+            {
+              "fixture": "retrieve_payment_link_custom_field_1"
+            }
+          ],
+          "subscription_plan_id": "retrieve_payment_link_subscription_plan_id_1"
+        },
+        "pre_populated_data": {
+          "buyer_email": "retrieve_payment_link_1@example.invalid",
+          "buyer_phone_number": "+15550100",
+          "buyer_address": {
+            "address_line_1": "retrieve_payment_link_address_line_1_1",
+            "address_line_2": "retrieve_payment_link_address_line_2_1",
+            "address_line_3": "retrieve_payment_link_address_line_3_1"
+          }
+        },
+        "url": "https://example.invalid/retrieve_payment_link/1",
+        "long_url": "https://example.invalid/retrieve_payment_link/1",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrievePaymentLink fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrievePaymentLink"
+        "payment_note": "retrieve_payment_link_payment_note_1"
       }
     }
   }

@@ -7,12 +7,31 @@
     "status": 200,
     "body": {
       "device": {
-        "id": "get_device_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetDevice fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetDevice"
+        "id": "get_device_id_1",
+        "attributes": {
+          "type": "TERMINAL",
+          "manufacturer": "get_device_manufacturer_1",
+          "model": "get_device_model_1",
+          "name": "get_device_name_1",
+          "manufacturers_id": "get_device_manufacturers_id_1"
+        },
+        "components": [
+          {
+            "type": "APPLICATION",
+            "application_details": {
+              "fixture": "get_device_application_details_1"
+            },
+            "card_reader_details": {
+              "fixture": "get_device_card_reader_details_1"
+            },
+            "battery_details": {
+              "fixture": "get_device_battery_details_1"
+            }
+          }
+        ],
+        "status": {
+          "category": "AVAILABLE"
+        }
       }
     }
   }

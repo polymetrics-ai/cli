@@ -11,12 +11,17 @@
     "body": {
       "channels": [
         {
-          "id": "list_channels_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListChannels fixture",
+          "id": "list_channels_id_1",
+          "merchant_id": "list_channels_merchant_id_1",
+          "name": "list_channels_name_1",
+          "version": 1,
+          "reference": {
+            "type": "UNKNOWN_TYPE",
+            "id": "list_channels_id_1"
+          },
           "status": "ACTIVE",
-          "source_operation": "ListChannels"
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-01T00:05:00Z"
         }
       ]
     }

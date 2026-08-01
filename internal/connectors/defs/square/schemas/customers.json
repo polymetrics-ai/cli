@@ -24,21 +24,111 @@
         "null"
       ]
     },
-    "name": {
+    "given_name": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "family_name": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "nickname": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "company_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "address": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "birthday": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "preferences": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "creation_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "segment_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "tax_ids": {
+      "type": [
+        "object",
         "null"
       ]
     }

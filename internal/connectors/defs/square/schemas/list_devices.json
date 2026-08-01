@@ -12,33 +12,27 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "attributes": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
-    "updated_at": {
+    "components": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
     },
     "status": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "object",
         "null"
       ]
     }

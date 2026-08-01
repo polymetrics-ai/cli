@@ -7,12 +7,60 @@
     "status": 200,
     "body": {
       "invoice": {
-        "id": "get_invoice_fixture_1",
+        "id": "get_invoice_id_1",
+        "version": 1,
+        "location_id": "get_invoice_location_id_1",
+        "order_id": "get_invoice_order_id_1",
+        "primary_recipient": {
+          "customer_id": "get_invoice_customer_id_1",
+          "given_name": "get_invoice_given_name_1",
+          "family_name": "get_invoice_family_name_1"
+        },
+        "payment_requests": [
+          {
+            "uid": "get_invoice_uid_1",
+            "request_method": "EMAIL",
+            "request_type": "BALANCE"
+          }
+        ],
+        "delivery_method": "EMAIL",
+        "invoice_number": "get_invoice_invoice_number_1",
+        "title": "get_invoice_title_1",
+        "description": "get_invoice_description_1",
+        "scheduled_at": "2026-01-01T00:00:00Z",
+        "public_url": "https://example.invalid/get_invoice/1",
+        "next_payment_amount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "status": "DRAFT",
+        "timezone": "2026-01-01T00:00:00Z",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetInvoice fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetInvoice"
+        "accepted_payment_methods": {
+          "card": true,
+          "square_gift_card": true,
+          "bank_account": true
+        },
+        "custom_fields": [
+          {
+            "label": "get_invoice_label_1",
+            "value": "get_invoice_value_1",
+            "placement": "ABOVE_LINE_ITEMS"
+          }
+        ],
+        "subscription_id": "get_invoice_subscription_id_1",
+        "sale_or_service_date": "2026-01-01T00:00:00Z",
+        "payment_conditions": "get_invoice_payment_conditions_1",
+        "store_payment_method_enabled": true,
+        "attachments": [
+          {
+            "id": "get_invoice_id_1",
+            "filename": "get_invoice_filename_1",
+            "description": "get_invoice_description_1"
+          }
+        ],
+        "creator_team_member_id": "get_invoice_creator_team_member_id_1"
       }
     }
   }

@@ -9,8 +9,62 @@
     "id"
   ],
   "properties": {
+    "dispute_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "id": {
       "type": "string"
+    },
+    "amount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "due_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "disputed_payment": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "evidence_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "card_brand": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "created_at": {
       "type": [
@@ -24,19 +78,31 @@
         "null"
       ]
     },
-    "name": {
+    "brand_dispute_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "reported_date": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "reported_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "location_id": {
       "type": [
         "string",
         "null"

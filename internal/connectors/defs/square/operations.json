@@ -15,21 +15,60 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
-              "type": [
-                "object",
-                "null"
-              ],
+              "type": "object",
               "properties": {
                 "filter": {
-                  "type": [
-                    "object",
-                    "null"
+                  "type": "object",
+                  "properties": {
+                    "start_at_range": {
+                      "type": "object",
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "location_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "segment_filters": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "booking_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "start_at_range"
                   ]
                 }
               },
@@ -61,16 +100,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "booking_ids": {
-              "type": [
-                "array",
-                "null"
-              ],
+              "type": "array",
               "items": {
                 "type": [
                   "string",
@@ -101,16 +134,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "team_member_ids": {
-              "type": [
-                "array",
-                "null"
-              ],
+              "type": "array",
               "items": {
                 "type": [
                   "string",
@@ -141,16 +168,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "object_ids": {
-              "type": [
-                "array",
-                "null"
-              ],
+              "type": "array",
               "items": {
                 "type": [
                   "string",
@@ -205,10 +226,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "cursor": {
               "type": [
@@ -227,32 +245,14 @@
                   "null"
                 ],
                 "enum": [
-                  "CATALOG_OBJECT_TYPE_DO_NOT_USE",
                   "ITEM",
                   "IMAGE",
-                  "PAGE_TILE",
                   "CATEGORY",
                   "ITEM_VARIATION",
                   "TAX",
-                  "PLACEHOLDER",
                   "DISCOUNT",
                   "MODIFIER_LIST",
                   "MODIFIER",
-                  "DINING_OPTION",
-                  "TAX_EXEMPTION",
-                  "CONFIGURATION",
-                  "TICKET_GROUP",
-                  "TICKET_TEMPLATE",
-                  "PAGE",
-                  "MENU",
-                  "TAG",
-                  "FLOOR_PLAN",
-                  "FLOOR_PLAN_TILE",
-                  "VOID_REASON",
-                  "FAVORITES_LIST_POSITION",
-                  "MENU_GROUP",
-                  "ITEM_VARIATION_VENDOR_INFO",
-                  "SERVICE_CHARGE",
                   "PRICING_RULE",
                   "PRODUCT_SET",
                   "TIME_PERIOD",
@@ -262,19 +262,9 @@
                   "ITEM_OPTION_VAL",
                   "CUSTOM_ATTRIBUTE_DEFINITION",
                   "QUICK_AMOUNTS_SETTINGS",
-                  "COMPONENT",
-                  "COMPOSITION",
-                  "RESOURCE",
-                  "CHECKOUT_LINK",
-                  "ADDRESS",
-                  "SETTINGS",
                   "SUBSCRIPTION_PLAN",
                   "AVAILABILITY_PERIOD",
-                  "CREDIT_REDEMPTION_POLICY",
-                  "AGE_RESTRICTION",
-                  "SALE_PRICE",
-                  "TRANSLATIONS",
-                  "CREDIT_CARD_SURCHARGE"
+                  null
                 ]
               }
             },
@@ -306,61 +296,228 @@
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "attribute_name": {
+                      "type": "string"
+                    },
+                    "initial_attribute_value": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sort_order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "attribute_name"
                   ]
                 },
                 "exact_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "attribute_name": {
+                      "type": "string"
+                    },
+                    "attribute_value": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "attribute_name",
+                    "attribute_value"
                   ]
                 },
                 "set_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "attribute_name": {
+                      "type": "string"
+                    },
+                    "attribute_values": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "attribute_name",
+                    "attribute_values"
                   ]
                 },
                 "prefix_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "attribute_name": {
+                      "type": "string"
+                    },
+                    "attribute_prefix": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "attribute_name",
+                    "attribute_prefix"
                   ]
                 },
                 "range_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "attribute_name": {
+                      "type": "string"
+                    },
+                    "attribute_min_value": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "attribute_max_value": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "attribute_name"
                   ]
                 },
                 "text_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "keywords": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "keywords"
                   ]
                 },
                 "items_for_tax_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "tax_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "tax_ids"
                   ]
                 },
                 "items_for_modifier_list_query": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "modifier_list_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "modifier_list_ids"
                   ]
                 },
                 "items_for_item_options_query": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "item_option_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "item_variations_for_item_option_values_query": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "item_option_value_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -397,10 +554,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "text_filter": {
               "type": [
@@ -431,9 +585,9 @@
                   "null"
                 ],
                 "enum": [
-                  "STOCK_LEVEL_DO_NOT_USE",
                   "OUT",
-                  "LOW"
+                  "LOW",
+                  null
                 ]
               }
             },
@@ -468,7 +622,8 @@
               ],
               "enum": [
                 "DESC",
-                "ASC"
+                "ASC",
+                null
               ]
             },
             "product_types": {
@@ -485,17 +640,13 @@
                   "REGULAR",
                   "GIFT_CARD",
                   "APPOINTMENTS_SERVICE",
-                  "CLASS_TICKET",
                   "FOOD_AND_BEV",
                   "EVENT",
                   "DIGITAL",
                   "DONATION",
-                  "MEMBERSHIP",
-                  "CREDIT_PACKAGE",
-                  "COMBO",
                   "LEGACY_SQUARE_ONLINE_SERVICE",
                   "LEGACY_SQUARE_ONLINE_MEMBERSHIP",
-                  "APPOINTMENTS_MEMBERSHIP"
+                  null
                 ]
               }
             },
@@ -508,7 +659,67 @@
                 "type": [
                   "object",
                   "null"
-                ]
+                ],
+                "properties": {
+                  "custom_attribute_definition_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "key": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "string_filter": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "number_filter": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "min": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "max": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "selection_uids_filter": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "bool_filter": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                },
+                "additionalProperties": false
               }
             },
             "archived_state": {
@@ -517,10 +728,10 @@
                 "null"
               ],
               "enum": [
-                "ARCHIVED_STATE_DO_NOT_USE",
                 "ARCHIVED_STATE_NOT_ARCHIVED",
                 "ARCHIVED_STATE_ARCHIVED",
-                "ARCHIVED_STATE_ALL"
+                "ARCHIVED_STATE_ALL",
+                null
               ]
             }
           },
@@ -543,16 +754,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "channel_ids": {
-              "type": [
-                "array",
-                "null"
-              ],
+              "type": "array",
               "items": {
                 "type": [
                   "string",
@@ -583,16 +788,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "customer_ids": {
-              "type": [
-                "array",
-                "null"
-              ],
+              "type": "array",
               "items": {
                 "type": [
                   "string",
@@ -623,10 +822,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "cursor": {
               "type": [
@@ -650,13 +846,284 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "creation_source": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "values": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "rule": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "created_at": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "updated_at": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "email_address": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "exact": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "fuzzy": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "phone_number": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "exact": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "fuzzy": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "reference_id": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "exact": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "fuzzy": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "group_ids": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "all": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "any": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "none": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "custom_attribute": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "filters": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "object",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "segment_ids": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "all": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "any": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "none": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "field": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DEFAULT",
+                        "CREATED_AT",
+                        null
+                      ]
+                    },
+                    "order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -687,16 +1154,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "gan": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -721,16 +1182,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "nonce": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string"
             }
           },
           "additionalProperties": false,
@@ -755,24 +1210,14 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "reason_id": {
-              "type": [
-                "object",
-                "null"
-              ],
+              "type": "object",
               "properties": {
                 "type": {
-                  "type": [
-                    "string",
-                    "null"
-                  ],
+                  "type": "string",
                   "enum": [
-                    "INVENTORY_ADJUSTMENT_REASON_TYPE_DO_NOT_USE",
                     "RECEIVED",
                     "DAMAGED",
                     "THEFT",
@@ -826,10 +1271,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "catalog_object_ids": {
               "type": [
@@ -866,43 +1308,9 @@
                   "null"
                 ],
                 "enum": [
-                  "INVENTORY_CHANGE_TYPE_DO_NOT_USE",
                   "PHYSICAL_COUNT",
                   "ADJUSTMENT",
-                  "TRANSFER",
-                  "AVAILABILITY"
-                ]
-              }
-            },
-            "statuses": {
-              "type": [
-                "array",
-                "null"
-              ],
-              "items": {
-                "type": [
-                  "string",
-                  "null"
-                ],
-                "enum": [
-                  "INVENTORY_STATE_DO_NOT_USE",
-                  "CUSTOM",
-                  "IN_STOCK",
-                  "SOLD",
-                  "RETURNED_BY_CUSTOMER",
-                  "RESERVED_FOR_SALE",
-                  "SOLD_ONLINE",
-                  "ORDERED_FROM_VENDOR",
-                  "RECEIVED_FROM_VENDOR",
-                  "IN_TRANSIT_TO",
-                  "NONE",
-                  "WASTE",
-                  "UNLINKED_RETURN",
-                  "COMPOSED",
-                  "DECOMPOSED",
-                  "SUPPORTED_BY_NEWER_VERSION",
-                  "IN_TRANSIT",
-                  "UNTRACKED"
+                  null
                 ]
               }
             },
@@ -917,7 +1325,6 @@
                   "null"
                 ],
                 "enum": [
-                  "INVENTORY_STATE_DO_NOT_USE",
                   "CUSTOM",
                   "IN_STOCK",
                   "SOLD",
@@ -934,7 +1341,8 @@
                   "DECOMPOSED",
                   "SUPPORTED_BY_NEWER_VERSION",
                   "IN_TRANSIT",
-                  "UNTRACKED"
+                  "UNTRACKED",
+                  null
                 ]
               }
             },
@@ -974,7 +1382,8 @@
                     "null"
                   ],
                   "enum": [
-                    "OCCURRED_AT"
+                    "OCCURRED_AT",
+                    null
                   ]
                 },
                 "order": {
@@ -984,7 +1393,8 @@
                   ],
                   "enum": [
                     "DESC",
-                    "ASC"
+                    "ASC",
+                    null
                   ]
                 }
               },
@@ -999,6 +1409,43 @@
                 "type": [
                   "object",
                   "null"
+                ],
+                "properties": {
+                  "type": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "RECEIVED",
+                      "DAMAGED",
+                      "THEFT",
+                      "LOST",
+                      "RETURNED",
+                      "SPOILAGE_WASTE",
+                      "SAMPLES_PROMOTIONAL",
+                      "INTERNAL_USE",
+                      "VENDOR_RETURN",
+                      "PRODUCTION_WASTE",
+                      "SALE",
+                      "RECOUNT",
+                      "TRANSFER",
+                      "IN_TRANSIT",
+                      "CANCELED_SALE",
+                      "CUSTOM",
+                      null
+                    ]
+                  },
+                  "custom_reason_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "type"
                 ]
               }
             }
@@ -1022,10 +1469,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "catalog_object_ids": {
               "type": [
@@ -1074,7 +1518,6 @@
                   "null"
                 ],
                 "enum": [
-                  "INVENTORY_STATE_DO_NOT_USE",
                   "CUSTOM",
                   "IN_STOCK",
                   "SOLD",
@@ -1091,7 +1534,8 @@
                   "DECOMPOSED",
                   "SUPPORTED_BY_NEWER_VERSION",
                   "IN_TRANSIT",
-                  "UNTRACKED"
+                  "UNTRACKED",
+                  null
                 ]
               }
             },
@@ -1121,27 +1565,68 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
-              "type": [
-                "object",
-                "null"
-              ],
+              "type": "object",
               "properties": {
                 "filter": {
-                  "type": [
-                    "object",
-                    "null"
+                  "type": "object",
+                  "properties": {
+                    "location_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "customer_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "location_ids"
                   ]
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "INVOICE_SORT_DATE"
+                      ]
+                    },
+                    "order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "field"
                   ]
                 }
               },
@@ -1185,10 +1670,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -1200,13 +1682,159 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "location_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "start": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "end": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "workday": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "date_range": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        },
+                        "match_scheduled_shifts_by": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "default_timezone": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "team_member_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "assignment_status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "ASSIGNED",
+                        "UNASSIGNED",
+                        null
+                      ]
+                    },
+                    "scheduled_shift_statuses": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "field": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "START_AT",
+                        "END_AT",
+                        "CREATED_AT",
+                        "UPDATED_AT",
+                        null
+                      ]
+                    },
+                    "order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -1243,10 +1871,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -1258,13 +1883,147 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "location_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "OPEN",
+                        "CLOSED",
+                        null
+                      ]
+                    },
+                    "start": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "end": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "workday": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "date_range": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        },
+                        "match_timecards_by": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "default_timezone": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "team_member_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "field": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "START_AT",
+                        "END_AT",
+                        "CREATED_AT",
+                        "UPDATED_AT",
+                        null
+                      ]
+                    },
+                    "order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -1301,10 +2060,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -1321,7 +2077,28 @@
                     "type": [
                       "object",
                       "null"
-                    ]
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "created_at": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "phone_number": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "customer_ids": {
@@ -1371,10 +2148,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "order_id": {
               "type": [
@@ -1499,7 +2273,91 @@
                     "MNT",
                     "MOP",
                     "MRO",
-                    "MUR"
+                    "MUR",
+                    "MVR",
+                    "MWK",
+                    "MXN",
+                    "MXV",
+                    "MYR",
+                    "MZN",
+                    "NAD",
+                    "NGN",
+                    "NIO",
+                    "NOK",
+                    "NPR",
+                    "NZD",
+                    "OMR",
+                    "PAB",
+                    "PEN",
+                    "PGK",
+                    "PHP",
+                    "PKR",
+                    "PLN",
+                    "PYG",
+                    "QAR",
+                    "RON",
+                    "RSD",
+                    "RUB",
+                    "RWF",
+                    "SAR",
+                    "SBD",
+                    "SCR",
+                    "SDG",
+                    "SEK",
+                    "SGD",
+                    "SHP",
+                    "SLL",
+                    "SLE",
+                    "SOS",
+                    "SRD",
+                    "SSP",
+                    "STD",
+                    "SVC",
+                    "SYP",
+                    "SZL",
+                    "THB",
+                    "TJS",
+                    "TMT",
+                    "TND",
+                    "TOP",
+                    "TRY",
+                    "TTD",
+                    "TWD",
+                    "TZS",
+                    "UAH",
+                    "UGX",
+                    "USD",
+                    "USN",
+                    "USS",
+                    "UYI",
+                    "UYU",
+                    "UZS",
+                    "VEF",
+                    "VND",
+                    "VUV",
+                    "WST",
+                    "XAF",
+                    "XAG",
+                    "XAU",
+                    "XBA",
+                    "XBB",
+                    "XBC",
+                    "XBD",
+                    "XCD",
+                    "XDR",
+                    "XOF",
+                    "XPD",
+                    "XPF",
+                    "XPT",
+                    "XTS",
+                    "XXX",
+                    "YER",
+                    "ZAR",
+                    "ZMK",
+                    "ZMW",
+                    "BTC",
+                    "XUS",
+                    null
                   ]
                 }
               },
@@ -1531,10 +2389,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -1543,10 +2398,7 @@
               ],
               "properties": {
                 "loyalty_account_id": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": "string"
                 },
                 "status": {
                   "type": [
@@ -1554,10 +2406,10 @@
                     "null"
                   ],
                   "enum": [
-                    "STATUS_DO_NOT_USE",
                     "ISSUED",
                     "REDEEMED",
-                    "DELETED"
+                    "DELETED",
+                    null
                   ]
                 }
               },
@@ -1598,10 +2450,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "location_id": {
               "type": [
@@ -1610,10 +2459,7 @@
               ]
             },
             "order_ids": {
-              "type": [
-                "array",
-                "null"
-              ],
+              "type": "array",
               "items": {
                 "type": [
                   "string",
@@ -1644,16 +2490,10 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "order": {
-              "type": [
-                "object",
-                "null"
-              ],
+              "type": "object",
               "properties": {
                 "id": {
                   "type": [
@@ -1662,10 +2502,7 @@
                   ]
                 },
                 "location_id": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                  "type": "string"
                 },
                 "reference_id": {
                   "type": [
@@ -1677,7 +2514,16 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "customer_id": {
                   "type": [
@@ -1694,6 +2540,168 @@
                     "type": [
                       "object",
                       "null"
+                    ],
+                    "properties": {
+                      "uid": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "quantity": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "quantity_unit": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "note": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_object_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_version": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "variation_name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "item_type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "metadata": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "modifiers": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "applied_taxes": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "applied_discounts": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "applied_service_charges": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "base_price_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "variation_total_price_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "gross_sales_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "total_tax_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "total_discount_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "total_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "pricing_blocklists": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "total_service_charge_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "quantity"
                     ]
                   }
                 },
@@ -1706,7 +2714,70 @@
                     "type": [
                       "object",
                       "null"
-                    ]
+                    ],
+                    "properties": {
+                      "uid": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_object_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_version": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "percentage": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "metadata": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "applied_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "scope": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "auto_applied": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "discounts": {
@@ -1718,7 +2789,88 @@
                     "type": [
                       "object",
                       "null"
-                    ]
+                    ],
+                    "properties": {
+                      "uid": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_object_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_version": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "percentage": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "amount_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "applied_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "metadata": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "scope": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "reward_ids": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "pricing_rule_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "service_charges": {
@@ -1730,7 +2882,112 @@
                     "type": [
                       "object",
                       "null"
-                    ]
+                    ],
+                    "properties": {
+                      "uid": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_object_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "catalog_version": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "percentage": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "amount_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "applied_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "total_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "total_tax_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "calculation_phase": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "taxable": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      "applied_taxes": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "metadata": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "treatment_type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "scope": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "fulfillments": {
@@ -1742,7 +2999,76 @@
                     "type": [
                       "object",
                       "null"
-                    ]
+                    ],
+                    "properties": {
+                      "uid": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "state": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "line_item_application": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "entries": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "metadata": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "pickup_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "shipment_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "delivery_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "in_store_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "returns": {
@@ -1754,26 +3080,365 @@
                     "type": [
                       "object",
                       "null"
-                    ]
+                    ],
+                    "properties": {
+                      "uid": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "source_order_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "return_line_items": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "return_service_charges": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "return_taxes": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "return_discounts": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "return_tips": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "rounding_adjustment": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "return_amounts": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "return_amounts": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "total_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "tax_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "discount_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "tip_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "service_charge_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "net_amounts": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "total_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "tax_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "discount_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "tip_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "service_charge_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "rounding_adjustment": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "uid": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "amount_money": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "amount": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "currency": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "tenders": {
                   "type": [
@@ -1784,6 +3449,120 @@
                     "type": [
                       "object",
                       "null"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "location_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "transaction_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "created_at": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "note": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "amount_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "tip_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "processing_fee_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "customer_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "type": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "card_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "cash_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "bank_account_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "buy_now_pay_later_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "square_account_details": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "additional_recipients": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "payment_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "type"
                     ]
                   }
                 },
@@ -1796,6 +3575,82 @@
                     "type": [
                       "object",
                       "null"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "location_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "transaction_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "tender_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "created_at": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "reason": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "amount_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "status": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "processing_fee_money": {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      "additional_recipients": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "location_id",
+                      "reason",
+                      "amount_money",
+                      "status"
                     ]
                   }
                 },
@@ -1829,11 +3684,11 @@
                     "null"
                   ],
                   "enum": [
-                    "DO_NOT_USE",
                     "OPEN",
                     "COMPLETED",
                     "CANCELED",
-                    "DRAFT"
+                    "DRAFT",
+                    null
                   ]
                 },
                 "version": {
@@ -1846,31 +3701,1036 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "UNKNOWN_CURRENCY",
+                        "AED",
+                        "AFN",
+                        "ALL",
+                        "AMD",
+                        "ANG",
+                        "AOA",
+                        "ARS",
+                        "AUD",
+                        "AWG",
+                        "AZN",
+                        "BAM",
+                        "BBD",
+                        "BDT",
+                        "BGN",
+                        "BHD",
+                        "BIF",
+                        "BMD",
+                        "BND",
+                        "BOB",
+                        "BOV",
+                        "BRL",
+                        "BSD",
+                        "BTN",
+                        "BWP",
+                        "BYR",
+                        "BZD",
+                        "CAD",
+                        "CDF",
+                        "CHE",
+                        "CHF",
+                        "CHW",
+                        "CLF",
+                        "CLP",
+                        "CNY",
+                        "COP",
+                        "COU",
+                        "CRC",
+                        "CUC",
+                        "CUP",
+                        "CVE",
+                        "CZK",
+                        "DJF",
+                        "DKK",
+                        "DOP",
+                        "DZD",
+                        "EGP",
+                        "ERN",
+                        "ETB",
+                        "EUR",
+                        "FJD",
+                        "FKP",
+                        "GBP",
+                        "GEL",
+                        "GHS",
+                        "GIP",
+                        "GMD",
+                        "GNF",
+                        "GTQ",
+                        "GYD",
+                        "HKD",
+                        "HNL",
+                        "HRK",
+                        "HTG",
+                        "HUF",
+                        "IDR",
+                        "ILS",
+                        "INR",
+                        "IQD",
+                        "IRR",
+                        "ISK",
+                        "JMD",
+                        "JOD",
+                        "JPY",
+                        "KES",
+                        "KGS",
+                        "KHR",
+                        "KMF",
+                        "KPW",
+                        "KRW",
+                        "KWD",
+                        "KYD",
+                        "KZT",
+                        "LAK",
+                        "LBP",
+                        "LKR",
+                        "LRD",
+                        "LSL",
+                        "LTL",
+                        "LVL",
+                        "LYD",
+                        "MAD",
+                        "MDL",
+                        "MGA",
+                        "MKD",
+                        "MMK",
+                        "MNT",
+                        "MOP",
+                        "MRO",
+                        "MUR",
+                        "MVR",
+                        "MWK",
+                        "MXN",
+                        "MXV",
+                        "MYR",
+                        "MZN",
+                        "NAD",
+                        "NGN",
+                        "NIO",
+                        "NOK",
+                        "NPR",
+                        "NZD",
+                        "OMR",
+                        "PAB",
+                        "PEN",
+                        "PGK",
+                        "PHP",
+                        "PKR",
+                        "PLN",
+                        "PYG",
+                        "QAR",
+                        "RON",
+                        "RSD",
+                        "RUB",
+                        "RWF",
+                        "SAR",
+                        "SBD",
+                        "SCR",
+                        "SDG",
+                        "SEK",
+                        "SGD",
+                        "SHP",
+                        "SLL",
+                        "SLE",
+                        "SOS",
+                        "SRD",
+                        "SSP",
+                        "STD",
+                        "SVC",
+                        "SYP",
+                        "SZL",
+                        "THB",
+                        "TJS",
+                        "TMT",
+                        "TND",
+                        "TOP",
+                        "TRY",
+                        "TTD",
+                        "TWD",
+                        "TZS",
+                        "UAH",
+                        "UGX",
+                        "USD",
+                        "USN",
+                        "USS",
+                        "UYI",
+                        "UYU",
+                        "UZS",
+                        "VEF",
+                        "VND",
+                        "VUV",
+                        "WST",
+                        "XAF",
+                        "XAG",
+                        "XAU",
+                        "XBA",
+                        "XBB",
+                        "XBC",
+                        "XBD",
+                        "XCD",
+                        "XDR",
+                        "XOF",
+                        "XPD",
+                        "XPF",
+                        "XPT",
+                        "XTS",
+                        "XXX",
+                        "YER",
+                        "ZAR",
+                        "ZMK",
+                        "ZMW",
+                        "BTC",
+                        "XUS",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "total_tax_money": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "UNKNOWN_CURRENCY",
+                        "AED",
+                        "AFN",
+                        "ALL",
+                        "AMD",
+                        "ANG",
+                        "AOA",
+                        "ARS",
+                        "AUD",
+                        "AWG",
+                        "AZN",
+                        "BAM",
+                        "BBD",
+                        "BDT",
+                        "BGN",
+                        "BHD",
+                        "BIF",
+                        "BMD",
+                        "BND",
+                        "BOB",
+                        "BOV",
+                        "BRL",
+                        "BSD",
+                        "BTN",
+                        "BWP",
+                        "BYR",
+                        "BZD",
+                        "CAD",
+                        "CDF",
+                        "CHE",
+                        "CHF",
+                        "CHW",
+                        "CLF",
+                        "CLP",
+                        "CNY",
+                        "COP",
+                        "COU",
+                        "CRC",
+                        "CUC",
+                        "CUP",
+                        "CVE",
+                        "CZK",
+                        "DJF",
+                        "DKK",
+                        "DOP",
+                        "DZD",
+                        "EGP",
+                        "ERN",
+                        "ETB",
+                        "EUR",
+                        "FJD",
+                        "FKP",
+                        "GBP",
+                        "GEL",
+                        "GHS",
+                        "GIP",
+                        "GMD",
+                        "GNF",
+                        "GTQ",
+                        "GYD",
+                        "HKD",
+                        "HNL",
+                        "HRK",
+                        "HTG",
+                        "HUF",
+                        "IDR",
+                        "ILS",
+                        "INR",
+                        "IQD",
+                        "IRR",
+                        "ISK",
+                        "JMD",
+                        "JOD",
+                        "JPY",
+                        "KES",
+                        "KGS",
+                        "KHR",
+                        "KMF",
+                        "KPW",
+                        "KRW",
+                        "KWD",
+                        "KYD",
+                        "KZT",
+                        "LAK",
+                        "LBP",
+                        "LKR",
+                        "LRD",
+                        "LSL",
+                        "LTL",
+                        "LVL",
+                        "LYD",
+                        "MAD",
+                        "MDL",
+                        "MGA",
+                        "MKD",
+                        "MMK",
+                        "MNT",
+                        "MOP",
+                        "MRO",
+                        "MUR",
+                        "MVR",
+                        "MWK",
+                        "MXN",
+                        "MXV",
+                        "MYR",
+                        "MZN",
+                        "NAD",
+                        "NGN",
+                        "NIO",
+                        "NOK",
+                        "NPR",
+                        "NZD",
+                        "OMR",
+                        "PAB",
+                        "PEN",
+                        "PGK",
+                        "PHP",
+                        "PKR",
+                        "PLN",
+                        "PYG",
+                        "QAR",
+                        "RON",
+                        "RSD",
+                        "RUB",
+                        "RWF",
+                        "SAR",
+                        "SBD",
+                        "SCR",
+                        "SDG",
+                        "SEK",
+                        "SGD",
+                        "SHP",
+                        "SLL",
+                        "SLE",
+                        "SOS",
+                        "SRD",
+                        "SSP",
+                        "STD",
+                        "SVC",
+                        "SYP",
+                        "SZL",
+                        "THB",
+                        "TJS",
+                        "TMT",
+                        "TND",
+                        "TOP",
+                        "TRY",
+                        "TTD",
+                        "TWD",
+                        "TZS",
+                        "UAH",
+                        "UGX",
+                        "USD",
+                        "USN",
+                        "USS",
+                        "UYI",
+                        "UYU",
+                        "UZS",
+                        "VEF",
+                        "VND",
+                        "VUV",
+                        "WST",
+                        "XAF",
+                        "XAG",
+                        "XAU",
+                        "XBA",
+                        "XBB",
+                        "XBC",
+                        "XBD",
+                        "XCD",
+                        "XDR",
+                        "XOF",
+                        "XPD",
+                        "XPF",
+                        "XPT",
+                        "XTS",
+                        "XXX",
+                        "YER",
+                        "ZAR",
+                        "ZMK",
+                        "ZMW",
+                        "BTC",
+                        "XUS",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "total_discount_money": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "UNKNOWN_CURRENCY",
+                        "AED",
+                        "AFN",
+                        "ALL",
+                        "AMD",
+                        "ANG",
+                        "AOA",
+                        "ARS",
+                        "AUD",
+                        "AWG",
+                        "AZN",
+                        "BAM",
+                        "BBD",
+                        "BDT",
+                        "BGN",
+                        "BHD",
+                        "BIF",
+                        "BMD",
+                        "BND",
+                        "BOB",
+                        "BOV",
+                        "BRL",
+                        "BSD",
+                        "BTN",
+                        "BWP",
+                        "BYR",
+                        "BZD",
+                        "CAD",
+                        "CDF",
+                        "CHE",
+                        "CHF",
+                        "CHW",
+                        "CLF",
+                        "CLP",
+                        "CNY",
+                        "COP",
+                        "COU",
+                        "CRC",
+                        "CUC",
+                        "CUP",
+                        "CVE",
+                        "CZK",
+                        "DJF",
+                        "DKK",
+                        "DOP",
+                        "DZD",
+                        "EGP",
+                        "ERN",
+                        "ETB",
+                        "EUR",
+                        "FJD",
+                        "FKP",
+                        "GBP",
+                        "GEL",
+                        "GHS",
+                        "GIP",
+                        "GMD",
+                        "GNF",
+                        "GTQ",
+                        "GYD",
+                        "HKD",
+                        "HNL",
+                        "HRK",
+                        "HTG",
+                        "HUF",
+                        "IDR",
+                        "ILS",
+                        "INR",
+                        "IQD",
+                        "IRR",
+                        "ISK",
+                        "JMD",
+                        "JOD",
+                        "JPY",
+                        "KES",
+                        "KGS",
+                        "KHR",
+                        "KMF",
+                        "KPW",
+                        "KRW",
+                        "KWD",
+                        "KYD",
+                        "KZT",
+                        "LAK",
+                        "LBP",
+                        "LKR",
+                        "LRD",
+                        "LSL",
+                        "LTL",
+                        "LVL",
+                        "LYD",
+                        "MAD",
+                        "MDL",
+                        "MGA",
+                        "MKD",
+                        "MMK",
+                        "MNT",
+                        "MOP",
+                        "MRO",
+                        "MUR",
+                        "MVR",
+                        "MWK",
+                        "MXN",
+                        "MXV",
+                        "MYR",
+                        "MZN",
+                        "NAD",
+                        "NGN",
+                        "NIO",
+                        "NOK",
+                        "NPR",
+                        "NZD",
+                        "OMR",
+                        "PAB",
+                        "PEN",
+                        "PGK",
+                        "PHP",
+                        "PKR",
+                        "PLN",
+                        "PYG",
+                        "QAR",
+                        "RON",
+                        "RSD",
+                        "RUB",
+                        "RWF",
+                        "SAR",
+                        "SBD",
+                        "SCR",
+                        "SDG",
+                        "SEK",
+                        "SGD",
+                        "SHP",
+                        "SLL",
+                        "SLE",
+                        "SOS",
+                        "SRD",
+                        "SSP",
+                        "STD",
+                        "SVC",
+                        "SYP",
+                        "SZL",
+                        "THB",
+                        "TJS",
+                        "TMT",
+                        "TND",
+                        "TOP",
+                        "TRY",
+                        "TTD",
+                        "TWD",
+                        "TZS",
+                        "UAH",
+                        "UGX",
+                        "USD",
+                        "USN",
+                        "USS",
+                        "UYI",
+                        "UYU",
+                        "UZS",
+                        "VEF",
+                        "VND",
+                        "VUV",
+                        "WST",
+                        "XAF",
+                        "XAG",
+                        "XAU",
+                        "XBA",
+                        "XBB",
+                        "XBC",
+                        "XBD",
+                        "XCD",
+                        "XDR",
+                        "XOF",
+                        "XPD",
+                        "XPF",
+                        "XPT",
+                        "XTS",
+                        "XXX",
+                        "YER",
+                        "ZAR",
+                        "ZMK",
+                        "ZMW",
+                        "BTC",
+                        "XUS",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "total_tip_money": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "UNKNOWN_CURRENCY",
+                        "AED",
+                        "AFN",
+                        "ALL",
+                        "AMD",
+                        "ANG",
+                        "AOA",
+                        "ARS",
+                        "AUD",
+                        "AWG",
+                        "AZN",
+                        "BAM",
+                        "BBD",
+                        "BDT",
+                        "BGN",
+                        "BHD",
+                        "BIF",
+                        "BMD",
+                        "BND",
+                        "BOB",
+                        "BOV",
+                        "BRL",
+                        "BSD",
+                        "BTN",
+                        "BWP",
+                        "BYR",
+                        "BZD",
+                        "CAD",
+                        "CDF",
+                        "CHE",
+                        "CHF",
+                        "CHW",
+                        "CLF",
+                        "CLP",
+                        "CNY",
+                        "COP",
+                        "COU",
+                        "CRC",
+                        "CUC",
+                        "CUP",
+                        "CVE",
+                        "CZK",
+                        "DJF",
+                        "DKK",
+                        "DOP",
+                        "DZD",
+                        "EGP",
+                        "ERN",
+                        "ETB",
+                        "EUR",
+                        "FJD",
+                        "FKP",
+                        "GBP",
+                        "GEL",
+                        "GHS",
+                        "GIP",
+                        "GMD",
+                        "GNF",
+                        "GTQ",
+                        "GYD",
+                        "HKD",
+                        "HNL",
+                        "HRK",
+                        "HTG",
+                        "HUF",
+                        "IDR",
+                        "ILS",
+                        "INR",
+                        "IQD",
+                        "IRR",
+                        "ISK",
+                        "JMD",
+                        "JOD",
+                        "JPY",
+                        "KES",
+                        "KGS",
+                        "KHR",
+                        "KMF",
+                        "KPW",
+                        "KRW",
+                        "KWD",
+                        "KYD",
+                        "KZT",
+                        "LAK",
+                        "LBP",
+                        "LKR",
+                        "LRD",
+                        "LSL",
+                        "LTL",
+                        "LVL",
+                        "LYD",
+                        "MAD",
+                        "MDL",
+                        "MGA",
+                        "MKD",
+                        "MMK",
+                        "MNT",
+                        "MOP",
+                        "MRO",
+                        "MUR",
+                        "MVR",
+                        "MWK",
+                        "MXN",
+                        "MXV",
+                        "MYR",
+                        "MZN",
+                        "NAD",
+                        "NGN",
+                        "NIO",
+                        "NOK",
+                        "NPR",
+                        "NZD",
+                        "OMR",
+                        "PAB",
+                        "PEN",
+                        "PGK",
+                        "PHP",
+                        "PKR",
+                        "PLN",
+                        "PYG",
+                        "QAR",
+                        "RON",
+                        "RSD",
+                        "RUB",
+                        "RWF",
+                        "SAR",
+                        "SBD",
+                        "SCR",
+                        "SDG",
+                        "SEK",
+                        "SGD",
+                        "SHP",
+                        "SLL",
+                        "SLE",
+                        "SOS",
+                        "SRD",
+                        "SSP",
+                        "STD",
+                        "SVC",
+                        "SYP",
+                        "SZL",
+                        "THB",
+                        "TJS",
+                        "TMT",
+                        "TND",
+                        "TOP",
+                        "TRY",
+                        "TTD",
+                        "TWD",
+                        "TZS",
+                        "UAH",
+                        "UGX",
+                        "USD",
+                        "USN",
+                        "USS",
+                        "UYI",
+                        "UYU",
+                        "UZS",
+                        "VEF",
+                        "VND",
+                        "VUV",
+                        "WST",
+                        "XAF",
+                        "XAG",
+                        "XAU",
+                        "XBA",
+                        "XBB",
+                        "XBC",
+                        "XBD",
+                        "XCD",
+                        "XDR",
+                        "XOF",
+                        "XPD",
+                        "XPF",
+                        "XPT",
+                        "XTS",
+                        "XXX",
+                        "YER",
+                        "ZAR",
+                        "ZMK",
+                        "ZMW",
+                        "BTC",
+                        "XUS",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "total_service_charge_money": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "UNKNOWN_CURRENCY",
+                        "AED",
+                        "AFN",
+                        "ALL",
+                        "AMD",
+                        "ANG",
+                        "AOA",
+                        "ARS",
+                        "AUD",
+                        "AWG",
+                        "AZN",
+                        "BAM",
+                        "BBD",
+                        "BDT",
+                        "BGN",
+                        "BHD",
+                        "BIF",
+                        "BMD",
+                        "BND",
+                        "BOB",
+                        "BOV",
+                        "BRL",
+                        "BSD",
+                        "BTN",
+                        "BWP",
+                        "BYR",
+                        "BZD",
+                        "CAD",
+                        "CDF",
+                        "CHE",
+                        "CHF",
+                        "CHW",
+                        "CLF",
+                        "CLP",
+                        "CNY",
+                        "COP",
+                        "COU",
+                        "CRC",
+                        "CUC",
+                        "CUP",
+                        "CVE",
+                        "CZK",
+                        "DJF",
+                        "DKK",
+                        "DOP",
+                        "DZD",
+                        "EGP",
+                        "ERN",
+                        "ETB",
+                        "EUR",
+                        "FJD",
+                        "FKP",
+                        "GBP",
+                        "GEL",
+                        "GHS",
+                        "GIP",
+                        "GMD",
+                        "GNF",
+                        "GTQ",
+                        "GYD",
+                        "HKD",
+                        "HNL",
+                        "HRK",
+                        "HTG",
+                        "HUF",
+                        "IDR",
+                        "ILS",
+                        "INR",
+                        "IQD",
+                        "IRR",
+                        "ISK",
+                        "JMD",
+                        "JOD",
+                        "JPY",
+                        "KES",
+                        "KGS",
+                        "KHR",
+                        "KMF",
+                        "KPW",
+                        "KRW",
+                        "KWD",
+                        "KYD",
+                        "KZT",
+                        "LAK",
+                        "LBP",
+                        "LKR",
+                        "LRD",
+                        "LSL",
+                        "LTL",
+                        "LVL",
+                        "LYD",
+                        "MAD",
+                        "MDL",
+                        "MGA",
+                        "MKD",
+                        "MMK",
+                        "MNT",
+                        "MOP",
+                        "MRO",
+                        "MUR",
+                        "MVR",
+                        "MWK",
+                        "MXN",
+                        "MXV",
+                        "MYR",
+                        "MZN",
+                        "NAD",
+                        "NGN",
+                        "NIO",
+                        "NOK",
+                        "NPR",
+                        "NZD",
+                        "OMR",
+                        "PAB",
+                        "PEN",
+                        "PGK",
+                        "PHP",
+                        "PKR",
+                        "PLN",
+                        "PYG",
+                        "QAR",
+                        "RON",
+                        "RSD",
+                        "RUB",
+                        "RWF",
+                        "SAR",
+                        "SBD",
+                        "SCR",
+                        "SDG",
+                        "SEK",
+                        "SGD",
+                        "SHP",
+                        "SLL",
+                        "SLE",
+                        "SOS",
+                        "SRD",
+                        "SSP",
+                        "STD",
+                        "SVC",
+                        "SYP",
+                        "SZL",
+                        "THB",
+                        "TJS",
+                        "TMT",
+                        "TND",
+                        "TOP",
+                        "TRY",
+                        "TTD",
+                        "TWD",
+                        "TZS",
+                        "UAH",
+                        "UGX",
+                        "USD",
+                        "USN",
+                        "USS",
+                        "UYI",
+                        "UYU",
+                        "UZS",
+                        "VEF",
+                        "VND",
+                        "VUV",
+                        "WST",
+                        "XAF",
+                        "XAG",
+                        "XAU",
+                        "XBA",
+                        "XBB",
+                        "XBC",
+                        "XBD",
+                        "XCD",
+                        "XDR",
+                        "XOF",
+                        "XPD",
+                        "XPF",
+                        "XPT",
+                        "XTS",
+                        "XXX",
+                        "YER",
+                        "ZAR",
+                        "ZMK",
+                        "ZMW",
+                        "BTC",
+                        "XUS",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "ticket_name": {
                   "type": [
@@ -1882,7 +4742,22 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "auto_apply_discounts": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "auto_apply_taxes": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "rewards": {
                   "type": [
@@ -1893,6 +4768,25 @@
                     "type": [
                       "object",
                       "null"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "reward_tier_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "reward_tier_id"
                     ]
                   }
                 },
@@ -1900,7 +4794,208 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "UNKNOWN_CURRENCY",
+                        "AED",
+                        "AFN",
+                        "ALL",
+                        "AMD",
+                        "ANG",
+                        "AOA",
+                        "ARS",
+                        "AUD",
+                        "AWG",
+                        "AZN",
+                        "BAM",
+                        "BBD",
+                        "BDT",
+                        "BGN",
+                        "BHD",
+                        "BIF",
+                        "BMD",
+                        "BND",
+                        "BOB",
+                        "BOV",
+                        "BRL",
+                        "BSD",
+                        "BTN",
+                        "BWP",
+                        "BYR",
+                        "BZD",
+                        "CAD",
+                        "CDF",
+                        "CHE",
+                        "CHF",
+                        "CHW",
+                        "CLF",
+                        "CLP",
+                        "CNY",
+                        "COP",
+                        "COU",
+                        "CRC",
+                        "CUC",
+                        "CUP",
+                        "CVE",
+                        "CZK",
+                        "DJF",
+                        "DKK",
+                        "DOP",
+                        "DZD",
+                        "EGP",
+                        "ERN",
+                        "ETB",
+                        "EUR",
+                        "FJD",
+                        "FKP",
+                        "GBP",
+                        "GEL",
+                        "GHS",
+                        "GIP",
+                        "GMD",
+                        "GNF",
+                        "GTQ",
+                        "GYD",
+                        "HKD",
+                        "HNL",
+                        "HRK",
+                        "HTG",
+                        "HUF",
+                        "IDR",
+                        "ILS",
+                        "INR",
+                        "IQD",
+                        "IRR",
+                        "ISK",
+                        "JMD",
+                        "JOD",
+                        "JPY",
+                        "KES",
+                        "KGS",
+                        "KHR",
+                        "KMF",
+                        "KPW",
+                        "KRW",
+                        "KWD",
+                        "KYD",
+                        "KZT",
+                        "LAK",
+                        "LBP",
+                        "LKR",
+                        "LRD",
+                        "LSL",
+                        "LTL",
+                        "LVL",
+                        "LYD",
+                        "MAD",
+                        "MDL",
+                        "MGA",
+                        "MKD",
+                        "MMK",
+                        "MNT",
+                        "MOP",
+                        "MRO",
+                        "MUR",
+                        "MVR",
+                        "MWK",
+                        "MXN",
+                        "MXV",
+                        "MYR",
+                        "MZN",
+                        "NAD",
+                        "NGN",
+                        "NIO",
+                        "NOK",
+                        "NPR",
+                        "NZD",
+                        "OMR",
+                        "PAB",
+                        "PEN",
+                        "PGK",
+                        "PHP",
+                        "PKR",
+                        "PLN",
+                        "PYG",
+                        "QAR",
+                        "RON",
+                        "RSD",
+                        "RUB",
+                        "RWF",
+                        "SAR",
+                        "SBD",
+                        "SCR",
+                        "SDG",
+                        "SEK",
+                        "SGD",
+                        "SHP",
+                        "SLL",
+                        "SLE",
+                        "SOS",
+                        "SRD",
+                        "SSP",
+                        "STD",
+                        "SVC",
+                        "SYP",
+                        "SZL",
+                        "THB",
+                        "TJS",
+                        "TMT",
+                        "TND",
+                        "TOP",
+                        "TRY",
+                        "TTD",
+                        "TWD",
+                        "TZS",
+                        "UAH",
+                        "UGX",
+                        "USD",
+                        "USN",
+                        "USS",
+                        "UYI",
+                        "UYU",
+                        "UZS",
+                        "VEF",
+                        "VND",
+                        "VUV",
+                        "WST",
+                        "XAF",
+                        "XAG",
+                        "XAU",
+                        "XBA",
+                        "XBB",
+                        "XBC",
+                        "XBD",
+                        "XCD",
+                        "XDR",
+                        "XOF",
+                        "XPD",
+                        "XPF",
+                        "XPT",
+                        "XTS",
+                        "XXX",
+                        "YER",
+                        "ZAR",
+                        "ZMK",
+                        "ZMW",
+                        "BTC",
+                        "XUS",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false,
@@ -1917,6 +5012,25 @@
                 "type": [
                   "object",
                   "null"
+                ],
+                "properties": {
+                  "id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "reward_tier_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "reward_tier_id"
                 ]
               }
             }
@@ -1943,10 +5057,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "location_ids": {
               "type": [
@@ -1976,12 +5087,163 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "state_filter": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "states": {
+                          "type": "array",
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "states"
+                      ]
+                    },
+                    "date_time_filter": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "created_at": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        },
+                        "updated_at": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        },
+                        "closed_at": {
+                          "type": [
+                            "object",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "fulfillment_filter": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "fulfillment_types": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "fulfillment_states": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "source_filter": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "source_names": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "customer_filter": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "customer_ids": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
+                  ],
+                  "properties": {
+                    "sort_field": {
+                      "type": "string",
+                      "enum": [
+                        "CREATED_AT",
+                        "UPDATED_AT",
+                        "CLOSED_AT"
+                      ]
+                    },
+                    "sort_order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "sort_field"
                   ]
                 }
               },
@@ -2019,10 +5281,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "cursor": {
               "type": [
@@ -2046,7 +5305,46 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "customer_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "location_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "source_names": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -2083,10 +5381,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -2098,7 +5393,39 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "location_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "ACTIVE",
+                        "INACTIVE",
+                        null
+                      ]
+                    },
+                    "is_owner": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -2135,10 +5462,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -2150,13 +5474,80 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "device_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "created_at": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "type": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "QR_CODE",
+                        "PING",
+                        "SAVE_CARD",
+                        "SIGNATURE",
+                        "CONFIRMATION",
+                        "RECEIPT",
+                        "DATA_COLLECTION",
+                        "SELECT",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "sort_order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -2193,10 +5584,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -2208,13 +5596,63 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "device_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "created_at": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "sort_order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -2251,10 +5689,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -2266,13 +5701,58 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "device_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "created_at": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "properties": {
+                        "start_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "end_at": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "sort_order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -2309,10 +5789,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "query": {
               "type": [
@@ -2324,13 +5801,77 @@
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "source_location_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "destination_location_ids": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "statuses": {
+                      "type": [
+                        "array",
+                        "null"
+                      ],
+                      "items": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "sort": {
                   "type": [
                     "object",
                     "null"
-                  ]
+                  ],
+                  "properties": {
+                    "field": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "CREATED_AT",
+                        "UPDATED_AT",
+                        null
+                      ]
+                    },
+                    "order": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "DESC",
+                        "ASC",
+                        null
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false
@@ -2367,10 +5908,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "vendor_ids": {
               "type": [
@@ -2404,10 +5942,7 @@
         "content_type": "application/json",
         "max_bytes": 1048576,
         "body_schema": {
-          "type": [
-            "object",
-            "null"
-          ],
+          "type": "object",
           "properties": {
             "filter": {
               "type": [
@@ -2438,9 +5973,9 @@
                       "null"
                     ],
                     "enum": [
-                      "DO_NOT_USE",
                       "ACTIVE",
-                      "INACTIVE"
+                      "INACTIVE",
+                      null
                     ]
                   }
                 }
@@ -2460,7 +5995,8 @@
                   ],
                   "enum": [
                     "NAME",
-                    "CREATED_AT"
+                    "CREATED_AT",
+                    null
                   ]
                 },
                 "order": {
@@ -2470,7 +6006,8 @@
                   ],
                   "enum": [
                     "DESC",
-                    "ASC"
+                    "ASC",
+                    null
                   ]
                 }
               },

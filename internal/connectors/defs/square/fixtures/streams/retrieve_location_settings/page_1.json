@@ -7,12 +7,31 @@
     "status": 200,
     "body": {
       "location_settings": {
-        "id": "retrieve_location_settings_fixture_1",
-        "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveLocationSettings fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveLocationSettings"
+        "location_id": "retrieve_location_settings_location_id_1",
+        "customer_notes_enabled": true,
+        "policies": [
+          {
+            "uid": "retrieve_location_settings_uid_1",
+            "title": "retrieve_location_settings_title_1",
+            "description": "retrieve_location_settings_description_1"
+          }
+        ],
+        "branding": {
+          "header_type": "BUSINESS_NAME",
+          "button_color": "retrieve_location_settings_button_color_1",
+          "button_shape": "SQUARED"
+        },
+        "tipping": {
+          "percentages": [
+            101
+          ],
+          "smart_tipping_enabled": true,
+          "default_percent": 101
+        },
+        "coupons": {
+          "enabled": true
+        },
+        "updated_at": "2026-01-01T00:05:00Z"
       }
     }
   }

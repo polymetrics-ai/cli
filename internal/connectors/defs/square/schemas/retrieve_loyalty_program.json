@@ -12,6 +12,48 @@
     "id": {
       "type": "string"
     },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reward_tiers": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "expiration_policy": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "terminology": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "location_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,23 +66,17 @@
         "null"
       ]
     },
-    "name": {
+    "accrual_rules": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
-        "null"
-      ]
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
     }
   }
 }

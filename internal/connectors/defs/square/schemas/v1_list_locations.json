@@ -12,19 +12,31 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "business_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "country": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
       "type": [
         "string",
         "null"
@@ -36,7 +48,7 @@
         "null"
       ]
     },
-    "source_operation": {
+    "created_at": {
       "type": [
         "string",
         "null"

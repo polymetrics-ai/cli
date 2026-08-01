@@ -3,40 +3,55 @@
   "title": "retrieve_location_settings",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "location_id"
   ],
   "required": [
-    "id"
+    "location_id"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "created_at": {
+    "location_id": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "customer_notes_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "policies": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "branding": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tipping": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "coupons": {
+      "type": [
+        "object",
         "null"
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
       "type": [
         "string",
         "null"

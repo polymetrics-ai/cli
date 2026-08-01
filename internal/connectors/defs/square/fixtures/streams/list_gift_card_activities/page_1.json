@@ -11,12 +11,109 @@
     "body": {
       "gift_card_activities": [
         {
-          "id": "list_gift_card_activities_fixture_1",
+          "id": "list_gift_card_activities_id_1",
+          "type": "ACTIVATE",
+          "location_id": "list_gift_card_activities_location_id_1",
           "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListGiftCardActivities fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListGiftCardActivities"
+          "gift_card_id": "list_gift_card_activities_gift_card_id_1",
+          "gift_card_gan": "list_gift_card_activities_gift_card_gan_1",
+          "gift_card_balance_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "load_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "order_id": "list_gift_card_activities_order_id_1",
+            "line_item_uid": "list_gift_card_activities_line_item_uid_1"
+          },
+          "activate_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "order_id": "list_gift_card_activities_order_id_1",
+            "line_item_uid": "list_gift_card_activities_line_item_uid_1"
+          },
+          "redeem_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "payment_id": "list_gift_card_activities_payment_id_1",
+            "reference_id": "list_gift_card_activities_reference_id_1",
+            "status": "PENDING"
+          },
+          "clear_balance_activity_details": {
+            "reason": "SUSPICIOUS_ACTIVITY"
+          },
+          "deactivate_activity_details": {
+            "reason": "SUSPICIOUS_ACTIVITY"
+          },
+          "adjust_increment_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "reason": "COMPLIMENTARY"
+          },
+          "adjust_decrement_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "reason": "SUSPICIOUS_ACTIVITY"
+          },
+          "refund_activity_details": {
+            "redeem_activity_id": "list_gift_card_activities_redeem_activity_id_1",
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "reference_id": "list_gift_card_activities_reference_id_1"
+          },
+          "unlinked_activity_refund_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "reference_id": "list_gift_card_activities_reference_id_1",
+            "payment_id": "list_gift_card_activities_payment_id_1"
+          },
+          "import_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            }
+          },
+          "block_activity_details": {
+            "reason": "CHARGEBACK_BLOCK"
+          },
+          "unblock_activity_details": {
+            "reason": "CHARGEBACK_UNBLOCK"
+          },
+          "import_reversal_activity_details": {
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            }
+          },
+          "transfer_balance_to_activity_details": {
+            "transfer_from_gift_card_id": "list_gift_card_activities_transfer_from_gift_card_id_1",
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            }
+          },
+          "transfer_balance_from_activity_details": {
+            "transfer_to_gift_card_id": "list_gift_card_activities_transfer_to_gift_card_id_1",
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            }
+          }
         }
       ]
     }

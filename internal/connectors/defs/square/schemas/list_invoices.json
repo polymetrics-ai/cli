@@ -12,6 +12,96 @@
     "id": {
       "type": "string"
     },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "primary_recipient": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "payment_requests": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "delivery_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "invoice_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scheduled_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "public_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "next_payment_amount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +114,61 @@
         "null"
       ]
     },
-    "name": {
+    "accepted_payment_methods": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "custom_fields": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "subscription_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "sale_or_service_date": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "payment_conditions": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "store_payment_method_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "attachments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "creator_team_member_id": {
       "type": [
         "string",
         "null"

@@ -12,19 +12,61 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "account_number_suffix": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "country": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "account_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "holder_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "primary_bank_identification_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "secondary_bank_identification_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "debit_mandate_reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location_id": {
       "type": [
         "string",
         "null"
@@ -36,7 +78,37 @@
         "null"
       ]
     },
-    "source_operation": {
+    "creditable": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "debitable": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "bank_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_id": {
       "type": [
         "string",
         "null"

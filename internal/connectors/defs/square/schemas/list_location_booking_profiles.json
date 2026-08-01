@@ -3,42 +3,27 @@
   "title": "list_location_booking_profiles",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "location_id"
   ],
   "required": [
-    "id"
+    "location_id"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "created_at": {
+    "location_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "booking_site_url": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "online_booking_enabled": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "boolean",
         "null"
       ]
     }

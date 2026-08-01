@@ -11,12 +11,9 @@
     "body": {
       "location_booking_profiles": [
         {
-          "id": "list_location_booking_profiles_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListLocationBookingProfiles fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListLocationBookingProfiles"
+          "location_id": "list_location_booking_profiles_location_id_1",
+          "booking_site_url": "https://example.invalid/list_location_booking_profiles/1",
+          "online_booking_enabled": true
         }
       ]
     }

@@ -12,33 +12,129 @@
     "id": {
       "type": "string"
     },
+    "card_brand": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_4": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "exp_month": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "exp_year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "cardholder_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "billing_address": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "customer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "merchant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "card_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prepaid_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "disabled_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "card_co_brand": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "issuer_alert": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "issuer_alert_at": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "hsa_fsa": {
+      "type": [
+        "boolean",
         "null"
       ]
     }

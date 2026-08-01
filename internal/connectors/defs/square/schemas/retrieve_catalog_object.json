@@ -9,14 +9,14 @@
     "id"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "created_at": {
+    "type": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "id": {
+      "type": "string"
     },
     "updated_at": {
       "type": [
@@ -24,21 +24,177 @@
         "null"
       ]
     },
-    "name": {
+    "version": {
       "type": [
-        "string",
+        "integer",
         "null"
       ]
     },
-    "status": {
+    "is_deleted": {
       "type": [
-        "string",
+        "boolean",
         "null"
       ]
     },
-    "source_operation": {
+    "custom_attribute_values": {
       "type": [
-        "string",
+        "object",
+        "null"
+      ]
+    },
+    "catalog_v1_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "present_at_all_locations": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "present_at_location_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "absent_at_location_ids": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "item_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "category_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "item_variation_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tax_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "discount_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "modifier_list_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "modifier_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "time_period_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "product_set_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "pricing_rule_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "image_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "measurement_unit_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "subscription_plan_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "item_option_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "item_option_value_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "custom_attribute_definition_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "quick_amounts_settings_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "subscription_plan_variation_data": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "availability_period_data": {
+      "type": [
+        "object",
         "null"
       ]
     }

@@ -363,7 +363,7 @@
       "name": "list_cash_drawer_shifts",
       "path": "/v2/cash-drawers/shifts",
       "records": {
-        "path": "items"
+        "path": "cash_drawer_shifts"
       },
       "schema": "schemas/list_cash_drawer_shifts.json",
       "query": {

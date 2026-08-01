@@ -8,12 +8,167 @@
     "body": {
       "objects": [
         {
-          "id": "list_catalog_fixture_1",
-          "created_at": "2026-01-01T00:00:00Z",
+          "type": "ITEM",
+          "id": "list_catalog_id_1",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListCatalog fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListCatalog"
+          "version": 1,
+          "is_deleted": true,
+          "custom_attribute_values": {
+            "fixture": "list_catalog_custom_attribute_values_1"
+          },
+          "catalog_v1_ids": [
+            {
+              "catalog_v1_id": "list_catalog_catalog_v1_id_1",
+              "location_id": "list_catalog_location_id_1"
+            }
+          ],
+          "present_at_all_locations": true,
+          "present_at_location_ids": [
+            "list_catalog_present_at_location_id_1"
+          ],
+          "absent_at_location_ids": [
+            "list_catalog_absent_at_location_id_1"
+          ],
+          "item_data": {
+            "name": "list_catalog_name_1",
+            "description": "list_catalog_description_1",
+            "abbreviation": "list_catalog_abbreviation_1"
+          },
+          "category_data": {
+            "name": "list_catalog_name_1",
+            "image_ids": [
+              "list_catalog_image_id_1"
+            ],
+            "category_type": "REGULAR_CATEGORY"
+          },
+          "item_variation_data": {
+            "item_id": "list_catalog_item_id_1",
+            "name": "list_catalog_name_1",
+            "sku": "list_catalog_sku_1"
+          },
+          "tax_data": {
+            "name": "list_catalog_name_1",
+            "calculation_phase": "TAX_SUBTOTAL_PHASE",
+            "inclusion_type": "ADDITIVE"
+          },
+          "discount_data": {
+            "name": "list_catalog_name_1",
+            "discount_type": "FIXED_PERCENTAGE",
+            "percentage": "list_catalog_percentage_1"
+          },
+          "modifier_list_data": {
+            "name": "list_catalog_name_1",
+            "ordinal": 101,
+            "selection_type": "SINGLE"
+          },
+          "modifier_data": {
+            "name": "list_catalog_name_1",
+            "price_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "on_by_default": true
+          },
+          "time_period_data": {
+            "event": "list_catalog_event_1"
+          },
+          "product_set_data": {
+            "name": "list_catalog_name_1",
+            "product_ids_any": [
+              "list_catalog_product_ids_any_1"
+            ],
+            "product_ids_all": [
+              "list_catalog_product_ids_all_1"
+            ]
+          },
+          "pricing_rule_data": {
+            "name": "list_catalog_name_1",
+            "time_period_ids": [
+              "list_catalog_time_period_id_1"
+            ],
+            "discount_id": "list_catalog_discount_id_1"
+          },
+          "image_data": {
+            "name": "list_catalog_name_1",
+            "url": "https://example.invalid/list_catalog/1",
+            "caption": "list_catalog_caption_1"
+          },
+          "measurement_unit_data": {
+            "measurement_unit": {
+              "custom_unit": {
+                "fixture": "list_catalog_custom_unit_1"
+              },
+              "area_unit": "IMPERIAL_ACRE",
+              "length_unit": "IMPERIAL_INCH"
+            },
+            "precision": 101
+          },
+          "subscription_plan_data": {
+            "name": "list_catalog_name_1",
+            "phases": [
+              {
+                "fixture": "list_catalog_phase_1"
+              }
+            ],
+            "subscription_plan_variations": [
+              {
+                "fixture": "list_catalog_subscription_plan_variation_1"
+              }
+            ],
+            "eligible_item_ids": [
+              "list_catalog_eligible_item_id_1"
+            ]
+          },
+          "item_option_data": {
+            "name": "list_catalog_name_1",
+            "display_name": "list_catalog_display_name_1",
+            "description": "list_catalog_description_1"
+          },
+          "item_option_value_data": {
+            "item_option_id": "list_catalog_item_option_id_1",
+            "name": "list_catalog_name_1",
+            "description": "list_catalog_description_1"
+          },
+          "custom_attribute_definition_data": {
+            "type": "STRING",
+            "name": "list_catalog_name_1",
+            "allowed_object_types": [
+              "ITEM"
+            ],
+            "description": "list_catalog_description_1",
+            "source_application": {
+              "product": "SQUARE_POS",
+              "application_id": "list_catalog_application_id_1",
+              "name": "list_catalog_name_1"
+            },
+            "seller_visibility": "SELLER_VISIBILITY_HIDDEN"
+          },
+          "quick_amounts_settings_data": {
+            "option": "DISABLED",
+            "eligible_for_auto_amounts": true,
+            "amounts": [
+              {
+                "amount": 1001,
+                "currency": "USD"
+              }
+            ]
+          },
+          "subscription_plan_variation_data": {
+            "name": "list_catalog_name_1",
+            "phases": [
+              {
+                "fixture": "list_catalog_phase_1"
+              }
+            ],
+            "subscription_plan_id": "list_catalog_subscription_plan_id_1",
+            "monthly_billing_anchor_date": 101,
+            "can_prorate": true
+          },
+          "availability_period_data": {
+            "start_local_time": "2026-01-01T00:00:00Z",
+            "end_local_time": "2026-01-01T00:00:00Z",
+            "day_of_week": "SUN"
+          }
         }
       ]
     }

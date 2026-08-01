@@ -12,6 +12,36 @@
     "id": {
       "type": "string"
     },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "break_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expected_duration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_paid": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -19,24 +49,6 @@
       ]
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
       "type": [
         "string",
         "null"

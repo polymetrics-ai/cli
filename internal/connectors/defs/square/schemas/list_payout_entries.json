@@ -12,33 +12,189 @@
     "id": {
       "type": "string"
     },
-    "created_at": {
+    "payout_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "effective_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "type": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "gross_amount_money": {
       "type": [
-        "string",
+        "object",
         "null"
       ]
     },
-    "source_operation": {
+    "fee_amount_money": {
       "type": [
-        "string",
+        "object",
+        "null"
+      ]
+    },
+    "net_amount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_app_fee_revenue_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_app_fee_refund_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_automatic_savings_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_automatic_savings_reversed_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_charge_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_deposit_fee_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_deposit_fee_reversed_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_dispute_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_fee_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_free_processing_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_hold_adjustment_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_open_dispute_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_other_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_other_adjustment_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_refund_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_release_adjustment_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_reserve_hold_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_reserve_release_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_square_capital_payment_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_square_capital_reversed_payment_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_tax_on_fee_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_third_party_fee_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_third_party_fee_refund_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_square_payroll_transfer_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type_square_payroll_transfer_reversed_details": {
+      "type": [
+        "object",
         "null"
       ]
     }

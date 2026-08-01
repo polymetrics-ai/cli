@@ -7,12 +7,23 @@
     "status": 200,
     "body": {
       "refund": {
-        "id": "get_terminal_refund_fixture_1",
+        "id": "get_terminal_refund_id_1",
+        "refund_id": "get_terminal_refund_refund_id_1",
+        "payment_id": "get_terminal_refund_payment_id_1",
+        "order_id": "get_terminal_refund_order_id_1",
+        "amount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "reason": "get_terminal_refund_reason_1",
+        "device_id": "get_terminal_refund_device_id_1",
+        "deadline_duration": "get_terminal_refund_deadline_duration_1",
+        "status": "ACTIVE",
+        "cancel_reason": "BUYER_CANCELED",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetTerminalRefund fixture",
-        "status": "ACTIVE",
-        "source_operation": "GetTerminalRefund"
+        "app_id": "get_terminal_refund_app_id_1",
+        "location_id": "get_terminal_refund_location_id_1"
       }
     }
   }

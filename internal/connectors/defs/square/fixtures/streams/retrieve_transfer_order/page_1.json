@@ -7,12 +7,27 @@
     "status": 200,
     "body": {
       "transfer_order": {
-        "id": "retrieve_transfer_order_fixture_1",
+        "id": "retrieve_transfer_order_id_1",
+        "source_location_id": "retrieve_transfer_order_source_location_id_1",
+        "destination_location_id": "retrieve_transfer_order_destination_location_id_1",
+        "status": "DRAFT",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveTransferOrder fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveTransferOrder"
+        "expected_at": "2026-01-01T00:00:00Z",
+        "completed_at": "2026-01-01T00:00:00Z",
+        "notes": "retrieve_transfer_order_notes_1",
+        "tracking_number": "retrieve_transfer_order_tracking_number_1",
+        "created_by_team_member_id": "retrieve_transfer_order_created_by_team_member_id_1",
+        "line_items": [
+          {
+            "item_variation_id": "retrieve_transfer_order_item_variation_id_1",
+            "quantity_ordered": "retrieve_transfer_order_quantity_ordered_1",
+            "uid": "retrieve_transfer_order_uid_1",
+            "quantity_pending": "retrieve_transfer_order_quantity_pending_1",
+            "quantity_received": "retrieve_transfer_order_quantity_received_1"
+          }
+        ],
+        "version": 1
       }
     }
   }

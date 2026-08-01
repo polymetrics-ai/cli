@@ -12,6 +12,54 @@
     "id": {
       "type": "string"
     },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "opened_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ended_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "closed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "opened_cash_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "expected_cash_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "closed_cash_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +72,7 @@
         "null"
       ]
     },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "location_id": {
       "type": [
         "string",
         "null"

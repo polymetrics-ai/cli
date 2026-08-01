@@ -7,12 +7,23 @@
     "status": 200,
     "body": {
       "count": {
-        "id": "retrieve_inventory_physical_count_fixture_1",
+        "id": "retrieve_inventory_physical_count_id_1",
+        "reference_id": "retrieve_inventory_physical_count_reference_id_1",
+        "catalog_object_id": "retrieve_inventory_physical_count_catalog_object_id_1",
+        "catalog_object_type": "FIXTURE",
+        "state": "CUSTOM",
+        "location_id": "retrieve_inventory_physical_count_location_id_1",
+        "quantity": "1",
+        "source": {
+          "product": "SQUARE_POS",
+          "application_id": "retrieve_inventory_physical_count_application_id_1",
+          "name": "retrieve_inventory_physical_count_name_1"
+        },
+        "employee_id": "retrieve_inventory_physical_count_employee_id_1",
+        "team_member_id": "retrieve_inventory_physical_count_team_member_id_1",
+        "occurred_at": "2026-01-01T00:00:00Z",
         "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveInventoryPhysicalCount fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveInventoryPhysicalCount"
+        "adjustment_id": "retrieve_inventory_physical_count_adjustment_id_1"
       }
     }
   }

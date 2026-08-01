@@ -7,12 +7,165 @@
     "status": 200,
     "body": {
       "payment": {
-        "id": "get_payment_fixture_1",
+        "id": "get_payment_id_1",
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "GetPayment fixture",
+        "amount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "tip_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "total_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "app_fee_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "app_fee_allocations": [
+          {
+            "fixture": "get_payment_app_fee_allocation_1"
+          }
+        ],
+        "approved_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "processing_fee": [
+          {
+            "effective_at": "2026-01-01T00:00:00Z",
+            "type": "FIXTURE",
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            }
+          }
+        ],
+        "refunded_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
         "status": "ACTIVE",
-        "source_operation": "GetPayment"
+        "delay_duration": "get_payment_delay_duration_1",
+        "delay_action": "get_payment_delay_action_1",
+        "delayed_until": "get_payment_delayed_until_1",
+        "source_type": "FIXTURE",
+        "card_details": {
+          "status": "ACTIVE",
+          "card": {
+            "id": "get_payment_id_1",
+            "card_brand": "OTHER_BRAND",
+            "last_4": "get_payment_last_4_1"
+          },
+          "entry_method": "get_payment_entry_method_1"
+        },
+        "cash_details": {
+          "buyer_supplied_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "change_back_money": {
+            "amount": 1001,
+            "currency": "USD"
+          }
+        },
+        "bank_account_details": {
+          "bank_name": "get_payment_bank_name_1",
+          "transfer_type": "FIXTURE",
+          "account_ownership_type": "FIXTURE"
+        },
+        "electronic_money_details": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "external_details": {
+          "type": "FIXTURE",
+          "source": "get_payment_source_1",
+          "source_id": "get_payment_source_id_1",
+          "source_fee_money": {
+            "amount": 1001,
+            "currency": "USD"
+          }
+        },
+        "wallet_details": {
+          "status": "ACTIVE",
+          "brand": "get_payment_brand_1",
+          "cash_app_details": {
+            "buyer_full_name": "get_payment_buyer_full_name_1",
+            "buyer_country_code": "US",
+            "buyer_cashtag": "get_payment_buyer_cashtag_1"
+          }
+        },
+        "buy_now_pay_later_details": {
+          "brand": "get_payment_brand_1",
+          "afterpay_details": {
+            "email_address": "get_payment_1@example.invalid"
+          },
+          "clearpay_details": {
+            "email_address": "get_payment_1@example.invalid"
+          }
+        },
+        "square_account_details": {
+          "payment_source_token": "get_payment_payment_source_token_1",
+          "errors": [
+            {
+              "fixture": "get_payment_error_1"
+            }
+          ]
+        },
+        "location_id": "get_payment_location_id_1",
+        "order_id": "get_payment_order_id_1",
+        "reference_id": "get_payment_reference_id_1",
+        "customer_id": "get_payment_customer_id_1",
+        "employee_id": "get_payment_employee_id_1",
+        "team_member_id": "get_payment_team_member_id_1",
+        "refund_ids": [
+          "get_payment_refund_id_1"
+        ],
+        "risk_evaluation": {
+          "created_at": "2026-01-01T00:00:00Z",
+          "risk_level": "PENDING"
+        },
+        "terminal_checkout_id": "get_payment_terminal_checkout_id_1",
+        "buyer_email_address": "get_payment_1@example.invalid",
+        "billing_address": {
+          "address_line_1": "get_payment_address_line_1_1",
+          "address_line_2": "get_payment_address_line_2_1",
+          "address_line_3": "get_payment_address_line_3_1"
+        },
+        "shipping_address": {
+          "address_line_1": "get_payment_address_line_1_1",
+          "address_line_2": "get_payment_address_line_2_1",
+          "address_line_3": "get_payment_address_line_3_1"
+        },
+        "note": "get_payment_note_1",
+        "statement_description_identifier": "get_payment_statement_description_identifier_1",
+        "capabilities": [
+          "get_payment_capabilitie_1"
+        ],
+        "receipt_number": "get_payment_receipt_number_1",
+        "receipt_url": "https://example.invalid/get_payment/1",
+        "device_details": {
+          "device_id": "get_payment_device_id_1",
+          "device_installation_id": "get_payment_device_installation_id_1",
+          "device_name": "get_payment_device_name_1"
+        },
+        "application_details": {
+          "square_product": "APPOINTMENTS",
+          "application_id": "get_payment_application_id_1"
+        },
+        "buyer_currency_exchange": {
+          "fixture": "get_payment_buyer_currency_exchange_1"
+        },
+        "is_offline_payment": true,
+        "offline_payment_details": {
+          "client_created_at": "2026-01-01T00:00:00Z"
+        },
+        "version_token": "get_payment_version_token_1"
       }
     }
   }

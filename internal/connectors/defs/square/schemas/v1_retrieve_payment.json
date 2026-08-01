@@ -12,33 +12,177 @@
     "id": {
       "type": "string"
     },
+    "merchant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "updated_at": {
+    "creator_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "device": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "payment_url": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "receipt_url": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "inclusive_tax_money": {
       "type": [
-        "string",
+        "object",
+        "null"
+      ]
+    },
+    "additive_tax_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tax_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tip_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "discount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "total_collected_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "processing_fee_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "net_total_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "refunded_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "swedish_rounding_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gross_sales_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "net_sales_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "inclusive_tax": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "additive_tax": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "tender": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "refunds": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "itemizations": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "surcharge_money": {
+      "type": [
+        "object",
         "null"
       ]
     }

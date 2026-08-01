@@ -7,12 +7,164 @@
     "status": 200,
     "body": {
       "order": {
-        "id": "retrieve_order_fixture_1",
+        "id": "retrieve_order_id_1",
+        "location_id": "retrieve_order_location_id_1",
+        "reference_id": "retrieve_order_reference_id_1",
+        "source": {
+          "name": "retrieve_order_name_1"
+        },
+        "customer_id": "retrieve_order_customer_id_1",
+        "line_items": [
+          {
+            "quantity": "1",
+            "uid": "retrieve_order_uid_1",
+            "name": "retrieve_order_name_1",
+            "quantity_unit": {
+              "fixture": "retrieve_order_quantity_unit_1"
+            }
+          }
+        ],
+        "taxes": [
+          {
+            "uid": "retrieve_order_uid_1",
+            "catalog_object_id": "retrieve_order_catalog_object_id_1",
+            "catalog_version": 1
+          }
+        ],
+        "discounts": [
+          {
+            "uid": "retrieve_order_uid_1",
+            "catalog_object_id": "retrieve_order_catalog_object_id_1",
+            "catalog_version": 1
+          }
+        ],
+        "service_charges": [
+          {
+            "uid": "retrieve_order_uid_1",
+            "name": "retrieve_order_name_1",
+            "catalog_object_id": "retrieve_order_catalog_object_id_1"
+          }
+        ],
+        "fulfillments": [
+          {
+            "uid": "retrieve_order_uid_1",
+            "type": "PICKUP",
+            "state": "PROPOSED"
+          }
+        ],
+        "returns": [
+          {
+            "uid": "retrieve_order_uid_1",
+            "source_order_id": "retrieve_order_source_order_id_1",
+            "return_line_items": [
+              {
+                "fixture": "retrieve_order_return_line_item_1"
+              }
+            ]
+          }
+        ],
+        "return_amounts": {
+          "total_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "tax_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "discount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          }
+        },
+        "net_amounts": {
+          "total_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "tax_money": {
+            "amount": 1001,
+            "currency": "USD"
+          },
+          "discount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          }
+        },
+        "rounding_adjustment": {
+          "uid": "retrieve_order_uid_1",
+          "name": "retrieve_order_name_1",
+          "amount_money": {
+            "amount": 1001,
+            "currency": "USD"
+          }
+        },
+        "tenders": [
+          {
+            "type": "CARD",
+            "id": "retrieve_order_id_1",
+            "location_id": "retrieve_order_location_id_1",
+            "transaction_id": "retrieve_order_transaction_id_1"
+          }
+        ],
+        "refunds": [
+          {
+            "id": "retrieve_order_id_1",
+            "location_id": "retrieve_order_location_id_1",
+            "reason": "retrieve_order_reason_1",
+            "amount_money": {
+              "amount": 1001,
+              "currency": "USD"
+            },
+            "status": "PENDING",
+            "transaction_id": "retrieve_order_transaction_id_1",
+            "tender_id": "retrieve_order_tender_id_1",
+            "created_at": "2026-01-01T00:00:00Z"
+          }
+        ],
+        "metadata": {
+          "fixture": "retrieve_order_metadata_1"
+        },
         "created_at": "2026-01-01T00:00:00Z",
         "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveOrder fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveOrder"
+        "closed_at": "2026-01-01T00:00:00Z",
+        "state": "OPEN",
+        "version": 1,
+        "total_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "total_tax_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "total_discount_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "total_tip_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "total_service_charge_money": {
+          "amount": 1001,
+          "currency": "USD"
+        },
+        "ticket_name": "retrieve_order_ticket_name_1",
+        "pricing_options": {
+          "auto_apply_discounts": true,
+          "auto_apply_taxes": true
+        },
+        "rewards": [
+          {
+            "id": "retrieve_order_id_1",
+            "reward_tier_id": "retrieve_order_reward_tier_id_1"
+          }
+        ],
+        "net_amount_due_money": {
+          "amount": 1001,
+          "currency": "USD"
+        }
       }
     }
   }

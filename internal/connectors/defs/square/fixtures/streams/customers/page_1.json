@@ -11,12 +11,37 @@
     "body": {
       "customers": [
         {
-          "id": "list_customers_fixture_1",
+          "id": "customers_id_1",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListCustomers fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListCustomers"
+          "given_name": "customers_given_name_1",
+          "family_name": "customers_family_name_1",
+          "nickname": "customers_nickname_1",
+          "company_name": "customers_company_name_1",
+          "email_address": "customers_1@example.invalid",
+          "address": {
+            "address_line_1": "customers_address_line_1_1",
+            "address_line_2": "customers_address_line_2_1",
+            "address_line_3": "customers_address_line_3_1"
+          },
+          "phone_number": "+15550100",
+          "birthday": "2026-01-01T00:00:00Z",
+          "reference_id": "customers_reference_id_1",
+          "note": "customers_note_1",
+          "preferences": {
+            "email_unsubscribed": true
+          },
+          "creation_source": "OTHER",
+          "group_ids": [
+            "customers_group_id_1"
+          ],
+          "segment_ids": [
+            "customers_segment_id_1"
+          ],
+          "version": 1,
+          "tax_ids": {
+            "eu_vat": "customers_eu_vat_1"
+          }
         }
       ]
     }

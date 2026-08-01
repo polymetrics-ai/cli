@@ -7,12 +7,10 @@
     "status": 200,
     "body": {
       "group": {
-        "id": "retrieve_customer_group_fixture_1",
+        "id": "retrieve_customer_group_id_1",
+        "name": "retrieve_customer_group_name_1",
         "created_at": "2026-01-01T00:00:00Z",
-        "updated_at": "2026-01-01T00:05:00Z",
-        "name": "RetrieveCustomerGroup fixture",
-        "status": "ACTIVE",
-        "source_operation": "RetrieveCustomerGroup"
+        "updated_at": "2026-01-01T00:05:00Z"
       }
     }
   }

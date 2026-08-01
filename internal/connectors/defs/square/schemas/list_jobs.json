@@ -12,6 +12,18 @@
     "id": {
       "type": "string"
     },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_tip_eligible": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,21 +36,9 @@
         "null"
       ]
     },
-    "name": {
+    "version": {
       "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
-      "type": [
-        "string",
+        "integer",
         "null"
       ]
     }

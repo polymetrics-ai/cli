@@ -12,6 +12,90 @@
     "id": {
       "type": "string"
     },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "unlinked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "destination_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "destination_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "amount_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "app_fee_money": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "app_fee_allocations": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "processing_fee": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "payment_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "order_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,19 +108,13 @@
         "null"
       ]
     },
-    "name": {
+    "team_member_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "source_operation": {
+    "terminal_refund_id": {
       "type": [
         "string",
         "null"

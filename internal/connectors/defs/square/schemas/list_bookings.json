@@ -12,6 +12,18 @@
     "id": {
       "type": "string"
     },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
@@ -24,21 +36,81 @@
         "null"
       ]
     },
-    "name": {
+    "start_at": {
       "type": [
         "string",
         "null"
       ]
     },
-    "status": {
+    "location_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "source_operation": {
+    "customer_id": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "customer_note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "seller_note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "appointment_segments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "object",
+          "null"
+        ]
+      }
+    },
+    "transition_time_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "all_day": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "location_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creator_details": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "address": {
+      "type": [
+        "object",
         "null"
       ]
     }

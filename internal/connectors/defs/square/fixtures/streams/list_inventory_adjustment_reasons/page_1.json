@@ -8,12 +8,15 @@
     "body": {
       "adjustment_reasons": [
         {
-          "id": "list_inventory_adjustment_reasons_fixture_1",
+          "id": {
+            "type": "RECEIVED",
+            "custom_reason_id": "list_inventory_adjustment_reasons_custom_reason_id_1"
+          },
+          "name": "list_inventory_adjustment_reasons_name_1",
+          "direction": "INCREASE",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-01T00:05:00Z",
-          "name": "ListInventoryAdjustmentReasons fixture",
-          "status": "ACTIVE",
-          "source_operation": "ListInventoryAdjustmentReasons"
+          "is_deleted": true
         }
       ]
     }
