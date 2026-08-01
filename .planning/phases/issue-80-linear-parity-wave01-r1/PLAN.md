@@ -14,10 +14,12 @@ Primary production paths are connector-local Linear artifacts: `internal/connect
 ## Source inventory
 
 - Parent/subissues: #80, #97-#103. Captain addendum appended idempotently with `gh-axi` to include destructive/delete operations with typed confirmation and preserve existing counts.
-- Official pinned Linear schema blob from parent: `3934265499c95f1d6b8e4d5c695ad0b6f1d52fec` (`packages/sdk/src/schema.graphql`). Raw blob retrieval used `gh api` because `gh-axi api` truncates raw blobs after 4000 chars; all issue mutations used `gh-axi`.
+- Official Linear schema source: parent started from blob `3934265499c95f1d6b8e4d5c695ad0b6f1d52fec`; the 2026-08-01 review-ready audit refreshed against current blob `e92dc40c31e3b6e3962f93fa1d8cbe91f3e83034` at master commit `7ef4c5024f88667b2c85057ff4c905676c4a93c2` (`packages/sdk/src/schema.graphql`). Raw blob retrieval used `gh api` because `gh-axi api` truncates raw blobs after 4000 chars; all issue mutations and issue-body checks used `gh-axi`.
 - The connector-local generated evidence must not claim live certification or changed implemented counts unless exact local artifacts prove them.
 
 ## Implementation slices
+
+Parity checkpoint before review-ready (2026-08-01 resume): re-audit the pinned official Linear schema blob against `api_surface.json`, `writes.json`, `streams.json`, `operations.json`, and `cli_surface.json` before requesting review. Treat any stale command metadata or missing canonical destructive/write command as a defect to fix locally because no current-branch no-mistakes validation run owns the branch.
 
 1. Generate/refresh Linear operation inventory from the pinned GraphQL schema.
    - Parse root `Query`, `Mutation`, and `Subscription` fields.
