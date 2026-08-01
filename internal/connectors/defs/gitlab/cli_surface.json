@@ -6120,7 +6120,9 @@
           "summary": "Return issues from non archived projects",
           "maps_to": "query.non_archived"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get groups-id-issues-statistics",
@@ -10070,7 +10072,9 @@
           "summary": "Name of branch to start the pagination from",
           "maps_to": "query.page_token"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-repository-branches",
@@ -10552,7 +10556,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-jobs-job-id-artifacts-artifact-path",
@@ -11292,7 +11298,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-secure-files",
@@ -11348,7 +11356,9 @@
           "summary": "The ID of a secure file",
           "maps_to": "path.secure_file_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete projects-id-secure-files-secure-file-id",
@@ -13570,7 +13580,9 @@
           "summary": "Record from which to start the keyset pagination",
           "maps_to": "query.page_token"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-repository-commits",
@@ -23710,7 +23722,9 @@
           "summary": "Cursor for obtaining the next set of records",
           "maps_to": "query.cursor"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-issues",
@@ -24018,7 +24032,9 @@
           "summary": "The internal ID of a project issue",
           "maps_to": "path.issue_iid"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-issues-issue-iid",
@@ -24208,7 +24224,9 @@
           "summary": "The internal ID of a project issue",
           "maps_to": "path.issue_iid"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-issues-issue-iid-closed-by",
@@ -24238,7 +24256,9 @@
           "summary": "The internal ID of a project issue",
           "maps_to": "path.issue_iid"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-issues-issue-iid-participants",
@@ -24268,7 +24288,9 @@
           "summary": "The internal ID of a project issue",
           "maps_to": "path.issue_iid"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-issues-issue-iid-user-agent-detail",
@@ -34508,7 +34530,9 @@
           "summary": "Include custom attributes in the response",
           "maps_to": "query.with_custom_attributes"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-housekeeping",
@@ -35965,7 +35989,9 @@
           "summary": "Record from which to start the keyset pagination",
           "maps_to": "query.page_token"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-repository-blobs-sha-raw",
@@ -37211,7 +37237,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-repository-tags",
@@ -42558,11 +42586,11 @@
     {
       "path": "operation get geo-retrieve-replicable-name-replicable-id",
       "summary": "Internal endpoint that returns a replicable file",
-      "intent": "etl",
+      "intent": "direct_read",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-geo-retrieve-replicable-name-replicable-id",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -42583,7 +42611,9 @@
           "summary": "The replicable ID of a replicable instance",
           "maps_to": "path.replicable_id"
         }
-      ]
+      ],
+      "output_policy": "binary_file_bounded",
+      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get geo-repositories-gl-repository-pipeline-refs",
@@ -45020,7 +45050,9 @@
           "method": "GET",
           "path": "/usage_data/service_ping"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post usage-data-track-event",
@@ -45338,7 +45370,9 @@
           "summary": "The group ID to find all certificate-based clusters in the hierarchy",
           "maps_to": "query.group_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get deploy-keys",

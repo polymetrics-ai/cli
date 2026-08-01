@@ -12,10 +12,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[4]
 DEF_DIR = ROOT / "internal/connectors/defs/gitlab"
 EXPECTED = {
-    "gitlab.etl_read": 398,
+    "gitlab.etl_read": 397,
     "gitlab.reverse_etl_write": 637,
     "gitlab.direct_read_query_search": 6,
-    "gitlab.binary_file": 88,
+    "gitlab.binary_file": 89,
     "gitlab.cdc_changefeed": 15,
     "gitlab.excluded_not_applicable": 2,
 }
@@ -38,6 +38,18 @@ METADATA_REST_ROWS = {
 }
 TERRAFORM_MODULE_FILE_ROWS = {
     ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/file"),
+}
+SECRET_SENSITIVE_ROWS = {
+    ("PUT", "/groups/{id}/integrations/campfire"),
+    ("PUT", "/projects/{id}/integrations/campfire"),
+    ("PUT", "/projects/{id}/services/campfire"),
+    ("GET", "/projects/{id}/secure_files"),
+    ("POST", "/projects/{id}/secure_files"),
+    ("GET", "/projects/{id}/secure_files/{secure_file_id}"),
+    ("GET", "/projects/{id}/secure_files/{secure_file_id}/download"),
+}
+GEO_BINARY_ROWS = {
+    ("GET", "/geo/retrieve/{replicable_name}/{replicable_id}"),
 }
 
 
@@ -166,6 +178,16 @@ def main() -> int:
         if key in TERRAFORM_MODULE_FILE_ROWS:
             if op.get("kind") != "binary_download" or audit_event != "gitlab.binary_file":
                 problems.append(f"{op.get('id')} terraform module file row classified as {op.get('kind')}/{audit_event}")
+        if key in SECRET_SENSITIVE_ROWS:
+            if op.get("secret_sensitive") is not True:
+                problems.append(f"{op.get('id')} expected secret_sensitive=true")
+            if op.get("risk") != "high":
+                problems.append(f"{op.get('id')} secret row risk={op.get('risk')!r}")
+            if not isinstance(op.get("sensitive_policy"), dict):
+                problems.append(f"{op.get('id')} missing sensitive_policy")
+        if key in GEO_BINARY_ROWS:
+            if op.get("kind") != "binary_download" or audit_event != "gitlab.binary_file":
+                problems.append(f"{op.get('id')} geo retrieve row classified as {op.get('kind')}/{audit_event}")
         if op.get("secret_sensitive") is True:
             if op.get("risk") in {"low", "none"}:
                 problems.append(f"{op.get('id')} secret-sensitive risk={op.get('risk')!r}")

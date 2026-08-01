@@ -25,10 +25,10 @@ OPENAPI_URL = "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e
 MASTER_BRANCH_URL = "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master"
 METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 PARENT_COUNTS = {
-    "etl_read": 398,
+    "etl_read": 397,
     "reverse_etl_write": 637,
     "direct_read_query_search": 6,
-    "binary_file": 88,
+    "binary_file": 89,
     "cdc_changefeed": 15,
     "excluded_not_applicable": 2,
 }
@@ -55,6 +55,7 @@ FORCE_ETL = {
     ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version"),
 }
 FORCE_BINARY = {
+    ("GET", "/api/v4/geo/retrieve/{replicable_name}/{replicable_id}"),
     ("GET", "/api/v4/projects/{id}/export/download"),
     ("GET", "/api/v4/projects/{id}/export_relations/download"),
     ("GET", "/api/v4/projects/{id}/terraform/state/{name}"),
@@ -117,10 +118,27 @@ SECRET_TERMS = (
     "token",
     "password",
     "credential",
+    "certificate",
+    "certificates",
     "variables",
     "keys",
     "deploy_key",
+    "access_key",
+    "api_key",
+    "private_key",
+    "service_account_key",
     "access_tokens",
+    "secure_files",
+    "secure file",
+    "webhook token",
+    "integration token",
+)
+SECRET_TEXT_PATTERN = re.compile(
+    r"(^|[^a-z0-9])"
+    r"(secrets?|tokens?|passwords?|credentials?|certificates?|private[_ -]?tokens?|"
+    r"webhook[_ -]?tokens?|integration[_ -]?tokens?|api[_ -]?keys?|access[_ -]?keys?|"
+    r"private[_ -]?keys?|service[_ -]?account[_ -]?keys?|deploy[_ -]?keys?|secure[_ -]?files?)"
+    r"([^a-z0-9]|$)"
 )
 STREAM_COVERAGE = {
     ("GET", "/api/v4/projects"): "projects",
@@ -275,9 +293,46 @@ def is_admin(op: dict[str, Any]) -> bool:
     return any(term in blob for term in ADMIN_TERMS)
 
 
-def is_secret_sensitive(op: dict[str, Any]) -> bool:
-    blob = op_blob(op)
-    return any(term in blob for term in SECRET_TERMS)
+def text_marks_secret(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    lowered = value.lower()
+    if any(term in lowered for term in SECRET_TERMS):
+        return True
+    normalized = re.sub(r"[_/.-]+", " ", lowered)
+    return bool(SECRET_TEXT_PATTERN.search(normalized))
+
+
+def schema_marks_secret(value: Any, spec: dict[str, Any] | None = None, seen: set[str] | None = None) -> bool:
+    if isinstance(value, dict):
+        ref = value.get("$ref")
+        if spec is not None and isinstance(ref, str):
+            seen = seen or set()
+            if ref in seen:
+                return False
+            try:
+                return schema_marks_secret(resolve_ref(ref, spec), spec, seen | {ref})
+            except KeyError:
+                return False
+        for key, item in value.items():
+            if key == "$ref":
+                continue
+            if text_marks_secret(str(key)) or schema_marks_secret(item, spec, seen):
+                return True
+        return False
+    if isinstance(value, list):
+        return any(schema_marks_secret(item, spec, seen) for item in value)
+    return text_marks_secret(value)
+
+
+def parameter_marks_secret(param: dict[str, Any], spec: dict[str, Any] | None = None) -> bool:
+    return schema_marks_secret(param, spec)
+
+
+def is_secret_sensitive(op: dict[str, Any], spec: dict[str, Any] | None = None) -> bool:
+    if text_marks_secret(op_blob(op)) or text_marks_secret(op.get("description")):
+        return True
+    return any(parameter_marks_secret(param, spec) for param in op.get("parameters") or [] if isinstance(param, dict))
 
 
 def is_destructive(op: dict[str, Any], lane: str) -> bool:
@@ -288,12 +343,12 @@ def is_destructive(op: dict[str, Any], lane: str) -> bool:
     )
 
 
-def risk_for(op: dict[str, Any], lane: str) -> str:
+def risk_for(op: dict[str, Any], lane: str, spec: dict[str, Any] | None = None) -> str:
     if lane == "excluded_not_applicable":
         return "none"
     if is_destructive(op, lane):
         return "critical" if is_admin(op) else "high"
-    if is_admin(op) or is_secret_sensitive(op):
+    if is_admin(op) or is_secret_sensitive(op, spec):
         return "high"
     if lane == "etl_read":
         return "low"
@@ -306,14 +361,14 @@ def is_write_method(op: dict[str, Any]) -> bool:
     return op["method"] not in {"GET", "HEAD"}
 
 
-def mutation_class_for(op: dict[str, Any], lane: str) -> str:
+def mutation_class_for(op: dict[str, Any], lane: str, spec: dict[str, Any] | None = None) -> str:
     if lane in {"excluded_not_applicable", "direct_read_query_search"} or not is_write_method(op):
         return "none"
     if op["method"] == "DELETE":
         return "delete"
     if is_admin(op):
         return "admin"
-    if is_secret_sensitive(op):
+    if is_secret_sensitive(op, spec):
         return "secret"
     if op["method"] == "POST":
         return "create"
@@ -509,7 +564,7 @@ def api_operation_notes(lane: str) -> str:
     return "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
 
 
-def api_surface_row(op: dict[str, Any], lane: str, op_id: str) -> dict[str, Any]:
+def api_surface_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any]) -> dict[str, Any]:
     key = (op["method"], op["path"])
     row: dict[str, Any] = {"method": op["method"], "path": relative_path(op["path"])}
     if key in STREAM_COVERAGE:
@@ -527,7 +582,7 @@ def api_surface_row(op: dict[str, Any], lane: str, op_id: str) -> dict[str, Any]
             "notes": "Counted as excluded/not-applicable in the parent ledger.",
         }
         return row
-    risk = risk_for(op, lane)
+    risk = risk_for(op, lane, spec)
     row["operation"] = {
         "model": operation_model_for(op, lane),
         "status": "blocked",
@@ -542,10 +597,10 @@ def api_surface_row(op: dict[str, Any], lane: str, op_id: str) -> dict[str, Any]
 
 def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any]) -> dict[str, Any]:
     summary = clean_text(op.get("summary"), op.get("operationId") or f"{op['method']} {op['path']}")
-    risk = risk_for(op, lane)
+    risk = risk_for(op, lane, spec)
     destructive = is_destructive(op, lane)
     admin = is_admin(op)
-    secret_sensitive = is_secret_sensitive(op)
+    secret_sensitive = is_secret_sensitive(op, spec)
     if lane == "excluded_not_applicable":
         approval = "not_applicable"
     elif is_write_method(op):
@@ -593,7 +648,7 @@ def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any
         "output_policy": output_policy,
         "auth_scopes": ["GitLab token scopes per official operation and target resource permissions"],
         "audit_event": f"gitlab.{lane}",
-        "mutation_class": mutation_class_for(op, lane),
+        "mutation_class": mutation_class_for(op, lane, spec),
     }
     if kind == "composite":
         row["composite"] = {"steps": [f"{op['method']} {relative_path(op['path'])} planned metadata only"]}
@@ -613,7 +668,7 @@ def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any
         row["secret_sensitive"] = True
         row["sensitive_policy"] = {
             "input_mode": "env_or_file",
-            "redact_fields": ["value", "token", "secret", "key", "password"],
+            "redact_fields": ["value", "token", "secret", "key", "password", "credential", "certificate", "private_key", "secure_file", "file"],
             "preflight": "secret-shaped inputs must be supplied outside prompt text and redacted from previews/errors",
             "transform": "none",
             "approval_mode": "typed_confirmation",
@@ -646,7 +701,7 @@ def cli_command_for_stream(stream: str, method: str, path: str, source_url: str 
 def cli_command_for_operation(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any]) -> dict[str, Any]:
     method = op["method"].lower()
     slug = re.sub(r"[^a-z0-9]+", "-", relative_path(op["path"]).lower()).strip("-") or "root"
-    operation_risk = risk_for(op, lane)
+    operation_risk = risk_for(op, lane, spec)
     if lane == "etl_read":
         intent = "etl"
         availability = "implemented" if (op["method"], op["path"]) in STREAM_COVERAGE else "planned"
@@ -826,7 +881,7 @@ def main() -> None:
         ids[key] = op_id
         lanes[key] = lane
         counts[lane] += 1
-        api_rows.append(api_surface_row(op, lane, op_id))
+        api_rows.append(api_surface_row(op, lane, op_id, spec))
         operation_rows.append(operation_row(op, lane, op_id, spec))
     if len(ops) != 1146:
         raise SystemExit(f"expected 1146 official operations, got {len(ops)}")

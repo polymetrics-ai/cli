@@ -2,10 +2,10 @@
   "official_operations": 1146,
   "api_surface_endpoints": 1147,
   "lane_counts": {
-    "etl_read": 398,
+    "etl_read": 397,
     "reverse_etl_write": 637,
     "cdc_changefeed": 15,
-    "binary_file": 88,
+    "binary_file": 89,
     "direct_read_query_search": 6,
     "excluded_not_applicable": 2
   },

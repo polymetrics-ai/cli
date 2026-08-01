@@ -304,7 +304,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-groups, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -317,7 +317,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -928,7 +928,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-clusters-cluster-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -954,7 +954,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-groups-id-clusters-user, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1279,7 +1279,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-apple-app-store, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1292,7 +1292,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-asana, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1305,7 +1305,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-assembla, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1318,7 +1318,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-bamboo, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1344,7 +1344,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-buildkite, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1357,7 +1357,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-campfire, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1396,7 +1396,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-datadog, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1409,7 +1409,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-diffblue-cover, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1435,7 +1435,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-drone-ci, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1487,7 +1487,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-google-play, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1513,7 +1513,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-harbor, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1539,7 +1539,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-jenkins, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1552,7 +1552,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-jira, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1591,7 +1591,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-matrix, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1604,7 +1604,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-mattermost-slash-commands, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1617,7 +1617,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-packagist, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1656,7 +1656,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-pivotaltracker, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1682,7 +1682,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-pushover, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1786,7 +1786,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-teamcity, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1799,7 +1799,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-telegram, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1838,7 +1838,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-zentao, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1851,7 +1851,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-squash-tm, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1864,7 +1864,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-github, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1877,7 +1877,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-groups-id-integrations-git-guardian, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -2020,7 +2020,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-issues, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3216,7 +3216,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-repository-branches, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3333,7 +3333,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-artifacts-ref-name-download, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3346,7 +3346,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-artifacts-ref-name-raw-artifact-path, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3359,7 +3359,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-job-id-artifacts, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3385,7 +3385,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-job-id-artifacts-tree, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3398,7 +3398,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-job-id-artifacts-artifact-path, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3515,7 +3515,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-jobs-job-id-play, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3645,7 +3645,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-secure-files, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3658,7 +3658,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-secure-files, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3671,7 +3671,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-secure-files-secure-file-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3697,7 +3697,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-secure-files-secure-file-id-download, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3723,7 +3723,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-pipeline, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4373,7 +4373,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-repository-commits, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6193,7 +6193,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-apple-app-store, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6206,7 +6206,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-asana, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6219,7 +6219,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-assembla, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6232,7 +6232,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-bamboo, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6258,7 +6258,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-buildkite, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6271,7 +6271,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-campfire, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6310,7 +6310,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-datadog, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6323,7 +6323,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-diffblue-cover, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6349,7 +6349,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-drone-ci, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6401,7 +6401,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-google-play, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6427,7 +6427,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-harbor, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6453,7 +6453,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-jenkins, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6466,7 +6466,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-jira, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6505,7 +6505,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-matrix, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6518,7 +6518,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-mattermost-slash-commands, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6531,7 +6531,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-packagist, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6570,7 +6570,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-pivotaltracker, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6596,7 +6596,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-pushover, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6700,7 +6700,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-teamcity, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6713,7 +6713,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-telegram, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6752,7 +6752,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-zentao, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6765,7 +6765,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-squash-tm, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6778,7 +6778,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-github, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6791,7 +6791,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-services-git-guardian, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6882,7 +6882,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-services-mattermost-slash-commands-trigger, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6908,7 +6908,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-apple-app-store, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6921,7 +6921,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-asana, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6934,7 +6934,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-assembla, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6947,7 +6947,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-bamboo, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6973,7 +6973,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-buildkite, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6986,7 +6986,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-campfire, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7025,7 +7025,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-datadog, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7038,7 +7038,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-diffblue-cover, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7064,7 +7064,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-drone-ci, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7116,7 +7116,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-google-play, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7142,7 +7142,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-harbor, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7168,7 +7168,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-jenkins, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7181,7 +7181,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-jira, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7220,7 +7220,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-matrix, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7233,7 +7233,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-mattermost-slash-commands, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7246,7 +7246,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-packagist, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7285,7 +7285,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-pivotaltracker, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7311,7 +7311,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-pushover, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7415,7 +7415,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-teamcity, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7428,7 +7428,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-telegram, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7467,7 +7467,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-zentao, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7480,7 +7480,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-squash-tm, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7493,7 +7493,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-github, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7506,7 +7506,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-integrations-git-guardian, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7597,7 +7597,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-integrations-mattermost-slash-commands-trigger, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7779,7 +7779,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-issues, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7818,7 +7818,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-issues-issue-iid, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7896,7 +7896,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-issues-issue-iid-related-merge-requests, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7909,7 +7909,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-issues-issue-iid-closed-by, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7922,7 +7922,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-issues-issue-iid-participants, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -8650,7 +8650,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-merge-requests-merge-request-iid-approve, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9209,7 +9209,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-pages-domains, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9235,7 +9235,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-pages-domains-domain, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9313,7 +9313,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-clusters-cluster-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9339,7 +9339,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-clusters-user, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9872,7 +9872,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-import, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9898,7 +9898,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-import-git, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9911,7 +9911,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-remote-import, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9963,7 +9963,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-remote-import-s3, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10412,7 +10412,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10425,7 +10425,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-user-user-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10464,7 +10464,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10698,7 +10698,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-invited-groups, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10815,7 +10815,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-protected-branches, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10841,7 +10841,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.patch-api-v4-projects-id-protected-branches-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10880,7 +10880,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-protected-tags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -11166,7 +11166,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-projects-id-remote-mirrors, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -11192,7 +11192,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-projects-id-remote-mirrors-mirror-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -11244,7 +11244,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-repository-tree, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -11647,7 +11647,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-repository-tags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12401,7 +12401,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-bulk-imports, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12739,7 +12739,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-jobs-request, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12752,7 +12752,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.put-api-v4-jobs-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12765,7 +12765,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.patch-api-v4-jobs-id-trace, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12778,7 +12778,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-jobs-id-artifacts-authorize, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12791,7 +12791,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-jobs-id-artifacts, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12804,7 +12804,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-jobs-id-artifacts, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13465,13 +13465,13 @@
       "method": "GET",
       "path": "/geo/retrieve/{replicable_name}/{replicable_id}",
       "operation": {
-        "model": "direct_read",
+        "model": "binary_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-geo-retrieve-replicable-name-replicable-id, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-geo-retrieve-replicable-name-replicable-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
+        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
       }
     },
     {
@@ -13493,7 +13493,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-geo-status, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13506,7 +13506,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-geo-proxy-git-ssh-info-refs-upload-pack, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13519,7 +13519,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-geo-proxy-git-ssh-upload-pack, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13532,7 +13532,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-geo-proxy-git-ssh-info-refs-receive-pack, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13545,7 +13545,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-geo-proxy-git-ssh-receive-pack, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13584,7 +13584,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-integrations-slack-events, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13623,7 +13623,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-integrations-jira-connect-subscriptions, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13877,7 +13877,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-offline-exports, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13916,7 +13916,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-offline-imports, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14488,7 +14488,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-usage-data-service-ping, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14631,7 +14631,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-discover-cert-based-clusters, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14683,7 +14683,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-import-bitbucket, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14696,7 +14696,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-import-bitbucket-server, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14709,7 +14709,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-import-github, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14735,7 +14735,7 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab reverse_etl_write operation; connector-local typed metadata exists as gitlab.post-api-v4-import-github-gists, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
