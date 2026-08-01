@@ -357,6 +357,12 @@ func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 		"remove_permission":        true,
 		"untag_queue":              true,
 	}
+	redacted := map[string][]string{
+		"delete_message":           {"receipt_handle"},
+		"send_message":             {"message_body", "message_attributes", "message_system_attributes"},
+		"set_queue_attributes":     {"attribute_value", "attributes"},
+		"cancel_message_move_task": {"task_handle"},
+	}
 	seen := map[string]bool{}
 	for _, action := range manifest.WriteActions {
 		seen[action.Name] = true
@@ -365,6 +371,9 @@ func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 		}
 		if action.Risk == "" || action.Method != http.MethodPost || !strings.HasPrefix(action.Path, "SQS.") {
 			t.Fatalf("action %+v missing risk/method/path", action)
+		}
+		if want := redacted[action.Name]; len(want) > 0 && !hasAllStrings(action.RedactFields, want) {
+			t.Fatalf("action %s RedactFields = %v, want at least %v", action.Name, action.RedactFields, want)
 		}
 	}
 	for name := range destructive {
@@ -476,7 +485,9 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 
 func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	var sawQueueURL string
+	var calls int
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
 		if err := r.ParseForm(); err != nil {
 			t.Fatalf("ParseForm: %v", err)
 		}
@@ -494,29 +505,179 @@ func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("DryRunWrite purge_queue: %v", err)
 	}
-	if preview.Action != "purge_queue" || !strings.Contains(strings.Join(preview.Warnings, " "), "destructive") {
-		t.Fatalf("preview = %+v, want normalized destructive action", preview)
+	if preview.Action != "purge_queue" || preview.RecordsStaged != 0 || !strings.Contains(strings.Join(preview.Warnings, " "), "destructive") {
+		t.Fatalf("preview = %+v, want normalized zero-staged destructive action", preview)
 	}
 	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, nil)
 	if err != nil {
-		t.Fatalf("Write purge_queue: %v", err)
+		t.Fatalf("Write purge_queue empty: %v", err)
 	}
-	if res.RecordsWritten != 1 || sawQueueURL != cfg.Config["queue_url"] {
-		t.Fatalf("result=%+v QueueUrl=%q, want one write to configured queue", res, sawQueueURL)
+	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
+		t.Fatalf("empty write result=%+v calls=%d, want no execution", res, calls)
+	}
+	res, err = c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, []connectors.Record{{}})
+	if err != nil {
+		t.Fatalf("Write purge_queue explicit record: %v", err)
+	}
+	if res.RecordsWritten != 1 || calls != 1 || sawQueueURL != cfg.Config["queue_url"] {
+		t.Fatalf("result=%+v calls=%d QueueUrl=%q, want one write to configured queue", res, calls, sawQueueURL)
 	}
 }
 
 func TestValidateWriteClosedSchemas(t *testing.T) {
 	c := native.New()
 	cfg := testRuntimeConfig("https://sqs.example.test")
-	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "raw_action": "PurgeQueue"}}); err == nil || !strings.Contains(err.Error(), "unsupported field") {
-		t.Fatalf("ValidateWrite unsupported field err = %v, want unsupported field", err)
+	cases := []struct {
+		name    string
+		action  string
+		records []connectors.Record
+		want    string
+	}{
+		{
+			name:    "unsupported field",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": "ok", "raw_action": "PurgeQueue"}},
+			want:    "unsupported field",
+		},
+		{
+			name:    "missing required field",
+			action:  "send_message",
+			records: []connectors.Record{{}},
+			want:    "requires field",
+		},
+		{
+			name:    "string field wrong type",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": 42}},
+			want:    "must be string",
+		},
+		{
+			name:    "integer field rejects string",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": "ok", "delay_seconds": "5"}},
+			want:    "must be integer",
+		},
+		{
+			name:    "integer field rejects fractional number",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": "ok", "delay_seconds": 1.5}},
+			want:    "must be integer",
+		},
+		{
+			name:    "integer field rejects out of range",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": "ok", "delay_seconds": 901}},
+			want:    "must be between 0 and 900",
+		},
+		{
+			name:    "array field rejects scalar",
+			action:  "add_permission",
+			records: []connectors.Record{{"label": "l", "aws_account_ids": "123", "actions": []string{"SendMessage"}}},
+			want:    "must be array of strings",
+		},
+		{
+			name:    "array field rejects non-string item",
+			action:  "add_permission",
+			records: []connectors.Record{{"label": "l", "aws_account_ids": []any{"123", 4}, "actions": []string{"SendMessage"}}},
+			want:    "must be array of strings",
+		},
+		{
+			name:    "map field rejects scalar",
+			action:  "tag_queue",
+			records: []connectors.Record{{"tag_key": "team", "tag_value": "platform", "tags": "team=platform"}},
+			want:    "must be object with string values",
+		},
+		{
+			name:    "map field rejects non-string value",
+			action:  "tag_queue",
+			records: []connectors.Record{{"tag_key": "team", "tag_value": "platform", "tags": map[string]any{"team": 7}}},
+			want:    "must be object with string values",
+		},
+		{
+			name:    "message attribute map rejects scalar",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": "ok", "message_attributes": "trace=abc"}},
+			want:    "must be object",
+		},
+		{
+			name:    "message attribute map rejects nested wrong type",
+			action:  "send_message",
+			records: []connectors.Record{{"message_body": "ok", "message_attributes": map[string]any{"trace": map[string]any{"string_value": 7}}}},
+			want:    "field \"string_value\" must be string",
+		},
 	}
-	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{}}); err == nil || !strings.Contains(err.Error(), "requires field") {
-		t.Fatalf("ValidateWrite missing field err = %v, want requires field", err)
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: tc.action, Config: cfg}, tc.records)
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("ValidateWrite err = %v, want %q", err, tc.want)
+			}
+		})
 	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil); err != nil {
 		t.Fatalf("ValidateWrite purge_queue empty record: %v", err)
+	}
+}
+
+func TestWriteSerializesTagMapsWithKeyValue(t *testing.T) {
+	var bodies []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		bodies = append(bodies, r.Form.Encode())
+		switch r.Form.Get("Action") {
+		case "CreateQueue":
+			_, _ = w.Write([]byte(`<CreateQueueResponse><CreateQueueResult><QueueUrl>https://sqs.example.test/123/orders</QueueUrl></CreateQueueResult></CreateQueueResponse>`))
+		case "TagQueue":
+			_, _ = w.Write([]byte(`<TagQueueResponse/>`))
+		default:
+			t.Fatalf("unexpected Action %q", r.Form.Get("Action"))
+		}
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "create_queue", Config: cfg}, []connectors.Record{{"queue_name": "orders", "tags": map[string]any{"env": "prod"}}}); err != nil {
+		t.Fatalf("Write create_queue: %v", err)
+	}
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "tag_queue", Config: cfg}, []connectors.Record{{"tag_key": "team", "tag_value": "platform"}}); err != nil {
+		t.Fatalf("Write tag_queue: %v", err)
+	}
+	if len(bodies) != 2 {
+		t.Fatalf("bodies = %d, want 2", len(bodies))
+	}
+	if !strings.Contains(bodies[0], "Tag.1.Key=env") || !strings.Contains(bodies[0], "Tag.1.Value=prod") || strings.Contains(bodies[0], "Tag.1.Name") {
+		t.Fatalf("create_queue tags encoded incorrectly: %q", bodies[0])
+	}
+	if !strings.Contains(bodies[1], "Tag.1.Key=team") || !strings.Contains(bodies[1], "Tag.1.Value=platform") || strings.Contains(bodies[1], "Tag.1.Name") {
+		t.Fatalf("tag_queue tags encoded incorrectly: %q", bodies[1])
+	}
+}
+
+func TestWriteBatchFailuresReturnError(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if action := r.Form.Get("Action"); action != "SendMessageBatch" {
+			t.Fatalf("Action = %q, want SendMessageBatch", action)
+		}
+		_, _ = w.Write([]byte(`<SendMessageBatchResponse><SendMessageBatchResult><Successful><Id>entry_1</Id><MessageId>m1</MessageId></Successful><Failed><Id>entry_2</Id><SenderFault>true</SenderFault><Code>InvalidMessageContents</Code><Message>bad</Message></Failed></SendMessageBatchResult></SendMessageBatchResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message_batch", Config: cfg}, []connectors.Record{{"message_body": "first"}, {"message_body": "second"}})
+	if err == nil || !strings.Contains(err.Error(), "batch response reported 1 failed") {
+		t.Fatalf("Write send_message_batch err = %v, want batch failure", err)
+	}
+	if res.RecordsWritten != 1 || res.RecordsFailed != 1 || calls != 1 {
+		t.Fatalf("result=%+v calls=%d, want one success and one failure", res, calls)
 	}
 }
 
@@ -539,4 +700,17 @@ func countAction(actions []string, want string) int {
 		}
 	}
 	return count
+}
+
+func hasAllStrings(values []string, wants []string) bool {
+	seen := map[string]bool{}
+	for _, value := range values {
+		seen[value] = true
+	}
+	for _, want := range wants {
+		if !seen[want] {
+			return false
+		}
+	}
+	return true
 }
