@@ -1224,9 +1224,9 @@
           "path": "/api/v2/any_channel/validate_token"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations list_approval_requests",
@@ -3011,8 +3011,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations bulk_permanently_delete_tickets",
@@ -3044,9 +3044,9 @@
           "path": "/api/v2/deleted_tickets/restore_many"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations list_deleted_users",
@@ -3503,9 +3503,9 @@
           "path": "/api/v2/end_users/{user_id}/identities"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations show_end_user_identity",
@@ -3554,9 +3554,9 @@
           "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}/make_primary"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations request_end_user_verification",
@@ -3571,9 +3571,9 @@
           "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}/request_verification"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations create_group_membership",
@@ -5068,8 +5068,8 @@
         }
       ],
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction."
     },
     {
       "path": "operations show_client",
@@ -5101,9 +5101,9 @@
           "path": "/api/v2/oauth/clients/{oauth_client_id}"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations delete_client",
@@ -5136,8 +5136,8 @@
         }
       ],
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction."
     },
     {
       "path": "operations list_global_oauth_clients",
@@ -5221,8 +5221,8 @@
         }
       ],
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction."
     },
     {
       "path": "operations show_token",
@@ -5339,9 +5339,9 @@
           "path": "/api/v2/organization_fields/{organization_field_id}"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations delete_organization_field",
@@ -6138,9 +6138,9 @@
           "path": "/api/v2/recipient_addresses"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations show_support_address",
@@ -6206,9 +6206,9 @@
           "path": "/api/v2/recipient_addresses/{support_address_id}/verify"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations get_relationship_filter_definitions",
@@ -7261,8 +7261,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations suspended_tickets_attachments",
@@ -7294,9 +7294,9 @@
           "path": "/api/v2/suspended_tickets/bulk_recover"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations delete_suspended_tickets",
@@ -7345,9 +7345,9 @@
           "path": "/api/v2/suspended_tickets/recover_many"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations count_tags",
@@ -9011,9 +9011,9 @@
           "path": "/api/v2/user_fields/{user_field_id}"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations delete_user_field",
@@ -9368,9 +9368,9 @@
           "path": "/api/v2/users/{user_id}/identities"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations show_user_identity",
@@ -9402,9 +9402,9 @@
           "path": "/api/v2/users/{user_id}/identities/{user_identity_id}"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations delete_user_identity",
@@ -9436,9 +9436,9 @@
           "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/make_primary"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations request_user_verification",
@@ -9453,9 +9453,9 @@
           "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/request_verification"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations verify_user_identity",
@@ -9470,9 +9470,9 @@
           "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/verify"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations merge_end_users",
@@ -9675,8 +9675,8 @@
         }
       ],
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations change_own_password",
@@ -9692,8 +9692,8 @@
         }
       ],
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations get_user_password_requirements",
@@ -10729,8 +10729,8 @@
         }
       ],
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction."
     }
   ],
   "help_topics": [

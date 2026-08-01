@@ -18,7 +18,7 @@
 - Project memory hook attempted with `fm-ensure-agents-md.sh .`; it reported both `AGENTS.md` and `CLAUDE.md` are real files and require manual reconciliation. No AGENTS/CLAUDE edits were made because this task produced no broad project rule change beyond connector-local evidence.
 - Destructive/delete operations are no longer blanket-excluded as unsafe. They are either existing typed delete write actions with `confirm: "destructive"` or blocked operation metadata pending connector-local typed schema/action work and the plan -> preview -> explicit approval -> execute path.
 - Shared foundation gap recorded: `scripts/gsd prompt programming-loop ...` is unavailable in this adapter (`unknown GSD command: programming-loop`), so this used the manual GSD fallback plus `plan-phase` and `quick` prompts.
-- Shared executor dependencies remain blocked, not claimed complete: provider direct/query/search (#2985), CDC truthfulness/state (#2986/#2988), and bounded binary/file executor/output policy.
+- Shared executor dependencies remain blocked, not claimed complete: provider direct/query/search (#2985), CDC truthfulness/state (#2986/#2988), and bounded binary/file executor/output policy. File-upload request contracts are recorded in connector-local operation descriptions while structured file-operation schema validation remains a shared dependency outside this worker scope.
 
 ## Parity checkpoint re-audit (2026-08-01)
 
@@ -26,7 +26,7 @@
 - Official operation totals remain 625 unique method/path rows across 434 paths: GET 325, POST 111, PUT 89, PATCH 14, DELETE 86.
 - Local ledger totals after the checkpoint: 631 `api_surface.json` rows = 625 official + 6 supplemental existing-bundle rows; 571 blocked operation rows; 33 stream-covered rows; 27 write-covered rows; 0 missing official, 0 stale official, 0 duplicate endpoint keys, 0 unclassified, 0 multi-disposition.
 - Command/operation parity remains exact: 571 `operations.json` entries match blocked rows, and 631 `cli_surface.json` commands reference 631 unique endpoint rows with 0 missing/stale refs.
-- Delete/destructive safety remains explicit: 86 official DELETE operations = 9 covered delete writes with `confirm: "destructive"` + 77 blocked typed operation rows; 93 blocked destructive-action rows include the 77 DELETE rows plus 16 non-DELETE destructive mutations; 26 sensitive/secret/file-upload mutations require bounded sensitive handling or file-transfer foundations.
+- Delete/destructive safety remains explicit: 86 official DELETE operations = 9 covered delete writes with `confirm: "destructive"` + 77 blocked typed operation rows; restore/recover rows are classified as non-destructive admin updates; remaining sensitive/file-upload rows stay blocked pending typed sensitive handling or file-transfer foundations.
 
 ## Verification run
 

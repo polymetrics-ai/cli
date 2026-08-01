@@ -68,7 +68,7 @@
 - No live credentials, provider calls, external writes, certification, VPS/Thaalam, dependencies, shared runtime edits, or merges.
 - No secrets in fixtures, docs, metadata, command examples, or GitHub issue edits.
 - Reverse ETL remains plan → preview → explicit approval → execute; destructive operations require typed `destructive` confirmation before execution.
-- Shared executor gaps are recorded as blocked operation metadata rather than claimed as implemented.
+- Shared executor gaps are recorded as blocked operation metadata rather than claimed as implemented. File-upload rows are limited to the currently supported connector-local `direction`/`path`/`max_bytes` metadata, with source-backed method/query/content-type/body contracts recorded in operation descriptions pending a shared file-operation schema/validator.
 
 ## Expected checkpoint commits
 
