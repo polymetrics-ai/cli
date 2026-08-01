@@ -382,7 +382,7 @@ type WriteAction struct {
 	Method       string              `json:"method"`
 	Path         string              `json:"path"`
 	PathFields   []string            `json:"path_fields,omitempty"`
-	RedactFields []string            `json:"redact_fields,omitempty"` // record fields redacted from write previews and write errors
+	RedactFields []string            `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
 	BodyType     string              `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
 	BodyFields   []string            `json:"body_fields,omitempty"`
 	BodyField    string              `json:"body_field,omitempty"`

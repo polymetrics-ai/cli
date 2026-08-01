@@ -27,7 +27,7 @@
 | Check | Result |
 | --- | --- |
 | `scripts/verify-gsd-workflow dc753087d3ec7cbb7d317869a26550db5de25cd2` | Failed: `cmd/internal changed, but no GSD planning evidence changed`. |
-| `make verify` | Failed in `go test -timeout 20m ./...`: `TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides` loaded 549 bundles, but the stale assertion expected 548. |
+| `make verify` | Failed in `go test -timeout 20m ./...`: `TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides` loaded 550 bundles, but the stale assertion expected 549. |
 
 ## Green plan
 
@@ -40,7 +40,7 @@
 
 | Check | Result |
 | --- | --- |
-| `go test ./internal/connectors/bundleregistry -count=1` | Passed after updating the expected bundle count from 548 to 549. |
+| `go test ./internal/connectors/bundleregistry -count=1` | Passed after updating the expected bundle count from 549 to 550. |
 | `make verify` | Passed: fmt, tidy-check, vet, full `go test ./...`, build, docs validation, smoke, lint, connectorgen validate, connector-boundary, and release workflow check. |
 | `git diff --check` | Passed. |
 

@@ -31,8 +31,9 @@
 
 ## Scope guard
 
-Allowed repo edits for this worker stay connector-local under `internal/connectors/defs/bitbucket/`.
-No shared runtime files, hooks, natives, command runners, go.mod/go.sum, live credentials, provider calls, VPS/Thaalam work, merges, or certification claims.
+Initial connector-bundle edits for this worker stayed connector-local under `internal/connectors/defs/bitbucket/`.
+Review follow-up shared runtime edits were limited to reverse-plan redaction metadata and generated CLI/docs parity.
+No hooks, natives, command runners, go.mod/go.sum, live credentials, provider calls, VPS/Thaalam work, merges, or certification claims were added.
 GitHub issue-body updates use `gh-axi` only and preserve existing issue body counts.
 
 ## Captain policy addendum requirement
@@ -82,7 +83,7 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
 | --- | --- | --- |
 | Red validation | `go run ./cmd/connectorgen validate internal/connectors/defs/bitbucket` before bundle files | command reported 0 checked/0 findings because an empty connector dir is skipped by connectorgen |
 | Red conformance | `go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1` before bundle files | failed as expected: `load bundle bitbucket: missing required file metadata.json` |
-| Bundle validation | `go run ./cmd/connectorgen validate internal/connectors/defs` after bundle generation | passed: `549 connector(s) checked, 0 findings` |
+| Bundle validation | `go run ./cmd/connectorgen validate internal/connectors/defs` after bundle generation | passed: `550 connector(s) checked, 0 findings` |
 | Conformance | `go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1` | passed |
 | CLI/golden targeted | `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` and `go test ./internal/cli -run 'TestConnectorCatalogCLIJSON|TestGoldenTranscripts|TestGoldenDocsGenerateMatchesTrackedCLIManuals|TestDocsGenerateIncludesConnectorCatalog' -count=1` | passed after generated golden/catalog docs updates |
 | Focused connector packages | `go test ./internal/connectors/engine ./internal/connectors/conformance -count=1` | passed |
