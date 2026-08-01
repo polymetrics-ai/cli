@@ -3843,12 +3843,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.catalogContextUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/catalogContextUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/catalogContextUpdate",
+        "notes": "Shopify docs describe adding or removing catalog contexts that control product and price availability; treated as catalog-context relationship removal"
       }
     },
     {
@@ -4105,12 +4107,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.collectionUnpublish",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionUnpublish"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionUnpublish",
+        "notes": "Shopify docs describe unpublishing a collection; treated as publication removal"
       }
     },
     {
@@ -4129,12 +4133,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.combinedListingUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/combinedListingUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/combinedListingUpdate",
+        "notes": "Shopify docs describe adding, removing, and updating combined listings; treated as listing relationship removal"
       }
     },
     {
@@ -5067,12 +5073,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.deliveryProfileUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryProfileUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryProfileUpdate",
+        "notes": "Shopify docs describe removing shipping zones and dissociating products or selling plan groups; treated as delivery-profile relationship removal"
       }
     },
     {
@@ -5655,12 +5663,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.draftOrderUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderUpdate",
+        "notes": "Shopify docs warn updates unlink an in-progress checkout; treated as checkout-link removal"
       }
     },
     {
@@ -5741,12 +5751,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.fileUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileUpdate",
+        "notes": "Shopify docs describe removing file-product associations, deleting files from product media galleries, and clearing variant images; treated as media relationship removal"
       }
     },
     {
@@ -6195,24 +6207,28 @@
       "method": "POST",
       "path": "GraphQL Mutation.giftCardDebit",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardDebit"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardDebit",
+        "notes": "Shopify docs describe removing funds from a gift card; treated as balance removal"
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.giftCardProductSet",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardProductSet"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardProductSet",
+        "notes": "Shopify docs describe full replacement of gift-card variants, removing entries omitted from input; treated as replacement removal"
       }
     },
     {
@@ -7471,12 +7487,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderEditSetQuantity",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditSetQuantity"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditSetQuantity",
+        "notes": "Shopify docs describe quantity zero effectively removing a line item from an order edit; treated as order-line removal"
       }
     },
     {
@@ -7817,12 +7835,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.priceListFixedPricesByProductUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesByProductUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesByProductUpdate",
+        "notes": "Shopify docs describe removing a product's fixed prices; treated as price override removal"
       }
     },
     {
@@ -7843,24 +7863,28 @@
       "method": "POST",
       "path": "GraphQL Mutation.priceListFixedPricesUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesUpdate",
+        "notes": "Shopify docs describe removing existing fixed prices; treated as price override removal"
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.priceListUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListUpdate",
+        "notes": "Shopify docs describe currency changes removing all fixed prices from a price list; treated as price override removal"
       }
     },
     {
@@ -8031,12 +8055,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.productLeaveSellingPlanGroups",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productLeaveSellingPlanGroups"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productLeaveSellingPlanGroups",
+        "notes": "Shopify docs describe removing multiple selling plan groups from a product; treated as selling-plan relationship removal"
       }
     },
     {
@@ -8129,12 +8155,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.productUnpublish",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productUnpublish"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productUnpublish",
+        "notes": "Shopify docs describe unpublishing a product; treated as publication removal"
       }
     },
     {
@@ -8177,12 +8205,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.productVariantDetachMedia",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantDetachMedia"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantDetachMedia",
+        "notes": "Shopify docs describe detaching media from product variants; treated as media relationship removal"
       }
     },
     {
@@ -8201,24 +8231,28 @@
       "method": "POST",
       "path": "GraphQL Mutation.productVariantLeaveSellingPlanGroups",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantLeaveSellingPlanGroups"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantLeaveSellingPlanGroups",
+        "notes": "Shopify docs describe removing multiple selling plan groups from a product variant; treated as selling-plan relationship removal"
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.productVariantRelationshipBulkUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantRelationshipBulkUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantRelationshipBulkUpdate",
+        "notes": "Shopify docs describe removing bundle components; treated as bundle relationship removal"
       }
     },
     {
@@ -8301,12 +8335,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.publicationUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publicationUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publicationUpdate",
+        "notes": "Shopify docs describe adding or removing products from a publication; treated as publication relationship removal"
       }
     },
     {
@@ -8337,24 +8373,28 @@
       "method": "POST",
       "path": "GraphQL Mutation.publishableUnpublish",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishableUnpublish"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishableUnpublish",
+        "notes": "Shopify docs describe unpublishing resources from publications, making them unavailable to customers; treated as publication removal"
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.publishableUnpublishToCurrentChannel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishableUnpublishToCurrentChannel"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishableUnpublishToCurrentChannel",
+        "notes": "Shopify docs describe unpublishing a resource from the current channel; treated as publication removal"
       }
     },
     {
@@ -8967,12 +9007,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.shopResourceFeedbackCreate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shopResourceFeedbackCreate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shopResourceFeedbackCreate",
+        "notes": "Shopify docs describe ACCEPTED feedback removing the active resource feedback entry; treated as feedback-state removal"
       }
     },
     {
@@ -9051,12 +9093,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.storeCreditAccountDebit",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/storeCreditAccountDebit"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/storeCreditAccountDebit",
+        "notes": "Shopify docs describe a debit transaction that decreases the store credit account balance; treated as balance removal"
       }
     },
     {

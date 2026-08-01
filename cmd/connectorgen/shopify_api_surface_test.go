@@ -10,6 +10,31 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+var shopifySourceDescriptionStateDestroyingPaths = map[string]struct{}{
+	"GraphQL Mutation.catalogContextUpdate":                 {},
+	"GraphQL Mutation.collectionUnpublish":                  {},
+	"GraphQL Mutation.combinedListingUpdate":                {},
+	"GraphQL Mutation.deliveryProfileUpdate":                {},
+	"GraphQL Mutation.draftOrderUpdate":                     {},
+	"GraphQL Mutation.fileUpdate":                           {},
+	"GraphQL Mutation.giftCardDebit":                        {},
+	"GraphQL Mutation.giftCardProductSet":                   {},
+	"GraphQL Mutation.orderEditSetQuantity":                 {},
+	"GraphQL Mutation.priceListFixedPricesByProductUpdate":  {},
+	"GraphQL Mutation.priceListFixedPricesUpdate":           {},
+	"GraphQL Mutation.priceListUpdate":                      {},
+	"GraphQL Mutation.productLeaveSellingPlanGroups":        {},
+	"GraphQL Mutation.productUnpublish":                     {},
+	"GraphQL Mutation.productVariantDetachMedia":            {},
+	"GraphQL Mutation.productVariantLeaveSellingPlanGroups": {},
+	"GraphQL Mutation.productVariantRelationshipBulkUpdate": {},
+	"GraphQL Mutation.publicationUpdate":                    {},
+	"GraphQL Mutation.publishableUnpublish":                 {},
+	"GraphQL Mutation.publishableUnpublishToCurrentChannel": {},
+	"GraphQL Mutation.shopResourceFeedbackCreate":           {},
+	"GraphQL Mutation.storeCreditAccountDebit":              {},
+}
+
 func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	surface := loadShopifySurface(t)
 
@@ -61,20 +86,20 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	if operations != 1123 {
 		t.Fatalf("operation endpoints = %d, want 1123", operations)
 	}
-	if destructiveConfirm != 157 {
-		t.Fatalf("destructive confirmed operations = %d, want 157", destructiveConfirm)
+	if destructiveConfirm != 179 {
+		t.Fatalf("destructive confirmed operations = %d, want 179", destructiveConfirm)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":  495,
+		"admin_reverse_etl":  473,
 		"binary_read":        17,
-		"destructive_action": 157,
+		"destructive_action": 179,
 		"direct_read":        454,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 157,
+		"critical": 179,
 		"high":     3,
 		"low":      471,
-		"medium":   492,
+		"medium":   470,
 	})
 
 	for _, path := range []string{
@@ -107,13 +132,28 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 		}
 	}
 
-	activate := byPath["GraphQL Mutation.discountCodeActivate"].Operation
-	if activate == nil || activate.Model != "admin_reverse_etl" || activate.Risk != "medium" || activate.Confirm != "" {
-		t.Fatalf("discountCodeActivate operation = %+v, want non-destructive admin_reverse_etl/medium", activate)
+	for path := range shopifySourceDescriptionStateDestroyingPaths {
+		ep, ok := byPath[path]
+		if !ok {
+			t.Fatalf("expected source-described state-destroying endpoint %q", path)
+		}
+		if ep.Operation == nil || ep.Operation.Model != "destructive_action" || ep.Operation.Risk != "critical" || ep.Operation.Confirm != "destructive" {
+			t.Fatalf("source-described state-destroying endpoint %q operation = %+v, want destructive_action/critical/destructive", path, ep.Operation)
+		}
 	}
-	hold := byPath["GraphQL Mutation.fulfillmentOrderHold"].Operation
-	if hold == nil || hold.Model != "admin_reverse_etl" || hold.Risk != "medium" || hold.Confirm != "" {
-		t.Fatalf("fulfillmentOrderHold operation = %+v, want non-destructive admin_reverse_etl/medium", hold)
+
+	for _, path := range []string{
+		"GraphQL Mutation.discountCodeActivate",
+		"GraphQL Mutation.fileCreate",
+		"GraphQL Mutation.fulfillmentOrderHold",
+		"GraphQL Mutation.inventoryTransferSetItems",
+		"GraphQL Mutation.orderUpdate",
+		"GraphQL Mutation.shippingLabelPurchase",
+	} {
+		op := byPath[path].Operation
+		if op == nil || op.Model != "admin_reverse_etl" || op.Risk != "medium" || op.Confirm != "" {
+			t.Fatalf("%s operation = %+v, want non-destructive admin_reverse_etl/medium", path, op)
+		}
 	}
 }
 
@@ -162,6 +202,9 @@ func shopifyStateDestroying(ep engine.SurfaceEndpoint) bool {
 	if ep.Method == "DELETE" {
 		return true
 	}
+	if shopifySourceDescriptionStateDestroying(ep.Path) {
+		return true
+	}
 	var tokens []string
 	if strings.HasPrefix(ep.Path, "GraphQL Mutation.") {
 		tokens = shopifyCamelTokens(strings.TrimPrefix(ep.Path, "GraphQL Mutation."))
@@ -170,7 +213,7 @@ func shopifyStateDestroying(ep engine.SurfaceEndpoint) bool {
 	}
 	for _, token := range tokens {
 		switch token {
-		case "archive", "cancel", "close", "deactivate", "delete", "destroy", "disable", "discard", "dispose", "erasure", "expire", "release", "remove", "revoke", "uninstall", "void":
+		case "archive", "cancel", "close", "deactivate", "debit", "delete", "destroy", "detach", "disable", "discard", "disassociate", "dissociate", "dispose", "erasure", "expire", "leave", "release", "remove", "revoke", "unlink", "uninstall", "unpublish", "void":
 			return true
 		}
 		if strings.HasPrefix(token, "cancel") {
@@ -178,6 +221,11 @@ func shopifyStateDestroying(ep engine.SurfaceEndpoint) bool {
 		}
 	}
 	return false
+}
+
+func shopifySourceDescriptionStateDestroying(path string) bool {
+	_, ok := shopifySourceDescriptionStateDestroyingPaths[path]
+	return ok
 }
 
 func shopifyCamelTokens(s string) []string {
@@ -244,10 +292,24 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 	if !reflect.DeepEqual(shopifyCamelTokens("reverseFulfillmentOrderDispose"), []string{"reverse", "fulfillment", "order", "dispose"}) {
 		t.Fatalf("unexpected reverseFulfillmentOrderDispose tokens")
 	}
-	if !shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: "GraphQL Mutation.fulfillmentOrderReleaseHold", Operation: &engine.SurfaceOperation{}}) {
-		t.Fatalf("fulfillmentOrderReleaseHold was not classified as state-destroying")
+	for _, path := range []string{
+		"GraphQL Mutation.fulfillmentOrderReleaseHold",
+		"GraphQL Mutation.giftCardDebit",
+		"GraphQL Mutation.productLeaveSellingPlanGroups",
+		"GraphQL Mutation.productVariantDetachMedia",
+		"GraphQL Mutation.publishableUnpublish",
+	} {
+		if !shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: path, Operation: &engine.SurfaceOperation{}}) {
+			t.Fatalf("%s was not classified as state-destroying", path)
+		}
 	}
-	if got := shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: "GraphQL Mutation.fulfillmentOrderHold", Operation: &engine.SurfaceOperation{}}); got {
-		t.Fatalf("fulfillmentOrderHold classified as state-destroying")
+	for _, path := range []string{
+		"GraphQL Mutation.discountCodeActivate",
+		"GraphQL Mutation.fulfillmentOrderHold",
+		"GraphQL Mutation.inventoryTransferSetItems",
+	} {
+		if shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: path, Operation: &engine.SurfaceOperation{}}) {
+			t.Fatalf("%s classified as state-destroying", path)
+		}
 	}
 }
