@@ -10,9 +10,9 @@ SYNOPSIS
   pm etl read --connector aws-cloudtrail --credential <name> --stream <stream> --json
 
 DESCRIPTION
-  Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams.
+  Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.
 
-  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, but only 19 read-stream actions are currently exposed as executable connector-local runtime behavior. The 10 provider query/direct-read actions and 31 write/admin actions are blocked/planned until shared promoted-native forwarding exposes command surfaces, manifests, validation, dry-run previews, and operation-direct reads safely.
+  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, but only 9 read-stream actions are currently exposed as executable connector-local runtime behavior. The 10 provider query/direct-read actions, 10 parameterized read actions, and 31 write/admin actions are blocked/planned until shared promoted-native forwarding or a typed request-parameter boundary exposes them safely.
 
 ICON
   asset: icons/aws-cloudtrail.svg
@@ -31,33 +31,24 @@ CONFIGURATION
   base_url (optional fixture/local endpoint)
   page_size (optional)
   max_pages (optional)
-  start_date (optional)
   mode=fixture (optional credential-free local tests)
   aws_key_id (required secret)
   aws_secret_key (required secret)
 
 ETL STREAMS
   describe_trails
-  get_channel
-  get_dashboard
   get_event_configuration
-  get_event_data_store
-  get_event_selectors
-  get_import
   get_insight_selectors
-  get_resource_policy
-  get_trail
-  get_trail_status
   list_channels
   list_dashboards
   list_event_data_stores
-  list_import_failures
   list_imports
   list_public_keys
-  list_tags
   list_trails
 
 BLOCKED / PLANNED OPERATIONS
+  Parameterized read actions blocked: GetChannel, GetDashboard, GetEventDataStore, GetEventSelectors, GetImport, GetResourcePolicy, GetTrail, GetTrailStatus, ListImportFailures, ListTags.
+
   Provider query/direct-read actions blocked: CancelQuery, DescribeQuery, GenerateQuery, GetQueryResults, ListInsightsData, ListInsightsMetricData, ListQueries, LookupEvents, SearchSampleQueries, StartQuery.
 
   Write/admin actions blocked: AddTags, CreateChannel, CreateDashboard, CreateEventDataStore, CreateTrail, DeleteChannel, DeleteDashboard, DeleteEventDataStore, DeleteResourcePolicy, DeleteTrail, DeregisterOrganizationDelegatedAdmin, DisableFederation, EnableFederation, PutEventConfiguration, PutEventSelectors, PutInsightSelectors, PutResourcePolicy, RegisterOrganizationDelegatedAdmin, RemoveTags, RestoreEventDataStore, StartDashboardRefresh, StartEventDataStoreIngestion, StartImport, StartLogging, StopEventDataStoreIngestion, StopImport, StopLogging, UpdateChannel, UpdateDashboard, UpdateEventDataStore, UpdateTrail.
@@ -70,6 +61,6 @@ SECURITY
 AGENT WORKFLOW
   1. Inspect metadata with pm connectors inspect aws-cloudtrail --json; this does not read credentials.
   2. Add credentials from environment variables or stdin only.
-  3. Use pm etl catalog/read/run for the 19 implemented read streams.
-  4. Treat provider query/direct-read commands and all write/admin actions as blocked/planned until a shared-runtime forwarding slice lands.
+  3. Use pm etl catalog/read/run for the 9 implemented read streams.
+  4. Treat parameterized reads, provider query/direct-read commands, and all write/admin actions as blocked/planned until a shared-runtime forwarding or typed request-parameter slice lands.
 ```

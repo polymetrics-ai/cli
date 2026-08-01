@@ -22,18 +22,6 @@ func streams() []connectors.Stream {
 
 func genericFields(action string) []connectors.Field {
 	fields := []connectors.Field{{Name: "pm_record_id", Type: "string"}, {Name: "operation", Type: "string"}}
-	if action == "LookupEvents" {
-		fields = append(fields,
-			connectors.Field{Name: "EventId", Type: "string"},
-			connectors.Field{Name: "EventName", Type: "string"},
-			connectors.Field{Name: "EventSource", Type: "string"},
-			connectors.Field{Name: "EventTime", Type: "integer"},
-			connectors.Field{Name: "Username", Type: "string"},
-			connectors.Field{Name: "AccessKeyId", Type: "string"},
-			connectors.Field{Name: "CloudTrailEvent", Type: "string"},
-		)
-		return fields
-	}
 	if strings.HasPrefix(action, "Get") || strings.HasPrefix(action, "List") || action == "DescribeTrails" {
 		fields = append(fields, connectors.Field{Name: "Name", Type: "string"}, connectors.Field{Name: "Arn", Type: "string"})
 	}
