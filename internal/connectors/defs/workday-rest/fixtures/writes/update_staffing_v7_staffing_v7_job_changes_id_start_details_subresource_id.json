@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "date": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/jobChanges/sample-id/startDetails/sample-id",
+    "body": {
+      "date": "sample"
+    }
+  }
+}

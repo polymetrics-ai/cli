@@ -1,0 +1,18 @@
+{
+  "record": {
+    "expenseReportMemo": "sample",
+    "payee": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/expense/v1/reports",
+    "body": {
+      "expenseReportMemo": "sample",
+      "payee": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recruiting/v4/prospects/synthetic-conformance-value/educations",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "recruiting_v4_recruiting_v4_prospects_id_educations_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "fund": {
+      "id": "sample"
+    },
+    "gift": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/organizationAssignmentChanges/sample-id/costing/sample-id",
+    "body": {
+      "fund": {
+        "id": "sample"
+      },
+      "gift": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/learning/v1/records",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "learning_v1_learning_v1_records_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

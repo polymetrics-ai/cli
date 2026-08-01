@@ -1,0 +1,32 @@
+{
+  "record": {
+    "cascadedGoals": [
+      {
+        "goalName": {}
+      }
+    ],
+    "employees": [
+      {
+        "descriptor": {},
+        "id": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/cascadedGoalEvent",
+    "body": {
+      "cascadedGoals": [
+        {
+          "goalName": {}
+        }
+      ],
+      "employees": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ]
+    }
+  }
+}

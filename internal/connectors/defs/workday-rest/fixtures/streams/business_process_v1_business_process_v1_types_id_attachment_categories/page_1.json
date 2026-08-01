@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/businessProcess/v1/types/synthetic-conformance-value/attachmentCategories",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "business_process_v1_business_process_v1_types_id_attachment_categories_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

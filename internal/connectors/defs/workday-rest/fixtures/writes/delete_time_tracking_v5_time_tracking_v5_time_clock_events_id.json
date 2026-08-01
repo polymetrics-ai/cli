@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/timeTracking/v5/timeClockEvents/sample-id"
+  }
+}

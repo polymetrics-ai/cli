@@ -1,0 +1,14 @@
+{
+  "record": {
+    "integrationEventStartDate": "sample",
+    "integrationEvent": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/finTaxPublic/v1/electronicReportingRuns",
+    "body": {
+      "integrationEventStartDate": "sample",
+      "integrationEvent": "sample"
+    }
+  }
+}

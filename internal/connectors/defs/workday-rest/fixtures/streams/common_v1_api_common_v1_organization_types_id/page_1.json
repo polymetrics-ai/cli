@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/common/v1/organizationTypes/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "common_v1_api_common_v1_organization_types_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

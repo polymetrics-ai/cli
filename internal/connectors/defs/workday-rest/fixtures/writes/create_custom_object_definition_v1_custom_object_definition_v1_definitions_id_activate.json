@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "descriptor": "sample",
+    "href": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customObjectDefinition/v1/definitions/sample-id/activate",
+    "body": {
+      "descriptor": "sample",
+      "href": "sample"
+    }
+  }
+}

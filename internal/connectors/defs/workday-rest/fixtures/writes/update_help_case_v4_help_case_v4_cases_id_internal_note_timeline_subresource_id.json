@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "note": {
+      "textBody": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/helpCase/v4/cases/sample-id/internalNoteTimeline/sample-id",
+    "body": {
+      "note": {
+        "textBody": "sample"
+      }
+    }
+  }
+}

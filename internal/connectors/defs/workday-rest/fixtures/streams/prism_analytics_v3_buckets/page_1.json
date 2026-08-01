@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/buckets",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "prism_analytics_v3_buckets_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

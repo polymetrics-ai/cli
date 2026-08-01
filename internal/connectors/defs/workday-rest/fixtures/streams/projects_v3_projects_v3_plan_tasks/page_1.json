@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/v3/planTasks",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "projects_v3_projects_v3_plan_tasks_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

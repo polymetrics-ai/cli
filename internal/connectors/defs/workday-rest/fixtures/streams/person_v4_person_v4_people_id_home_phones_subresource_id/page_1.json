@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/people/synthetic-conformance-value/homePhones/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "person_v4_person_v4_people_id_home_phones_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

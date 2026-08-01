@@ -1,0 +1,29 @@
+{
+  "record": {
+    "id": "sample-id",
+    "oneTimePayments": [
+      {
+        "additionalInformation": {},
+        "coverageEndDate": {}
+      }
+    ],
+    "position": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/compensation/v3/workers/sample-id/requestOneTimePayment",
+    "body": {
+      "oneTimePayments": [
+        {
+          "additionalInformation": {},
+          "coverageEndDate": {}
+        }
+      ],
+      "position": {
+        "id": "sample"
+      }
+    }
+  }
+}

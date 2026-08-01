@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/helpArticle/v1/articleStatuses",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "help_article_v1_help_article_v1_article_statuses_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

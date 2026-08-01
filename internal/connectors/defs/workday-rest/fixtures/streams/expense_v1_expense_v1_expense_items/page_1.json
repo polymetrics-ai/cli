@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/expense/v1/expenseItems",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "expense_v1_expense_v1_expense_items_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

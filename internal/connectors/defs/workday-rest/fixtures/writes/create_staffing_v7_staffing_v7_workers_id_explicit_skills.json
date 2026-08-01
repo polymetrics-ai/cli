@@ -1,0 +1,31 @@
+{
+  "record": {
+    "id": "sample-id",
+    "skillItem": {
+      "remoteID": "sample",
+      "skillName": "sample"
+    },
+    "skillSources": [
+      {
+        "skillSource": {},
+        "id": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/explicitSkills",
+    "body": {
+      "skillItem": {
+        "remoteID": "sample",
+        "skillName": "sample"
+      },
+      "skillSources": [
+        {
+          "skillSource": {},
+          "id": {}
+        }
+      ]
+    }
+  }
+}

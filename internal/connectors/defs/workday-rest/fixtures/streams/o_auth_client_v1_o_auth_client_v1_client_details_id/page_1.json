@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/oAuthClient/v1/clientDetails/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "o_auth_client_v1_o_auth_client_v1_client_details_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

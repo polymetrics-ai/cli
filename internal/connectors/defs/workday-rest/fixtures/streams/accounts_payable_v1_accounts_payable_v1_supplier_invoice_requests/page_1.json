@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accountsPayable/v1/supplierInvoiceRequests",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "accounts_payable_v1_accounts_payable_v1_supplier_invoice_requests_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

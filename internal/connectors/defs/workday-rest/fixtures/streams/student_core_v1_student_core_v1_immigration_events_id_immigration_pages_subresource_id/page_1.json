@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentCore/v1/immigrationEvents/synthetic-conformance-value/immigrationPages/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "student_core_v1_student_core_v1_immigration_events_id_immigration_pages_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

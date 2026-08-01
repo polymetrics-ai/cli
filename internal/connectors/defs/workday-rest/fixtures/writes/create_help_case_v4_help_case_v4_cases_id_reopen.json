@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "comment": {
+      "content": "sample",
+      "textBody": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpCase/v4/cases/sample-id/reopen",
+    "body": {
+      "comment": {
+        "content": "sample",
+        "textBody": "sample"
+      }
+    }
+  }
+}

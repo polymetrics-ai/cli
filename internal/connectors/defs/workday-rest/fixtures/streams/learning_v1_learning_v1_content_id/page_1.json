@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/learning/v1/content/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "learning_v1_learning_v1_content_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

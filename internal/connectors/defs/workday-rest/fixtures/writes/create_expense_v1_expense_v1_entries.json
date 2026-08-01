@@ -1,0 +1,14 @@
+{
+  "record": {
+    "json_data": {
+      "expenseItem": {
+        "id": "sample"
+      },
+      "date": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/expense/v1/entries"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/contractCompliance/v1/supplierContracts",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "contract_compliance_v1_contract_compliance_v1_supplier_contracts_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

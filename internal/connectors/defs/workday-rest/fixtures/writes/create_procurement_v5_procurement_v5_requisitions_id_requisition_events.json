@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "autoComplete": true,
+    "comment": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/procurement/v5/requisitions/sample-id/requisitionEvents",
+    "body": {
+      "autoComplete": true,
+      "comment": "sample"
+    }
+  }
+}

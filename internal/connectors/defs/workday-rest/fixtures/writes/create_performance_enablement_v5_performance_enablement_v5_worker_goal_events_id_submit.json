@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "businessProcessParameters": {
+        "action": {
+          "id": {}
+        }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/workerGoalEvents/sample-id/submit"
+  }
+}

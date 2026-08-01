@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "region": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/organizationAssignmentChanges/sample-id/region/sample-id",
+    "body": {
+      "region": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/procurement/v5/requisitions/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "procurement_v5_procurement_v5_requisitions_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

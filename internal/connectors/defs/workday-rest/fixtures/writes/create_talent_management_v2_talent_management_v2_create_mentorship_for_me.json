@@ -1,0 +1,24 @@
+{
+  "record": {
+    "mentor": {
+      "id": "sample"
+    },
+    "mentorType": {
+      "id": "sample"
+    },
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/createMentorshipForMe",
+    "body": {
+      "mentor": {
+        "id": "sample"
+      },
+      "mentorType": {
+        "id": "sample"
+      },
+      "startDate": "sample"
+    }
+  }
+}

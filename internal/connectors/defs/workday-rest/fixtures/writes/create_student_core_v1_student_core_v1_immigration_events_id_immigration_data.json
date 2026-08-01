@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "activeSevisId": "sample",
+    "issuingInstitution": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentCore/v1/immigrationEvents/sample-id/immigrationData",
+    "body": {
+      "activeSevisId": "sample",
+      "issuingInstitution": {
+        "id": "sample"
+      }
+    }
+  }
+}

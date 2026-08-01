@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "reasonCode": {
+      "id": "sample"
+    },
+    "comments": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/procurement/v5/requisitions/sample-id/close",
+    "body": {
+      "reasonCode": {
+        "id": "sample"
+      },
+      "comments": "sample"
+    }
+  }
+}

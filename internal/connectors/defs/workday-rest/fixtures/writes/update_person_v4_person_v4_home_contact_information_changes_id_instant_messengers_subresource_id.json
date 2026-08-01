@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "userName": "sample",
+    "type": {
+      "descriptor": "sample",
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/person/v4/homeContactInformationChanges/sample-id/instantMessengers/sample-id",
+    "body": {
+      "userName": "sample",
+      "type": {
+        "descriptor": "sample",
+        "id": "sample"
+      }
+    }
+  }
+}

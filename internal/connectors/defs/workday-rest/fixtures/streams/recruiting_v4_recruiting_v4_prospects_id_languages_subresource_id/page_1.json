@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recruiting/v4/prospects/synthetic-conformance-value/languages/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "recruiting_v4_recruiting_v4_prospects_id_languages_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "descriptor": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/performanceEnablement/v5/workers/sample-id/developmentItems/sample-id",
+    "body": {
+      "descriptor": "sample"
+    }
+  }
+}

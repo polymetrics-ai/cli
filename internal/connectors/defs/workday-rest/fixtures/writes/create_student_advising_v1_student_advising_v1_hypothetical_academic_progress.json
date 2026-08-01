@@ -1,0 +1,24 @@
+{
+  "record": {
+    "programOfStudy": {
+      "id": "sample"
+    },
+    "startDate": "sample",
+    "student": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentAdvising/v1/hypotheticalAcademicProgress",
+    "body": {
+      "programOfStudy": {
+        "id": "sample"
+      },
+      "startDate": "sample",
+      "student": {
+        "id": "sample"
+      }
+    }
+  }
+}

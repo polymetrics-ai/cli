@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/workers/synthetic-conformance-value/serviceDates",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "staffing_v7_staffing_v7_workers_id_service_dates_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

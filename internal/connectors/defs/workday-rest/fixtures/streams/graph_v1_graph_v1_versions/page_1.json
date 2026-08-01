@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/graph/v1/versions",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "graph_v1_graph_v1_versions_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

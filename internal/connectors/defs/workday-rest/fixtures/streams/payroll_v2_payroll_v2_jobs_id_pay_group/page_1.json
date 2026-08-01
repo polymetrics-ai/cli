@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/v2/jobs/synthetic-conformance-value/payGroup",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "payroll_v2_payroll_v2_jobs_id_pay_group_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

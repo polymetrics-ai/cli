@@ -1,0 +1,18 @@
+{
+  "record": {
+    "case": {
+      "id": "sample"
+    },
+    "href": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpCase/v4/externalRecords",
+    "body": {
+      "case": {
+        "id": "sample"
+      },
+      "href": "sample"
+    }
+  }
+}

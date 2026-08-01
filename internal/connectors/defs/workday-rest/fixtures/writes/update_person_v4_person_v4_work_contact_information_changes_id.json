@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "alternateWorkLocation": {
+      "id": "sample"
+    },
+    "descriptor": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/person/v4/workContactInformationChanges/sample-id",
+    "body": {
+      "alternateWorkLocation": {
+        "id": "sample"
+      },
+      "descriptor": "sample"
+    }
+  }
+}

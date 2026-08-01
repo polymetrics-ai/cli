@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "date": "sample",
+    "travelBookingRecord": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/expense/v1/reports/sample-id/lines",
+    "body": {
+      "date": "sample",
+      "travelBookingRecord": {
+        "id": "sample"
+      }
+    }
+  }
+}

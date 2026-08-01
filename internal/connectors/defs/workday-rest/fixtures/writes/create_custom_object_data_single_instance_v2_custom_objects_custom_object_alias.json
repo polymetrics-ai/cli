@@ -1,0 +1,9 @@
+{
+  "record": {
+    "custom_object_alias": "sample-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customObjects/sample-id"
+  }
+}

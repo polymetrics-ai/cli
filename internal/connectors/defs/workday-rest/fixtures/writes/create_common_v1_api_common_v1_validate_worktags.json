@@ -1,0 +1,34 @@
+{
+  "record": {
+    "validationTypes": [
+      {
+        "descriptor": {},
+        "href": {}
+      }
+    ],
+    "restrictions": [
+      {
+        "descriptor": {},
+        "href": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/common/v1/validateWorktags",
+    "body": {
+      "validationTypes": [
+        {
+          "descriptor": {},
+          "href": {}
+        }
+      ],
+      "restrictions": [
+        {
+          "descriptor": {},
+          "href": {}
+        }
+      ]
+    }
+  }
+}

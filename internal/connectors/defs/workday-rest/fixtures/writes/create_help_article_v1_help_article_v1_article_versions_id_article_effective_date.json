@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "publishDate": "sample",
+    "expirationDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpArticle/v1/articleVersions/sample-id/articleEffectiveDate",
+    "body": {
+      "publishDate": "sample",
+      "expirationDate": "sample"
+    }
+  }
+}

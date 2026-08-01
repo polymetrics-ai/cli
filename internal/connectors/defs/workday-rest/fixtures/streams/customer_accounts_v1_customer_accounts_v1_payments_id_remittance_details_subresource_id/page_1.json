@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerAccounts/v1/payments/synthetic-conformance-value/remittanceDetails/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "customer_accounts_v1_customer_accounts_v1_payments_id_remittance_details_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

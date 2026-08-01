@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/benefitEnrollmentEventOfferings/v1/employeeEnrollmentEvent/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "benefit_enrollment_event_offerings_v1_benefit_enrollment_event_offerings_v1_employee_enrollment_event_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

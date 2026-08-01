@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recruiting/v4/interviews",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "recruiting_v4_recruiting_v4_interviews_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

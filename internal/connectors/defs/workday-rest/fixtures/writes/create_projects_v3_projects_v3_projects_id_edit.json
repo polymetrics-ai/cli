@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "customer": {
+      "id": "sample"
+    },
+    "problemStatement": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/projects/sample-id/edit",
+    "body": {
+      "customer": {
+        "id": "sample"
+      },
+      "problemStatement": "sample"
+    }
+  }
+}

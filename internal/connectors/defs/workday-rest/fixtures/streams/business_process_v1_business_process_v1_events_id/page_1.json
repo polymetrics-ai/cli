@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/businessProcess/v1/events/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "business_process_v1_business_process_v1_events_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

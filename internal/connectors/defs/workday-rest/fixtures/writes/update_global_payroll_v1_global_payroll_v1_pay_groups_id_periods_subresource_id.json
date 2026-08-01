@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "periodIsEarliestOpen": true,
+    "periodStartDate": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/globalPayroll/v1/payGroups/sample-id/periods/sample-id",
+    "body": {
+      "periodIsEarliestOpen": true,
+      "periodStartDate": "sample"
+    }
+  }
+}

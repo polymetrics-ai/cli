@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "relationshipToStudent": {
+      "id": "sample"
+    },
+    "sevisIssueDate": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/studentCore/v1/immigrationEvents/sample-id/dependentImmigrationData/sample-id",
+    "body": {
+      "relationshipToStudent": {
+        "id": "sample"
+      },
+      "sevisIssueDate": "sample"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "feedbackResponders": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/workers/sample-id/requestedFeedbackOnSelfEvents"
+  }
+}

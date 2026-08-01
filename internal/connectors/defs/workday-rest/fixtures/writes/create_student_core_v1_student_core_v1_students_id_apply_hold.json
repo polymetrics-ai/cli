@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "sample-id",
+    "reason": {
+      "id": "sample"
+    },
+    "typeContext": [
+      {
+        "holdType": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentCore/v1/students/sample-id/applyHold",
+    "body": {
+      "reason": {
+        "id": "sample"
+      },
+      "typeContext": [
+        {
+          "holdType": {}
+        }
+      ]
+    }
+  }
+}

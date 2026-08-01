@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "sample-id",
+    "skillItems": [
+      {
+        "skillName": {},
+        "skillItem": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/skillItems",
+    "body": {
+      "skillItems": [
+        {
+          "skillName": {},
+          "skillItem": {}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "company": {
+      "id": "sample"
+    },
+    "date": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customerAccounts/v1/payments",
+    "body": {
+      "company": {
+        "id": "sample"
+      },
+      "date": "sample"
+    }
+  }
+}

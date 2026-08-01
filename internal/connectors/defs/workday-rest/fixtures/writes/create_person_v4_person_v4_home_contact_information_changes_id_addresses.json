@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "citySubdivision2Local": "sample",
+    "addressLine9": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/homeContactInformationChanges/sample-id/addresses",
+    "body": {
+      "citySubdivision2Local": "sample",
+      "addressLine9": "sample"
+    }
+  }
+}

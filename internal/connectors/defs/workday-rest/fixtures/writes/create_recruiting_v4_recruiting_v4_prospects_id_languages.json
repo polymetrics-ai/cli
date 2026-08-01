@@ -1,0 +1,29 @@
+{
+  "record": {
+    "id": "sample-id",
+    "language": {
+      "id": "sample"
+    },
+    "abilities": [
+      {
+        "proficiency": {},
+        "abilityType": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recruiting/v4/prospects/sample-id/languages",
+    "body": {
+      "language": {
+        "id": "sample"
+      },
+      "abilities": [
+        {
+          "proficiency": {},
+          "abilityType": {}
+        }
+      ]
+    }
+  }
+}

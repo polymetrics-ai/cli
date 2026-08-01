@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentAcademicFoundation/v1/academicCalendars/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "student_academic_foundation_v1_student_academic_foundation_v1_academic_calendars_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

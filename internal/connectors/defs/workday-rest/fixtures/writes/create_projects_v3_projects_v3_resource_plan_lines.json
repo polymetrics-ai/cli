@@ -1,0 +1,18 @@
+{
+  "record": {
+    "percentAllocation": 1,
+    "workerGroup": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/resourcePlanLines",
+    "body": {
+      "percentAllocation": 1,
+      "workerGroup": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentCore/v1/immigrationEvents",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "student_core_v1_student_core_v1_immigration_events_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

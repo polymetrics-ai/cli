@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/compensation/v3/workers/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "compensation_v3_compensation_v3_workers_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

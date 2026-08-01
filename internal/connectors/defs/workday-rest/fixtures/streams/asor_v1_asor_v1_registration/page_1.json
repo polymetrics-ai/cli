@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/asor/v1/registration",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "asor_v1_asor_v1_registration_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

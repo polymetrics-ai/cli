@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "sample-id",
+    "date": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/jobChanges",
+    "body": {
+      "date": "sample"
+    }
+  }
+}

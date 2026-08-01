@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "sample-id",
+    "date": "sample",
+    "timeReviewEvents": [
+      {
+        "position": {},
+        "project": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timeTracking/v5/workers/sample-id/timeReviewEvents",
+    "body": {
+      "date": "sample",
+      "timeReviewEvents": [
+        {
+          "position": {},
+          "project": {}
+        }
+      ]
+    }
+  }
+}

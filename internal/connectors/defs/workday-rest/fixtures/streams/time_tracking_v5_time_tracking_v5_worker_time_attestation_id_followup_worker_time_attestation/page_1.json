@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/timeTracking/v5/workerTimeAttestation/synthetic-conformance-value/followupWorkerTimeAttestation",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "time_tracking_v5_time_tracking_v5_worker_time_attestation_id_followup_worker_time_attestation_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

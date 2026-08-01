@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "amountToPay": {},
+    "billToCustomer": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customerAccounts/v1/payments/sample-id/remittanceDetails",
+    "body": {
+      "amountToPay": {},
+      "billToCustomer": {
+        "id": "sample"
+      }
+    }
+  }
+}

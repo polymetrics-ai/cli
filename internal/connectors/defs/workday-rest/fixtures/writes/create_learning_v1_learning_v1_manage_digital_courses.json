@@ -1,0 +1,48 @@
+{
+  "record": {
+    "availabilityStatus": {
+      "id": "sample"
+    },
+    "description": "sample",
+    "lessons": [
+      {
+        "order": {},
+        "title": {},
+        "type": {},
+        "url": {}
+      }
+    ],
+    "title": "sample",
+    "topics": [
+      {
+        "descriptor": {},
+        "id": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/learning/v1/manageDigitalCourses",
+    "body": {
+      "availabilityStatus": {
+        "id": "sample"
+      },
+      "description": "sample",
+      "lessons": [
+        {
+          "order": {},
+          "title": {},
+          "type": {},
+          "url": {}
+        }
+      ],
+      "title": "sample",
+      "topics": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ]
+    }
+  }
+}

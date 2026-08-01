@@ -1,0 +1,9 @@
+{
+  "record": {
+    "data_change_id": "sample-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/dataChanges/sample-id/activities"
+  }
+}

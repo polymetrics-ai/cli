@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/buckets/sample-id"
+  }
+}

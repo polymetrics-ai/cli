@@ -1,0 +1,18 @@
+{
+  "record": {
+    "programOfStudy": {
+      "id": "sample"
+    },
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentRecruiting/v1/academicRequirementEvaluation",
+    "body": {
+      "programOfStudy": {
+        "id": "sample"
+      },
+      "startDate": "sample"
+    }
+  }
+}

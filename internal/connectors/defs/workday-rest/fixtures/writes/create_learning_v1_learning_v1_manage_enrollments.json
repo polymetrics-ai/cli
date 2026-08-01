@@ -1,0 +1,22 @@
+{
+  "record": {
+    "content": {
+      "id": "sample"
+    },
+    "learner": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/learning/v1/manageEnrollments",
+    "body": {
+      "content": {
+        "id": "sample"
+      },
+      "learner": {
+        "id": "sample"
+      }
+    }
+  }
+}

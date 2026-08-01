@@ -1,0 +1,35 @@
+{
+  "record": {
+    "id": "sample-id",
+    "awaitingRoles": [
+      {
+        "descriptor": {},
+        "id": {}
+      }
+    ],
+    "addAssignees": [
+      {
+        "descriptor": {},
+        "id": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/businessProcess/v1/eventSteps/sample-id/reassign",
+    "body": {
+      "awaitingRoles": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ],
+      "addAssignees": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "reasonForChange": "sample",
+    "amountToBill": {}
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/revenue/v1/billableTransactions/sample-id",
+    "body": {
+      "reasonForChange": "sample",
+      "amountToBill": {}
+    }
+  }
+}

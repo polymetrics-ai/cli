@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/expense/v1/entries/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "expense_v1_expense_v1_entries_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

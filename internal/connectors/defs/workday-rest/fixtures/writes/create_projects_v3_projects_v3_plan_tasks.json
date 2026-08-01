@@ -1,0 +1,14 @@
+{
+  "record": {
+    "order": "sample",
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/planTasks",
+    "body": {
+      "order": "sample",
+      "startDate": "sample"
+    }
+  }
+}

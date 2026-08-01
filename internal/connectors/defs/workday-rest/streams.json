@@ -2,44 +2,5157 @@
   "base": {
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
-      "page_param": "page",
+      "page_param": "offset",
       "size_param": "limit",
-      "start_page": 1,
+      "start_page": 0,
       "page_size": 100,
       "max_pages": 1
     },
-    "check": { "method": "GET", "path": "/ccx/api/hcm/v1/{{ config.tenant }}/workers", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/common/v1/workers",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "workday-rest access_token is missing or invalid; re-run pm credentials add workday-rest" },
-      { "status": 429, "class": "rate_limited", "hint": "workday-rest rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "workday-rest access_token is missing or invalid; re-run pm credentials add workday-rest"
+      },
+      {
+        "status": 403,
+        "hint": "workday-rest credentials lack the Workday domain/security access required for this service"
+      },
+      {
+        "status": 404,
+        "hint": "Workday REST resource not found or the configured tenant hostname/path is unavailable"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "workday-rest rate limit exceeded; retry after provider backoff"
+      }
     ]
   },
   "streams": [
     {
-      "name": "workers",
-      "path": "/ccx/api/hcm/v1/{{ config.tenant }}/workers",
-      "records": { "path": "data" },
+      "name": "absence_management_v5_absence_management_v5_workers_id_leaves_of_absence_subresource_id",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/leavesOfAbsence/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
       "projection": "passthrough",
-      "schema": "schemas/workers.json"
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
-      "name": "organizations",
-      "path": "/ccx/api/hcm/v1/{{ config.tenant }}/organizations",
-      "records": { "path": "data" },
+      "name": "absence_management_v5_absence_management_v5_balances_id",
+      "path": "/absenceManagement/v5/balances/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
       "projection": "passthrough",
-      "schema": "schemas/organizations.json"
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
-      "name": "jobs",
-      "path": "/ccx/api/hcm/v1/{{ config.tenant }}/jobs",
-      "records": { "path": "data" },
+      "name": "absence_management_v5_absence_management_v5_workers_id_eligible_absence_types",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/eligibleAbsenceTypes",
+      "records": {
+        "path": "data"
+      },
       "projection": "passthrough",
-      "schema": "schemas/jobs.json"
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers_id_leaves_of_absence",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/leavesOfAbsence",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_balances",
+      "path": "/absenceManagement/v5/balances",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers_id",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers_id_time_off_details_subresource_id",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/timeOffDetails/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers_id_time_off_details",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/timeOffDetails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers_id_valid_time_off_dates",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/validTimeOffDates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers",
+      "path": "/absenceManagement/v5/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "absence_management_v5_absence_management_v5_workers_id_eligible_absence_types_subresource_id",
+      "path": "/absenceManagement/v5/workers/{{ config.id }}/eligibleAbsenceTypes/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "accounts_payable_v1_accounts_payable_v1_supplier_invoice_requests",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "accounts_payable_v1_accounts_payable_v1_supplier_invoice_requests_id_lines",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests/{{ config.id }}/lines",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "accounts_payable_v1_accounts_payable_v1_supplier_invoice_requests_id",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "accounts_payable_v1_accounts_payable_v1_supplier_invoice_requests_id_lines_subresource_id",
+      "path": "/accountsPayable/v1/supplierInvoiceRequests/{{ config.id }}/lines/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "asor_v1_asor_v1_agent_definition",
+      "path": "/asor/v1/agentDefinition",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "asor_v1_asor_v1_registration",
+      "path": "/asor/v1/registration",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "asor_v1_asor_v1_registration_id",
+      "path": "/asor/v1/registration/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "benefit_enrollment_event_offerings_v1_benefit_enrollment_event_offerings_v1_employee_enrollment_event_id",
+      "path": "/benefitEnrollmentEventOfferings/v1/employeeEnrollmentEvent/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "benefit_enrollment_event_offerings_v1_benefit_enrollment_event_offerings_v1_employee_enrollment_event",
+      "path": "/benefitEnrollmentEventOfferings/v1/employeeEnrollmentEvent",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_event_steps",
+      "path": "/businessProcess/v1/eventSteps",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_events",
+      "path": "/businessProcess/v1/events",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_events_id_completed_steps",
+      "path": "/businessProcess/v1/events/{{ config.id }}/completedSteps",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_types",
+      "path": "/businessProcess/v1/types",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_types_id",
+      "path": "/businessProcess/v1/types/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "business_process_v1_business_process_v1_event_steps_id",
+      "path": "/businessProcess/v1/eventSteps/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "business_process_v1_business_process_v1_events_id_comments",
+      "path": "/businessProcess/v1/events/{{ config.id }}/comments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_events_id_in_progress_steps",
+      "path": "/businessProcess/v1/events/{{ config.id }}/inProgressSteps",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_events_id_remaining_steps",
+      "path": "/businessProcess/v1/events/{{ config.id }}/remainingSteps",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_types_id_attachment_categories",
+      "path": "/businessProcess/v1/types/{{ config.id }}/attachmentCategories",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "business_process_v1_business_process_v1_events_id",
+      "path": "/businessProcess/v1/events/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_time_off_plans_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/timeOffPlans/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_job_change_reasons",
+      "path": "/api/common/v1/jobChangeReasons",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_organizations",
+      "path": "/api/common/v1/organizations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_business_title_changes_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/businessTitleChanges/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_business_title_changes_id",
+      "path": "/api/common/v1/businessTitleChanges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_currencies_id",
+      "path": "/api/common/v1/currencies/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_inbox_tasks",
+      "path": "/api/common/v1/workers/{{ config.id }}/inboxTasks",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_currencies",
+      "path": "/api/common/v1/currencies",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_customers_id",
+      "path": "/api/common/v1/customers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_organizations_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/organizations/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_history",
+      "path": "/api/common/v1/workers/{{ config.id }}/history",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_organization_types",
+      "path": "/api/common/v1/organizationTypes",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers",
+      "path": "/api/common/v1/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_history_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/history/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_organizations",
+      "path": "/api/common/v1/workers/{{ config.id }}/organizations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_supervisory_organizations_managed",
+      "path": "/api/common/v1/workers/{{ config.id }}/supervisoryOrganizationsManaged",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_time_off_entries_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/timeOffEntries/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_pay_slips",
+      "path": "/api/common/v1/workers/{{ config.id }}/paySlips",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_direct_reports",
+      "path": "/api/common/v1/workers/{{ config.id }}/directReports",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_job_change_reasons_id",
+      "path": "/api/common/v1/jobChangeReasons/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_supervisory_organizations",
+      "path": "/api/common/v1/supervisoryOrganizations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_pay_slips_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/paySlips/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_supervisory_organizations_id",
+      "path": "/api/common/v1/supervisoryOrganizations/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_customers_id_activities_subresource_id",
+      "path": "/api/common/v1/customers/{{ config.id }}/activities/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_inbox_tasks_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/inboxTasks/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_supervisory_organizations_id_workers_subresource_id",
+      "path": "/api/common/v1/supervisoryOrganizations/{{ config.id }}/workers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_direct_reports_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/directReports/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_time_off_plans",
+      "path": "/api/common/v1/workers/{{ config.id }}/timeOffPlans",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_supervisory_organizations_id_workers",
+      "path": "/api/common/v1/supervisoryOrganizations/{{ config.id }}/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_business_title_changes",
+      "path": "/api/common/v1/workers/{{ config.id }}/businessTitleChanges",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id",
+      "path": "/api/common/v1/workers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_organizations_id",
+      "path": "/api/common/v1/organizations/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_customers_id_activities",
+      "path": "/api/common/v1/customers/{{ config.id }}/activities",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_supervisory_organizations_managed_subresource_id",
+      "path": "/api/common/v1/workers/{{ config.id }}/supervisoryOrganizationsManaged/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "common_v1_api_common_v1_workers_id_time_off_entries",
+      "path": "/api/common/v1/workers/{{ config.id }}/timeOffEntries",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "common_v1_api_common_v1_organization_types_id",
+      "path": "/api/common/v1/organizationTypes/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "compensation_v3_compensation_v3_scorecard_results",
+      "path": "/compensation/v3/scorecardResults",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "compensation_v3_compensation_v3_scorecards",
+      "path": "/compensation/v3/scorecards",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "compensation_v3_compensation_v3_workers_id",
+      "path": "/compensation/v3/workers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "compensation_v3_compensation_v3_scorecard_results_id",
+      "path": "/compensation/v3/scorecardResults/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "compensation_v3_compensation_v3_workers",
+      "path": "/compensation/v3/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "compensation_v3_compensation_v3_scorecards_id",
+      "path": "/compensation/v3/scorecards/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "connect_v2_connect_v2_message_templates_id",
+      "path": "/connect/v2/messageTemplates/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "connect_v2_connect_v2_notification_types",
+      "path": "/connect/v2/notificationTypes",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "connect_v2_connect_v2_notification_types_id",
+      "path": "/connect/v2/notificationTypes/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "connect_v2_connect_v2_message_templates",
+      "path": "/connect/v2/messageTemplates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "contract_compliance_v1_contract_compliance_v1_supplier_contracts",
+      "path": "/contractCompliance/v1/supplierContracts",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "contract_compliance_v1_contract_compliance_v1_supplier_contracts_id",
+      "path": "/contractCompliance/v1/supplierContracts/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "core_accounting_v1_core_accounting_v1_currencies",
+      "path": "/coreAccounting/v1/currencies",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "core_accounting_v1_core_accounting_v1_currencies_id",
+      "path": "/coreAccounting/v1/currencies/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "core_accounting_v1_core_accounting_v1_evaluate_account_posting_rules",
+      "path": "/coreAccounting/v1/evaluateAccountPostingRules",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "custom_object_data_multi_instance_v2_business_object_resource_business_object_id_custom_objects_custom_object_alias",
+      "path": "/{{ config.business_object_resource }}/{{ config.business_object_id }}/customObjects/{{ config.custom_object_alias }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_data_multi_instance_v2_custom_objects_custom_object_alias_custom_object_id",
+      "path": "/customObjects/{{ config.custom_object_alias }}/{{ config.custom_object_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_data_single_instance_v2_custom_objects_custom_object_alias_custom_object_id",
+      "path": "/customObjects/{{ config.custom_object_alias }}/{{ config.custom_object_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id_validations",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}/validations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id_validations_subresource_id",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}/validations/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_field_types",
+      "path": "/customObjectDefinition/v1/fieldTypes",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions",
+      "path": "/customObjectDefinition/v1/definitions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_field_types_id_list_values_subresource_id",
+      "path": "/customObjectDefinition/v1/fieldTypes/{{ config.id }}/listValues/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id_condition_rules",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}/conditionRules",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id_condition_rules_subresource_id",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}/conditionRules/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_field_types_id",
+      "path": "/customObjectDefinition/v1/fieldTypes/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_field_types_id_list_values",
+      "path": "/customObjectDefinition/v1/fieldTypes/{{ config.id }}/listValues",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id_fields_subresource_id",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}/fields/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "custom_object_definition_v1_custom_object_definition_v1_definitions_id_fields",
+      "path": "/customObjectDefinition/v1/definitions/{{ config.id }}/fields",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_payments_id_remittance_details_subresource_id",
+      "path": "/customerAccounts/v1/payments/{{ config.id }}/remittanceDetails/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_customers_id",
+      "path": "/customerAccounts/v1/customers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_payments_id",
+      "path": "/customerAccounts/v1/payments/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_invoices_id",
+      "path": "/customerAccounts/v1/invoices/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_invoices",
+      "path": "/customerAccounts/v1/invoices",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_invoices_id_print_runs_subresource_id",
+      "path": "/customerAccounts/v1/invoices/{{ config.id }}/printRuns/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_invoices_id_print_runs",
+      "path": "/customerAccounts/v1/invoices/{{ config.id }}/printRuns",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "customer_accounts_v1_customer_accounts_v1_customers",
+      "path": "/customerAccounts/v1/customers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "expense_v1_expense_v1_expense_items_id",
+      "path": "/expense/v1/expenseItems/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_v1_expense_v1_reports_id",
+      "path": "/expense/v1/reports/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_v1_expense_v1_entries_id",
+      "path": "/expense/v1/entries/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "expense_v1_expense_v1_reports",
+      "path": "/expense/v1/reports",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "expense_v1_expense_v1_entries",
+      "path": "/expense/v1/entries",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "expense_v1_expense_v1_expense_items",
+      "path": "/expense/v1/expenseItems",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "global_payroll_v1_global_payroll_v1_pay_groups_id",
+      "path": "/globalPayroll/v1/payGroups/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "global_payroll_v1_global_payroll_v1_pay_groups_id_periods",
+      "path": "/globalPayroll/v1/payGroups/{{ config.id }}/periods",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "global_payroll_v1_global_payroll_v1_event_driven_integration_vendor_response_id",
+      "path": "/globalPayroll/v1/eventDrivenIntegrationVendorResponse/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "global_payroll_v1_global_payroll_v1_pay_groups_id_periods_subresource_id",
+      "path": "/globalPayroll/v1/payGroups/{{ config.id }}/periods/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "global_payroll_v1_global_payroll_v1_pay_groups",
+      "path": "/globalPayroll/v1/payGroups",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "global_payroll_v1_global_payroll_v1_effective_changes_id",
+      "path": "/globalPayroll/v1/effectiveChanges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "graph_v1_graph_v1_versions",
+      "path": "/graph/v1/versions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "graph_v1_graph_v1_versions_id",
+      "path": "/graph/v1/versions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_versions_id",
+      "path": "/helpArticle/v1/articleVersions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_versions",
+      "path": "/helpArticle/v1/articleVersions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_versions_id_approval_decision",
+      "path": "/helpArticle/v1/articleVersions/{{ config.id }}/approvalDecision",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_versions_id_approval_decision_subresource_id",
+      "path": "/helpArticle/v1/articleVersions/{{ config.id }}/approvalDecision/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_versions_id_approval_request_subresource_id",
+      "path": "/helpArticle/v1/articleVersions/{{ config.id }}/approvalRequest/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_statuses",
+      "path": "/helpArticle/v1/articleStatuses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_article_v1_help_article_v1_article_statuses_id",
+      "path": "/helpArticle/v1/articleStatuses/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_service_categories_id",
+      "path": "/helpCase/v4/serviceCategories/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id_timeline",
+      "path": "/helpCase/v4/cases/{{ config.id }}/timeline",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id_comment_subresource_id",
+      "path": "/helpCase/v4/cases/{{ config.id }}/comment/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_case_suggestions",
+      "path": "/helpCase/v4/caseSuggestions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_configuration",
+      "path": "/helpCase/v4/configuration",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_case_suggestions_id",
+      "path": "/helpCase/v4/caseSuggestions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_external_creators",
+      "path": "/helpCase/v4/externalCreators",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id_timeline_subresource_id",
+      "path": "/helpCase/v4/cases/{{ config.id }}/timeline/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases",
+      "path": "/helpCase/v4/cases",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id_internal_note_timeline_subresource_id",
+      "path": "/helpCase/v4/cases/{{ config.id }}/internalNoteTimeline/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id_comment",
+      "path": "/helpCase/v4/cases/{{ config.id }}/comment",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id_internal_note_timeline",
+      "path": "/helpCase/v4/cases/{{ config.id }}/internalNoteTimeline",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_external_creators_id",
+      "path": "/helpCase/v4/externalCreators/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_case_types_id",
+      "path": "/helpCase/v4/caseTypes/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_cases_id",
+      "path": "/helpCase/v4/cases/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "help_case_v4_help_case_v4_case_types",
+      "path": "/helpCase/v4/caseTypes",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_service_categories",
+      "path": "/helpCase/v4/serviceCategories",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "help_case_v4_help_case_v4_configuration_id",
+      "path": "/helpCase/v4/configuration/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "holiday_v1_holiday_v1_holiday_events",
+      "path": "/holiday/v1/holidayEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "learning_v1_learning_v1_content",
+      "path": "/learning/v1/content",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "learning_v1_learning_v1_content_id",
+      "path": "/learning/v1/content/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "learning_v1_learning_v1_records",
+      "path": "/learning/v1/records",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "learning_v1_learning_v1_enrollments_id_lesson_trackings",
+      "path": "/learning/v1/enrollments/{{ config.id }}/lessonTrackings",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "learning_v1_learning_v1_content_id_lessons",
+      "path": "/learning/v1/content/{{ config.id }}/lessons",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "learning_v1_learning_v1_records_id",
+      "path": "/learning/v1/records/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "learning_v1_learning_v1_enrollments_id",
+      "path": "/learning/v1/enrollments/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "learning_v1_learning_v1_enrollments",
+      "path": "/learning/v1/enrollments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "learning_v1_learning_v1_enrollments_id_lesson_trackings_subresource_id",
+      "path": "/learning/v1/enrollments/{{ config.id }}/lessonTrackings/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "learning_v1_learning_v1_content_id_lessons_subresource_id",
+      "path": "/learning/v1/content/{{ config.id }}/lessons/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "o_auth_client_v1_o_auth_client_v1_client_details",
+      "path": "/oAuthClient/v1/clientDetails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "o_auth_client_v1_o_auth_client_v1_client_details_id",
+      "path": "/oAuthClient/v1/clientDetails/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_jobs_id_pay_group_subresource_id",
+      "path": "/payroll/v2/jobs/{{ config.id }}/payGroup/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_pay_groups_id",
+      "path": "/payroll/v2/payGroups/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_jobs_id_pay_group",
+      "path": "/payroll/v2/jobs/{{ config.id }}/payGroup",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "payroll_v2_payroll_v2_pay_group_details_id",
+      "path": "/payroll/v2/payGroupDetails/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_jobs",
+      "path": "/payroll/v2/jobs",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "payroll_v2_payroll_v2_minimum_wage_rates",
+      "path": "/payroll/v2/minimumWageRates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "payroll_v2_payroll_v2_jobs_id",
+      "path": "/payroll/v2/jobs/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_pay_group_details",
+      "path": "/payroll/v2/payGroupDetails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "payroll_v2_payroll_v2_payroll_inputs_id",
+      "path": "/payroll/v2/payrollInputs/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_minimum_wage_rates_id",
+      "path": "/payroll/v2/minimumWageRates/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "payroll_v2_payroll_v2_payroll_inputs",
+      "path": "/payroll/v2/payrollInputs",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "payroll_v2_payroll_v2_tax_rates",
+      "path": "/payroll/v2/taxRates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "payroll_v2_payroll_v2_pay_groups",
+      "path": "/payroll/v2/payGroups",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_feedback_badges",
+      "path": "/performanceEnablement/v5/feedbackBadges",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_requested_feedback_on_self_events_subresource_id",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/requestedFeedbackOnSelfEvents/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_give_requested_feedback_events",
+      "path": "/performanceEnablement/v5/giveRequestedFeedbackEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_feedback_badges_id",
+      "path": "/performanceEnablement/v5/feedbackBadges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_goals",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/goals",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_requested_feedback_on_self_events",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/requestedFeedbackOnSelfEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_requested_feedback_on_worker_events_subresource_id",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/requestedFeedbackOnWorkerEvents/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_development_items",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/developmentItems",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_requested_feedback_on_worker_events",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/requestedFeedbackOnWorkerEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers",
+      "path": "/performanceEnablement/v5/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_worker_goal_events",
+      "path": "/performanceEnablement/v5/workerGoalEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_development_items_subresource_id",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/developmentItems/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_goals_subresource_id",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/goals/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_anytime_feedback_events_subresource_id",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/anytimeFeedbackEvents/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_workers_id_anytime_feedback_events",
+      "path": "/performanceEnablement/v5/workers/{{ config.id }}/anytimeFeedbackEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_give_requested_feedback_events_id",
+      "path": "/performanceEnablement/v5/giveRequestedFeedbackEvents/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "performance_enablement_v5_performance_enablement_v5_worker_goal_events_id",
+      "path": "/performanceEnablement/v5/workerGoalEvents/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_personal_information",
+      "path": "/person/v4/people/{{ config.id }}/personalInformation",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_addresses_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/homeAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_countries_id",
+      "path": "/person/v4/countries/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_web_addresses",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/webAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_additional_names_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/additionalNames/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_phone_numbers_subresource_id",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/phoneNumbers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_audio_name_pronunciation",
+      "path": "/person/v4/people/{{ config.id }}/audioNamePronunciation",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_personal_information_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/personalInformation/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_instant_messengers_subresource_id",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/instantMessengers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_phone_numbers",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/phoneNumbers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_photos",
+      "path": "/person/v4/people/{{ config.id }}/photos",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_preferred_name",
+      "path": "/person/v4/people/{{ config.id }}/preferredName",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_countries_id_address_components",
+      "path": "/person/v4/countries/{{ config.id }}/addressComponents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_photos_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/photos/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_instant_messengers",
+      "path": "/person/v4/people/{{ config.id }}/workInstantMessengers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_legal_name_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/legalName/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_emails",
+      "path": "/person/v4/people/{{ config.id }}/workEmails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_addresses",
+      "path": "/person/v4/people/{{ config.id }}/homeAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_phones_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/homePhones/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_instant_messengers",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/instantMessengers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_email_addresses",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/emailAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_countries_id_name_components",
+      "path": "/person/v4/countries/{{ config.id }}/nameComponents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_instant_messengers_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/workInstantMessengers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_addresses_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/workAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_addresses",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/addresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_instant_messengers_subresource_id",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/instantMessengers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_phones",
+      "path": "/person/v4/people/{{ config.id }}/workPhones",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_web_addresses_subresource_id",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/webAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_audio_name_pronunciation_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/audioNamePronunciation/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_web_addresses_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/workWebAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_phone_numbers_subresource_id",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/phoneNumbers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_public_contact_information_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/publicContactInformation/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_phones",
+      "path": "/person/v4/people/{{ config.id }}/homePhones",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id",
+      "path": "/person/v4/people/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_public_contact_information",
+      "path": "/person/v4/people/{{ config.id }}/publicContactInformation",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_legal_name",
+      "path": "/person/v4/people/{{ config.id }}/legalName",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people",
+      "path": "/person/v4/people",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_web_addresses",
+      "path": "/person/v4/people/{{ config.id }}/homeWebAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_preferred_name_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/preferredName/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_instant_messengers",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/instantMessengers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_additional_names",
+      "path": "/person/v4/people/{{ config.id }}/additionalNames",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_addresses",
+      "path": "/person/v4/people/{{ config.id }}/workAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_web_addresses",
+      "path": "/person/v4/people/{{ config.id }}/workWebAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_phones_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/workPhones/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_emails_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/homeEmails/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_web_addresses_subresource_id",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/webAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_instant_messengers_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/homeInstantMessengers/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_work_emails_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/workEmails/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_email_addresses_subresource_id",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/emailAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_phone_numbers",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/phoneNumbers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_email_addresses",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/emailAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_web_addresses_subresource_id",
+      "path": "/person/v4/people/{{ config.id }}/homeWebAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_email_addresses_subresource_id",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/emailAddresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_instant_messengers",
+      "path": "/person/v4/people/{{ config.id }}/homeInstantMessengers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_people_id_home_emails",
+      "path": "/person/v4/people/{{ config.id }}/homeEmails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_web_addresses",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/webAddresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_addresses_subresource_id",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/addresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_home_contact_information_changes_id_addresses_subresource_id",
+      "path": "/person/v4/homeContactInformationChanges/{{ config.id }}/addresses/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "person_v4_person_v4_work_contact_information_changes_id_addresses",
+      "path": "/person/v4/workContactInformationChanges/{{ config.id }}/addresses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "person_v4_person_v4_countries",
+      "path": "/person/v4/countries",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "prism_analytics_v3_tables",
+      "path": "/tables",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_tables_id",
+      "path": "/tables/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_buckets",
+      "path": "/buckets",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_buckets_id",
+      "path": "/buckets/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_data_changes",
+      "path": "/dataChanges",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_data_changes_data_change_id",
+      "path": "/dataChanges/{{ config.data_change_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_data_changes_data_change_id_activities_activity_id",
+      "path": "/dataChanges/{{ config.data_change_id }}/activities/{{ config.activity_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "prism_analytics_v3_data_changes_data_change_id_validate",
+      "path": "/dataChanges/{{ config.data_change_id }}/validate",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "privacy_v1_privacy_v1_activity_logging",
+      "path": "/privacy/v1/activityLogging",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "procurement_v5_procurement_v5_purchase_orders_id",
+      "path": "/procurement/v5/purchaseOrders/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisitions_id_related_purchase_orders_subresource_id",
+      "path": "/procurement/v5/requisitions/{{ config.id }}/relatedPurchaseOrders/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisitions_id_requisition_lines_subresource_id",
+      "path": "/procurement/v5/requisitions/{{ config.id }}/requisitionLines/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisition_templates_id",
+      "path": "/procurement/v5/requisitionTemplates/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisitions",
+      "path": "/procurement/v5/requisitions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisitions_id_related_purchase_orders",
+      "path": "/procurement/v5/requisitions/{{ config.id }}/relatedPurchaseOrders",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisition_templates",
+      "path": "/procurement/v5/requisitionTemplates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisitions_id",
+      "path": "/procurement/v5/requisitions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "procurement_v5_procurement_v5_purchase_orders",
+      "path": "/procurement/v5/purchaseOrders",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "procurement_v5_procurement_v5_requisitions_id_requisition_lines",
+      "path": "/procurement/v5/requisitions/{{ config.id }}/requisitionLines",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_resource_forecast_lines_id_allocations",
+      "path": "/projects/v3/resourceForecastLines/{{ config.id }}/allocations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_resource_forecast_lines_id",
+      "path": "/projects/v3/resourceForecastLines/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_resource_plan_lines_id",
+      "path": "/projects/v3/resourcePlanLines/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_projects",
+      "path": "/projects/v3/projects",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_projects_id",
+      "path": "/projects/v3/projects/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_ad_hoc_project_time_transactions",
+      "path": "/projects/v3/adHocProjectTimeTransactions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_resource_forecast_lines_id_allocations_subresource_id",
+      "path": "/projects/v3/resourceForecastLines/{{ config.id }}/allocations/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_plan_tasks",
+      "path": "/projects/v3/planTasks",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_task_resources",
+      "path": "/projects/v3/taskResources",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_resource_plan_lines",
+      "path": "/projects/v3/resourcePlanLines",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_task_resources_id",
+      "path": "/projects/v3/taskResources/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_plan_phases_id",
+      "path": "/projects/v3/planPhases/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_plan_tasks_id",
+      "path": "/projects/v3/planTasks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "projects_v3_projects_v3_resource_forecast_lines",
+      "path": "/projects/v3/resourceForecastLines",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_plan_phases",
+      "path": "/projects/v3/planPhases",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "projects_v3_projects_v3_ad_hoc_project_time_transactions_id",
+      "path": "/projects/v3/adHocProjectTimeTransactions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_job_postings_id_questionnaire_subresource_id",
+      "path": "/recruiting/v4/jobPostings/{{ config.id }}/questionnaire/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_interviews_id",
+      "path": "/recruiting/v4/interviews/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_interviews",
+      "path": "/recruiting/v4/interviews",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_languages",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/languages",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_skills",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/skills",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_experiences_subresource_id",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/experiences/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_job_postings_id_candidate_availability_template",
+      "path": "/recruiting/v4/jobPostings/{{ config.id }}/candidateAvailabilityTemplate",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_job_postings",
+      "path": "/recruiting/v4/jobPostings",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_languages_subresource_id",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/languages/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_educations",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/educations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_interviews_id_feedback_subresource_id",
+      "path": "/recruiting/v4/interviews/{{ config.id }}/feedback/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_skills_subresource_id",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/skills/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_job_postings_id",
+      "path": "/recruiting/v4/jobPostings/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_job_postings_id_candidate_availability_template_subresource_id",
+      "path": "/recruiting/v4/jobPostings/{{ config.id }}/candidateAvailabilityTemplate/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_experiences",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/experiences",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_interviews_id_feedback",
+      "path": "/recruiting/v4/interviews/{{ config.id }}/feedback",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_job_postings_id_questionnaire",
+      "path": "/recruiting/v4/jobPostings/{{ config.id }}/questionnaire",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id_educations_subresource_id",
+      "path": "/recruiting/v4/prospects/{{ config.id }}/educations/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "recruiting_v4_recruiting_v4_prospects_id",
+      "path": "/recruiting/v4/prospects/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "request_v2_request_v2_requests_id",
+      "path": "/request/v2/requests/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "request_v2_request_v2_types",
+      "path": "/request/v2/types",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "request_v2_request_v2_requests",
+      "path": "/request/v2/requests",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "request_v2_request_v2_types_id",
+      "path": "/request/v2/types/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "revenue_v1_revenue_v1_billable_transactions_id_billing_rate_application",
+      "path": "/revenue/v1/billableTransactions/{{ config.id }}/billingRateApplication",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "revenue_v1_revenue_v1_billable_transactions_id",
+      "path": "/revenue/v1/billableTransactions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "revenue_v1_revenue_v1_billable_transactions_id_billing_rate_application_subresource_id",
+      "path": "/revenue/v1/billableTransactions/{{ config.id }}/billingRateApplication/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "revenue_v1_revenue_v1_billable_transactions",
+      "path": "/revenue/v1/billableTransactions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_location",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/location",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_skill_items",
+      "path": "/staffing/v7/workers/{{ config.id }}/skillItems",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_region",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/region",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_start_details_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/startDetails/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_administrative",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/administrative",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_job_profile_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/jobProfile/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_location_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/location/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_check_in_topics",
+      "path": "/staffing/v7/workers/{{ config.id }}/checkInTopics",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_comment",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/comment",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_custom_organizations_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/customOrganizations/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_business_unit_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/businessUnit/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_supervisory_organizations_id",
+      "path": "/staffing/v7/supervisoryOrganizations/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_position",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/position",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_start_details",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/startDetails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_supervisory_organizations_id_org_chart",
+      "path": "/staffing/v7/supervisoryOrganizations/{{ config.id }}/orgChart",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_skill_items_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/skillItems/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_external_skill_level_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/externalSkillLevel/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_start_details_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/startDetails/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_move_team_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/moveTeam/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_position_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/position/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_comment",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/comment",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_profiles",
+      "path": "/staffing/v7/jobProfiles",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_business_title_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/businessTitle/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_check_ins_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/checkIns/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_job_classification",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/jobClassification",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_administrative_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/administrative/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_move_team",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/moveTeam",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_opening",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/opening",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_explicit_skills",
+      "path": "/staffing/v7/workers/{{ config.id }}/explicitSkills",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_business_title",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/businessTitle",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_explicit_skills_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/explicitSkills/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_company_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/company/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_families",
+      "path": "/staffing/v7/jobFamilies",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_costing_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/costing/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_check_in_topics_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/checkInTopics/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_home_contact_information_changes_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/homeContactInformationChanges/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_jobs_id_workspace",
+      "path": "/staffing/v7/jobs/{{ config.id }}/workspace",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_contract",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/contract",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_start_details",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/startDetails",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_region_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/region/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_work_contact_information_changes_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/workContactInformationChanges/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_jobs_id",
+      "path": "/staffing/v7/jobs/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_check_ins",
+      "path": "/staffing/v7/workers/{{ config.id }}/checkIns",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers",
+      "path": "/staffing/v7/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_families_id",
+      "path": "/staffing/v7/jobFamilies/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_custom_organizations",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/customOrganizations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_job_classification_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/jobClassification/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_supervisory_organizations_id_members_subresource_id",
+      "path": "/staffing/v7/supervisoryOrganizations/{{ config.id }}/members/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_opening_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/opening/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_supervisory_organizations",
+      "path": "/staffing/v7/supervisoryOrganizations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_costing",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/costing",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id",
+      "path": "/staffing/v7/workers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_service_dates_subresource_id",
+      "path": "/staffing/v7/workers/{{ config.id }}/serviceDates/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_cost_center_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/costCenter/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_comment_subresource_id",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/comment/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_service_dates",
+      "path": "/staffing/v7/workers/{{ config.id }}/serviceDates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_contract_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/contract/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_jobs",
+      "path": "/staffing/v7/jobs",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_job_profile",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/jobProfile",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_profiles_id",
+      "path": "/staffing/v7/jobProfiles/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_workers_id_external_skill_level",
+      "path": "/staffing/v7/workers/{{ config.id }}/externalSkillLevel",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_supervisory_organizations_id_members",
+      "path": "/staffing/v7/supervisoryOrganizations/{{ config.id }}/members",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_jobs_id_workspace_subresource_id",
+      "path": "/staffing/v7/jobs/{{ config.id }}/workspace/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_business_unit",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/businessUnit",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_company",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/company",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "staffing_v7_staffing_v7_supervisory_organizations_id_org_chart_subresource_id",
+      "path": "/staffing/v7/supervisoryOrganizations/{{ config.id }}/orgChart/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_job_changes_id_comment_subresource_id",
+      "path": "/staffing/v7/jobChanges/{{ config.id }}/comment/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "staffing_v7_staffing_v7_organization_assignment_changes_id_cost_center",
+      "path": "/staffing/v7/organizationAssignmentChanges/{{ config.id }}/costCenter",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_programs_of_study_id",
+      "path": "/studentAcademicFoundation/v1/programsOfStudy/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_units_id",
+      "path": "/studentAcademicFoundation/v1/academicUnits/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_calendars_id_academic_years_subresource_id",
+      "path": "/studentAcademicFoundation/v1/academicCalendars/{{ config.id }}/academicYears/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_educational_credentials",
+      "path": "/studentAcademicFoundation/v1/educationalCredentials",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_calendars",
+      "path": "/studentAcademicFoundation/v1/academicCalendars",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_periods_id",
+      "path": "/studentAcademicFoundation/v1/academicPeriods/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_calendars_id_academic_years",
+      "path": "/studentAcademicFoundation/v1/academicCalendars/{{ config.id }}/academicYears",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_levels_id",
+      "path": "/studentAcademicFoundation/v1/academicLevels/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_educational_credentials_id",
+      "path": "/studentAcademicFoundation/v1/educationalCredentials/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_calendars_id",
+      "path": "/studentAcademicFoundation/v1/academicCalendars/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_units",
+      "path": "/studentAcademicFoundation/v1/academicUnits",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_periods",
+      "path": "/studentAcademicFoundation/v1/academicPeriods",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_academic_levels",
+      "path": "/studentAcademicFoundation/v1/academicLevels",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_academic_foundation_v1_student_academic_foundation_v1_programs_of_study",
+      "path": "/studentAcademicFoundation/v1/programsOfStudy",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id_residencies",
+      "path": "/studentCore/v1/students/{{ config.id }}/residencies",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id_apply_hold_events",
+      "path": "/studentCore/v1/students/{{ config.id }}/applyHoldEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id",
+      "path": "/studentCore/v1/students/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_holds_id",
+      "path": "/studentCore/v1/holds/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id_immigration_data_subresource_id",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}/immigrationData/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events",
+      "path": "/studentCore/v1/immigrationEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id_immigration_data",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}/immigrationData",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id_apply_hold_events_subresource_id",
+      "path": "/studentCore/v1/students/{{ config.id }}/applyHoldEvents/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id_immigration_pages",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}/immigrationPages",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id_immigration_pages_subresource_id",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}/immigrationPages/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_holds",
+      "path": "/studentCore/v1/holds",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students",
+      "path": "/studentCore/v1/students",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id_dependent_immigration_data_subresource_id",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}/dependentImmigrationData/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_immigration_events_id_dependent_immigration_data",
+      "path": "/studentCore/v1/immigrationEvents/{{ config.id }}/dependentImmigrationData",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id_immigration_events",
+      "path": "/studentCore/v1/students/{{ config.id }}/immigrationEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id_immigration_events_subresource_id",
+      "path": "/studentCore/v1/students/{{ config.id }}/immigrationEvents/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_core_v1_student_core_v1_students_id_residencies_subresource_id",
+      "path": "/studentCore/v1/students/{{ config.id }}/residencies/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_curriculum_v1_student_curriculum_v1_courses_id",
+      "path": "/studentCurriculum/v1/courses/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_curriculum_v1_student_curriculum_v1_course_sections",
+      "path": "/studentCurriculum/v1/courseSections",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_curriculum_v1_student_curriculum_v1_course_sections_id",
+      "path": "/studentCurriculum/v1/courseSections/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_curriculum_v1_student_curriculum_v1_courses",
+      "path": "/studentCurriculum/v1/courses",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_curriculum_v1_student_curriculum_v1_course_subjects",
+      "path": "/studentCurriculum/v1/courseSubjects",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_curriculum_v1_student_curriculum_v1_course_subjects_id",
+      "path": "/studentCurriculum/v1/courseSubjects/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_engagement_v1_student_engagement_v1_students_id_holds",
+      "path": "/studentEngagement/v1/students/{{ config.id }}/holds",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_engagement_v1_student_engagement_v1_students",
+      "path": "/studentEngagement/v1/students",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_engagement_v1_student_engagement_v1_students_id",
+      "path": "/studentEngagement/v1/students/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_engagement_v1_student_engagement_v1_students_id_holds_subresource_id",
+      "path": "/studentEngagement/v1/students/{{ config.id }}/holds/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_finance_v1_student_finance_v1_students",
+      "path": "/studentFinance/v1/students",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "student_finance_v1_student_finance_v1_students_id",
+      "path": "/studentFinance/v1/students/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_finance_v1_student_finance_v1_students_id_payments_subresource_id",
+      "path": "/studentFinance/v1/students/{{ config.id }}/payments/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "student_finance_v1_student_finance_v1_students_id_payments",
+      "path": "/studentFinance/v1/students/{{ config.id }}/payments",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "system_metrics_v1_system_metrics_v1_active_tasks_id",
+      "path": "/systemMetrics/v1/activeTasks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "system_metrics_v1_system_metrics_v1_active_user_sessions",
+      "path": "/systemMetrics/v1/activeUserSessions",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "system_metrics_v1_system_metrics_v1_active_tasks",
+      "path": "/systemMetrics/v1/activeTasks",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "system_metrics_v1_system_metrics_v1_active_user_sessions_id",
+      "path": "/systemMetrics/v1/activeUserSessions/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "system_metrics_v1_system_metrics_v1_system_metrics_overview",
+      "path": "/systemMetrics/v1/systemMetricsOverview",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "system_metrics_v1_system_metrics_v1_system_metrics_overview_id",
+      "path": "/systemMetrics/v1/systemMetricsOverview/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_succession_plans_id",
+      "path": "/talentManagement/v2/successionPlans/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_succession_plan_events_id_candidates",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ config.id }}/candidates",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_mentorships",
+      "path": "/talentManagement/v2/mentorships",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_succession_plan_events_id_candidates_subresource_id",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ config.id }}/candidates/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_succession_plan_events_id",
+      "path": "/talentManagement/v2/successionPlanEvents/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_mentorships_id",
+      "path": "/talentManagement/v2/mentorships/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_succession_plans",
+      "path": "/talentManagement/v2/successionPlans",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "talent_management_v2_talent_management_v2_succession_plan_events",
+      "path": "/talentManagement/v2/successionPlanEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_worker_time_attestation_id_followup_worker_time_attestation",
+      "path": "/timeTracking/v5/workerTimeAttestation/{{ config.id }}/followupWorkerTimeAttestation",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_time_validations",
+      "path": "/timeTracking/v5/timeValidations",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_workers",
+      "path": "/timeTracking/v5/workers",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_workers_id_time_totals",
+      "path": "/timeTracking/v5/workers/{{ config.id }}/timeTotals",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_worker_time_blocks_id",
+      "path": "/timeTracking/v5/workerTimeBlocks/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_time_clock_events",
+      "path": "/timeTracking/v5/timeClockEvents",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_worker_time_attestation_id",
+      "path": "/timeTracking/v5/workerTimeAttestation/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_workers_id_time_totals_subresource_id",
+      "path": "/timeTracking/v5/workers/{{ config.id }}/timeTotals/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_time_clock_events_id",
+      "path": "/timeTracking/v5/timeClockEvents/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_workers_id_period",
+      "path": "/timeTracking/v5/workers/{{ config.id }}/period",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_workers_id",
+      "path": "/timeTracking/v5/workers/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_worker_time_attestation_id_followup_time_attestation_prompt",
+      "path": "/timeTracking/v5/workerTimeAttestation/{{ config.id }}/followupTimeAttestationPrompt",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_worker_time_blocks",
+      "path": "/timeTracking/v5/workerTimeBlocks",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "time_tracking_v5_time_tracking_v5_time_attestation_prompts",
+      "path": "/timeTracking/v5/timeAttestationPrompts",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "wql_v1_wql_v1_data_sources_id",
+      "path": "/wql/v1/dataSources/{{ config.id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "wql_v1_wql_v1_data_sources_id_data_source_filters_subresource_id",
+      "path": "/wql/v1/dataSources/{{ config.id }}/dataSourceFilters/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "wql_v1_wql_v1_data_sources_id_data_source_filters",
+      "path": "/wql/v1/dataSources/{{ config.id }}/dataSourceFilters",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "wql_v1_wql_v1_data",
+      "path": "/wql/v1/data",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "wql_v1_wql_v1_data_sources",
+      "path": "/wql/v1/dataSources",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
+    },
+    {
+      "name": "wql_v1_wql_v1_data_sources_id_fields_subresource_id",
+      "path": "/wql/v1/dataSources/{{ config.id }}/fields/{{ config.subresource_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json",
+      "pagination": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "wql_v1_wql_v1_data_sources_id_fields",
+      "path": "/wql/v1/dataSources/{{ config.id }}/fields",
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/workday_record.json"
     }
   ]
 }

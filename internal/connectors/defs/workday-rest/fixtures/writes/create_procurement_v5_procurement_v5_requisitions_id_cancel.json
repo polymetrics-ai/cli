@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "comments": "sample",
+    "reasonCode": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/procurement/v5/requisitions/sample-id/cancel",
+    "body": {
+      "comments": "sample",
+      "reasonCode": {
+        "id": "sample"
+      }
+    }
+  }
+}

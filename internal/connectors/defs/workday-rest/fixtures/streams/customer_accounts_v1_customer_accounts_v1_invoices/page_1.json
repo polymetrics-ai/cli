@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customerAccounts/v1/invoices",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "customer_accounts_v1_customer_accounts_v1_invoices_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

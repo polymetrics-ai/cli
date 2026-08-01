@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "sample-id",
+    "shipToAddress": {
+      "id": "sample"
+    },
+    "supplier": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/procurement/v5/requisitions/sample-id/requisitionLines",
+    "body": {
+      "shipToAddress": {
+        "id": "sample"
+      },
+      "supplier": {
+        "id": "sample"
+      }
+    }
+  }
+}

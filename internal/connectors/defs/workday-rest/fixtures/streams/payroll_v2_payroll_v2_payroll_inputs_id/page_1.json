@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/v2/payrollInputs/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "payroll_v2_payroll_v2_payroll_inputs_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

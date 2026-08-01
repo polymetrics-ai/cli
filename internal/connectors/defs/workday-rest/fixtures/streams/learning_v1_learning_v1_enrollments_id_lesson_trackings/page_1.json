@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/learning/v1/enrollments/synthetic-conformance-value/lessonTrackings",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "learning_v1_learning_v1_enrollments_id_lesson_trackings_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

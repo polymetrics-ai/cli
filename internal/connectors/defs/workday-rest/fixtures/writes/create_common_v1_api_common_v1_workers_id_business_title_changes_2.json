@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "proposedBusinessTitle": "sample",
+    "descriptor": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/common/v1/workers/sample-id/businessTitleChanges",
+    "body": {
+      "proposedBusinessTitle": "sample",
+      "descriptor": "sample"
+    }
+  }
+}

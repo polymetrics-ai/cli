@@ -1,0 +1,18 @@
+{
+  "record": {
+    "timeZone": {
+      "id": "sample"
+    },
+    "reference_ID": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timeTracking/v5/timeClockEvents",
+    "body": {
+      "timeZone": {
+        "id": "sample"
+      },
+      "reference_ID": "sample"
+    }
+  }
+}

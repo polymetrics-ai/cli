@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/workers/synthetic-conformance-value/skillItems",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "staffing_v7_staffing_v7_workers_id_skill_items_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

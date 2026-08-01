@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/helpCase/v4/externalCreators/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "help_case_v4_help_case_v4_external_creators_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

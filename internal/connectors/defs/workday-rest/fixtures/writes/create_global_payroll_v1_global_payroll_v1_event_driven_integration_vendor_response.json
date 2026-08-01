@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "sample",
+    "overallStatus": {
+      "id": "sample"
+    },
+    "relaunchable": true,
+    "setLsrd": true,
+    "skipReview": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/globalPayroll/v1/eventDrivenIntegrationVendorResponse",
+    "body": {
+      "id": "sample",
+      "overallStatus": {
+        "id": "sample"
+      },
+      "relaunchable": true,
+      "setLsrd": true,
+      "skipReview": true
+    }
+  }
+}

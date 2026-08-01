@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/jobChanges/synthetic-conformance-value/administrative",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "staffing_v7_staffing_v7_job_changes_id_administrative_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

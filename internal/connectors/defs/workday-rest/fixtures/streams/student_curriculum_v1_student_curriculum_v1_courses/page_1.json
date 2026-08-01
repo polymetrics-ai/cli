@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentCurriculum/v1/courses",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "student_curriculum_v1_student_curriculum_v1_courses_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "sample-id",
+    "url": "sample",
+    "usage": {
+      "usageType": {
+        "id": {}
+      },
+      "comment": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/homeContactInformationChanges/sample-id/webAddresses",
+    "body": {
+      "url": "sample",
+      "usage": {
+        "usageType": {
+          "id": {}
+        },
+        "comment": "sample"
+      }
+    }
+  }
+}

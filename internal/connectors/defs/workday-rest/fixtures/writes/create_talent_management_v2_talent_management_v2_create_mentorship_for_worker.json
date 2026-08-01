@@ -1,0 +1,30 @@
+{
+  "record": {
+    "mentee": {
+      "id": "sample"
+    },
+    "mentor": {
+      "id": "sample"
+    },
+    "mentorType": {
+      "id": "sample"
+    },
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/createMentorshipForWorker",
+    "body": {
+      "mentee": {
+        "id": "sample"
+      },
+      "mentor": {
+        "id": "sample"
+      },
+      "mentorType": {
+        "id": "sample"
+      },
+      "startDate": "sample"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/organizationAssignmentChanges/synthetic-conformance-value/costCenter/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "staffing_v7_staffing_v7_organization_assignment_changes_id_cost_center_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

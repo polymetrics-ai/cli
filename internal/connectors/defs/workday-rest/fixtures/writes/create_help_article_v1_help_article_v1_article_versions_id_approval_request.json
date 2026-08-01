@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "sample-id",
+    "lastUpdated": "sample",
+    "decisions": [
+      {
+        "approver": {},
+        "id": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpArticle/v1/articleVersions/sample-id/approvalRequest",
+    "body": {
+      "lastUpdated": "sample",
+      "decisions": [
+        {
+          "approver": {},
+          "id": {}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/absenceManagement/v5/workers/synthetic-conformance-value/eligibleAbsenceTypes/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "absence_management_v5_absence_management_v5_workers_id_eligible_absence_types_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

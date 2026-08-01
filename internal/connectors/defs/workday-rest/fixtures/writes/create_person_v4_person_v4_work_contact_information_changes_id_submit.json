@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "businessProcessParameters": {
+        "action": {
+          "id": {}
+        }
+      },
+      "descriptor": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/workContactInformationChanges/sample-id/submit"
+  }
+}

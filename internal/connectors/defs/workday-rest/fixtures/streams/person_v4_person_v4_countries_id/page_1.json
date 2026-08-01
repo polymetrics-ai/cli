@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/countries/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "person_v4_person_v4_countries_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

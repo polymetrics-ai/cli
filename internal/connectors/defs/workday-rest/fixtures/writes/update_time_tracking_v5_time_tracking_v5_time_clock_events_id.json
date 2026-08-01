@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "timeZone": {
+      "id": "sample"
+    },
+    "reference_ID": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/timeTracking/v5/timeClockEvents/sample-id",
+    "body": {
+      "timeZone": {
+        "id": "sample"
+      },
+      "reference_ID": "sample"
+    }
+  }
+}

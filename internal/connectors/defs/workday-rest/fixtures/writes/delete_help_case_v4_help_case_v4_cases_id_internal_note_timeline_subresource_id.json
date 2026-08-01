@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/helpCase/v4/cases/sample-id/internalNoteTimeline/sample-id"
+  }
+}

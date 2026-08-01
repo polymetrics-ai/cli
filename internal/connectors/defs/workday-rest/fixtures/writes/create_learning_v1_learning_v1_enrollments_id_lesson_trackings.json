@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "sample-id",
+    "completionStatus": {
+      "id": "sample"
+    },
+    "lessonIdentifier": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/learning/v1/enrollments/sample-id/lessonTrackings",
+    "body": {
+      "completionStatus": {
+        "id": "sample"
+      },
+      "lessonIdentifier": {
+        "id": "sample"
+      }
+    }
+  }
+}

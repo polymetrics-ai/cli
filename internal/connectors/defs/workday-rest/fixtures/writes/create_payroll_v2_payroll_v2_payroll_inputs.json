@@ -1,0 +1,30 @@
+{
+  "record": {
+    "runCategories": [
+      {
+        "descriptor": {},
+        "id": {}
+      }
+    ],
+    "payComponent": {
+      "code": "sample",
+      "descriptor": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payroll/v2/payrollInputs",
+    "body": {
+      "runCategories": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ],
+      "payComponent": {
+        "code": "sample",
+        "descriptor": "sample"
+      }
+    }
+  }
+}

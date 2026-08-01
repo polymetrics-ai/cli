@@ -1,0 +1,12 @@
+{
+  "record": {
+    "query": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/wql/v1/data",
+    "body": {
+      "query": "sample"
+    }
+  }
+}

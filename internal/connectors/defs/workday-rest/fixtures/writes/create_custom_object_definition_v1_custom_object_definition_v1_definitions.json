@@ -1,0 +1,28 @@
+{
+  "record": {
+    "alias": "sample",
+    "domains": [
+      {
+        "descriptor": {},
+        "href": {}
+      }
+    ],
+    "multiInstance": true,
+    "name": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customObjectDefinition/v1/definitions",
+    "body": {
+      "alias": "sample",
+      "domains": [
+        {
+          "descriptor": {},
+          "href": {}
+        }
+      ],
+      "multiInstance": true,
+      "name": "sample"
+    }
+  }
+}

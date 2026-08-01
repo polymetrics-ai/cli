@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/compensation/v3/scorecards/sample-id"
+  }
+}

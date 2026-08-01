@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "sample-id",
+    "closeMentorshipReason": {
+      "id": "sample"
+    },
+    "endDate": "sample",
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/mentorships/sample-id/close",
+    "body": {
+      "closeMentorshipReason": {
+        "id": "sample"
+      },
+      "endDate": "sample",
+      "startDate": "sample"
+    }
+  }
+}

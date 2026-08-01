@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "customOrganizations": [
+      {
+        "organizationType": {},
+        "descriptor": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/organizationAssignmentChanges/sample-id/customOrganizations/sample-id",
+    "body": {
+      "customOrganizations": [
+        {
+          "organizationType": {},
+          "descriptor": {}
+        }
+      ]
+    }
+  }
+}

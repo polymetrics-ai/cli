@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "attendanceStatus": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/learning/v1/enrollments/sample-id",
+    "body": {
+      "attendanceStatus": {
+        "id": "sample"
+      }
+    }
+  }
+}

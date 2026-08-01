@@ -1,0 +1,16 @@
+{
+  "record": {
+    "position": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/successionPlans",
+    "body": {
+      "position": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/talentManagement/v2/mentorships",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "talent_management_v2_talent_management_v2_mentorships_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

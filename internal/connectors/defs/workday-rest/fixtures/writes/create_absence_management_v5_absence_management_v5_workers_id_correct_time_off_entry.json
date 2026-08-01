@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "days": [
+        {
+          "reason": {},
+          "start": {}
+        }
+      ],
+      "businessProcessParameters": {
+        "action": {
+          "id": {}
+        }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/absenceManagement/v5/workers/sample-id/correctTimeOffEntry"
+  }
+}

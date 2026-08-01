@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coreAccounting/v1/evaluateAccountPostingRules",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "core_accounting_v1_core_accounting_v1_evaluate_account_posting_rules_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

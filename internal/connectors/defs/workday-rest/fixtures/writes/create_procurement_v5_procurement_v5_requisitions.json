@@ -1,0 +1,14 @@
+{
+  "record": {
+    "externalSourceableId": "sample",
+    "otherCharges": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/procurement/v5/requisitions",
+    "body": {
+      "externalSourceableId": "sample",
+      "otherCharges": {}
+    }
+  }
+}

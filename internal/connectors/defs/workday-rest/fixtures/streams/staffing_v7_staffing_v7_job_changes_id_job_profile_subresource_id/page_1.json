@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/jobChanges/synthetic-conformance-value/jobProfile/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "staffing_v7_staffing_v7_job_changes_id_job_profile_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "sample-id",
+    "typeContexts": [
+      {
+        "holdType": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentCore/v1/holds/sample-id/updateHold",
+    "body": {
+      "typeContexts": [
+        {
+          "holdType": {}
+        }
+      ]
+    }
+  }
+}

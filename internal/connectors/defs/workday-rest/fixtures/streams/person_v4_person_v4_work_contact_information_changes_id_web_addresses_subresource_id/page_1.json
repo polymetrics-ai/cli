@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/workContactInformationChanges/synthetic-conformance-value/webAddresses/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "person_v4_person_v4_work_contact_information_changes_id_web_addresses_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

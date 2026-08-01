@@ -1,0 +1,22 @@
+{
+  "record": {
+    "builder": {
+      "id": "sample"
+    },
+    "category": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/journeys/v1/distributionRequests",
+    "body": {
+      "builder": {
+        "id": "sample"
+      },
+      "category": {
+        "id": "sample"
+      }
+    }
+  }
+}

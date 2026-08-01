@@ -1,23 +1,25 @@
 {
   "name": "workday-rest",
   "display_name": "Workday REST",
-  "description": "Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token authentication. Read-only.",
+  "description": "Reads Workday REST 2026.30 production service resources, exposes bounded provider direct reads for values/search endpoints, and provides typed non-binary reverse ETL write actions. Fixture-backed; not live-certified.",
   "integration_type": "api",
-  "docs_url": "manual intervention needed",
+  "docs_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/index.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Workday REST API read of worker, organization, and job profile data (HR/PII-adjacent)",
-    "approval": "none; read-only, bearer-token auth"
+    "read": "external Workday REST reads can include HR, recruiting, procurement, and financial tenant data; fixtures are synthetic and live reads require caller-provided credentials",
+    "write": "typed Workday REST reverse ETL actions can create, update, submit, or delete tenant business objects; every execution must go through plan, preview, explicit approval, and least-privilege Workday scopes",
+    "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive deletes require destructive confirmation and treat documented 404 as idempotent missing only"
   }
 }

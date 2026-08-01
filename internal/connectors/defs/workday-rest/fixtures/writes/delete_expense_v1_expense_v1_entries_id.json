@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/expense/v1/entries/sample-id"
+  }
+}

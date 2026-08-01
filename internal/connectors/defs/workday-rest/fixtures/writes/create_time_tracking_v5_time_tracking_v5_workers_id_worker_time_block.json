@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "sample-id",
+    "customWorktag07": {
+      "id": "sample"
+    },
+    "customWorktag01": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timeTracking/v5/workers/sample-id/workerTimeBlock",
+    "body": {
+      "customWorktag07": {
+        "id": "sample"
+      },
+      "customWorktag01": {
+        "id": "sample"
+      }
+    }
+  }
+}

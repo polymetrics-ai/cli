@@ -1,0 +1,12 @@
+{
+  "record": {
+    "skillID": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/skill/v1/mlSkills",
+    "body": {
+      "skillID": "sample"
+    }
+  }
+}

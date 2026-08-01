@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/studentCore/v1/immigrationEvents/sample-id/dependentImmigrationData/sample-id"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "workSpace": {
+      "id": "sample"
+    },
+    "workShift": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/jobChanges/sample-id/location/sample-id",
+    "body": {
+      "workSpace": {
+        "id": "sample"
+      },
+      "workShift": {
+        "id": "sample"
+      }
+    }
+  }
+}

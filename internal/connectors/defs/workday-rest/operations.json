@@ -1,0 +1,2614 @@
+{
+  "operations": [
+    {
+      "id": "read_absence_management_v5_absence_management_v5_values_leave_status",
+      "kind": "rest_read",
+      "summary": "The status of the event that tracks the requested time off.",
+      "description": "Bounded Workday REST direct read for Absence Management v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/absenceManagement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/absenceManagement/v5/values/leave/status/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_absence_management_v5_absence_management_v5_values_time_off_status",
+      "kind": "rest_read",
+      "summary": "The possible statuses for a worker's time off entry request event. They include: * Approved, 0391102bd1b542538d996936c8fa2fa7 * Not Submitted, eddf5968e6d4430ca4bce9a4cfaba337 * Sent Back, 070b249867f747a19bca64f73eafc9b8 * Submitted, dd817fe688db4ac7bf84e3ef79f72948",
+      "description": "Bounded Workday REST direct read for Absence Management v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/absenceManagement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/absenceManagement/v5/values/timeOff/status/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_asor_v1_asor_v1_agent_resource_search_id",
+      "kind": "rest_read",
+      "summary": "Agent Resource Search APi",
+      "description": "Bounded Workday REST direct read for Asor v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/asor_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/asor/v1/agentResourceSearch/{ID}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_asor_v1_asor_v1_agent_resource_search",
+      "kind": "rest_read",
+      "summary": "Agent Resource Search APi",
+      "description": "Bounded Workday REST direct read for Asor v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/asor_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/asor/v1/agentResourceSearch",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_business_process_v1_business_process_v1_values_send_back_to",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Business Process v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/businessProcess_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/businessProcess/v1/values/sendBack/to/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_compensation_v3_compensation_v3_values_one_time_payment_plan_group_one_time_payment_plan",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Compensation v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/compensation_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/compensation/v3/values/oneTimePaymentPlanGroup/oneTimePaymentPlan/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_connect_v2_connect_v2_values_audience_prompt_group_audience_type",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Connect v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/connect_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/connect/v2/values/AudiencePromptGroup/audienceType/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_connect_v2_connect_v2_values_audience_prompt_group_selection",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Connect v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/connect_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/connect/v2/values/AudiencePromptGroup/selection/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_companies_or_hierarchies",
+      "kind": "rest_read",
+      "summary": "Retrieves all companies or company hierarchies the user has access to.",
+      "description": "Bounded Workday REST direct read for Contract Compliance v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/contractCompliance_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/contractCompliance/v1/values/contractComplianceGroup/companiesOrHierarchies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_contract_types",
+      "kind": "rest_read",
+      "summary": "Retrieves all contract types the user has access to.",
+      "description": "Bounded Workday REST direct read for Contract Compliance v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/contractCompliance_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/contractCompliance/v1/values/contractComplianceGroup/contractTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_expense_v1_expense_v1_values_bespoke_prompt_expense_group",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Expense v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/expense_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/expense/v1/values/bespokePrompt/expenseGroup/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_expense_v1_expense_v1_values_bespoke_prompt_expense_item",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Expense v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/expense_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/expense/v1/values/bespokePrompt/expenseItem/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_expense_v1_expense_v1_values_bespoke_prompt_currency",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Expense v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/expense_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/expense/v1/values/bespokePrompt/currency/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_help_article_v1_help_article_v1_values_common_audiences",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Help Article v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpArticle_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/helpArticle/v1/values/common/audiences/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_help_case_v4_help_case_v4_values_external_records_source",
+      "kind": "rest_read",
+      "summary": "Get all sources for External Records",
+      "description": "Bounded Workday REST direct read for Help Case v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/helpCase/v4/values/externalRecords/source/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_help_case_v4_help_case_v4_values_case_statuses_group_case_statuses",
+      "kind": "rest_read",
+      "summary": "Get all \\~case\\~ statuses.",
+      "description": "Bounded Workday REST direct read for Help Case v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/helpCase/v4/values/caseStatusesGroup/caseStatuses/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_help_case_v4_help_case_v4_values_service_teams_group_service_teams",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Help Case v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/helpCase/v4/values/serviceTeamsGroup/serviceTeams/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_help_case_v4_help_case_v4_values_case_label_categories_group_case_label_categories",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Help Case v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/helpCase/v4/values/caseLabelCategoriesGroup/caseLabelCategories/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_help_case_v4_help_case_v4_values_case_flags_group_case_flags",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Help Case v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/helpCase/v4/values/caseFlagsGroup/caseFlags/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_journeys_v1_journeys_v1_values_related_role_role",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Journeys v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/journeys_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/journeys/v1/values/relatedRole/role/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_learning_v1_learning_v1_values_tracking_enrollment_data_attendance_status",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Learning v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/learning_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/learning/v1/values/trackingEnrollmentData/attendanceStatus/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_learning_v1_learning_v1_values_tracking_enrollment_data_grade",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Learning v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/learning_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/learning/v1/values/trackingEnrollmentData/grade/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_learning_v1_learning_v1_values_tracking_enrollment_data_duration_unit",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Learning v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/learning_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/learning/v1/values/trackingEnrollmentData/durationUnit/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_tax_rates_group_company_instances",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/taxRatesGroup/companyInstances/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_worktags",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/payrollInputsGroup/worktags/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_run_categories",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/payrollInputsGroup/runCategories/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_positions",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/payrollInputsGroup/positions/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_minimum_wage_rates_group_tax_authorities",
+      "kind": "rest_read",
+      "summary": "Retrieves a list of tax authorities available for use as query parameters in the /minimumWageRates endpoint.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/minimumWageRatesGroup/taxAuthorities/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_tax_rates_group_state_instances",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/taxRatesGroup/stateInstances/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_minimum_wage_rates_group_countries",
+      "kind": "rest_read",
+      "summary": "Retrieves a list of all countries available as query parameters in the /minimumWageRates endpoint.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/minimumWageRatesGroup/countries/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_pay_components",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Payroll v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/payroll/v2/values/payrollInputsGroup/payComponents/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_workers_to_notify_workers_to_notify",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/workersToNotify/workersToNotify/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_manage_goals_categories",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/manageGoals/categories/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_feedback_template_feedback_template",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/feedbackTemplate/feedbackTemplate/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_feedback_on_worker_feedback_on_worker",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/feedbackOnWorker/feedbackOnWorker/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_feedback_responder_feedback_responder",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/feedbackResponder/feedbackResponder/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_organization_goal_organizations",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/organizationGoal/organizations/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_organization_goal_supporting_initiatives",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/organizationGoal/supportingInitiatives/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_review_template_template_for_my_performance_re",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/reviewTemplate/templateForMyPerformanceReview/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_cascade_goal_talent_pools",
+      "kind": "rest_read",
+      "summary": "Talent Pools the processing user has view and edit access for.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/cascadeGoal/talentPools/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_organization_goal_goal_periods",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/organizationGoal/goalPeriods/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_manage_goals_status",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/manageGoals/status/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_performance_enablement_v5_performance_enablement_v5_values_relates_to_relates_to",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Performance Enablement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/performanceEnablement/v5/values/relatesTo/relatesTo/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_hereditary",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/hereditary/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_religious",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/religious/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_honorary",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/honorary/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_royal",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/royal/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_title",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/title/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_common_phone_country_phone_codes",
+      "kind": "rest_read",
+      "summary": "Exposes prompting for country phone codes, which are used during the collection of phone numbers.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/commonPhone/countryPhoneCodes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_country_components_country_city",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/countryComponents/countryCity/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_salutation",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/salutation/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_marital_status_active_martial_statuses",
+      "kind": "rest_read",
+      "summary": "Marital Statuses that are Active and configured for the Country or Country Region.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/maritalStatus/activeMartialStatuses/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_personal_information_country_populated_country",
+      "kind": "rest_read",
+      "summary": "The set of countries a person has populated with country specific data.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/personalInformationCountry/populatedCountry/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_social",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/social/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_professional",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/professional/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_country_components_country",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/countryComponents/country/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_name_components_academic",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/nameComponents/academic/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_personal_information_country_allowed_country",
+      "kind": "rest_read",
+      "summary": "The set of countries a person is allowed to populated with country specific data.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/personalInformationCountry/allowedCountry/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_country_components_country_region",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/countryComponents/countryRegion/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_person_v4_person_v4_values_common_phone_phone_device_types",
+      "kind": "rest_read",
+      "summary": "Exposes prompting for phone device types, which are used during the collection of phone numbers.",
+      "description": "Bounded Workday REST direct read for Person v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/person/v4/values/commonPhone/phoneDeviceTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_resolved_worktags",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/resolvedWorktags/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_requesters",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/requesters/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_companies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service. Note: This prompt value endpoint also returns the Company_Reference_ID response field.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/companies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_order_from_connection",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/orderFromConnection/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_ship_to_address",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/shipToAddress/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_resource_provider",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/resourceProvider/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_deliver_to_location",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/deliverToLocation/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_spend_category",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service. Note: This prompt value endpoint also returns the Spend_Category_ID response field.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/spendCategory/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_supplier_contract",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/supplierContract/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_unit_of_measure",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service. Note: This prompt value endpoint also returns the unCefactCommonCode response field.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/unitOfMeasure/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_sourcing_buyer",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/sourcingBuyer/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_inventory_site",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/inventorySite/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_line_company",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/lineCompany/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_currencies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/currencies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_requesting_entity",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/requestingEntity/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_requisition_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/requisitionTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_par_location",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/parLocation/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_commodity_codes",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/commodityCodes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_procurement_v5_procurement_v5_values_requisitions_group_worktags",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Procurement v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/procurement/v5/values/requisitionsGroup/worktags/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_worker_groups",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/workerGroups/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_currencies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/currencies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_worktag_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/worktagTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_unnamed_resources",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/unnamedResources/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_worker_to_replace_unnamed_resources",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/workerToReplaceUnnamedResources/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_success_ratings",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/successRatings/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_groups",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/groups/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_project_plan_project_phases",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/projectPlan/projectPhases/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_roles",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/roles/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_hierarchies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/hierarchies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_customers",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/customers/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_worktags",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/worktags/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_role_categories",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/roleCategories/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_project_plan_project_tasks",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/projectPlan/projectTasks/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_owners",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/owners/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_workers",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/workers/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_statuses",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/statuses/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_optional_hierarchies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/optionalHierarchies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_priorities",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/priorities/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_resource_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/resourceTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_project_plan_project_plan_phases",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/projectPlan/projectPlanPhases/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_cost_rate_currencies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/costRateCurrencies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_requirements",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/requirements/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_requirement_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/requirementTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_companies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/companies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_risk_levels",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/riskLevels/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_resource_plan_booking_status",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/resourcePlan/bookingStatus/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_project_plan_project_plan_tasks",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/projectPlan/projectPlanTasks/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_importance_ratings",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/importanceRatings/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_projects",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/projects/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_project_states",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/projectStates/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_projects_v3_projects_v3_values_common_project_dependencies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Projects v3.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/v3/values/common/projectDependencies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_recruiting_v4_recruiting_v4_values_common_countries",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Recruiting v4.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/recruiting_v4_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/recruiting/v4/values/common/countries/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_regions",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/regions/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_reason",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/reason/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_customs",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/customs/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_supervisory_organization",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/supervisoryOrganization/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_programs",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/programs/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_jobs",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/jobs/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_funds",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/funds/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_workers_compensation_code_overrides",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/workersCompensationCodeOverrides/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_time_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/timeTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_work_shifts",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/workShifts/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_cost_centers",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/costCenters/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_business_units",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/businessUnits/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_frequencies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/frequencies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_employee_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/employeeTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_pay_rate_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/payRateTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_templates",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/templates/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_workers",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/workers/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_contingent_worker_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/contingentWorkerTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_currencies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/currencies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_proposed_position",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/proposedPosition/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_jobs",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/jobs/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_company_insider_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/companyInsiderTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_headcount_options",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/headcountOptions/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_grants",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/grants/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_worker_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/workerTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_workers",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/workers/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_work_study_awards",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/workStudyAwards/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_locations",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/locations/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_positions",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/positions/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_job_requisitions",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/jobRequisitions/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_job_profiles",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/jobProfiles/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_companies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/companies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_work_spaces",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/workSpaces/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_assignment_types",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/assignmentTypes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_job_changes_group_job_classifications",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/jobChangesGroup/jobClassifications/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_gifts",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Staffing v7.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/staffing/v7/values/organizationAssignmentChangesGroup/gifts/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_program_of_study",
+      "kind": "rest_read",
+      "summary": "Retrieves all programs of study. You can filter the programs of study by academic unit, academic level, program type, and effective date.",
+      "description": "Bounded Workday REST direct read for Student Advising v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentAdvising_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentAdvising/v1/values/hypotheticalAcademicProgress/programOfStudy/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_student",
+      "kind": "rest_read",
+      "summary": "Retrieves a student with the specified username or universal ID.",
+      "description": "Bounded Workday REST direct read for Student Advising v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentAdvising_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentAdvising/v1/values/hypotheticalAcademicProgress/student/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_academic_record",
+      "kind": "rest_read",
+      "summary": "Retrieves an academic record with the specified ID.",
+      "description": "Bounded Workday REST direct read for Student Advising v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentAdvising_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentAdvising/v1/values/hypotheticalAcademicProgress/academicRecord/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_award_years",
+      "kind": "rest_read",
+      "summary": "Valid financial aid award years.",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/awardYears/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_academic_records",
+      "kind": "rest_read",
+      "summary": "Valid academic records filtered by student and hold reason. Call the GET /values/holds/academicRecords?student=id&reason=id endpoint.",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/academicRecords/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_reasons",
+      "kind": "rest_read",
+      "summary": "All of the active hold reasons, optionally filtered by student and academic unit query parms. Call these endpoints for valid filter values: - GET /values/holds/reasons?student={id} - GET /values/holds/reasons?academicUnit={id} - GET /values/holds/reasons?student={id}&academicUnit={id}",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/reasons/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_award_items",
+      "kind": "rest_read",
+      "summary": "Valid student award items for the student and academic unit specified. Call the GET /values/holds/awardItems?student={id}&academicUnit={id} endpoint.",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/awardItems/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_institution",
+      "kind": "rest_read",
+      "summary": "The institution of the hold reason. Call the following endpoint for the correct institution: GET /values/holds/institution?reason={id}",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/institution/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_school_codes",
+      "kind": "rest_read",
+      "summary": "All federal school codes, optionally filtered by student and hold reason query parms. Call these endpoints for valid filter values: - GET /values/holds/schoolCodes?student={id} - GET /values/holds/schoolCodes?reason={id} - GET /values/holds/schoolCodes?student={id}&reason={id}",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/schoolCodes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_core_v1_student_core_v1_values_holds_academic_periods",
+      "kind": "rest_read",
+      "summary": "Valid academic periods filtered by student, academic record, or academic unit. Call these endpoints for valid filter values: GET /values/holds/academicPeriods?student={id} GET /values/holds/academicPeriods?student={id}&academicUnit={id} GET /values/holds/academicPeriods?academicRecord={id}",
+      "description": "Bounded Workday REST direct read for Student Core v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentCore/v1/values/holds/academicPeriods/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_unit_type",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Student Recruiting v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/unitType/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_educational_institutio",
+      "kind": "rest_read",
+      "summary": "Retrieves all educational institutions.",
+      "description": "Bounded Workday REST direct read for Student Recruiting v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/educationalInstitution/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_external_course",
+      "kind": "rest_read",
+      "summary": "Retrieves the external courses for the educational institution you specify.",
+      "description": "Bounded Workday REST direct read for Student Recruiting v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/externalCourse/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_external_grading_schem",
+      "kind": "rest_read",
+      "summary": "Retrieves the educational institution grading schemes for the educational institution you specify.",
+      "description": "Bounded Workday REST direct read for Student Recruiting v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/externalGradingScheme/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_programs_of_study",
+      "kind": "rest_read",
+      "summary": "Retrieves all programs of study. You can filter the programs of study by academic unit, academic level, program type, and effective date.",
+      "description": "Bounded Workday REST direct read for Student Recruiting v1.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/programsOfStudy/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_talent_management_v2_talent_management_v2_values_succession_plan_members",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Talent Management v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/talentManagement_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/talentManagement/v2/values/successionPlan/members/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_talent_management_v2_talent_management_v2_values_succession_plan_strategies",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Talent Management v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/talentManagement_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/talentManagement/v2/values/successionPlan/strategies/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_talent_management_v2_talent_management_v2_values_succession_plan_readiness",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Talent Management v2.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/talentManagement_v2_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/talentManagement/v2/values/successionPlan/readiness/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_types_time_entry_codes",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeTypes/timeEntryCodes/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_values_positions",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeValues/positions/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_enter_time_by_type_time_type_nested",
+      "kind": "rest_read",
+      "summary": "Provides a nested prompt for Time Tracking Time Types, similar prompt structure to the one provided in UI prompts. Currently does not support Time Offs.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/enterTimeByType/timeTypeNested/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_types_default_time_entry_code",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeTypes/defaultTimeEntryCode/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_values_worker_time_zone",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeValues/workerTimeZone/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_types_project_plan_tasks",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeTypes/projectPlanTasks/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_types_projects",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeTypes/projects/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "read_time_tracking_v5_time_tracking_v5_values_time_values_out_reason",
+      "kind": "rest_read",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "description": "Bounded Workday REST direct read for Time Tracking v5.",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "risk": "medium",
+      "approval": "read-only direct read; no write approval required",
+      "output_policy": "clinical_json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/timeTracking/v5/values/timeValues/outReason/",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

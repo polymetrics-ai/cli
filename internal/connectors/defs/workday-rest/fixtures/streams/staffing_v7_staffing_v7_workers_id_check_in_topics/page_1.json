@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/workers/synthetic-conformance-value/checkInTopics",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "staffing_v7_staffing_v7_workers_id_check_in_topics_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

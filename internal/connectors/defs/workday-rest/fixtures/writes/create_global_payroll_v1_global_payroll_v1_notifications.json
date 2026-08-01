@@ -1,0 +1,44 @@
+{
+  "record": {
+    "message": {
+      "body": "sample",
+      "title": "sample"
+    },
+    "recipient": {
+      "workerRecipients": [
+        {
+          "id": {}
+        }
+      ],
+      "organizationRecipients": [
+        {
+          "organization": {},
+          "roles": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/globalPayroll/v1/notifications",
+    "body": {
+      "message": {
+        "body": "sample",
+        "title": "sample"
+      },
+      "recipient": {
+        "workerRecipients": [
+          {
+            "id": {}
+          }
+        ],
+        "organizationRecipients": [
+          {
+            "organization": {},
+            "roles": {}
+          }
+        ]
+      }
+    }
+  }
+}

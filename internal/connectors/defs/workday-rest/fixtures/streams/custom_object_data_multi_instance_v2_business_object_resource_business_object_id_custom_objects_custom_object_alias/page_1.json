@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/synthetic-conformance-value/customObjects/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "custom_object_data_multi_instance_v2_business_object_resource_business_object_id_custom_objects_custom_object_alias_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

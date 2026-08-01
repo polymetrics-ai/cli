@@ -1,0 +1,20 @@
+{
+  "record": {
+    "completePhoneNumber": "sample",
+    "deviceType": {
+      "descriptor": "sample",
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/phoneValidation",
+    "body": {
+      "completePhoneNumber": "sample",
+      "deviceType": {
+        "descriptor": "sample",
+        "id": "sample"
+      }
+    }
+  }
+}

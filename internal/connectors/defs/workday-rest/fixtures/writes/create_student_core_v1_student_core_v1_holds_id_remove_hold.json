@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "sample-id",
+    "descriptor": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentCore/v1/holds/sample-id/removeHold",
+    "body": {
+      "descriptor": "sample"
+    }
+  }
+}

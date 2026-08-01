@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "businessProcessParameters": {
+        "action": {
+          "id": {}
+        }
+      },
+      "descriptor": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/organizationAssignmentChanges/sample-id/submit"
+  }
+}

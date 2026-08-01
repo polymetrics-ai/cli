@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/compensation/v3/scorecards",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "compensation_v3_compensation_v3_scorecards_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

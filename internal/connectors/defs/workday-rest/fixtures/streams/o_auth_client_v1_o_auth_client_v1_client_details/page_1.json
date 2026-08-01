@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/oAuthClient/v1/clientDetails",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "o_auth_client_v1_o_auth_client_v1_client_details_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

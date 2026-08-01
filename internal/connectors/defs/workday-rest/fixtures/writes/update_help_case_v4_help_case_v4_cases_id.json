@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "sample-id",
+    "labels": [
+      {
+        "id": {}
+      }
+    ],
+    "substatus": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/helpCase/v4/cases/sample-id",
+    "body": {
+      "labels": [
+        {
+          "id": {}
+        }
+      ],
+      "substatus": {
+        "id": "sample"
+      }
+    }
+  }
+}

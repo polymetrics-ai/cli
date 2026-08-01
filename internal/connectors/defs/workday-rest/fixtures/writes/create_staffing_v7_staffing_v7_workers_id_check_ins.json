@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "date": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/checkIns"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/performanceEnablement/v5/workers/synthetic-conformance-value/requestedFeedbackOnSelfEvents/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "performance_enablement_v5_performance_enablement_v5_workers_id_requested_feedback_on_self_events_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

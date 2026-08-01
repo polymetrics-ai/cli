@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/payroll/v2/minimumWageRates",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "payroll_v2_payroll_v2_minimum_wage_rates_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

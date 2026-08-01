@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "sample-id",
+    "defaultScorecardGoals": [
+      {
+        "goalName": {},
+        "goalWeight": {}
+      }
+    ],
+    "effectiveDate": "sample",
+    "scorecardName": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/compensation/v3/scorecards/sample-id",
+    "body": {
+      "defaultScorecardGoals": [
+        {
+          "goalName": {},
+          "goalWeight": {}
+        }
+      ],
+      "effectiveDate": "sample",
+      "scorecardName": "sample"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/projects/v3/taskResources/sample-id"
+  }
+}

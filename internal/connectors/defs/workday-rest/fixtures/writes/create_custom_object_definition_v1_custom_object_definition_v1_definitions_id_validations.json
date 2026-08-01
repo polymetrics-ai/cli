@@ -1,0 +1,35 @@
+{
+  "record": {
+    "id": "sample-id",
+    "conditionRule": {
+      "id": "sample"
+    },
+    "customField": {
+      "id": "sample"
+    },
+    "messageText": "sample",
+    "name": "sample",
+    "onlyOnOk": true,
+    "severityLevel": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customObjectDefinition/v1/definitions/sample-id/validations",
+    "body": {
+      "conditionRule": {
+        "id": "sample"
+      },
+      "customField": {
+        "id": "sample"
+      },
+      "messageText": "sample",
+      "name": "sample",
+      "onlyOnOk": true,
+      "severityLevel": {
+        "id": "sample"
+      }
+    }
+  }
+}

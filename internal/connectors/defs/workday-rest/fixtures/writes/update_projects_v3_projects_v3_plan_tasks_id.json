@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "order": "sample",
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/v3/planTasks/sample-id",
+    "body": {
+      "order": "sample",
+      "startDate": "sample"
+    }
+  }
+}

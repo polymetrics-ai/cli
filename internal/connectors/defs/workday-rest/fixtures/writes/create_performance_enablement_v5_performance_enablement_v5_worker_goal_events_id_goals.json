@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "sample-id",
+    "name": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/workerGoalEvents/sample-id/goals",
+    "body": {
+      "name": "sample"
+    }
+  }
+}

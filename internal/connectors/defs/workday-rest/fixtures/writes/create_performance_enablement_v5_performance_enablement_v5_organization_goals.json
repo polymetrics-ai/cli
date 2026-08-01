@@ -1,0 +1,24 @@
+{
+  "record": {
+    "goalName": "sample",
+    "organization": {
+      "id": "sample"
+    },
+    "planPeriod": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/organizationGoals",
+    "body": {
+      "goalName": "sample",
+      "organization": {
+        "id": "sample"
+      },
+      "planPeriod": {
+        "id": "sample"
+      }
+    }
+  }
+}

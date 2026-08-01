@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/tables/sample-id"
+  }
+}

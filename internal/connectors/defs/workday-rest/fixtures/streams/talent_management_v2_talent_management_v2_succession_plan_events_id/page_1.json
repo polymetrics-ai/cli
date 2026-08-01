@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/talentManagement/v2/successionPlanEvents/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "talent_management_v2_talent_management_v2_succession_plan_events_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

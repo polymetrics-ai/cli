@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coreAccounting/v1/currencies/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "core_accounting_v1_core_accounting_v1_currencies_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

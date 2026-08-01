@@ -1,0 +1,15 @@
+{
+  "record": {
+    "json_data": {
+      "status": {
+        "descriptor": "sample",
+        "id": "sample"
+      },
+      "caseLink": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpCase/v4/cases"
+  }
+}
