@@ -287,6 +287,16 @@ Reads and writes allow-listed Zendesk Support resources and carries a complete b
 - Inspect, read, and safely plan typed Zendesk Support operations.
 - Usage: pm zendesk-support <command> [flags]
 - Source CLI: Zendesk Support API (Support API OpenAPI 2.0.0)
+- Global flags:
+  - --credential (string): Credential name to use for the Zendesk Support request.
+  - --connection (string): Credential name alias used only when --credential is omitted; does not resolve pm connections.
+  - --config (string_array): Connector config override as key=value; never pass secret values here.
+  - --json (boolean): Emit machine-readable JSON output.
+  - --limit (integer): Maximum records to emit from stream commands.
+  - --plan (string): Execute an approved reverse-ETL plan by id.
+  - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
+  - --approve (string): Approval token required to execute a reverse-ETL plan.
+  - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - Fixture-backed ETL streams
   - streams account_attributes list - Run the account_attributes Zendesk Support stream. [intent=etl availability=implemented stream=account_attributes]
   - streams articles list - Run the articles Zendesk Support stream. [intent=etl availability=implemented stream=articles]
