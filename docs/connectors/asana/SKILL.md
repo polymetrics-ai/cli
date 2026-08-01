@@ -456,7 +456,7 @@ Reads implemented Asana project-management streams and safely plans implemented 
   - workspaces get-workspace-events - Planned fixed-target Asana read: Get workspace events. [intent=etl availability=planned]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid
 - Help topics:
   - destructive-confirmation - Asana DELETE/destructive/admin operations are in scope only through typed destructive confirmation and reverse ETL plan -> preview -> approval -> execute.
-  - operation-ledger - The pinned OpenAPI ledger has 249 operations: 109 ETL/read, 124 reverse-ETL write, 3 direct/search, 4 binary/file, 8 changefeed, and 1 disallowed batch wrapper.
+  - operation-ledger - The pinned OpenAPI ledger has 249 operations: 111 ETL/read, 125 reverse-ETL write, 3 direct/search, 1 file-upload input, 8 changefeed, and 1 disallowed batch wrapper.
   - shared-foundations - Provider search/query #2985 and CDC/changefeed #2986/#2988 remain blocked dependencies for planned commands.
 
 ## Commands

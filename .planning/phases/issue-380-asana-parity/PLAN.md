@@ -48,7 +48,7 @@ Authoritative source for this slice:
 - `asana_openapi_pinned`: `https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml`
 - OpenAPI evidence from the pinned source: OpenAPI `3.0.0`, `info.version=1.0`, `249` HTTP operations (`GET=119`, `POST=81`, `PUT=26`, `DELETE=23`).
 
-Parent #380 operation-lane counts remain authoritative: `etl_read=109`, `reverse_etl_write=124`, `direct_read_query_search=3`, `binary_file=4`, `cdc_changefeed=8`, `excluded_not_applicable=1`, total `249`.
+Parent #380 operation-lane counts remain authoritative: `etl_read=111`, `reverse_etl_write=125`, `direct_read_query_search=3`, `file_upload=1`, `cdc_changefeed=8`, `excluded_not_applicable=1`, total `249`.
 
 ## Implementation slices
 

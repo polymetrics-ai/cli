@@ -178,13 +178,13 @@
       "method": "GET",
       "path": "/attachments/{attachment_gid}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment/file operation; blocked until connector-local binary metadata, max-byte policy, and redacted fixture evidence are authored.",
+        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
         "source_url": "https://developers.asana.com/reference/getattachment",
-        "notes": "official_operation_id=getAttachment; lane=binary_file"
+        "notes": "official_operation_id=getAttachment; lane=etl_read"
       }
     },
     {
@@ -197,20 +197,20 @@
         "blocked_by_default": true,
         "reason": "planned destructive attachment operation; blocked until named write action has a typed schema, redaction, idempotency evidence, confirm: \"destructive\", and plan -> preview -> explicit approval -> execute evidence.",
         "source_url": "https://developers.asana.com/reference/deleteattachment",
-        "notes": "official_operation_id=deleteAttachment; lane=binary_file"
+        "notes": "official_operation_id=deleteAttachment; lane=reverse_etl_write"
       }
     },
     {
       "method": "GET",
       "path": "/attachments",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment/file operation; blocked until connector-local binary metadata, max-byte policy, and redacted fixture evidence are authored.",
+        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
         "source_url": "https://developers.asana.com/reference/getattachmentsforobject",
-        "notes": "official_operation_id=getAttachmentsForObject; lane=binary_file"
+        "notes": "official_operation_id=getAttachmentsForObject; lane=etl_read"
       }
     },
     {
@@ -221,9 +221,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment upload; blocked until file-upload input mode, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
+        "reason": "planned bounded attachment upload; blocked until file-upload input mode, JSON response redaction, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
         "source_url": "https://developers.asana.com/reference/createattachmentforobject",
-        "notes": "official_operation_id=createAttachmentForObject; lane=binary_file"
+        "notes": "official_operation_id=createAttachmentForObject; lane=file_upload"
       }
     },
     {

@@ -8,7 +8,7 @@ Official source inventory:
 - Pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml
 - OpenAPI: `3.0.0` / info version `1.0`
 - Operation count: `249` (`GET=119`, `POST=81`, `PUT=26`, `DELETE=23`)
-- Parent #380 lane counts: `etl_read=109`, `reverse_etl_write=124`, `direct_read_query_search=3`, `binary_file=4`, `cdc_changefeed=8`, `excluded_not_applicable=1`
+- Parent #380 lane counts: `etl_read=111`, `reverse_etl_write=125`, `direct_read_query_search=3`, `file_upload=1`, `cdc_changefeed=8`, `excluded_not_applicable=1`
 
 Readable streams currently executable by the declarative engine: `custom_fields`, `project_statuses`, `projects`, `sections`, `stories`, `tags`, `tasks`, `team_memberships`, `teams`, `users`, `workspace_memberships`, `workspaces`.
 
@@ -55,7 +55,7 @@ Implemented streams remain intentionally bounded and fixture-backed:
 - `team_memberships`: GET `/team_memberships`; optional `team` and `workspace` query values.
 - `workspace_memberships`: GET `/workspaces/{{ config.workspace_id }}/workspace_memberships`.
 
-All other official read-like operations are represented in `api_surface.json`, `operations.json`, and `cli_surface.json` as blocked/planned fixed-target metadata until a connector-local stream or direct-read command adds a bounded schema, query flag contract, sanitized fixtures, and conformance evidence. Provider search/typeahead operations remain blocked on #2985. Audit/event/job/webhook changefeed surfaces remain blocked on #2986/#2988. Attachment/binary operations remain blocked until max-byte, redaction, and file-transfer fixtures are authored.
+All other official read-like operations are represented in `api_surface.json`, `operations.json`, and `cli_surface.json` as blocked/planned fixed-target metadata until a connector-local stream or direct-read command adds a bounded schema, query flag contract, sanitized fixtures, and conformance evidence. Provider search/typeahead operations remain blocked on #2985. Audit/event/job/webhook changefeed surfaces remain blocked on #2986/#2988. Attachment metadata reads remain blocked until connector-local JSON schema, redaction, and sanitized fixture evidence are authored; attachment uploads remain blocked until file-upload input contracts and multipart fixture evidence exist.
 
 ## Write actions & risks
 
@@ -85,5 +85,5 @@ The remaining official POST/PUT/DELETE operations are not blanket-excluded. They
 - `api_surface.json` uses `operation_ledger_version: 1`: legacy `excluded` classifiers are intentionally not used. Blocked/planned operation rows are the source of truth for unimplemented operations.
 - `/batch` is the only not-applicable official lane row. It is disallowed because it is a generic batch subrequest wrapper and would recreate raw method/path/body passthrough; each underlying Asana operation is represented individually instead.
 - Existing executable count remains the current 12 streams + 13 writes. The 224 remaining official rows are planned/blocked metadata, not executable runtime claims.
-- Provider search/typeahead execution depends on #2985. CDC/changefeed/audit/webhook truthfulness depends on #2986/#2988. Attachment upload/download/delete execution needs connector-local binary/file contracts and fixtures.
+- Provider search/typeahead execution depends on #2985. CDC/changefeed/audit/webhook truthfulness depends on #2986/#2988. Attachment metadata read/upload/delete execution needs connector-local JSON/file-upload contracts and fixtures.
 - No generic shell, generic HTTP request/write, raw SQL write, arbitrary GraphQL, unrestricted file, unrestricted binary, or raw passthrough tool is exposed by this connector.

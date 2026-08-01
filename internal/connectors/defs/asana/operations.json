@@ -322,23 +322,23 @@
     },
     {
       "id": "get_attachment",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get an attachment",
-      "description": "planned bounded attachment/file operation; blocked until connector-local binary metadata, max-byte policy, and redacted fixture evidence are authored.",
+      "description": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
       "source_url": "https://developers.asana.com/reference/getattachment",
       "risk": "medium",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
-      "output_policy": "binary_file_bounded_redacted",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "asana:personal-access-token"
       ],
       "mutation_class": "none",
       "destructive": false,
       "audit_event": "asana.get_attachment",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/attachments/{attachment_gid}",
-        "max_bytes": 26214400
+        "max_bytes": 1048576
       }
     },
     {
@@ -366,7 +366,7 @@
       "id": "get_attachments_for_object",
       "kind": "rest_read",
       "summary": "Get attachments from an object",
-      "description": "planned bounded attachment/file operation; blocked until connector-local binary metadata, max-byte policy, and redacted fixture evidence are authored.",
+      "description": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
       "source_url": "https://developers.asana.com/reference/getattachmentsforobject",
       "risk": "medium",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -387,11 +387,11 @@
       "id": "create_attachment_for_object",
       "kind": "file_upload",
       "summary": "Upload an attachment",
-      "description": "planned bounded attachment upload; blocked until file-upload input mode, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
+      "description": "planned bounded attachment upload; blocked until file-upload input mode, JSON response redaction, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "binary_file_bounded_redacted",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "asana:personal-access-token"
       ],

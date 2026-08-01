@@ -7632,7 +7632,7 @@
     },
     {
       "name": "operation-ledger",
-      "summary": "The pinned OpenAPI ledger has 249 operations: 109 ETL/read, 124 reverse-ETL write, 3 direct/search, 4 binary/file, 8 changefeed, and 1 disallowed batch wrapper."
+      "summary": "The pinned OpenAPI ledger has 249 operations: 111 ETL/read, 125 reverse-ETL write, 3 direct/search, 1 file-upload input, 8 changefeed, and 1 disallowed batch wrapper."
     },
     {
       "name": "shared-foundations",
