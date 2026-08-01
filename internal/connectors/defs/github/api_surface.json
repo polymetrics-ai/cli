@@ -6618,10 +6618,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
-      "covered_by": {
-        "direct_reads": [
-          "actions concurrency_groups view-2"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GitHub concurrency group names may contain refs or expressions with slashes/spaces that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {

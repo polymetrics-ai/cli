@@ -73,11 +73,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1604 {
 		t.Fatalf("endpoints = %d, want 1604 (1596 official rows plus 8 connector conformance coverage rows)", len(surface.Endpoints))
 	}
-	if covered != 228 {
-		t.Fatalf("covered endpoints = %d, want 228", covered)
+	if covered != 227 {
+		t.Fatalf("covered endpoints = %d, want 227", covered)
 	}
-	if operations != 1376 {
-		t.Fatalf("operation endpoints = %d, want 1376 blocked/planned rows", operations)
+	if operations != 1377 {
+		t.Fatalf("operation endpoints = %d, want 1377 blocked/planned rows", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -93,7 +93,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  19,
-		"GET":     156,
+		"GET":     155,
 		"GRAPHQL": 4,
 		"PATCH":   16,
 		"POST":    23,
@@ -101,7 +101,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE":  168,
-		"GET":     478,
+		"GET":     479,
 		"GRAPHQL": 305,
 		"PATCH":   57,
 		"POST":    170,
@@ -111,7 +111,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "models", models, map[string]int{
 		"admin_reverse_etl":     494,
 		"destructive_action":    220,
-		"direct_read":           515,
+		"direct_read":           516,
 		"disallowed":            1,
 		"duplicate":             53,
 		"deprecated":            30,
@@ -121,10 +121,10 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"critical": 60,
 		"high":     725,
 		"low":      419,
-		"medium":   172,
+		"medium":   173,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 1376,
+		"blocked": 1377,
 	})
 }
 
@@ -265,6 +265,8 @@ func TestGitHubImplementedDirectReadOperationsAreRunnable(t *testing.T) {
 			t.Fatalf("command %q operation %q rest.max_bytes = %d, want positive bound", cmd.Path, op.ID, op.REST.MaxBytes)
 		}
 		githubAssertOperationDirectReadMetadata(t, cmd, op)
+		githubAssertOperationDirectReadPathParamsSupported(t, cmd, op)
+		githubAssertDirectReadSensitiveFieldsRedacted(t, cmd, op)
 		if !githubSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
 			t.Fatalf("command %q output_policy = %q, want supported direct-read policy", cmd.Path, cmd.OutputPolicy)
 		}
@@ -337,10 +339,11 @@ type githubDeletePolicy struct {
 }
 
 type githubOperationSpec struct {
-	ID           string                   `json:"id"`
-	Kind         string                   `json:"kind"`
-	OutputPolicy string                   `json:"output_policy"`
-	REST         *githubOperationRESTSpec `json:"rest"`
+	ID              string                   `json:"id"`
+	Kind            string                   `json:"kind"`
+	OutputPolicy    string                   `json:"output_policy"`
+	SensitivePolicy *githubSensitivePolicy   `json:"sensitive_policy"`
+	REST            *githubOperationRESTSpec `json:"rest"`
 }
 
 type githubOperationRESTSpec struct {
@@ -348,6 +351,10 @@ type githubOperationRESTSpec struct {
 	Path     string            `json:"path"`
 	Query    map[string]string `json:"query"`
 	MaxBytes int               `json:"max_bytes"`
+}
+
+type githubSensitivePolicy struct {
+	RedactFields []string `json:"redact_fields"`
 }
 
 type githubSurfaceCoverage struct {
@@ -362,6 +369,7 @@ type githubCLICommand struct {
 	Operation    string                     `json:"operation"`
 	APISurface   []githubCLISurfaceEndpoint `json:"api_surface"`
 	OutputPolicy string                     `json:"output_policy"`
+	RedactFields []string                   `json:"redact_fields"`
 	Flags        []githubCLIFlag            `json:"flags"`
 	Write        string                     `json:"write"`
 	Approval     string                     `json:"approval"`
@@ -449,6 +457,45 @@ func githubSupportedDirectReadOutputPolicy(policy string) bool {
 	default:
 		return false
 	}
+}
+
+func githubAssertOperationDirectReadPathParamsSupported(t *testing.T, cmd githubCLICommand, op githubOperationSpec) {
+	t.Helper()
+	for _, match := range githubPathParamRE.FindAllStringSubmatch(op.REST.Path, -1) {
+		if githubUnsupportedDirectReadPathParam(match[1]) {
+			t.Fatalf("command %q operation %q path parameter %q requires non-identifier values; keep planned until typed path encoding is supported", cmd.Path, op.ID, match[1])
+		}
+	}
+}
+
+func githubUnsupportedDirectReadPathParam(name string) bool {
+	switch name {
+	case "basehead", "branch", "concurrency_group_name", "dir", "environment_name", "ref", "subject_digest":
+		return true
+	default:
+		return false
+	}
+}
+
+func githubAssertDirectReadSensitiveFieldsRedacted(t *testing.T, cmd githubCLICommand, op githubOperationSpec) {
+	t.Helper()
+	if !githubDirectReadNeedsValueRedaction(op) {
+		return
+	}
+	if githubStringSliceContains(cmd.RedactFields, "value") {
+		return
+	}
+	if op.SensitivePolicy != nil && githubStringSliceContains(op.SensitivePolicy.RedactFields, "value") {
+		return
+	}
+	t.Fatalf("command %q operation %q must redact GitHub variable value fields", cmd.Path, op.ID)
+}
+
+func githubDirectReadNeedsValueRedaction(op githubOperationSpec) bool {
+	if op.REST == nil {
+		return false
+	}
+	return strings.Contains(op.REST.Path, "/actions/organization-variables") || strings.Contains(op.REST.Path, "/actions/variables")
 }
 
 func githubAssertRulesetSchemaBlocksUnmodeledFields(t *testing.T, action githubWriteAction) {

@@ -471,6 +471,11 @@
       "risk": "high",
       "approval": "none",
       "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "value"
+        ]
+      },
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/organization-variables",
@@ -1106,6 +1111,11 @@
       "risk": "high",
       "approval": "none",
       "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "value"
+        ]
+      },
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/variables",
@@ -1148,6 +1158,11 @@
       "risk": "high",
       "approval": "none",
       "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "value"
+        ]
+      },
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/variables/{name}",

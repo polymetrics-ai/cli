@@ -2538,7 +2538,7 @@
       "path": "actions concurrency_groups view-2",
       "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.actions_concurrency_groups_concurrency_group_name",
       "source_cli_path": "",
       "flags": [
@@ -2549,13 +2549,7 @@
           "maps_to": "path.concurrency_group_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Concurrency group names may contain refs or expressions with slashes/spaces; direct reads remain planned until arbitrary string path parameter encoding is supported."
     },
     {
       "path": "actions jobs view",
@@ -2671,7 +2665,10 @@
           "path": "/repos/{owner}/{repo}/actions/organization-variables"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "value"
+      ]
     },
     {
       "path": "actions permissions view",
@@ -3456,7 +3453,10 @@
           "path": "/repos/{owner}/{repo}/actions/variables"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "value"
+      ]
     },
     {
       "path": "variable create",
@@ -3508,7 +3508,10 @@
           "path": "/repos/{owner}/{repo}/actions/variables/{name}"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "value"
+      ]
     },
     {
       "path": "variable update",
