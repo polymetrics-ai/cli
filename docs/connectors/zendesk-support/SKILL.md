@@ -293,6 +293,7 @@ Reads and writes allow-listed Zendesk Support resources and carries a complete b
   - --config (string_array): Connector config override as key=value; never pass secret values here.
   - --json (boolean): Emit machine-readable JSON output.
   - --limit (integer): Maximum records to emit from stream commands.
+  - --max-bytes (integer): Maximum direct-read response bytes; typed operations declare their own lower cap.
   - --plan (string): Execute an approved reverse-ETL plan by id.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
   - --approve (string): Approval token required to execute a reverse-ETL plan.
