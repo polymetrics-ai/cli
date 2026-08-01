@@ -1385,6 +1385,9 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if b.Metadata.Name != "" && !b.Metadata.Capabilities.Check {
+		return fmt.Errorf("connector %s check: %w", b.Name, connectors.ErrUnsupportedOperation)
+	}
 
 	cfg = materializeConfigDefaults(b, cfg)
 

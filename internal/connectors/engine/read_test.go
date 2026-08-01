@@ -2176,6 +2176,38 @@ func TestCheckDeclarativeRequestSucceeds(t *testing.T) {
 	}
 }
 
+func TestCheckCapabilityDisabledReturnsUnsupported(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	hookCalled := false
+	h := &checkHookFunc{fn: func(ctx context.Context, cfg connectors.RuntimeConfig, rt *Runtime) (bool, error) {
+		hookCalled = true
+		return true, nil
+	}}
+	b := Bundle{
+		Name: "crisp",
+		Metadata: Metadata{
+			Name:         "crisp",
+			Capabilities: Capabilities{Check: false},
+		},
+		HTTP: HTTPBase{URL: srv.URL, Check: &RequestSpec{Method: "GET", Path: "/status"}},
+	}
+
+	err := Check(context.Background(), b, connectors.RuntimeConfig{}, h)
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("Check error = %v, want unsupported operation", err)
+	}
+	if hits != 0 {
+		t.Fatalf("requests = %d, want 0", hits)
+	}
+	if hookCalled {
+		t.Fatal("CheckHook called for disabled check capability")
+	}
+}
+
 func TestCheckNoDeclaredCheckIsNoop(t *testing.T) {
 	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: "http://example.invalid"}}
 	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {
