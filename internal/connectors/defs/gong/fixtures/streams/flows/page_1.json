@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/flows",
+    "query": {
+      "flowOwnerEmail": "owner.fixture@example.com"
+    }
+  },
+  "read_query": {
+    "flowOwnerEmail": "owner.fixture@example.com"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "req_fixture_flows_1",
+      "flows": [
+        {
+          "id": "flow_fixture_1",
+          "name": "Fixture flow",
+          "title": "Fixture flow",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

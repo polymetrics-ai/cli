@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/mail"
 	"sort"
 	"strconv"
 	"strings"
@@ -555,9 +556,25 @@ func validateCommandConstraint(constraint connectors.CommandSurfaceConstraint, c
 	switch constraint.Kind {
 	case "order":
 		return validateOrderConstraint(constraint, cfg, inputs)
+	case "required":
+		return validateRequiredConstraint(constraint, cfg, inputs)
 	default:
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint kind %q", constraint.Kind)}
 	}
+}
+
+func validateRequiredConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
+	value, present, label, err := validationTargetValue(constraint.Left, cfg, inputs)
+	if err != nil {
+		return err
+	}
+	if present && strings.TrimSpace(value) != "" {
+		return nil
+	}
+	if strings.TrimSpace(constraint.Message) != "" {
+		return errors.New(constraint.Message)
+	}
+	return fmt.Errorf("required command input %s is missing", label)
 }
 
 func validateOrderConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
@@ -662,7 +679,12 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return err
 	}
 	switch flag.Type {
-	case "", "string", "boolean", "integer", "string_array":
+	case "", "string", "boolean", "string_array":
+		return nil
+	case "integer":
+		if _, err := strconv.Atoi(trimmed); err != nil {
+			return fmt.Errorf("invalid --%s %q, want integer", flag.Name, value)
+		}
 		return nil
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -688,6 +710,12 @@ func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error 
 	case "date-time":
 		if _, err := time.Parse(time.RFC3339, value); err != nil {
 			return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
+		}
+		return nil
+	case "email":
+		addr, err := mail.ParseAddress(value)
+		if err != nil || addr.Address != value || strings.ContainsAny(value, " \t\r\n") {
+			return fmt.Errorf("invalid --%s %q, want email address", flag.Name, value)
 		}
 		return nil
 	default:

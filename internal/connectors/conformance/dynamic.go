@@ -14,7 +14,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -160,7 +162,7 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 // from real credentials) per THREAT-MODEL §4 — conformance never touches
 // live secrets.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{}, Secrets: map[string]string{}}
+	cfg := connectors.RuntimeConfig{ProjectDir: conformanceProjectDir(), Config: map[string]string{}, Secrets: map[string]string{}}
 	if b.Spec == nil {
 		return cfg
 	}
@@ -180,6 +182,22 @@ func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
 		cfg.Config[name] = "synthetic-conformance-value"
 	}
 	return cfg
+}
+
+func conformanceProjectDir() string {
+	wd, err := os.Getwd()
+	if err != nil {
+		return "."
+	}
+	for dir := wd; ; dir = filepath.Dir(dir) {
+		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+			return dir
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "."
+		}
+	}
 }
 
 // readRequestFor builds a connectors.ReadRequest for streamName with cfg and

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/flows/folders",
+    "query": {
+      "flowFolderOwnerEmail": "owner.fixture@example.com"
+    }
+  },
+  "read_query": {
+    "flowFolderOwnerEmail": "owner.fixture@example.com"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "req_fixture_flow_folders_1",
+      "flows": [
+        {
+          "id": "flow_folder_fixture_1",
+          "name": "Fixture flow folder",
+          "title": "Fixture flow folder",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

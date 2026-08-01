@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/all-permission-profiles",
+    "query": {
+      "workspaceId": "123"
+    }
+  },
+  "read_query": {
+    "workspaceId": "123"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "requestId": "req_fixture_permission_profiles_1",
+      "profiles": [
+        {
+          "id": "profile_fixture_1",
+          "name": "Fixture permission profile",
+          "title": "Fixture permission profile",
+          "created": "2026-01-01T00:00:00Z",
+          "updated": "2026-01-02T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

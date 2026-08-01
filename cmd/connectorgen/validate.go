@@ -916,7 +916,7 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if strings.TrimSpace(flag.MapsTo) != "" {
 			mappedTargets[flag.MapsTo] = flag.Name
 		}
-		if flag.Format != "" && flag.Format != "date-time" {
+		if flag.Format != "" && flag.Format != "date-time" && flag.Format != "email" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s declares unsupported format %q", i, cmd.Path, flag.Name, flag.Format)})
 		}
 		if flag.Format != "" && flag.Type != "string" {
@@ -927,47 +927,76 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		}
 	}
 	for j, constraint := range cmd.Constraints {
-		if constraint.Kind != "order" {
+		switch constraint.Kind {
+		case "order":
+			findings = append(findings, checkCLIOrderConstraint(b, i, j, cmd.Path, constraint, mappedTargets)...)
+		case "required":
+			findings = append(findings, checkCLIRequiredConstraint(b, i, j, cmd.Path, constraint, mappedTargets)...)
+		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported kind %q", i, cmd.Path, j, constraint.Kind)})
-		}
-		if constraint.Op != "lt" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
-		}
-		if constraint.ValueType != "date-time" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
-		}
-		for _, ref := range []struct {
-			role   string
-			target string
-		}{
-			{role: "left", target: constraint.Left},
-			{role: "right", target: constraint.Right},
-		} {
-			if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
-				continue
-			}
-			if mappedTargets[ref.target] == "" {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is not mapped by a command flag", i, cmd.Path, j, ref.role, ref.target)})
-			}
-		}
-		for _, ref := range []struct {
-			role   string
-			target string
-		}{
-			{role: "left_fallback", target: constraint.LeftFallback},
-			{role: "right_fallback", target: constraint.RightFallback},
-		} {
-			if ref.target == "" {
-				continue
-			}
-			if err := validateCLIConstraintConfigFallback(ref.target); err != nil {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
-			}
 		}
 		if strings.ContainsAny(constraint.Message, "\r\n") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d message must be a single line", i, cmd.Path, j)})
 		}
+	}
+	return findings
+}
+
+func checkCLIOrderConstraint(b engine.Bundle, i, j int, commandPath string, constraint engine.CLIConstraint, mappedTargets map[string]string) []Finding {
+	var findings []Finding
+	if constraint.Op != "lt" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, commandPath, j, constraint.Op)})
+	}
+	if constraint.ValueType != "date-time" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, commandPath, j)})
+	}
+	for _, ref := range []struct {
+		role   string
+		target string
+	}{
+		{role: "left", target: constraint.Left},
+		{role: "right", target: constraint.Right},
+	} {
+		if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, commandPath, j, ref.role, ref.target, err)})
+			continue
+		}
+		if mappedTargets[ref.target] == "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is not mapped by a command flag", i, commandPath, j, ref.role, ref.target)})
+		}
+	}
+	for _, ref := range []struct {
+		role   string
+		target string
+	}{
+		{role: "left_fallback", target: constraint.LeftFallback},
+		{role: "right_fallback", target: constraint.RightFallback},
+	} {
+		if ref.target == "" {
+			continue
+		}
+		if err := validateCLIConstraintConfigFallback(ref.target); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s %q is invalid: %v", i, commandPath, j, ref.role, ref.target, err)})
+		}
+	}
+	return findings
+}
+
+func checkCLIRequiredConstraint(b engine.Bundle, i, j int, commandPath string, constraint engine.CLIConstraint, mappedTargets map[string]string) []Finding {
+	var findings []Finding
+	if constraint.Left == "" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d required target is missing", i, commandPath, j)})
+		return findings
+	}
+	if constraint.Op != "" || constraint.Right != "" || constraint.ValueType != "" || constraint.LeftFallback != "" || constraint.RightFallback != "" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d required constraint must only declare left and message", i, commandPath, j)})
+	}
+	if err := validateCLIConstraintMappedTarget(constraint.Left); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d left target %q is invalid: %v", i, commandPath, j, constraint.Left, err)})
+		return findings
+	}
+	if mappedTargets[constraint.Left] == "" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d left target %q is not mapped by a command flag", i, commandPath, j, constraint.Left)})
 	}
 	return findings
 }

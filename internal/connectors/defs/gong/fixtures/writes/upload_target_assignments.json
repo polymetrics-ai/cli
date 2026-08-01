@@ -1,0 +1,11 @@
+{
+  "record": {
+    "targetId": "12345678901234567890",
+    "workspaceId": "123",
+    "assignments_file_path": "internal/connectors/defs/gong/fixtures/files/target_assignments.csv"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/targets/12345678901234567890/assignments"
+  }
+}

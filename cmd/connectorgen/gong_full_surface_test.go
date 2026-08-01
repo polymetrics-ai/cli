@@ -34,8 +34,15 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 				Name       string `json:"name"`
 				MapsTo     string `json:"maps_to"`
 				Type       string `json:"type"`
+				Format     string `json:"format"`
 				AllowEmpty *bool  `json:"allow_empty"`
 			} `json:"flags"`
+			Constraints []struct {
+				Kind    string `json:"kind"`
+				Left    string `json:"left"`
+				Message string `json:"message"`
+			} `json:"constraints"`
+			RedactFields []string `json:"redact_fields"`
 		} `json:"commands"`
 	}](t, "../../internal/connectors/defs/gong/cli_surface.json")
 	writes := loadGongJSON[struct {
@@ -46,6 +53,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			Path         string          `json:"path"`
 			Risk         string          `json:"risk"`
 			Confirm      string          `json:"confirm"`
+			RedactFields []string        `json:"redact_fields"`
 			RecordSchema json.RawMessage `json:"record_schema"`
 		} `json:"actions"`
 	}](t, "../../internal/connectors/defs/gong/writes.json")
@@ -98,14 +106,23 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}{}
 	flagsByPath := map[string]map[string]gongCommandFlag{}
 	examplesByPath := map[string][]string{}
+	constraintsByPath := map[string]map[string]string{}
+	redactFieldsByPath := map[string][]string{}
 	for _, cmd := range cli.Commands {
 		commandsByPath[cmd.Path] = struct {
 			intent, availability, stream, write, operation, outputPolicy string
 		}{cmd.Intent, cmd.Availability, cmd.Stream, cmd.Write, cmd.Operation, cmd.OutputPolicy}
 		flagsByPath[cmd.Path] = map[string]gongCommandFlag{}
 		examplesByPath[cmd.Path] = cmd.Examples
+		constraintsByPath[cmd.Path] = map[string]string{}
+		redactFieldsByPath[cmd.Path] = append([]string(nil), cmd.RedactFields...)
 		for _, flag := range cmd.Flags {
-			flagsByPath[cmd.Path][flag.Name] = gongCommandFlag{mapsTo: flag.MapsTo, typeName: flag.Type, allowEmpty: flag.AllowEmpty}
+			flagsByPath[cmd.Path][flag.Name] = gongCommandFlag{mapsTo: flag.MapsTo, typeName: flag.Type, format: flag.Format, allowEmpty: flag.AllowEmpty}
+		}
+		for _, constraint := range cmd.Constraints {
+			if constraint.Kind == "required" {
+				constraintsByPath[cmd.Path][constraint.Left] = constraint.Message
+			}
 		}
 		if cmd.Intent == "direct_read" && cmd.Availability != "implemented" {
 			t.Fatalf("direct read command %q availability = %q, want implemented", cmd.Path, cmd.Availability)
@@ -158,13 +175,15 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 
 	writesByName := map[string]struct {
 		kind, method, path, risk, confirm string
+		redactFields                      []string
 		recordSchema                      json.RawMessage
 	}{}
 	for _, action := range writes.Actions {
 		writesByName[action.Name] = struct {
 			kind, method, path, risk, confirm string
+			redactFields                      []string
 			recordSchema                      json.RawMessage
-		}{action.Kind, action.Method, action.Path, action.Risk, action.Confirm, action.RecordSchema}
+		}{action.Kind, action.Method, action.Path, action.Risk, action.Confirm, append([]string(nil), action.RedactFields...), action.RecordSchema}
 	}
 	if got := flagsByPath["calls transcript"]["call-id"].mapsTo; got != "body.filter.callIds" {
 		t.Fatalf("calls transcript --call-id maps_to = %q, want body.filter.callIds", got)
@@ -174,6 +193,10 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 
 	minimumExampleFlags := map[string][]string{
+		"permissions profiles list":          {"workspaceId"},
+		"flows list":                         {"flowOwnerEmail"},
+		"flows folders list":                 {"flowFolderOwnerEmail"},
+		"targets list":                       {"workspaceId"},
 		"calls extensive":                    {"call-id"},
 		"calls users-access get":             {"call-id"},
 		"tasks list":                         {"status", "task-action", "task-type", "user-id"},
@@ -218,7 +241,24 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	if writesByName["upload_crm_entity_schema"].path != "/crm/entity-schema?integrationId={{ record.integrationId }}&objectType={{ record.objectType }}" {
 		t.Fatalf("upload_crm_entity_schema path = %q, want required Gong query parameters", writesByName["upload_crm_entity_schema"].path)
 	}
+	assertGongWriteRequiredFields(t, "upload_target_assignments", writesByName["upload_target_assignments"].recordSchema, "targetId", "workspaceId", "assignments_file_path")
+	assertStringSliceContains(t, writesByName["upload_target_assignments"].redactFields, "assignments_file_path")
+	assertStringSliceContains(t, writesByName["upload_target_assignments"].redactFields, "assignments_file_content")
+	assertStringSliceContains(t, redactFieldsByPath["targets upload-assignments"], "assignments_file_path")
+	assertStringSliceContains(t, redactFieldsByPath["targets upload-assignments"], "assignments_file_content")
+	if _, err := os.Stat("../../internal/connectors/defs/gong/fixtures/writes/upload_target_assignments.json"); err != nil {
+		t.Fatalf("missing upload_target_assignments write fixture: %v", err)
+	}
+	assertGongFlag(t, flagsByPath, "permissions profiles list", "workspaceId", "query.workspaceId", "integer", nil)
+	assertGongRequiredConstraint(t, constraintsByPath, "permissions profiles list", "query.workspaceId")
+	assertGongFlag(t, flagsByPath, "flows list", "flowOwnerEmail", "query.flowOwnerEmail", "string", boolPtr(false))
+	assertGongFlagFormat(t, flagsByPath, "flows list", "flowOwnerEmail", "email")
+	assertGongRequiredConstraint(t, constraintsByPath, "flows list", "query.flowOwnerEmail")
+	assertGongFlag(t, flagsByPath, "flows folders list", "flowFolderOwnerEmail", "query.flowFolderOwnerEmail", "string", boolPtr(false))
+	assertGongFlagFormat(t, flagsByPath, "flows folders list", "flowFolderOwnerEmail", "email")
+	assertGongRequiredConstraint(t, constraintsByPath, "flows folders list", "query.flowFolderOwnerEmail")
 	assertGongFlag(t, flagsByPath, "targets list", "workspaceId", "query.workspaceId", "integer", nil)
+	assertGongRequiredConstraint(t, constraintsByPath, "targets list", "query.workspaceId")
 	assertGongFlag(t, flagsByPath, "crm upload-entity-schema", "integration-id", "record.integrationId", "string", boolPtr(false))
 	assertGongFlag(t, flagsByPath, "crm upload-entity-schema", "object-type", "record.objectType", "enum", nil)
 
@@ -250,6 +290,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 type gongCommandFlag struct {
 	mapsTo     string
 	typeName   string
+	format     string
 	allowEmpty *bool
 }
 
@@ -275,6 +316,34 @@ func assertGongFlag(t *testing.T, flagsByPath map[string]map[string]gongCommandF
 	if flag.allowEmpty == nil || *flag.allowEmpty != *allowEmpty {
 		t.Fatalf("command %q flag --%s allow_empty = %v, want %t", commandPath, flagName, flag.allowEmpty, *allowEmpty)
 	}
+}
+
+func assertGongFlagFormat(t *testing.T, flagsByPath map[string]map[string]gongCommandFlag, commandPath, flagName, format string) {
+	t.Helper()
+	flag, ok := flagsByPath[commandPath][flagName]
+	if !ok {
+		t.Fatalf("command %q missing flag --%s", commandPath, flagName)
+	}
+	if flag.format != format {
+		t.Fatalf("command %q flag --%s format = %q, want %q", commandPath, flagName, flag.format, format)
+	}
+}
+
+func assertGongRequiredConstraint(t *testing.T, constraintsByPath map[string]map[string]string, commandPath, target string) {
+	t.Helper()
+	if constraintsByPath[commandPath][target] == "" {
+		t.Fatalf("command %q missing required constraint for %s", commandPath, target)
+	}
+}
+
+func assertStringSliceContains(t *testing.T, values []string, want string) {
+	t.Helper()
+	for _, value := range values {
+		if value == want {
+			return
+		}
+	}
+	t.Fatalf("values %v missing %q", values, want)
 }
 
 func boolPtr(v bool) *bool { return &v }

@@ -299,6 +299,42 @@ func TestCLICommandValidationDefinitionsGeneric(t *testing.T) {
 	}
 }
 
+func TestCLICommandRequiredConstraintRejectsMissingInput(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "widget list",
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       "widgets",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "workspaceId", Type: "integer", MapsTo: "query.workspaceId"},
+				},
+				Constraints: []connectors.CommandSurfaceConstraint{
+					{Kind: "required", Left: "query.workspaceId", Message: "--workspaceId is required"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{Path: []string{"widget", "list"}, Limit: 1}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "--workspaceId is required") {
+		t.Fatalf("Run error = %v, want required workspaceId error", err)
+	}
+
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"widget", "list"},
+		Flags: map[string][]string{"workspaceId": {"123"}},
+		Limit: 1,
+	}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run with required workspaceId: %v", err)
+	}
+	if got := connector.readReq.Query["workspaceId"]; got != "123" {
+		t.Fatalf("read query workspaceId = %q, want 123", got)
+	}
+}
+
 func TestGongCallsListDateFlagsMapToQuery(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 
@@ -483,6 +519,145 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestGongRequiredQueryCommandsRejectMissingOrInvalidFlagsBeforeHTTP(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name  string
+		path  []string
+		flags map[string][]string
+		want  string
+	}{
+		{name: "permissions profiles missing workspace", path: []string{"permissions", "profiles", "list"}, want: "--workspaceId is required"},
+		{name: "flows missing owner", path: []string{"flows", "list"}, want: "--flowOwnerEmail is required"},
+		{name: "flow folders missing owner", path: []string{"flows", "folders", "list"}, want: "--flowFolderOwnerEmail is required"},
+		{name: "targets missing workspace", path: []string{"targets", "list"}, want: "--workspaceId is required"},
+		{name: "permissions profiles invalid workspace", path: []string{"permissions", "profiles", "list"}, flags: map[string][]string{"workspaceId": {"abc"}}, want: "invalid --workspaceId"},
+		{name: "flows invalid email", path: []string{"flows", "list"}, flags: map[string][]string{"flowOwnerEmail": {"not-an-email"}}, want: "invalid --flowOwnerEmail"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			hits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				hits++
+				_ = json.NewEncoder(w).Encode(map[string]any{})
+			}))
+			defer server.Close()
+
+			_, err := Run(context.Background(), connector, Request{
+				Path:   tt.path,
+				Flags:  tt.flags,
+				Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "2"}),
+				Limit:  1,
+			}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run error = %v, want %q", err, tt.want)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
+	}
+}
+
+func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name      string
+		path      []string
+		flags     map[string][]string
+		wantPath  string
+		wantQuery map[string]string
+	}{
+		{
+			name:      "permissions profiles workspace",
+			path:      []string{"permissions", "profiles", "list"},
+			flags:     map[string][]string{"workspaceId": {"123"}},
+			wantPath:  "/v2/all-permission-profiles",
+			wantQuery: map[string]string{"workspaceId": "123"},
+		},
+		{
+			name:      "flows owner",
+			path:      []string{"flows", "list"},
+			flags:     map[string][]string{"flowOwnerEmail": {"owner.fixture@example.com"}},
+			wantPath:  "/v2/flows",
+			wantQuery: map[string]string{"flowOwnerEmail": "owner.fixture@example.com"},
+		},
+		{
+			name:      "flow folders owner",
+			path:      []string{"flows", "folders", "list"},
+			flags:     map[string][]string{"flowFolderOwnerEmail": {"owner.fixture@example.com"}},
+			wantPath:  "/v2/flows/folders",
+			wantQuery: map[string]string{"flowFolderOwnerEmail": "owner.fixture@example.com"},
+		},
+		{
+			name:      "targets workspace",
+			path:      []string{"targets", "list"},
+			flags:     map[string][]string{"workspaceId": {"123"}},
+			wantPath:  "/v2/targets",
+			wantQuery: map[string]string{"workspaceId": "123"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != tt.wantPath {
+					t.Fatalf("request path = %q, want %q", r.URL.Path, tt.wantPath)
+				}
+				query := r.URL.Query()
+				for key, want := range tt.wantQuery {
+					if got := query.Get(key); got != want {
+						t.Fatalf("query[%s] = %q, want %q (full query %v)", key, got, want, query)
+					}
+				}
+				writeGongRequiredQueryPage(w, tt.wantPath)
+			}))
+			defer server.Close()
+
+			var records []connectors.Record
+			result, err := Run(context.Background(), connector, Request{
+				Path:   tt.path,
+				Flags:  tt.flags,
+				Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "2"}),
+				Limit:  1,
+			}, func(record connectors.Record) error {
+				records = append(records, record)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if tt.wantPath == "/v2/targets" {
+				if result.DirectRead == nil {
+					t.Fatalf("targets result DirectRead = nil, want direct read result")
+				}
+				return
+			}
+			if result.Count != 1 || len(records) != 1 {
+				t.Fatalf("count/result records = %d/%d, want 1/1", result.Count, len(records))
+			}
+		})
+	}
+}
+
+func writeGongRequiredQueryPage(w http.ResponseWriter, requestPath string) {
+	var body map[string]any
+	switch requestPath {
+	case "/v2/all-permission-profiles":
+		body = map[string]any{"profiles": []map[string]any{{"id": "profile_fixture_1"}}}
+	case "/v2/flows", "/v2/flows/folders":
+		body = map[string]any{"flows": []map[string]any{{"id": "flow_fixture_1"}}}
+	case "/v2/targets":
+		body = map[string]any{"targets": []map[string]any{{"id": "target_fixture_1"}}}
+	default:
+		body = map[string]any{}
+	}
+	_ = json.NewEncoder(w).Encode(body)
 }
 
 func mergeCommandRunnerConfig(base, overrides map[string]string) map[string]string {

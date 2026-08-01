@@ -1785,7 +1785,8 @@
         "approval_mode": "typed_confirmation",
         "input_mode": "file",
         "redact_fields": [
-          "assignments_file_path"
+          "assignments_file_path",
+          "assignments_file_content"
         ]
       },
       "auth_scopes": [

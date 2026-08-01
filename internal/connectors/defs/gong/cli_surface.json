@@ -381,7 +381,24 @@
         }
       ],
       "examples": [
-        "pm gong flows list --json --limit 25"
+        "pm gong flows list --flowOwnerEmail owner.fixture@example.com --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "flowOwnerEmail",
+          "type": "string",
+          "summary": "Required Engage flow owner email for the official Gong flow list query.",
+          "maps_to": "query.flowOwnerEmail",
+          "format": "email",
+          "allow_empty": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.flowOwnerEmail",
+          "message": "--flowOwnerEmail is required for Gong flows list"
+        }
       ]
     },
     {
@@ -397,7 +414,24 @@
         }
       ],
       "examples": [
-        "pm gong flows folders list --json --limit 25"
+        "pm gong flows folders list --flowFolderOwnerEmail owner.fixture@example.com --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "flowFolderOwnerEmail",
+          "type": "string",
+          "summary": "Required Engage flow folder owner email for the official Gong flow folders query.",
+          "maps_to": "query.flowFolderOwnerEmail",
+          "format": "email",
+          "allow_empty": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.flowFolderOwnerEmail",
+          "message": "--flowFolderOwnerEmail is required for Gong flows folders list"
+        }
       ]
     },
     {
@@ -429,7 +463,22 @@
         }
       ],
       "examples": [
-        "pm gong permissions profiles list --json --limit 25"
+        "pm gong permissions profiles list --workspaceId 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "integer",
+          "summary": "Required Gong workspace identifier for the official permission profiles query.",
+          "maps_to": "query.workspaceId"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.workspaceId",
+          "message": "--workspaceId is required for Gong permissions profiles list"
+        }
       ]
     },
     {
@@ -2410,7 +2459,7 @@
         {
           "name": "workspaceId",
           "type": "integer",
-          "summary": "Workspace identifier whose target definitions should be listed.",
+          "summary": "Required workspace identifier whose target definitions should be listed.",
           "maps_to": "query.workspaceId"
         }
       ],
@@ -2425,7 +2474,14 @@
       "examples": [
         "pm gong targets list --workspaceId 123 --json --max-bytes 1048576"
       ],
-      "operation": "gong.list_target_definitions"
+      "operation": "gong.list_target_definitions",
+      "constraints": [
+        {
+          "kind": "required",
+          "left": "query.workspaceId",
+          "message": "--workspaceId is required for Gong targets list"
+        }
+      ]
     },
     {
       "path": "targets upload-assignments",
@@ -2467,6 +2523,10 @@
       ],
       "examples": [
         "pm gong targets upload-assignments --target-id 12345678901234567890 --workspace-id 123 --assignments-file-path internal/connectors/defs/gong/fixtures/files/target_assignments.csv"
+      ],
+      "redact_fields": [
+        "assignments_file_path",
+        "assignments_file_content"
       ]
     }
   ],

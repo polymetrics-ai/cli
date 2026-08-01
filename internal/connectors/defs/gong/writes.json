@@ -1814,7 +1814,11 @@
         "additionalProperties": false
       },
       "risk": "high: uploads target assignment CSV data from a bounded project-local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "redact_fields": [
+        "assignments_file_path",
+        "assignments_file_content"
+      ]
     }
   ]
 }

@@ -53,7 +53,7 @@
           "maps_to": { "type": "string" },
           "format": {
             "type": "string",
-            "enum": ["date-time"]
+            "enum": ["date-time", "email"]
           },
           "allow_empty": { "type": "boolean" }
         }
@@ -120,7 +120,7 @@
                 "maps_to": { "type": "string" },
                 "format": {
                   "type": "string",
-                  "enum": ["date-time"]
+                  "enum": ["date-time", "email"]
                 },
                 "allow_empty": { "type": "boolean" }
               }
@@ -130,12 +130,12 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["kind", "left", "right", "op"],
+              "required": ["kind", "left"],
               "additionalProperties": false,
               "properties": {
                 "kind": {
                   "type": "string",
-                  "enum": ["order"]
+                  "enum": ["order", "required"]
                 },
                 "left": { "type": "string" },
                 "right": { "type": "string" },

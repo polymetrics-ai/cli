@@ -167,6 +167,9 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	if !targetUpload.Destructive || targetUpload.SensitivePolicy == nil || targetUpload.SensitivePolicy.ApprovalMode != "typed_confirmation" {
 		t.Fatalf("target assignments destructive policy = %+v", targetUpload)
 	}
+	if !containsGongString(targetUpload.SensitivePolicy.RedactFields, "assignments_file_path") || !containsGongString(targetUpload.SensitivePolicy.RedactFields, "assignments_file_content") {
+		t.Fatalf("target assignments sensitive redaction = %+v", targetUpload.SensitivePolicy)
+	}
 }
 
 type gongSurfaceOperation struct {
@@ -194,7 +197,17 @@ type gongRESTOperation struct {
 }
 
 type gongSensitivePolicySpec struct {
-	ApprovalMode string `json:"approval_mode"`
+	ApprovalMode string   `json:"approval_mode"`
+	RedactFields []string `json:"redact_fields"`
+}
+
+func containsGongString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
 
 func gongRequiresSourceOrNotes(model string) bool {
