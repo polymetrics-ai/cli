@@ -3574,8 +3574,8 @@
       "flags": [
         {
           "name": "workflow-id",
-          "type": "integer",
-          "summary": "workflow_id path parameter",
+          "type": "string",
+          "summary": "Workflow file name or ID path parameter.",
           "maps_to": "path.workflow_id"
         }
       ],
@@ -3625,7 +3625,7 @@
       "path": "attestations view",
       "summary": "Read /repos/{owner}/{repo}/attestations/{subject_digest}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.attestations_subject_digest",
       "source_cli_path": "",
       "flags": [
@@ -3636,13 +3636,7 @@
           "maps_to": "path.subject_digest"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/attestations/{subject_digest}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Subject digests require values such as sha256:<digest>; direct reads remain planned until digest path parameter encoding is supported."
     },
     {
       "path": "autolinks create",
@@ -4871,7 +4865,7 @@
       "flags": [
         {
           "name": "sarif-id",
-          "type": "integer",
+          "type": "string",
           "summary": "sarif_id path parameter",
           "maps_to": "path.sarif_id"
         }
@@ -7596,7 +7590,7 @@
       "path": "readme view-2",
       "summary": "Read /repos/{owner}/{repo}/readme/{dir}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.readme_dir",
       "source_cli_path": "",
       "flags": [
@@ -7607,13 +7601,7 @@
           "maps_to": "path.dir"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/readme/{dir}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Directory paths may contain slashes; direct reads remain planned until nested repository path parameter encoding is supported."
     },
     {
       "path": "releases assets view",
