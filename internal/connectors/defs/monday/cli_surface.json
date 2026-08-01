@@ -1171,7 +1171,7 @@
     },
     {
       "path": "reverse add-file-to-column",
-      "summary": "Plan and execute Monday add_file_to_column",
+      "summary": "Planned/blocked Monday add_file_to_column upload",
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/assets-1",
@@ -1182,7 +1182,7 @@
     },
     {
       "path": "reverse add-file-to-update",
-      "summary": "Plan and execute Monday add_file_to_update",
+      "summary": "Planned/blocked Monday add_file_to_update upload",
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.monday.com/api-reference/reference/assets-1",

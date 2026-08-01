@@ -709,7 +709,7 @@
       "destructive": false,
       "audit_event": "monday.mutation.change_item_position",
       "graphql": {
-        "document": "mutation Monday_change_item_position($item_id: ID!, $relative_to: Int!) { change_item_position(item_id: $item_id, relative_to: $relative_to, position_relative_method: after_at) {\n  id\n  group {\n   id\n  }\n } }",
+        "document": "mutation Monday_change_item_position($item_id: ID!, $relative_to: Int!) { change_item_position(item_id: $item_id, relative_to: $relative_to, position_relative_method: after_at) {\n  id\n  group {\n   id\n  }\n } }",
         "operation_name": "Monday_change_item_position"
       }
     },
@@ -1037,7 +1037,7 @@
       "destructive": false,
       "audit_event": "monday.mutation.convert_board_to_project",
       "graphql": {
-        "document": "mutation Monday_convert_board_to_project { convert_board_to_project {\n    success\n    message\n    process_id\n    projectId\n  } }",
+        "document": "mutation Monday_convert_board_to_project { convert_board_to_project {\n    success\n    message\n    process_id\n    projectId\n  } }",
         "operation_name": "Monday_convert_board_to_project"
       }
     },
@@ -1682,7 +1682,7 @@
       "destructive": false,
       "audit_event": "monday.mutation.create_project",
       "graphql": {
-        "document": "mutation Monday_create_project { create_project {\n    success\n    message\n    process_id\n    error\n  } }",
+        "document": "mutation Monday_create_project { create_project {\n    success\n    message\n    process_id\n    error\n  } }",
         "operation_name": "Monday_create_project"
       }
     },
@@ -5432,7 +5432,7 @@
       "mutation_class": "none",
       "audit_event": "monday.graphql_query.users",
       "graphql": {
-        "document": "query Monday_users { users {\n    id\n    activity_logs(from: $from, to: $to, limit: $limit) {\n      cursor\n      logs {\n        id\n        account_id\n        user_id\n        event\n        entity\n        data\n        created_at\n      }\n    }\n  } }",
+        "document": "query Monday_users { users {\n    id\n    activity_logs(from: \"2026-01-01T00:00:00Z\", to: \"2026-01-02T00:00:00Z\", limit: 25) {\n      cursor\n      logs {\n        id\n        account_id\n        user_id\n        event\n        entity\n        data\n        created_at\n      }\n    }\n  } }",
         "operation_name": "Monday_users"
       }
     },

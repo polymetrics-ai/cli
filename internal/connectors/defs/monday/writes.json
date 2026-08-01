@@ -497,7 +497,7 @@
       "path": "",
       "body_type": "graphql",
       "graphql": {
-        "document": "mutation Monday_change_item_position($item_id: ID!, $relative_to: Int!) { change_item_position(item_id: $item_id, relative_to: $relative_to, position_relative_method: after_at) {\n  id\n  group {\n   id\n  }\n } }",
+        "document": "mutation Monday_change_item_position($item_id: ID!, $relative_to: Int!) { change_item_position(item_id: $item_id, relative_to: $relative_to, position_relative_method: after_at) {\n  id\n  group {\n   id\n  }\n } }",
         "operation_name": "Monday_change_item_position",
         "variables": {
           "item_id": "{{ record.item_id }}",
