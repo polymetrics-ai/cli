@@ -7,7 +7,7 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/v1/jobs/job_id_fixture",
+    "path": "/v1/jobs/job_id_fixture/hiring_team",
     "body": {
       "hiring_managers": [
         1234

@@ -613,21 +613,21 @@
     },
     {
       "method": "PUT",
-      "path": "/v1/jobs/{job_id}",
+      "path": "/v1/jobs/{job_id}/hiring_team",
       "covered_by": {
         "write": "replace_hiring_team"
       }
     },
     {
       "method": "POST",
-      "path": "/v1/jobs/{job_id}",
+      "path": "/v1/jobs/{job_id}/hiring_team",
       "covered_by": {
         "write": "add_hiring_team_members"
       }
     },
     {
       "method": "DELETE",
-      "path": "/v1/jobs/{job_id}",
+      "path": "/v1/jobs/{job_id}/hiring_team",
       "covered_by": {
         "write": "remove_hiring_team_member"
       }

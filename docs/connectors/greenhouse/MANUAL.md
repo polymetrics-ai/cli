@@ -356,16 +356,16 @@ REVERSE ETL ACTIONS
     endpoint: POST /v1/jobs
     risk: Greenhouse mutation: POST: Create Job.
   replace_hiring_team:
-    endpoint: PUT /v1/jobs/{{ record.job_id }}
-    required fields: job_id
+    endpoint: PUT /v1/jobs/{{ record.job_id }}/hiring_team
+    required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list
     risk: Greenhouse mutation: PUT: Replace Hiring Team.
   add_hiring_team_members:
-    endpoint: POST /v1/jobs/{{ record.job_id }}
-    required fields: job_id
+    endpoint: POST /v1/jobs/{{ record.job_id }}/hiring_team
+    required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list
     risk: Greenhouse mutation: POST: Add Hiring Team Members.
   remove_hiring_team_member:
-    endpoint: DELETE /v1/jobs/{{ record.job_id }}
-    required fields: job_id
+    endpoint: DELETE /v1/jobs/{{ record.job_id }}/hiring_team
+    required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list
     risk: Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.
   update_current_offer:
     endpoint: PATCH /v1/applications/{{ record.application_id }}/offers/current_offer
@@ -426,7 +426,7 @@ REVERSE ETL ACTIONS
   destroy_openings:
     endpoint: DELETE /v2/jobs/{{ record.job_id }}/openings
     required fields: job_id, ids
-    risk: Destructive Greenhouse mutation: DELETE: Destroy Openings (v2). Deletes only closed, unfilled openings allowed by Greenhouse validations; response may include IDs that could not be deleted.
+    risk: Destructive Greenhouse mutation: DELETE: Destroy Openings (v2). Deletes only closed, unfilled openings allowed by Greenhouse validations; fails if Greenhouse returns any IDs in not_deleted.
   create_scheduled_interview:
     endpoint: POST /v2/scheduled_interviews
     required fields: application_id, interview_id, interviewers, start, end, external_event_id

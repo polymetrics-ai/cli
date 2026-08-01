@@ -38,6 +38,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/hooks/google-forms"
 	_ "polymetrics.ai/internal/connectors/hooks/google-pagespeed-insights"
 	_ "polymetrics.ai/internal/connectors/hooks/google-search-console"
+	_ "polymetrics.ai/internal/connectors/hooks/greenhouse"
 	_ "polymetrics.ai/internal/connectors/hooks/hoorayhr"
 	_ "polymetrics.ai/internal/connectors/hooks/jamf-pro"
 	_ "polymetrics.ai/internal/connectors/hooks/keka"
