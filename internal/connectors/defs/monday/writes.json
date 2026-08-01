@@ -1131,7 +1131,7 @@
     },
     {
       "name": "create_doc_block",
-      "kind": "delete",
+      "kind": "create",
       "method": "POST",
       "path": "",
       "body_type": "graphql",
@@ -1167,8 +1167,7 @@
         ],
         "additionalProperties": false
       },
-      "risk": "critical: runs Monday mutation create_doc_block; reverse ETL approval required",
-      "confirm": "destructive"
+      "risk": "high: runs Monday mutation create_doc_block; reverse ETL approval required"
     },
     {
       "name": "create_folder",
@@ -1444,6 +1443,9 @@
       "kind": "create",
       "method": "POST",
       "path": "",
+      "redact_fields": [
+        "callback_url"
+      ],
       "body_type": "graphql",
       "graphql": {
         "document": "mutation Monday_create_portfolio($boardName: String!, $boardPrivacy: String!, $destinationWorkspaceId: ID!, $callback_url: String!) { create_portfolio(boardName: $boardName, boardPrivacy: $boardPrivacy, destinationWorkspaceId: $destinationWorkspaceId, callback_url: $callback_url) {\n    success\n    message\n    process_id\n  } }",
@@ -1559,6 +1561,9 @@
       "kind": "create",
       "method": "POST",
       "path": "",
+      "redact_fields": [
+        "url"
+      ],
       "body_type": "graphql",
       "graphql": {
         "document": "mutation Monday_create_webhook($board_id: ID!, $url: String!, $config: String!) { create_webhook(board_id: $board_id, url: $url, event: change_status_column_value, config: $config) {\n    id\n    board_id\n  } }",
@@ -1641,6 +1646,9 @@
       "kind": "delete",
       "method": "POST",
       "path": "",
+      "redact_fields": [
+        "formToken"
+      ],
       "body_type": "graphql",
       "graphql": {
         "document": "mutation Monday_deactivate_form($formToken: String!) { deactivate_form(formToken: $formToken) }",
@@ -2222,6 +2230,9 @@
       "kind": "delete",
       "method": "POST",
       "path": "",
+      "redact_fields": [
+        "formToken"
+      ],
       "body_type": "graphql",
       "graphql": {
         "document": "mutation Monday_delete_question($formToken: String!, $questionId: String!) { delete_question(formToken: $formToken, questionId: $questionId) }",
@@ -2921,6 +2932,9 @@
       "kind": "delete",
       "method": "POST",
       "path": "",
+      "redact_fields": [
+        "partial_signing_secret"
+      ],
       "body_type": "graphql",
       "graphql": {
         "document": "mutation Monday_remove_mock_app_subscription($app_id: ID!, $partial_signing_secret: String!) { remove_mock_app_subscription(app_id: $app_id, partial_signing_secret: $partial_signing_secret) {\n    billing_period\n    days_left\n    is_trial\n  } }",
@@ -3054,6 +3068,9 @@
       "kind": "update",
       "method": "POST",
       "path": "",
+      "redact_fields": [
+        "partial_signing_secret"
+      ],
       "body_type": "graphql",
       "graphql": {
         "document": "mutation Monday_set_mock_app_subscription($app_id: ID!, $partial_signing_secret: String!, $is_trial: Boolean!, $plan_id: String!, $max_units: Int!) { set_mock_app_subscription(app_id: $app_id, partial_signing_secret: $partial_signing_secret, is_trial: $is_trial, plan_id: $plan_id, max_units: $max_units) {\n    plan_id\n  } }",
@@ -3376,7 +3393,7 @@
     },
     {
       "name": "update_doc_block",
-      "kind": "delete",
+      "kind": "update",
       "method": "POST",
       "path": "",
       "body_type": "graphql",
@@ -3406,8 +3423,7 @@
         ],
         "additionalProperties": false
       },
-      "risk": "critical: runs Monday mutation update_doc_block; reverse ETL approval required",
-      "confirm": "destructive"
+      "risk": "high: runs Monday mutation update_doc_block; reverse ETL approval required"
     },
     {
       "name": "update_doc_name",

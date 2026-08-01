@@ -83563,11 +83563,10 @@
       },
       {
         "name": "create_doc_block",
-        "kind": "delete",
+        "kind": "create",
         "method": "POST",
         "path": "",
-        "risk": "critical: runs Monday mutation create_doc_block; reverse ETL approval required",
-        "confirm": "destructive"
+        "risk": "high: runs Monday mutation create_doc_block; reverse ETL approval required"
       },
       {
         "name": "create_folder",
@@ -84059,11 +84058,10 @@
       },
       {
         "name": "update_doc_block",
-        "kind": "delete",
+        "kind": "update",
         "method": "POST",
         "path": "",
-        "risk": "critical: runs Monday mutation update_doc_block; reverse ETL approval required",
-        "confirm": "destructive"
+        "risk": "high: runs Monday mutation update_doc_block; reverse ETL approval required"
       },
       {
         "name": "update_doc_name",

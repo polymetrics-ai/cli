@@ -2269,8 +2269,8 @@
           "allow_empty": false
         }
       ],
-      "risk": "critical: runs Monday mutation create_doc_block; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
+      "risk": "high: runs Monday mutation create_doc_block; reverse ETL approval required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Fixed GraphQL mutation document for create_doc_block; no raw query text is accepted."
     },
     {
@@ -2609,44 +2609,14 @@
     },
     {
       "path": "reverse create-portfolio",
-      "summary": "Plan and execute Monday create_portfolio",
+      "summary": "Planned Monday create_portfolio mutation",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_portfolio",
+      "availability": "planned",
+      "operation": "monday.mutation.create_portfolio",
       "source_url": "https://developer.monday.com/api-reference/reference/portfolio",
-      "flags": [
-        {
-          "name": "boardname",
-          "type": "string",
-          "summary": "boardName argument",
-          "maps_to": "record.boardName",
-          "allow_empty": false
-        },
-        {
-          "name": "boardprivacy",
-          "type": "string",
-          "summary": "boardPrivacy argument",
-          "maps_to": "record.boardPrivacy",
-          "allow_empty": false
-        },
-        {
-          "name": "destinationworkspaceid",
-          "type": "string",
-          "summary": "destinationWorkspaceId argument",
-          "maps_to": "record.destinationWorkspaceId",
-          "allow_empty": false
-        },
-        {
-          "name": "callback-url",
-          "type": "string",
-          "summary": "callback_url argument",
-          "maps_to": "record.callback_url",
-          "allow_empty": false
-        }
-      ],
-      "risk": "high: runs Monday mutation create_portfolio; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
-      "notes": "Fixed GraphQL mutation document for create_portfolio; no raw query text is accepted."
+      "risk": "planned high mutation",
+      "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+      "notes": "Planned/blocked because redacted callback URL must not be exposed as a persistent CLI flag."
     },
     {
       "path": "reverse create-project",
@@ -2792,37 +2762,14 @@
     },
     {
       "path": "reverse create-webhook",
-      "summary": "Plan and execute Monday create_webhook",
+      "summary": "Planned Monday create_webhook mutation",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_webhook",
+      "availability": "planned",
+      "operation": "monday.mutation.create_webhook",
       "source_url": "https://developer.monday.com/api-reference/reference/webhooks",
-      "flags": [
-        {
-          "name": "board-id",
-          "type": "string",
-          "summary": "board_id argument",
-          "maps_to": "record.board_id",
-          "allow_empty": false
-        },
-        {
-          "name": "url",
-          "type": "string",
-          "summary": "url argument",
-          "maps_to": "record.url",
-          "allow_empty": false
-        },
-        {
-          "name": "config",
-          "type": "string",
-          "summary": "config argument",
-          "maps_to": "record.config",
-          "allow_empty": false
-        }
-      ],
-      "risk": "high: runs Monday mutation create_webhook; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
-      "notes": "Fixed GraphQL mutation document for create_webhook; no raw query text is accepted."
+      "risk": "planned high mutation",
+      "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+      "notes": "Planned/blocked because redacted webhook URL must not be exposed as a persistent CLI flag."
     },
     {
       "path": "reverse create-widget",
@@ -2871,23 +2818,14 @@
     },
     {
       "path": "reverse deactivate-form",
-      "summary": "Plan and execute Monday deactivate_form",
+      "summary": "Planned Monday deactivate_form mutation",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "deactivate_form",
+      "availability": "planned",
+      "operation": "monday.mutation.deactivate_form",
       "source_url": "https://developer.monday.com/api-reference/reference/form",
-      "flags": [
-        {
-          "name": "formtoken",
-          "type": "string",
-          "summary": "formToken argument",
-          "maps_to": "record.formToken",
-          "allow_empty": false
-        }
-      ],
-      "risk": "critical: runs Monday mutation deactivate_form; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
-      "notes": "Fixed GraphQL mutation document for deactivate_form; no raw query text is accepted."
+      "risk": "planned critical mutation",
+      "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+      "notes": "Planned/blocked because redacted form token must not be exposed as a persistent CLI flag."
     },
     {
       "path": "reverse deactivate-managed-column",
@@ -3330,30 +3268,14 @@
     },
     {
       "path": "reverse delete-question",
-      "summary": "Plan and execute Monday delete_question",
+      "summary": "Planned Monday delete_question mutation",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_question",
+      "availability": "planned",
+      "operation": "monday.mutation.delete_question",
       "source_url": "https://developer.monday.com/api-reference/reference/form",
-      "flags": [
-        {
-          "name": "formtoken",
-          "type": "string",
-          "summary": "formToken argument",
-          "maps_to": "record.formToken",
-          "allow_empty": false
-        },
-        {
-          "name": "questionid",
-          "type": "string",
-          "summary": "questionId argument",
-          "maps_to": "record.questionId",
-          "allow_empty": false
-        }
-      ],
-      "risk": "critical: runs Monday mutation delete_question; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
-      "notes": "Fixed GraphQL mutation document for delete_question; no raw query text is accepted."
+      "risk": "planned critical mutation",
+      "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+      "notes": "Planned/blocked because redacted form token must not be exposed as a persistent CLI flag."
     },
     {
       "path": "reverse delete-subscribers-from-board",
@@ -3973,30 +3895,14 @@
     },
     {
       "path": "reverse remove-mock-app-subscription",
-      "summary": "Plan and execute Monday remove_mock_app_subscription",
+      "summary": "Planned Monday remove_mock_app_subscription mutation",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "remove_mock_app_subscription",
+      "availability": "planned",
+      "operation": "monday.mutation.remove_mock_app_subscription",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscription",
-      "flags": [
-        {
-          "name": "app-id",
-          "type": "string",
-          "summary": "app_id argument",
-          "maps_to": "record.app_id",
-          "allow_empty": false
-        },
-        {
-          "name": "partial-signing-secret",
-          "type": "string",
-          "summary": "partial_signing_secret argument",
-          "maps_to": "record.partial_signing_secret",
-          "allow_empty": false
-        }
-      ],
-      "risk": "critical: runs Monday mutation remove_mock_app_subscription; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
-      "notes": "Fixed GraphQL mutation document for remove_mock_app_subscription; no raw query text is accepted."
+      "risk": "planned critical mutation",
+      "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+      "notes": "Planned/blocked because redacted partial signing secret must not be exposed as a persistent CLI flag."
     },
     {
       "path": "reverse remove-required-column",
@@ -4118,49 +4024,14 @@
     },
     {
       "path": "reverse set-mock-app-subscription",
-      "summary": "Plan and execute Monday set_mock_app_subscription",
+      "summary": "Planned Monday set_mock_app_subscription mutation",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_mock_app_subscription",
+      "availability": "planned",
+      "operation": "monday.mutation.set_mock_app_subscription",
       "source_url": "https://developer.monday.com/api-reference/reference/app-subscription",
-      "flags": [
-        {
-          "name": "app-id",
-          "type": "string",
-          "summary": "app_id argument",
-          "maps_to": "record.app_id",
-          "allow_empty": false
-        },
-        {
-          "name": "partial-signing-secret",
-          "type": "string",
-          "summary": "partial_signing_secret argument",
-          "maps_to": "record.partial_signing_secret",
-          "allow_empty": false
-        },
-        {
-          "name": "is-trial",
-          "type": "boolean",
-          "summary": "is_trial argument",
-          "maps_to": "record.is_trial"
-        },
-        {
-          "name": "plan-id",
-          "type": "string",
-          "summary": "plan_id argument",
-          "maps_to": "record.plan_id",
-          "allow_empty": false
-        },
-        {
-          "name": "max-units",
-          "type": "integer",
-          "summary": "max_units argument",
-          "maps_to": "record.max_units"
-        }
-      ],
-      "risk": "high: runs Monday mutation set_mock_app_subscription; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
-      "notes": "Fixed GraphQL mutation document for set_mock_app_subscription; no raw query text is accepted."
+      "risk": "planned high mutation",
+      "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+      "notes": "Planned/blocked because redacted partial signing secret must not be exposed as a persistent CLI flag."
     },
     {
       "path": "reverse set-object-schema-column-active-state",
@@ -4489,8 +4360,8 @@
           "allow_empty": false
         }
       ],
-      "risk": "critical: runs Monday mutation update_doc_block; reverse ETL approval required",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; type destructive to confirm",
+      "risk": "high: runs Monday mutation update_doc_block; reverse ETL approval required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Fixed GraphQL mutation document for update_doc_block; no raw query text is accepted."
     },
     {

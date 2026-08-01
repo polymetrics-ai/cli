@@ -1248,21 +1248,14 @@
       "summary": "Run Monday GraphQL mutation create_doc_block",
       "description": "Monday GraphQL mutation sourced from official docs. Executable through a named reverse-ETL write action with typed scalar variables.",
       "source_url": "https://developer.monday.com/api-reference/reference/blocks",
-      "risk": "critical",
+      "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute; destructive/admin actions require typed confirmation",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "monday.com API token or OAuth scope allowed to run this mutation"
       ],
-      "mutation_class": "delete",
-      "destructive": true,
-      "sensitive_policy": {
-        "input_mode": "stdin",
-        "redact_fields": [],
-        "preflight": "scope and target-resource availability check without reading secrets",
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "create",
+      "destructive": false,
       "audit_event": "monday.mutation.create_doc_block",
       "graphql": {
         "document": "mutation Monday_create_doc_block($doc_id: ID!, $after_block_id: String!, $content: String!) { create_doc_block(type: normal_text, doc_id: $doc_id, after_block_id: $after_block_id, content: $content) {\n    id\n  } }",
@@ -3937,21 +3930,14 @@
       "summary": "Run Monday GraphQL mutation update_doc_block",
       "description": "Monday GraphQL mutation sourced from official docs. Executable through a named reverse-ETL write action with typed scalar variables.",
       "source_url": "https://developer.monday.com/api-reference/reference/blocks",
-      "risk": "critical",
+      "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute; destructive/admin actions require typed confirmation",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "monday.com API token or OAuth scope allowed to run this mutation"
       ],
-      "mutation_class": "delete",
-      "destructive": true,
-      "sensitive_policy": {
-        "input_mode": "stdin",
-        "redact_fields": [],
-        "preflight": "scope and target-resource availability check without reading secrets",
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
+      "destructive": false,
       "audit_event": "monday.mutation.update_doc_block",
       "graphql": {
         "document": "mutation Monday_update_doc_block($block_id: String!, $content: String!) { update_doc_block(block_id: $block_id, content: $content) {\n    id\n  } }",

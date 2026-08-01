@@ -118,22 +118,29 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 		t.Fatalf("blocked operation rows = %d, want 147", blocked)
 	}
 
+	type mondaySensitivePolicy struct {
+		InputMode    string   `json:"input_mode"`
+		RedactFields []string `json:"redact_fields"`
+	}
+	type mondayOperation struct {
+		ID              string                 `json:"id"`
+		Kind            string                 `json:"kind"`
+		Description     string                 `json:"description"`
+		Approval        string                 `json:"approval"`
+		Risk            string                 `json:"risk"`
+		MutationClass   string                 `json:"mutation_class"`
+		Destructive     bool                   `json:"destructive"`
+		SensitivePolicy *mondaySensitivePolicy `json:"sensitive_policy"`
+		REST            *struct {
+			Path string `json:"path"`
+		} `json:"rest"`
+		GraphQL *struct {
+			Document      string `json:"document"`
+			OperationName string `json:"operation_name"`
+		} `json:"graphql"`
+	}
 	var operations struct {
-		Operations []struct {
-			ID            string `json:"id"`
-			Kind          string `json:"kind"`
-			Description   string `json:"description"`
-			Approval      string `json:"approval"`
-			MutationClass string `json:"mutation_class"`
-			Destructive   bool   `json:"destructive"`
-			REST          *struct {
-				Path string `json:"path"`
-			} `json:"rest"`
-			GraphQL *struct {
-				Document      string `json:"document"`
-				OperationName string `json:"operation_name"`
-			} `json:"graphql"`
-		} `json:"operations"`
+		Operations []mondayOperation `json:"operations"`
 	}
 	readJSONFile(t, filepath.Join(root, "operations.json"), &operations)
 	if len(operations.Operations) != 254 {
@@ -141,8 +148,20 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	}
 	counts := map[string]int{}
 	fileUploadOps := map[string]bool{}
+	operationByID := map[string]mondayOperation{}
+	sensitiveWriteRedactions := map[string][]string{}
 	for _, op := range operations.Operations {
 		counts[op.Kind]++
+		operationByID[op.ID] = op
+		if op.SensitivePolicy != nil && len(op.SensitivePolicy.RedactFields) > 0 {
+			if op.SensitivePolicy.InputMode != "stdin" {
+				t.Fatalf("sensitive operation %q input_mode = %q, want stdin", op.ID, op.SensitivePolicy.InputMode)
+			}
+			writeName := strings.TrimPrefix(op.ID, "monday.mutation.")
+			if coveredWrites[writeName] {
+				sensitiveWriteRedactions[writeName] = append([]string(nil), op.SensitivePolicy.RedactFields...)
+			}
+		}
 		if op.ID == "monday.mutation.add_file_to_column" || op.ID == "monday.mutation.add_file_to_update" {
 			fileUploadOps[op.ID] = true
 			if !strings.Contains(op.Description, "multipart/binary GraphQL upload handling") || !strings.Contains(op.Description, "planned/blocked") {
@@ -181,22 +200,49 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 			t.Fatalf("file upload operation %q missing from operation ledger", id)
 		}
 	}
+	for _, tt := range []struct {
+		id            string
+		mutationClass string
+	}{
+		{id: "monday.mutation.create_doc_block", mutationClass: "create"},
+		{id: "monday.mutation.update_doc_block", mutationClass: "update"},
+	} {
+		op, ok := operationByID[tt.id]
+		if !ok {
+			t.Fatalf("operation %q missing from operation ledger", tt.id)
+		}
+		if op.MutationClass != tt.mutationClass {
+			t.Fatalf("operation %q mutation_class = %q, want %q", tt.id, op.MutationClass, tt.mutationClass)
+		}
+		if op.Destructive {
+			t.Fatalf("operation %q is destructive, want false", tt.id)
+		}
+		if op.SensitivePolicy != nil {
+			t.Fatalf("operation %q has destructive sensitive_policy, want none", tt.id)
+		}
+	}
 
+	type mondayWriteAction struct {
+		Name         string   `json:"name"`
+		Kind         string   `json:"kind"`
+		Risk         string   `json:"risk"`
+		Confirm      string   `json:"confirm"`
+		RedactFields []string `json:"redact_fields"`
+		GraphQL      *struct {
+			Document string `json:"document"`
+		} `json:"graphql"`
+	}
 	var writes struct {
-		Actions []struct {
-			Name    string `json:"name"`
-			Confirm string `json:"confirm"`
-			GraphQL *struct {
-				Document string `json:"document"`
-			} `json:"graphql"`
-		} `json:"actions"`
+		Actions []mondayWriteAction `json:"actions"`
 	}
 	readJSONFile(t, filepath.Join(root, "writes.json"), &writes)
 	if len(writes.Actions) == 0 {
 		t.Fatal("writes.json has zero actions")
 	}
 	var sawDeleteBoard bool
+	writeActionByName := map[string]mondayWriteAction{}
 	for _, action := range writes.Actions {
+		writeActionByName[action.Name] = action
 		if strings.Contains(action.Name, "add_file_to_") {
 			t.Fatalf("binary upload action %q must remain planned/blocked, not executable in writes.json", action.Name)
 		}
@@ -216,26 +262,73 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	if !sawDeleteBoard {
 		t.Fatal("delete_board write action missing")
 	}
+	for _, tt := range []struct {
+		name string
+		kind string
+	}{
+		{name: "create_doc_block", kind: "create"},
+		{name: "update_doc_block", kind: "update"},
+	} {
+		action, ok := writeActionByName[tt.name]
+		if !ok {
+			t.Fatalf("write action %q missing", tt.name)
+		}
+		if action.Kind != tt.kind {
+			t.Fatalf("write action %q kind = %q, want %q", tt.name, action.Kind, tt.kind)
+		}
+		if action.Confirm != "" {
+			t.Fatalf("write action %q confirm = %q, want empty", tt.name, action.Confirm)
+		}
+		if strings.Contains(action.Risk, "critical") {
+			t.Fatalf("write action %q risk = %q, want non-critical", tt.name, action.Risk)
+		}
+	}
+	for writeName, fields := range sensitiveWriteRedactions {
+		action, ok := writeActionByName[writeName]
+		if !ok {
+			t.Fatalf("sensitive write action %q missing", writeName)
+		}
+		for _, field := range fields {
+			var found bool
+			for _, redacted := range action.RedactFields {
+				if redacted == field {
+					found = true
+					break
+				}
+			}
+			if !found {
+				t.Fatalf("write action %q redact_fields = %v, want %q", writeName, action.RedactFields, field)
+			}
+		}
+	}
 
+	type mondayCLIFlag struct {
+		Name   string `json:"name"`
+		MapsTo string `json:"maps_to"`
+	}
+	type mondayCLICommand struct {
+		Path         string          `json:"path"`
+		Intent       string          `json:"intent"`
+		Availability string          `json:"availability"`
+		Write        string          `json:"write"`
+		Operation    string          `json:"operation"`
+		Notes        string          `json:"notes"`
+		Flags        []mondayCLIFlag `json:"flags"`
+		APISurface   []struct {
+			Path string `json:"path"`
+		} `json:"api_surface"`
+	}
 	var cli struct {
-		Commands []struct {
-			Path         string `json:"path"`
-			Intent       string `json:"intent"`
-			Availability string `json:"availability"`
-			Write        string `json:"write"`
-			Operation    string `json:"operation"`
-			Notes        string `json:"notes"`
-			APISurface   []struct {
-				Path string `json:"path"`
-			} `json:"api_surface"`
-		} `json:"commands"`
+		Commands []mondayCLICommand `json:"commands"`
 	}
 	readJSONFile(t, filepath.Join(root, "cli_surface.json"), &cli)
 	var sawDeleteCommand bool
 	var sawPlannedAccountQuery bool
 	implementedDirectReads := 0
 	plannedQueryCommands := 0
+	cliCommandByPath := map[string]mondayCLICommand{}
 	for _, cmd := range cli.Commands {
+		cliCommandByPath[cmd.Path] = cmd
 		for _, ep := range cmd.APISurface {
 			if ep.Path != "/" {
 				t.Fatalf("cli command %q api_surface path = %q, want real Monday GraphQL endpoint /", cmd.Path, ep.Path)
@@ -255,8 +348,28 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 				sawPlannedAccountQuery = true
 			}
 		}
+		if cmd.Availability == "implemented" && cmd.Write != "" && len(sensitiveWriteRedactions[cmd.Write]) > 0 {
+			t.Fatalf("implemented CLI command %q exposes sensitive write %q", cmd.Path, cmd.Write)
+		}
 		if cmd.Path == "reverse delete-board" && cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write == "delete_board" {
 			sawDeleteCommand = true
+		}
+	}
+	for writeName, fields := range sensitiveWriteRedactions {
+		path := "reverse " + strings.ReplaceAll(writeName, "_", "-")
+		cmd, ok := cliCommandByPath[path]
+		if !ok {
+			t.Fatalf("CLI command %q missing", path)
+		}
+		if cmd.Availability != "planned" || cmd.Operation != "monday.mutation."+writeName || cmd.Write != "" {
+			t.Fatalf("CLI command %q availability/write/operation = %q/%q/%q, want planned operation-only", path, cmd.Availability, cmd.Write, cmd.Operation)
+		}
+		for _, flag := range cmd.Flags {
+			for _, field := range fields {
+				if flag.MapsTo == "record."+field {
+					t.Fatalf("planned CLI command %q still exposes sensitive flag %q", path, flag.Name)
+				}
+			}
 		}
 	}
 	if implementedDirectReads != 0 {
