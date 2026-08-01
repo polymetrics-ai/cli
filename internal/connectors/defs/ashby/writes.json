@@ -3160,7 +3160,12 @@
                 ]
               },
               "value": {
-                "type": "boolean"
+                "type": [
+                  "boolean",
+                  "number",
+                  "string"
+                ],
+                "description": "The assessment data value, whose type depends on the type field"
               },
               "isInternal": {
                 "type": "boolean"
@@ -3202,7 +3207,12 @@
                 ]
               },
               "value": {
-                "type": "boolean"
+                "type": [
+                  "boolean",
+                  "number",
+                  "string"
+                ],
+                "description": "The assessment data value, whose type depends on the type field"
               },
               "isInternal": {
                 "type": "boolean"
@@ -3244,7 +3254,12 @@
                 ]
               },
               "value": {
-                "type": "boolean"
+                "type": [
+                  "boolean",
+                  "number",
+                  "string"
+                ],
+                "description": "The assessment data value, whose type depends on the type field"
               },
               "isInternal": {
                 "type": "boolean"
@@ -3286,7 +3301,12 @@
                 ]
               },
               "value": {
-                "type": "boolean"
+                "type": [
+                  "boolean",
+                  "number",
+                  "string"
+                ],
+                "description": "The assessment data value, whose type depends on the type field"
               },
               "isInternal": {
                 "type": "boolean"
@@ -3330,7 +3350,12 @@
                   ]
                 },
                 "value": {
-                  "type": "boolean"
+                  "type": [
+                    "boolean",
+                    "number",
+                    "string"
+                  ],
+                  "description": "The assessment data value, whose type depends on the type field"
                 },
                 "isInternal": {
                   "type": "boolean"
@@ -3417,7 +3442,12 @@
                     ]
                   },
                   "value": {
-                    "type": "boolean"
+                    "type": [
+                      "boolean",
+                      "number",
+                      "string"
+                    ],
+                    "description": "The assessment data value, whose type depends on the type field"
                   },
                   "isInternal": {
                     "type": "boolean"
@@ -3462,7 +3492,12 @@
                       ]
                     },
                     "value": {
-                      "type": "boolean"
+                      "type": [
+                        "boolean",
+                        "number",
+                        "string"
+                      ],
+                      "description": "The assessment data value, whose type depends on the type field"
                     },
                     "isInternal": {
                       "type": "boolean"
@@ -4244,7 +4279,8 @@
       },
       "risk": "Executes Ashby webhook.create through the documented POST /webhook.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "redact_fields": [
-        "requestUrl"
+        "requestUrl",
+        "secretToken"
       ]
     },
     {
@@ -4280,7 +4316,8 @@
       "risk": "Executes Ashby webhook.update through the documented POST /webhook.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "redact_fields": [
         "webhookId",
-        "requestUrl"
+        "requestUrl",
+        "secretToken"
       ]
     },
     {

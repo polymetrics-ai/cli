@@ -27,6 +27,5 @@
   },
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "candidateId"
+  ]
 }

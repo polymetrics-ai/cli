@@ -19,7 +19,7 @@ CDC_STREAM_SUMMARIES = {"auditLog.list","application.listHistory"}
 CDC_WRITE_SUMMARIES = {"application.updateHistory"}
 PAGINATION_FIELDS = {"cursor","limit","syncToken"}
 DESTRUCTIVE_WORDS = ("delete","remove","archive","cancel","reject","close","disable","restore")
-REDACT_MARKERS = ("id","email","file","resume","handle","url","name")
+REDACT_MARKERS = ("id","email","file","resume","handle","url","name","secret")
 
 
 def fetch_schema():
@@ -81,13 +81,39 @@ def json_type(schema: dict[str, Any], node: Any) -> list[str]:
     if "enum" in node: return ["string"]
     return []
 
+def scalar_union_types(schema: dict[str, Any], node: Any) -> list[str]:
+    node = resolve(schema, node)
+    if not isinstance(node, dict): return []
+    variants = None
+    for key in ("oneOf", "anyOf"):
+        if isinstance(node.get(key), list) and node[key]:
+            variants = node[key]
+            break
+    if not variants: return []
+    out: list[str] = []
+    for variant in variants:
+        resolved = resolve(schema, variant)
+        if not isinstance(resolved, dict): return []
+        if "properties" in resolved or "items" in resolved or "additionalProperties" in resolved: return []
+        types = json_type(schema, resolved)
+        if not types: return []
+        for typ in types:
+            if typ not in out: out.append(typ)
+    return out
+
 def to_draft_schema(schema: dict[str, Any], node: Any, *, close_object: bool=False, depth: int=0) -> dict[str, Any]:
+    source = resolve(schema, node)
+    union_types = scalar_union_types(schema, source)
     node = choose_variant(schema, node)
     if not isinstance(node, dict): return {}
     out: dict[str, Any] = {}
-    types = json_type(schema, node)
-    if types: out["type"] = types[0] if len(types)==1 else types
-    if isinstance(node.get("description"), str): out["description"] = node["description"][:500]
+    if union_types:
+        out["type"] = union_types[0] if len(union_types)==1 else union_types
+    else:
+        types = json_type(schema, node)
+        if types: out["type"] = types[0] if len(types)==1 else types
+    if isinstance(source, dict) and isinstance(source.get("description"), str): out["description"] = source["description"][:500]
+    elif isinstance(node.get("description"), str): out["description"] = node["description"][:500]
     if node.get("format") in {"date-time","date","uri","email"}: out["format"] = node["format"]
     if isinstance(node.get("enum"), list) and len(node["enum"]) <= 100: out["enum"] = node["enum"]
     props = node.get("properties") if isinstance(node.get("properties"), dict) else None
@@ -141,12 +167,31 @@ def choose_pk(props):
     for n in props:
         if n.endswith("Id") or n.endswith("ID") or n.lower()=="email": return n
     return next(iter(props), "_ashby_row_id")
+
+def name_words(name: str) -> list[str]:
+    return [w.lower() for w in re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|\d+", name.replace("_", " ").replace("-", " "))]
+
+def is_time_like_name(name: str) -> bool:
+    lower = name.lower()
+    if lower in {"date", "timestamp"}: return True
+    words = name_words(name)
+    if not words: return False
+    if words[-1] in {"date", "time", "timestamp", "after", "before"}: return True
+    return words[-1] == "at" and len(words) > 1
+
+def cursor_field_supported(name: str, prop_schema: dict[str, Any]) -> bool:
+    typ = prop_schema.get("type") if isinstance(prop_schema, dict) else None
+    types = {typ} if isinstance(typ, str) else set(typ or []) if isinstance(typ, list) else set()
+    types.discard("null")
+    if types and types <= {"object", "array"}: return False
+    if isinstance(prop_schema, dict) and prop_schema.get("format") in {"date-time", "date"}: return True
+    return is_time_like_name(name)
+
 def choose_cursor(props):
     for n in ("updatedAt","createdAt","submittedAt","completedAt","sentAt","date","timestamp"):
-        if n in props: return n
-    for n in props:
-        lo=n.lower()
-        if lo.endswith("at") or "date" in lo or "time" in lo: return n
+        if n in props and cursor_field_supported(n, props[n]): return n
+    for n, prop_schema in props.items():
+        if cursor_field_supported(n, prop_schema): return n
     return None
 
 def result_record_schema(schema, stream_name, op):
@@ -163,8 +208,15 @@ def cli_flag_type(prop_schema):
     typ = prop_schema.get("type")
     types = typ if isinstance(typ, list) else [typ]
     types = [t for t in types if t != "null"]
+    type_set = set(types)
     if prop_schema.get("enum"):
         return "enum"
+    if len(type_set) > 1:
+        if type_set <= {"string", "number", "integer", "boolean"} and "string" in type_set:
+            return "string"
+        if type_set <= {"integer", "number"}:
+            return "integer"
+        return None
     if "boolean" in types:
         return "boolean"
     if "integer" in types or "number" in types:
@@ -188,7 +240,7 @@ def field_flag(name, maps_to, prop_schema):
     flag={"name":flag_name,"type":ftype,"maps_to":maps_to}
     if prop_schema.get("description"): flag["summary"] = str(prop_schema["description"])[:180]
     if flag["type"] == "enum" and isinstance(prop_schema.get("enum"), list): flag["values"] = [str(v) for v in prop_schema["enum"] if v is not None][:50]
-    if flag["type"] == "string" and ("date" in name.lower() or name.lower().endswith("at") or name.lower().endswith("after") or name.lower().endswith("before")): flag["format"]="date-time"
+    if flag["type"] == "string" and is_time_like_name(name): flag["format"]="date-time"
     if flag["type"] == "string": flag["allow_empty"] = False
     return flag
 
