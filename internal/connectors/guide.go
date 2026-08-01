@@ -180,6 +180,9 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Write != "" {
 		meta = append(meta, "write="+cmd.Write)
 	}
+	if cmd.Operation != "" {
+		meta = append(meta, "operation="+cmd.Operation)
+	}
 	if cmd.Availability == "unsupported_local" || cmd.Intent == "local_workflow" {
 		meta = append(meta, "unsupported local workflow")
 	}
