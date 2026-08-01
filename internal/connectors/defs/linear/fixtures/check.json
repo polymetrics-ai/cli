@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "",
+    "query": {
+      "query": "query LinearCredentialCheck { viewer { id } }",
+      "operationName": "LinearCredentialCheck"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "viewer": {
+          "id": "user_fixture_1"
+        }
+      }
+    }
+  }
+}

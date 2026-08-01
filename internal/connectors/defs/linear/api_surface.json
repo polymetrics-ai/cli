@@ -115,8 +115,14 @@
     {
       "method": "POST",
       "path": "/graphql#Query.archivedTeams",
-      "covered_by": {
-        "stream": "archived_teams"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this query as provider-internal; public connector streams do not expose provider-internal Linear queries.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[Internal] All archived teams of the workspace."
       }
     },
     {
@@ -491,8 +497,14 @@
     {
       "method": "POST",
       "path": "/graphql#Query.failuresForOauthWebhooks",
-      "covered_by": {
-        "stream": "failures_for_oauth_webhooks"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this query as provider-internal; public connector streams do not expose provider-internal Linear queries.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Webhook failure events for webhooks that belong to an OAuth application. (last 50)"
       }
     },
     {
@@ -1788,8 +1800,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.agentSkillDelete",
-      "covered_by": {
-        "write": "agent_skill_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "agent_skill_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -1831,8 +1849,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.attachmentDelete",
-      "covered_by": {
-        "write": "attachment_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "attachment_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -1970,8 +1994,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.attachmentSyncToSlack",
-      "covered_by": {
-        "write": "attachment_sync_to_slack"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "attachment_sync_to_slack is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2001,8 +2031,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.commentDelete",
-      "covered_by": {
-        "write": "comment_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "comment_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2020,8 +2056,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.commentUnresolve",
-      "covered_by": {
-        "write": "comment_unresolve"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "comment_unresolve is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2123,8 +2165,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.customViewDelete",
-      "covered_by": {
-        "write": "custom_view_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "custom_view_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2154,22 +2202,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerDelete",
-      "covered_by": {
-        "write": "customer_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerMerge",
-      "covered_by": {
-        "write": "customer_merge"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_merge is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerNeedArchive",
-      "covered_by": {
-        "write": "customer_need_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_need_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2211,8 +2277,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerNeedUnarchive",
-      "covered_by": {
-        "write": "customer_need_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_need_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2242,8 +2314,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerStatusDelete",
-      "covered_by": {
-        "write": "customer_status_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_status_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2273,8 +2351,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerTierDelete",
-      "covered_by": {
-        "write": "customer_tier_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_tier_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2292,8 +2376,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.customerUnsync",
-      "covered_by": {
-        "write": "customer_unsync"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "customer_unsync is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2323,8 +2413,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.cycleArchive",
-      "covered_by": {
-        "write": "cycle_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "cycle_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2354,8 +2450,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.cycleStartUpcomingCycleToday",
-      "covered_by": {
-        "write": "cycle_start_upcoming_cycle_today"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "cycle_start_upcoming_cycle_today is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2385,15 +2487,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.documentDelete",
-      "covered_by": {
-        "write": "document_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "document_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.documentUnarchive",
-      "covered_by": {
-        "write": "document_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "document_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2423,22 +2537,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.emailIntakeAddressDelete",
-      "covered_by": {
-        "write": "email_intake_address_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "email_intake_address_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.emailIntakeAddressRefreshSesDomainStatus",
-      "covered_by": {
-        "write": "email_intake_address_refresh_ses_domain_status"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "email_intake_address_refresh_ses_domain_status is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.emailIntakeAddressRotate",
-      "covered_by": {
-        "write": "email_intake_address_rotate"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "email_intake_address_rotate is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2504,8 +2636,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.emojiDelete",
-      "covered_by": {
-        "write": "emoji_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "emoji_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2523,8 +2661,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.entityExternalLinkDelete",
-      "covered_by": {
-        "write": "entity_external_link_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "entity_external_link_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2554,8 +2698,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.favoriteDelete",
-      "covered_by": {
-        "write": "favorite_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "favorite_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2610,8 +2760,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.gitAutomationStateDelete",
-      "covered_by": {
-        "write": "git_automation_state_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "git_automation_state_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2641,8 +2797,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.gitAutomationTargetBranchDelete",
-      "covered_by": {
-        "write": "git_automation_target_branch_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "git_automation_target_branch_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2672,8 +2834,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.imageUploadFromUrl",
-      "covered_by": {
-        "write": "image_upload_from_url"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "image_upload_from_url is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2691,15 +2859,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeAddLabel",
-      "covered_by": {
-        "write": "initiative_add_label"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_add_label is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeArchive",
-      "covered_by": {
-        "write": "initiative_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2717,8 +2897,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeDelete",
-      "covered_by": {
-        "write": "initiative_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2736,22 +2922,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeLabelDelete",
-      "covered_by": {
-        "write": "initiative_label_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_label_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeLabelRestore",
-      "covered_by": {
-        "write": "initiative_label_restore"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_label_restore is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeLabelRetire",
-      "covered_by": {
-        "write": "initiative_label_retire"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_label_retire is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2793,8 +2997,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeRelationDelete",
-      "covered_by": {
-        "write": "initiative_relation_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_relation_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2812,8 +3022,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeRemoveLabel",
-      "covered_by": {
-        "write": "initiative_remove_label"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_remove_label is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2831,8 +3047,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeToProjectDelete",
-      "covered_by": {
-        "write": "initiative_to_project_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_to_project_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2850,8 +3072,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeUnarchive",
-      "covered_by": {
-        "write": "initiative_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2869,8 +3097,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeUpdateArchive",
-      "covered_by": {
-        "write": "initiative_update_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_update_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2888,8 +3122,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.initiativeUpdateUnarchive",
-      "covered_by": {
-        "write": "initiative_update_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "initiative_update_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2907,8 +3147,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationArchive",
-      "covered_by": {
-        "write": "integration_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -2986,8 +3232,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationGitHubEnterpriseServerConnect",
-      "covered_by": {
-        "write": "integration_git_hub_enterprise_server_connect"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_git_hub_enterprise_server_connect is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3005,8 +3257,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationGithubCommitCreate",
-      "covered_by": {
-        "write": "integration_github_commit_create"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_github_commit_create is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3036,8 +3294,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationGithubImportRefresh",
-      "covered_by": {
-        "write": "integration_github_import_refresh"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_github_import_refresh is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3062,8 +3326,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationGitlabTestConnection",
-      "covered_by": {
-        "write": "integration_gitlab_test_connection"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_gitlab_test_connection is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3117,8 +3387,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationIntercomDelete",
-      "covered_by": {
-        "write": "integration_intercom_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_intercom_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3451,8 +3727,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationSlackOrAsksUpdateSlackTeamName",
-      "covered_by": {
-        "write": "integration_slack_or_asks_update_slack_team_name"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_slack_or_asks_update_slack_team_name is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3542,8 +3824,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationTemplateDelete",
-      "covered_by": {
-        "write": "integration_template_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "integration_template_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3597,8 +3885,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueAddLabel",
-      "covered_by": {
-        "write": "issue_add_label"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_add_label is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3677,8 +3971,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueExternalSyncDisable",
-      "covered_by": {
-        "write": "issue_external_sync_disable"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_external_sync_disable is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3756,8 +4056,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueImportDelete",
-      "covered_by": {
-        "write": "issue_import_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_import_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3799,22 +4105,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueLabelDelete",
-      "covered_by": {
-        "write": "issue_label_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_label_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueLabelRestore",
-      "covered_by": {
-        "write": "issue_label_restore"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_label_restore is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueLabelRetire",
-      "covered_by": {
-        "write": "issue_label_retire"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_label_retire is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3844,8 +4168,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueRelationDelete",
-      "covered_by": {
-        "write": "issue_relation_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_relation_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3863,22 +4193,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueReminder",
-      "covered_by": {
-        "write": "issue_reminder"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_reminder is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueRemoveLabel",
-      "covered_by": {
-        "write": "issue_remove_label"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_remove_label is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueShare",
-      "covered_by": {
-        "write": "issue_share"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_share is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -3908,29 +4256,53 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueToReleaseDelete",
-      "covered_by": {
-        "write": "issue_to_release_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_to_release_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueToReleaseDeleteByIssueAndRelease",
-      "covered_by": {
-        "write": "issue_to_release_delete_by_issue_and_release"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_to_release_delete_by_issue_and_release is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueUnarchive",
-      "covered_by": {
-        "write": "issue_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueUnshare",
-      "covered_by": {
-        "write": "issue_unshare"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "issue_unshare is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4027,15 +4399,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.logoutSession",
-      "covered_by": {
-        "write": "logout_session"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "logout_session is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.notificationArchive",
-      "covered_by": {
-        "write": "notification_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "notification_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4137,8 +4521,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.notificationUnarchive",
-      "covered_by": {
-        "write": "notification_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "notification_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4168,8 +4558,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.oauthApplicationArchive",
-      "covered_by": {
-        "write": "oauth_application_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "oauth_application_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4225,8 +4621,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.organizationCancelDelete",
-      "covered_by": {
-        "write": "organization_cancel_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "organization_cancel_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4244,8 +4646,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.organizationDeleteChallenge",
-      "covered_by": {
-        "write": "organization_delete_challenge"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "organization_delete_challenge is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4276,8 +4684,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.organizationDomainDelete",
-      "covered_by": {
-        "write": "organization_domain_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "organization_domain_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4319,8 +4733,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.organizationInviteDelete",
-      "covered_by": {
-        "write": "organization_invite_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "organization_invite_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4423,8 +4843,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectAddLabel",
-      "covered_by": {
-        "write": "project_add_label"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_add_label is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4466,8 +4892,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectDelete",
-      "covered_by": {
-        "write": "project_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4497,22 +4929,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectLabelDelete",
-      "covered_by": {
-        "write": "project_label_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_label_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectLabelRestore",
-      "covered_by": {
-        "write": "project_label_restore"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_label_restore is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectLabelRetire",
-      "covered_by": {
-        "write": "project_label_retire"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_label_retire is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4542,8 +4992,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectMilestoneDelete",
-      "covered_by": {
-        "write": "project_milestone_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_milestone_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4598,8 +5054,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectRelationDelete",
-      "covered_by": {
-        "write": "project_relation_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_relation_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4617,15 +5079,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectRemoveLabel",
-      "covered_by": {
-        "write": "project_remove_label"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_remove_label is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectStatusArchive",
-      "covered_by": {
-        "write": "project_status_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_status_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4643,8 +5117,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectStatusUnarchive",
-      "covered_by": {
-        "write": "project_status_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_status_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4662,8 +5142,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectUnarchive",
-      "covered_by": {
-        "write": "project_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4681,8 +5167,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectUpdateArchive",
-      "covered_by": {
-        "write": "project_update_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_update_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4712,8 +5204,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectUpdateUnarchive",
-      "covered_by": {
-        "write": "project_update_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "project_update_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4743,8 +5241,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.pushSubscriptionDelete",
-      "covered_by": {
-        "write": "push_subscription_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "push_subscription_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4762,8 +5266,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.reactionDelete",
-      "covered_by": {
-        "write": "reaction_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "reaction_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4781,8 +5291,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releaseArchive",
-      "covered_by": {
-        "write": "release_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4824,8 +5340,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releaseDelete",
-      "covered_by": {
-        "write": "release_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4843,8 +5365,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releaseNoteDelete",
-      "covered_by": {
-        "write": "release_note_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_note_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4862,8 +5390,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releasePipelineArchive",
-      "covered_by": {
-        "write": "release_pipeline_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_pipeline_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4881,15 +5415,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releasePipelineDelete",
-      "covered_by": {
-        "write": "release_pipeline_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_pipeline_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.releasePipelineUnarchive",
-      "covered_by": {
-        "write": "release_pipeline_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_pipeline_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4907,8 +5453,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releaseStageArchive",
-      "covered_by": {
-        "write": "release_stage_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_stage_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4926,8 +5478,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releaseStageUnarchive",
-      "covered_by": {
-        "write": "release_stage_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_stage_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -4969,8 +5527,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.releaseUnarchive",
-      "covered_by": {
-        "write": "release_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "release_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5012,15 +5576,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.resendOrganizationInvite",
-      "covered_by": {
-        "write": "resend_organization_invite"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "resend_organization_invite is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.resendOrganizationInviteByEmail",
-      "covered_by": {
-        "write": "resend_organization_invite_by_email"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "resend_organization_invite_by_email is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5146,22 +5722,40 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.teamCyclesDelete",
-      "covered_by": {
-        "write": "team_cycles_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "team_cycles_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.teamDelete",
-      "covered_by": {
-        "write": "team_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "team_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.teamKeyDelete",
-      "covered_by": {
-        "write": "team_key_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "team_key_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5203,8 +5797,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.teamUnarchive",
-      "covered_by": {
-        "write": "team_unarchive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "team_unarchive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5234,8 +5834,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.templateDelete",
-      "covered_by": {
-        "write": "template_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "template_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5265,15 +5871,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.timeScheduleDelete",
-      "covered_by": {
-        "write": "time_schedule_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "time_schedule_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.timeScheduleRefreshIntegrationSchedule",
-      "covered_by": {
-        "write": "time_schedule_refresh_integration_schedule"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "time_schedule_refresh_integration_schedule is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5327,8 +5945,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.triageResponsibilityDelete",
-      "covered_by": {
-        "write": "triage_responsibility_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "triage_responsibility_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5382,8 +6006,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.userExternalUserDisconnect",
-      "covered_by": {
-        "write": "user_external_user_disconnect"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "user_external_user_disconnect is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5401,15 +6031,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.userRevokeAllSessions",
-      "covered_by": {
-        "write": "user_revoke_all_sessions"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "user_revoke_all_sessions is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.userRevokeSession",
-      "covered_by": {
-        "write": "user_revoke_session"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "user_revoke_session is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5451,8 +6093,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.userUnlinkFromIdentityProvider",
-      "covered_by": {
-        "write": "user_unlink_from_identity_provider"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "user_unlink_from_identity_provider is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5494,8 +6142,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.viewPreferencesDelete",
-      "covered_by": {
-        "write": "view_preferences_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "view_preferences_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5525,8 +6179,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.webhookDelete",
-      "covered_by": {
-        "write": "webhook_delete"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "webhook_delete is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {
@@ -5557,8 +6217,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.workflowStateArchive",
-      "covered_by": {
-        "write": "workflow_state_archive"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear mutation payload exposes success: Boolean!, but declarative GraphQL writes cannot yet enforce success == true without shared payload-success validation; blocked until that shared invariant is available.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "workflow_state_archive is blocked rather than exposed as a write because HTTP 200 plus GraphQL errors-only handling is not sufficient source-backed success confirmation."
       }
     },
     {

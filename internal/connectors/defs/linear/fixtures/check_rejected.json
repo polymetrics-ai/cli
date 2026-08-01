@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "",
+    "query": {
+      "query": "query LinearCredentialCheck { viewer { id } }",
+      "operationName": "LinearCredentialCheck"
+    }
+  },
+  "response": {
+    "status": 401,
+    "body": {
+      "errors": [
+        {
+          "message": "Authentication required, not authenticated",
+          "extensions": {
+            "code": "AUTHENTICATION_ERROR",
+            "statusCode": 401
+          }
+        }
+      ]
+    }
+  }
+}

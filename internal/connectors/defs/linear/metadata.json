@@ -1,12 +1,12 @@
 {
   "name": "linear",
   "display_name": "Linear",
-  "description": "Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL reverse-ETL mutations where connector-local schemas can do so without raw GraphQL passthrough.",
+  "description": "Reads Linear GraphQL list/connection data and exposes only fixed GraphQL reverse-ETL mutations whose payloads do not require success:Boolean! assertions.",
   "integration_type": "api",
   "docs_url": "https://developers.linear.app/docs",
   "release_stage": "ga",
   "capabilities": {
-    "check": false,
+    "check": true,
     "read": true,
     "write": true,
     "query": false,
@@ -19,7 +19,7 @@
   },
   "risk": {
     "read": "fixed Linear GraphQL documents against documented root Query list/connection fields",
-    "write": "fixed Linear GraphQL mutations; destructive/delete/archive operations require typed destructive confirmation when implemented",
+    "write": "fixed Linear GraphQL mutations whose payloads do not require success:Boolean! enforcement; success-payload and destructive mutation shapes remain blocked",
     "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions require typed confirmation"
   }
 }

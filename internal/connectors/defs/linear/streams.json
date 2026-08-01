@@ -37,7 +37,18 @@
         "class": "rate_limited",
         "hint": "linear rate limit exceeded; retry after backoff"
       }
-    ]
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "check": {
+      "method": "GET",
+      "path": "",
+      "query": {
+        "query": "query LinearCredentialCheck { viewer { id } }",
+        "operationName": "LinearCredentialCheck"
+      }
+    }
   },
   "streams": [
     {
@@ -277,20 +288,6 @@
         "path": "data.archivedIntegrations"
       },
       "schema": "schemas/archived_integrations.json"
-    },
-    {
-      "name": "archived_teams",
-      "method": "POST",
-      "path": "",
-      "graphql": {
-        "operation_name": "LinearArchivedTeams",
-        "document": "query LinearArchivedTeams { archivedTeams {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    key\n    displayName\n    description\n  } }",
-        "variables": {}
-      },
-      "records": {
-        "path": "data.archivedTeams"
-      },
-      "schema": "schemas/archived_teams.json"
     },
     {
       "name": "attachments",
@@ -687,25 +684,6 @@
         "stop_path": "data.externalUsers.pageInfo.hasNextPage",
         "max_pages": 100
       }
-    },
-    {
-      "name": "failures_for_oauth_webhooks",
-      "method": "POST",
-      "path": "",
-      "graphql": {
-        "operation_name": "LinearFailuresForOauthWebhooks",
-        "document": "query LinearFailuresForOauthWebhooks($oauthClientId: String!) { failuresForOauthWebhooks(oauthClientId: $oauthClientId) {\n    __typename\n    id\n    createdAt\n    url\n  } }",
-        "variables": {
-          "oauthClientId": {
-            "template": "{{ query.oauthClientId }}",
-            "type": "string"
-          }
-        }
-      },
-      "records": {
-        "path": "data.failuresForOauthWebhooks"
-      },
-      "schema": "schemas/failures_for_oauth_webhooks.json"
     },
     {
       "name": "favorites",
