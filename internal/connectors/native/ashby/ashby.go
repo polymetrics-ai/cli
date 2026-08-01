@@ -129,11 +129,11 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 // Ashby's OpenAPI. Caller input can populate only those fields; cursor, limit,
 // page count, and client-side incremental filtering stay bounded here.
 func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint streamEndpoint, req connectors.ReadRequest, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	cursor := strings.TrimSpace(req.State["cursor"])
-	lowerBound := cursor
+	lowerBound := connsdk.Cursor(req.State)
 	if lowerBound == "" {
 		lowerBound = strings.TrimSpace(req.Config.Config["start_date"])
 	}
+	pageCursor := ""
 	baseBody, err := ashbyStreamBody(endpoint, req.Config, req.Query, pageSize)
 	if err != nil {
 		return err
@@ -143,8 +143,8 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 			return err
 		}
 		body := cloneMap(baseBody)
-		if cursor != "" {
-			body["cursor"] = cursor
+		if pageCursor != "" {
+			body["cursor"] = pageCursor
 		}
 		resp, err := r.Do(ctx, http.MethodPost, endpoint.path, nil, body)
 		if err != nil {
@@ -170,7 +170,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 		if !boolValue(pageBody["moreDataAvailable"]) || next == "" {
 			return nil
 		}
-		cursor = next
+		pageCursor = next
 	}
 	return nil
 }

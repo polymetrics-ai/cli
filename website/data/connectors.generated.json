@@ -13759,8 +13759,8 @@
         "primary_key": [
           "id"
         ],
-        "cursor": "candidate",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "interview_info",
@@ -13807,8 +13807,8 @@
         "primary_key": [
           "id"
         ],
-        "cursor": "candidateId",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "survey_submission_list",
@@ -14862,7 +14862,6 @@
               "summary": "The id of the candidate to consider for a job.",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -15871,7 +15870,6 @@
               "summary": "The id of the candidate",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -15905,7 +15903,6 @@
               "summary": "The id of the candidate",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -15939,7 +15936,6 @@
               "summary": "The unique id of the candidate to update",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16060,7 +16056,6 @@
               "summary": "The id of the candidate",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16127,7 +16122,6 @@
               "summary": "The id of the candidate to fetch client info for",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             }
           ],
@@ -16153,7 +16147,6 @@
               "summary": "The id of the candidate to fetch fraud checks for",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             }
           ],
@@ -16179,7 +16172,6 @@
               "summary": "The id of the candidate to set the fraud status for",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16216,7 +16208,6 @@
               "summary": "The id of the candidate to fetch notes for",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             }
           ],
@@ -16242,7 +16233,6 @@
               "summary": "The id of the candidate to anonymize",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             }
           ],
@@ -16268,7 +16258,6 @@
               "summary": "The id of the candidate",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16302,7 +16291,6 @@
               "summary": "The id of the candidate",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16336,7 +16324,6 @@
               "summary": "The candidate to attach this email to",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16458,7 +16445,6 @@
               "summary": "The unique id of the candidate to add the tag to",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16492,7 +16478,6 @@
               "summary": "The id of the candidate to remove the tag from",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -16526,7 +16511,6 @@
               "summary": "The id of the candidate to fetch projects for",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             }
           ],
@@ -19207,7 +19191,7 @@
           "path": "custom-field set-value",
           "summary": "Set the value of a custom field for a given object.\n\n**Note:** When updating multiple custom fields on the same object, use\n[`customField.setValues`](#operation",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "partial",
           "stream": "",
           "write": "set_custom_field_value",
           "source_cli_path": "",
@@ -19240,28 +19224,13 @@
               "values": [],
               "maps_to": "record.fieldId",
               "allow_empty": false
-            },
-            {
-              "name": "field-value-value",
-              "type": "integer",
-              "summary": "The currency amount",
-              "values": [],
-              "maps_to": "record.fieldValue.value"
-            },
-            {
-              "name": "field-value-currency-code",
-              "type": "string",
-              "summary": "The currency code",
-              "values": [],
-              "maps_to": "record.fieldValue.currencyCode",
-              "allow_empty": false
             }
           ],
           "examples": [],
           "output_policy": "",
           "risk": "Executes Ashby customField.setValue through the documented POST /customField.setValue endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
         },
         {
           "path": "custom-field info",
@@ -19292,7 +19261,7 @@
           "path": "custom-field set-values",
           "summary": "Set the values of multiple custom fields for a given object in a single call.\nThis is the recommended approach when updating multiple fields on the same object",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "partial",
           "stream": "",
           "write": "set_custom_field_values",
           "source_cli_path": "",
@@ -19325,28 +19294,13 @@
               "values": [],
               "maps_to": "record.values.0.fieldId",
               "allow_empty": false
-            },
-            {
-              "name": "values-0-field-value-value",
-              "type": "integer",
-              "summary": "The currency amount",
-              "values": [],
-              "maps_to": "record.values.0.fieldValue.value"
-            },
-            {
-              "name": "values-0-field-value-currency-code",
-              "type": "string",
-              "summary": "The currency code",
-              "values": [],
-              "maps_to": "record.values.0.fieldValue.currencyCode",
-              "allow_empty": false
             }
           ],
           "examples": [],
           "output_policy": "",
           "risk": "Executes Ashby customField.setValues through the documented POST /customField.setValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
         },
         {
           "path": "custom-field update-selectable-values",
@@ -19444,7 +19398,6 @@
               "summary": "The id of the candidate to whom to add the completed assessment",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -19513,10 +19466,11 @@
             },
             {
               "name": "assessment-result-value",
-              "type": "boolean",
-              "summary": "",
+              "type": "string",
+              "summary": "The assessment data value, whose type depends on the type field",
               "values": [],
-              "maps_to": "record.assessment.result.value"
+              "maps_to": "record.assessment.result.value",
+              "allow_empty": false
             },
             {
               "name": "assessment-metadata-0-identifier",
@@ -19552,10 +19506,11 @@
             },
             {
               "name": "assessment-metadata-0-value",
-              "type": "boolean",
-              "summary": "",
+              "type": "string",
+              "summary": "The assessment data value, whose type depends on the type field",
               "values": [],
-              "maps_to": "record.assessment.metadata.0.value"
+              "maps_to": "record.assessment.metadata.0.value",
+              "allow_empty": false
             },
             {
               "name": "timestamp",
@@ -19847,7 +19802,7 @@
           "path": "user set-custom-field-value",
           "summary": "Set the value of a custom field on an employee.\n\nThe values accepted in the `fieldValue` param depend on the type of field being updated. See the [customField.s",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "partial",
           "stream": "",
           "write": "set_user_custom_field_value",
           "source_cli_path": "",
@@ -19868,34 +19823,19 @@
               "values": [],
               "maps_to": "record.fieldId",
               "allow_empty": false
-            },
-            {
-              "name": "field-value-value",
-              "type": "integer",
-              "summary": "The currency amount",
-              "values": [],
-              "maps_to": "record.fieldValue.value"
-            },
-            {
-              "name": "field-value-currency-code",
-              "type": "string",
-              "summary": "The currency code",
-              "values": [],
-              "maps_to": "record.fieldValue.currencyCode",
-              "allow_empty": false
             }
           ],
           "examples": [],
           "output_policy": "",
           "risk": "Executes Ashby user.setCustomFieldValue through the documented POST /user.setCustomFieldValue endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
         },
         {
           "path": "user set-custom-field-values",
           "summary": "Set the values of multiple custom fields on an employee in a single call.\nThis is the recommended approach when updating multiple fields on the same employee\nto",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "partial",
           "stream": "",
           "write": "set_user_custom_field_values",
           "source_cli_path": "",
@@ -19916,28 +19856,13 @@
               "values": [],
               "maps_to": "record.values.0.fieldId",
               "allow_empty": false
-            },
-            {
-              "name": "values-0-field-value-value",
-              "type": "integer",
-              "summary": "The currency amount",
-              "values": [],
-              "maps_to": "record.values.0.fieldValue.value"
-            },
-            {
-              "name": "values-0-field-value-currency-code",
-              "type": "string",
-              "summary": "The currency code",
-              "values": [],
-              "maps_to": "record.values.0.fieldValue.currencyCode",
-              "allow_empty": false
             }
           ],
           "examples": [],
           "output_policy": "",
           "risk": "Executes Ashby user.setCustomFieldValues through the documented POST /user.setCustomFieldValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
         },
         {
           "path": "referral create",
@@ -20045,7 +19970,6 @@
               "summary": "The candidate to enroll in the sequence",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -20170,7 +20094,6 @@
               "summary": "Only return sequence enrollments for this candidate",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             }
           ],
@@ -20488,7 +20411,6 @@
               "summary": "",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -20779,7 +20701,6 @@
               "summary": "The id of the candidate to create a survey request for.",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -20838,7 +20759,6 @@
               "summary": "",
               "values": [],
               "maps_to": "query.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -20879,7 +20799,6 @@
               "summary": "The unique identifier of the candidate submitting the survey",
               "values": [],
               "maps_to": "record.candidateId",
-              "format": "date-time",
               "allow_empty": false
             },
             {
@@ -21513,7 +21432,7 @@
         }
       ]
     },
-    "docs_md": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL/changefeed streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 95; partial nested-object flag surfaces: 6\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.\n",
+    "docs_md": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL/changefeed streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.\n",
     "icon": {
       "id": "ashby",
       "path": "icons/ashby.svg",

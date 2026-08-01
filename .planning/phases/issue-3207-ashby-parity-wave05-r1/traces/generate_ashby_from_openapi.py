@@ -81,7 +81,7 @@ def json_type(schema: dict[str, Any], node: Any) -> list[str]:
     if "enum" in node: return ["string"]
     return []
 
-def scalar_union_types(schema: dict[str, Any], node: Any) -> list[str]:
+def union_json_types(schema: dict[str, Any], node: Any) -> list[str]:
     node = resolve(schema, node)
     if not isinstance(node, dict): return []
     variants = None
@@ -94,7 +94,6 @@ def scalar_union_types(schema: dict[str, Any], node: Any) -> list[str]:
     for variant in variants:
         resolved = resolve(schema, variant)
         if not isinstance(resolved, dict): return []
-        if "properties" in resolved or "items" in resolved or "additionalProperties" in resolved: return []
         types = json_type(schema, resolved)
         if not types: return []
         for typ in types:
@@ -103,27 +102,28 @@ def scalar_union_types(schema: dict[str, Any], node: Any) -> list[str]:
 
 def to_draft_schema(schema: dict[str, Any], node: Any, *, close_object: bool=False, depth: int=0) -> dict[str, Any]:
     source = resolve(schema, node)
-    union_types = scalar_union_types(schema, source)
+    union_types = union_json_types(schema, source)
+    preserve_union = len(union_types) > 1
     node = choose_variant(schema, node)
     if not isinstance(node, dict): return {}
     out: dict[str, Any] = {}
-    if union_types:
-        out["type"] = union_types[0] if len(union_types)==1 else union_types
+    if preserve_union:
+        out["type"] = union_types
     else:
-        types = json_type(schema, node)
+        types = union_types or json_type(schema, node)
         if types: out["type"] = types[0] if len(types)==1 else types
     if isinstance(source, dict) and isinstance(source.get("description"), str): out["description"] = source["description"][:500]
     elif isinstance(node.get("description"), str): out["description"] = node["description"][:500]
     if node.get("format") in {"date-time","date","uri","email"}: out["format"] = node["format"]
     if isinstance(node.get("enum"), list) and len(node["enum"]) <= 100: out["enum"] = node["enum"]
     props = node.get("properties") if isinstance(node.get("properties"), dict) else None
-    if props is not None:
+    if props is not None and not preserve_union:
         out.setdefault("type", "object")
         out["properties"] = {n: to_draft_schema(schema, p, close_object=False, depth=depth+1) for n,p in props.items()}
         req = [r for r in node.get("required", []) if isinstance(r, str)]
         if req: out["required"] = req
         if close_object and depth == 0: out["additionalProperties"] = False
-    elif "items" in node:
+    elif "items" in node and not preserve_union:
         out.setdefault("type", "array")
         out["items"] = to_draft_schema(schema, node.get("items"), close_object=False, depth=depth+1)
     elif not out:
