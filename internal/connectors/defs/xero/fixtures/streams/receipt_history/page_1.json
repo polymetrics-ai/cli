@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Receipts/synthetic-conformance-value/History"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "HistoryRecords": [
+        {
+          "DateUTC": "date_utc_fixture_1"
+        }
+      ]
+    }
+  }
+}

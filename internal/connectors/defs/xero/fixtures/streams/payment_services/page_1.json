@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/PaymentServices"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "PaymentServices": [
+        {
+          "PaymentServiceID": "payment_service_id_fixture_1",
+          "PaymentServiceName": "payment_service_name_fixture",
+          "PaymentServiceUrl": "payment_service_url_fixture",
+          "PayNowText": "pay_now_text_fixture",
+          "PaymentServiceType": "STANDARD",
+          "ValidationErrors": [
+            "validation_error_fixture_1"
+          ]
+        }
+      ]
+    }
+  }
+}

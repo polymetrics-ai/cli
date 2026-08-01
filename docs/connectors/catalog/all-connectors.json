@@ -154816,6 +154816,22 @@
         "risk": "creates Xero bank transfer resources in the connected tenant; approval required"
       },
       {
+        "name": "delete_bank_transfers",
+        "kind": "delete",
+        "method": "POST",
+        "path": "BankTransfers",
+        "risk": "Destructive Xero Accounting API action: sets one or more bank transfers to DELETED; reverse ETL must preview records and require explicit approval before execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_bank_transfer",
+        "kind": "delete",
+        "method": "POST",
+        "path": "BankTransfers/{{ record.bank_transfer_id }}",
+        "risk": "Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.",
+        "confirm": "destructive"
+      },
+      {
         "name": "create_bank_transfer_history_record",
         "kind": "create",
         "method": "PUT",

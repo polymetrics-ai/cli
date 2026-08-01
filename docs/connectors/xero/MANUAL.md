@@ -395,28 +395,37 @@ REVERSE ETL ACTIONS
     risk: mutates Xero bank transaction resources in the connected tenant; approval required
   create_bank_transaction_history_record:
     endpoint: PUT BankTransactions/{{ record.bank_transaction_id }}/History
-    required fields: bank_transaction_id
+    required fields: bank_transaction_id, HistoryRecords
     risk: creates Xero bank transaction history record resources in the connected tenant; approval required
   create_bank_transfer:
     endpoint: PUT BankTransfers
     risk: creates Xero bank transfer resources in the connected tenant; approval required
+  delete_bank_transfers:
+    endpoint: POST BankTransfers
+    required fields: BankTransfers
+    risk: Destructive Xero Accounting API action: sets one or more bank transfers to DELETED; reverse ETL must preview records and require explicit approval before execute.
+  delete_bank_transfer:
+    endpoint: POST BankTransfers/{{ record.bank_transfer_id }}
+    required fields: bank_transfer_id, Status
+    risk: Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.
   create_bank_transfer_history_record:
     endpoint: PUT BankTransfers/{{ record.bank_transfer_id }}/History
-    required fields: bank_transfer_id
+    required fields: bank_transfer_id, HistoryRecords
     risk: creates Xero bank transfer history record resources in the connected tenant; approval required
   delete_batch_payment:
     endpoint: POST BatchPayments
+    required fields: Status, BatchPaymentID
     risk: deletes Xero batch payment resources in the connected tenant; approval required
   create_batch_payment:
     endpoint: PUT BatchPayments
     risk: creates Xero batch payment resources in the connected tenant; approval required
   delete_batch_payment_by_url_param:
     endpoint: POST BatchPayments/{{ record.batch_payment_id }}
-    required fields: batch_payment_id
+    required fields: batch_payment_id, Status
     risk: deletes Xero batch payment by url param resources in the connected tenant; approval required
   create_batch_payment_history_record:
     endpoint: PUT BatchPayments/{{ record.batch_payment_id }}/History
-    required fields: batch_payment_id
+    required fields: batch_payment_id, HistoryRecords
     risk: creates Xero batch payment history record resources in the connected tenant; approval required
   create_branding_theme_payment_services:
     endpoint: POST BrandingThemes/{{ record.branding_theme_id }}/PaymentServices
@@ -453,7 +462,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero contact resources in the connected tenant; approval required
   create_contact_history:
     endpoint: PUT Contacts/{{ record.contact_id }}/History
-    required fields: contact_id
+    required fields: contact_id, HistoryRecords
     risk: creates Xero contact history resources in the connected tenant; approval required
   upsert_credit_notes:
     endpoint: POST CreditNotes
@@ -475,7 +484,7 @@ REVERSE ETL ACTIONS
     risk: deletes Xero credit note allocations resources in the connected tenant; approval required
   create_credit_note_history:
     endpoint: PUT CreditNotes/{{ record.credit_note_id }}/History
-    required fields: credit_note_id
+    required fields: credit_note_id, HistoryRecords
     risk: creates Xero credit note history resources in the connected tenant; approval required
   create_currency:
     endpoint: PUT Currencies
@@ -489,7 +498,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero expense claim resources in the connected tenant; approval required
   create_expense_claim_history:
     endpoint: PUT ExpenseClaims/{{ record.expense_claim_id }}/History
-    required fields: expense_claim_id
+    required fields: expense_claim_id, HistoryRecords
     risk: creates Xero expense claim history resources in the connected tenant; approval required
   upsert_invoices:
     endpoint: POST Invoices
@@ -507,7 +516,7 @@ REVERSE ETL ACTIONS
     risk: executes Xero email invoice resources in the connected tenant; approval required
   create_invoice_history:
     endpoint: PUT Invoices/{{ record.invoice_id }}/History
-    required fields: invoice_id
+    required fields: invoice_id, HistoryRecords
     risk: creates Xero invoice history resources in the connected tenant; approval required
   upsert_items:
     endpoint: POST Items
@@ -525,7 +534,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero item resources in the connected tenant; approval required
   create_item_history:
     endpoint: PUT Items/{{ record.item_id }}/History
-    required fields: item_id
+    required fields: item_id, HistoryRecords
     risk: creates Xero item history resources in the connected tenant; approval required
   create_linked_transaction:
     endpoint: PUT LinkedTransactions
@@ -550,7 +559,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero manual journal resources in the connected tenant; approval required
   create_manual_journal_history_record:
     endpoint: PUT ManualJournals/{{ record.manual_journal_id }}/History
-    required fields: manual_journal_id
+    required fields: manual_journal_id, HistoryRecords
     risk: creates Xero manual journal history record resources in the connected tenant; approval required
   create_overpayment_allocations:
     endpoint: PUT Overpayments/{{ record.overpayment_id }}/Allocations
@@ -562,7 +571,7 @@ REVERSE ETL ACTIONS
     risk: deletes Xero overpayment allocations resources in the connected tenant; approval required
   create_overpayment_history:
     endpoint: PUT Overpayments/{{ record.overpayment_id }}/History
-    required fields: overpayment_id
+    required fields: overpayment_id, HistoryRecords
     risk: creates Xero overpayment history resources in the connected tenant; approval required
   create_payment:
     endpoint: POST Payments
@@ -572,11 +581,11 @@ REVERSE ETL ACTIONS
     risk: creates Xero payments resources in the connected tenant; approval required
   delete_payment:
     endpoint: POST Payments/{{ record.payment_id }}
-    required fields: payment_id
+    required fields: payment_id, Status
     risk: deletes Xero payment resources in the connected tenant; approval required
   create_payment_history:
     endpoint: PUT Payments/{{ record.payment_id }}/History
-    required fields: payment_id
+    required fields: payment_id, HistoryRecords
     risk: creates Xero payment history resources in the connected tenant; approval required
   create_payment_service:
     endpoint: PUT PaymentServices
@@ -591,7 +600,7 @@ REVERSE ETL ACTIONS
     risk: deletes Xero prepayment allocations resources in the connected tenant; approval required
   create_prepayment_history:
     endpoint: PUT Prepayments/{{ record.prepayment_id }}/History
-    required fields: prepayment_id
+    required fields: prepayment_id, HistoryRecords
     risk: creates Xero prepayment history resources in the connected tenant; approval required
   upsert_purchase_orders:
     endpoint: POST PurchaseOrders
@@ -605,7 +614,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero purchase order resources in the connected tenant; approval required
   create_purchase_order_history:
     endpoint: PUT PurchaseOrders/{{ record.purchase_order_id }}/History
-    required fields: purchase_order_id
+    required fields: purchase_order_id, HistoryRecords
     risk: creates Xero purchase order history resources in the connected tenant; approval required
   upsert_quotes:
     endpoint: POST Quotes
@@ -619,7 +628,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero quote resources in the connected tenant; approval required
   create_quote_history:
     endpoint: PUT Quotes/{{ record.quote_id }}/History
-    required fields: quote_id
+    required fields: quote_id, HistoryRecords
     risk: creates Xero quote history resources in the connected tenant; approval required
   create_receipt:
     endpoint: PUT Receipts
@@ -630,7 +639,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero receipt resources in the connected tenant; approval required
   create_receipt_history:
     endpoint: PUT Receipts/{{ record.receipt_id }}/History
-    required fields: receipt_id
+    required fields: receipt_id, HistoryRecords
     risk: creates Xero receipt history resources in the connected tenant; approval required
   upsert_repeating_invoices:
     endpoint: POST RepeatingInvoices
@@ -644,7 +653,7 @@ REVERSE ETL ACTIONS
     risk: mutates Xero repeating invoice resources in the connected tenant; approval required
   create_repeating_invoice_history:
     endpoint: PUT RepeatingInvoices/{{ record.repeating_invoice_id }}/History
-    required fields: repeating_invoice_id
+    required fields: repeating_invoice_id, HistoryRecords
     risk: creates Xero repeating invoice history resources in the connected tenant; approval required
   setup_organisation:
     endpoint: POST Setup
@@ -684,6 +693,93 @@ SECURITY
   write risk: creates, updates, emails, sets up, and deletes Xero Accounting API resources in the connected tenant
   approval: reverse ETL writes require plan preview and approval token; delete actions are marked destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Run bounded Xero Accounting API streams, report reads, and approved reverse-ETL writes.
+  Usage: pm connectors command xero <group> <action> --credential <name> [flags] --json
+  Source CLI: Xero Accounting API (https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml)
+  Global flags:
+    --credential (string): Named Xero credential; secrets are loaded from the credential store and never from prompt text.
+    --json (boolean): Emit machine-readable JSON output.
+    --max-bytes (integer): Clamp direct-read response size; report reads are capped by the operation definition.
+  Bounded report direct reads
+  ETL stream shortcuts
+  Other Commands
+    streams invoices - Read the Xero `invoices` stream through the ETL engine. [intent=etl availability=implemented stream=invoices]
+    streams contacts - Read the Xero `contacts` stream through the ETL engine. [intent=etl availability=implemented stream=contacts]
+    streams accounts - Read the Xero `accounts` stream through the ETL engine. [intent=etl availability=implemented stream=accounts]
+    streams bank_transactions - Read the Xero `bank_transactions` stream through the ETL engine. [intent=etl availability=implemented stream=bank_transactions]
+    streams items - Read the Xero `items` stream through the ETL engine. [intent=etl availability=implemented stream=items]
+    streams payments - Read the Xero `payments` stream through the ETL engine. [intent=etl availability=implemented stream=payments]
+    streams account - Read the Xero `account` stream through the ETL engine. [intent=etl availability=implemented stream=account]
+    streams account_attachments - Read the Xero `account_attachments` stream through the ETL engine. [intent=etl availability=implemented stream=account_attachments]
+    streams bank_transaction - Read the Xero `bank_transaction` stream through the ETL engine. [intent=etl availability=implemented stream=bank_transaction]
+    streams bank_transaction_attachments - Read the Xero `bank_transaction_attachments` stream through the ETL engine. [intent=etl availability=implemented stream=bank_transaction_attachments]
+    streams bank_transactions_history - Read the Xero `bank_transactions_history` stream through the ETL engine. [intent=etl availability=implemented stream=bank_transactions_history]
+    streams bank_transfer - Read the Xero `bank_transfer` stream through the ETL engine. [intent=etl availability=implemented stream=bank_transfer]
+    reports ten_ninety_nine - Retrieve reports for 1099 [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --report-year
+    reports aged_payables_by_contact - Retrieves report for aged payables by contact [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --contact-id, --date, --from-date, --to-date
+    reports aged_receivables_by_contact - Retrieves report for aged receivables by contact [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --contact-id, --date, --from-date, --to-date
+    reports balance_sheet - Retrieves report for balancesheet [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --date, --periods, --timeframe, --tracking-option-id-1, --tracking-option-id-2, --standard-layout, --payments-only
+    reports bank_summary - Retrieves report for bank summary [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --from-date, --to-date
+    reports get - Retrieves a specific report using a unique ReportID [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --report-id
+    reports budget_summary - Retrieves report for budget summary [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --date, --periods, --timeframe
+    reports executive_summary - Retrieves report for executive summary [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --date
+    reports list - Retrieves a list of the organistaions unique reports that require a uuid to fetch [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output
+    reports profit_and_loss - Retrieves report for profit and loss [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --from-date, --to-date, --periods, --timeframe, --tracking-category-id, --tracking-category-id-2, --tracking-option-id, --tracking-option-id-2, --standard-layout, --payments-only
+    reports trial_balance - Retrieves report for trial balance [intent=direct_read availability=implemented]; approval: none; risk: bounded read; report responses are capped at 16 MiB and redacted before JSON output; flags: --date, --payments-only
+    attachments get_account_attachment_by_id - Retrieves a specific attachment from a specific account using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_account_attachment_by_file_name - Retrieves an attachment for a specific account by filename [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_account_attachment_by_file_name - Updates attachment on a specific account by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_account_attachment_by_file_name - Creates an attachment on a specific account [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_bank_transaction_attachment_by_id - Retrieves specific attachments from a specific BankTransaction using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_bank_transaction_attachment_by_file_name - Retrieves a specific attachment from a specific bank transaction by filename [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_bank_transaction_attachment_by_file_name - Updates a specific attachment from a specific bank transaction by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_bank_transaction_attachment_by_file_name - Creates an attachment for a specific bank transaction by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_bank_transfer_attachment_by_id - Retrieves a specific attachment from a specific bank transfer using a unique attachment ID [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_bank_transfer_attachment_by_file_name - Retrieves a specific attachment on a specific bank transfer by file name [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_bank_transfer_attachment_by_file_name - updateBankTransferAttachmentByFileName [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_bank_transfer_attachment_by_file_name - createBankTransferAttachmentByFileName [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_contact_attachment_by_id - Retrieves a specific attachment from a specific contact using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_contact_attachment_by_file_name - Retrieves a specific attachment from a specific contact by file name [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_contact_attachment_by_file_name - updateContactAttachmentByFileName [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_contact_attachment_by_file_name - createContactAttachmentByFileName [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_credit_note_attachment_by_id - Retrieves a specific attachment from a specific credit note using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_credit_note_attachment_by_file_name - Retrieves a specific attachment on a specific credit note by file name [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_credit_note_attachment_by_file_name - Updates attachments on a specific credit note by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_credit_note_attachment_by_file_name - Creates an attachment for a specific credit note [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_credit_note_as_pdf - Retrieves credit notes as PDF files [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_invoice_as_pdf - Retrieves invoices or purchase bills as PDF files [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_invoice_attachment_by_id - Retrieves a specific attachment from a specific invoices or purchase bills by using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_invoice_attachment_by_file_name - Retrieves an attachment from a specific invoice or purchase bill by filename [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_invoice_attachment_by_file_name - Updates an attachment from a specific invoices or purchase bill by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_invoice_attachment_by_file_name - Creates an attachment for a specific invoice or purchase bill by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_manual_journal_attachment_by_id - Allows you to retrieve a specific attachment from a specific manual journal using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_manual_journal_attachment_by_file_name - Retrieves a specific attachment from a specific manual journal by file name [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_manual_journal_attachment_by_file_name - Updates a specific attachment from a specific manual journal by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_manual_journal_attachment_by_file_name - Creates a specific attachment for a specific manual journal by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_purchase_order_as_pdf - Retrieves specific purchase order as PDF files using a unique purchase order Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_purchase_order_attachment_by_id - Retrieves specific attachment for a specific purchase order using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_purchase_order_attachment_by_file_name - Retrieves a specific attachment for a specific purchase order by filename [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_purchase_order_attachment_by_file_name - Updates a specific attachment for a specific purchase order by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_purchase_order_attachment_by_file_name - Creates attachment for a specific purchase order [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_quote_as_pdf - Retrieves a specific quote as a PDF file using a unique quote Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_quote_attachment_by_id - Retrieves a specific attachment from a specific quote using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_quote_attachment_by_file_name - Retrieves a specific attachment from a specific quote by filename [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_quote_attachment_by_file_name - Updates a specific attachment from a specific quote by filename [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_quote_attachment_by_file_name - Creates attachment for a specific quote [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_receipt_attachment_by_id - Retrieves a specific attachments from a specific expense claim receipts by using a unique attachment Id [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_receipt_attachment_by_file_name - Retrieves a specific attachment from a specific expense claim receipts by file name [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_receipt_attachment_by_file_name - Updates a specific attachment on a specific expense claim receipts by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_receipt_attachment_by_file_name - Creates an attachment on a specific expense claim receipts by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_repeating_invoice_attachment_by_id - Retrieves a specific attachment from a specific repeating invoice [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments get_repeating_invoice_attachment_by_file_name - Retrieves a specific attachment from a specific repeating invoices by file name [intent=direct_read availability=planned]; approval: none; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments update_repeating_invoice_attachment_by_file_name - Updates a specific attachment from a specific repeating invoices by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+    attachments create_repeating_invoice_attachment_by_file_name - Creates an attachment from a specific repeating invoices by file name [intent=reverse_etl availability=planned]; approval: binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution; risk: blocked shared-runtime binary/file transfer dependency; notes: Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed.
+  Help topics:
+    xero reports - Bounded direct reads for Xero Accounting report endpoints with typed query/path flags.
+    xero reverse-etl - Reverse ETL writes use typed schemas and require plan, preview, explicit approval, and execute.
+    xero attachments - Attachment metadata streams are available; binary/PDF download and upload execution is blocked on the shared binary/file runner.
 
 EXAMPLES
   # Inspect as a manual

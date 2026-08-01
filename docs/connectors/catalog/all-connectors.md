@@ -530,7 +530,7 @@
 | `workramp` | [`icons/workramp.svg`](../icons/workramp.svg) | WorkRamp | `api` | ga | check, catalog, read, write | 5 | 5 | [Documentation](https://developers.workramp.com/) | bundle definition |
 | `wrike` | [`icons/wrike.svg`](../icons/wrike.svg) | Wrike | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.wrike.com/api/v4/) | bundle definition |
 | `wufoo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Wufoo | `api` | ga | check, catalog, read, write | 8 | 3 | [Documentation](https://wufoo.github.io/docs/) | bundle definition |
-| `xero` | [`icons/xero.svg`](../icons/xero.svg) | Xero | `api` | ga | check, catalog, read, write | 100 | 85 | [Documentation](https://developer.xero.com/documentation/) | bundle definition |
+| `xero` | [`icons/xero.svg`](../icons/xero.svg) | Xero | `api` | ga | check, catalog, read, write | 100 | 87 | [Documentation](https://developer.xero.com/documentation/) | bundle definition |
 | `xkcd` | [`icons/xkcd.svg`](../icons/xkcd.svg) | XKCD | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://xkcd.com/json.html) | bundle definition |
 | `xsolla` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Xsolla | `api` | ga | check, catalog, read, write | 8 | 2 | [Documentation](https://developers.xsolla.com/) | bundle definition |
 | `yahoo-finance-price` | [`icons/yahoo-finance-price.svg`](../icons/yahoo-finance-price.svg) | Yahoo Finance Price | `api` | alpha | check, catalog, read | 1 | 0 | [Documentation](https://www.yahoofinanceapi.com/) | bundle definition |
