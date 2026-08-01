@@ -110,34 +110,45 @@ func TestLinearStateReducingWritesRequireDestructiveConfirmation(t *testing.T) {
 	}
 }
 
-func TestLinearCustomerMergeRequiresDestructiveConfirmation(t *testing.T) {
+func TestLinearCustomerMergeRemainsBlockedPendingPayloadSuccessValidation(t *testing.T) {
 	linear := mustProductionBundle(t, "linear")
 
-	var action *engine.WriteAction
-	for i := range linear.Writes {
-		if linear.Writes[i].Name == "customer_merge" {
-			action = &linear.Writes[i]
+	for _, action := range linear.Writes {
+		if action.Name == "customer_merge" {
+			t.Fatal("linear customer_merge write action exposed; want blocked operation")
+		}
+	}
+	for _, command := range mustLinearCLICommands(t) {
+		if command.Write == "customer_merge" {
+			t.Fatalf("linear customer_merge CLI command %q exposed; want blocked operation", command.Path)
+		}
+	}
+
+	surface := mustLinearAPISurface(t)
+	var endpoint *engine.SurfaceEndpoint
+	for i := range surface.Endpoints {
+		if surface.Endpoints[i].Path == "/graphql#Mutation.customerMerge" {
+			endpoint = &surface.Endpoints[i]
 			break
 		}
 	}
-	if action == nil {
-		t.Fatal("linear customer_merge action missing")
+	if endpoint == nil {
+		t.Fatal("api_surface row missing for customer_merge")
 	}
-	if action.Confirm != "destructive" {
-		t.Fatalf("customer_merge confirm = %q, want destructive", action.Confirm)
+	if endpoint.CoveredBy != nil {
+		t.Fatalf("customer_merge covered_by = %+v, want blocked operation", endpoint.CoveredBy)
 	}
-	for _, want := range []string{"destructive", "archives the source customer", "typed confirmation"} {
-		if !strings.Contains(action.Risk, want) {
-			t.Fatalf("customer_merge risk = %q, want %q", action.Risk, want)
+	if endpoint.Operation == nil {
+		t.Fatal("customer_merge operation = nil, want blocked operation")
+	}
+	operation := endpoint.Operation
+	if operation.Model != "destructive_action" || operation.Status != "blocked" || !operation.BlockedByDefault {
+		t.Fatalf("customer_merge operation = %+v, want destructive action blocked by default", operation)
+	}
+	for _, want := range []string{"success: Boolean!", "payload-success validation", "HTTP 200 plus GraphQL errors-only handling"} {
+		if !strings.Contains(operation.Reason+operation.Notes, want) {
+			t.Fatalf("customer_merge reason/notes = %q / %q, want %q", operation.Reason, operation.Notes, want)
 		}
-	}
-
-	command := mustLinearCLICommand(t, "customer_merge")
-	if !strings.Contains(command.Approval, "typed destructive confirmation") {
-		t.Fatalf("customer_merge CLI approval = %q, want typed destructive confirmation", command.Approval)
-	}
-	if !strings.Contains(command.Risk, "archives the source customer") {
-		t.Fatalf("customer_merge CLI risk = %q, want source customer archive warning", command.Risk)
 	}
 }
 
@@ -197,22 +208,8 @@ func TestLinearProviderInternalMutationsAreBlocked(t *testing.T) {
 }
 
 type linearCLICommand struct {
-	Path     string `json:"path"`
-	Write    string `json:"write"`
-	Risk     string `json:"risk"`
-	Approval string `json:"approval"`
-}
-
-func mustLinearCLICommand(t *testing.T, write string) linearCLICommand {
-	t.Helper()
-
-	for _, command := range mustLinearCLICommands(t) {
-		if command.Write == write {
-			return command
-		}
-	}
-	t.Fatalf("linear CLI command for write %s missing", write)
-	return linearCLICommand{}
+	Path  string `json:"path"`
+	Write string `json:"write"`
 }
 
 func mustLinearCLICommands(t *testing.T) []linearCLICommand {
