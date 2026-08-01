@@ -35,14 +35,59 @@
           "fieldValues": {
             "type": "array",
             "items": {
-              "type": [
-                "object",
-                "string",
-                "number",
-                "integer",
-                "boolean",
-                "null"
-              ]
+              "type": "object",
+              "required": [
+                "id",
+                "value"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "number",
+                    "integer",
+                    "boolean",
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": [
+                      "string",
+                      "number",
+                      "integer",
+                      "boolean",
+                      "object",
+                      "null"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "score": {
+                        "type": [
+                          "integer",
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "comment": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "text": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -90,7 +135,8 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "text"
+          "text",
+          "fields"
         ],
         "additionalProperties": false,
         "properties": {
@@ -115,14 +161,105 @@
           "fields": {
             "type": "array",
             "items": {
-              "type": [
-                "object",
-                "string",
-                "number",
-                "integer",
-                "boolean",
-                "null"
-              ]
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -169,14 +306,105 @@
           "fields": {
             "type": "array",
             "items": {
-              "type": [
-                "object",
-                "string",
-                "number",
-                "integer",
-                "boolean",
-                "null"
-              ]
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -218,7 +446,8 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "text"
+          "text",
+          "fields"
         ],
         "additionalProperties": false,
         "properties": {
@@ -246,14 +475,105 @@
           "fields": {
             "type": "array",
             "items": {
-              "type": [
-                "object",
-                "string",
-                "number",
-                "integer",
-                "boolean",
-                "null"
-              ]
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -303,14 +623,105 @@
           "fields": {
             "type": "array",
             "items": {
-              "type": [
-                "object",
-                "string",
-                "number",
-                "integer",
-                "boolean",
-                "null"
-              ]
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "application-file-upload",
+                    "code",
+                    "currency",
+                    "date",
+                    "dropdown",
+                    "file-upload",
+                    "multiple choice",
+                    "multiple-choice",
+                    "multiple select",
+                    "multiple-select",
+                    "note",
+                    "score",
+                    "score system",
+                    "score-system",
+                    "scorecard",
+                    "text",
+                    "textarea",
+                    "university",
+                    "yes-no",
+                    "yes/no"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "prompt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "optionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "scores": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "text"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         },

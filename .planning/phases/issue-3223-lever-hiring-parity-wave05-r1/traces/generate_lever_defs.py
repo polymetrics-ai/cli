@@ -53,8 +53,96 @@ def kebab(value: str) -> str:
     return slug(value).replace("_", "-")
 
 
+FIELD_VALUE_ITEM_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "required": ["id", "value"],
+    "additionalProperties": False,
+    "properties": {
+        "id": {"type": "string"},
+        "value": {
+            "type": ["string", "number", "integer", "boolean", "array", "null"],
+            "items": {
+                "type": ["string", "number", "integer", "boolean", "object", "null"],
+                "additionalProperties": False,
+                "properties": {
+                    "score": {"type": ["integer", "number", "null"]},
+                    "comment": {"type": ["string", "null"]},
+                    "text": {"type": ["string", "null"]},
+                },
+            },
+        },
+    },
+}
+
+FORM_FIELD_ITEM_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "required": ["type", "text"],
+    "additionalProperties": False,
+    "properties": {
+        "id": {"type": ["string", "null"]},
+        "type": {
+            "type": "string",
+            "enum": [
+                "application-file-upload",
+                "code",
+                "currency",
+                "date",
+                "dropdown",
+                "file-upload",
+                "multiple choice",
+                "multiple-choice",
+                "multiple select",
+                "multiple-select",
+                "note",
+                "score",
+                "score system",
+                "score-system",
+                "scorecard",
+                "text",
+                "textarea",
+                "university",
+                "yes-no",
+                "yes/no",
+            ],
+        },
+        "text": {"type": "string"},
+        "description": {"type": ["string", "null"]},
+        "required": {"type": "boolean"},
+        "prompt": {"type": ["string", "null"]},
+        "options": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["text"],
+                "additionalProperties": False,
+                "properties": {
+                    "text": {"type": "string"},
+                    "optionId": {"type": ["string", "null"]},
+                },
+            },
+        },
+        "scores": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["text"],
+                "additionalProperties": False,
+                "properties": {
+                    "text": {"type": "string"},
+                    "description": {"type": ["string", "null"]},
+                },
+            },
+        },
+    },
+}
+
+
 def prop_schema(name: str) -> dict[str, Any]:
-    if name in {"fields", "fieldValues", "links", "tags", "sources", "postingIds", "options", "subfields"}:
+    if name == "fieldValues":
+        return {"type": "array", "items": FIELD_VALUE_ITEM_SCHEMA}
+    if name == "fields":
+        return {"type": "array", "items": FORM_FIELD_ITEM_SCHEMA}
+    if name in {"links", "tags", "sources", "postingIds", "options", "subfields"}:
         return {"type": "array", "items": {"type": ["object", "string", "number", "integer", "boolean", "null"]}}
     if name in {"secretByDefault", "backfill", "isRequired"}:
         return {"type": "boolean"}
@@ -231,6 +319,8 @@ for name, kind, method, raw_path, body_fields, risk in write_specs:
     required = list(path_fields)
     if kind == "create" and "text" in body_fields:
         required.append("text")
+    if kind == "create" and "fields" in body_fields:
+        required.append("fields")
     schema: dict[str, Any] = {"type": "object", "required": required, "additionalProperties": False, "properties": props}
     if body_fields and kind != "create":
         schema["minProperties"] = len(path_fields) + 1
@@ -250,8 +340,17 @@ for name, kind, method, raw_path, body_fields, risk in write_specs:
 
     record: dict[str, Any] = {field: f"{field}_fixture_1" for field in path_fields}
     for field in body_fields:
-        if field in {"fields", "fieldValues"}:
+        if field == "fieldValues":
             record[field] = [{"id": "field_fixture_1", "value": "Fixture value"}]
+        elif field == "fields" and "feedback_template" in name:
+            record[field] = [{"type": "score-system", "text": "Rating", "required": True}]
+        elif field == "fields":
+            record[field] = [{
+                "type": "date",
+                "text": "Start Date",
+                "description": "Please enter a desired start date.",
+                "required": True,
+            }]
         elif field == "secretByDefault":
             record[field] = False
         elif field.endswith("At"):
@@ -281,6 +380,49 @@ def is_binary_family(path: str) -> bool:
 
 def is_webhook(path: str) -> bool:
     return path.startswith("/webhooks")
+
+
+def sensitive_direct_read_policy(path: str) -> dict[str, Any] | None:
+    if path == "/v1/eeo/responses/pii":
+        return {"redact_fields": [
+            "eeoResponses",
+            "applicationArchivedAt",
+            "applicationArchivedBy",
+            "appliedAt",
+            "currentStage",
+            "contact",
+            "gender",
+            "race",
+            "veteran",
+            "disability",
+            "disabilitySignatureDate",
+            "eeoSurveyRespondedAt",
+            "hiredDate",
+            "hiringManager",
+            "opportunityId",
+            "origin",
+            "posting",
+            "requisitionCodes",
+            "source",
+        ]}
+    if path.startswith("/surveys/diversity/"):
+        return {"redact_fields": [
+            "candidateLocations",
+            "countryCodes",
+            "fields",
+            "instructions",
+            "text",
+            "options",
+            "gender",
+            "ethnicity",
+            "race",
+            "veteran",
+            "disability",
+            "sexualOrientation",
+            "genderIdentity",
+        ]}
+    return None
+
 
 direct_ops: list[dict[str, Any]] = []
 cli_commands: list[dict[str, Any]] = []
@@ -342,7 +484,7 @@ for op in HTTP_OPS:
         path_params = re.findall(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", path)
         flags = [{"name": kebab(param), "type": "string", "summary": f"Lever {param} identifier.", "maps_to": f"path.{param}", "allow_empty": False} for param in path_params]
         policy = "clinical_json_redacted" if "eeo" in path.lower() or "diversity" in path.lower() else "json_redacted"
-        direct_ops.append({
+        direct_op = {
             "id": op_id,
             "kind": "rest_read",
             "summary": title,
@@ -352,7 +494,11 @@ for op in HTTP_OPS:
             "approval": "none: read-only fixed-target operation with bounded redacted output",
             "output_policy": policy,
             "rest": {"method": "GET", "path": path, "max_bytes": 1048576},
-        })
+        }
+        sensitive_policy = sensitive_direct_read_policy(path)
+        if sensitive_policy:
+            direct_op["sensitive_policy"] = sensitive_policy
+        direct_ops.append(direct_op)
         cli_commands.append({
             "path": cmd_path,
             "summary": title,

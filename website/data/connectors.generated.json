@@ -159856,14 +159856,14 @@
   {
     "slug": "lever-hiring",
     "name": "Lever Hiring",
-    "description": "Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).",
+    "description": "Reads Lever Hiring opportunities, postings, users, requisitions, stages, and related hiring resources; exposes bounded direct reads and selected typed reverse-ETL write plans.",
     "docs_url": "https://hire.lever.co/developer/documentation",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -159908,11 +159908,2017 @@
         ],
         "cursor": "",
         "incremental": false
+      },
+      {
+        "name": "deleted_applications",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "archive_reasons",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "audit_events",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "disposition_stages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "feedback_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "deleted_opportunities",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "deleted_postings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "form_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "requisition_fields",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "sources",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "applications",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_feedback",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_interviews",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_notes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_offers",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_file_actions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_panels",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_forms",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "opportunity_referrals",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "posting_users",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data\nAPI. Read-only (full-refresh).\n\nReadable streams: `opportunities`, `postings`, `users`, `requisitions`, `stages`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://hire.lever.co/developer/documentation.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (optional, secret, string); Lever OAuth2 access token. Sent as Authorization:\n  Bearer <access_token>. Never logged.\n- `api_key` (optional, secret, string); Lever API key. Sent as the HTTP Basic auth username with a\n  blank password (Lever's documented API-key auth convention). Never logged.\n- `base_url` (optional, string); default `https://api.lever.co/v1`; format `uri`; Lever Data API\n  base URL override for tests, proxies, or a sandbox environment (https://api.sandbox.lever.co/v1).\n- `mode` (optional, string).\n\nSecret fields are redacted in logs and write previews: `access_token`, `api_key`.\n\nDefault configuration values: `base_url=https://api.lever.co/v1`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token` when `{{ secrets.access_token }}`.\n- HTTP Basic authentication using `secrets.api_key` when `{{ secrets.api_key }}`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/postings` with query `limit`=`1`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `offset`; next token from `next`; stop flag\n`hasNext`; page size 100.\n\n- `opportunities`: GET `/opportunities` - records path `data`; query `limit`=`100`; cursor\n  pagination; cursor parameter `offset`; next token from `next`; stop flag `hasNext`; page size 100.\n- `postings`: GET `/postings` - records path `data`; query `limit`=`100`; cursor pagination; cursor\n  parameter `offset`; next token from `next`; stop flag `hasNext`; page size 100.\n- `users`: GET `/users` - records path `data`; query `limit`=`100`; cursor pagination; cursor\n  parameter `offset`; next token from `next`; stop flag `hasNext`; page size 100.\n- `requisitions`: GET `/requisitions` - records path `data`; query `limit`=`100`; cursor pagination;\n  cursor parameter `offset`; next token from `next`; stop flag `hasNext`; page size 100.\n- `stages`: GET `/stages` - records path `data`; query `limit`=`100`; cursor pagination; cursor\n  parameter `offset`; next token from `next`; stop flag `hasNext`; page size 100.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Lever API read of candidate and hiring pipeline\ndata.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 5 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=6.\n",
+    "write_actions": [
+      {
+        "name": "update_feedback",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_feedback",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_feedback_template",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_feedback_template",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_feedback_template",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_form_template",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_form_template",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_form_template",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_note",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_requisition",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_requisition_field_options",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_requisition_field",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "deactivate_user",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "reactivate_user",
+        "method": "POST",
+        "kind": "update"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Read Lever Hiring records and safely plan typed Lever mutations.",
+      "usage": "pm lever-hiring <command> [flags]",
+      "source_cli": {
+        "name": "Lever API",
+        "docs": "https://hire.lever.co/developer/documentation",
+        "reference": "Lever Developer documentation fetched 2026-08-01",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "etl",
+          "title": "ETL streams",
+          "commands": [
+            "applications",
+            "archive-reasons",
+            "audit-events",
+            "deleted-applications",
+            "deleted-opportunities",
+            "deleted-postings",
+            "disposition-stages",
+            "feedback-templates",
+            "form-templates",
+            "opportunities",
+            "opportunity-feedback",
+            "opportunity-file-actions",
+            "opportunity-forms",
+            "opportunity-interviews",
+            "opportunity-notes",
+            "opportunity-offers",
+            "opportunity-panels",
+            "opportunity-referrals",
+            "posting-users",
+            "postings",
+            "requisition-fields",
+            "requisitions",
+            "sources",
+            "stages",
+            "users"
+          ]
+        },
+        {
+          "id": "direct",
+          "title": "Bounded direct reads",
+          "commands": [
+            "direct"
+          ]
+        },
+        {
+          "id": "writes",
+          "title": "Reverse ETL write plans",
+          "commands": [
+            "create-feedback-template",
+            "create-form-template",
+            "deactivate-user",
+            "delete-feedback",
+            "delete-feedback-template",
+            "delete-form-template",
+            "delete-note",
+            "delete-requisition",
+            "delete-requisition-field",
+            "delete-requisition-field-options",
+            "reactivate-user",
+            "update-feedback",
+            "update-feedback-template",
+            "update-form-template"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the Lever request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Alias for --credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value; never pass secret values here.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum ETL records to emit.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum bounded direct-read response bytes.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "opportunities list",
+          "summary": "Read Lever Hiring opportunities as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunities",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunities list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "postings list",
+          "summary": "Read Lever Hiring postings as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "postings",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring postings list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "users list",
+          "summary": "Read Lever Hiring users as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "users",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring users list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "requisitions list",
+          "summary": "Read Lever Hiring requisitions as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "requisitions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring requisitions list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "stages list",
+          "summary": "Read Lever Hiring stages as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "stages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring stages list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "deleted-applications list",
+          "summary": "Read Lever Hiring deleted applications as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "deleted_applications",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring deleted-applications list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "archive-reasons list",
+          "summary": "Read Lever Hiring archive reasons as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "archive_reasons",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring archive-reasons list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "audit-events list",
+          "summary": "Read Lever Hiring audit events as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "audit_events",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring audit-events list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "disposition-stages list",
+          "summary": "Read Lever Hiring disposition stages as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "disposition_stages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring disposition-stages list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "feedback-templates list",
+          "summary": "Read Lever Hiring feedback templates as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "feedback_templates",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring feedback-templates list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "deleted-opportunities list",
+          "summary": "Read Lever Hiring deleted opportunities as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "deleted_opportunities",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring deleted-opportunities list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "deleted-postings list",
+          "summary": "Read Lever Hiring deleted postings as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "deleted_postings",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring deleted-postings list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "form-templates list",
+          "summary": "Read Lever Hiring form templates as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "form_templates",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring form-templates list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "requisition-fields list",
+          "summary": "Read Lever Hiring requisition fields as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "requisition_fields",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring requisition-fields list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "sources list",
+          "summary": "Read Lever Hiring sources as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "sources",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring sources list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "applications list",
+          "summary": "Read Lever Hiring applications as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "applications",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring applications list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-feedback list",
+          "summary": "Read Lever Hiring opportunity feedback as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_feedback",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-feedback list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-interviews list",
+          "summary": "Read Lever Hiring opportunity interviews as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_interviews",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-interviews list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-notes list",
+          "summary": "Read Lever Hiring opportunity notes as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_notes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-notes list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-offers list",
+          "summary": "Read Lever Hiring opportunity offers as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_offers",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-offers list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-file-actions list",
+          "summary": "Read Lever Hiring opportunity file actions as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_file_actions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-file-actions list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-panels list",
+          "summary": "Read Lever Hiring opportunity panels as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_panels",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-panels list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-forms list",
+          "summary": "Read Lever Hiring opportunity forms as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_forms",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-forms list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "opportunity-referrals list",
+          "summary": "Read Lever Hiring opportunity referrals as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "opportunity_referrals",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring opportunity-referrals list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "posting-users list",
+          "summary": "Read Lever Hiring posting users as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "posting_users",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring posting-users list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-application",
+          "summary": "Retrieve a single application",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "application",
+              "type": "string",
+              "summary": "Lever application identifier.",
+              "values": [],
+              "maps_to": "path.application",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-application --opportunity fixture-opportunity --application fixture-application --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-archive-reason",
+          "summary": "Retrieve a single archive reason",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "archive-reason",
+              "type": "string",
+              "summary": "Lever archive_reason identifier.",
+              "values": [],
+              "maps_to": "path.archive_reason",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-archive-reason --archive-reason fixture-archive-reason --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-contact",
+          "summary": "Retrieve a single contact",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "contact",
+              "type": "string",
+              "summary": "Lever contact identifier.",
+              "values": [],
+              "maps_to": "path.contact",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-contact --contact fixture-contact --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-eeo-responses-with-pii",
+          "summary": "Retrieve EEO responses with PII",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring direct retrieve-eeo-responses-with-pii --json"
+          ],
+          "output_policy": "clinical_json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-feedback-form",
+          "summary": "Retrieve a feedback form",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "feedback",
+              "type": "string",
+              "summary": "Lever feedback identifier.",
+              "values": [],
+              "maps_to": "path.feedback",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-feedback-form --opportunity fixture-opportunity --feedback fixture-feedback --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-feedback-template",
+          "summary": "Retrieve a feedback template",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "feedback-template",
+              "type": "string",
+              "summary": "Lever feedback_template identifier.",
+              "values": [],
+              "maps_to": "path.feedback_template",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-feedback-template --feedback-template fixture-feedback-template --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-interview",
+          "summary": "Retrieve a single interview",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "interview",
+              "type": "string",
+              "summary": "Lever interview identifier.",
+              "values": [],
+              "maps_to": "path.interview",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-interview --opportunity fixture-opportunity --interview fixture-interview --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-note",
+          "summary": "Retrieve a single note",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Lever note identifier.",
+              "values": [],
+              "maps_to": "path.note",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-note --opportunity fixture-opportunity --note fixture-note --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-opportunity",
+          "summary": "Retrieve a single opportunity",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-opportunity --opportunity fixture-opportunity --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-panel",
+          "summary": "Retrieve a single panel",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "panel",
+              "type": "string",
+              "summary": "Lever panel identifier.",
+              "values": [],
+              "maps_to": "path.panel",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-panel --opportunity fixture-opportunity --panel fixture-panel --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-posting",
+          "summary": "Retrieve a single posting",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "posting",
+              "type": "string",
+              "summary": "Lever posting identifier.",
+              "values": [],
+              "maps_to": "path.posting",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-posting --posting fixture-posting --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct list-all-postings-content",
+          "summary": "List all postings with content expansion",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring direct list-all-postings-content --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct list-all-postings-followers",
+          "summary": "List all postings with followers expansion",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring direct list-all-postings-followers --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-posting-application-questions",
+          "summary": "Retrieve posting application questions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "posting",
+              "type": "string",
+              "summary": "Lever posting identifier.",
+              "values": [],
+              "maps_to": "path.posting",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-posting-application-questions --posting fixture-posting --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-profile-form",
+          "summary": "Retrieve a profile form",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "form",
+              "type": "string",
+              "summary": "Lever form identifier.",
+              "values": [],
+              "maps_to": "path.form",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-profile-form --opportunity fixture-opportunity --form fixture-form --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-profile-form-template",
+          "summary": "Retrieve a profile form template",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "form-template",
+              "type": "string",
+              "summary": "Lever form_template identifier.",
+              "values": [],
+              "maps_to": "path.form_template",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-profile-form-template --form-template fixture-form-template --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-referral",
+          "summary": "Retrieve a single referral",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity identifier.",
+              "values": [],
+              "maps_to": "path.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "referral",
+              "type": "string",
+              "summary": "Lever referral identifier.",
+              "values": [],
+              "maps_to": "path.referral",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-referral --opportunity fixture-opportunity --referral fixture-referral --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-requisition",
+          "summary": "Retrieve a single requisition",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "requisition",
+              "type": "string",
+              "summary": "Lever requisition identifier.",
+              "values": [],
+              "maps_to": "path.requisition",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-requisition --requisition fixture-requisition --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-requisition-field",
+          "summary": "Retrieve a single requisition field",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "requisition-field",
+              "type": "string",
+              "summary": "Lever requisition_field identifier.",
+              "values": [],
+              "maps_to": "path.requisition_field",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-requisition-field --requisition-field fixture-requisition-field --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-stage",
+          "summary": "Retrieve a single stage",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "stage",
+              "type": "string",
+              "summary": "Lever stage identifier.",
+              "values": [],
+              "maps_to": "path.stage",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-stage --stage fixture-stage --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-diversity-survey",
+          "summary": "Retrieve a diversity survey",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "posting",
+              "type": "string",
+              "summary": "Lever posting identifier.",
+              "values": [],
+              "maps_to": "path.posting",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-diversity-survey --posting fixture-posting --json"
+          ],
+          "output_policy": "clinical_json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct list-all-tags",
+          "summary": "List all tags",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm lever-hiring direct list-all-tags --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct retrieve-a-single-user",
+          "summary": "Retrieve a single user",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "user",
+              "type": "string",
+              "summary": "Lever user identifier.",
+              "values": [],
+              "maps_to": "path.user",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring direct retrieve-a-single-user --user fixture-user --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "update-feedback plan",
+          "summary": "Updates a feedback form for an opportunity.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_feedback",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity value.",
+              "values": [],
+              "maps_to": "record.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "feedback",
+              "type": "string",
+              "summary": "Lever feedback value.",
+              "values": [],
+              "maps_to": "record.feedback",
+              "allow_empty": false
+            },
+            {
+              "name": "completedat",
+              "type": "integer",
+              "summary": "Lever completedAt value.",
+              "values": [],
+              "maps_to": "record.completedAt"
+            },
+            {
+              "name": "fieldvalues",
+              "type": "string_array",
+              "summary": "Lever fieldValues value.",
+              "values": [],
+              "maps_to": "record.fieldValues"
+            }
+          ],
+          "examples": [
+            "pm lever-hiring update-feedback plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Updates a feedback form for an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-feedback plan",
+          "summary": "Deletes a feedback form from an opportunity.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_feedback",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity value.",
+              "values": [],
+              "maps_to": "record.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "feedback",
+              "type": "string",
+              "summary": "Lever feedback value.",
+              "values": [],
+              "maps_to": "record.feedback",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-feedback plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes a feedback form from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "create-feedback-template plan",
+          "summary": "Creates a feedback template.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_feedback_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "text",
+              "type": "string",
+              "summary": "Lever text value.",
+              "values": [],
+              "maps_to": "record.text",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Lever instructions value.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "group",
+              "type": "string",
+              "summary": "Lever group value.",
+              "values": [],
+              "maps_to": "record.group",
+              "allow_empty": false
+            },
+            {
+              "name": "fields",
+              "type": "string_array",
+              "summary": "Lever fields value.",
+              "values": [],
+              "maps_to": "record.fields"
+            }
+          ],
+          "examples": [
+            "pm lever-hiring create-feedback-template plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "update-feedback-template plan",
+          "summary": "Updates a feedback template.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_feedback_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "feedback-template",
+              "type": "string",
+              "summary": "Lever feedback_template value.",
+              "values": [],
+              "maps_to": "record.feedback_template",
+              "allow_empty": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "summary": "Lever text value.",
+              "values": [],
+              "maps_to": "record.text",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Lever instructions value.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "group",
+              "type": "string",
+              "summary": "Lever group value.",
+              "values": [],
+              "maps_to": "record.group",
+              "allow_empty": false
+            },
+            {
+              "name": "fields",
+              "type": "string_array",
+              "summary": "Lever fields value.",
+              "values": [],
+              "maps_to": "record.fields"
+            }
+          ],
+          "examples": [
+            "pm lever-hiring update-feedback-template plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Updates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-feedback-template plan",
+          "summary": "Deletes a feedback template.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_feedback_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "feedback-template",
+              "type": "string",
+              "summary": "Lever feedback_template value.",
+              "values": [],
+              "maps_to": "record.feedback_template",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-feedback-template plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "create-form-template plan",
+          "summary": "Creates a profile form template.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_form_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "text",
+              "type": "string",
+              "summary": "Lever text value.",
+              "values": [],
+              "maps_to": "record.text",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Lever instructions value.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "group",
+              "type": "string",
+              "summary": "Lever group value.",
+              "values": [],
+              "maps_to": "record.group",
+              "allow_empty": false
+            },
+            {
+              "name": "secretbydefault",
+              "type": "boolean",
+              "summary": "Lever secretByDefault value.",
+              "values": [],
+              "maps_to": "record.secretByDefault"
+            },
+            {
+              "name": "fields",
+              "type": "string_array",
+              "summary": "Lever fields value.",
+              "values": [],
+              "maps_to": "record.fields"
+            }
+          ],
+          "examples": [
+            "pm lever-hiring create-form-template plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "update-form-template plan",
+          "summary": "Updates a profile form template.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_form_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "form-template",
+              "type": "string",
+              "summary": "Lever form_template value.",
+              "values": [],
+              "maps_to": "record.form_template",
+              "allow_empty": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "summary": "Lever text value.",
+              "values": [],
+              "maps_to": "record.text",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Lever instructions value.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "group",
+              "type": "string",
+              "summary": "Lever group value.",
+              "values": [],
+              "maps_to": "record.group",
+              "allow_empty": false
+            },
+            {
+              "name": "secretbydefault",
+              "type": "boolean",
+              "summary": "Lever secretByDefault value.",
+              "values": [],
+              "maps_to": "record.secretByDefault"
+            },
+            {
+              "name": "fields",
+              "type": "string_array",
+              "summary": "Lever fields value.",
+              "values": [],
+              "maps_to": "record.fields"
+            }
+          ],
+          "examples": [
+            "pm lever-hiring update-form-template plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Updates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-form-template plan",
+          "summary": "Deletes a profile form template.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_form_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "form-template",
+              "type": "string",
+              "summary": "Lever form_template value.",
+              "values": [],
+              "maps_to": "record.form_template",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-form-template plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-note plan",
+          "summary": "Deletes a note from an opportunity.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_note",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "opportunity",
+              "type": "string",
+              "summary": "Lever opportunity value.",
+              "values": [],
+              "maps_to": "record.opportunity",
+              "allow_empty": false
+            },
+            {
+              "name": "noteid",
+              "type": "string",
+              "summary": "Lever noteId value.",
+              "values": [],
+              "maps_to": "record.noteId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-note plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes a note from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-requisition plan",
+          "summary": "Deletes a requisition.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_requisition",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "requisition",
+              "type": "string",
+              "summary": "Lever requisition value.",
+              "values": [],
+              "maps_to": "record.requisition",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-requisition plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes a requisition. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-requisition-field-options plan",
+          "summary": "Deletes dropdown options for a requisition field.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_requisition_field_options",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "requisition-field",
+              "type": "string",
+              "summary": "Lever requisition_field value.",
+              "values": [],
+              "maps_to": "record.requisition_field",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-requisition-field-options plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes dropdown options for a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "delete-requisition-field plan",
+          "summary": "Deletes a requisition field.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_requisition_field",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "requisition-field",
+              "type": "string",
+              "summary": "Lever requisition_field value.",
+              "values": [],
+              "maps_to": "record.requisition_field",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring delete-requisition-field plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deletes a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "deactivate-user plan",
+          "summary": "Deactivates a Lever user.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "deactivate_user",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "user",
+              "type": "string",
+              "summary": "Lever user value.",
+              "values": [],
+              "maps_to": "record.user",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring deactivate-user plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Deactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        },
+        {
+          "path": "reactivate-user plan",
+          "summary": "Reactivates a Lever user.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "reactivate_user",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "user",
+              "type": "string",
+              "summary": "Lever user value.",
+              "values": [],
+              "maps_to": "record.user",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm lever-hiring reactivate-user plan --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "Reactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+          "approval": "Reverse ETL writes require plan, preview, explicit approval, then execute.",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "operation-ledger",
+          "summary": "Lever operation ledger covers 107 HTTP operations and 10 webhook events from the official documentation."
+        },
+        {
+          "name": "write-safety",
+          "summary": "Lever write commands use reverse ETL plan -> preview -> approval -> execute; destructive actions require typed confirmation."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads Lever Hiring opportunities, postings, users, requisitions, stages, and related hiring records through the Lever Data API. This bundle also exposes fixed-target bounded direct reads and selected typed reverse-ETL write plans.\n\nService API documentation: https://hire.lever.co/developer/documentation.\n\nCurrent official operation ledger: 117 operations total (107 HTTP operations and 10 webhook trigger/event names). Implemented rows: 25 stream-backed reads, 23 bounded direct reads, and 14 typed writes. Blocked/planned rows: 55. Certified rows: 0 (fixture-only; no live provider calls were made).\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (optional, secret, string): Lever OAuth2 access token. Bearer authentication is preferred when both credential types are present.\n- `api_key` (optional, secret, string): Lever API key sent as HTTP Basic username with a blank password.\n- `base_url` (optional, string): default `https://api.lever.co/v1`; use `https://api.sandbox.lever.co/v1` or a test proxy only via config, never by editing operation paths.\n- `mode` (optional, string): retained for credential-free fixture/conformance compatibility.\n\nSecret fields are redacted: `access_token`, `api_key`. Connection checks call `GET /postings?limit=1`.\n\n## Streams notes\n\nThe connector declares 25 stream-backed read surfaces. Top-level collection streams use Lever cursor pagination (`limit`, `offset`, `next`, `hasNext`). Opportunity/posting sub-resource streams use the engine fan-out contract to list parent IDs from `/opportunities` or `/postings`, then request the fixed child collection path once per parent ID and stamp the parent ID onto emitted records.\n\nImplemented stream names: `opportunities`, `postings`, `users`, `requisitions`, `stages`, `deleted_applications`, `archive_reasons`, `audit_events`, `disposition_stages`, `feedback_templates`, `deleted_opportunities`, `deleted_postings`, `form_templates`, `requisition_fields`, `sources`, `applications`, `opportunity_feedback`, `opportunity_interviews`, `opportunity_notes`, `opportunity_offers`, `opportunity_file_actions`, `opportunity_panels`, `opportunity_forms`, `opportunity_referrals`, `posting_users`.\n\nScalar-list and binary/file-family operations that cannot be represented as durable object records are kept out of ETL streams and are either bounded direct reads or blocked in the operation ledger.\n\n## Write actions & risks\n\nThe connector declares 14 typed write actions: `update_feedback`, `delete_feedback`, `create_feedback_template`, `update_feedback_template`, `delete_feedback_template`, `create_form_template`, `update_form_template`, `delete_form_template`, `delete_note`, `delete_requisition`, `delete_requisition_field_options`, `delete_requisition_field`, `deactivate_user`, `reactivate_user`.\n\nWrites are only available through reverse ETL plan -> preview -> explicit approval -> execute. Destructive/no-body actions use `confirm: destructive`. The bundle does not expose arbitrary request bodies, raw query strings, generic method/path/body, file bytes, shell commands, or passthrough HTTP tools.\n\nMany official Lever mutations remain blocked because the current generic write executor does not support provider query parameters such as `perform_as`, or because the official request body is not closed enough to expose without a connector-specific schema/hook.\n\n## Known limits\n\n- Fixture-only evidence: no live Lever credentials, provider calls, provider writes, or certification run were used.\n- Webhook trigger ingestion and webhook subscription lifecycle rows are blocked pending the shared webhook/CDC foundation (#2986/#2988).\n- Lever file/resume/upload/download rows are blocked pending a bounded binary/multipart transfer executor; no generic file byte passthrough is exposed.\n- Mutations requiring documented query/form parameters (for example `perform_as`) are blocked until shared write-query support or a connector hook can express them without a raw query escape hatch.\n- The generated operation ledger is based on the current official Lever Developer documentation fetched for this slice and should be re-audited when Lever changes that page.\n",
     "icon": {
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
