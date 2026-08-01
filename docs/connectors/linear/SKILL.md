@@ -81,7 +81,7 @@ Reads Linear GraphQL list/connection data and exposes only fixed GraphQL reverse
   - cursor: updatedAt
   - fields: __typename(), archivedAt(), createdAt(), id(), type(), updatedAt()
 - audit_entry_types:
-  - primary key: __typename
+  - primary key: type
   - fields: __typename(), description(), type()
 - authentication_sessions:
   - primary key: id
@@ -168,7 +168,7 @@ Reads Linear GraphQL list/connection data and exposes only fixed GraphQL reverse
   - cursor: updatedAt
   - fields: __typename(), archivedAt(), createdAt(), description(), id(), name(), updatedAt()
 - issue_priority_values:
-  - primary key: __typename
+  - primary key: priority
   - fields: __typename(), label(), priority()
 - issue_relations:
   - primary key: id

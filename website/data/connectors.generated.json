@@ -160106,7 +160106,7 @@
       {
         "name": "audit_entry_types",
         "primary_key": [
-          "__typename"
+          "type"
         ],
         "cursor": "",
         "incremental": false
@@ -160282,7 +160282,7 @@
       {
         "name": "issue_priority_values",
         "primary_key": [
-          "__typename"
+          "priority"
         ],
         "cursor": "",
         "incremental": false

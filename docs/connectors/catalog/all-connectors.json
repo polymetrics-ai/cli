@@ -74404,7 +74404,7 @@
       {
         "name": "audit_entry_types",
         "primary_key": [
-          "__typename"
+          "type"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -74667,7 +74667,7 @@
       {
         "name": "issue_priority_values",
         "primary_key": [
-          "__typename"
+          "priority"
         ],
         "sync_modes": [
           "full_refresh_append",

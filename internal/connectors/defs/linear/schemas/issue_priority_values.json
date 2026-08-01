@@ -3,7 +3,7 @@
   "title": "issue_priority_values",
   "type": "object",
   "x-primary-key": [
-    "__typename"
+    "priority"
   ],
   "properties": {
     "__typename": {

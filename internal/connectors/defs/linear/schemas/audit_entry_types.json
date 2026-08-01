@@ -3,7 +3,7 @@
   "title": "audit_entry_types",
   "type": "object",
   "x-primary-key": [
-    "__typename"
+    "type"
   ],
   "properties": {
     "__typename": {
