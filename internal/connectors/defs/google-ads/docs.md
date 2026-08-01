@@ -20,19 +20,19 @@ Provide `access_token` and `developer_token` through the credentials layer or en
 
 Implemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.
 
-Direct reads: `34` fixed connector-owned operations with JSON-redacted output and bounded response size.
+Direct reads: `33` fixed connector-owned operations with JSON-redacted output and bounded response size.
 
 ## Write actions & risks
 
-Reverse/write actions: `104` guarded write actions generated from v22 methods whose path variables are representable by the current connector contract.
+Reverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.
 
-- Write actions use typed top-level schemas and closed top-level request objects derived from the public discovery schema.
+- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.
 - Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.
 - Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.
 - No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.
 
 ## Known limits
 
-Blocked/planned operations: `23` rows. These are not advertised as executable. Most require reserved-expansion resource-name path variables whose values contain slashes.
+Blocked/planned operations: `121` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, and raw GAQL query commands remain blocked.
 
 Google Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.

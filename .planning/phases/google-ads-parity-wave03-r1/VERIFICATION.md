@@ -6,7 +6,7 @@ Credential-free only. No live Google Ads API calls or provider writes were made.
 
 - [x] Source inventory script: official v22 methods counted and local surface partition summarized.
   - `python3 .planning/phases/google-ads-parity-wave03-r1/generate_google_ads_parity.py`
-  - Generated counts: `api_surface_rows=164`, `streams=3`, `direct_reads=34`, `write_actions=104`, `write_fixtures=104`, `blocked_rows=23`.
+  - Generated counts: `api_surface_rows=164`, `streams=3`, `direct_reads=33`, `write_actions=7`, `write_fixtures=7`, `blocked_rows=121`.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/google-ads`
   - `connectorgen validate: 1 connector(s) checked, 0 findings`
 - [x] `go test ./internal/connectors/conformance -run 'TestConformance/google-ads' -count=1`
@@ -32,7 +32,7 @@ Credential-free only. No live Google Ads API calls or provider writes were made.
 - [x] Help/inspect checks (no credentials):
   - [x] `./pm help connectors`
   - [x] `./pm connectors inspect google-ads`
-  - [x] `go run ./cmd/pm connectors inspect google-ads --json` summarized as 3 streams and 104 write actions.
+  - [x] `go run ./cmd/pm connectors inspect google-ads --json` summarized as 3 streams and 7 write actions.
   - [x] `go run ./cmd/pm google-ads --help`
   - [x] `go run ./cmd/pm google-ads customers generate-ad-group-themes --help`
 

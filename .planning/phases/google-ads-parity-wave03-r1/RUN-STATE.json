@@ -2,7 +2,16 @@
   "phase": "google-ads-parity-wave03-r1",
   "branch": "fm/cli-google-ads-parity-wave03-r1",
   "status": "verified",
-  "issues": [3021, 3022, 3023, 3024, 3025, 3026, 3027, 3028],
+  "issues": [
+    3021,
+    3022,
+    3023,
+    3024,
+    3025,
+    3026,
+    3027,
+    3028
+  ],
   "gsdCommandPath": {
     "doctor": "scripts/gsd doctor",
     "list": "scripts/gsd list",
@@ -25,10 +34,10 @@
     "rawMethods": 163,
     "localLedgerRows": 164,
     "streams": 3,
-    "directReads": 34,
-    "writeActions": 104,
-    "writeFixtures": 104,
-    "blockedRows": 23
+    "directReads": 33,
+    "writeActions": 7,
+    "writeFixtures": 7,
+    "blockedRows": 121
   },
   "verificationPassed": true,
   "safety": {

@@ -1,5 +1,5 @@
 {
-  "tagline": "Google Ads v22 fixed direct reads and guarded reverse/write actions.",
+  "tagline": "Google Ads v22 fixed direct reads and limited guarded reverse/write actions.",
   "usage": "pm google-ads <resource> <operation> [flags]",
   "source_cli": {
     "name": "Google Ads API v22 REST discovery",
@@ -1204,43 +1204,11 @@
     },
     {
       "path": "google-ads-fields search",
-      "summary": "Read Google Ads googleAdsFields.search.",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "google_ads.google.ads.fields.search",
-      "output_policy": "json_redacted",
+      "summary": "Google Ads googleAdsFields.search raw GAQL query",
+      "intent": "raw_api",
+      "availability": "unsafe_or_disallowed",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#googleAdsFields.search",
-      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
-      "approval": "none",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v22/googleAdsFields:search"
-        }
-      ],
-      "examples": [
-        "pm google-ads google-ads-fields search --json"
-      ],
-      "flags": [
-        {
-          "name": "page-size",
-          "maps_to": "body.pageSize",
-          "summary": "Google Ads request field pageSize.",
-          "type": "integer"
-        },
-        {
-          "name": "page-token",
-          "maps_to": "body.pageToken",
-          "summary": "Google Ads request field pageToken.",
-          "type": "string"
-        },
-        {
-          "name": "query",
-          "maps_to": "body.query",
-          "summary": "Google Ads request field query.",
-          "type": "string"
-        }
-      ]
+      "notes": "Free-form GAQL query text is a raw query escape hatch; use fixed connector-owned streams such as campaigns and ad_groups instead."
     },
     {
       "path": "keyword-theme-constants suggest",

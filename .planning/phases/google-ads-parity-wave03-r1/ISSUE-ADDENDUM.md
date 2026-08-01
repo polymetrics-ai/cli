@@ -11,10 +11,10 @@ Fixture-only local implementation complete on branch `fm/cli-google-ads-parity-w
 **Implemented local parity counts**
 - Local operation-ledger rows: 164 (one extra row because `customers.googleAds.search` backs two fixed streams: `campaigns` and `ad_groups`)
 - Streams: 3 (`accessible_customers`, `campaigns`, `ad_groups`)
-- Fixed direct reads: 34
-- Guarded reverse/write actions: 104
-- Sanitized write fixtures: 104
-- Blocked/planned rows: 23 (`destructive_action=4`, `admin_reverse_etl=10`, `direct_read=8`, `duplicate=1`)
+- Fixed direct reads: 33
+- Guarded reverse/write actions: 7
+- Sanitized write fixtures: 7
+- Blocked/planned rows: 121 (`disallowed=98`, `destructive_action=4`, `admin_reverse_etl=10`, `direct_read=8`, `duplicate=1`)
 - Excluded/N/A rows: 0 in v2 operation-ledger mode
 
 **Safety disposition**

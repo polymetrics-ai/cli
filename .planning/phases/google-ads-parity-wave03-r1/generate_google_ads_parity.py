@@ -191,6 +191,48 @@ def request_schema(schemas, ref, force_required=None, min_props=False):
     return result
 
 
+def schema_has_open_objects(schema):
+    if isinstance(schema, dict):
+        if schema.get("additionalProperties") is True:
+            return True
+        return any(schema_has_open_objects(value) for value in schema.values())
+    if isinstance(schema, list):
+        return any(schema_has_open_objects(value) for value in schema)
+    return False
+
+
+def raw_write_block_row(method_name, method, http_method, spath, source, name):
+    return {
+        "method": http_method,
+        "path": spath,
+        "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": write_risk(method_name, method),
+            "blocked_by_default": True,
+            "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+            "source_url": source,
+            "notes": "Author a closed record_schema for " + name + " before enabling this reverse ETL action.",
+        },
+    }
+
+
+def raw_query_block_row(method_name, http_method, spath, source):
+    return {
+        "method": http_method,
+        "path": spath,
+        "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": True,
+            "reason": "Blocked because body.query accepts arbitrary GAQL text; Google Ads query surfaces must use fixed connector-owned stream queries.",
+            "source_url": source,
+            "notes": "Use the fixed campaigns and ad_groups streams instead of exposing googleAdsFields.search as a raw query command.",
+        },
+    }
+
+
 def dummy_for_schema(schema):
     typ = schema.get("type")
     if isinstance(typ, list):
@@ -343,6 +385,13 @@ def build_artifacts(rest_description):
                     required.append("resourceName")
                 body_schema["required"] = required
                 body_schema.pop("minProperties", None)
+            if schema_has_open_objects(body_schema):
+                class_counts[cls] -= 1
+                class_counts["blocked_raw_write_schema"] += 1
+                row = raw_write_block_row(method_name, method, http_method, spath, source, name)
+                api_endpoints.append(row)
+                blocked_rows.append(row)
+                continue
             risk = write_risk(method_name, method)
             action = {
                 "name": name,
@@ -373,9 +422,16 @@ def build_artifacts(rest_description):
             continue
 
         if cls == "direct_read":
+            body_schema = request_schema(schemas, req_ref, min_props=False)
+            if method_name == "googleAdsFields.search" and "query" in (body_schema.get("properties") or {}):
+                class_counts[cls] -= 1
+                class_counts["blocked_raw_query"] += 1
+                row = raw_query_block_row(method_name, http_method, spath, source)
+                api_endpoints.append(row)
+                blocked_rows.append(row)
+                continue
             op = unique(operation_id(method_name), seen_ops)
             cmd = unique(command_path(method_name), seen_commands)
-            body_schema = request_schema(schemas, req_ref, min_props=False)
             operation = {
                 "id": op,
                 "kind": "rest_read",
@@ -458,7 +514,7 @@ def update_definition_files(rest_description, artifacts):
     methods, class_counts, api_endpoints, writes, write_fixtures, operations, cli_commands, blocked_rows = artifacts
 
     metadata = json.load((ROOT / "metadata.json").open())
-    metadata["description"] = "Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and guarded reverse-ETL API surfaces."
+    metadata["description"] = "Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces."
     metadata.pop("categories", None)
     metadata.pop("status", None)
     caps = metadata.setdefault("capabilities", {})
@@ -468,7 +524,7 @@ def update_definition_files(rest_description, artifacts):
     caps.pop("webhook", None)
     metadata["risk"] = {
         "read": "external Google Ads API reads of customer, campaign, ad-group, and bounded direct-read metadata",
-        "write": "guarded Google Ads API reverse/write actions generated from fixed v22 methods; destructive/admin actions require explicit approval",
+        "write": "limited guarded Google Ads API reverse/write actions with closed record schemas; destructive/admin actions require explicit approval",
         "approval": "reads require no approval; writes remain gated by plan -> preview -> explicit approval -> execute"
     }
     write_json(ROOT / "metadata.json", metadata)
@@ -543,7 +599,7 @@ def update_definition_files(rest_description, artifacts):
     write_json(ROOT / "writes.json", {"actions": writes})
     write_json(ROOT / "operations.json", {"operations": operations})
     write_json(ROOT / "cli_surface.json", {
-        "tagline": "Google Ads v22 fixed direct reads and guarded reverse/write actions.",
+        "tagline": "Google Ads v22 fixed direct reads and limited guarded reverse/write actions.",
         "usage": "pm google-ads <resource> <operation> [flags]",
         "source_cli": {
             "name": "Google Ads API v22 REST discovery",
@@ -572,7 +628,7 @@ def update_definition_files(rest_description, artifacts):
             req["path"] = "/v22" + path
         write_json(fixture_path, fixture)
 
-    docs = f"""# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave is fixture-only: it does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.\n\nPublic source audit:\n\n- Source: `{DISCOVERY_URL}`\n- API version: `{rest_description.get('version')}`\n- Discovery revision: `{rest_description.get('revision')}`\n- Raw discovery method count: `{len(methods)}` (`POST={Counter(m.get('httpMethod') for _, m in methods).get('POST', 0)}`, `GET={Counter(m.get('httpMethod') for _, m in methods).get('GET', 0)}`, `DELETE={Counter(m.get('httpMethod') for _, m in methods).get('DELETE', 0)}`)\n- Local operation ledger rows: `{len(api_endpoints)}`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `{len(operations)}` fixed connector-owned operations with JSON-redacted output and bounded response size.\n\n## Write actions & risks\n\nReverse/write actions: `{len(writes)}` guarded write actions generated from v22 methods whose path variables are representable by the current connector contract.\n\n- Write actions use typed top-level schemas and closed top-level request objects derived from the public discovery schema.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `{len(blocked_rows)}` rows. These are not advertised as executable. Most require reserved-expansion resource-name path variables whose values contain slashes.\n\nGoogle Ads methods whose REST paths use `{{+resourceName}}`, `{{+name}}`, `{{+experiment}}`, `{{+campaignDraft}}`, or `{{+adGroupAd}}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n"""
+    docs = f"""# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave is fixture-only: it does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.\n\nPublic source audit:\n\n- Source: `{DISCOVERY_URL}`\n- API version: `{rest_description.get('version')}`\n- Discovery revision: `{rest_description.get('revision')}`\n- Raw discovery method count: `{len(methods)}` (`POST={Counter(m.get('httpMethod') for _, m in methods).get('POST', 0)}`, `GET={Counter(m.get('httpMethod') for _, m in methods).get('GET', 0)}`, `DELETE={Counter(m.get('httpMethod') for _, m in methods).get('DELETE', 0)}`)\n- Local operation ledger rows: `{len(api_endpoints)}`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `{len(operations)}` fixed connector-owned operations with JSON-redacted output and bounded response size.\n\n## Write actions & risks\n\nReverse/write actions: `{len(writes)}` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `{len(blocked_rows)}` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, and raw GAQL query commands remain blocked.\n\nGoogle Ads methods whose REST paths use `{{+resourceName}}`, `{{+name}}`, `{{+experiment}}`, `{{+campaignDraft}}`, or `{{+adGroupAd}}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n"""
     (ROOT / "docs.md").write_text(docs, encoding="utf-8")
 
 

@@ -1329,37 +1329,6 @@
       }
     },
     {
-      "id": "google_ads.google.ads.fields.search",
-      "kind": "rest_read",
-      "summary": "Read Google Ads API v22 method googleAdsFields.search with a fixed connector-owned operation definition.",
-      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#googleAdsFields.search",
-      "risk": "medium",
-      "approval": "none; bounded direct read with JSON redaction and a fixed endpoint",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/v22/googleAdsFields:search",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "query": {
-              "type": "string"
-            },
-            "pageSize": {
-              "type": "integer"
-            },
-            "pageToken": {
-              "type": "string"
-            }
-          }
-        },
-        "body": {}
-      }
-    },
-    {
       "id": "google_ads.keyword.theme.constants.suggest",
       "kind": "rest_read",
       "summary": "Read Google Ads API v22 method keywordThemeConstants.suggest with a fixed connector-owned operation definition.",

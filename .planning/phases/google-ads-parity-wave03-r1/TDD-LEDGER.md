@@ -75,12 +75,12 @@ python3 .planning/phases/google-ads-parity-wave03-r1/generate_google_ads_parity.
 Observed:
 
 ```text
-generated {'classification': {'blocked_duplicate': 1, 'blocked_reserved_path': 22, 'direct_read': 34, 'stream': 2, 'write': 104}, 'api_surface_rows': 164, 'writes': 104, 'write_fixtures': 104, 'direct_reads': 34, 'blocked': 23}
+generated {'classification': {'blocked_duplicate': 1, 'blocked_raw_query': 1, 'blocked_raw_write_schema': 97, 'blocked_reserved_path': 22, 'direct_read': 33, 'stream': 2, 'write': 7}, 'api_surface_rows': 164, 'writes': 7, 'write_fixtures': 7, 'direct_reads': 33, 'blocked': 121}
 ```
 
 Green evidence:
 
-- `internal/connectors/defs/google-ads/api_surface.json` uses v22 operation ledger mode and records 164 rows: 3 stream-covered rows, 34 direct reads, 104 write-covered rows, and 23 blocked/planned operation rows.
+- `internal/connectors/defs/google-ads/api_surface.json` uses v22 operation ledger mode and records 164 rows: 3 stream-covered rows, 33 direct reads, 7 write-covered rows, and 121 blocked/planned operation rows.
 - `SOURCE-AUDIT.json` records discovery revision `20260721`, 163 raw methods, HTTP split `GET=11`, `POST=151`, `DELETE=1`, and the reserved path-variable gap.
 - The extra local row is documented: `customers.googleAds.search` is split into fixed `campaigns` and `ad_groups` stream rows.
 
