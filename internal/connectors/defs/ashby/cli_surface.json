@@ -4810,7 +4810,7 @@
       "path": "custom-field set-value",
       "summary": "Set the value of a custom field for a given object.\n\n**Note:** When updating multiple custom fields on the same object, use\n[`customField.setValues`](#operation",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_custom_field_value",
       "source_url": "https://developers.ashbyhq.com/reference/customfieldsetvalue",
       "flags": [
@@ -4839,19 +4839,6 @@
           "maps_to": "record.fieldId",
           "summary": "The unique id of the Custom Field definition for the field",
           "allow_empty": false
-        },
-        {
-          "name": "field-value-value",
-          "type": "integer",
-          "maps_to": "record.fieldValue.value",
-          "summary": "The currency amount"
-        },
-        {
-          "name": "field-value-currency-code",
-          "type": "string",
-          "maps_to": "record.fieldValue.currencyCode",
-          "summary": "The currency code",
-          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -4866,7 +4853,7 @@
       ],
       "risk": "Executes Ashby customField.setValue through the documented POST /customField.setValue endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
     },
     {
       "path": "custom-field info",
@@ -4896,7 +4883,7 @@
       "path": "custom-field set-values",
       "summary": "Set the values of multiple custom fields for a given object in a single call.\nThis is the recommended approach when updating multiple fields on the same object\n",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_custom_field_values",
       "source_url": "https://developers.ashbyhq.com/reference/customfieldsetvalues",
       "flags": [
@@ -4925,19 +4912,6 @@
           "maps_to": "record.values.0.fieldId",
           "summary": "The unique id of the Custom Field definition for the field",
           "allow_empty": false
-        },
-        {
-          "name": "values-0-field-value-value",
-          "type": "integer",
-          "maps_to": "record.values.0.fieldValue.value",
-          "summary": "The currency amount"
-        },
-        {
-          "name": "values-0-field-value-currency-code",
-          "type": "string",
-          "maps_to": "record.values.0.fieldValue.currencyCode",
-          "summary": "The currency code",
-          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -4951,7 +4925,7 @@
       ],
       "risk": "Executes Ashby customField.setValues through the documented POST /customField.setValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
     },
     {
       "path": "custom-field update-selectable-values",
@@ -5461,7 +5435,7 @@
       "path": "user set-custom-field-value",
       "summary": "Set the value of a custom field on an employee.\n\nThe values accepted in the `fieldValue` param depend on the type of field being updated. See the [customField.s",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_user_custom_field_value",
       "source_url": "https://developers.ashbyhq.com/reference/usersetcustomfieldvalue",
       "flags": [
@@ -5478,19 +5452,6 @@
           "maps_to": "record.fieldId",
           "summary": "The unique id of the Custom Field definition for the field",
           "allow_empty": false
-        },
-        {
-          "name": "field-value-value",
-          "type": "integer",
-          "maps_to": "record.fieldValue.value",
-          "summary": "The currency amount"
-        },
-        {
-          "name": "field-value-currency-code",
-          "type": "string",
-          "maps_to": "record.fieldValue.currencyCode",
-          "summary": "The currency code",
-          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -5505,13 +5466,13 @@
       ],
       "risk": "Executes Ashby user.setCustomFieldValue through the documented POST /user.setCustomFieldValue endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
     },
     {
       "path": "user set-custom-field-values",
       "summary": "Set the values of multiple custom fields on an employee in a single call.\nThis is the recommended approach when updating multiple fields on the same employee\nto",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_user_custom_field_values",
       "source_url": "https://developers.ashbyhq.com/reference/usersetcustomfieldvalues",
       "flags": [
@@ -5528,19 +5489,6 @@
           "maps_to": "record.values.0.fieldId",
           "summary": "The unique id of the Custom Field definition for the field",
           "allow_empty": false
-        },
-        {
-          "name": "values-0-field-value-value",
-          "type": "integer",
-          "maps_to": "record.values.0.fieldValue.value",
-          "summary": "The currency amount"
-        },
-        {
-          "name": "values-0-field-value-currency-code",
-          "type": "string",
-          "maps_to": "record.values.0.fieldValue.currencyCode",
-          "summary": "The currency code",
-          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -5554,7 +5502,7 @@
       ],
       "risk": "Executes Ashby user.setCustomFieldValues through the documented POST /user.setCustomFieldValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
     },
     {
       "path": "referral create",

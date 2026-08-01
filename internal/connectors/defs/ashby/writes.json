@@ -2967,21 +2967,15 @@
             "description": "The unique id of the Custom Field definition for the field"
           },
           "fieldValue": {
-            "type": "object",
-            "properties": {
-              "value": {
-                "type": "number",
-                "description": "The currency amount"
-              },
-              "currencyCode": {
-                "type": "string",
-                "description": "The currency code"
-              }
-            },
-            "required": [
-              "value",
-              "currencyCode"
-            ]
+            "type": [
+              "boolean",
+              "number",
+              "string",
+              "array",
+              "object",
+              "null"
+            ],
+            "description": "The custom field value; Ashby's accepted JSON shape depends on the target custom field type."
           }
         },
         "required": [
@@ -3031,21 +3025,15 @@
                   "description": "The unique id of the Custom Field definition for the field"
                 },
                 "fieldValue": {
-                  "type": "object",
-                  "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The currency amount"
-                    },
-                    "currencyCode": {
-                      "type": "string",
-                      "description": "The currency code"
-                    }
-                  },
-                  "required": [
-                    "value",
-                    "currencyCode"
-                  ]
+                  "type": [
+                    "boolean",
+                    "number",
+                    "string",
+                    "array",
+                    "object",
+                    "null"
+                  ],
+                  "description": "The custom field value; Ashby's accepted JSON shape depends on the target custom field type."
                 }
               },
               "required": [
@@ -3670,21 +3658,15 @@
             "description": "The unique id of the Custom Field definition for the field"
           },
           "fieldValue": {
-            "type": "object",
-            "properties": {
-              "value": {
-                "type": "number",
-                "description": "The currency amount"
-              },
-              "currencyCode": {
-                "type": "string",
-                "description": "The currency code"
-              }
-            },
-            "required": [
-              "value",
-              "currencyCode"
-            ]
+            "type": [
+              "boolean",
+              "number",
+              "string",
+              "array",
+              "object",
+              "null"
+            ],
+            "description": "The custom field value; Ashby's accepted JSON shape depends on the target custom field type."
           }
         },
         "required": [
@@ -3723,21 +3705,15 @@
                   "description": "The unique id of the Custom Field definition for the field"
                 },
                 "fieldValue": {
-                  "type": "object",
-                  "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The currency amount"
-                    },
-                    "currencyCode": {
-                      "type": "string",
-                      "description": "The currency code"
-                    }
-                  },
-                  "required": [
-                    "value",
-                    "currencyCode"
-                  ]
+                  "type": [
+                    "boolean",
+                    "number",
+                    "string",
+                    "array",
+                    "object",
+                    "null"
+                  ],
+                  "description": "The custom field value; Ashby's accepted JSON shape depends on the target custom field type."
                 }
               },
               "required": [

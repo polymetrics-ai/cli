@@ -11,7 +11,7 @@ Coverage summary:
 - Implemented ETL/changefeed streams: 72
 - Implemented bounded direct reads/search/file metadata operations: 7
 - Implemented reverse-ETL write actions: 101
-- Reverse-ETL CLI commands with scalar flags: 95; partial nested-object flag surfaces: 6
+- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10
 - Blocked/non-executable ledger rows: 32
 
 ## Auth setup

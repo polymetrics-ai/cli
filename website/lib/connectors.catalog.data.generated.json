@@ -14631,56 +14631,56 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "jobs",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "applications",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "users",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "api_key_info",
         "primaryKey": [
           "title"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "audit_log_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "timestamp",
+        "incremental": true
       },
       {
         "name": "application_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "application_hiring_team_role_list",
@@ -14695,64 +14695,64 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "enteredStageAt",
+        "incremental": true
       },
       {
         "name": "application_list_criteria_evaluations",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "evaluatedAt",
+        "incremental": true
       },
       {
         "name": "application_feedback_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "submittedAt",
+        "incremental": true
       },
       {
         "name": "candidate_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "candidate_list_client_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "candidate_list_fraud_checks",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "candidate_list_notes",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "candidate_list_projects",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "candidate_tag_list",
@@ -14767,8 +14767,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "feedback_form_definition_list",
@@ -14791,24 +14791,24 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "job_posting_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "job_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "job_board_list",
@@ -14831,24 +14831,24 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "department_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "department_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "location_list",
@@ -14871,8 +14871,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "interview_stage_list",
@@ -14895,48 +14895,48 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "decidedAt",
+        "incremental": true
       },
       {
         "name": "offer_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "decidedAt",
+        "incremental": true
       },
       {
         "name": "opening_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "openedAt",
+        "incremental": true
       },
       {
         "name": "opening_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "openedAt",
+        "incremental": true
       },
       {
         "name": "project_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "project_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "source_list",
@@ -14999,11 +14999,19 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "user_list_interviewer_pauses",
+        "primaryKey": [
+          "id"
+        ],
+        "cursor": "createdAt",
+        "incremental": true
+      },
+      {
+        "name": "referral_form_info",
         "primaryKey": [
           "id"
         ],
@@ -15023,64 +15031,64 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "sequence_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       },
       {
         "name": "sequence_template_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "sequence_template_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "interview_schedule_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "take_home_assignment_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "take_home_assignment_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "interview_event_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "updatedAt",
+        "incremental": true
       },
       {
         "name": "interview_briefing_info",
@@ -15143,8 +15151,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "submittedAt",
+        "incremental": true
       },
       {
         "name": "webhook_info",
@@ -15191,8 +15199,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "",
-        "incremental": false
+        "cursor": "createdAt",
+        "incremental": true
       }
     ],
     "writeActions": [
@@ -15258,6 +15266,11 @@
       },
       {
         "name": "create_application_feedback_request",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "submit_application_form",
         "method": "POST",
         "kind": "create"
       },
@@ -15562,6 +15575,11 @@
         "kind": "delete"
       },
       {
+        "name": "interviewer_user_settings",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
         "name": "update_user_interviewer_settings",
         "method": "POST",
         "kind": "update"
@@ -15685,6 +15703,11 @@
         "name": "remove_interviewer_pool_user",
         "method": "POST",
         "kind": "delete"
+      },
+      {
+        "name": "generate_report",
+        "method": "POST",
+        "kind": "custom"
       }
     ],
     "cliSurface": {
@@ -15749,6 +15772,7 @@
             "hiring-team-role list",
             "user info",
             "user list-interviewer-pauses",
+            "referral-form info",
             "email-sender list",
             "sequence info",
             "sequence list",
@@ -15784,9 +15808,7 @@
             "opening search",
             "project search",
             "user search",
-            "user interviewer-settings",
-            "file info",
-            "report generate"
+            "file info"
           ]
         },
         {
@@ -15806,6 +15828,7 @@
             "application update-history",
             "application-feedback submit",
             "application-feedback-request create",
+            "application-form submit",
             "approval-definition update",
             "candidate create",
             "candidate upload-resume",
@@ -15866,6 +15889,7 @@
             "assessment add-completed-to-candidate",
             "hiring-team add-member",
             "hiring-team remove-member",
+            "user interviewer-settings",
             "user update-interviewer-settings",
             "user create-interviewer-pause",
             "user delete-interviewer-pause",
@@ -15890,7 +15914,8 @@
             "interviewer-pool create",
             "interviewer-pool update",
             "interviewer-pool add-user",
-            "interviewer-pool remove-user"
+            "interviewer-pool remove-user",
+            "report generate"
           ]
         }
       ],
@@ -15898,7 +15923,7 @@
       "commands": [
         {
           "path": "candidate list",
-          "summary": "Full-refresh-only Ashby candidate list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all candidates in the organization with pagination and incremental sync support.\n\nUse the `syncToken` parameter to retrieve only candidates updated since",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidates",
@@ -15925,11 +15950,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidate.list; flags map only to documented request body fields."
         },
         {
           "path": "job list",
-          "summary": "Full-refresh-only Ashby job list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all jobs.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires the",
           "intent": "etl",
           "availability": "implemented",
           "stream": "jobs",
@@ -15937,6 +15962,13 @@
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/joblist",
           "flags": [
+            {
+              "name": "status",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.status"
+            },
             {
               "name": "created-after",
               "type": "integer",
@@ -15978,17 +16010,24 @@
               "summary": "",
               "values": [],
               "mapsTo": "query.includeUnpublishedJobPostingsIds"
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for job.list; flags map only to documented request body fields. Repeatable array request variants (--status, --expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for job.list; flags map only to documented request body fields."
         },
         {
           "path": "application list",
-          "summary": "Full-refresh-only Ashby application list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Gets all applications in the organization.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage",
           "intent": "etl",
           "availability": "implemented",
           "stream": "applications",
@@ -16025,17 +16064,24 @@
               "values": [],
               "mapsTo": "query.jobId",
               "allowEmpty": false
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for application.list; flags map only to documented request body fields."
         },
         {
           "path": "user list",
-          "summary": "Full-refresh-only Ashby user list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all users in the organization with pagination support.\n\nBy default, only active (enabled) users are returned. Use `includeDeactivated: true` to include de",
           "intent": "etl",
           "availability": "implemented",
           "stream": "users",
@@ -16055,11 +16101,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for user.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for user.list; flags map only to documented request body fields."
         },
         {
           "path": "api-key info",
-          "summary": "Returns details for the API key used to make the request. Requires the apiKeysRead permission.",
+          "summary": "Returns details for the API key used to make the request.\n\n**Requires the [`apiKeysRead`](authentication#permissions-apikeyinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "api_key_info",
@@ -16071,11 +16117,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for apiKey.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for apiKey.info; flags map only to documented request body fields."
         },
         {
           "path": "audit-log list",
-          "summary": "Beta This API is in active development and only available in a closed beta with early design partners.",
+          "summary": "> **Beta**\n>\n> **This API is in active development and only available in a closed beta with early design partners.**\n\nLists an organization's audit log entries,",
           "intent": "etl",
           "availability": "implemented",
           "stream": "audit_log_list",
@@ -16100,17 +16146,45 @@
               "mapsTo": "query.endDate",
               "format": "date-time",
               "allowEmpty": false
+            },
+            {
+              "name": "actor-ids",
+              "type": "string_array",
+              "summary": "Restricts results to entries whose actor id is one of these values. An empty array is ignored, same as omitting this field. Max 100 items.",
+              "values": [],
+              "mapsTo": "query.actorIds"
+            },
+            {
+              "name": "target-ids",
+              "type": "string_array",
+              "summary": "Restricts results to entries whose target object id is one of these values. Combined with other filters using AND (all conditions must match). An empty array is ignored. Max 100 it",
+              "values": [],
+              "mapsTo": "query.targetIds"
+            },
+            {
+              "name": "target-types",
+              "type": "string_array",
+              "summary": "Restricts results to entries whose target type is one of these values (e.g. \"job\", \"app_user\"). When both targetTypes and categories are supplied, matching uses OR (entries that ma",
+              "values": [],
+              "mapsTo": "query.targetTypes"
+            },
+            {
+              "name": "categories",
+              "type": "string_array",
+              "summary": "Restricts results to entries in one of categories (e.g. \"JobStatusChanged\"). Max 100 items. See the Audit Log Vocabulary guide.",
+              "values": [],
+              "mapsTo": "query.categories"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for auditLog.list; flags map only to documented request body fields. Repeatable array request variants (--actor-ids, --target-ids, --target-types, --categories) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for auditLog.list; flags map only to documented request body fields."
         },
         {
           "path": "application create",
-          "summary": "Consider a candidate for a job (e.g. when sourcing a candidate for a job posting).",
+          "summary": "Consider a candidate for a job (e.g. when sourcing a candidate for a job posting).\n\nIf you're submitting an application as a job board, use the [`applicationFor",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16185,13 +16259,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "application update",
-          "summary": "Update an application. To set values for custom fields on Applications, use the customField.setValue endpoint.",
+          "summary": "Update an application.\n\nTo set values for custom fields on Applications, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.\n\n**Requires the [`c",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16248,7 +16322,7 @@
         },
         {
           "path": "application delete",
-          "summary": "Deletes an application by id. Requires the candidatesDelete permission.",
+          "summary": "Deletes an application by id.\n\n**Requires the [`candidatesDelete`](authentication#permissions-applicationdelete) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16273,7 +16347,7 @@
         },
         {
           "path": "application info",
-          "summary": "Fetch application details by application id or by submitted form instance id (which is returned by the applicationForm.submit endpoint).",
+          "summary": "Fetch application details by application id or by submitted form instance id (which is returned by the `applicationForm.submit` endpoint). If both `applicationI",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_info",
@@ -16296,17 +16370,24 @@
               "values": [],
               "mapsTo": "query.submittedFormInstanceId",
               "allowEmpty": false
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.info; flags map only to documented request body fields. Requires at least one documented selector: applicationId, submittedFormInstanceId. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for application.info; flags map only to documented request body fields."
         },
         {
           "path": "application add-hiring-team-member",
-          "summary": "Adds an Ashby user to the hiring team at the application level.",
+          "summary": "Adds an Ashby user to the hiring team at the application level.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationaddhiringteammember) p",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16347,7 +16428,7 @@
         },
         {
           "path": "application remove-hiring-team-member",
-          "summary": "Unassigns a hiring team role from an Ashby user at the application level.",
+          "summary": "Unassigns a hiring team role from an Ashby user at the application level.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationremovehiring",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16388,7 +16469,7 @@
         },
         {
           "path": "application-hiring-team-role list",
-          "summary": "Gets all available hiring team roles for applications in the organization.",
+          "summary": "Gets all available hiring team roles for applications in the organization.\n\n**Requires the [`candidatesRead`](authentication#permissions-applicationhiringteamro",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_hiring_team_role_list",
@@ -16404,7 +16485,7 @@
         },
         {
           "path": "application change-stage",
-          "summary": "Deprecated. Use application.changeStage instead. Change the stage of an application.",
+          "summary": "**Deprecated.** Use [`application.changeStage`](ref:applicationchangestage) instead.\n\nChange the stage of an application.\n\n**Requires the [`candidatesWrite`](au",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16439,13 +16520,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "application change-stage-2",
-          "summary": "Change the stage of an application. Requires the candidatesWrite permission.",
+          "summary": "Change the stage of an application.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationchangestage) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16480,13 +16561,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "application change-source",
-          "summary": "Deprecated. Use application.changeSource instead. Change the source of an application.",
+          "summary": "**Deprecated.** Use [`application.changeSource`](ref:applicationchangesource) instead.\n\nChange the source of an application.\n\n**Requires the [`candidatesWrite`]",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16519,7 +16600,7 @@
         },
         {
           "path": "application change-source-2",
-          "summary": "Change the source of an application. Requires the candidatesWrite permission.",
+          "summary": "Change the source of an application.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationchangesource) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16552,7 +16633,7 @@
         },
         {
           "path": "application transfer",
-          "summary": "Transfer an application to a different job. Requires the candidatesWrite permission.",
+          "summary": "Transfer an application to a different job.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationtransfer) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16608,7 +16689,7 @@
         },
         {
           "path": "application update-history",
-          "summary": "Update the history of an application. Used to update stage timestamps and to delete history events. Also requires the Allow updating application history?",
+          "summary": "Update the history of an application. Used to update stage timestamps and to delete history events.\n\n**Also requires the `Allow updating application history?` s",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16651,13 +16732,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "application list-history",
-          "summary": "Fetch a paginated list of application history items for an application. This endpoint supports pagination only (not incremental sync).",
+          "summary": "Fetch a paginated list of application history items for an application.\n\nThis endpoint supports pagination only (not incremental sync). See the [Pagination and",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_list_history",
@@ -16671,8 +16752,7 @@
               "summary": "The id of the application to fetch.",
               "values": [],
               "mapsTo": "query.applicationId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -16683,7 +16763,7 @@
         },
         {
           "path": "application list-criteria-evaluations",
-          "summary": "Fetch a paginated list of AI criteria evaluations for an application.",
+          "summary": "Fetch a paginated list of AI criteria evaluations for an application.\n\nThis endpoint returns the AI-generated criteria evaluations that assess how well a candid",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_list_criteria_evaluations",
@@ -16697,19 +16777,18 @@
               "summary": "The id of the application to fetch criteria evaluations for.",
               "values": [],
               "mapsTo": "query.applicationId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields."
         },
         {
           "path": "application-feedback list",
-          "summary": "Full-refresh-only Ashby application-feedback list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List all interview scorecards and feedback submissions associated with an application.\n\nEach feedback submission contains:\n- **formDefinition**: The structure o",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_feedback_list",
@@ -16737,11 +16816,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields."
         },
         {
           "path": "application-feedback submit",
-          "summary": "Application feedback forms support a variety of field types.",
+          "summary": "Application feedback forms support a variety of field types.\n\nThe values accepted for each field depend on the type of field that's being filled out:\n- `Boolean",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -16798,7 +16877,7 @@
         },
         {
           "path": "application-feedback-request create",
-          "summary": "Request feedback on an application without scheduling an interview.",
+          "summary": "Request feedback on an application without scheduling an interview.\nThe `interviewEventId` returned in the response can be provided to `applicationFeedback.subm",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16838,8 +16917,55 @@
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
+          "path": "application-form submit",
+          "summary": "Submits a completed application form for a job posting.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationformsubmit) permission.**",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "submit_application_form",
+          "sourceCliPath": "",
+          "sourceUrl": "https://developers.ashbyhq.com/reference/applicationformsubmit",
+          "flags": [
+            {
+              "name": "job-posting-id",
+              "type": "string",
+              "summary": "The id of the job posting to submit the application for",
+              "values": [],
+              "mapsTo": "record.jobPostingId",
+              "allowEmpty": false
+            },
+            {
+              "name": "application-form-field-submissions-0-path",
+              "type": "string",
+              "summary": "The path of the application form field being submitted",
+              "values": [],
+              "mapsTo": "record.applicationForm.fieldSubmissions.0.path",
+              "allowEmpty": false
+            },
+            {
+              "name": "allow-submission-for-unpublished-job-posting",
+              "type": "boolean",
+              "summary": "",
+              "values": [],
+              "mapsTo": "record.allowSubmissionForUnpublishedJobPosting"
+            },
+            {
+              "name": "tag-ids",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "record.tagIds"
+            }
+          ],
+          "examples": [],
+          "outputPolicy": "",
+          "risk": "Executes Ashby applicationForm.submit through the documented POST /applicationForm.submit endpoint; reverse ETL plan, preview, approval, and execute are required.",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
+        },
+        {
           "path": "approval-definition update",
-          "summary": "Create or update an approval definition for a specific entity that requires approval.",
+          "summary": "Create or update an approval definition for a specific entity that requires approval. The entity requiring approval must be within scope of an approval in Ashby",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16902,7 +17028,7 @@
         },
         {
           "path": "candidate search",
-          "summary": "Searches for candidates by email and/or name. Requires the candidatesRead permission.",
+          "summary": "Searches for candidates by email and/or name.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.**",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -16930,13 +17056,13 @@
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "candidate info",
-          "summary": "Fetches details about a single candidate by id or external mapping id. Requires the candidatesRead permission.",
+          "summary": "Fetches details about a single candidate by id or external mapping id.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidateinfo) permission.*",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_info",
@@ -16965,11 +17091,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidate.info; flags map only to documented request body fields."
         },
         {
           "path": "candidate create",
-          "summary": "Creates a new candidate. Requires the candidatesWrite permission.",
+          "summary": "Creates a new candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidatecreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17066,7 +17192,7 @@
         },
         {
           "path": "candidate upload-resume",
-          "summary": "Uploads a resume for a candidate. Accepts either a multipart/form-data request with a resume file part, or a JSON body with a resumeHandle previously...",
+          "summary": "Uploads a resume for a candidate. Accepts either a multipart/form-data\nrequest with a `resume` file part, or a JSON body with a `resumeHandle`\npreviously create",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17099,7 +17225,7 @@
         },
         {
           "path": "candidate upload-file",
-          "summary": "Uploads a file for a candidate. Accepts either a multipart/form-data request with a file file part, or a JSON body with a fileHandle previously created...",
+          "summary": "Uploads a file for a candidate. Accepts either a multipart/form-data\nrequest with a `file` file part, or a JSON body with a `fileHandle`\npreviously created via",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17132,7 +17258,7 @@
         },
         {
           "path": "candidate update",
-          "summary": "Updates an existing candidate. Requires the candidatesWrite permission.",
+          "summary": "Updates an existing candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateupdate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17252,7 +17378,7 @@
         },
         {
           "path": "candidate create-note",
-          "summary": "Creates a note on a candidate. Requires the candidatesWrite permission.",
+          "summary": "Creates a note on a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidatecreatenote) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17318,7 +17444,7 @@
         },
         {
           "path": "candidate list-client-info",
-          "summary": "Full-refresh-only Ashby candidate list-client-info read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists client information records (IP, user agent) collected for a candidate.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistclientin",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_list_client_info",
@@ -17332,19 +17458,18 @@
               "summary": "The id of the candidate to fetch client info for",
               "values": [],
               "mapsTo": "query.candidateId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields."
         },
         {
           "path": "candidate list-fraud-checks",
-          "summary": "Lists the fraud checks performed on a candidate. Requires the candidatesRead permission.",
+          "summary": "Lists the fraud checks performed on a candidate.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistfraudchecks) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_list_fraud_checks",
@@ -17358,19 +17483,18 @@
               "summary": "The id of the candidate to fetch fraud checks for",
               "values": [],
               "mapsTo": "query.candidateId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields."
         },
         {
           "path": "candidate set-fraud-status",
-          "summary": "Updates the manual fraud-review status of a candidate. Requires the candidatesWrite permission.",
+          "summary": "Updates the manual fraud-review status of a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidatesetfraudstatus) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17406,7 +17530,7 @@
         },
         {
           "path": "candidate list-notes",
-          "summary": "Full-refresh-only Ashby candidate list-notes read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists the notes that have been added to a candidate.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistnotes) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_list_notes",
@@ -17420,19 +17544,18 @@
               "summary": "The id of the candidate to fetch notes for",
               "values": [],
               "mapsTo": "query.candidateId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields."
         },
         {
           "path": "candidate anonymize",
-          "summary": "Anonymizes a candidate's personally identifiable information. Requires the candidatesWrite permission.",
+          "summary": "Anonymizes a candidate's personally identifiable information.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateanonymize) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17457,7 +17580,7 @@
         },
         {
           "path": "candidate remove-project",
-          "summary": "Removes the candidate from a project. Requires the candidatesWrite permission.",
+          "summary": "Removes the candidate from a project.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateremoveproject) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17490,7 +17613,7 @@
         },
         {
           "path": "candidate add-project",
-          "summary": "Adds a candidate to a project. Requires the candidatesWrite permission.",
+          "summary": "Adds a candidate to a project.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateaddproject) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17523,7 +17646,7 @@
         },
         {
           "path": "candidate add-email-message",
-          "summary": "Attaches an existing email message (e.g. fetched from a partner provider) to a candidate.",
+          "summary": "Attaches an existing email message (e.g. fetched from a partner provider) to a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candida",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17644,7 +17767,7 @@
         },
         {
           "path": "candidate add-tag",
-          "summary": "Adds a tag to a candidate. Requires the candidatesWrite permission.",
+          "summary": "Adds a tag to a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateaddtag) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17677,7 +17800,7 @@
         },
         {
           "path": "candidate remove-tag",
-          "summary": "Removes a tag from a candidate. Requires the candidatesWrite permission.",
+          "summary": "Removes a tag from a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateremovetag) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17710,7 +17833,7 @@
         },
         {
           "path": "candidate list-projects",
-          "summary": "Lists the projects a candidate has been added to. Requires the candidatesRead permission.",
+          "summary": "Lists the projects a candidate has been added to.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistprojects) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_list_projects",
@@ -17724,19 +17847,18 @@
               "summary": "The id of the candidate to fetch projects for",
               "values": [],
               "mapsTo": "query.candidateId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listProjects; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidate.listProjects; flags map only to documented request body fields."
         },
         {
           "path": "candidate push-to-hris",
-          "summary": "Beta This feature is in beta and may not be available for all organizations. Pushes a candidate's data to an HRIS system (e.g. Workday, BambooHR, ADP).",
+          "summary": "> Beta\n>\n> This feature is in beta and may not be available for all organizations.\n\nPushes a candidate's data to an HRIS system (e.g. Workday, BambooHR, ADP).",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17796,7 +17918,7 @@
         },
         {
           "path": "candidate-tag create",
-          "summary": "Creates a candidate tag. If a tag already exists with the given title, the existing tag will be returned.",
+          "summary": "Creates a candidate tag.\n\nIf a tag already exists with the given title, the existing tag will be returned.\n\n**Requires the [`hiringProcessMetadataWrite`](authen",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17821,7 +17943,7 @@
         },
         {
           "path": "candidate-tag archive",
-          "summary": "Archives a candidate tag. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Archives a candidate tag.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-candidatetagarchive) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17846,7 +17968,7 @@
         },
         {
           "path": "candidate-tag list",
-          "summary": "Full-refresh-only Ashby candidate-tag list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all candidate tags.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Req",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_tag_list",
@@ -17866,11 +17988,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidateTag.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for candidateTag.list; flags map only to documented request body fields."
         },
         {
           "path": "communication-template list",
-          "summary": "List all enabled communication templates. Requires the hiringProcessMetadataRead permission.",
+          "summary": "List all enabled communication templates.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-communicationtemplatelist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "communication_template_list",
@@ -17882,11 +18004,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for communicationTemplate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for communicationTemplate.list; flags map only to documented request body fields."
         },
         {
           "path": "feedback-form-definition list",
-          "summary": "Full-refresh-only Ashby feedback-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all feedback form definitions.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examp",
           "intent": "etl",
           "availability": "implemented",
           "stream": "feedback_form_definition_list",
@@ -17906,11 +18028,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields."
         },
         {
           "path": "feedback-form-definition info",
-          "summary": "Returns a single feedback form by id Requires the hiringProcessMetadataRead permission.",
+          "summary": "Returns a single feedback form by id\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-feedbackformdefinitioninfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "feedback_form_definition_info",
@@ -17924,8 +18046,7 @@
               "summary": "The unique id of the feedback form you'd like to fetch.",
               "values": [],
               "mapsTo": "query.feedbackFormDefinitionId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -17936,7 +18057,7 @@
         },
         {
           "path": "job-posting list",
-          "summary": "Lists published job postings. By default, only published job postings are returned.",
+          "summary": "Lists published job postings. By default, only published job postings are returned.\n\nSet `includeUnpublishedJobPostings` to `true` to also include unpublished (",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_posting_list",
@@ -17987,11 +18108,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for jobPosting.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for jobPosting.list; flags map only to documented request body fields."
         },
         {
           "path": "job-posting info",
-          "summary": "Retrieve an individual job posting. Set includeUnpublishedJobPostings to true when fetching an unpublished (draft) job posting.",
+          "summary": "Retrieve an individual job posting.\n\nSet `includeUnpublishedJobPostings` to `true` when fetching an unpublished (draft) job posting. This flag is required for d",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_posting_info",
@@ -18005,8 +18126,7 @@
               "summary": "The id of the job posting to return",
               "values": [],
               "mapsTo": "query.jobPostingId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             },
             {
               "name": "job-board-id",
@@ -18022,17 +18142,24 @@
               "summary": "",
               "values": [],
               "mapsTo": "query.includeUnpublishedJobPostings"
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for jobPosting.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for jobPosting.info; flags map only to documented request body fields."
         },
         {
           "path": "job-posting update-compensation",
-          "summary": "Updates compensation for an existing job posting. Set includeUnpublishedJobPostings to true when updating an unpublished (draft) job posting.",
+          "summary": "Updates compensation for an existing job posting.\n\nSet `includeUnpublishedJobPostings` to `true` when updating an unpublished (draft) job posting. This flag is",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18097,7 +18224,7 @@
         },
         {
           "path": "job-posting update",
-          "summary": "Updates an existing job posting. Set includeUnpublishedJobPostings to true when updating an unpublished (draft) job posting.",
+          "summary": "Updates an existing job posting.\n\nSet `includeUnpublishedJobPostings` to `true` when updating an unpublished (draft) job posting. This flag is required for draf",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18170,7 +18297,7 @@
         },
         {
           "path": "job-posting set-status",
-          "summary": "Sets the status of a job posting. Use this to publish or unpublish a job posting. Set status to Published to publish a draft job posting.",
+          "summary": "Sets the status of a job posting. Use this to publish or unpublish a job posting.\n\nSet `status` to `Published` to publish a draft job posting. The posting must",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18205,7 +18332,7 @@
         },
         {
           "path": "job info",
-          "summary": "Fetches details of a single job by id. Requires the jobsRead permission.",
+          "summary": "Fetches details of a single job by id.\n\n**Requires the [`jobsRead`](authentication#permissions-jobinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_info",
@@ -18219,8 +18346,7 @@
               "summary": "The id of the job to fetch",
               "values": [],
               "mapsTo": "query.id",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             },
             {
               "name": "include-unpublished-job-postings-ids",
@@ -18228,17 +18354,24 @@
               "summary": "",
               "values": [],
               "mapsTo": "query.includeUnpublishedJobPostingsIds"
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for job.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for job.info; flags map only to documented request body fields."
         },
         {
           "path": "job create",
-          "summary": "Creates a new job. Requires the jobsWrite permission.",
+          "summary": "Creates a new job.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18316,7 +18449,7 @@
         },
         {
           "path": "job update",
-          "summary": "Updates an existing job. At least one field other than jobId must be supplied. Requires the jobsWrite permission.",
+          "summary": "Updates an existing job. At least one field other than `jobId` must be supplied.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobupdate) permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18394,7 +18527,7 @@
         },
         {
           "path": "job update-compensation",
-          "summary": "Replaces the compensation tiers on a job. Pass an empty array to clear existing compensation.",
+          "summary": "Replaces the compensation tiers on a job. Pass an empty array to clear existing compensation.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobupdate",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18452,7 +18585,7 @@
         },
         {
           "path": "job search",
-          "summary": "Searches jobs by title or custom requisition id. At least one of title or requisitionId must be provided.",
+          "summary": "Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.\n\n**Requires the [`jobsRead`](authentication#permis",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -18480,13 +18613,13 @@
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "job set-status",
-          "summary": "Sets the status of a job. Requires the jobsWrite permission.",
+          "summary": "Sets the status of a job.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobsetstatus) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18517,13 +18650,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "job-board list",
-          "summary": "List all enabled job boards. Requires the jobsRead permission.",
+          "summary": "List all enabled job boards.\n\n**Requires the [`jobsRead`](authentication#permissions-jobboardlist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_board_list",
@@ -18539,7 +18672,7 @@
         },
         {
           "path": "job-interview-plan info",
-          "summary": "Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage.",
+          "summary": "Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage.\n\n**Requires the [`jobsRead`](authentication#permiss",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_interview_plan_info",
@@ -18553,8 +18686,7 @@
               "summary": "The id of the job to fetch an interview plan for",
               "values": [],
               "mapsTo": "query.jobId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -18565,23 +18697,31 @@
         },
         {
           "path": "job-template list",
-          "summary": "Full-refresh-only Ashby job-template list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List all active and inactive job templates.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usag",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_template_list",
           "write": "",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/jobtemplatelist",
-          "flags": [],
+          "flags": [
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
+            }
+          ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields."
         },
         {
           "path": "department archive",
-          "summary": "Archives a department. Requires the organizationWrite permission.",
+          "summary": "Archives a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentarchive) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18606,7 +18746,7 @@
         },
         {
           "path": "department restore",
-          "summary": "Restores a department. Requires the organizationWrite permission.",
+          "summary": "Restores a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentrestore) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18631,7 +18771,7 @@
         },
         {
           "path": "department create",
-          "summary": "Creates a department. Requires the organizationWrite permission.",
+          "summary": "Creates a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18672,7 +18812,7 @@
         },
         {
           "path": "department info",
-          "summary": "Fetch department details by id. Requires the organizationRead permission.",
+          "summary": "Fetch department details by id.\n\n**Requires the [`organizationRead`](authentication#permissions-departmentinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "department_info",
@@ -18686,19 +18826,18 @@
               "summary": "The unique id of the department whose details will be fetched",
               "values": [],
               "mapsTo": "query.departmentId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for department.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for department.info; flags map only to documented request body fields."
         },
         {
           "path": "department list",
-          "summary": "Full-refresh-only Ashby department list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all departments.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requir",
           "intent": "etl",
           "availability": "implemented",
           "stream": "department_list",
@@ -18718,11 +18857,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for department.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for department.list; flags map only to documented request body fields."
         },
         {
           "path": "department move",
-          "summary": "Moves a department to another parent. Requires the organizationWrite permission.",
+          "summary": "Moves a department to another parent.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentmove) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18755,7 +18894,7 @@
         },
         {
           "path": "department update",
-          "summary": "Updates a department. Requires the organizationWrite permission.",
+          "summary": "Updates a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentupdate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18796,7 +18935,7 @@
         },
         {
           "path": "location archive",
-          "summary": "Archives a location or location hierarchy. Requires the organizationWrite permission.",
+          "summary": "Archives a location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationarchive) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18821,7 +18960,7 @@
         },
         {
           "path": "location create",
-          "summary": "Creates a location or location hierarchy. Requires the organizationWrite permission.",
+          "summary": "Creates a location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18890,7 +19029,7 @@
         },
         {
           "path": "location restore",
-          "summary": "Restores an archived location or location hierarchy. Requires the organizationWrite permission.",
+          "summary": "Restores an archived location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationrestore) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18915,7 +19054,7 @@
         },
         {
           "path": "location list",
-          "summary": "Full-refresh-only Ashby location list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List all locations. Regions are not returned.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed us",
           "intent": "etl",
           "availability": "implemented",
           "stream": "location_list",
@@ -18942,11 +19081,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for location.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for location.list; flags map only to documented request body fields."
         },
         {
           "path": "location info",
-          "summary": "Gets details for a single location by id. Requires the organizationRead permission.",
+          "summary": "Gets details for a single location by id.\n\n**Requires the [`organizationRead`](authentication#permissions-locationinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "location_info",
@@ -18960,8 +19099,7 @@
               "summary": "The id of the location to fetch",
               "values": [],
               "mapsTo": "query.locationId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -18972,7 +19110,7 @@
         },
         {
           "path": "location move",
-          "summary": "Moves a location in location hierarchy. Requires the organizationWrite permission.",
+          "summary": "Moves a location in location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationmove) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19005,7 +19143,7 @@
         },
         {
           "path": "location update-address",
-          "summary": "Update an address of a location or location hierarchy. Requires the organizationWrite permission.",
+          "summary": "Update an address of a location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdateaddress) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19030,7 +19168,7 @@
         },
         {
           "path": "location update-name",
-          "summary": "Update location's name. Requires the organizationWrite permission.",
+          "summary": "Update location's name.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdatename) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19063,7 +19201,7 @@
         },
         {
           "path": "location update-workplace-type",
-          "summary": "Update location's workplace type. Requires the organizationWrite permission.",
+          "summary": "Update location's workplace type.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdateworkplacetype) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19099,7 +19237,7 @@
         },
         {
           "path": "location update-external-name",
-          "summary": "Update a location's external (candidate-facing) name. Requires the organizationWrite permission.",
+          "summary": "Update a location's external (candidate-facing) name.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdateexternalname) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19132,7 +19270,7 @@
         },
         {
           "path": "interview-plan list",
-          "summary": "Full-refresh-only Ashby interview-plan list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List published interview plans. Draft interview plans are not returned. If `includeArchived` is true, archived interview plans are also included. Job-specific i",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_plan_list",
@@ -19152,11 +19290,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields."
         },
         {
           "path": "interview-stage list",
-          "summary": "List all interview stages for an interview plan in order. Requires the interviewsRead permission.",
+          "summary": "List all interview stages for an interview plan in order.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewstagelist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_stage_list",
@@ -19170,8 +19308,7 @@
               "summary": "The id of the interview plan to list stages for",
               "values": [],
               "mapsTo": "query.interviewPlanId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -19182,7 +19319,7 @@
         },
         {
           "path": "interview-stage-group list",
-          "summary": "List all interview stage groups in the organization in order. Requires the interviewsRead permission.",
+          "summary": "List all interview stage groups in the organization in order.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewstagegrouplist) permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_stage_group_list",
@@ -19198,7 +19335,7 @@
         },
         {
           "path": "notetaker-transcript info",
-          "summary": "Fetches metadata and a pre-signed download URL for an AI Notetaker transcript recording.",
+          "summary": "Fetches metadata and a pre-signed download URL for an AI\nNotetaker transcript recording.\n\n**Prerequisites:**\n- Your organization must have the **AI Notetaker ad",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -19213,19 +19350,18 @@
               "summary": "The unique id of the notetaker transcript to fetch",
               "values": [],
               "mapsTo": "body.notetakerTranscriptId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "offer approve",
-          "summary": "Approves an offer or a specific approval step within an offer's approval process.",
+          "summary": "Approves an offer or a specific approval step within an offer's approval process.\n\nThis endpoint mimics the behavior of the \"Force Approve\" function in the Ashb",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19273,7 +19409,7 @@
         },
         {
           "path": "offer create",
-          "summary": "Creates a new Offer Offer forms support a variety of field types.",
+          "summary": "Creates a new Offer\n\nOffer forms support a variety of field types. The values accepted for each field depend on the type of field that's being filled out:\n- `Bo",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -19321,7 +19457,7 @@
         },
         {
           "path": "offer list",
-          "summary": "Full-refresh-only Ashby offer list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Get a list of all offers with their latest version.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detai",
           "intent": "etl",
           "availability": "implemented",
           "stream": "offer_list",
@@ -19337,23 +19473,44 @@
               "mapsTo": "query.createdAfter"
             },
             {
+              "name": "offer-status",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.offerStatus"
+            },
+            {
+              "name": "acceptance-status",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.acceptanceStatus"
+            },
+            {
               "name": "application-id",
               "type": "string",
               "summary": "",
               "values": [],
               "mapsTo": "query.applicationId",
               "allowEmpty": false
+            },
+            {
+              "name": "approval-status",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.approvalStatus"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for offer.list; flags map only to documented request body fields."
         },
         {
           "path": "offer info",
-          "summary": "Returns details about a single offer by id Requires the offersRead permission.",
+          "summary": "Returns details about a single offer by id\n\n**Requires the [`offersRead`](authentication#permissions-offerinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "offer_info",
@@ -19367,8 +19524,7 @@
               "summary": "The id of the offer to fetch",
               "values": [],
               "mapsTo": "query.offerId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             },
             {
               "name": "exclude-form-definition",
@@ -19382,11 +19538,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for offer.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for offer.info; flags map only to documented request body fields."
         },
         {
           "path": "offer start",
-          "summary": "The offer.start endpoint creates and returns an offer version instance that can be filled out and submitted using the offer.create endpoint.",
+          "summary": "The offer.start endpoint creates and returns an offer version instance that can be filled out and submitted\nusing the `offer.create` endpoint.\n\nIn order to crea",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19411,7 +19567,7 @@
         },
         {
           "path": "offer start-approval-process",
-          "summary": "Starts the approval process for an offer in a \"WaitingOnApprovalStart\" state. Once started, the approval is sent to the configured approvers.",
+          "summary": "Starts the approval process for an offer in a \"WaitingOnApprovalStart\" state.\nOnce started, the approval is sent to the configured approvers.\n\nThe offer version",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19451,7 +19607,7 @@
         },
         {
           "path": "offer update",
-          "summary": "Updates an existing Offer Offer forms support a variety of field types.",
+          "summary": "Updates an existing Offer\n\nOffer forms support a variety of field types. The values accepted for each field depend on the type of field that's being filled out:",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -19491,7 +19647,7 @@
         },
         {
           "path": "offer set-status",
-          "summary": "Updates an offer's acceptance status. Ashby derives the offer status from the provided acceptance status; offerStatus can't be set independently.",
+          "summary": "Updates an offer's acceptance status.\n\nAshby derives the offer status from the provided acceptance status; `offerStatus` can't be set independently.\n\n**Requires",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19528,13 +19684,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "offer set-decided-at",
-          "summary": "Updates an offer's decidedAt timestamp. Requires the offersWrite permission.",
+          "summary": "Updates an offer's decidedAt timestamp.\n\n**Requires the [`offersWrite`](authentication#permissions-offersetdecidedat) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19575,7 +19731,7 @@
         },
         {
           "path": "offer-process start",
-          "summary": "Starts an offer process for a candidate. Requires the offersWrite permission.",
+          "summary": "Starts an offer process for a candidate.\n\n**Requires the [`offersWrite`](authentication#permissions-offerprocessstart) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19600,7 +19756,7 @@
         },
         {
           "path": "opening info",
-          "summary": "Retrieves an opening by its UUID. Requires the jobsRead permission.",
+          "summary": "Retrieves an opening by its UUID.\n\n**Requires the [`jobsRead`](authentication#permissions-openinginfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "opening_info",
@@ -19614,19 +19770,18 @@
               "summary": "The id of the opening",
               "values": [],
               "mapsTo": "query.openingId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for opening.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for opening.info; flags map only to documented request body fields."
         },
         {
           "path": "opening create",
-          "summary": "Creates an opening. To set values of custom fields on Openings, use the customField.setValue endpoint.",
+          "summary": "Creates an opening.\n\nTo set values of custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.\n\n**Requires the [`jobsWrite",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19725,13 +19880,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "opening update",
-          "summary": "Updates an opening. To set values for custom fields on Openings, use the customField.setValue endpoint.",
+          "summary": "Updates an opening.\n\nTo set values for custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.\n\n**Requires the [`jobsWrit",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19818,7 +19973,7 @@
         },
         {
           "path": "opening set-archived",
-          "summary": "Sets the archived state of an opening. Requires the jobsWrite permission.",
+          "summary": "Sets the archived state of an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingsetarchived) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19844,13 +19999,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "opening set-opening-state",
-          "summary": "Sets the state of an opening. Requires the jobsWrite permission.",
+          "summary": "Sets the state of an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingsetopeningstate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19889,13 +20044,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "opening add-job",
-          "summary": "Adds a job to an opening. Requires the jobsWrite permission.",
+          "summary": "Adds a job to an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingaddjob) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19928,7 +20083,7 @@
         },
         {
           "path": "opening remove-job",
-          "summary": "Removes a job from an opening. Requires the jobsWrite permission.",
+          "summary": "Removes a job from an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingremovejob) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19961,7 +20116,7 @@
         },
         {
           "path": "opening add-location",
-          "summary": "Adds a location to an opening. Requires the jobsWrite permission.",
+          "summary": "Adds a location to an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingaddlocation) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19994,7 +20149,7 @@
         },
         {
           "path": "opening remove-location",
-          "summary": "Removes a location from an opening. Requires the jobsWrite permission.",
+          "summary": "Removes a location from an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingremovelocation) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20027,7 +20182,7 @@
         },
         {
           "path": "opening list",
-          "summary": "Full-refresh-only Ashby opening list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists openings.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires the",
           "intent": "etl",
           "availability": "implemented",
           "stream": "opening_list",
@@ -20047,11 +20202,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for opening.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for opening.list; flags map only to documented request body fields."
         },
         {
           "path": "opening search",
-          "summary": "Searches for openings by identifier. Requires the jobsRead permission.",
+          "summary": "Searches for openings by identifier.\n\n**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.**",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20066,19 +20221,18 @@
               "summary": "The identifier of the opening you want to search for",
               "values": [],
               "mapsTo": "body.identifier",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "project info",
-          "summary": "Retrieves a project by its UUID. Requires the candidatesRead permission.",
+          "summary": "Retrieves a project by its UUID.\n\n**Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "project_info",
@@ -20092,19 +20246,18 @@
               "summary": "The id of the project",
               "values": [],
               "mapsTo": "query.projectId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for project.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for project.info; flags map only to documented request body fields."
         },
         {
           "path": "project list",
-          "summary": "Full-refresh-only Ashby project list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists projects.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires the",
           "intent": "etl",
           "availability": "implemented",
           "stream": "project_list",
@@ -20124,11 +20277,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for project.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for project.list; flags map only to documented request body fields."
         },
         {
           "path": "project search",
-          "summary": "Search for projects by title. Responses are limited to 100 results.",
+          "summary": "Search for projects by title.\n\nResponses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20143,19 +20296,18 @@
               "summary": "The project's title",
               "values": [],
               "mapsTo": "body.title",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "source list",
-          "summary": "List all sources Requires the hiringProcessMetadataRead permission.",
+          "summary": "List all sources\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcelist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "source_list",
@@ -20179,7 +20331,7 @@
         },
         {
           "path": "source-tracking-link list",
-          "summary": "Full-refresh-only Ashby source-tracking-link list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List all source custom tracking links\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcetrackinglinklist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "source_tracking_link_list",
@@ -20207,11 +20359,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields."
         },
         {
           "path": "archive-reason list",
-          "summary": "Lists archive reasons. Requires the hiringProcessMetadataRead permission.",
+          "summary": "Lists archive reasons.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-archivereasonlist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "archive_reason_list",
@@ -20235,7 +20387,7 @@
         },
         {
           "path": "brand list",
-          "summary": "Lists all brands for the organization. Requires the organizationRead permission.",
+          "summary": "Lists all brands for the organization.\n\n**Requires the [`organizationRead`](authentication#permissions-brandlist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "brand_list",
@@ -20251,7 +20403,7 @@
         },
         {
           "path": "custom-field list",
-          "summary": "Full-refresh-only Ashby custom-field list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all custom fields.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requ",
           "intent": "etl",
           "availability": "implemented",
           "stream": "custom_field_list",
@@ -20271,11 +20423,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for customField.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for customField.list; flags map only to documented request body fields."
         },
         {
           "path": "custom-field create",
-          "summary": "Create a new custom field. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Create a new custom field.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-customfieldcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20373,7 +20525,7 @@
         },
         {
           "path": "custom-field set-value",
-          "summary": "Set the value of a custom field for a given object.",
+          "summary": "Set the value of a custom field for a given object.\n\n**Note:** When updating multiple custom fields on the same object, use\n[`customField.setValues`](#operation",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -20418,7 +20570,7 @@
         },
         {
           "path": "custom-field info",
-          "summary": "Get information about a custom field. Requires the hiringProcessMetadataRead permission.",
+          "summary": "Get information about a custom field.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-customfieldinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "custom_field_info",
@@ -20432,8 +20584,7 @@
               "summary": "The id of the custom field to fetch",
               "values": [],
               "mapsTo": "query.customFieldId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -20444,7 +20595,7 @@
         },
         {
           "path": "custom-field set-values",
-          "summary": "Set the values of multiple custom fields for a given object in a single call.",
+          "summary": "Set the values of multiple custom fields for a given object in a single call.\nThis is the recommended approach when updating multiple fields on the same object",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -20489,7 +20640,7 @@
         },
         {
           "path": "custom-field update-selectable-values",
-          "summary": "Update the selectable values for a custom field. This endpoint merges the provided selectable values with the existing values for a custom field.",
+          "summary": "Update the selectable values for a custom field.\n\nThis endpoint merges the provided selectable values with the existing values for a custom field.\n\n**Merge beha",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20524,13 +20675,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "assessment update",
-          "summary": "Update Ashby about the status of a started assessment. assessment_status is required unless cancelled_reason is provided.",
+          "summary": "Update Ashby about the status of a started assessment.\n\n`assessment_status` is required unless `cancelled_reason` is provided.\n\n**Requires the [`candidatesWrite",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20563,13 +20714,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "assessment add-completed-to-candidate",
-          "summary": "Add a completed assessment to a candidate. Requires the candidatesWrite permission.",
+          "summary": "Add a completed assessment to a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-assessmentaddcompletedtocandidate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20713,137 +20864,63 @@
         },
         {
           "path": "hiring-team add-member",
-          "summary": "Adds an Ashby user to the hiring team at the application, job, or opening level.",
+          "summary": "Adds an Ashby user to the hiring team at the application, job, or opening level.\n\n**Requires the [`organizationWrite`](authentication#permissions-hiringteamaddm",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
           "write": "add_hiring_team_member",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/hiringteamaddmember",
-          "flags": [
-            {
-              "name": "application-id",
-              "type": "string",
-              "summary": "The application to assign the user a role on",
-              "values": [],
-              "mapsTo": "record.applicationId",
-              "allowEmpty": false
-            },
-            {
-              "name": "job-id",
-              "type": "string",
-              "summary": "The job to assign the user a role on",
-              "values": [],
-              "mapsTo": "record.jobId",
-              "allowEmpty": false
-            },
-            {
-              "name": "opening-id",
-              "type": "string",
-              "summary": "The opening to assign the user a role on",
-              "values": [],
-              "mapsTo": "record.openingId",
-              "allowEmpty": false
-            },
-            {
-              "name": "team-member-id",
-              "type": "string",
-              "summary": "The id of the user to assign the role to",
-              "values": [],
-              "mapsTo": "record.teamMemberId",
-              "allowEmpty": false
-            },
-            {
-              "name": "role-id",
-              "type": "string",
-              "summary": "The id of the hiring team role to assign",
-              "values": [],
-              "mapsTo": "record.roleId",
-              "allowEmpty": false
-            }
-          ],
+          "flags": [],
           "examples": [],
           "outputPolicy": "",
           "risk": "Executes Ashby hiringTeam.addMember through the documented POST /hiringTeam.addMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "hiring-team remove-member",
-          "summary": "Removes an Ashby user from the hiring team at the application, job, or opening level.",
+          "summary": "Removes an Ashby user from the hiring team at the application, job, or opening level.\n\n**Requires the [`organizationWrite`](authentication#permissions-hiringtea",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
           "write": "remove_hiring_team_member",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/hiringteamremovemember",
-          "flags": [
-            {
-              "name": "application-id",
-              "type": "string",
-              "summary": "The application to unassign the user role from",
-              "values": [],
-              "mapsTo": "record.applicationId",
-              "allowEmpty": false
-            },
-            {
-              "name": "job-id",
-              "type": "string",
-              "summary": "The job to unassign the user role from",
-              "values": [],
-              "mapsTo": "record.jobId",
-              "allowEmpty": false
-            },
-            {
-              "name": "opening-id",
-              "type": "string",
-              "summary": "The opening to unassign the user role from",
-              "values": [],
-              "mapsTo": "record.openingId",
-              "allowEmpty": false
-            },
-            {
-              "name": "team-member-id",
-              "type": "string",
-              "summary": "The id of the user to unassign the role from",
-              "values": [],
-              "mapsTo": "record.teamMemberId",
-              "allowEmpty": false
-            },
-            {
-              "name": "role-id",
-              "type": "string",
-              "summary": "The id of the hiring team role to unassign from",
-              "values": [],
-              "mapsTo": "record.roleId",
-              "allowEmpty": false
-            }
-          ],
+          "flags": [],
           "examples": [],
           "outputPolicy": "",
           "risk": "Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "hiring-team-role list",
-          "summary": "Lists the possible hiring team roles in an organization Requires the organizationRead permission.",
+          "summary": "Lists the possible hiring team roles in an organization\n\n**Requires the [`organizationRead`](authentication#permissions-hiringteamrolelist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "hiring_team_role_list",
           "write": "",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/hiringteamrolelist",
-          "flags": [],
+          "flags": [
+            {
+              "name": "names-only",
+              "type": "boolean",
+              "summary": "When set to true (the default), an array of role titles is returned. When set to false, an array of objects that include the id and title of the role is returned.",
+              "values": [],
+              "mapsTo": "query.namesOnly"
+            }
+          ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for hiringTeamRole.list; defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false."
+          "notes": "Fixed Ashby stream for hiringTeamRole.list; flags map only to documented request body fields."
         },
         {
           "path": "user info",
-          "summary": "Retrieves detailed information about a specific user by their ID. Requires the organizationRead permission.",
+          "summary": "Retrieves detailed information about a specific user by their ID.\n\n**Requires the [`organizationRead`](authentication#permissions-userinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "user_info",
@@ -20857,19 +20934,18 @@
               "summary": "The unique identifier for the user",
               "values": [],
               "mapsTo": "query.userId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for user.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for user.info; flags map only to documented request body fields."
         },
         {
           "path": "user search",
-          "summary": "Searches for users by email address. Returns an array containing the user if found, or an empty array if no user with the given email exists.",
+          "summary": "Searches for users by email address.\n\nReturns an array containing the user if found, or an empty array if no user with the given email exists.\n\n**Requires the [",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20884,24 +20960,22 @@
               "summary": "The email address to search for",
               "values": [],
               "mapsTo": "body.email",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "user interviewer-settings",
-          "summary": "Get interviewer settings for a user. Requires the organizationRead permission.",
-          "intent": "direct_read",
+          "summary": "Get interviewer settings for a user.\n\n**Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.**",
+          "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "ashby.direct.user.interviewer.settings",
+          "write": "interviewer_user_settings",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/userinterviewersettings",
           "flags": [
@@ -20910,20 +20984,19 @@
               "type": "string",
               "summary": "The id of the user to get interviewer settings for",
               "values": [],
-              "mapsTo": "body.userId",
-              "allowEmpty": false,
-              "required": true
+              "mapsTo": "record.userId",
+              "allowEmpty": false
             }
           ],
           "examples": [],
-          "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential interviewer settings remain complete in trusted live local output",
-          "approval": "none",
-          "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
+          "outputPolicy": "",
+          "risk": "Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "user update-interviewer-settings",
-          "summary": "Update interviewer settings for a user. Either limit can be provided, or both can be provided. If only one is provided, the other will remain unchanged.",
+          "summary": "Update interviewer settings for a user.\n\nEither limit can be provided, or both can be provided. If only one is provided, the other will remain unchanged. If a l",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20962,7 +21035,7 @@
         },
         {
           "path": "user create-interviewer-pause",
-          "summary": "Creates an interviewer pause for a user. While paused, the user will not be scheduled for interviews.",
+          "summary": "Creates an interviewer pause for a user. While paused, the user will not be scheduled for interviews.\n\nA user can only have one interviewer pause at a time (whe",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21013,7 +21086,7 @@
         },
         {
           "path": "user list-interviewer-pauses",
-          "summary": "Lists all active or scheduled interviewer pauses for a user.",
+          "summary": "Lists all active or scheduled interviewer pauses for a user.\n\n**Requires the [`organizationRead`](authentication#permissions-userlistinterviewerpauses) permissi",
           "intent": "etl",
           "availability": "implemented",
           "stream": "user_list_interviewer_pauses",
@@ -21027,19 +21100,18 @@
               "summary": "The id of the user to list pauses for.",
               "values": [],
               "mapsTo": "query.userId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields."
         },
         {
           "path": "user delete-interviewer-pause",
-          "summary": "Deletes an interviewer pause. Requires the organizationWrite permission.",
+          "summary": "Deletes an interviewer pause.\n\n**Requires the [`organizationWrite`](authentication#permissions-userdeleteinterviewerpause) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21064,7 +21136,7 @@
         },
         {
           "path": "user set-custom-field-value",
-          "summary": "Set the value of a custom field on an employee. The values accepted in the fieldValue param depend on the type of field being updated.",
+          "summary": "Set the value of a custom field on an employee.\n\nThe values accepted in the `fieldValue` param depend on the type of field being updated. See the [customField.s",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -21097,7 +21169,7 @@
         },
         {
           "path": "user set-custom-field-values",
-          "summary": "Set the values of multiple custom fields on an employee in a single call.",
+          "summary": "Set the values of multiple custom fields on an employee in a single call.\nThis is the recommended approach when updating multiple fields on the same employee\nto",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -21130,7 +21202,7 @@
         },
         {
           "path": "referral create",
-          "summary": "Creates a referral Requires the candidatesWrite permission.",
+          "summary": "Creates a referral\n\n**Requires the [`candidatesWrite`](authentication#permissions-referralcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -21179,8 +21251,24 @@
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
         },
         {
+          "path": "referral-form info",
+          "summary": "Fetches the default referral form or creates a default referral form if none exists.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-re",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "referral_form_info",
+          "write": "",
+          "sourceCliPath": "",
+          "sourceUrl": "https://developers.ashbyhq.com/reference/referralforminfo",
+          "flags": [],
+          "examples": [],
+          "outputPolicy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Fixed Ashby stream for referralForm.info; flags map only to documented request body fields."
+        },
+        {
           "path": "email-sender list",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists the email addresses available to the acting identity for sending emai",
           "intent": "etl",
           "availability": "implemented",
           "stream": "email_sender_list",
@@ -21196,7 +21284,7 @@
         },
         {
           "path": "sequence add",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations. Enrolls a candidate in a reusable sourcing sequence.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nEnrolls a candidate in a reusable sourcing sequence. Set start to false to",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21244,7 +21332,7 @@
         },
         {
           "path": "sequence cancel",
-          "summary": "Cancels a running sourcing sequence (campaign) for a candidate. Requires the sourcingWrite permission.",
+          "summary": "Cancels a running sourcing sequence (campaign) for a candidate.\n\n**Requires the [`sourcingWrite`](authentication#permissions-sequencecancel) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21278,7 +21366,7 @@
         },
         {
           "path": "sequence discard",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nPermanently discards a NotStarted sourcing sequence draft owned by the acti",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21297,13 +21385,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.",
+          "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "sequence info",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nRetrieves a candidate's sourcing sequence enrollment when it is visible to",
           "intent": "etl",
           "availability": "implemented",
           "stream": "sequence_info",
@@ -21317,19 +21405,18 @@
               "summary": "The unique identifier for the sequence enrollment",
               "values": [],
               "mapsTo": "query.sequenceId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequence.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for sequence.info; flags map only to documented request body fields."
         },
         {
           "path": "sequence list",
-          "summary": "Full-refresh-only Ashby sequence list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists visible started and ended sourcing sequence enrollments across the or",
           "intent": "etl",
           "availability": "implemented",
           "stream": "sequence_list",
@@ -21350,11 +21437,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequence.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for sequence.list; flags map only to documented request body fields."
         },
         {
           "path": "sequence update-stage",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nReplaces the supplied subject or HTML body of one email stage in a not-star",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21403,7 +21490,7 @@
         },
         {
           "path": "sequence start",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nValidates and starts an existing NotStarted sourcing sequence draft owned b",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21428,7 +21515,7 @@
         },
         {
           "path": "sequence-template info",
-          "summary": "Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned.",
+          "summary": "Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned. Message subjects and bodies are not expo",
           "intent": "etl",
           "availability": "implemented",
           "stream": "sequence_template_info",
@@ -21442,19 +21529,18 @@
               "summary": "The unique identifier for the sequence template",
               "values": [],
               "mapsTo": "query.sequenceTemplateId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields."
         },
         {
           "path": "sequence-template list",
-          "summary": "Full-refresh-only Ashby sequence-template list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists reusable sourcing sequence templates visible to the caller. Returns template and cadence metadata only; message subjects and bodies are not exposed.\n\nArch",
           "intent": "etl",
           "availability": "implemented",
           "stream": "sequence_template_list",
@@ -21474,11 +21560,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields."
         },
         {
           "path": "interview-schedule list",
-          "summary": "Full-refresh-only Ashby interview-schedule list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Gets all interview schedules in the organization.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detaile",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_schedule_list",
@@ -21514,11 +21600,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields."
         },
         {
           "path": "interview-schedule create",
-          "summary": "Create a scheduled interview in Ashby. Requires the interviewsWrite permission.",
+          "summary": "Create a scheduled interview in Ashby.\n\n**Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21567,7 +21653,7 @@
         },
         {
           "path": "interview-schedule update",
-          "summary": "Update an interview schedule. This endpoint allows you to add, cancel, or update interview events associated with an interview schedule.",
+          "summary": "Update an interview schedule. This endpoint allows you to add, cancel, or update interview events associated with an interview schedule.\n\nIn order to update an",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21601,13 +21687,13 @@
           ],
           "examples": [],
           "outputPolicy": "",
-          "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+          "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "interview-schedule cancel",
-          "summary": "Cancel an interview schedule by id. Requires the interviewsWrite permission.",
+          "summary": "Cancel an interview schedule by id.\n\n**Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecancel) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21639,7 +21725,7 @@
         },
         {
           "path": "take-home-assignment list",
-          "summary": "Full-refresh-only Ashby take-home-assignment list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists take-home assignments visible to the caller, including candidate subm",
           "intent": "etl",
           "availability": "implemented",
           "stream": "take_home_assignment_list",
@@ -21662,17 +21748,24 @@
               "values": [],
               "mapsTo": "query.candidateId",
               "allowEmpty": false
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields."
         },
         {
           "path": "take-home-assignment info",
-          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
+          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nRetrieves a single take-home assignment by id and links it to its interview",
           "intent": "etl",
           "availability": "implemented",
           "stream": "take_home_assignment_info",
@@ -21686,19 +21779,25 @@
               "summary": "The id of the take-home assignment",
               "values": [],
               "mapsTo": "query.takeHomeAssignmentId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields."
         },
         {
           "path": "interview-event list",
-          "summary": "Full-refresh-only Ashby interview-event list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists interview events associated with an interview schedule.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_event_list",
@@ -21712,8 +21811,14 @@
               "summary": "The unique ID of the interview schedule, for which to list interview events",
               "values": [],
               "mapsTo": "query.interviewScheduleId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             },
             {
               "name": "created-after",
@@ -21727,11 +21832,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields."
         },
         {
           "path": "interview-briefing info",
-          "summary": "Fetch the briefing data for an interview event.",
+          "summary": "Fetch the briefing data for an interview event. Returns the application,\ninterview, per-interviewer status, and the feedback form definition id\nneeded to render",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_briefing_info",
@@ -21745,19 +21850,25 @@
               "summary": "The id of the interview event whose briefing should be returned.",
               "values": [],
               "mapsTo": "query.interviewEventId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
+            },
+            {
+              "name": "expand",
+              "type": "string_array",
+              "summary": "",
+              "values": [],
+              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation."
+          "notes": "Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields."
         },
         {
           "path": "interview info",
-          "summary": "Fetch interview details by id. Requires the interviewsRead permission.",
+          "summary": "Fetch interview details by id.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_info",
@@ -21771,8 +21882,7 @@
               "summary": "The unique id of the interview whose details will be fetched",
               "values": [],
               "mapsTo": "query.id",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -21783,7 +21893,7 @@
         },
         {
           "path": "interview list",
-          "summary": "Full-refresh-only Ashby interview list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List all interviews.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_list",
@@ -21817,11 +21927,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interview.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for interview.list; flags map only to documented request body fields."
         },
         {
           "path": "interview-stage info",
-          "summary": "Retrieves detailed information about a specific interview stage by its ID.",
+          "summary": "Retrieves detailed information about a specific interview stage by its ID.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewstageinfo) per",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_stage_info",
@@ -21835,8 +21945,7 @@
               "summary": "The id of the interview stage to retrieve",
               "values": [],
               "mapsTo": "query.interviewStageId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -21847,7 +21956,7 @@
         },
         {
           "path": "file info",
-          "summary": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).",
+          "summary": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).\n\n**Please note** that",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -21862,19 +21971,18 @@
               "summary": "A file handle retrieved from the public API",
               "values": [],
               "mapsTo": "body.fileHandle",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
           "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output",
+          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
         {
           "path": "survey-form-definition info",
-          "summary": "Returns details about a single survey form definition by id.",
+          "summary": "Returns details about a single survey form definition by id.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-surveyformdefinitioninfo)",
           "intent": "etl",
           "availability": "implemented",
           "stream": "survey_form_definition_info",
@@ -21888,8 +21996,7 @@
               "summary": "The unique identifier of the survey form definition to fetch",
               "values": [],
               "mapsTo": "query.surveyFormDefinitionId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -21900,7 +22007,7 @@
         },
         {
           "path": "survey-form-definition list",
-          "summary": "Full-refresh-only Ashby survey-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all survey form definitions.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage example",
           "intent": "etl",
           "availability": "implemented",
           "stream": "survey_form_definition_list",
@@ -21912,11 +22019,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields."
         },
         {
           "path": "survey-request create",
-          "summary": "This endpoint generates a survey request and returns a survey URL. You can send this URL to a candidate to allow them to complete a survey.",
+          "summary": "This endpoint generates a survey request and returns a survey URL. You can send this URL to a candidate to allow them to complete a survey.\n\n**Note that calling",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21957,7 +22064,7 @@
         },
         {
           "path": "survey-request list",
-          "summary": "Full-refresh-only Ashby survey-request list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all survey requests.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Re",
           "intent": "etl",
           "availability": "implemented",
           "stream": "survey_request_list",
@@ -21972,8 +22079,7 @@
               "values": [
                 "CandidateExperience"
               ],
-              "mapsTo": "query.surveyType",
-              "required": true
+              "mapsTo": "query.surveyType"
             },
             {
               "name": "application-id",
@@ -22003,11 +22109,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields."
         },
         {
           "path": "survey-submission create",
-          "summary": "Creates a survey submission for a candidate and application. Requires the candidatesWrite permission.",
+          "summary": "Creates a survey submission for a candidate and application.\n\n**Requires the [`candidatesWrite`](authentication#permissions-surveysubmissioncreate) permission.*",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -22048,7 +22154,7 @@
         },
         {
           "path": "survey-submission list",
-          "summary": "Full-refresh-only Ashby survey-submission list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Lists all survey submissions of a given `surveyType`.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for det",
           "intent": "etl",
           "availability": "implemented",
           "stream": "survey_submission_list",
@@ -22065,8 +22171,7 @@
                 "Questionnaire",
                 "HiringManagerExperience"
               ],
-              "mapsTo": "query.surveyType",
-              "required": true
+              "mapsTo": "query.surveyType"
             },
             {
               "name": "created-after",
@@ -22080,11 +22185,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields."
         },
         {
           "path": "webhook create",
-          "summary": "Creates a webhook setting. Requires the apiKeysWrite permission.",
+          "summary": "Creates a webhook setting.\n\n**Requires the [`apiKeysWrite`](authentication#permissions-webhookcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22151,7 +22256,7 @@
         },
         {
           "path": "webhook info",
-          "summary": "Retrieves information about a specific webhook setting by its ID. Requires the apiKeysRead permission.",
+          "summary": "Retrieves information about a specific webhook setting by its ID.\n\n**Requires the [`apiKeysRead`](authentication#permissions-webhookinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "webhook_info",
@@ -22165,8 +22270,7 @@
               "summary": "The id of the webhook setting to retrieve",
               "values": [],
               "mapsTo": "query.webhookId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -22177,7 +22281,7 @@
         },
         {
           "path": "webhook update",
-          "summary": "Updates a webhook setting. One of enabled, requestUrl, or secretToken must be provided.",
+          "summary": "Updates a webhook setting. One of `enabled`, `requestUrl`, or `secretToken` must be provided.\n\n**Requires the [`apiKeysWrite`](authentication#permissions-webhoo",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22225,7 +22329,7 @@
         },
         {
           "path": "webhook delete",
-          "summary": "Deletes a webhook setting. Requires the apiKeysWrite permission.",
+          "summary": "Deletes a webhook setting.\n\n**Requires the [`apiKeysWrite`](authentication#permissions-webhookdelete) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22250,7 +22354,7 @@
         },
         {
           "path": "interviewer-pool list",
-          "summary": "Full-refresh-only Ashby interviewer-pool list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "List all interviewer pools.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**R",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interviewer_pool_list",
@@ -22277,11 +22381,11 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields."
         },
         {
           "path": "interviewer-pool info",
-          "summary": "Get information about an interviewer pool. Requires the hiringProcessMetadataRead permission.",
+          "summary": "Get information about an interviewer pool.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-interviewerpoolinfo) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interviewer_pool_info",
@@ -22295,8 +22399,7 @@
               "summary": "The id of the interviewer pool",
               "values": [],
               "mapsTo": "query.interviewerPoolId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             }
           ],
           "examples": [],
@@ -22307,7 +22410,7 @@
         },
         {
           "path": "interviewer-pool archive",
-          "summary": "Archives an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Archives an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolarchive) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22332,7 +22435,7 @@
         },
         {
           "path": "interviewer-pool restore",
-          "summary": "Restores an archived interviewer pool. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Restores an archived interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolrestore) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22357,7 +22460,7 @@
         },
         {
           "path": "interviewer-pool create",
-          "summary": "Create an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Create an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolcreate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22389,7 +22492,7 @@
         },
         {
           "path": "interviewer-pool update",
-          "summary": "Update an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Update an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolupdate) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22429,7 +22532,7 @@
         },
         {
           "path": "interviewer-pool add-user",
-          "summary": "Add a user to an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Add a user to an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpooladduser) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22470,7 +22573,7 @@
         },
         {
           "path": "interviewer-pool remove-user",
-          "summary": "Remove a user from an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
+          "summary": "Remove a user from an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolremoveuser) permission.**",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22503,7 +22606,7 @@
         },
         {
           "path": "close-reason list",
-          "summary": "Lists all close reasons for jobs or openings. Requires the hiringProcessMetadataRead permission.",
+          "summary": "Lists all close reasons for jobs or openings.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-closereasonlist) permission.**",
           "intent": "etl",
           "availability": "implemented",
           "stream": "close_reason_list",
@@ -22527,12 +22630,11 @@
         },
         {
           "path": "report generate",
-          "summary": "Start an Ashby report generation or check an existing request.",
-          "intent": "direct_read",
+          "summary": "> Beta\n>\n> This endpoint is currently in beta and may change without notice.\n\nGenerates a new report or polls the status of an existing report generation.\n\n**Tw",
+          "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "ashby.direct.report.generate",
+          "write": "generate_report",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/reportgenerate",
           "flags": [
@@ -22541,16 +22643,15 @@
               "type": "string",
               "summary": "The ID of the report",
               "values": [],
-              "mapsTo": "body.reportId",
-              "allowEmpty": false,
-              "required": true
+              "mapsTo": "record.reportId",
+              "allowEmpty": false
             },
             {
               "name": "include-headers-in-data",
               "type": "boolean",
               "summary": "",
               "values": [],
-              "mapsTo": "body.includeHeadersInData"
+              "mapsTo": "record.includeHeadersInData"
             },
             {
               "name": "result-style",
@@ -22560,26 +22661,26 @@
                 "inline",
                 "url"
               ],
-              "mapsTo": "body.resultStyle"
+              "mapsTo": "record.resultStyle"
             },
             {
               "name": "request-id",
               "type": "string",
               "summary": "",
               "values": [],
-              "mapsTo": "body.requestId",
+              "mapsTo": "record.requestId",
               "allowEmpty": false
             }
           ],
           "examples": [],
-          "outputPolicy": "json_redacted",
-          "risk": "bounded JSON direct read that starts or polls a documented Ashby report generation and returns at most 1 MiB of redacted JSON; the connector does not fetch returned report URLs or poll automatically",
-          "approval": "none",
-          "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
+          "outputPolicy": "",
+          "risk": "Executes Ashby report.generate through the documented POST /report.generate endpoint; reverse ETL plan, preview, approval, and execute are required.",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "report synchronous",
-          "summary": "Beta This endpoint is currently in beta and may change without notice. Retrieves report data synchronously. Timeout: 30 seconds.",
+          "summary": "> Beta\n>\n> This endpoint is currently in beta and may change without notice.\n\nRetrieves report data synchronously.\n\n**Timeout:** 30 seconds. If a report is timi",
           "intent": "etl",
           "availability": "implemented",
           "stream": "report_synchronous",
@@ -22593,8 +22694,7 @@
               "summary": "The ID of the report",
               "values": [],
               "mapsTo": "query.reportId",
-              "allowEmpty": false,
-              "required": true
+              "allowEmpty": false
             },
             {
               "name": "include-headers-in-data",
@@ -22622,7 +22722,7 @@
         },
         {
           "path": "approval list",
-          "summary": "Full-refresh-only Ashby approval list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
+          "summary": "Gets all approvals in the organization. You can optionally filter by entity type and entity ID.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagi",
           "intent": "etl",
           "availability": "implemented",
           "stream": "approval_list",
@@ -22654,7 +22754,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for approval.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+          "notes": "Fixed Ashby stream for approval.list; flags map only to documented request body fields."
         }
       ],
       "helpTopics": [
@@ -22668,7 +22768,7 @@
         }
       ]
     },
-    "docsMd": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL streams: 71\n- Implemented bounded direct reads/search/file metadata operations: 9\n- Implemented reverse-ETL write actions: 98\n- Reverse-ETL CLI commands with scalar flags: 89; partial nested-object flag surfaces: 9\n- Blocked/non-executable ledger rows: 34\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination and applies page-size, max-pages, and repeated-cursor bounds. Streams are full-refresh only until `ashby-sync-token-checkpoint-foundation` supplies an Ashby-owned persisted opaque-token state seam; timestamp fields are not used as lossy substitutes. Runtime help replaces provider incremental descriptions with full-refresh-only blocker text for every documented sync-token request. Repeatable array stream flags are withheld until `connector-stream-repeatable-array-foundation` preserves every supplied value.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with recursively closed modeled JSON schemas and the normal plan → preview → explicit approval → execute gate. Explicitly documented map-valued fields retain their map schemas; all other modeled objects reject undeclared fields. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `referralForm.info` is blocked pending `ashby-referral-form-info-side-effect-foundation` because it conditionally creates a default form. `applicationForm.submit` is blocked pending `ashby-application-form-typed-multipart-foundation` because the documented request requires multipart form data and typed file parts. Opaque incremental state is blocked pending `ashby-sync-token-checkpoint-foundation`, and repeatable array stream-command variants are blocked pending `connector-stream-repeatable-array-foundation`. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.",
+    "docsMd": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL/changefeed streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.",
     "docs": [
       {
         "title": "Service API documentation",
