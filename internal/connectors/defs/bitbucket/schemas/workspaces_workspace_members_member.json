@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": true,
+  "properties": {
+    "created_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workspace": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    }
+  },
+  "title": "workspaces_workspace_members_member",
+  "type": "object"
+}

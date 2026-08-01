@@ -171,7 +171,7 @@
           },
           "output_policy": {
             "type": "string",
-            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted"]
+            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "binary_file_bounded"]
           },
           "redact_fields": {
             "type": "array",

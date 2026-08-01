@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories",
+    "query": {
+      "page": "2",
+      "pagelen": "100"
+    }
+  },
+  "response": {
+    "body": {
+      "page": 2,
+      "pagelen": 100,
+      "size": 101,
+      "values": [
+        {
+          "created_on": "2026-01-01T00:01:41Z",
+          "full_name": "fixture-workspace/fixture-repo-101",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.invalid/fixture/repo-101"
+            }
+          },
+          "name": "Fixture Repository 101",
+          "slug": "fixture-repo-101",
+          "type": "repository",
+          "updated_on": "2026-01-02T00:01:41Z",
+          "uuid": "{fixture-repo-101}"
+        }
+      ]
+    },
+    "status": 200
+  }
+}

@@ -13089,6 +13089,2138 @@
     }
   },
   {
+    "name": "bitbucket",
+    "display_name": "Bitbucket",
+    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; exposes closed-schema repository creation and path-only deletes while blocking untyped JSON-body and multipart writes.",
+    "integration_type": "api",
+    "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": true,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "access_token": {
+          "description": "OAuth access token or app password-compatible bearer token.",
+          "type": "string",
+          "x-secret": true
+        },
+        "addon_key": {
+          "description": "Bitbucket path parameter `addon_key` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "annotationId": {
+          "description": "Bitbucket path parameter `annotationId` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "app_key": {
+          "description": "Bitbucket path parameter `app_key` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "app_password": {
+          "description": "Bitbucket app password for basic auth.",
+          "type": "string",
+          "x-secret": true
+        },
+        "base_url": {
+          "default": "https://api.bitbucket.org/2.0",
+          "description": "Bitbucket Cloud API base URL.",
+          "format": "uri",
+          "type": "string"
+        },
+        "cache_uuid": {
+          "description": "Bitbucket path parameter `cache_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "change_id": {
+          "description": "Bitbucket path parameter `change_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "comment_id": {
+          "description": "Bitbucket path parameter `comment_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "commit": {
+          "description": "Bitbucket path parameter `commit` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "component_id": {
+          "description": "Bitbucket path parameter `component_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "deployment_uuid": {
+          "description": "Bitbucket path parameter `deployment_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "email": {
+          "description": "Bitbucket path parameter `email` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "encoded_id": {
+          "description": "Bitbucket path parameter `encoded_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "environment_uuid": {
+          "description": "Bitbucket path parameter `environment_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "filename": {
+          "description": "Bitbucket path parameter `filename` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "fingerprint": {
+          "description": "Bitbucket path parameter `fingerprint` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "group_slug": {
+          "description": "Bitbucket path parameter `group_slug` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Bitbucket path parameter `id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "issue_id": {
+          "description": "Bitbucket path parameter `issue_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "key": {
+          "description": "Bitbucket path parameter `key` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "key_id": {
+          "description": "Bitbucket path parameter `key_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "known_host_uuid": {
+          "description": "Bitbucket path parameter `known_host_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "log_uuid": {
+          "description": "Bitbucket path parameter `log_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "member": {
+          "description": "Bitbucket path parameter `member` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "milestone_id": {
+          "description": "Bitbucket path parameter `milestone_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Bitbucket path parameter `name` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "node_id": {
+          "description": "Bitbucket path parameter `node_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "path": {
+          "description": "Bitbucket path parameter `path` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "pipeline_uuid": {
+          "description": "Bitbucket path parameter `pipeline_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "project_key": {
+          "description": "Bitbucket path parameter `project_key` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "property_name": {
+          "description": "Bitbucket path parameter `property_name` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "pull_request_id": {
+          "description": "Bitbucket path parameter `pull_request_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "pullrequest_id": {
+          "description": "Bitbucket path parameter `pullrequest_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "repo_name": {
+          "description": "Bitbucket path parameter `repo_name` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "repo_slug": {
+          "description": "Bitbucket path parameter `repo_slug` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "reportId": {
+          "description": "Bitbucket path parameter `reportId` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "revision": {
+          "description": "Bitbucket path parameter `revision` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "revspec": {
+          "description": "Bitbucket path parameter `revspec` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "runner_uuid": {
+          "description": "Bitbucket path parameter `runner_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "schedule_uuid": {
+          "description": "Bitbucket path parameter `schedule_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "selected_user": {
+          "description": "Bitbucket path parameter `selected_user` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "selected_user_id": {
+          "description": "Bitbucket path parameter `selected_user_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "spec": {
+          "description": "Bitbucket path parameter `spec` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "start_date": {
+          "description": "Optional lower bound for future incremental streams.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "step_uuid": {
+          "description": "Bitbucket path parameter `step_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "subject_type": {
+          "description": "Bitbucket path parameter `subject_type` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "target_username": {
+          "description": "Bitbucket path parameter `target_username` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "task_id": {
+          "description": "Bitbucket path parameter `task_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "test_case_uuid": {
+          "description": "Bitbucket path parameter `test_case_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "uid": {
+          "description": "Bitbucket path parameter `uid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "username": {
+          "description": "Bitbucket username for app-password basic auth.",
+          "type": "string"
+        },
+        "variable_uuid": {
+          "description": "Bitbucket path parameter `variable_uuid` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "version_id": {
+          "description": "Bitbucket path parameter `version_id` used by resource-scoped streams.",
+          "type": "string"
+        },
+        "workspace": {
+          "description": "Bitbucket path parameter `workspace` used by resource-scoped streams.",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "Bitbucket Connection Specification",
+      "type": "object"
+    },
+    "streams": [
+      {
+        "name": "repositories",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "hook_events",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "hook_events_subject_type",
+        "primary_key": [
+          "event"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branch_restrictions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branch_restrictions_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branching_model",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branching_model_settings",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit",
+        "primary_key": [
+          "hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_comments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_pullrequests",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports",
+        "primary_key": [
+          "external_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid",
+        "primary_key": [
+          "external_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+        "primary_key": [
+          "external_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+        "primary_key": [
+          "external_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_statuses",
+        "primary_key": [
+          "key"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_statuses_build_key",
+        "primary_key": [
+          "key"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commits",
+        "primary_key": [
+          "hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commits_revision",
+        "primary_key": [
+          "hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_components",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_components_component_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_default_reviewers",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_default_reviewers_target_username",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deploy_keys",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deploy_keys_key_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deployments",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deployments_deployment_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_diffstat_spec",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_effective_branching_model",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_effective_default_reviewers",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_environments",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_environments_environment_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_file_conflicts_spec",
+        "primary_key": [
+          "path"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_filehistory_commit_path",
+        "primary_key": [
+          "path"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_forks",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_hooks",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_hooks_uid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_import",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_attachments",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_changes",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_changes_change_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_comments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_merge_base_revspec",
+        "primary_key": [
+          "hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_milestones",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_milestones_milestone_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_override_settings",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_groups",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_users",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_caches",
+        "primary_key": [
+          "key_hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
+        "primary_key": [
+          "uri"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_runners",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_schedules",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_properties_app_key_property_name",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses",
+        "primary_key": [
+          "key"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_branches",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_branches_name",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_tags",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_tags_name",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_src",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_versions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_versions_version_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "repositories_workspace_repo_slug_watchers",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id_comments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id_commits",
+        "primary_key": [
+          "hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id_commits_revision",
+        "primary_key": [
+          "hash"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id_node_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "snippets_workspace_encoded_id_watchers",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "teams_username_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "teams_username_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_permissions_repositories",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "user_permissions_workspaces",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "user_workspaces",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "user_workspaces_workspace_permission",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "user_workspaces_workspace_permissions_repositories",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "users_selected_user",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "users_selected_user_gpg_keys",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "users_selected_user_gpg_keys_fingerprint",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "users_selected_user_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "users_selected_user_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "users_selected_user_properties_app_key_property_name",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "users_selected_user_ssh_keys",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "users_selected_user_ssh_keys_key_id",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_hooks",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_hooks_uid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_members",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_members_member",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_permissions",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_permissions_repositories",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_permissions_repositories_repo_slug",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_runners",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_runners_runner_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_branching_model",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_branching_model_settings",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_default_reviewers",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+        "primary_key": [
+          "account_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_deploy_keys",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_deploy_keys_key_id",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_groups",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_users",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces_workspace_pullrequests_selected_user",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "delete_repositories_workspace_repo_slug",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_repositories_workspace_repo_slug",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}",
+        "risk": "POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_branch_restrictions_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/branch-restrictions/{{ record.id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_approve",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/approve",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/comments/{{ record.comment_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}/annotations/{{ record.annotationId }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_default_reviewers_target_username",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/default-reviewers/{{ record.target_username }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_deploy_keys_key_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/deploy-keys/{{ record.key_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/deployments_config/environments/{{ record.environment_uuid }}/variables/{{ record.variable_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_downloads_filename",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/downloads/{{ record.filename }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_environments_environment_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/environments/{{ record.environment_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_hooks_uid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/hooks/{{ record.uid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/issues/{issue_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/attachments/{{ record.path }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/comments/{{ record.comment_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_vote",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/vote",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_watch",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}/watch",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/permissions-config/groups/{{ record.group_slug }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/permissions-config/users/{{ record.selected_user_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/caches",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/caches/{{ record.cache_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/runners/{{ record.runner_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/schedules/{{ record.schedule_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/ssh/key_pair",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/ssh/known_hosts/{{ record.known_host_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/variables/{{ record.variable_uuid }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_properties_app_key_property_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/approve",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}/resolve",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/request-changes",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/tasks/{{ record.task_id }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pullrequest_id }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_refs_branches_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/branches/{{ record.name }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_refs_tags_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/tags/{{ record.name }}",
+        "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}",
+        "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id_comments_comment_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}/comments/{{ record.comment_id }}",
+        "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id_watch",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}/watch",
+        "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id_node_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}/{{ record.node_id }}",
+        "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/{node_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_teams_username_pipelines_config_variables_variable_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.username }}/pipelines_config/variables/{{ record.variable_uuid }}",
+        "risk": "Destructive DELETE /teams/{username}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_users_selected_user_gpg_keys_fingerprint",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.selected_user }}/gpg-keys/{{ record.fingerprint }}",
+        "risk": "Destructive DELETE /users/{selected_user}/gpg-keys/{fingerprint}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_users_selected_user_pipelines_config_variables_variable_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.selected_user }}/pipelines_config/variables/{{ record.variable_uuid }}",
+        "risk": "Destructive DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_users_selected_user_properties_app_key_property_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.selected_user }}/properties/{{ record.app_key }}/{{ record.property_name }}",
+        "risk": "Destructive DELETE /users/{selected_user}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_users_selected_user_ssh_keys_key_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.selected_user }}/ssh-keys/{{ record.key_id }}",
+        "risk": "Destructive DELETE /users/{selected_user}/ssh-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_hooks_uid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/hooks/{{ record.uid }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/pipelines-config/runners/{{ record.runner_uuid }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/pipelines-config/variables/{{ record.variable_uuid }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/default-reviewers/{{ record.selected_user }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/deploy-keys/{{ record.key_id }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/permissions-config/groups/{{ record.group_slug }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/permissions-config/users/{{ record.selected_user_id }}",
+        "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+        "confirm": "destructive"
+      }
+    ],
+    "risk": {
+      "read": "Read-only Bitbucket Cloud REST calls against configured workspaces, repositories, or typed resource identifiers.",
+      "write": "Closed-schema Bitbucket writes only: repository creation and path-only DELETE actions; untyped JSON-body and multipart mutations stay blocked until typed schemas and bounded transfer foundations exist. Redaction claims apply to newly created plans that persist redact_fields metadata; stale-plan hydration is a shared runtime dependency outside this connector bundle.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions."
+    },
+    "icon": {
+      "id": "pm-bitbucket",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "bitly",
     "display_name": "Bitly",
     "description": "Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short domains, webhooks, QR codes, and group tags, and writes bitlink/campaign/group/channel/webhook/custom-bitlink/QR-code mutations, through the Bitly v4 REST API.",

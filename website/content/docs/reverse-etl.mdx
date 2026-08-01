@@ -31,7 +31,7 @@ pm reverse plan sync \
   --json
 ```
 
-The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID and an approval token.
+The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID and an approval token. Newly created plans persist the destination write action's `redact_fields` metadata and mask those fields in plan samples.
 
 JSON output:
 
@@ -60,7 +60,7 @@ JSON output:
 pm reverse preview plan_abc123 --json
 ```
 
-The preview returns the full plan record including all staged actions. Review it before approving.
+The preview returns the plan metadata and mapped sample rows before execution. Plans created with persisted connector-declared `redact_fields` keep those fields masked in preview output; hydrating saved pre-upgrade plans that lack that metadata is a shared runtime dependency.
 
 ```json
 {
@@ -112,7 +112,7 @@ Returns all plans and their associated runs.
 |---|---|
 | **Approval tokens are time-bounded** | A token expires after a configurable window. Expired tokens are rejected. |
 | **Tokens are single-use** | Replaying a token returns exit code `7` (policy / approval needed). |
-| **Secrets are never printed** | Only secret field names appear in plan manifests; values are never exposed. |
+| **Secrets are never printed** | Only secret field names appear in plan manifests; newly created plans with persisted `redact_fields` mask connector-declared sensitive sample fields. |
 | **Agents get a diff first** | An agent can run `plan` and `preview` autonomously; it must present an approval token for `run`. |
 
 This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, a human (or an explicitly trusted policy) issues the token, and only then does data move.
