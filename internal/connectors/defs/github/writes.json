@@ -444,7 +444,8 @@
           }
         }
       },
-      "risk": "irreversibly changes repository history unless branch protection blocks merge"
+      "risk": "irreversibly changes repository history unless branch protection blocks merge",
+      "confirm": "destructive"
     },
     {
       "name": "create_label",
@@ -532,12 +533,6 @@
         }
       },
       "risk": "removes a label from the repository and existing issue metadata",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
@@ -634,12 +629,6 @@
         }
       },
       "risk": "removes repository planning metadata from GitHub",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
@@ -752,12 +741,6 @@
         }
       },
       "risk": "removes release metadata from GitHub; tags are not deleted by this action",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
@@ -788,7 +771,8 @@
           }
         }
       },
-      "risk": "starts CI/CD automation that may deploy, publish, or mutate external systems"
+      "risk": "starts CI/CD automation that may deploy, publish, or mutate external systems",
+      "confirm": "destructive"
     },
     {
       "name": "rerun_workflow_run",
@@ -811,7 +795,8 @@
           }
         }
       },
-      "risk": "reruns CI/CD automation and consumes workflow minutes"
+      "risk": "reruns CI/CD automation and consumes workflow minutes",
+      "confirm": "destructive"
     },
     {
       "name": "cancel_workflow_run",
@@ -834,7 +819,8 @@
           }
         }
       },
-      "risk": "interrupts in-flight CI/CD automation"
+      "risk": "interrupts in-flight CI/CD automation",
+      "confirm": "destructive"
     },
     {
       "name": "delete_workflow_run",
@@ -858,12 +844,6 @@
         }
       },
       "risk": "removes workflow run history from GitHub",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
@@ -948,7 +928,8 @@
           }
         }
       },
-      "risk": "writes a commit to the repository and may trigger CI/CD"
+      "risk": "writes a commit to the repository and may trigger CI/CD",
+      "confirm": "destructive"
     },
     {
       "name": "delete_file",
@@ -996,12 +977,6 @@
         }
       },
       "risk": "writes a commit that removes a file from the repository",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
@@ -1140,12 +1115,6 @@
           }
         }
       },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "risk": "removes a webhook; the target will stop receiving repository event payloads",
       "confirm": "destructive"
     },
@@ -1173,7 +1142,8 @@
           }
         }
       },
-      "risk": "grants a new SSH public key deploy access to the repository"
+      "risk": "grants a new SSH public key deploy access to the repository",
+      "confirm": "destructive"
     },
     {
       "name": "delete_deploy_key",
@@ -1195,12 +1165,6 @@
             "type": "integer"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "revokes an SSH deploy key's access to the repository",
       "confirm": "destructive"
@@ -1238,7 +1202,8 @@
           }
         }
       },
-      "risk": "creates or changes a deployment environment's protection rules and reviewers"
+      "risk": "creates or changes a deployment environment's protection rules and reviewers",
+      "confirm": "destructive"
     },
     {
       "name": "delete_environment",
@@ -1260,12 +1225,6 @@
             "type": "string"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "removes a deployment environment and its protection rules",
       "confirm": "destructive"
@@ -1357,12 +1316,6 @@
           }
         }
       },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "risk": "removes a commit comment",
       "confirm": "destructive"
     },
@@ -1416,12 +1369,6 @@
             "type": "integer"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "removes an issue or pull request comment",
       "confirm": "destructive"
@@ -1515,7 +1462,8 @@
           }
         }
       },
-      "risk": "replaces every label on an issue or pull request, removing any not listed"
+      "risk": "replaces every label on an issue or pull request, removing any not listed",
+      "confirm": "destructive"
     },
     {
       "name": "add_issue_labels",
@@ -1575,12 +1523,6 @@
             "type": "string"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "removes a single label from an issue or pull request",
       "confirm": "destructive"
@@ -1761,12 +1703,6 @@
           }
         }
       },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "risk": "removes a pull request review comment",
       "confirm": "destructive"
     },
@@ -1854,7 +1790,8 @@
           }
         }
       },
-      "risk": "dismisses an existing pull request review, clearing its approval status"
+      "risk": "dismisses an existing pull request review, clearing its approval status",
+      "confirm": "destructive"
     },
     {
       "name": "update_pull_request_branch",
@@ -1883,7 +1820,8 @@
           }
         }
       },
-      "risk": "merges the base branch into the pull request's head branch, adding a merge commit"
+      "risk": "merges the base branch into the pull request's head branch, adding a merge commit",
+      "confirm": "destructive"
     },
     {
       "name": "update_release_asset",
@@ -1938,12 +1876,6 @@
             "type": "integer"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "removes a downloadable asset from a published release",
       "confirm": "destructive"
@@ -2005,7 +1937,8 @@
           }
         }
       },
-      "risk": "grants a GitHub user access to the repository and may send an invitation email"
+      "risk": "grants a GitHub user access to the repository and may send an invitation email",
+      "confirm": "destructive"
     },
     {
       "name": "remove_collaborator",
@@ -2027,12 +1960,6 @@
             "type": "string"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "revokes a collaborator's access to the repository",
       "confirm": "destructive"
@@ -2095,7 +2022,8 @@
           }
         }
       },
-      "risk": "moves an existing branch or tag ref to a different commit SHA, potentially discarding history"
+      "risk": "moves an existing branch or tag ref to a different commit SHA, potentially discarding history",
+      "confirm": "destructive"
     },
     {
       "name": "delete_ref",
@@ -2117,13 +2045,6 @@
             "type": "string"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404,
-          422
-        ]
       },
       "risk": "permanently deletes a branch or tag ref",
       "confirm": "destructive"
@@ -2153,7 +2074,8 @@
           }
         }
       },
-      "risk": "creates a merge commit combining the head ref into the base branch"
+      "risk": "creates a merge commit combining the head ref into the base branch",
+      "confirm": "destructive"
     },
     {
       "name": "update_code_scanning_alert",
@@ -2195,7 +2117,8 @@
           }
         }
       },
-      "risk": "changes a code scanning alert's triage state, which can suppress a real security finding"
+      "risk": "changes a code scanning alert's triage state, which can suppress a real security finding",
+      "confirm": "destructive"
     },
     {
       "name": "update_dependabot_alert",
@@ -2239,7 +2162,8 @@
           }
         }
       },
-      "risk": "changes a dependabot alert's triage state, which can suppress a real vulnerability finding"
+      "risk": "changes a dependabot alert's triage state, which can suppress a real vulnerability finding",
+      "confirm": "destructive"
     },
     {
       "name": "create_deployment",
@@ -2286,7 +2210,8 @@
           }
         }
       },
-      "risk": "records a new deployment and may trigger CI/CD deployment automation"
+      "risk": "records a new deployment and may trigger CI/CD deployment automation",
+      "confirm": "destructive"
     },
     {
       "name": "create_fork",
@@ -2355,7 +2280,8 @@
           }
         }
       },
-      "risk": "creates a repository ruleset that can block pushes, merges, or deletions repo-wide once active"
+      "risk": "creates a repository ruleset that can block pushes, merges, or deletions repo-wide once active",
+      "confirm": "destructive"
     },
     {
       "name": "update_repo_ruleset",
@@ -2407,7 +2333,8 @@
           }
         }
       },
-      "risk": "changes an existing repository ruleset's enforcement or rule set, which can block pushes, merges, or deletions repo-wide"
+      "risk": "changes an existing repository ruleset's enforcement or rule set, which can block pushes, merges, or deletions repo-wide",
+      "confirm": "destructive"
     },
     {
       "name": "delete_repo_ruleset",
@@ -2429,12 +2356,6 @@
             "type": "integer"
           }
         }
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
       },
       "risk": "removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced",
       "confirm": "destructive"
@@ -2480,13 +2401,14 @@
           }
         }
       },
-      "risk": "changes a secret scanning alert's triage state, which can suppress a real leaked-credential finding"
+      "risk": "changes a secret scanning alert's triage state, which can suppress a real leaked-credential finding",
+      "confirm": "destructive"
     },
     {
       "name": "repo",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2496,19 +2418,13 @@
         "properties": {}
       },
       "risk": "critical",
-      "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      }
+      "confirm": "destructive"
     },
     {
       "name": "repo2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2517,13 +2433,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_cache_retention_limit2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/cache/retention-limit",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2532,13 +2449,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_cache_storage_limit2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/cache/storage-limit",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2547,13 +2465,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_caches",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/caches",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2563,19 +2482,13 @@
         "properties": {}
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_caches_cache_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/caches/{{ record.cache_id }}",
       "path_fields": [
         "cache_id"
       ],
@@ -2593,19 +2506,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_jobs_job_id_rerun",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/jobs/{{ record.job_id }}/rerun",
       "path_fields": [
         "job_id"
       ],
@@ -2628,7 +2535,7 @@
       "name": "actions_oidc_customization_sub2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/oidc/customization/sub",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2637,13 +2544,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2652,13 +2560,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions_access2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/access",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/access",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2667,13 +2576,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions_artifact_and_log_retention2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/artifact-and-log-retention",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2682,13 +2592,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions_fork_pr_contributor_approval2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-contributor-approval",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2697,13 +2608,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions_fork_pr_workflows_private_repos2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/fork-pr-workflows-private-repos",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2712,13 +2624,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions_selected_actions2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/selected-actions",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2727,13 +2640,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_permissions_workflow2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/permissions/workflow",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2742,13 +2656,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_generate_jitconfig",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/generate-jitconfig",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2757,13 +2672,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_registration_token",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/registration-token",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/registration-token",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2772,13 +2688,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_remove_token",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/remove-token",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/remove-token",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2787,13 +2704,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}",
       "path_fields": [
         "runner_id"
       ],
@@ -2811,19 +2729,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id_labels",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
       "path_fields": [
         "runner_id"
       ],
@@ -2841,19 +2753,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id_labels3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
       "path_fields": [
         "runner_id"
       ],
@@ -2870,13 +2776,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id_labels4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels",
       "path_fields": [
         "runner_id"
       ],
@@ -2893,13 +2800,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id_labels_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runners/{{ record.runner_id }}/labels/{{ record.name }}",
       "path_fields": [
         "runner_id",
         "name"
@@ -2922,19 +2830,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_runs_run_id_approve",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/approve",
       "path_fields": [
         "run_id"
       ],
@@ -2951,13 +2853,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runs_run_id_deployment_protection_rule",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/deployment_protection_rule",
       "path_fields": [
         "run_id"
       ],
@@ -2974,13 +2877,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_runs_run_id_logs",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/logs",
       "path_fields": [
         "run_id"
       ],
@@ -2998,19 +2902,13 @@
         }
       },
       "risk": "critical",
-      "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      }
+      "confirm": "destructive"
     },
     {
       "name": "actions_runs_run_id_pending_deployments2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/pending_deployments",
       "path_fields": [
         "run_id"
       ],
@@ -3027,13 +2925,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -3051,19 +2950,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -3080,13 +2973,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_variables2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/actions/variables",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3095,13 +2989,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_variables_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}",
       "path_fields": [
         "name"
       ],
@@ -3119,19 +3014,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "actions_variables_name3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/variables/{{ record.name }}",
       "path_fields": [
         "name"
       ],
@@ -3148,13 +3037,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_workflows_workflow_id_disable",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/disable",
       "path_fields": [
         "workflow_id"
       ],
@@ -3171,13 +3061,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "actions_workflows_workflow_id_enable",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{ record.workflow_id }}/enable",
       "path_fields": [
         "workflow_id"
       ],
@@ -3194,13 +3085,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "attestations",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/attestations",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/attestations",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3209,13 +3101,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "autolinks",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/autolinks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3230,7 +3123,7 @@
       "name": "autolinks_autolink_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/autolinks/{{ record.autolink_id }}",
       "path_fields": [
         "autolink_id"
       ],
@@ -3248,19 +3141,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "automated_security_fixes",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3270,19 +3157,13 @@
         "properties": {}
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "automated_security_fixes3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/automated-security-fixes",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/automated-security-fixes",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3291,13 +3172,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection",
       "path_fields": [
         "branch"
       ],
@@ -3315,42 +3197,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_enforce_admins",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection",
       "path_fields": [
         "branch"
       ],
@@ -3368,42 +3221,37 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_enforce_admins",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_enforce_admins3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_required_pull_request_reviews",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/enforce_admins",
       "path_fields": [
         "branch"
       ],
@@ -3421,42 +3269,37 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_required_pull_request_reviews",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_pull_request_reviews3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_required_signatures",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_pull_request_reviews",
       "path_fields": [
         "branch"
       ],
@@ -3474,42 +3317,37 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_required_signatures",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_signatures3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_required_status_checks",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_signatures",
       "path_fields": [
         "branch"
       ],
@@ -3527,42 +3365,37 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_required_status_checks",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_status_checks3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_required_status_checks_contexts",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks",
       "path_fields": [
         "branch"
       ],
@@ -3580,65 +3413,37 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_required_status_checks_contexts",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_status_checks_contexts3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_required_status_checks_contexts4",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_restrictions",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
       "path_fields": [
         "branch"
       ],
@@ -3656,19 +3461,61 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_required_status_checks_contexts4",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/required_status_checks/contexts",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_restrictions",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_apps",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
       "path_fields": [
         "branch"
       ],
@@ -3686,65 +3533,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_apps3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_restrictions_apps4",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_restrictions_teams",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
       "path_fields": [
         "branch"
       ],
@@ -3762,65 +3557,61 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_restrictions_apps4",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/apps",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_restrictions_teams",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_teams3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_restrictions_teams4",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "path_fields": [
-        "branch"
-      ],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "branch"
-        ],
-        "properties": {
-          "branch": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "high"
-    },
-    {
-      "name": "branches_branch_protection_restrictions_users",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
       "path_fields": [
         "branch"
       ],
@@ -3838,19 +3629,61 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_restrictions_teams4",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/teams",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
       },
+      "risk": "high",
+      "confirm": "destructive"
+    },
+    {
+      "name": "branches_branch_protection_restrictions_users",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
+      "path_fields": [
+        "branch"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "branch"
+        ],
+        "properties": {
+          "branch": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high",
       "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_users3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
       "path_fields": [
         "branch"
       ],
@@ -3867,13 +3700,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_users4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/protection/restrictions/users",
       "path_fields": [
         "branch"
       ],
@@ -3890,13 +3724,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_rename",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/branches/{branch}/rename",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/branches/{{ record.branch }}/rename",
       "path_fields": [
         "branch"
       ],
@@ -3920,7 +3755,7 @@
       "name": "check_runs",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-runs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3935,7 +3770,7 @@
       "name": "check_runs_check_run_id2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}",
       "path_fields": [
         "check_run_id"
       ],
@@ -3958,7 +3793,7 @@
       "name": "check_runs_check_run_id_rerequest",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-runs/{{ record.check_run_id }}/rerequest",
       "path_fields": [
         "check_run_id"
       ],
@@ -3981,7 +3816,7 @@
       "name": "check_suites",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-suites",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -3996,7 +3831,7 @@
       "name": "check_suites_preferences",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/check-suites/preferences",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites/preferences",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4011,7 +3846,7 @@
       "name": "check_suites_check_suite_id_rerequest",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/check-suites/{{ record.check_suite_id }}/rerequest",
       "path_fields": [
         "check_suite_id"
       ],
@@ -4034,7 +3869,7 @@
       "name": "code_quality_setup2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/code-quality/setup",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-quality/setup",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4043,13 +3878,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_alerts_alert_number_autofix2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix",
       "path_fields": [
         "alert_number"
       ],
@@ -4066,13 +3902,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_alerts_alert_number_autofix_commits",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts/{{ record.alert_number }}/autofix/commits",
       "path_fields": [
         "alert_number"
       ],
@@ -4089,13 +3926,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_analyses_analysis_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/analyses/{{ record.analysis_id }}",
       "path_fields": [
         "analysis_id"
       ],
@@ -4113,19 +3951,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "code_scanning_codeql_databases_language",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/databases/{{ record.language }}",
       "path_fields": [
         "language"
       ],
@@ -4143,19 +3975,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "code_scanning_codeql_variant_analyses",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/codeql/variant-analyses",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4164,13 +3990,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_default_setup2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/default-setup",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4179,13 +4006,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_sarifs",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/code-scanning/sarifs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/sarifs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4200,7 +4028,7 @@
       "name": "codespaces2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/codespaces",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4215,7 +4043,7 @@
       "name": "codespaces_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4234,19 +4062,13 @@
       },
       "risk": "medium",
       "hook": "github",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "codespaces_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/codespaces/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4270,7 +4092,7 @@
       "name": "comments_comment_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions",
       "path_fields": [
         "comment_id"
       ],
@@ -4293,7 +4115,7 @@
       "name": "comments_comment_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "comment_id",
         "reaction_id"
@@ -4316,19 +4138,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "dependabot_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4346,19 +4162,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "dependabot_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependabot/secrets/{{ record.secret_name }}",
       "path_fields": [
         "secret_name"
       ],
@@ -4375,13 +4185,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "dependency_graph_snapshots",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/dependency-graph/snapshots",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dependency-graph/snapshots",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4396,7 +4207,7 @@
       "name": "deployments_deployment_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}",
       "path_fields": [
         "deployment_id"
       ],
@@ -4414,19 +4225,13 @@
         }
       },
       "risk": "critical",
-      "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      }
+      "confirm": "destructive"
     },
     {
       "name": "deployments_deployment_id_statuses2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/deployments/{{ record.deployment_id }}/statuses",
       "path_fields": [
         "deployment_id"
       ],
@@ -4449,7 +4254,7 @@
       "name": "dispatches",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/dispatches",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/dispatches",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4464,7 +4269,7 @@
       "name": "environments_environment_name_deployment_branch_policies2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies",
       "path_fields": [
         "environment_name"
       ],
@@ -4481,13 +4286,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_deployment_branch_policies_branch_policy_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
       "path_fields": [
         "environment_name",
         "branch_policy_id"
@@ -4510,19 +4316,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment-branch-policies/{{ record.branch_policy_id }}",
       "path_fields": [
         "environment_name",
         "branch_policy_id"
@@ -4544,13 +4344,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_deployment_protection_rules2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules",
       "path_fields": [
         "environment_name"
       ],
@@ -4567,13 +4368,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_deployment_protection_rules_protection_rule_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/deployment_protection_rules/{{ record.protection_rule_id }}",
       "path_fields": [
         "environment_name",
         "protection_rule_id"
@@ -4596,19 +4398,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_secrets_secret_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}",
       "path_fields": [
         "environment_name",
         "secret_name"
@@ -4631,19 +4427,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_secrets_secret_name3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/secrets/{{ record.secret_name }}",
       "path_fields": [
         "environment_name",
         "secret_name"
@@ -4665,13 +4455,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_variables2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables",
       "path_fields": [
         "environment_name"
       ],
@@ -4688,13 +4479,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_variables_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}",
       "path_fields": [
         "environment_name",
         "name"
@@ -4717,19 +4509,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_variables_name3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}/variables/{{ record.name }}",
       "path_fields": [
         "environment_name",
         "name"
@@ -4751,13 +4537,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "git_blobs",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/git/blobs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/blobs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4772,7 +4559,7 @@
       "name": "git_commits",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/git/commits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/commits",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4787,7 +4574,7 @@
       "name": "git_trees",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/git/trees",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/trees",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4802,7 +4589,7 @@
       "name": "hooks_hook_id_deliveries_delivery_id_attempts",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/deliveries/{{ record.delivery_id }}/attempts",
       "path_fields": [
         "hook_id",
         "delivery_id"
@@ -4830,7 +4617,7 @@
       "name": "hooks_hook_id_pings",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/pings",
       "path_fields": [
         "hook_id"
       ],
@@ -4853,7 +4640,7 @@
       "name": "hooks_hook_id_tests",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/tests",
       "path_fields": [
         "hook_id"
       ],
@@ -4876,7 +4663,7 @@
       "name": "immutable_releases",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4886,19 +4673,13 @@
         "properties": {}
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "immutable_releases3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/immutable-releases",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/immutable-releases",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4907,13 +4688,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "import",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/import",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4923,19 +4705,13 @@
         "properties": {}
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "import3",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/import",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4950,7 +4726,7 @@
       "name": "import4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/import",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -4965,7 +4741,7 @@
       "name": "import_authors_author_id",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/import/authors/{author_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import/authors/{{ record.author_id }}",
       "path_fields": [
         "author_id"
       ],
@@ -4988,7 +4764,7 @@
       "name": "import_lfs",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/import/lfs",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/import/lfs",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5003,7 +4779,7 @@
       "name": "interaction_limits",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/interaction-limits",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5013,34 +4789,13 @@
         "properties": {}
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "interaction_limits3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/interaction-limits",
-      "path_fields": [],
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [],
-        "properties": {}
-      },
-      "risk": "high"
-    },
-    {
-      "name": "interaction_limits_pulls_bypass_list",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5050,19 +4805,13 @@
         "properties": {}
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
-      "name": "interaction_limits_pulls_bypass_list3",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "name": "interaction_limits_pulls_bypass_list",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5071,13 +4820,30 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
+    },
+    {
+      "name": "interaction_limits_pulls_bypass_list3",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/interaction-limits/pulls/bypass-list",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "invitations_invitation_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}",
       "path_fields": [
         "invitation_id"
       ],
@@ -5095,19 +4861,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "invitations_invitation_id2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/invitations/{{ record.invitation_id }}",
       "path_fields": [
         "invitation_id"
       ],
@@ -5130,7 +4890,7 @@
       "name": "issues_comments_comment_id_pin",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin",
       "path_fields": [
         "comment_id"
       ],
@@ -5148,19 +4908,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "issues_comments_comment_id_pin2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/pin",
       "path_fields": [
         "comment_id"
       ],
@@ -5183,7 +4937,7 @@
       "name": "issues_comments_comment_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions",
       "path_fields": [
         "comment_id"
       ],
@@ -5206,7 +4960,7 @@
       "name": "issues_comments_comment_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "comment_id",
         "reaction_id"
@@ -5229,19 +4983,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_dependencies_blocked_by2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by",
       "path_fields": [
         "issue_number"
       ],
@@ -5264,7 +5012,7 @@
       "name": "issues_issue_number_dependencies_blocked_by_issue_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/dependencies/blocked_by/{{ record.issue_id }}",
       "path_fields": [
         "issue_number",
         "issue_id"
@@ -5287,19 +5035,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_issue_field_values2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values",
       "path_fields": [
         "issue_number"
       ],
@@ -5316,13 +5058,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_issue_field_values3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values",
       "path_fields": [
         "issue_number"
       ],
@@ -5339,13 +5082,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_issue_field_values_issue_field_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/issue-field-values/{{ record.issue_field_id }}",
       "path_fields": [
         "issue_number",
         "issue_field_id"
@@ -5368,19 +5112,13 @@
         }
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions",
       "path_fields": [
         "issue_number"
       ],
@@ -5403,7 +5141,7 @@
       "name": "issues_issue_number_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "issue_number",
         "reaction_id"
@@ -5426,19 +5164,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_sub_issue",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issue",
       "path_fields": [
         "issue_number"
       ],
@@ -5456,19 +5188,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_sub_issues2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues",
       "path_fields": [
         "issue_number"
       ],
@@ -5491,7 +5217,7 @@
       "name": "issues_issue_number_sub_issues_priority",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/sub_issues/priority",
       "path_fields": [
         "issue_number"
       ],
@@ -5514,7 +5240,7 @@
       "name": "merge_upstream",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/merge-upstream",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/merge-upstream",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5529,7 +5255,7 @@
       "name": "notifications2",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/notifications",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/notifications",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5544,7 +5270,7 @@
       "name": "pages",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/pages",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5554,19 +5280,13 @@
         "properties": {}
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "pages3",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5581,7 +5301,7 @@
       "name": "pages4",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/pages",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5596,7 +5316,7 @@
       "name": "pages_builds2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages/builds",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/builds",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5611,7 +5331,7 @@
       "name": "pages_deployments",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages/deployments",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/deployments",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5626,7 +5346,7 @@
       "name": "pages_deployments_pages_deployment_id_cancel",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pages/deployments/{{ record.pages_deployment_id }}/cancel",
       "path_fields": [
         "pages_deployment_id"
       ],
@@ -5649,7 +5369,7 @@
       "name": "private_vulnerability_reporting",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5659,19 +5379,13 @@
         "properties": {}
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "private_vulnerability_reporting3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/private-vulnerability-reporting",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5680,13 +5394,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "properties_values2",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/properties/values",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/properties/values",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5695,13 +5410,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "pulls_comments_comment_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions",
       "path_fields": [
         "comment_id"
       ],
@@ -5724,7 +5440,7 @@
       "name": "pulls_comments_comment_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "comment_id",
         "reaction_id"
@@ -5747,19 +5463,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "pulls_pull_number_codespaces",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/codespaces",
       "path_fields": [
         "pull_number"
       ],
@@ -5782,7 +5492,7 @@
       "name": "pulls_pull_number_requested_reviewers",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/requested_reviewers",
       "path_fields": [
         "pull_number"
       ],
@@ -5800,19 +5510,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "releases_generate_notes",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/releases/generate-notes",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/generate-notes",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5827,7 +5531,7 @@
       "name": "releases_release_id_assets2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/assets",
       "path_fields": [
         "release_id"
       ],
@@ -5850,7 +5554,7 @@
       "name": "releases_release_id_reactions2",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions",
       "path_fields": [
         "release_id"
       ],
@@ -5873,7 +5577,7 @@
       "name": "releases_release_id_reactions_reaction_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/reactions/{{ record.reaction_id }}",
       "path_fields": [
         "release_id",
         "reaction_id"
@@ -5896,19 +5600,13 @@
         }
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "secret_scanning_push_protection_bypasses",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/push-protection-bypasses",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5917,13 +5615,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "security_advisories",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5932,13 +5631,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "security_advisories_reports",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories/reports",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/reports",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -5947,13 +5647,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "security_advisories_ghsa_id",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}",
       "path_fields": [
         "ghsa_id"
       ],
@@ -5970,13 +5671,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "security_advisories_ghsa_id_cve",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/cve",
       "path_fields": [
         "ghsa_id"
       ],
@@ -5993,13 +5695,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "security_advisories_ghsa_id_forks",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/security-advisories/{{ record.ghsa_id }}/forks",
       "path_fields": [
         "ghsa_id"
       ],
@@ -6016,13 +5719,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     },
     {
       "name": "statuses_sha",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/statuses/{sha}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/statuses/{{ record.sha }}",
       "path_fields": [
         "sha"
       ],
@@ -6045,7 +5749,7 @@
       "name": "subscription",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/subscription",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -6055,19 +5759,13 @@
         "properties": {}
       },
       "risk": "medium",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "subscription3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/subscription",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/subscription",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -6082,7 +5780,7 @@
       "name": "transfer",
       "kind": "create",
       "method": "POST",
-      "path": "/repos/{owner}/{repo}/transfer",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/transfer",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -6098,7 +5796,7 @@
       "name": "vulnerability_alerts",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -6108,19 +5806,13 @@
         "properties": {}
       },
       "risk": "high",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "confirm": "destructive"
     },
     {
       "name": "vulnerability_alerts3",
       "kind": "update",
       "method": "PUT",
-      "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/vulnerability-alerts",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -6129,7 +5821,8 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "confirm": "destructive"
     }
   ]
 }

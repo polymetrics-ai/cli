@@ -256,8 +256,10 @@ lower bound is available.
 Overall write risk: external GitHub API mutation.
 
 Reverse ETL writes should be planned, previewed, approved, and then executed. Every implemented
-DELETE or `kind: delete` action declares typed `destructive` confirmation; `kind: delete` actions
-also record idempotent missing-resource handling where the engine can apply it. Declared actions:
+DELETE or `kind: delete` action declares typed `destructive` confirmation; selected destructive or
+admin non-DELETE actions require the same typed confirmation. GitHub 404 responses are not treated
+as missing-ok delete success unless a future action records endpoint-specific proof. Declared
+actions:
 
 - `create_issue`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues` - kind `create`; body
   type `json`; required record fields `title`; accepted fields `assignees`, `body`, `labels`,
@@ -369,14 +371,14 @@ also record idempotent missing-resource handling where the engine can apply it. 
   existing webhook's target URL, secret, or event subscriptions.
 - `delete_webhook`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}`
   - kind `delete`; body type `none`; path fields `hook_id`; required record fields `hook_id`;
-  accepted fields `hook_id`; missing records treated as success for status `404`; risk: removes a
+  accepted fields `hook_id`; risk: removes a
   webhook; the target will stop receiving repository event payloads.
 - `create_deploy_key`: POST `/repos/{{ config.owner }}/{{ config.repo }}/keys` - kind `create`; body
   type `json`; required record fields `key`; accepted fields `key`, `read_only`, `title`; risk:
   grants a new SSH public key deploy access to the repository.
 - `delete_deploy_key`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/keys/{{ record.key_id }}`
   - kind `delete`; body type `none`; path fields `key_id`; required record fields `key_id`; accepted
-  fields `key_id`; missing records treated as success for status `404`; risk: revokes an SSH deploy
+  fields `key_id`; risk: revokes an SSH deploy
   key's access to the repository.
 - `create_or_update_environment`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/environments/{{
   record.environment_name }}` - kind `upsert`; body type `json`; path fields `environment_name`;
@@ -385,8 +387,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
   deployment environment's protection rules and reviewers.
 - `delete_environment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/environments/{{
   record.environment_name }}` - kind `delete`; body type `none`; path fields `environment_name`;
-  required record fields `environment_name`; accepted fields `environment_name`; missing records
-  treated as success for status `404`; risk: removes a deployment environment and its protection
+  required record fields `environment_name`; accepted fields `environment_name`; risk: removes a deployment environment and its protection
   rules.
 - `create_commit_comment`: POST `/repos/{{ config.owner }}/{{ config.repo }}/commits/{{
   record.commit_sha }}/comments` - kind `create`; body type `json`; path fields `commit_sha`;
@@ -398,16 +399,14 @@ also record idempotent missing-resource handling where the engine can apply it. 
   changes the text of an existing commit comment.
 - `delete_commit_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/comments/{{
   record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
-  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
-  `404`; risk: removes a commit comment.
+  fields `comment_id`; accepted fields `comment_id`; risk: removes a commit comment.
 - `update_issue_comment`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{
   record.comment_id }}` - kind `update`; body type `json`; path fields `comment_id`; body fields
   `body`; required record fields `comment_id`, `body`; accepted fields `body`, `comment_id`; risk:
   changes the text of an existing issue or pull request comment.
 - `delete_issue_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{
   record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
-  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
-  `404`; risk: removes an issue or pull request comment.
+  fields `comment_id`; accepted fields `comment_id`; risk: removes an issue or pull request comment.
 - `lock_issue`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
   }}/lock` - kind `update`; body type `json`; path fields `issue_number`; body fields `lock_reason`;
   required record fields `issue_number`; accepted fields `issue_number`, `lock_reason`; risk:
@@ -427,7 +426,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
 - `remove_issue_label`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
   record.issue_number }}/labels/{{ record.name }}` - kind `delete`; body type `none`; path fields
   `issue_number`, `name`; required record fields `issue_number`, `name`; accepted fields
-  `issue_number`, `name`; missing records treated as success for status `404`; risk: removes a
+  `issue_number`, `name`; risk: removes a
   single label from an issue or pull request.
 - `add_issue_assignees`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
   record.issue_number }}/assignees` - kind `update`; body type `json`; path fields `issue_number`;
@@ -449,8 +448,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
   changes the text of an existing pull request review comment.
 - `delete_review_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{
   record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
-  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
-  `404`; risk: removes a pull request review comment.
+  fields `comment_id`; accepted fields `comment_id`; risk: removes a pull request review comment.
 - `submit_pull_request_review`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
   record.pull_number }}/reviews/{{ record.review_id }}/events` - kind `update`; body type `json`;
   path fields `pull_number`, `review_id`; body fields `body`, `event`; required record fields
@@ -472,8 +470,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
   asset's file name or label.
 - `delete_release_asset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{
   record.asset_id }}` - kind `delete`; body type `none`; path fields `asset_id`; required record
-  fields `asset_id`; accepted fields `asset_id`; missing records treated as success for status
-  `404`; risk: removes a downloadable asset from a published release.
+  fields `asset_id`; accepted fields `asset_id`; risk: removes a downloadable asset from a published release.
 - `replace_repo_topics`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/topics` - kind `update`;
   body type `json`; required record fields `names`; accepted fields `names`; risk: replaces the
   repository's entire topic list, removing any topic not listed.
@@ -483,8 +480,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
   grants a GitHub user access to the repository and may send an invitation email.
 - `remove_collaborator`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{
   record.username }}` - kind `delete`; body type `none`; path fields `username`; required record
-  fields `username`; accepted fields `username`; missing records treated as success for status
-  `404`; risk: revokes a collaborator's access to the repository.
+  fields `username`; accepted fields `username`; risk: revokes a collaborator's access to the repository.
 - `create_ref`: POST `/repos/{{ config.owner }}/{{ config.repo }}/git/refs` - kind `create`; body
   type `json`; required record fields `ref`, `sha`; accepted fields `ref`, `sha`; risk: creates a
   new branch or tag ref pointing at the given commit SHA.
@@ -494,7 +490,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
   a different commit SHA, potentially discarding history.
 - `delete_ref`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` -
   kind `delete`; body type `none`; path fields `ref`; required record fields `ref`; accepted fields
-  `ref`; missing records treated as success for status `404`, `422`; confirmation `destructive`;
+  `ref`; confirmation `destructive`;
   risk: permanently deletes a branch or tag ref.
 - `merge_branch`: POST `/repos/{{ config.owner }}/{{ config.repo }}/merges` - kind `create`; body
   type `json`; required record fields `base`, `head`; accepted fields `base`, `commit_message`,
@@ -528,8 +524,7 @@ also record idempotent missing-resource handling where the engine can apply it. 
   rule set, which can block pushes, merges, or deletions repo-wide.
 - `delete_repo_ruleset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
   record.ruleset_id }}` - kind `delete`; body type `none`; path fields `ruleset_id`; required record
-  fields `ruleset_id`; accepted fields `ruleset_id`; missing records treated as success for status
-  `404`; risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it
+  fields `ruleset_id`; accepted fields `ruleset_id`; risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it
   enforced.
 - `update_secret_scanning_alert`: PATCH `/repos/{{ config.owner }}/{{ config.repo
   }}/secret-scanning/alerts/{{ record.alert_number }}` - kind `update`; body type `json`; path

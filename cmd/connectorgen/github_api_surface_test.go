@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -140,17 +141,17 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 	}
 	destructiveWrites := map[string]bool{}
 	for _, action := range writes.Actions {
+		if githubWritePathHasLiteralPlaceholder(action.Path) {
+			t.Fatalf("write action %q path uses single-brace placeholders: %q", action.Name, action.Path)
+		}
+		if githubActionRequiresTypedDestructiveConfirmation(action) && action.Confirm != "destructive" {
+			t.Fatalf("write action %q confirm = %q, want destructive", action.Name, action.Confirm)
+		}
 		if action.Confirm == "destructive" {
 			destructiveWrites[action.Name] = true
 		}
-		if action.Method != "DELETE" && action.Kind != "delete" {
-			continue
-		}
-		if action.Confirm != "destructive" {
-			t.Fatalf("write action %q confirm = %q, want destructive", action.Name, action.Confirm)
-		}
-		if action.Kind == "delete" && (action.Delete == nil || !action.Delete.Idempotent || len(action.Delete.MissingOKStatus) == 0) {
-			t.Fatalf("delete action %q missing idempotency metadata: %+v", action.Name, action.Delete)
+		if action.Delete != nil {
+			t.Fatalf("write action %q declares missing_ok_status without GitHub already-absent proof: %+v", action.Name, action.Delete)
 		}
 	}
 
@@ -194,6 +195,8 @@ type githubWriteAction struct {
 	Name    string              `json:"name"`
 	Kind    string              `json:"kind"`
 	Method  string              `json:"method"`
+	Path    string              `json:"path"`
+	Risk    string              `json:"risk"`
 	Confirm string              `json:"confirm"`
 	Delete  *githubDeletePolicy `json:"delete"`
 }
@@ -208,6 +211,45 @@ type githubCLICommand struct {
 	Availability string `json:"availability"`
 	Write        string `json:"write"`
 	Approval     string `json:"approval"`
+}
+
+var githubSingleBracePathParamRE = regexp.MustCompile(`(^|[^{])\{[A-Za-z0-9_]+\}([^}]|$)`)
+
+var githubDestructiveRiskPhrases = []string{
+	"irreversibly",
+	"repository history",
+	"writes a commit",
+	"ci/cd",
+	"deploy access",
+	"protection rules",
+	"replaces every",
+	"clearing its approval",
+	"merge commit",
+	"discarding history",
+	"suppress a real",
+	"deployment automation",
+	"ruleset",
+	"grants a github user access",
+}
+
+func githubWritePathHasLiteralPlaceholder(path string) bool {
+	return githubSingleBracePathParamRE.MatchString(path)
+}
+
+func githubActionRequiresTypedDestructiveConfirmation(action githubWriteAction) bool {
+	if action.Method == "DELETE" || action.Kind == "delete" {
+		return true
+	}
+	risk := strings.ToLower(action.Risk)
+	if risk == "critical" || risk == "high" {
+		return true
+	}
+	for _, phrase := range githubDestructiveRiskPhrases {
+		if strings.Contains(risk, phrase) {
+			return true
+		}
+	}
+	return false
 }
 
 func requiresSourceOrNotes(model string) bool {

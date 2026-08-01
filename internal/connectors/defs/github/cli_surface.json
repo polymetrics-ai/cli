@@ -732,7 +732,7 @@
       "write": "merge_pull_request",
       "source_cli_path": "gh pr merge",
       "risk": "Merges code into the pull request base branch.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
@@ -864,7 +864,7 @@
       "write": "update_pull_request_branch",
       "source_cli_path": "gh pr update-branch",
       "risk": "Updates a pull request branch from its base branch.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
@@ -1193,7 +1193,7 @@
       "write": "create_deploy_key",
       "source_cli_path": "gh repo deploy-key add",
       "risk": "Adds a deploy key to the repository.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "title",
@@ -1526,7 +1526,7 @@
       "write": "dispatch_workflow",
       "source_cli_path": "gh workflow run",
       "risk": "Triggers a GitHub Actions workflow run.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "POST",
@@ -1595,7 +1595,7 @@
       "write": "rerun_workflow_run",
       "source_cli_path": "gh run rerun",
       "risk": "Reruns a GitHub Actions workflow run.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "POST",
@@ -1619,7 +1619,7 @@
       "write": "cancel_workflow_run",
       "source_cli_path": "gh run cancel",
       "risk": "Cancels a GitHub Actions workflow run.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "POST",
@@ -1854,7 +1854,7 @@
       "availability": "implemented",
       "write": "create_repo_ruleset",
       "risk": "Creates repository rules that can affect contribution workflows.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not create.",
       "api_surface": [
         {
@@ -1900,7 +1900,7 @@
       "availability": "implemented",
       "write": "update_repo_ruleset",
       "risk": "Updates repository rules that can affect contribution workflows.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not update.",
       "api_surface": [
         {
@@ -2379,7 +2379,7 @@
       "write": "repo2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2419,7 +2419,7 @@
       "write": "actions_cache_retention_limit2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2439,7 +2439,7 @@
       "write": "actions_cache_storage_limit2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2578,7 +2578,7 @@
       "write": "actions_oidc_customization_sub2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2616,7 +2616,7 @@
       "write": "actions_permissions2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2636,7 +2636,7 @@
       "write": "actions_permissions_access2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2656,7 +2656,7 @@
       "write": "actions_permissions_artifact_and_log_retention2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2676,7 +2676,7 @@
       "write": "actions_permissions_fork_pr_contributor_approval2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2696,7 +2696,7 @@
       "write": "actions_permissions_fork_pr_workflows_private_repos2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2716,7 +2716,7 @@
       "write": "actions_permissions_selected_actions2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2736,7 +2736,7 @@
       "write": "actions_permissions_workflow2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2765,7 +2765,7 @@
       "write": "actions_runners_generate_jitconfig",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2776,7 +2776,7 @@
       "write": "actions_runners_registration_token",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2787,7 +2787,7 @@
       "write": "actions_runners_remove_token",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -2864,7 +2864,7 @@
       "write": "actions_runners_runner_id_labels3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "runner-id",
@@ -2882,7 +2882,7 @@
       "write": "actions_runners_runner_id_labels4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "runner-id",
@@ -2939,7 +2939,7 @@
       "write": "actions_runs_run_id_approve",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "run-id",
@@ -3032,7 +3032,7 @@
       "write": "actions_runs_run_id_deployment_protection_rule",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "run-id",
@@ -3114,7 +3114,7 @@
       "write": "actions_runs_run_id_pending_deployments2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "run-id",
@@ -3198,7 +3198,7 @@
       "write": "actions_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "secret-name",
@@ -3225,7 +3225,7 @@
       "write": "actions_variables2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -3269,7 +3269,7 @@
       "write": "actions_variables_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "name",
@@ -3287,7 +3287,7 @@
       "write": "actions_workflows_workflow_id_disable",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "workflow-id",
@@ -3305,7 +3305,7 @@
       "write": "actions_workflows_workflow_id_enable",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "workflow-id",
@@ -3353,7 +3353,7 @@
       "write": "attestations",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -3428,7 +3428,7 @@
       "write": "automated_security_fixes3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -3472,7 +3472,7 @@
       "write": "branches_branch_protection3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3523,7 +3523,7 @@
       "write": "branches_branch_protection_enforce_admins3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3574,7 +3574,7 @@
       "write": "branches_branch_protection_required_pull_request_reviews3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3625,7 +3625,7 @@
       "write": "branches_branch_protection_required_signatures3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3676,7 +3676,7 @@
       "write": "branches_branch_protection_required_status_checks3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3727,7 +3727,7 @@
       "write": "branches_branch_protection_required_status_checks_contexts3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3745,7 +3745,7 @@
       "write": "branches_branch_protection_required_status_checks_contexts4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3829,7 +3829,7 @@
       "write": "branches_branch_protection_restrictions_apps3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3847,7 +3847,7 @@
       "write": "branches_branch_protection_restrictions_apps4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3898,7 +3898,7 @@
       "write": "branches_branch_protection_restrictions_teams3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3916,7 +3916,7 @@
       "write": "branches_branch_protection_restrictions_teams4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3967,7 +3967,7 @@
       "write": "branches_branch_protection_restrictions_users3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -3985,7 +3985,7 @@
       "write": "branches_branch_protection_restrictions_users4",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "branch",
@@ -4202,7 +4202,7 @@
       "write": "code_quality_setup2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -4228,7 +4228,7 @@
       "write": "code_scanning_alerts_alert_number_autofix2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "alert-number",
@@ -4246,7 +4246,7 @@
       "write": "code_scanning_alerts_alert_number_autofix_commits",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "alert-number",
@@ -4363,7 +4363,7 @@
       "write": "code_scanning_codeql_variant_analyses",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -4423,7 +4423,7 @@
       "write": "code_scanning_default_setup2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -4834,7 +4834,7 @@
       "write": "dependabot_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "secret-name",
@@ -4989,7 +4989,7 @@
       "write": "environments_environment_name_deployment_branch_policies2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "environment-name",
@@ -5051,7 +5051,7 @@
       "write": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "environment-name",
@@ -5090,7 +5090,7 @@
       "write": "environments_environment_name_deployment_protection_rules2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "environment-name",
@@ -5241,7 +5241,7 @@
       "write": "environments_environment_name_secrets_secret_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "environment-name",
@@ -5280,7 +5280,7 @@
       "write": "environments_environment_name_variables2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "environment-name",
@@ -5342,7 +5342,7 @@
       "write": "environments_environment_name_variables_name3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "environment-name",
@@ -5583,7 +5583,7 @@
       "write": "immutable_releases3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -5712,7 +5712,7 @@
       "write": "interaction_limits3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -5743,7 +5743,7 @@
       "write": "interaction_limits_pulls_bypass_list3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -5999,7 +5999,7 @@
       "write": "issues_issue_number_issue_field_values2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "issue-number",
@@ -6017,7 +6017,7 @@
       "write": "issues_issue_number_issue_field_values3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "issue-number",
@@ -6414,7 +6414,7 @@
       "write": "private_vulnerability_reporting3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -6434,7 +6434,7 @@
       "write": "properties_values2",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -6832,7 +6832,7 @@
       "write": "secret_scanning_push_protection_bypasses",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -6852,7 +6852,7 @@
       "write": "security_advisories",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -6863,7 +6863,7 @@
       "write": "security_advisories_reports",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
@@ -6874,7 +6874,7 @@
       "write": "security_advisories_ghsa_id",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -6892,7 +6892,7 @@
       "write": "security_advisories_ghsa_id_cve",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -6910,7 +6910,7 @@
       "write": "security_advisories_ghsa_id_forks",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": [
         {
           "name": "ghsa-id",
@@ -7114,7 +7114,7 @@
       "write": "vulnerability_alerts3",
       "source_cli_path": "",
       "risk": "high",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
       "flags": []
     },
     {
