@@ -5,15 +5,16 @@
 // definitions, endpoints, and its POST cursor-in-body pagination.
 //
 // Ashby is an applicant-tracking system. Its REST API lives at
-// https://api.ashbyhq.com; every list endpoint is a POST to "<resource>/list"
-// authenticated with HTTP Basic auth (the API key is the username, the password
-// is blank) and returns {success, results:[...], moreDataAvailable, nextCursor}.
-// The Ashby upstream source is read-only (full_refresh), so this connector is
-// read-only too.
+// https://api.ashbyhq.com; list-style reads are POST requests authenticated
+// with HTTP Basic auth (the API key is the username, the password is blank) and
+// commonly return {success, results:[...], moreDataAvailable, nextCursor}. The
+// native package owns Ashby's POST cursor-in-body reads while the generated
+// bundle owns fixed direct-read and reverse-ETL write definitions.
 package ashby
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -52,8 +53,8 @@ func (Connector) Metadata() connectors.Metadata {
 		Name:            "ashby",
 		DisplayName:     "Ashby",
 		IntegrationType: "api",
-		Description:     "Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API.",
-		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: false},
+		Description:     "Reads Ashby applicant-tracking data and exposes typed, gated Ashby reverse-ETL writes through the documented REST API.",
+		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: true},
 	}
 }
 
@@ -76,9 +77,9 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	if err != nil {
 		return err
 	}
-	// A bounded read of the users list confirms auth and connectivity without
+	// A bounded apiKey.info request confirms auth and connectivity without
 	// mutating anything.
-	if _, err := r.Do(ctx, http.MethodPost, "user/list", nil, map[string]any{"limit": 1}); err != nil {
+	if _, err := r.Do(ctx, http.MethodPost, "apiKey.info", nil, map[string]any{}); err != nil {
 		return fmt.Errorf("check ashby: %w", err)
 	}
 	return nil
@@ -89,13 +90,6 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 		return connectors.Catalog{}, err
 	}
 	return connectors.Catalog{Connector: c.Name(), Streams: ashbyStreams()}, nil
-}
-
-// Write satisfies the connectors.Connector interface. The Ashby source is
-// read-only (its upstream source supports full_refresh only and exposes no safe
-// reverse-ETL writes), so writes are rejected. Capabilities.Write is false.
-func (c Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
-	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
 }
 
 func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
@@ -127,50 +121,53 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	if err != nil {
 		return err
 	}
-	return c.harvest(ctx, r, endpoint, pageSize, maxPages, emit)
+	return c.harvest(ctx, r, endpoint, req, pageSize, maxPages, emit)
 }
 
-// harvest drives Ashby's POST cursor-in-body pagination. List endpoints accept
-// a JSON body {limit, cursor} and return {results:[...], moreDataAvailable,
-// nextCursor}. The next page is requested by passing nextCursor as cursor until
-// moreDataAvailable is false. connsdk's paginators are query-param based, so this
-// body-cursor loop lives here, built on connsdk.Requester + connsdk.RecordsAt +
-// connsdk.StringAt.
-func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint streamEndpoint, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	cursor := ""
+// harvest drives Ashby's POST cursor-in-body pagination. Each stream has a
+// fixed path and an allow-list of documented request body fields generated from
+// Ashby's OpenAPI. Caller input can populate only those fields; cursor, limit,
+// page count, and client-side incremental filtering stay bounded here.
+func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint streamEndpoint, req connectors.ReadRequest, pageSize, maxPages int, emit func(connectors.Record) error) error {
+	cursor := strings.TrimSpace(req.State["cursor"])
+	lowerBound := cursor
+	if lowerBound == "" {
+		lowerBound = strings.TrimSpace(req.Config.Config["start_date"])
+	}
+	baseBody, err := ashbyStreamBody(endpoint, req.Config, req.Query, pageSize)
+	if err != nil {
+		return err
+	}
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		body := map[string]any{"limit": pageSize}
+		body := cloneMap(baseBody)
 		if cursor != "" {
 			body["cursor"] = cursor
 		}
-		resp, err := r.Do(ctx, http.MethodPost, endpoint.resource, nil, body)
+		resp, err := r.Do(ctx, http.MethodPost, endpoint.path, nil, body)
 		if err != nil {
-			return fmt.Errorf("read ashby %s: %w", endpoint.resource, err)
+			return fmt.Errorf("read ashby %s: %w", endpoint.path, err)
 		}
-		records, err := connsdk.RecordsAt(resp.Body, "results")
+		pageBody, records, err := ashbyResultRecords(resp.Body)
 		if err != nil {
-			return fmt.Errorf("decode ashby %s page: %w", endpoint.resource, err)
+			return fmt.Errorf("decode ashby %s page: %w", endpoint.path, err)
 		}
-		for _, item := range records {
+		for i, item := range records {
 			if err := ctx.Err(); err != nil {
 				return err
 			}
-			if err := emit(endpoint.mapRecord(item)); err != nil {
+			record := ashbyProjectRecord(endpoint, item, page, i)
+			if !ashbyPassesCursor(record, endpoint.cursorField, lowerBound) {
+				continue
+			}
+			if err := emit(record); err != nil {
 				return err
 			}
 		}
-		more, err := connsdk.StringAt(resp.Body, "moreDataAvailable")
-		if err != nil {
-			return fmt.Errorf("decode ashby %s moreDataAvailable: %w", endpoint.resource, err)
-		}
-		next, err := connsdk.StringAt(resp.Body, "nextCursor")
-		if err != nil {
-			return fmt.Errorf("decode ashby %s nextCursor: %w", endpoint.resource, err)
-		}
-		if more != "true" || strings.TrimSpace(next) == "" {
+		next := strings.TrimSpace(stringValue(pageBody["nextCursor"]))
+		if !boolValue(pageBody["moreDataAvailable"]) || next == "" {
 			return nil
 		}
 		cursor = next
@@ -179,31 +176,13 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise ashby credential-free (mirrors stripe's
-// fixture intent and NativeCatalogConnector).
+// conformance harness can exercise Ashby credential-free.
 func (c Connector) readFixture(ctx context.Context, stream string, endpoint streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	for i := 1; i <= 2; i++ {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		item := map[string]any{
-			"id":             fmt.Sprintf("%s_fixture_%d", strings.TrimSuffix(stream, "s"), i),
-			"name":           fmt.Sprintf("Fixture %d", i),
-			"title":          fmt.Sprintf("Fixture Title %d", i),
-			"status":         "Active",
-			"firstName":      fmt.Sprintf("Fixture%d", i),
-			"lastName":       "Example",
-			"email":          fmt.Sprintf("fixture+%d@example.com", i),
-			"globalRole":     "Member",
-			"isEnabled":      true,
-			"candidateId":    "candidate_fixture_1",
-			"jobId":          "job_fixture_1",
-			"employmentType": "FullTime",
-			"company":        "Example Inc",
-			"createdAt":      "2026-01-01T00:00:00Z",
-			"updatedAt":      fmt.Sprintf("2026-01-0%dT00:00:00Z", i),
-		}
-		record := endpoint.mapRecord(item)
+		record := ashbyProjectRecord(endpoint, ashbyFixtureItem(stream, endpoint, i), 0, i-1)
 		record["connector"] = "ashby"
 		record["fixture"] = true
 		if cursor := req.State["cursor"]; cursor != "" {
@@ -214,6 +193,227 @@ func (c Connector) readFixture(ctx context.Context, stream string, endpoint stre
 		}
 	}
 	return nil
+}
+
+func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, query map[string]string, pageSize int) (map[string]any, error) {
+	body := map[string]any{"limit": pageSize}
+	for field, kind := range endpoint.requestFields {
+		if field == "limit" || field == "cursor" {
+			continue
+		}
+		raw := strings.TrimSpace(query[field])
+		if raw == "" {
+			raw = strings.TrimSpace(cfg.Config[field])
+		}
+		if raw == "" {
+			continue
+		}
+		value, err := ashbyCoerceRequestValue(field, kind, raw)
+		if err != nil {
+			return nil, err
+		}
+		body[field] = value
+	}
+	for _, field := range endpoint.requiredFields {
+		if _, ok := body[field]; !ok {
+			return nil, fmt.Errorf("ashby stream %s requires documented request field %q", endpoint.path, field)
+		}
+	}
+	return body, nil
+}
+
+func ashbyCoerceRequestValue(field, kind, raw string) (any, error) {
+	switch kind {
+	case "integer":
+		value, err := strconv.Atoi(raw)
+		if err != nil {
+			return nil, fmt.Errorf("ashby request field %s must be an integer: %w", field, err)
+		}
+		return value, nil
+	case "number":
+		value, err := strconv.ParseFloat(raw, 64)
+		if err != nil {
+			return nil, fmt.Errorf("ashby request field %s must be a number: %w", field, err)
+		}
+		return value, nil
+	case "boolean":
+		value, err := strconv.ParseBool(raw)
+		if err != nil {
+			return nil, fmt.Errorf("ashby request field %s must be a boolean: %w", field, err)
+		}
+		return value, nil
+	case "array":
+		if strings.HasPrefix(raw, "[") {
+			var out []any
+			if err := json.Unmarshal([]byte(raw), &out); err != nil {
+				return nil, fmt.Errorf("ashby request field %s must be a JSON array: %w", field, err)
+			}
+			return out, nil
+		}
+		items := strings.Split(raw, ",")
+		out := make([]string, 0, len(items))
+		for _, item := range items {
+			item = strings.TrimSpace(item)
+			if item != "" {
+				out = append(out, item)
+			}
+		}
+		return out, nil
+	case "object":
+		var out map[string]any
+		if err := json.Unmarshal([]byte(raw), &out); err != nil {
+			return nil, fmt.Errorf("ashby request field %s must be a JSON object: %w", field, err)
+		}
+		return out, nil
+	default:
+		return raw, nil
+	}
+}
+
+func ashbyResultRecords(body []byte) (map[string]any, []map[string]any, error) {
+	var decoded map[string]any
+	if err := json.Unmarshal(body, &decoded); err != nil {
+		return nil, nil, err
+	}
+	results, ok := decoded["results"]
+	if !ok || results == nil {
+		return decoded, []map[string]any{decoded}, nil
+	}
+	switch typed := results.(type) {
+	case []any:
+		records := make([]map[string]any, 0, len(typed))
+		for _, item := range typed {
+			if rec, ok := item.(map[string]any); ok {
+				records = append(records, rec)
+			} else {
+				records = append(records, map[string]any{"value": item})
+			}
+		}
+		return decoded, records, nil
+	case map[string]any:
+		return decoded, []map[string]any{typed}, nil
+	default:
+		return decoded, []map[string]any{{"value": typed}}, nil
+	}
+}
+
+func ashbyProjectRecord(endpoint streamEndpoint, item map[string]any, page, index int) connectors.Record {
+	record := connectors.Record{}
+	if len(endpoint.fields) == 0 {
+		for key, value := range item {
+			record[key] = value
+		}
+	} else {
+		for _, field := range endpoint.fields {
+			if value, ok := item[field.Name]; ok {
+				record[field.Name] = value
+			}
+		}
+	}
+	for _, field := range endpoint.syntheticFields {
+		if _, ok := record[field]; !ok {
+			record[field] = fmt.Sprintf("ashby_%s_%d_%d", strings.Trim(endpoint.path, "/"), page+1, index+1)
+		}
+	}
+	return record
+}
+
+func ashbyFixtureItem(stream string, endpoint streamEndpoint, i int) map[string]any {
+	item := map[string]any{}
+	for _, field := range endpoint.fields {
+		item[field.Name] = ashbyFixtureValue(stream, field, i)
+	}
+	for _, key := range endpoint.primaryKey {
+		if _, ok := item[key]; !ok || item[key] == nil || item[key] == "" {
+			item[key] = fmt.Sprintf("%s_fixture_%d", snakeish(stream), i)
+		}
+	}
+	if endpoint.cursorField != "" {
+		item[endpoint.cursorField] = fmt.Sprintf("2026-01-%02dT00:00:00Z", i)
+	}
+	return item
+}
+
+func ashbyFixtureValue(stream string, field connectors.Field, i int) any {
+	lower := strings.ToLower(field.Name)
+	switch field.Type {
+	case "boolean":
+		return i%2 == 0
+	case "integer":
+		return i
+	case "number":
+		return float64(i)
+	case "array":
+		return []any{fmt.Sprintf("%s_fixture_%d", lower, i)}
+	case "object":
+		return map[string]any{"id": fmt.Sprintf("%s_%s_fixture_%d", snakeish(stream), lower, i)}
+	default:
+		if lower == "id" || strings.HasSuffix(lower, "id") {
+			return fmt.Sprintf("%s_%s_fixture_%d", snakeish(stream), lower, i)
+		}
+		if strings.Contains(lower, "email") {
+			return fmt.Sprintf("fixture+%d@example.invalid", i)
+		}
+		if strings.Contains(lower, "url") {
+			return fmt.Sprintf("https://example.invalid/%s/%d", snakeish(stream), i)
+		}
+		if strings.Contains(lower, "date") || strings.HasSuffix(lower, "at") || strings.Contains(lower, "time") {
+			return fmt.Sprintf("2026-01-%02dT00:00:00Z", i)
+		}
+		return fmt.Sprintf("%s fixture %d", field.Name, i)
+	}
+}
+
+func ashbyPassesCursor(record connectors.Record, cursorField, lowerBound string) bool {
+	if cursorField == "" || lowerBound == "" {
+		return true
+	}
+	value := strings.TrimSpace(stringValue(record[cursorField]))
+	return value == "" || value >= lowerBound
+}
+
+func cloneMap(in map[string]any) map[string]any {
+	out := make(map[string]any, len(in))
+	for key, value := range in {
+		out[key] = value
+	}
+	return out
+}
+
+func stringValue(value any) string {
+	switch typed := value.(type) {
+	case string:
+		return typed
+	case fmt.Stringer:
+		return typed.String()
+	case nil:
+		return ""
+	default:
+		return fmt.Sprint(typed)
+	}
+}
+
+func boolValue(value any) bool {
+	switch typed := value.(type) {
+	case bool:
+		return typed
+	case string:
+		parsed, _ := strconv.ParseBool(typed)
+		return parsed
+	default:
+		return false
+	}
+}
+
+func snakeish(value string) string {
+	value = strings.TrimSpace(strings.ToLower(value))
+	value = strings.ReplaceAll(value, "-", "_")
+	value = strings.ReplaceAll(value, ".", "_")
+	value = strings.ReplaceAll(value, "/", "_")
+	if value == "" {
+		return "ashby"
+	}
+	return value
 }
 
 // requester builds a connsdk.Requester wired with Basic auth (api key as

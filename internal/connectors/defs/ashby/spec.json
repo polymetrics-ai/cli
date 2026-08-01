@@ -10,20 +10,31 @@
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "The Ashby API Key, see <a href=\\\"https://developers.ashbyhq.com/reference/authentication\\\">doc</a> here."
+      "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
     },
     "start_date": {
       "type": "string",
-      "description": "UTC date and time in the format 2017-01-25T00:00:00Z. Any data before this date will not be replicated."
+      "format": "date-time",
+      "description": "Lower bound used by client-side incremental filtering when a stream has a timestamp cursor."
     },
     "base_url": {
       "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+      "default": "https://api.ashbyhq.com",
+      "description": "Ashby API base URL; override only for local tests."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "1",
+      "description": "Maximum pages to read per stream. Use 0, all, or unlimited for an exhaustive read."
     },
     "mode": {
       "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
+      "description": "Set to fixture for credential-free native tests."
     }
   }
 }
