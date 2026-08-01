@@ -6926,9 +6926,9 @@
     },
     {
       "id": "get_workspace",
-      "kind": "stream_etl",
+      "kind": "rest_read",
       "summary": "Get a workspace",
-      "description": "Implemented Asana operation mapped to {'stream': 'workspaces'}.",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
       "source_url": "https://developers.asana.com/reference/getworkspace",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -6939,10 +6939,10 @@
       "mutation_class": "none",
       "destructive": false,
       "audit_event": "asana.get_workspace",
-      "composite": {
-        "steps": [
-          "stream:workspaces"
-        ]
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}",
+        "max_bytes": 1048576
       }
     },
     {

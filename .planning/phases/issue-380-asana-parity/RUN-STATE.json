@@ -40,8 +40,8 @@
       "apiSurfaceRows": 249,
       "operations": 249,
       "cliCommands": 249,
-      "coveredRows": 26,
-      "blockedPlannedRows": 223,
+      "coveredRows": 25,
+      "blockedPlannedRows": 224,
       "legacyExcludedRows": 0
     },
     "executableSurface": {

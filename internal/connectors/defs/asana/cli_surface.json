@@ -1304,21 +1304,12 @@
     },
     {
       "path": "custom-fields list",
-      "summary": "Get a workspace's custom fields through the declared Asana ETL stream.",
+      "summary": "Get the configured workspace's custom fields through the declared Asana ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "GET /workspaces/{workspace_gid}/custom_fields",
       "source_url": "https://developers.asana.com/reference/getcustomfieldsforworkspace",
       "stream": "custom_fields",
-      "flags": [
-        {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Asana path parameter `workspace_gid`.",
-          "maps_to": "query.workspace_gid",
-          "allow_empty": false
-        }
-      ],
       "api_surface": [
         {
           "method": "GET",
@@ -3271,12 +3262,12 @@
     },
     {
       "path": "project-statuses list",
-      "summary": "Get statuses from a project through the declared Asana ETL stream.",
+      "summary": "Planned fixed-target Asana read: Get statuses from a project.",
       "intent": "etl",
-      "availability": "implemented",
+      "availability": "planned",
+      "operation": "get_project_statuses_for_project",
       "source_cli_path": "GET /projects/{project_gid}/project_statuses",
       "source_url": "https://developers.asana.com/reference/getprojectstatusesforproject",
-      "stream": "project_statuses",
       "flags": [
         {
           "name": "project-gid",
@@ -3291,7 +3282,8 @@
           "method": "GET",
           "path": "/projects/{project_gid}/project_statuses"
         }
-      ]
+      ],
+      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
     },
     {
       "path": "project-statuses create-project-status-for-project",
@@ -4515,12 +4507,12 @@
     },
     {
       "path": "sections list",
-      "summary": "Get sections in a project through the declared Asana ETL stream.",
+      "summary": "Planned fixed-target Asana read: Get sections in a project.",
       "intent": "etl",
-      "availability": "implemented",
+      "availability": "planned",
+      "operation": "get_sections_for_project",
       "source_cli_path": "GET /projects/{project_gid}/sections",
       "source_url": "https://developers.asana.com/reference/getsectionsforproject",
-      "stream": "sections",
       "flags": [
         {
           "name": "project-gid",
@@ -4535,7 +4527,8 @@
           "method": "GET",
           "path": "/projects/{project_gid}/sections"
         }
-      ]
+      ],
+      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
     },
     {
       "path": "sections create",
@@ -4835,12 +4828,12 @@
     },
     {
       "path": "stories list",
-      "summary": "Get stories from a task through the declared Asana ETL stream.",
+      "summary": "Planned fixed-target Asana read: Get stories from a task.",
       "intent": "etl",
-      "availability": "implemented",
+      "availability": "planned",
+      "operation": "get_stories_for_task",
       "source_cli_path": "GET /tasks/{task_gid}/stories",
       "source_url": "https://developers.asana.com/reference/getstoriesfortask",
-      "stream": "stories",
       "flags": [
         {
           "name": "task-gid",
@@ -4855,7 +4848,8 @@
           "method": "GET",
           "path": "/tasks/{task_gid}/stories"
         }
-      ]
+      ],
+      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
     },
     {
       "path": "tasks comments add",
@@ -6293,21 +6287,12 @@
     },
     {
       "path": "teams list",
-      "summary": "Get teams in a workspace through the declared Asana ETL stream.",
+      "summary": "Get teams in the configured workspace through the declared Asana ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "GET /workspaces/{workspace_gid}/teams",
       "source_url": "https://developers.asana.com/reference/getteamsforworkspace",
       "stream": "teams",
-      "flags": [
-        {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Asana path parameter `workspace_gid`.",
-          "maps_to": "query.workspace_gid",
-          "allow_empty": false
-        }
-      ],
       "api_surface": [
         {
           "method": "GET",
@@ -7408,21 +7393,12 @@
     },
     {
       "path": "workspace-memberships list",
-      "summary": "Get the workspace memberships for a workspace through the declared Asana ETL stream.",
+      "summary": "Get the configured workspace's memberships through the declared Asana ETL stream.",
       "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "GET /workspaces/{workspace_gid}/workspace_memberships",
       "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforworkspace",
       "stream": "workspace_memberships",
-      "flags": [
-        {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Asana path parameter `workspace_gid`.",
-          "maps_to": "query.workspace_gid",
-          "allow_empty": false
-        }
-      ],
       "api_surface": [
         {
           "method": "GET",
@@ -7446,13 +7422,13 @@
       ]
     },
     {
-      "path": "workspaces list",
-      "summary": "Get a workspace through the declared Asana ETL stream.",
+      "path": "workspaces get",
+      "summary": "Planned fixed-target Asana read: Get a workspace.",
       "intent": "etl",
-      "availability": "implemented",
+      "availability": "planned",
+      "operation": "get_workspace",
       "source_cli_path": "GET /workspaces/{workspace_gid}",
       "source_url": "https://developers.asana.com/reference/getworkspace",
-      "stream": "workspaces",
       "flags": [
         {
           "name": "workspace-gid",
@@ -7467,7 +7443,8 @@
           "method": "GET",
           "path": "/workspaces/{workspace_gid}"
         }
-      ]
+      ],
+      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
     },
     {
       "path": "workspaces update-workspace",

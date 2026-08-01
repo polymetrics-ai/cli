@@ -84,6 +84,6 @@ The remaining official POST/PUT/DELETE operations are not blanket-excluded. They
 - Fixture-only status: this connector is not live-certified. `certification.json` declares fixture defaults only; no live Asana credentials or provider calls were requested.
 - `api_surface.json` uses `operation_ledger_version: 1`: legacy `excluded` classifiers are intentionally not used. Blocked/planned operation rows are the source of truth for unimplemented operations.
 - `/batch` is the only not-applicable official lane row. It is disallowed because it is a generic batch subrequest wrapper and would recreate raw method/path/body passthrough; each underlying Asana operation is represented individually instead.
-- Existing executable count remains the current 12 streams + 13 writes. The 223 remaining official rows are planned/blocked metadata, not executable runtime claims.
+- Existing executable count remains the current 12 streams + 13 writes. The 224 remaining official rows are planned/blocked metadata, not executable runtime claims.
 - Provider search/typeahead execution depends on #2985. CDC/changefeed/audit/webhook truthfulness depends on #2986/#2988. Attachment upload/download/delete execution needs connector-local binary/file contracts and fixtures.
 - No generic shell, generic HTTP request/write, raw SQL write, arbitrary GraphQL, unrestricted file, unrestricted binary, or raw passthrough tool is exposed by this connector.

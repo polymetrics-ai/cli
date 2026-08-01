@@ -3030,8 +3030,14 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}",
-      "covered_by": {
-        "stream": "workspaces"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+        "source_url": "https://developers.asana.com/reference/getworkspace",
+        "notes": "official_operation_id=getWorkspace; lane=etl_read"
       }
     },
     {

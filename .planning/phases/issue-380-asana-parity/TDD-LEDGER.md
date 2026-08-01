@@ -58,7 +58,7 @@ GREEN asana official operation inventory
 official_count 249 local_count 249 missing_count 0 extra_count 0 duplicate_count 0
 official_methods {'GET': 119, 'POST': 81, 'PUT': 26, 'DELETE': 23}
 official_lanes {'etl_read': 109, 'reverse_etl_write': 124, 'binary_file': 4, 'cdc_changefeed': 8, 'excluded_not_applicable': 1, 'direct_read_query_search': 3}
-local_classifiers {'covered_by': 26, 'operation_blocked': 223, 'excluded': 0}
+local_classifiers {'covered_by': 25, 'operation_blocked': 224, 'excluded': 0}
 operations_json 249 cli_commands 249 unique_operation_ids 249
 destructive_operations 57 delete_methods 23
 ```
