@@ -201,7 +201,8 @@
           "data": {
             "type": "object",
             "required": [
-              "name"
+              "name",
+              "workspace"
             ],
             "properties": {
               "name": {
@@ -473,7 +474,8 @@
           "data": {
             "type": "object",
             "required": [
-              "name"
+              "name",
+              "workspace"
             ],
             "properties": {
               "name": {

@@ -3483,6 +3483,13 @@
           "summary": "Project name.",
           "maps_to": "record.data.name",
           "allow_empty": false
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "summary": "Workspace gid.",
+          "maps_to": "record.data.workspace",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -4990,6 +4997,13 @@
           "type": "string",
           "summary": "Tag name.",
           "maps_to": "record.data.name",
+          "allow_empty": false
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "summary": "Workspace gid.",
+          "maps_to": "record.data.workspace",
           "allow_empty": false
         }
       ],

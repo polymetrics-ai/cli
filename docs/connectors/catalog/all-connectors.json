@@ -8583,7 +8583,7 @@
   {
     "name": "asana",
     "display_name": "Asana",
-    "description": "Reads Asana workspaces, projects, tasks, sections, tags, stories, users, teams, custom fields, project statuses, and team/workspace memberships through the Asana v1 REST API. Writes task/project/section/tag create-update-delete and task comments.",
+    "description": "Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
     "integration_type": "api",
     "docs_url": "https://developers.asana.com/reference/rest-api-reference",
     "release_stage": "ga",
@@ -8775,21 +8775,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/tasks",
-        "risk": "external mutation; creates a new task visible to the whole team/project; low risk, no approval required"
+        "risk": "external mutation; creates a new task visible to the configured workspace/project; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_task",
         "kind": "update",
         "method": "PUT",
         "path": "/tasks/{{ record.gid }}",
-        "risk": "external mutation; overwrites task fields (e.g. can mark completed, reassign, reschedule); approval required"
+        "risk": "external mutation; overwrites task fields such as completion, assignee, or due dates; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_task",
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.gid }}",
-        "risk": "irreversible external deletion of a task; approval required",
+        "risk": "destructive mutation; deletes a task; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8797,21 +8797,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/projects",
-        "risk": "external mutation; creates a new project visible to the team/workspace; low risk, no approval required"
+        "risk": "external mutation; creates a new project visible to the team/workspace; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_project",
         "kind": "update",
         "method": "PUT",
         "path": "/projects/{{ record.gid }}",
-        "risk": "external mutation; overwrites project fields (can archive, reassign owner); approval required"
+        "risk": "external mutation; overwrites project fields such as archived state or owner; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_project",
         "kind": "delete",
         "method": "DELETE",
         "path": "/projects/{{ record.gid }}",
-        "risk": "irreversible external deletion of a project and its association with its tasks; approval required",
+        "risk": "destructive mutation; deletes a project; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8819,21 +8819,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/projects/{{ record.project_gid }}/sections",
-        "risk": "external mutation; creates a new section in a project's board/list view; low risk, no approval required"
+        "risk": "external mutation; creates a new section in a project; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_section",
         "kind": "update",
         "method": "PUT",
         "path": "/sections/{{ record.gid }}",
-        "risk": "external mutation; renames a section; low risk, no approval required"
+        "risk": "external mutation; renames a section; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_section",
         "kind": "delete",
         "method": "DELETE",
         "path": "/sections/{{ record.gid }}",
-        "risk": "irreversible external deletion of a section (Asana requires the section be empty of tasks first); approval required",
+        "risk": "destructive mutation; deletes an empty section; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8841,21 +8841,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/tags",
-        "risk": "external mutation; creates a new workspace-visible tag; low risk, no approval required"
+        "risk": "external mutation; creates a workspace-visible tag; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_tag",
         "kind": "update",
         "method": "PUT",
         "path": "/tags/{{ record.gid }}",
-        "risk": "external mutation; renames/recolors a tag visible workspace-wide; low risk, no approval required"
+        "risk": "external mutation; renames or recolors a workspace-visible tag; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_tag",
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags/{{ record.gid }}",
-        "risk": "irreversible external deletion of a tag, removed from every task that carries it; approval required",
+        "risk": "destructive mutation; deletes a tag and removes it from tasks; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8863,13 +8863,13 @@
         "kind": "create",
         "method": "POST",
         "path": "/tasks/{{ record.task_gid }}/stories",
-        "risk": "external mutation; posts a comment visible to everyone with access to the task; approval required"
+        "risk": "external mutation; posts a task story/comment visible to task collaborators; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       }
     ],
     "risk": {
-      "read": "external Asana API read of workspace, project, task, and PM metadata",
-      "write": "external mutations: creates/updates/deletes tasks, projects, sections, and tags, and posts task comments",
-      "approval": "required for every write action; deletes are flagged destructive/irreversible in writes.json's per-action risk field"
+      "read": "external Asana API reads use fixed declared streams or blocked/planned fixed-target command metadata; no raw provider query/path passthrough",
+      "write": "external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin",
+      "approval": "all write execution follows plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive actions also require confirm: destructive"
     },
     "icon": {
       "id": "asana",

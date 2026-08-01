@@ -66,13 +66,13 @@ Implemented write actions:
 - `create_task`: POST `/tasks`; requires `data.name` and `data.workspace`; requires plan -> preview -> explicit approval -> execute.
 - `update_task`: PUT `/tasks/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
 - `delete_task`: DELETE `/tasks/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
-- `create_project`: POST `/projects`; requires `data.name`; requires plan -> preview -> explicit approval -> execute.
+- `create_project`: POST `/projects`; requires `data.name` and `data.workspace`; requires plan -> preview -> explicit approval -> execute.
 - `update_project`: PUT `/projects/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
 - `delete_project`: DELETE `/projects/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
 - `create_section`: POST `/projects/{{ record.project_gid }}/sections`; redacts `project_gid`; requires plan -> preview -> explicit approval -> execute.
 - `update_section`: PUT `/sections/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
 - `delete_section`: DELETE `/sections/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
-- `create_tag`: POST `/tags`; requires `data.name`; requires plan -> preview -> explicit approval -> execute.
+- `create_tag`: POST `/tags`; requires `data.name` and `data.workspace`; requires plan -> preview -> explicit approval -> execute.
 - `update_tag`: PUT `/tags/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
 - `delete_tag`: DELETE `/tags/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
 - `add_comment`: POST `/tasks/{{ record.task_gid }}/stories`; redacts `task_gid`; requires plan -> preview -> explicit approval -> execute.
