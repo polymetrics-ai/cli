@@ -2582,26 +2582,19 @@
     },
     {
       "path": "run logs view",
-      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+      "summary": "Download /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.actions_jobs_job_id_logs",
       "source_cli_path": "",
       "flags": [
         {
           "name": "job-id",
           "type": "integer",
-          "summary": "job_id path parameter",
-          "maps_to": "path.job_id"
+          "summary": "job_id path parameter"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "actions rerun create",
@@ -5388,24 +5381,17 @@
       "path": "compare view",
       "summary": "Read /repos/{owner}/{repo}/compare/{basehead}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.compare_basehead",
       "source_cli_path": "",
       "flags": [
         {
           "name": "basehead",
           "type": "string",
-          "summary": "basehead path parameter",
-          "maps_to": "path.basehead"
+          "summary": "basehead path parameter"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/compare/{basehead}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Compare refs require a base...head path segment; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "copilot configuration view",
@@ -5518,24 +5504,17 @@
       "path": "dependency-graph compare view",
       "summary": "Read /repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.dependency_graph_compare_basehead",
       "source_cli_path": "",
       "flags": [
         {
           "name": "basehead",
           "type": "string",
-          "summary": "basehead path parameter",
-          "maps_to": "path.basehead"
+          "summary": "basehead path parameter"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Compare refs require a base...head path segment; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "repo sbom view",
@@ -6179,24 +6158,17 @@
       "path": "git ref view",
       "summary": "Read /repos/{owner}/{repo}/git/ref/{ref}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.git_ref_ref",
       "source_cli_path": "",
       "flags": [
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter",
-          "maps_to": "path.ref"
+          "summary": "ref path parameter"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/git/ref/{ref}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Git refs require heads/<branch> or tags/<tag> path segments; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "git tags view",

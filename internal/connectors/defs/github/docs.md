@@ -6,7 +6,7 @@ public GitHub REST, GraphQL, and webhook inventory in `api_surface.json`.
 Certification status: this bundle is not certified by this parity slice. The current documented
 ledger contains 1,596 official operations/events (1,216 REST, 305 GraphQL, 75 webhook/changefeed)
 plus 8 connector conformance coverage rows required by the current one-target-per-row schema. The
-269 covered rows map to existing streams, fixture-backed write actions, direct reads, or fixed GraphQL documents;
+265 covered rows map to existing streams, fixture-backed write actions, direct reads, or fixed GraphQL documents;
 remaining rows are blocked/planned ledger entries, not implemented-count claims. Destructive,
 delete, and admin operations are in scope when implemented with typed schemas, write fixtures,
 idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.
@@ -539,7 +539,7 @@ actions:
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 269 covered connector rows and 1,335 blocked/planned ledger rows. The
+- API coverage includes 265 covered connector rows and 1,339 blocked/planned ledger rows. The
   official source inventory is 1,596 operations/events; 8 additional rows exist only to satisfy
   connector conformance coverage for write-action reuse and fixed GraphQL documents.
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command

@@ -6636,10 +6636,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
-      "covered_by": {
-        "direct_reads": [
-          "run logs view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary download operation remains planned until bounded binary direct-read output policies are supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -8843,10 +8846,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/compare/{basehead}",
-      "covered_by": {
-        "direct_reads": [
-          "compare view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Compare basehead path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -8973,10 +8979,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
-      "covered_by": {
-        "direct_reads": [
-          "dependency-graph compare view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Compare basehead path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9466,10 +9475,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/ref/{ref}",
-      "covered_by": {
-        "direct_reads": [
-          "git ref view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Git ref path parameters require heads/<branch> or tags/<tag> values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
