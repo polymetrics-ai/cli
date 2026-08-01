@@ -134,6 +134,64 @@ func TestValidateCommand_AcceptsSingleBundleDir(t *testing.T) {
 	}
 }
 
+func TestValidateCommand_ReportsMissingMetadataForFocusedBundle(t *testing.T) {
+	root := t.TempDir()
+	bundle := filepath.Join(root, "internal", "connectors", "defs", "broken")
+	for _, dir := range []string{bundle, filepath.Join(bundle, "schemas"), filepath.Join(bundle, "fixtures")} {
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", dir, err)
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	exit := run([]string{"validate", bundle, "--json"}, &stdout, &stderr)
+	if exit != 1 {
+		t.Fatalf("exit = %d, want 1\nstderr=%s\nstdout=%s", exit, stderr.String(), stdout.String())
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("unexpected stderr: %s", stderr.String())
+	}
+	if !bytes.Contains(stdout.Bytes(), []byte(`"warnings": []`)) {
+		t.Fatalf("json output should keep warnings as an array:\n%s", stdout.String())
+	}
+
+	var report Report
+	if err := json.Unmarshal(stdout.Bytes(), &report); err != nil {
+		t.Fatalf("decode report: %v\n%s", err, stdout.String())
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+	if len(report.Findings) != 1 {
+		t.Fatalf("Findings = %+v, want one missing metadata finding", report.Findings)
+	}
+	got := report.Findings[0]
+	if got.Connector != "broken" || got.File != "metadata.json" || got.Rule != ruleMissingFile {
+		t.Fatalf("finding = %+v, want broken metadata.json %s", got, ruleMissingFile)
+	}
+}
+
+func TestValidatePath_PreservesDefsRootValidation(t *testing.T) {
+	root := t.TempDir()
+	defs := filepath.Join(root, "internal", "connectors", "defs")
+	for _, name := range []string{"acme", "schemas"} {
+		if err := os.MkdirAll(filepath.Join(defs, name), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", name, err)
+		}
+	}
+
+	report, err := validatePath(defs)
+	if err != nil {
+		t.Fatalf("validatePath: %v", err)
+	}
+	if report.ConnectorsChecked != 2 {
+		t.Fatalf("ConnectorsChecked = %d, want 2", report.ConnectorsChecked)
+	}
+	for _, connector := range []string{"acme", "schemas"} {
+		assertFindingRule(t, report, connector, ruleMissingFile)
+	}
+}
+
 // TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
 // S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
 // queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`

@@ -127,24 +127,76 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 // validatePath validates either a defs root (the historical contract) or a
 // single connector bundle directory. Several connector-issue checklists invoke
 // `connectorgen validate internal/connectors/defs/<name>` for a focused local
-// gate; when that path contains metadata.json, validate just that bundle rather
-// than treating fixtures/ and schemas/ as sibling connectors.
+// gate; classify bundle-shaped directories before loading so missing required
+// files still surface as findings for that one connector.
 func validatePath(dir string) (Report, error) {
 	clean := filepath.Clean(dir)
-	if info, err := os.Stat(filepath.Join(clean, "metadata.json")); err == nil && !info.IsDir() {
-		findings, warnings := validateBundleDir(os.DirFS(filepath.Dir(clean)), filepath.Base(clean))
-		if findings == nil {
-			findings = []Finding{}
-		}
-		if warnings == nil {
-			warnings = []Finding{}
-		}
-		return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
-	} else if err != nil && !os.IsNotExist(err) {
-		return Report{}, fmt.Errorf("validate: stat metadata.json: %w", err)
+	singleBundle, err := isSingleBundleValidatePath(clean)
+	if err != nil {
+		return Report{}, err
+	}
+	if singleBundle {
+		return validateSingleBundlePath(clean), nil
 	}
 
 	return validateDir(os.DirFS(clean))
+}
+
+func validateSingleBundlePath(dir string) Report {
+	findings, warnings := validateBundleDir(os.DirFS(filepath.Dir(dir)), filepath.Base(dir))
+	if findings == nil {
+		findings = []Finding{}
+	}
+	if warnings == nil {
+		warnings = []Finding{}
+	}
+	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}
+}
+
+func isSingleBundleValidatePath(dir string) (bool, error) {
+	if _, err := os.Stat(filepath.Join(dir, "metadata.json")); err == nil {
+		return true, nil
+	} else if err != nil && !os.IsNotExist(err) {
+		return false, fmt.Errorf("validate: stat metadata.json: %w", err)
+	}
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return false, nil
+	}
+
+	if isDefsRootValidatePath(dir) {
+		return false, nil
+	}
+
+	for _, entry := range entries {
+		if bundleValidatePathMarkers[entry.Name()] {
+			return true, nil
+		}
+	}
+
+	return filepath.Base(filepath.Dir(dir)) == "defs", nil
+}
+
+func isDefsRootValidatePath(dir string) bool {
+	if filepath.Base(dir) != "defs" {
+		return false
+	}
+	parent := filepath.Dir(dir)
+	return parent == "." || filepath.Base(parent) == "connectors"
+}
+
+var bundleValidatePathMarkers = map[string]bool{
+	"api_surface.json":   true,
+	"certification.json": true,
+	"cli_surface.json":   true,
+	"docs.md":            true,
+	"fixtures":           true,
+	"operations.json":    true,
+	"schemas":            true,
+	"spec.json":          true,
+	"streams.json":       true,
+	"writes.json":        true,
 }
 
 // renderText renders a Report as human-readable lines: one finding per line
