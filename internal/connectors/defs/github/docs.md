@@ -41,7 +41,7 @@ Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `add_collaborator`, `remove_collaborator`, `create_ref`, `merge_branch`,
 `update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
 `create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`,
-`repo`.
+`delete_repo`.
 
 Service API documentation: https://docs.github.com/en/rest and https://docs.github.com/en/graphql.
 
@@ -515,7 +515,7 @@ actions:
   fields `alert_number`; required record fields `alert_number`, `state`; accepted fields
   `alert_number`, `resolution`, `resolution_comment`, `state`; risk: changes a secret scanning
   alert's triage state, which can suppress a real leaked-credential finding.
-- `repo`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}` - kind `delete`; body type `none`;
+- `delete_repo`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}` - kind `delete`; body type `none`;
   accepted fields none; risk: critical repository deletion; requires typed `destructive`
   confirmation.
 

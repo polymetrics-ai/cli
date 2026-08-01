@@ -988,11 +988,20 @@
     {
       "path": "repo delete",
       "summary": "Delete a repository",
-      "intent": "direct_write",
-      "availability": "planned",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repo",
       "source_cli_path": "gh repo delete",
-      "notes": "In scope under the captain policy, but not implemented by this gh-style command path yet; the bounded operation must use typed schemas, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation when destructive.",
-      "approval": "Planned destructive/sensitive writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation when destructive."
+      "risk": "Permanently deletes the configured repository.",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
+      "notes": "Executes the typed repository deletion write through the reverse ETL safety path; use `--confirm destructive` only after approving the preview.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}"
+        }
+      ],
+      "flags": []
     },
     {
       "path": "repo archive",
@@ -2358,18 +2367,6 @@
       "availability": "unsupported_api",
       "source_cli_path": "gh agent-task list",
       "notes": "Agent task APIs are not modeled by the repository connector surface."
-    },
-    {
-      "path": "repo delete-2",
-      "summary": "DELETE /repos/{owner}/{repo}",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "source_cli_path": "",
-      "risk": "critical",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute, and typed `destructive` confirmation.",
-      "flags": [],
-      "notes": "destructive; requires --allow-destructive + typed confirmation",
-      "write": "repo"
     },
     {
       "path": "repo update",

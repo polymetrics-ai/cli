@@ -206,7 +206,12 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 		t.Fatalf("unmarshal github cli_surface.json: %v", err)
 	}
 	unsafe := map[string]bool{}
+	commandsByPath := map[string]githubCLICommand{}
 	for _, cmd := range cli.Commands {
+		if _, ok := commandsByPath[cmd.Path]; ok {
+			t.Fatalf("duplicate CLI command path %q", cmd.Path)
+		}
+		commandsByPath[cmd.Path] = cmd
 		if cmd.Availability == "unsafe_or_disallowed" {
 			unsafe[cmd.Path] = true
 		}
@@ -218,6 +223,19 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 		"api":        true,
 		"auth token": true,
 	})
+	if _, ok := commandsByPath["repo delete-2"]; ok {
+		t.Fatalf("synthetic repo delete-2 command must not be exposed")
+	}
+	repoDelete, ok := commandsByPath["repo delete"]
+	if !ok {
+		t.Fatalf("canonical repo delete command is missing")
+	}
+	if repoDelete.Intent != "reverse_etl" || repoDelete.Availability != "implemented" || repoDelete.Write != "delete_repo" {
+		t.Fatalf("repo delete command = %+v, want implemented reverse_etl write delete_repo", repoDelete)
+	}
+	if !strings.Contains(repoDelete.Approval, "destructive") {
+		t.Fatalf("repo delete approval omits destructive confirmation: %q", repoDelete.Approval)
+	}
 }
 
 func TestGitHubMultiSegmentWritePathsRemainBlocked(t *testing.T) {

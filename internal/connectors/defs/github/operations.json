@@ -163,9 +163,9 @@
       }
     },
     {
-      "id": "github.repo",
+      "id": "github.repo.delete",
       "kind": "rest_write",
-      "summary": "DELETE /repos/{owner}/{repo}",
+      "summary": "Delete repository",
       "source_url": "https://docs.github.com/en/rest",
       "risk": "critical",
       "approval": "plan, preview, approval, execute (typed confirmation)",

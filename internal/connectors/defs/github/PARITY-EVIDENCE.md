@@ -21,7 +21,7 @@
 ## Verification checklist
 
 - [x] Public source inventory script reports REST 1.1.4 operation count, GraphQL Query+Mutation field count, and webhook event count without credentials.
-- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` returned zero findings and zero warnings across 548 connectors.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` returned zero findings and zero warnings across 550 connectors.
 - [x] `go test ./cmd/connectorgen -run TestGitHub` passed after API-surface count and destructive metadata test updates.
 - [x] `go test ./internal/app -run TestRunReverseETL.*Destructive` passed the typed confirmation safety gate.
 - [x] `go test ./internal/cli -run TestGitHubDestructiveCommandRequiresTypedConfirmation` passed the CLI confirmation gate.

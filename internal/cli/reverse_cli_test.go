@@ -426,7 +426,7 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 
 	var planStdout, planStderr bytes.Buffer
 	code := cli.Run([]string{
-		"github", "repo", "delete-2",
+		"github", "repo", "delete",
 		"--credential", "github-local",
 		"--root", root,
 	}, &planStdout, &planStderr)
@@ -441,7 +441,7 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 
 	var deniedStdout, deniedStderr bytes.Buffer
 	code = cli.Run([]string{
-		"github", "repo", "delete-2",
+		"github", "repo", "delete",
 		"--plan", planID,
 		"--approve", token,
 		"--root", root,
@@ -456,7 +456,7 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 
 	var runStdout, runStderr bytes.Buffer
 	code = cli.Run([]string{
-		"github", "repo", "delete-2",
+		"github", "repo", "delete",
 		"--plan", planID,
 		"--approve", token,
 		"--confirm", "destructive",

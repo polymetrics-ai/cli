@@ -2260,7 +2260,7 @@
       "confirm": "destructive"
     },
     {
-      "name": "repo",
+      "name": "delete_repo",
       "kind": "delete",
       "method": "DELETE",
       "path": "/repos/{{ config.owner }}/{{ config.repo }}",

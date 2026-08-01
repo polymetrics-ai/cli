@@ -6469,7 +6469,7 @@
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}",
       "covered_by": {
-        "write": "repo"
+        "write": "delete_repo"
       }
     },
     {
