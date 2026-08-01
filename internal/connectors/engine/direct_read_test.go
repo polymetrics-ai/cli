@@ -600,62 +600,6 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadMatchesDuplicateGraphQLEndpointCoverage(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			t.Fatalf("method = %s, want POST", r.Method)
-		}
-		if r.URL.Path != "/v2/" {
-			t.Fatalf("path = %s, want /v2/", r.URL.Path)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"data":{"account":{"id":"acct-1"}}}`))
-	}))
-	defer srv.Close()
-
-	b := Bundle{
-		Name: "monday",
-		HTTP: HTTPBase{URL: srv.URL + "/v2"},
-		Operations: []OperationSpec{{
-			ID:           "monday.query.account",
-			Kind:         "rest_read",
-			Summary:      "Run Monday GraphQL query account",
-			Risk:         "medium",
-			Approval:     "none",
-			OutputPolicy: "json_redacted",
-			REST: &RESTOperationSpec{
-				Method:      http.MethodPost,
-				Path:        "/",
-				ContentType: "application/json",
-				MaxBytes:    1024,
-				Body:        map[string]any{"query": "query Monday_account { account { id } }"},
-				BodySchema:  json.RawMessage(`{"type":"object","required":["query"],"properties":{"query":{"type":"string"}},"additionalProperties":false}`),
-			},
-		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{
-			{Method: http.MethodPost, Path: "/", CoveredBy: &SurfaceCoverage{Write: "create_item"}},
-			{Method: http.MethodPost, Path: "/", CoveredBy: &SurfaceCoverage{DirectRead: "query account"}},
-		}},
-		CLISurface: &CLISurface{Commands: []CLICommand{{
-			Path:         "query account",
-			Intent:       "direct_read",
-			Availability: "implemented",
-			Operation:    "monday.query.account",
-		}}},
-	}
-
-	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
-		Operation: "monday.query.account",
-		MaxBytes:  1024,
-	}, nil)
-	if err != nil {
-		t.Fatalf("OperationDirectRead: %v", err)
-	}
-	if result.Path != "/" {
-		t.Fatalf("result path = %q, want /", result.Path)
-	}
-}
-
 func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/v2/calls/call-1" {

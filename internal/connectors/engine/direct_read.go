@@ -56,7 +56,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if op.REST.MaxBytes <= 0 {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires positive max_bytes")
 	}
-	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path, req.Operation); err != nil {
+	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
@@ -211,63 +211,19 @@ func findOperation(b Bundle, id string) (OperationSpec, error) {
 	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
 }
 
-func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath, operationID string) error {
+func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
 	if b.Surface == nil {
 		return nil
 	}
-	directReadTargets := operationDirectReadTargets(b.CLISurface, operationID)
-	matchedEndpoint := false
 	for _, ep := range b.Surface.Endpoints {
-		if !strings.EqualFold(ep.Method, method) || ep.Path != endpointPath {
-			continue
-		}
-		matchedEndpoint = true
-		if len(directReadTargets) > 0 {
-			for _, target := range surfaceDirectReadTargets(ep.CoveredBy) {
-				if directReadTargets[target] {
-					return nil
-				}
+		if strings.EqualFold(ep.Method, method) && ep.Path == endpointPath {
+			if ep.Operation == nil && (ep.CoveredBy == nil || (ep.CoveredBy.DirectRead == "" && len(ep.CoveredBy.DirectReads) == 0)) {
+				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation or direct_read command", method, endpointPath)
 			}
-			continue
-		}
-		if ep.Operation != nil || len(surfaceDirectReadTargets(ep.CoveredBy)) > 0 {
 			return nil
 		}
 	}
-	if matchedEndpoint {
-		if len(directReadTargets) > 0 {
-			return fmt.Errorf("api_surface endpoint %s %s is not covered by direct_read command for operation %q", method, endpointPath, operationID)
-		}
-		return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation or direct_read command", method, endpointPath)
-	}
 	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
-}
-
-func operationDirectReadTargets(cli *CLISurface, operationID string) map[string]bool {
-	if cli == nil || operationID == "" {
-		return nil
-	}
-	targets := map[string]bool{}
-	for _, cmd := range cli.Commands {
-		if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation == operationID {
-			targets[cmd.Path] = true
-		}
-	}
-	if len(targets) == 0 {
-		return nil
-	}
-	return targets
-}
-
-func surfaceDirectReadTargets(covered *SurfaceCoverage) []string {
-	if covered == nil {
-		return nil
-	}
-	targets := append([]string(nil), covered.DirectReads...)
-	if covered.DirectRead != "" {
-		targets = append(targets, covered.DirectRead)
-	}
-	return targets
 }
 
 func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) {

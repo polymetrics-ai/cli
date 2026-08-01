@@ -122,6 +122,8 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 		Operations []struct {
 			ID            string `json:"id"`
 			Kind          string `json:"kind"`
+			Description   string `json:"description"`
+			Approval      string `json:"approval"`
 			MutationClass string `json:"mutation_class"`
 			Destructive   bool   `json:"destructive"`
 			REST          *struct {
@@ -138,8 +140,21 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 		t.Fatalf("operations = %d, want 254", len(operations.Operations))
 	}
 	counts := map[string]int{}
+	fileUploadOps := map[string]bool{}
 	for _, op := range operations.Operations {
 		counts[op.Kind]++
+		if op.ID == "monday.mutation.add_file_to_column" || op.ID == "monday.mutation.add_file_to_update" {
+			fileUploadOps[op.ID] = true
+			if !strings.Contains(op.Description, "multipart/binary GraphQL upload handling") || !strings.Contains(op.Description, "planned/blocked") {
+				t.Fatalf("file upload operation %q missing multipart planned/blocker evidence", op.ID)
+			}
+			if !strings.Contains(op.Approval, "blocked until typed multipart/binary GraphQL upload contract exists") {
+				t.Fatalf("file upload operation %q approval = %q, want binary blocker", op.ID, op.Approval)
+			}
+			if op.GraphQL == nil || strings.Contains(op.GraphQL.Document, "YOUR_FILE") || !strings.Contains(op.GraphQL.Document, "$file: File!") {
+				t.Fatalf("file upload operation %q must keep fixed file variable metadata without executable placeholders", op.ID)
+			}
+		}
 		if op.Kind == "rest_read" && strings.HasPrefix(op.ID, "monday.query.") {
 			t.Fatalf("query operation %q must stay planned as graphql_query, not rest_read", op.ID)
 		}
@@ -161,6 +176,11 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	if counts["graphql_mutation"] != 188 {
 		t.Fatalf("graphql_mutation operations = %d, want 188", counts["graphql_mutation"])
 	}
+	for _, id := range []string{"monday.mutation.add_file_to_column", "monday.mutation.add_file_to_update"} {
+		if !fileUploadOps[id] {
+			t.Fatalf("file upload operation %q missing from operation ledger", id)
+		}
+	}
 
 	var writes struct {
 		Actions []struct {
@@ -177,6 +197,9 @@ func TestMondayAPISurfaceOperationLedger(t *testing.T) {
 	}
 	var sawDeleteBoard bool
 	for _, action := range writes.Actions {
+		if strings.Contains(action.Name, "add_file_to_") {
+			t.Fatalf("binary upload action %q must remain planned/blocked, not executable in writes.json", action.Name)
+		}
 		if !coveredWrites[action.Name] {
 			t.Fatalf("write action %q has no api_surface covered_by.write row", action.Name)
 		}

@@ -97,11 +97,11 @@
     {
       "id": "monday.mutation.add_file_to_column",
       "kind": "graphql_mutation",
-      "summary": "Run Monday GraphQL mutation add_file_to_column",
-      "description": "Monday GraphQL mutation sourced from official docs. Executable through a named reverse-ETL write action with typed scalar variables.",
+      "summary": "Plan Monday GraphQL file upload mutation add_file_to_column",
+      "description": "Monday GraphQL file upload mutation sourced from official docs. Kept blocked/planned because it requires multipart/binary GraphQL upload handling; the current connector-local GraphQL write contract only supports typed scalar/JSON body variables, so this remains planned/blocked instead of a fake scalar write.",
       "source_url": "https://developer.monday.com/api-reference/reference/assets-1",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; destructive/admin actions require typed confirmation",
+      "approval": "blocked until typed multipart/binary GraphQL upload contract exists; no raw file upload escape hatch",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "monday.com API token or OAuth scope allowed to run this mutation"
@@ -110,18 +110,18 @@
       "destructive": false,
       "audit_event": "monday.mutation.add_file_to_column",
       "graphql": {
-        "document": "mutation Monday_add_file_to_column($item_id: ID!, $column_id: String!) { add_file_to_column(item_id: $item_id, column_id: $column_id, file: YOUR_FILE) {\n    id\n  } }",
+        "document": "mutation Monday_add_file_to_column($item_id: ID!, $column_id: String!, $file: File!) { add_file_to_column(item_id: $item_id, column_id: $column_id, file: $file) {\n    id\n  } }",
         "operation_name": "Monday_add_file_to_column"
       }
     },
     {
       "id": "monday.mutation.add_file_to_update",
       "kind": "graphql_mutation",
-      "summary": "Run Monday GraphQL mutation add_file_to_update",
-      "description": "Monday GraphQL mutation sourced from official docs. Executable through a named reverse-ETL write action with typed scalar variables.",
+      "summary": "Plan Monday GraphQL file upload mutation add_file_to_update",
+      "description": "Monday GraphQL file upload mutation sourced from official docs. Kept blocked/planned because it requires multipart/binary GraphQL upload handling; the current connector-local GraphQL write contract only supports typed scalar/JSON body variables, so this remains planned/blocked instead of a fake scalar write.",
       "source_url": "https://developer.monday.com/api-reference/reference/assets-1",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; destructive/admin actions require typed confirmation",
+      "approval": "blocked until typed multipart/binary GraphQL upload contract exists; no raw file upload escape hatch",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "monday.com API token or OAuth scope allowed to run this mutation"
@@ -130,7 +130,7 @@
       "destructive": false,
       "audit_event": "monday.mutation.add_file_to_update",
       "graphql": {
-        "document": "mutation Monday_add_file_to_update($update_id: ID!) { add_file_to_update(update_id: $update_id, file: YOUR_FILE) {\n    id\n  } }",
+        "document": "mutation Monday_add_file_to_update($update_id: ID!, $file: File!) { add_file_to_update(update_id: $update_id, file: $file) {\n    id\n  } }",
         "operation_name": "Monday_add_file_to_update"
       }
     },
