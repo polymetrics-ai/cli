@@ -66,7 +66,8 @@
         ],
         "properties": {
           "audience_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "language": {
             "type": [
@@ -115,7 +116,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -147,10 +149,12 @@
         ],
         "properties": {
           "audience_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "contact_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "language": {
             "type": [
@@ -193,7 +197,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -219,10 +224,12 @@
         ],
         "properties": {
           "audience_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "contact_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -252,10 +259,12 @@
         ],
         "properties": {
           "audience_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "contact_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -321,7 +330,8 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -346,7 +356,8 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -371,7 +382,8 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -398,10 +410,12 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "workflow_email_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -441,10 +455,12 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "workflow_email_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "settings": {
             "type": [
@@ -458,7 +474,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update workflow email. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -483,10 +500,12 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "workflow_email_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -516,10 +535,12 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "workflow_email_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -552,10 +573,12 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "workflow_email_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -563,7 +586,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add subscriber to workflow email. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -590,7 +614,8 @@
         ],
         "properties": {
           "workflow_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -598,7 +623,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Remove subscriber from workflow. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -655,7 +681,8 @@
         ],
         "properties": {
           "batch_webhook_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -690,7 +717,8 @@
         ],
         "properties": {
           "batch_webhook_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "url": {
             "type": [
@@ -704,7 +732,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update batch webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -727,7 +756,8 @@
         ],
         "properties": {
           "batch_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -782,7 +812,8 @@
         ],
         "properties": {
           "folder_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -816,7 +847,8 @@
         ],
         "properties": {
           "folder_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -824,7 +856,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update campaign folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -917,7 +950,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -956,7 +990,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "recipients": {
             "type": [
@@ -994,7 +1029,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update campaign settings. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -1014,7 +1050,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1039,7 +1076,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "shortcut_type": {
             "type": [
@@ -1070,7 +1108,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1095,7 +1134,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         }
       },
@@ -1118,7 +1158,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         }
       },
@@ -1141,7 +1182,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "schedule_time": {
             "type": [
@@ -1182,7 +1224,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1207,7 +1250,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "test_emails": {
             "type": [
@@ -1258,7 +1302,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         }
       },
@@ -1289,7 +1334,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "plain_text": {
             "type": [
@@ -1338,7 +1384,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Set campaign content. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -1366,7 +1413,8 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "block_id": {
             "type": [
@@ -1386,7 +1434,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add campaign feedback. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -1408,10 +1457,12 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "feedback_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1449,10 +1500,12 @@
         ],
         "properties": {
           "campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "feedback_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "block_id": {
             "type": [
@@ -1472,7 +1525,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update campaign feedback message. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -1526,7 +1580,8 @@
         ],
         "properties": {
           "connected_site_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1557,7 +1612,8 @@
         ],
         "properties": {
           "connected_site_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         }
       },
@@ -1580,7 +1636,8 @@
         ],
         "properties": {
           "connected_site_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         }
       },
@@ -1603,7 +1660,8 @@
         ],
         "properties": {
           "connected_site_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1630,10 +1688,12 @@
         ],
         "properties": {
           "journey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "step_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -1780,7 +1840,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -1824,7 +1885,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -1892,7 +1954,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update store. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -1927,7 +1990,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -1990,7 +2054,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add cart. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -2015,10 +2080,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "cart_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -2060,10 +2127,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "cart_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "customer": {
             "type": [
@@ -2120,7 +2189,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update cart. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -2152,10 +2222,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "cart_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -2188,7 +2260,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add cart line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -2212,13 +2285,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "cart_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "line_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -2259,13 +2335,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "cart_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "line_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
             "type": [
@@ -2292,7 +2371,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update cart line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -2322,7 +2402,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -2372,7 +2453,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add customer. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -2398,10 +2480,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "customer_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -2441,10 +2525,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "customer_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "opt_in_status": {
             "type": [
@@ -2476,7 +2562,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update customer. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -2508,10 +2595,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "customer_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -2561,7 +2650,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add or update customer. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -2612,7 +2702,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -2790,7 +2881,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add order. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -2816,10 +2908,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -2878,10 +2972,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "customer": {
             "type": [
@@ -3053,7 +3149,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update order. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -3106,10 +3203,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -3287,7 +3386,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add or update order. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -3321,10 +3421,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -3364,7 +3466,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add order line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -3388,13 +3491,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "line_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -3436,13 +3542,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "order_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "line_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
             "type": [
@@ -3476,7 +3585,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update order line item. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -3509,7 +3619,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -3599,7 +3710,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add product. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -3625,10 +3737,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -3673,10 +3787,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -3760,7 +3876,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update product. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -3799,10 +3916,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -3892,7 +4011,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Create or update product. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -3923,10 +4043,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -3957,7 +4079,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add product image. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -3984,13 +4107,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "image_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -4030,13 +4156,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "image_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -4067,7 +4196,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update product image. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -4103,10 +4233,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -4163,7 +4295,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -4191,13 +4324,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "variant_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -4242,13 +4378,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "variant_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -4299,7 +4438,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -4338,13 +4478,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "product_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "variant_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -4401,7 +4544,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Add or update product variant. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -4438,7 +4582,8 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -4507,7 +4652,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add promo rule. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -4529,10 +4675,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_rule_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -4577,10 +4725,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_rule_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -4643,7 +4793,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update promo rule. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -4674,10 +4825,12 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_rule_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "id": {
             "type": [
@@ -4721,7 +4874,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add promo code. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -4748,13 +4902,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_rule_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_code_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -4797,13 +4954,16 @@
         ],
         "properties": {
           "store_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_rule_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "promo_code_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "code": {
             "type": [
@@ -4841,7 +5001,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update promo code. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -4905,7 +5066,8 @@
         ],
         "properties": {
           "file_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -4940,7 +5102,8 @@
         ],
         "properties": {
           "file_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "folder_id": {
             "type": [
@@ -4954,7 +5117,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update file. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -4998,7 +5162,8 @@
         ],
         "properties": {
           "folder_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5032,7 +5197,8 @@
         ],
         "properties": {
           "folder_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -5040,7 +5206,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5133,7 +5300,8 @@
         ],
         "properties": {
           "page_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5172,7 +5340,8 @@
         ],
         "properties": {
           "page_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -5210,7 +5379,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update landing page. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5230,7 +5400,8 @@
         ],
         "properties": {
           "page_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5255,7 +5426,8 @@
         ],
         "properties": {
           "page_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5371,7 +5543,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5414,7 +5587,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -5476,7 +5650,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update lists. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -5505,7 +5680,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "members": {
             "type": [
@@ -5536,7 +5712,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Batch subscribe or unsubscribe. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5561,7 +5738,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -5581,7 +5759,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add interest category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5603,10 +5782,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_category_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5644,10 +5825,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_category_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -5667,7 +5850,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update interest category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5693,10 +5877,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_category_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -5710,7 +5896,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add interest in category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5734,13 +5921,16 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_category_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -5779,13 +5969,16 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_category_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "interest_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -5799,7 +5992,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update interest in category. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -5835,7 +6029,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -5943,7 +6138,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add member to list. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -5969,10 +6165,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -6023,10 +6221,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -6117,7 +6317,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update list member. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -6160,10 +6361,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -6260,7 +6463,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add or update list member. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -6287,10 +6491,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -6326,10 +6532,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -6355,7 +6563,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add event. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -6383,10 +6592,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "note": {
             "type": [
@@ -6394,7 +6605,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add member note. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -6421,13 +6633,16 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "note_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -6468,13 +6683,16 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "note_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "note": {
             "type": [
@@ -6482,7 +6700,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Externally visible Mailchimp mutation: Update note. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -6511,10 +6730,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "tags": {
             "type": [
@@ -6539,7 +6760,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add or remove member tags. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -6573,7 +6795,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "tag": {
             "type": [
@@ -6629,7 +6852,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add merge field. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -6651,10 +6875,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "merge_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -6697,10 +6923,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "merge_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "tag": {
             "type": [
@@ -6750,7 +6978,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update merge field. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -6775,7 +7004,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -6806,7 +7036,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add segment. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -6828,10 +7059,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "segment_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -6869,10 +7102,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "segment_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -6903,7 +7138,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update segment. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -6929,10 +7165,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "segment_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "members_to_add": {
             "type": [
@@ -6968,7 +7206,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Batch add or remove members. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -6993,10 +7232,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "segment_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "email_address": {
             "type": [
@@ -7004,7 +7245,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Add member to segment. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -7031,13 +7273,16 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "segment_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "subscriber_hash": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7076,7 +7321,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "header": {
             "type": [
@@ -7118,7 +7364,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Customize signup form. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -7142,7 +7389,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -7167,7 +7415,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Create survey. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -7189,10 +7438,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "survey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7230,10 +7481,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "survey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -7264,7 +7517,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update survey. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -7286,10 +7540,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "survey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         }
       },
@@ -7314,10 +7570,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "survey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7347,10 +7605,12 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "survey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "title": {
             "type": [
@@ -7381,10 +7641,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "survey_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7414,7 +7676,8 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "url": {
             "type": [
@@ -7434,7 +7697,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Add webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -7459,10 +7723,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "webhook_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7500,10 +7766,12 @@
         ],
         "properties": {
           "list_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "webhook_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "url": {
             "type": [
@@ -7523,7 +7791,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Externally visible Mailchimp mutation: Update webhook. Reverse ETL must plan, preview, receive explicit approval, and then execute.",
       "redact_fields": [
@@ -7620,7 +7889,8 @@
         ],
         "properties": {
           "sms_campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7657,7 +7927,8 @@
         ],
         "properties": {
           "sms_campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -7705,7 +7976,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update SMS campaign settings. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -7725,7 +7997,8 @@
         ],
         "properties": {
           "sms_campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7750,7 +8023,8 @@
         ],
         "properties": {
           "sms_campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "schedule_time": {
             "type": [
@@ -7779,7 +8053,8 @@
         ],
         "properties": {
           "sms_campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7808,7 +8083,8 @@
         ],
         "properties": {
           "sms_campaign_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "message_body": {
             "type": [
@@ -7833,7 +8109,8 @@
               ]
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Set SMS campaign content. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -7877,7 +8154,8 @@
         ],
         "properties": {
           "folder_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -7911,7 +8189,8 @@
         ],
         "properties": {
           "folder_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -7919,7 +8198,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update template folder. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -7977,7 +8257,8 @@
         ],
         "properties": {
           "template_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -8013,7 +8294,8 @@
         ],
         "properties": {
           "template_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "name": {
             "type": [
@@ -8033,7 +8315,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Externally visible Mailchimp mutation: Update template. Reverse ETL must plan, preview, receive explicit approval, and then execute."
     },
@@ -8080,7 +8363,8 @@
         ],
         "properties": {
           "domain_name": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           }
         },
         "description": "Closed schema for approval-gated Mailchimp mutation."
@@ -8114,7 +8398,8 @@
         ],
         "properties": {
           "domain_name": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
           },
           "code": {
             "type": [

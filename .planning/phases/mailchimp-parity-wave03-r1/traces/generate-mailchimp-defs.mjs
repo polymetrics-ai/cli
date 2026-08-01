@@ -11,6 +11,8 @@ const OUT = 'internal/connectors/defs/mailchimp';
 const TRACE = '.planning/phases/mailchimp-parity-wave03-r1/traces';
 const METHODS = new Set(['get', 'post', 'put', 'patch', 'delete']);
 const TODAY = '2026-07-31';
+const MAILCHIMP_DATA_CENTER_PATTERN = '^us[1-9][0-9]*$';
+const MAILCHIMP_PATH_ID_PATTERN = '^[A-Za-z0-9][A-Za-z0-9._:-]*$';
 
 const cache = new Map();
 async function fetchJSON(url) {
@@ -193,6 +195,73 @@ function schemaForStream(name, itemSchema, vars) {
   return { schema, cursor };
 }
 
+function pathIdentifierSchema() {
+  return { type: 'string', pattern: MAILCHIMP_PATH_ID_PATTERN };
+}
+
+function nonNullTypes(schema) {
+  const raw = Array.isArray(schema?.type) ? schema.type : [schema?.type || 'string'];
+  return raw.filter(t => t && t !== 'null');
+}
+
+function flagForRecordField(field, schema, required, role) {
+  const types = nonNullTypes(schema);
+  let type = '';
+  if (schema?.enum?.length) type = 'enum';
+  else if (types.includes('boolean')) type = 'boolean';
+  else if (types.includes('integer') && !types.includes('number')) type = 'integer';
+  else if (types.includes('number')) type = 'number';
+  else if (types.includes('array')) type = 'json_array';
+  else if (types.includes('object')) type = 'json_object';
+  else if (types.includes('string')) type = 'string';
+  else return null;
+
+  const flag = {
+    name: kebab(field),
+    type,
+    summary: `${required ? 'Required' : 'Optional'} ${field} ${role}.`,
+    maps_to: `record.${field}`
+  };
+  if (type === 'string' || type === 'enum') flag.allow_empty = false;
+  if (type === 'string' && schema?.format === 'date-time') flag.format = 'date-time';
+  if (type === 'enum') flag.values = schema.enum.map(String);
+  return flag;
+}
+
+function exampleValueForFlag(flag) {
+  if (flag.type === 'boolean') return 'true';
+  if (flag.type === 'integer') return '1';
+  if (flag.type === 'number') return '1.5';
+  if (flag.type === 'json_object') return `'{}'`;
+  if (flag.type === 'json_array') return `'[]'`;
+  if (flag.values?.length) return flag.values[0];
+  if (flag.format === 'date-time' || /timestamp|time|date/i.test(flag.name)) return '2026-01-01T00:00:00Z';
+  return `fixture-${flag.name}`;
+}
+
+function reverseETLExample(commandPath, flags, action) {
+  const required = new Set(action.record_schema?.required || []);
+  const pathFields = new Set(action.path_fields || []);
+  const bodyFields = action.body_fields || [];
+  const bodyRequired = bodyFields.filter(f => required.has(f));
+  const wanted = new Set([...(action.path_fields || []), ...bodyRequired]);
+  if (bodyFields.length > 0 && bodyRequired.length === 0) {
+    const preferred = bodyFields.find(f => {
+      const flag = flags.find(candidate => candidate.maps_to === `record.${f}`);
+      return flag && !flag.type.startsWith('json_');
+    }) || bodyFields.find(f => flags.some(candidate => candidate.maps_to === `record.${f}`)) || bodyFields[0];
+    wanted.add(preferred);
+  }
+  const parts = ['pm', 'mailchimp', ...commandPath.split(/\s+/).filter(Boolean)];
+  for (const flag of flags) {
+    const target = flag.maps_to?.replace(/^record\./, '');
+    if (!target || (!wanted.has(target) && !(required.has(target) && !pathFields.has(target)))) continue;
+    parts.push(`--${flag.name}`, exampleValueForFlag(flag));
+  }
+  parts.push('--preview', '--json');
+  return parts.join(' ');
+}
+
 function sampleValue(field, schema) {
   const f = field.toLowerCase();
   const types = Array.isArray(schema?.type) ? schema.type : [schema?.type || 'string'];
@@ -226,7 +295,7 @@ function streamFixtureBody(recordPath, schema, streamName, vars, page = 1) {
 function recordSchemaForWrite(method, p, bodySchema, destructive) {
   const vars = pathVars(p);
   const properties = {};
-  for (const v of vars) properties[v] = { type: 'string' };
+  for (const v of vars) properties[v] = pathIdentifierSchema(v);
   const bodyFields = [];
   const bodyProps = bodySchema?.properties || {};
   for (const [k, raw] of Object.entries(bodyProps)) {
@@ -314,12 +383,12 @@ async function main() {
   const specProps = {
     access_token: { type: 'string', 'x-secret': true, description: 'Mailchimp OAuth access token. Takes precedence over api_key when both are set. Sent as Bearer auth; never logged.' },
     api_key: { type: 'string', 'x-secret': true, description: 'Mailchimp API key. Sent as HTTP Basic auth (username "anystring") when access_token is unset; never logged.' },
-    data_center: { type: 'string', description: 'Mailchimp datacenter token (for example, us6) used to build https://<data_center>.api.mailchimp.com/3.0.' },
+    data_center: { type: 'string', pattern: MAILCHIMP_DATA_CENTER_PATTERN, description: 'Mailchimp datacenter token (for example, us6) used to build https://<data_center>.api.mailchimp.com/3.0.' },
     start_date: { type: 'string', format: 'date-time', description: 'Optional RFC3339 lower bound used by stream definitions that expose Mailchimp since_* filters.' },
     mode: { type: 'string', description: 'Runtime mode: live (default) or fixture for credential-free conformance.' },
     search_query: { type: 'string', description: 'Optional default search term for typed search direct-read commands.' }
   };
-  for (const op of operations) for (const v of pathVars(op.path)) specProps[v] ||= { type: 'string', description: `Optional Mailchimp path identifier for {${v}} operations and nested streams.` };
+  for (const op of operations) for (const v of pathVars(op.path)) specProps[v] ||= { ...pathIdentifierSchema(v), description: `Optional Mailchimp path identifier for {${v}} operations and nested streams.` };
 
   const streams = [];
   const streamSchemas = new Map();
@@ -407,6 +476,7 @@ async function main() {
     if (schemaInfo.pathFields.length === 0) delete action.path_fields;
     if (schemaInfo.bodyFields.length === 0 || lower === 'delete' || /\/actions\//.test(endpointPath)) delete action.body_fields;
     if (lower === 'delete' || /\/actions\//.test(endpointPath)) action.body_type = 'none';
+    if ((action.body_fields || []).length > 0) action.record_schema.minProperties = Math.max(action.record_schema.minProperties || 0, (action.path_fields || []).length + 1);
     if (lower === 'delete') action.delete = { idempotent: true, missing_ok_status: [404] };
     if (destructive) action.confirm = 'destructive';
     const redact = [];
@@ -420,8 +490,14 @@ async function main() {
     writeJSON(path.join(OUT, 'fixtures', 'writes', `${actionName}.json`), { record, expect, response: { status: method === 'POST' ? 201 : 200, body: { id: `fixture_${actionName}` } } });
 
     const flags = [];
-    for (const reqField of [...(schemaInfo.schema.required || [])]) flags.push({ name: kebab(reqField), type: 'string', summary: `Required ${reqField} record field.`, maps_to: `record.${reqField}`, allow_empty: false });
-    cliCommands.push({ path: uniqueName(`actions ${kebab(actionName)}`, usedCommands).replace(/_/g, '-'), summary: summary || `${method} ${endpointPath}`, intent: 'reverse_etl', availability: 'implemented', write: actionName, flags, risk: action.risk, approval: destructive ? 'reverse ETL plan -> preview -> explicit approval -> execute with destructive confirmation' : 'reverse ETL plan -> preview -> explicit approval -> execute', api_surface: [{ method, path: endpointPath }], examples: [`pm mailchimp actions ${kebab(actionName)} --preview --json`] });
+    const requiredFields = new Set(action.record_schema.required || []);
+    for (const field of [...(action.path_fields || []), ...(action.body_fields || [])]) {
+      const role = (action.path_fields || []).includes(field) ? 'path identifier record field' : 'body record field';
+      const flag = flagForRecordField(field, action.record_schema.properties[field], requiredFields.has(field), role);
+      if (flag) flags.push(flag);
+    }
+    const commandPath = uniqueName(`actions ${kebab(actionName)}`, usedCommands).replace(/_/g, '-');
+    cliCommands.push({ path: commandPath, summary: summary || `${method} ${endpointPath}`, intent: 'reverse_etl', availability: 'implemented', write: actionName, flags, risk: action.risk, approval: destructive ? 'reverse ETL plan -> preview -> explicit approval -> execute with destructive confirmation' : 'reverse ETL plan -> preview -> explicit approval -> execute', api_surface: [{ method, path: endpointPath }], examples: [reverseETLExample(commandPath, flags, action)] });
   }
 
   for (const [name, schema] of streamSchemas) writeJSON(path.join(OUT, 'schemas', `${name}.json`), schema);
@@ -453,7 +529,7 @@ async function main() {
 
   writeJSON(path.join(OUT, 'streams.json'), {
     base: {
-      url: 'https://{{ config.data_center }}.api.mailchimp.com/3.0',
+      url: 'https://{{ config.data_center | urlencode }}.api.mailchimp.com/3.0',
       user_agent: 'polymetrics-go-cli',
       auth: [
         { mode: 'bearer', token: '{{ secrets.access_token }}', when: '{{ secrets.access_token }}' },

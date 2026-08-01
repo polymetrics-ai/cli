@@ -1062,6 +1062,37 @@ func TestCoerceFlagValueRejectsGenericJSONFlagType(t *testing.T) {
 	}
 }
 
+func TestRecordOverridesBuildsNumberAndStructuredJSONFields(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "orders create",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "total", Type: "number", MapsTo: "record.total"},
+			{Name: "address", Type: "json_object", MapsTo: "record.address"},
+			{Name: "lines", Type: "json_array", MapsTo: "record.lines"},
+		},
+	}, map[string][]string{
+		"total":   {"12.5"},
+		"address": {`{"city":"Synthetic"}`},
+		"lines":   {`[{"sku":"SKU-1"}]`},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	if record["total"] != 12.5 {
+		t.Fatalf("total = %#v, want 12.5", record["total"])
+	}
+	address, ok := record["address"].(map[string]any)
+	if !ok || address["city"] != "Synthetic" {
+		t.Fatalf("address = %#v, want typed object", record["address"])
+	}
+	lines, ok := record["lines"].([]any)
+	if !ok || len(lines) != 1 {
+		t.Fatalf("lines = %#v, want typed array", record["lines"])
+	}
+}
+
 func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "diagnoses create",

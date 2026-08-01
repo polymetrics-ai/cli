@@ -2,8 +2,10 @@ package commandrunner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"sort"
 	"strconv"
@@ -662,7 +664,7 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return err
 	}
 	switch flag.Type {
-	case "", "string", "boolean", "integer", "string_array":
+	case "", "string", "boolean", "integer", "number", "string_array", "json_object", "json_array":
 		return nil
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -1029,6 +1031,12 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			return nil, fmt.Errorf("invalid --%s %q, want integer", flag.Name, value)
 		}
 		return parsed, nil
+	case "number":
+		parsed, err := strconv.ParseFloat(value, 64)
+		if err != nil || math.IsNaN(parsed) || math.IsInf(parsed, 0) {
+			return nil, fmt.Errorf("invalid --%s %q, want number", flag.Name, value)
+		}
+		return parsed, nil
 	case "string_array":
 		var out []string
 		for _, raw := range clean {
@@ -1040,12 +1048,37 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			}
 		}
 		return out, nil
+	case "json_object", "json_array":
+		return coerceJSONFlagValue(flag, value)
 	default:
 		return nil, &BlockedCommandError{
 			Command: "unknown",
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+func coerceJSONFlagValue(flag connectors.CommandSurfaceFlag, value string) (any, error) {
+	if !json.Valid([]byte(value)) {
+		return nil, fmt.Errorf("invalid --%s %q, want %s", flag.Name, value, flag.Type)
+	}
+	var decoded any
+	dec := json.NewDecoder(strings.NewReader(value))
+	dec.UseNumber()
+	if err := dec.Decode(&decoded); err != nil {
+		return nil, fmt.Errorf("invalid --%s %q, want %s", flag.Name, value, flag.Type)
+	}
+	switch flag.Type {
+	case "json_object":
+		if obj, ok := decoded.(map[string]any); ok {
+			return obj, nil
+		}
+	case "json_array":
+		if arr, ok := decoded.([]any); ok {
+			return arr, nil
+		}
+	}
+	return nil, fmt.Errorf("invalid --%s %q, want %s", flag.Name, value, flag.Type)
 }
 
 func findWriteAction(manifest connectors.Manifest, name string) (connectors.WriteActionSpec, bool) {

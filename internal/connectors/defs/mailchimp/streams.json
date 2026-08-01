@@ -1,6 +1,6 @@
 {
   "base": {
-    "url": "https://{{ config.data_center }}.api.mailchimp.com/3.0",
+    "url": "https://{{ config.data_center | urlencode }}.api.mailchimp.com/3.0",
     "user_agent": "polymetrics-go-cli",
     "auth": [
       {

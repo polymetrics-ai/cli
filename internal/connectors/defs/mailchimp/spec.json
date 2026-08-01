@@ -18,103 +18,128 @@
     },
     "app_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {app_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {app_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "audience_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {audience_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {audience_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "batch_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {batch_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {batch_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "batch_webhook_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {batch_webhook_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {batch_webhook_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "campaign_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {campaign_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {campaign_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "cart_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {cart_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {cart_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "connected_site_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {connected_site_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {connected_site_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "contact_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {contact_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {contact_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "conversation_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {conversation_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {conversation_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "customer_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {customer_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {customer_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "data_center": {
       "type": "string",
-      "description": "Mailchimp datacenter token (for example, us6) used to build https://<data_center>.api.mailchimp.com/3.0."
+      "description": "Mailchimp datacenter token (for example, us6) used to build https://<data_center>.api.mailchimp.com/3.0.",
+      "pattern": "^us[1-9][0-9]*$"
     },
     "domain_name": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {domain_name} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {domain_name} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "export_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {export_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {export_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "feedback_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {feedback_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {feedback_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "file_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {file_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {file_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "folder_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {folder_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {folder_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "image_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {image_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {image_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "interest_category_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {interest_category_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {interest_category_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "interest_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {interest_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {interest_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "journey_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {journey_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {journey_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "line_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {line_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {line_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "link_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {link_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {link_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "list_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {list_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {list_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "merge_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {merge_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {merge_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "message_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {message_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {message_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "mode": {
       "type": "string",
@@ -122,47 +147,58 @@
     },
     "month": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {month} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {month} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "note_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {note_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {note_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "order_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {order_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {order_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "outreach_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {outreach_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {outreach_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "page_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {page_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {page_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "product_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {product_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {product_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "promo_code_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {promo_code_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {promo_code_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "promo_rule_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {promo_rule_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {promo_rule_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "question_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {question_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {question_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "report_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {report_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {report_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "response_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {response_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {response_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "search_query": {
       "type": "string",
@@ -170,11 +206,13 @@
     },
     "segment_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {segment_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {segment_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "sms_campaign_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {sms_campaign_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {sms_campaign_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "start_date": {
       "type": "string",
@@ -183,39 +221,48 @@
     },
     "step_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {step_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {step_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "store_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {store_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {store_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "subscriber_hash": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {subscriber_hash} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {subscriber_hash} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "survey_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {survey_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {survey_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "template_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {template_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {template_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "variant_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {variant_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {variant_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "webhook_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {webhook_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {webhook_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "workflow_email_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {workflow_email_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {workflow_email_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     },
     "workflow_id": {
       "type": "string",
-      "description": "Optional Mailchimp path identifier for {workflow_id} operations and nested streams."
+      "description": "Optional Mailchimp path identifier for {workflow_id} operations and nested streams.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
     }
   }
 }
