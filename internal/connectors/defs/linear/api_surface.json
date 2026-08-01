@@ -2585,8 +2585,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.fileUploadDangerouslyDelete",
-      "covered_by": {
-        "write": "file_upload_dangerously_delete"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Permanently delete an uploaded file by asset URL. This should be used as a last resort and will break comments and documents that reference the asset."
       }
     },
     {
@@ -3324,8 +3330,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationSalesforceMetadataRefresh",
-      "covered_by": {
-        "write": "integration_salesforce_metadata_refresh"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Refreshes the Salesforce integration metadata."
       }
     },
     {
@@ -3640,8 +3652,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.issueDescriptionUpdateFromFront",
-      "covered_by": {
-        "write": "issue_description_update_from_front"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Updates an issue description from the Front app to handle Front attachments correctly."
       }
     },
     {
@@ -4209,8 +4227,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.organizationDomainClaim",
-      "covered_by": {
-        "write": "organization_domain_claim"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Verifies a domain claim."
       }
     },
     {
@@ -4362,8 +4386,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.passkeyLoginStart",
-      "covered_by": {
-        "write": "passkey_login_start"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Starts passkey login process."
       }
     },
     {
@@ -4519,8 +4549,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.projectReassignStatus",
-      "covered_by": {
-        "write": "project_reassign_status"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Reassigns all projects from one project status to another. Used when archiving or deleting a project status."
       }
     },
     {

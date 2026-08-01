@@ -21,8 +21,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "favorites_cursor_page_1"
           }
         }
       }

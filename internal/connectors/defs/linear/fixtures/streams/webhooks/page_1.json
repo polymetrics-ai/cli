@@ -19,8 +19,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "webhooks_cursor_page_1"
           }
         }
       }

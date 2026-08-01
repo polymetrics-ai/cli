@@ -19,8 +19,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "project_relations_cursor_page_1"
           }
         }
       }

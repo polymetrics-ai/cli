@@ -18,8 +18,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "integrations_cursor_page_1"
           }
         }
       }

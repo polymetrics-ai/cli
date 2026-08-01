@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "customerStatuses": {
+          "nodes": [
+            {
+              "__typename": "CustomerStatus",
+              "id": "customer_statuses_fixture_2",
+              "createdAt": "2026-01-01T00:00:01Z",
+              "updatedAt": "2026-01-01T00:00:01Z",
+              "archivedAt": "2026-01-01T00:00:01Z",
+              "name": "name_fixture",
+              "displayName": "displayName_fixture",
+              "description": "description_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

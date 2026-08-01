@@ -18,8 +18,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "issue_to_releases_cursor_page_1"
           }
         }
       }

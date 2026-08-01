@@ -20,8 +20,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "project_statuses_cursor_page_1"
           }
         }
       }

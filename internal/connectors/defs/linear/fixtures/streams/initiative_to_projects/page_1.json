@@ -18,8 +18,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "initiative_to_projects_cursor_page_1"
           }
         }
       }

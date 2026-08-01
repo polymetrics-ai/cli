@@ -19,8 +19,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "agent_sessions_cursor_page_1"
           }
         }
       }

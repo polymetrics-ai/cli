@@ -19,8 +19,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "release_stages_cursor_page_1"
           }
         }
       }

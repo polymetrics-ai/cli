@@ -1015,8 +1015,8 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "customer_merge",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "risk": "destructive Linear customer merge; archives the source customer and requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "source-customer-id",
@@ -1333,26 +1333,6 @@
       ],
       "examples": [
         "pm linear favorite delete --json"
-      ]
-    },
-    {
-      "path": "file upload dangerously delete",
-      "summary": "Run Linear mutation fileUploadDangerouslyDelete.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "file_upload_dangerously_delete",
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
-      "flags": [
-        {
-          "name": "asset-url",
-          "type": "string",
-          "summary": "assetUrl argument.",
-          "maps_to": "record.assetUrl"
-        }
-      ],
-      "examples": [
-        "pm linear file upload dangerously delete --json"
       ]
     },
     {
@@ -1826,26 +1806,6 @@
       ]
     },
     {
-      "path": "integration salesforce metadata refresh",
-      "summary": "Run Linear mutation integrationSalesforceMetadataRefresh.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "integration_salesforce_metadata_refresh",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id argument.",
-          "maps_to": "record.id"
-        }
-      ],
-      "examples": [
-        "pm linear integration salesforce metadata refresh --json"
-      ]
-    },
-    {
       "path": "integration slack or asks update slack team name",
       "summary": "Run Linear mutation integrationSlackOrAsksUpdateSlackTeamName.",
       "intent": "reverse_etl",
@@ -1909,32 +1869,6 @@
       ],
       "examples": [
         "pm linear issue add label --json"
-      ]
-    },
-    {
-      "path": "issue description update from front",
-      "summary": "Run Linear mutation issueDescriptionUpdateFromFront.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "issue_description_update_from_front",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [
-        {
-          "name": "description",
-          "type": "string",
-          "summary": "description argument.",
-          "maps_to": "record.description"
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id argument.",
-          "maps_to": "record.id"
-        }
-      ],
-      "examples": [
-        "pm linear issue description update from front --json"
       ]
     },
     {
@@ -2394,26 +2328,6 @@
       ]
     },
     {
-      "path": "organization domain claim",
-      "summary": "Run Linear mutation organizationDomainClaim.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "organization_domain_claim",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id argument.",
-          "maps_to": "record.id"
-        }
-      ],
-      "examples": [
-        "pm linear organization domain claim --json"
-      ]
-    },
-    {
       "path": "organization domain delete",
       "summary": "Run Linear mutation organizationDomainDelete.",
       "intent": "reverse_etl",
@@ -2451,26 +2365,6 @@
       ],
       "examples": [
         "pm linear organization invite delete --json"
-      ]
-    },
-    {
-      "path": "passkey login start",
-      "summary": "Run Linear mutation passkeyLoginStart.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "passkey_login_start",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [
-        {
-          "name": "auth-id",
-          "type": "string",
-          "summary": "authId argument.",
-          "maps_to": "record.authId"
-        }
-      ],
-      "examples": [
-        "pm linear passkey login start --json"
       ]
     },
     {
@@ -2597,32 +2491,6 @@
       ],
       "examples": [
         "pm linear project milestone delete --json"
-      ]
-    },
-    {
-      "path": "project reassign status",
-      "summary": "Run Linear mutation projectReassignStatus.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "project_reassign_status",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [
-        {
-          "name": "new-project-status-id",
-          "type": "string",
-          "summary": "newProjectStatusId argument.",
-          "maps_to": "record.newProjectStatusId"
-        },
-        {
-          "name": "original-project-status-id",
-          "type": "string",
-          "summary": "originalProjectStatusId argument.",
-          "maps_to": "record.originalProjectStatusId"
-        }
-      ],
-      "examples": [
-        "pm linear project reassign status --json"
       ]
     },
     {

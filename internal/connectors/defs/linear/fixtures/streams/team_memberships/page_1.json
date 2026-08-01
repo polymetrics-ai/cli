@@ -18,8 +18,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "team_memberships_cursor_page_1"
           }
         }
       }

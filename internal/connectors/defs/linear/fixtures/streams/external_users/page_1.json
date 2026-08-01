@@ -21,8 +21,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "external_users_cursor_page_1"
           }
         }
       }

@@ -22,8 +22,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "teams_cursor_page_1"
           }
         }
       }

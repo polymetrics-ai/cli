@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io/fs"
+	"os"
 	"strings"
 	"testing"
 
@@ -107,6 +108,141 @@ func TestLinearStateReducingWritesRequireDestructiveConfirmation(t *testing.T) {
 			t.Fatalf("%s risk = %q, want destructive risk text", action.Name, action.Risk)
 		}
 	}
+}
+
+func TestLinearCustomerMergeRequiresDestructiveConfirmation(t *testing.T) {
+	linear := mustProductionBundle(t, "linear")
+
+	var action *engine.WriteAction
+	for i := range linear.Writes {
+		if linear.Writes[i].Name == "customer_merge" {
+			action = &linear.Writes[i]
+			break
+		}
+	}
+	if action == nil {
+		t.Fatal("linear customer_merge action missing")
+	}
+	if action.Confirm != "destructive" {
+		t.Fatalf("customer_merge confirm = %q, want destructive", action.Confirm)
+	}
+	for _, want := range []string{"destructive", "archives the source customer", "typed confirmation"} {
+		if !strings.Contains(action.Risk, want) {
+			t.Fatalf("customer_merge risk = %q, want %q", action.Risk, want)
+		}
+	}
+
+	command := mustLinearCLICommand(t, "customer_merge")
+	if !strings.Contains(command.Approval, "typed destructive confirmation") {
+		t.Fatalf("customer_merge CLI approval = %q, want typed destructive confirmation", command.Approval)
+	}
+	if !strings.Contains(command.Risk, "archives the source customer") {
+		t.Fatalf("customer_merge CLI risk = %q, want source customer archive warning", command.Risk)
+	}
+}
+
+func TestLinearProviderInternalMutationsAreBlocked(t *testing.T) {
+	internalMutations := map[string]string{
+		"file_upload_dangerously_delete":          "/graphql#Mutation.fileUploadDangerouslyDelete",
+		"integration_salesforce_metadata_refresh": "/graphql#Mutation.integrationSalesforceMetadataRefresh",
+		"issue_description_update_from_front":     "/graphql#Mutation.issueDescriptionUpdateFromFront",
+		"organization_domain_claim":               "/graphql#Mutation.organizationDomainClaim",
+		"passkey_login_start":                     "/graphql#Mutation.passkeyLoginStart",
+		"project_reassign_status":                 "/graphql#Mutation.projectReassignStatus",
+	}
+
+	linear := mustProductionBundle(t, "linear")
+	for _, action := range linear.Writes {
+		if _, ok := internalMutations[action.Name]; ok {
+			t.Fatalf("provider-internal mutation %s exposed as write action", action.Name)
+		}
+	}
+
+	commands := mustLinearCLICommands(t)
+	for _, command := range commands {
+		if _, ok := internalMutations[command.Write]; ok {
+			t.Fatalf("provider-internal mutation %s exposed as CLI command %q", command.Write, command.Path)
+		}
+	}
+
+	surface := mustLinearAPISurface(t)
+	for name, path := range internalMutations {
+		var endpoint *engine.SurfaceEndpoint
+		for i := range surface.Endpoints {
+			if surface.Endpoints[i].Path == path {
+				endpoint = &surface.Endpoints[i]
+				break
+			}
+		}
+		if endpoint == nil {
+			t.Fatalf("api_surface row missing for %s", name)
+		}
+		if endpoint.CoveredBy != nil {
+			t.Fatalf("%s covered_by = %+v, want blocked operation", name, endpoint.CoveredBy)
+		}
+		if endpoint.Operation == nil {
+			t.Fatalf("%s operation = nil, want blocked operation", name)
+		}
+		operation := endpoint.Operation
+		if operation.Model != "disallowed" || operation.Status != "blocked" || !operation.BlockedByDefault {
+			t.Fatalf("%s operation = %+v, want disallowed blocked by default", name, operation)
+		}
+		if !strings.Contains(operation.Reason, "[INTERNAL]") || !strings.Contains(operation.Reason, "provider-internal") {
+			t.Fatalf("%s reason = %q, want provider-internal evidence", name, operation.Reason)
+		}
+		if !strings.Contains(operation.SourceURL, "packages/sdk/src/schema.graphql") || !strings.Contains(operation.Notes, "[INTERNAL]") {
+			t.Fatalf("%s source evidence = source_url %q notes %q", name, operation.SourceURL, operation.Notes)
+		}
+	}
+}
+
+type linearCLICommand struct {
+	Path     string `json:"path"`
+	Write    string `json:"write"`
+	Risk     string `json:"risk"`
+	Approval string `json:"approval"`
+}
+
+func mustLinearCLICommand(t *testing.T, write string) linearCLICommand {
+	t.Helper()
+
+	for _, command := range mustLinearCLICommands(t) {
+		if command.Write == write {
+			return command
+		}
+	}
+	t.Fatalf("linear CLI command for write %s missing", write)
+	return linearCLICommand{}
+}
+
+func mustLinearCLICommands(t *testing.T) []linearCLICommand {
+	t.Helper()
+
+	raw, err := os.ReadFile("linear/cli_surface.json")
+	if err != nil {
+		t.Fatalf("read linear cli_surface.json: %v", err)
+	}
+	var surface struct {
+		Commands []linearCLICommand `json:"commands"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("parse linear cli_surface.json: %v", err)
+	}
+	return surface.Commands
+}
+
+func mustLinearAPISurface(t *testing.T) engine.APISurface {
+	t.Helper()
+
+	raw, err := os.ReadFile("linear/api_surface.json")
+	if err != nil {
+		t.Fatalf("read linear api_surface.json: %v", err)
+	}
+	var surface engine.APISurface
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("parse linear api_surface.json: %v", err)
+	}
+	return surface
 }
 
 func mustProductionBundle(t *testing.T, name string) *engine.Bundle {

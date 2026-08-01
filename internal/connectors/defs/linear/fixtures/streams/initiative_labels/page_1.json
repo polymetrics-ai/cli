@@ -20,8 +20,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "initiative_labels_cursor_page_1"
           }
         }
       }

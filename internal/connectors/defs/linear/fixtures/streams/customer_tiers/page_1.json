@@ -21,8 +21,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "customer_tiers_cursor_page_1"
           }
         }
       }

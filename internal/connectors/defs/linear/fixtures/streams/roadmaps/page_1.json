@@ -21,8 +21,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "roadmaps_cursor_page_1"
           }
         }
       }

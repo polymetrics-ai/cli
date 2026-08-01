@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "agentSkills": {
+          "nodes": [
+            {
+              "__typename": "AgentSkill",
+              "id": "agent_skills_fixture_2",
+              "createdAt": "2026-01-01T00:00:01Z",
+              "updatedAt": "2026-01-01T00:00:01Z",
+              "archivedAt": "2026-01-01T00:00:01Z",
+              "title": "title_fixture",
+              "description": "description_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

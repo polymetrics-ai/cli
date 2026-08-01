@@ -19,8 +19,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "organization_invites_cursor_page_1"
           }
         }
       }

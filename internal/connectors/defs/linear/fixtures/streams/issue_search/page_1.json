@@ -23,8 +23,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "issue_search_cursor_page_1"
           }
         }
       }

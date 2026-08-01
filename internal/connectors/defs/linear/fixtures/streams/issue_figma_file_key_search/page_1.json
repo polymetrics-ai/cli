@@ -23,8 +23,8 @@
             }
           ],
           "pageInfo": {
-            "hasNextPage": false,
-            "endCursor": null
+            "hasNextPage": true,
+            "endCursor": "issue_figma_file_key_search_cursor_page_1"
           }
         }
       }

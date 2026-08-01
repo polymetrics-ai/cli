@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "releaseStages": {
+          "nodes": [
+            {
+              "__typename": "ReleaseStage",
+              "id": "release_stages_fixture_2",
+              "createdAt": "2026-01-01T00:00:01Z",
+              "updatedAt": "2026-01-01T00:00:01Z",
+              "archivedAt": "2026-01-01T00:00:01Z",
+              "name": "name_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

@@ -289,7 +289,8 @@
           }
         }
       },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      "risk": "destructive Linear customer merge; archives the source customer and requires typed confirmation",
+      "confirm": "destructive"
     },
     {
       "name": "customer_need_archive",
@@ -798,44 +799,6 @@
         "variables": {
           "id": {
             "template": "{{ record.id }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      }
-    },
-    {
-      "name": "file_upload_dangerously_delete",
-      "kind": "delete",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "assetUrl"
-        ],
-        "properties": {
-          "assetUrl": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearFileUploadDangerouslyDelete",
-        "document": "mutation LinearFileUploadDangerouslyDelete($assetUrl: String!) { fileUploadDangerouslyDelete(assetUrl: $assetUrl) { __typename } }",
-        "variables": {
-          "assetUrl": {
-            "template": "{{ record.assetUrl }}",
             "type": "string"
           }
         }
@@ -1631,37 +1594,6 @@
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
     },
     {
-      "name": "integration_salesforce_metadata_refresh",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearIntegrationSalesforceMetadataRefresh",
-        "document": "mutation LinearIntegrationSalesforceMetadataRefresh($id: String!) { integrationSalesforceMetadataRefresh(id: $id) { __typename } }",
-        "variables": {
-          "id": {
-            "template": "{{ record.id }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
-    },
-    {
       "name": "integration_slack_or_asks_update_slack_team_name",
       "kind": "custom",
       "method": "POST",
@@ -1763,45 +1695,6 @@
           },
           "labelId": {
             "template": "{{ record.labelId }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
-    },
-    {
-      "name": "issue_description_update_from_front",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "description",
-          "id"
-        ],
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearIssueDescriptionUpdateFromFront",
-        "document": "mutation LinearIssueDescriptionUpdateFromFront($description: String!, $id: String!) { issueDescriptionUpdateFromFront(description: $description, id: $id) { __typename } }",
-        "variables": {
-          "description": {
-            "template": "{{ record.description }}",
-            "type": "string"
-          },
-          "id": {
-            "template": "{{ record.id }}",
             "type": "string"
           }
         }
@@ -2570,37 +2463,6 @@
       }
     },
     {
-      "name": "organization_domain_claim",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearOrganizationDomainClaim",
-        "document": "mutation LinearOrganizationDomainClaim($id: String!) { organizationDomainClaim(id: $id) { __typename } }",
-        "variables": {
-          "id": {
-            "template": "{{ record.id }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
-    },
-    {
       "name": "organization_domain_delete",
       "kind": "delete",
       "method": "POST",
@@ -2675,37 +2537,6 @@
           404
         ]
       }
-    },
-    {
-      "name": "passkey_login_start",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "authId"
-        ],
-        "properties": {
-          "authId": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearPasskeyLoginStart",
-        "document": "mutation LinearPasskeyLoginStart($authId: String!) { passkeyLoginStart(authId: $authId) { __typename } }",
-        "variables": {
-          "authId": {
-            "template": "{{ record.authId }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
     },
     {
       "name": "project_add_label",
@@ -2922,45 +2753,6 @@
           404
         ]
       }
-    },
-    {
-      "name": "project_reassign_status",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "newProjectStatusId",
-          "originalProjectStatusId"
-        ],
-        "properties": {
-          "newProjectStatusId": {
-            "type": "string"
-          },
-          "originalProjectStatusId": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearProjectReassignStatus",
-        "document": "mutation LinearProjectReassignStatus($newProjectStatusId: String!, $originalProjectStatusId: String!) { projectReassignStatus(newProjectStatusId: $newProjectStatusId, originalProjectStatusId: $originalProjectStatusId) { __typename } }",
-        "variables": {
-          "newProjectStatusId": {
-            "template": "{{ record.newProjectStatusId }}",
-            "type": "string"
-          },
-          "originalProjectStatusId": {
-            "template": "{{ record.originalProjectStatusId }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
     },
     {
       "name": "project_relation_delete",

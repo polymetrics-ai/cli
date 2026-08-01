@@ -319,7 +319,7 @@ REVERSE ETL ACTIONS
   customer_merge:
     endpoint: POST
     required fields: sourceCustomerId, targetCustomerId
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+    risk: destructive Linear customer merge; archives the source customer and requires typed confirmation
   customer_need_archive:
     endpoint: POST
     required fields: id
@@ -379,10 +379,6 @@ REVERSE ETL ACTIONS
   favorite_delete:
     endpoint: POST
     required fields: id
-    risk: destructive Linear GraphQL mutation; requires typed confirmation
-  file_upload_dangerously_delete:
-    endpoint: POST
-    required fields: assetUrl
     risk: destructive Linear GraphQL mutation; requires typed confirmation
   git_automation_state_delete:
     endpoint: POST
@@ -476,10 +472,6 @@ REVERSE ETL ACTIONS
   integration_pager_duty_refresh_schedule_mappings:
     endpoint: POST
     risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
-  integration_salesforce_metadata_refresh:
-    endpoint: POST
-    required fields: id
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
   integration_slack_or_asks_update_slack_team_name:
     endpoint: POST
     required fields: integrationId
@@ -491,10 +483,6 @@ REVERSE ETL ACTIONS
   issue_add_label:
     endpoint: POST
     required fields: id, labelId
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
-  issue_description_update_from_front:
-    endpoint: POST
-    required fields: description, id
     risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
   issue_external_sync_disable:
     endpoint: POST
@@ -582,10 +570,6 @@ REVERSE ETL ACTIONS
   organization_delete_challenge:
     endpoint: POST
     risk: destructive Linear GraphQL mutation; requires typed confirmation
-  organization_domain_claim:
-    endpoint: POST
-    required fields: id
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
   organization_domain_delete:
     endpoint: POST
     required fields: id
@@ -594,10 +578,6 @@ REVERSE ETL ACTIONS
     endpoint: POST
     required fields: id
     risk: destructive Linear GraphQL mutation; requires typed confirmation
-  passkey_login_start:
-    endpoint: POST
-    required fields: authId
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
   project_add_label:
     endpoint: POST
     required fields: id, labelId
@@ -622,10 +602,6 @@ REVERSE ETL ACTIONS
     endpoint: POST
     required fields: id
     risk: destructive Linear GraphQL mutation; requires typed confirmation
-  project_reassign_status:
-    endpoint: POST
-    required fields: newProjectStatusId, originalProjectStatusId
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
   project_relation_delete:
     endpoint: POST
     required fields: id
@@ -805,7 +781,7 @@ COMMAND SURFACE
     customer statuses list - List Linear customerStatuses. [intent=etl availability=implemented stream=customer_statuses]
     customer tiers list - List Linear customerTiers. [intent=etl availability=implemented stream=customer_tiers]
     customer delete - Run Linear mutation customerDelete. [intent=reverse_etl availability=implemented write=customer_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
-    customer merge - Run Linear mutation customerMerge. [intent=reverse_etl availability=implemented write=customer_merge]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --source-customer-id, --target-customer-id
+    customer merge - Run Linear mutation customerMerge. [intent=reverse_etl availability=implemented write=customer_merge]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear customer merge; archives the source customer and requires typed confirmation; flags: --source-customer-id, --target-customer-id
     customer need archive - Run Linear mutation customerNeedArchive. [intent=reverse_etl availability=implemented write=customer_need_archive]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     customer need unarchive - Run Linear mutation customerNeedUnarchive. [intent=reverse_etl availability=implemented write=customer_need_unarchive]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     customer status delete - Run Linear mutation customerStatusDelete. [intent=reverse_etl availability=implemented write=customer_status_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
@@ -845,7 +821,6 @@ COMMAND SURFACE
     integration intercom delete - Run Linear mutation integrationIntercomDelete. [intent=reverse_etl availability=implemented write=integration_intercom_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation
     integration opsgenie refresh schedule mappings - Run Linear mutation integrationOpsgenieRefreshScheduleMappings. [intent=reverse_etl availability=implemented write=integration_opsgenie_refresh_schedule_mappings]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
     integration pager duty refresh schedule mappings - Run Linear mutation integrationPagerDutyRefreshScheduleMappings. [intent=reverse_etl availability=implemented write=integration_pager_duty_refresh_schedule_mappings]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
-    integration salesforce metadata refresh - Run Linear mutation integrationSalesforceMetadataRefresh. [intent=reverse_etl availability=implemented write=integration_salesforce_metadata_refresh]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     integration slack or asks update slack team name - Run Linear mutation integrationSlackOrAsksUpdateSlackTeamName. [intent=reverse_etl availability=implemented write=integration_slack_or_asks_update_slack_team_name]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --integration-id
     integration template delete - Run Linear mutation integrationTemplateDelete. [intent=reverse_etl availability=implemented write=integration_template_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     integrations list - List Linear integrations. [intent=etl availability=implemented stream=integrations]
@@ -856,7 +831,6 @@ COMMAND SURFACE
     issue search list - List Linear issueSearch. [intent=etl availability=implemented stream=issue_search]
     issue to releases list - List Linear issueToReleases. [intent=etl availability=implemented stream=issue_to_releases]
     issue add label - Run Linear mutation issueAddLabel. [intent=reverse_etl availability=implemented write=issue_add_label]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id, --label-id
-    issue description update from front - Run Linear mutation issueDescriptionUpdateFromFront. [intent=reverse_etl availability=implemented write=issue_description_update_from_front]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --description, --id
     issue external sync disable - Run Linear mutation issueExternalSyncDisable. [intent=reverse_etl availability=implemented write=issue_external_sync_disable]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --attachment-id
     issue import delete - Run Linear mutation issueImportDelete. [intent=reverse_etl availability=implemented write=issue_import_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --issue-import-id
     issue label delete - Run Linear mutation issueLabelDelete. [intent=reverse_etl availability=implemented write=issue_label_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
@@ -878,7 +852,6 @@ COMMAND SURFACE
     organization invites list - List Linear organizationInvites. [intent=etl availability=implemented stream=organization_invites]
     organization cancel delete - Run Linear mutation organizationCancelDelete. [intent=reverse_etl availability=implemented write=organization_cancel_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation
     organization delete challenge - Run Linear mutation organizationDeleteChallenge. [intent=reverse_etl availability=implemented write=organization_delete_challenge]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation
-    organization domain claim - Run Linear mutation organizationDomainClaim. [intent=reverse_etl availability=implemented write=organization_domain_claim]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     organization domain delete - Run Linear mutation organizationDomainDelete. [intent=reverse_etl availability=implemented write=organization_domain_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     organization invite delete - Run Linear mutation organizationInviteDelete. [intent=reverse_etl availability=implemented write=organization_invite_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     project labels list - List Linear projectLabels. [intent=etl availability=implemented stream=project_labels]
@@ -892,7 +865,6 @@ COMMAND SURFACE
     project label restore - Run Linear mutation projectLabelRestore. [intent=reverse_etl availability=implemented write=project_label_restore]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     project label retire - Run Linear mutation projectLabelRetire. [intent=reverse_etl availability=implemented write=project_label_retire]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     project milestone delete - Run Linear mutation projectMilestoneDelete. [intent=reverse_etl availability=implemented write=project_milestone_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
-    project reassign status - Run Linear mutation projectReassignStatus. [intent=reverse_etl availability=implemented write=project_reassign_status]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --new-project-status-id, --original-project-status-id
     project relation delete - Run Linear mutation projectRelationDelete. [intent=reverse_etl availability=implemented write=project_relation_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     project remove label - Run Linear mutation projectRemoveLabel. [intent=reverse_etl availability=implemented write=project_remove_label]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id, --label-id
     project status archive - Run Linear mutation projectStatusArchive. [intent=reverse_etl availability=implemented write=project_status_archive]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
@@ -956,7 +928,7 @@ COMMAND SURFACE
     customer statuses list - List Linear customerStatuses. [intent=etl availability=implemented stream=customer_statuses]
     customer tiers list - List Linear customerTiers. [intent=etl availability=implemented stream=customer_tiers]
     customer delete - Run Linear mutation customerDelete. [intent=reverse_etl availability=implemented write=customer_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
-    customer merge - Run Linear mutation customerMerge. [intent=reverse_etl availability=implemented write=customer_merge]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --source-customer-id, --target-customer-id
+    customer merge - Run Linear mutation customerMerge. [intent=reverse_etl availability=implemented write=customer_merge]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear customer merge; archives the source customer and requires typed confirmation; flags: --source-customer-id, --target-customer-id
     customer need archive - Run Linear mutation customerNeedArchive. [intent=reverse_etl availability=implemented write=customer_need_archive]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     customer need unarchive - Run Linear mutation customerNeedUnarchive. [intent=reverse_etl availability=implemented write=customer_need_unarchive]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     customer status delete - Run Linear mutation customerStatusDelete. [intent=reverse_etl availability=implemented write=customer_status_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
@@ -972,7 +944,6 @@ COMMAND SURFACE
     emoji delete - Run Linear mutation emojiDelete. [intent=reverse_etl availability=implemented write=emoji_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     entity external link delete - Run Linear mutation entityExternalLinkDelete. [intent=reverse_etl availability=implemented write=entity_external_link_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     favorite delete - Run Linear mutation favoriteDelete. [intent=reverse_etl availability=implemented write=favorite_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
-    file upload dangerously delete - Run Linear mutation fileUploadDangerouslyDelete. [intent=reverse_etl availability=implemented write=file_upload_dangerously_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --asset-url
     git automation state delete - Run Linear mutation gitAutomationStateDelete. [intent=reverse_etl availability=implemented write=git_automation_state_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     git automation target branch delete - Run Linear mutation gitAutomationTargetBranchDelete. [intent=reverse_etl availability=implemented write=git_automation_target_branch_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     initiative labels list - List Linear initiativeLabels. [intent=etl availability=implemented stream=initiative_labels]
@@ -1001,7 +972,6 @@ COMMAND SURFACE
     integration intercom delete - Run Linear mutation integrationIntercomDelete. [intent=reverse_etl availability=implemented write=integration_intercom_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation
     integration opsgenie refresh schedule mappings - Run Linear mutation integrationOpsgenieRefreshScheduleMappings. [intent=reverse_etl availability=implemented write=integration_opsgenie_refresh_schedule_mappings]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
     integration pager duty refresh schedule mappings - Run Linear mutation integrationPagerDutyRefreshScheduleMappings. [intent=reverse_etl availability=implemented write=integration_pager_duty_refresh_schedule_mappings]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
-    integration salesforce metadata refresh - Run Linear mutation integrationSalesforceMetadataRefresh. [intent=reverse_etl availability=implemented write=integration_salesforce_metadata_refresh]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     integration slack or asks update slack team name - Run Linear mutation integrationSlackOrAsksUpdateSlackTeamName. [intent=reverse_etl availability=implemented write=integration_slack_or_asks_update_slack_team_name]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --integration-id
     integration template delete - Run Linear mutation integrationTemplateDelete. [intent=reverse_etl availability=implemented write=integration_template_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     issue figma file key search list - List Linear issueFigmaFileKeySearch. [intent=etl availability=implemented stream=issue_figma_file_key_search]; flags: --fileKey
@@ -1011,7 +981,6 @@ COMMAND SURFACE
     issue search list - List Linear issueSearch. [intent=etl availability=implemented stream=issue_search]
     issue to releases list - List Linear issueToReleases. [intent=etl availability=implemented stream=issue_to_releases]
     issue add label - Run Linear mutation issueAddLabel. [intent=reverse_etl availability=implemented write=issue_add_label]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id, --label-id
-    issue description update from front - Run Linear mutation issueDescriptionUpdateFromFront. [intent=reverse_etl availability=implemented write=issue_description_update_from_front]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --description, --id
     issue external sync disable - Run Linear mutation issueExternalSyncDisable. [intent=reverse_etl availability=implemented write=issue_external_sync_disable]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --attachment-id
     issue import delete - Run Linear mutation issueImportDelete. [intent=reverse_etl availability=implemented write=issue_import_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --issue-import-id
     issue label delete - Run Linear mutation issueLabelDelete. [intent=reverse_etl availability=implemented write=issue_label_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
@@ -1036,7 +1005,6 @@ COMMAND SURFACE
     organization invites list - List Linear organizationInvites. [intent=etl availability=implemented stream=organization_invites]
     organization cancel delete - Run Linear mutation organizationCancelDelete. [intent=reverse_etl availability=implemented write=organization_cancel_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation
     organization delete challenge - Run Linear mutation organizationDeleteChallenge. [intent=reverse_etl availability=implemented write=organization_delete_challenge]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation
-    organization domain claim - Run Linear mutation organizationDomainClaim. [intent=reverse_etl availability=implemented write=organization_domain_claim]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     organization domain delete - Run Linear mutation organizationDomainDelete. [intent=reverse_etl availability=implemented write=organization_domain_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     organization invite delete - Run Linear mutation organizationInviteDelete. [intent=reverse_etl availability=implemented write=organization_invite_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     project labels list - List Linear projectLabels. [intent=etl availability=implemented stream=project_labels]
@@ -1050,7 +1018,6 @@ COMMAND SURFACE
     project label restore - Run Linear mutation projectLabelRestore. [intent=reverse_etl availability=implemented write=project_label_restore]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     project label retire - Run Linear mutation projectLabelRetire. [intent=reverse_etl availability=implemented write=project_label_retire]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     project milestone delete - Run Linear mutation projectMilestoneDelete. [intent=reverse_etl availability=implemented write=project_milestone_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
-    project reassign status - Run Linear mutation projectReassignStatus. [intent=reverse_etl availability=implemented write=project_reassign_status]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --new-project-status-id, --original-project-status-id
     project relation delete - Run Linear mutation projectRelationDelete. [intent=reverse_etl availability=implemented write=project_relation_delete]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
     project remove label - Run Linear mutation projectRemoveLabel. [intent=reverse_etl availability=implemented write=project_remove_label]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id, --label-id
     project status archive - Run Linear mutation projectStatusArchive. [intent=reverse_etl availability=implemented write=project_status_archive]; approval: reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.; risk: destructive Linear GraphQL mutation; requires typed confirmation; flags: --id
@@ -1107,7 +1074,6 @@ COMMAND SURFACE
     agent activity events - Planned bounded Linear Subscription.agentActivityCreated command. [intent=direct_read availability=planned]; notes: Planned only: fixed GraphQL direct operation execution is not enabled for Linear in this connector-local slice.
   Other Commands
     image upload from url - Run Linear mutation imageUploadFromUrl. [intent=reverse_etl availability=implemented write=image_upload_from_url]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --url
-    passkey login start - Run Linear mutation passkeyLoginStart. [intent=reverse_etl availability=implemented write=passkey_login_start]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --auth-id
     resend organization invite - Run Linear mutation resendOrganizationInvite. [intent=reverse_etl availability=implemented write=resend_organization_invite]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --id
     resend organization invite by email - Run Linear mutation resendOrganizationInviteByEmail. [intent=reverse_etl availability=implemented write=resend_organization_invite_by_email]; approval: reverse ETL plan → preview → explicit approval → execute.; risk: typed Linear GraphQL mutation; executes only through reverse ETL approval; flags: --email
   Help topics:

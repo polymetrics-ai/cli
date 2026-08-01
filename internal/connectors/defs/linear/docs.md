@@ -8,7 +8,7 @@ Connector-local generated counts from the pinned blob:
 
 | query root fields | mutation root fields | subscription root fields | surface rows | streams | write actions | blocked operation rows |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 165 | 372 | 80 | 617 | 64 | 122 | 431 |
+| 165 | 372 | 80 | 617 | 64 | 116 | 437 |
 
 The GitHub parent/subissue r2 dispatch counts remain preserved in those issue bodies. This connector-local evidence does not claim live certification and does not fabricate implemented counts beyond the concrete stream/write rows present in this bundle.
 
@@ -28,13 +28,13 @@ Never place secret values in command text, fixtures, docs, or issue bodies. Add 
 
 Streams are fixed GraphQL Query documents generated from root fields returning connection/list object data. Connection streams use `first` and `after` variables with cursor pagination capped at 100 pages per read; list streams are single-request full refreshes. Runtime request bodies are fixed in `streams.json` and only declared variables are populated.
 
-Representative streams include `issues`, `teams`, `projects`, and `users`; additional generated streams cover other documented list/connection root Query fields from the pinned schema. Stream fixtures under `fixtures/streams/*/page_1.json` are sanitized synthetic GraphQL response shapes and are for local conformance only.
+Representative streams include `issues`, `teams`, `projects`, and `users`; additional generated streams cover other documented list/connection root Query fields from the pinned schema. Paginated stream fixtures under `fixtures/streams/*/{page_1,page_2}.json` are sanitized synthetic GraphQL response shapes with `hasNextPage`/`endCursor` transitions for local conformance only.
 
 ## Write actions & risks
 
-`writes.json` contains 122 fixed GraphQL reverse-ETL actions whose complete argument list is required, scalar, and non-secret-shaped in the schema. The action document is connector-owned metadata; callers provide only typed record fields declared in `record_schema`. `cli_surface.json` declares one canonical provider command for each action.
+`writes.json` contains 116 fixed GraphQL reverse-ETL actions whose complete argument list is required, scalar, non-secret-shaped, and not provider-internal in the schema. The action document is connector-owned metadata; callers provide only typed record fields declared in `record_schema`. `cli_surface.json` declares one canonical provider command for each action.
 
-93 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Their canonical commands include the same typed destructive approval language. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation instead.
+93 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect/merge-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Their canonical commands include the same typed destructive approval language. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation or provider-internal policy instead.
 
 Fixture write captures under `fixtures/writes/*.json` are synthetic replay examples. They do not perform live Linear writes.
 
@@ -44,5 +44,5 @@ Fixture write captures under `fixtures/writes/*.json` are synthetic replay examp
 - `api_surface.json` uses operation-ledger blocked rows instead of legacy `excluded` rows for direct/binary/CDC and unsupported mutation shapes.
 - GraphQL direct-read/query/search and binary execution remains blocked by the provider search/query foundation (#2985); `operations.json` and `cli_surface.json` keep planned commands bounded and fixed-document only.
 - Linear subscriptions/changefeeds remain blocked by CDC foundations (#2986/#2988); no connector-local stream pretends to execute a live subscription.
-- Input-object, optional-argument, list, JSON, secret-sensitive, deprecated, and internal-only mutation shapes remain blocked until shared fixed GraphQL variable/object support can omit absent optional `record.*` fields safely without a raw GraphQL escape hatch or provider-specific hook.
+- Input-object, optional-argument, list, JSON, secret-sensitive, deprecated, and provider-[INTERNAL] mutation shapes remain blocked until shared fixed GraphQL variable/object support can omit absent optional `record.*` fields safely without a raw GraphQL escape hatch or provider-specific hook.
 - Declarative `Check()` cannot send a fixed GraphQL body, so `capabilities.check` is false in this bundle; fixture-only stream/write replay is not live health certification.
