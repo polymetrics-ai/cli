@@ -243,7 +243,7 @@
         }
       ],
       "examples": [
-        "pm linear attachments for url list --json"
+        "pm linear attachments for url list --url https://example.invalid/linear-fixture --json"
       ]
     },
     {
@@ -416,7 +416,7 @@
         }
       ],
       "examples": [
-        "pm linear failures for oauth webhooks list --json"
+        "pm linear failures for oauth webhooks list --oauthClientId id_fixture --json"
       ]
     },
     {
@@ -523,7 +523,7 @@
         }
       ],
       "examples": [
-        "pm linear issue figma file key search list --json"
+        "pm linear issue figma file key search list --fileKey key_fixture --json"
       ]
     },
     {
@@ -762,7 +762,7 @@
         }
       ],
       "examples": [
-        "pm linear sla configurations list --json"
+        "pm linear sla configurations list --teamId id_fixture --json"
       ]
     },
     {
@@ -792,7 +792,7 @@
         }
       ],
       "examples": [
-        "pm linear templates for integration list --json"
+        "pm linear templates for integration list --integrationType value_fixture --json"
       ]
     },
     {
@@ -844,7 +844,7 @@
         }
       ],
       "examples": [
-        "pm linear user sessions list --json"
+        "pm linear user sessions list --id id_fixture --json"
       ]
     },
     {
@@ -876,7 +876,7 @@
       "availability": "implemented",
       "write": "agent_skill_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -886,7 +886,7 @@
         }
       ],
       "examples": [
-        "pm linear agent skill delete --json"
+        "pm linear agent skill delete --id id_fixture --json"
       ]
     },
     {
@@ -896,7 +896,7 @@
       "availability": "implemented",
       "write": "attachment_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -906,7 +906,7 @@
         }
       ],
       "examples": [
-        "pm linear attachment delete --json"
+        "pm linear attachment delete --id id_fixture --json"
       ]
     },
     {
@@ -916,7 +916,7 @@
       "availability": "implemented",
       "write": "attachment_sync_to_slack",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -926,7 +926,7 @@
         }
       ],
       "examples": [
-        "pm linear attachment sync to slack --json"
+        "pm linear attachment sync to slack --id id_fixture --json"
       ]
     },
     {
@@ -936,7 +936,7 @@
       "availability": "implemented",
       "write": "comment_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -946,7 +946,7 @@
         }
       ],
       "examples": [
-        "pm linear comment delete --json"
+        "pm linear comment delete --id id_fixture --json"
       ]
     },
     {
@@ -956,7 +956,7 @@
       "availability": "implemented",
       "write": "comment_unresolve",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -966,7 +966,7 @@
         }
       ],
       "examples": [
-        "pm linear comment unresolve --json"
+        "pm linear comment unresolve --id id_fixture --json"
       ]
     },
     {
@@ -976,7 +976,7 @@
       "availability": "implemented",
       "write": "custom_view_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -986,7 +986,7 @@
         }
       ],
       "examples": [
-        "pm linear custom view delete --json"
+        "pm linear custom view delete --id id_fixture --json"
       ]
     },
     {
@@ -996,7 +996,7 @@
       "availability": "implemented",
       "write": "customer_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1006,7 +1006,7 @@
         }
       ],
       "examples": [
-        "pm linear customer delete --json"
+        "pm linear customer delete --id id_fixture --json"
       ]
     },
     {
@@ -1016,7 +1016,7 @@
       "availability": "implemented",
       "write": "customer_merge",
       "risk": "destructive Linear customer merge; archives the source customer and requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "source-customer-id",
@@ -1032,7 +1032,7 @@
         }
       ],
       "examples": [
-        "pm linear customer merge --json"
+        "pm linear customer merge --source-customer-id id_fixture --target-customer-id id_fixture --json"
       ]
     },
     {
@@ -1042,7 +1042,7 @@
       "availability": "implemented",
       "write": "customer_need_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1052,7 +1052,7 @@
         }
       ],
       "examples": [
-        "pm linear customer need archive --json"
+        "pm linear customer need archive --id id_fixture --json"
       ]
     },
     {
@@ -1062,7 +1062,7 @@
       "availability": "implemented",
       "write": "customer_need_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1072,7 +1072,7 @@
         }
       ],
       "examples": [
-        "pm linear customer need unarchive --json"
+        "pm linear customer need unarchive --id id_fixture --json"
       ]
     },
     {
@@ -1082,7 +1082,7 @@
       "availability": "implemented",
       "write": "customer_status_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1092,7 +1092,7 @@
         }
       ],
       "examples": [
-        "pm linear customer status delete --json"
+        "pm linear customer status delete --id id_fixture --json"
       ]
     },
     {
@@ -1102,7 +1102,7 @@
       "availability": "implemented",
       "write": "customer_tier_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1112,7 +1112,7 @@
         }
       ],
       "examples": [
-        "pm linear customer tier delete --json"
+        "pm linear customer tier delete --id id_fixture --json"
       ]
     },
     {
@@ -1122,7 +1122,7 @@
       "availability": "implemented",
       "write": "customer_unsync",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1132,7 +1132,7 @@
         }
       ],
       "examples": [
-        "pm linear customer unsync --json"
+        "pm linear customer unsync --id id_fixture --json"
       ]
     },
     {
@@ -1142,7 +1142,7 @@
       "availability": "implemented",
       "write": "cycle_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1152,7 +1152,7 @@
         }
       ],
       "examples": [
-        "pm linear cycle archive --json"
+        "pm linear cycle archive --id id_fixture --json"
       ]
     },
     {
@@ -1162,7 +1162,7 @@
       "availability": "implemented",
       "write": "cycle_start_upcoming_cycle_today",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1172,7 +1172,7 @@
         }
       ],
       "examples": [
-        "pm linear cycle start upcoming cycle today --json"
+        "pm linear cycle start upcoming cycle today --id id_fixture --json"
       ]
     },
     {
@@ -1182,7 +1182,7 @@
       "availability": "implemented",
       "write": "document_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1192,7 +1192,7 @@
         }
       ],
       "examples": [
-        "pm linear document delete --json"
+        "pm linear document delete --id id_fixture --json"
       ]
     },
     {
@@ -1202,7 +1202,7 @@
       "availability": "implemented",
       "write": "document_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1212,7 +1212,7 @@
         }
       ],
       "examples": [
-        "pm linear document unarchive --json"
+        "pm linear document unarchive --id id_fixture --json"
       ]
     },
     {
@@ -1222,7 +1222,7 @@
       "availability": "implemented",
       "write": "email_intake_address_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1232,7 +1232,7 @@
         }
       ],
       "examples": [
-        "pm linear email intake address delete --json"
+        "pm linear email intake address delete --id id_fixture --json"
       ]
     },
     {
@@ -1242,7 +1242,7 @@
       "availability": "implemented",
       "write": "email_intake_address_refresh_ses_domain_status",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1252,7 +1252,7 @@
         }
       ],
       "examples": [
-        "pm linear email intake address refresh ses domain status --json"
+        "pm linear email intake address refresh ses domain status --id id_fixture --json"
       ]
     },
     {
@@ -1262,7 +1262,7 @@
       "availability": "implemented",
       "write": "email_intake_address_rotate",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1272,7 +1272,7 @@
         }
       ],
       "examples": [
-        "pm linear email intake address rotate --json"
+        "pm linear email intake address rotate --id id_fixture --json"
       ]
     },
     {
@@ -1282,7 +1282,7 @@
       "availability": "implemented",
       "write": "emoji_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1292,7 +1292,7 @@
         }
       ],
       "examples": [
-        "pm linear emoji delete --json"
+        "pm linear emoji delete --id id_fixture --json"
       ]
     },
     {
@@ -1302,7 +1302,7 @@
       "availability": "implemented",
       "write": "entity_external_link_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1312,7 +1312,7 @@
         }
       ],
       "examples": [
-        "pm linear entity external link delete --json"
+        "pm linear entity external link delete --id id_fixture --json"
       ]
     },
     {
@@ -1322,7 +1322,7 @@
       "availability": "implemented",
       "write": "favorite_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1332,7 +1332,7 @@
         }
       ],
       "examples": [
-        "pm linear favorite delete --json"
+        "pm linear favorite delete --id id_fixture --json"
       ]
     },
     {
@@ -1342,7 +1342,7 @@
       "availability": "implemented",
       "write": "git_automation_state_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1352,7 +1352,7 @@
         }
       ],
       "examples": [
-        "pm linear git automation state delete --json"
+        "pm linear git automation state delete --id id_fixture --json"
       ]
     },
     {
@@ -1362,7 +1362,7 @@
       "availability": "implemented",
       "write": "git_automation_target_branch_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1372,7 +1372,7 @@
         }
       ],
       "examples": [
-        "pm linear git automation target branch delete --json"
+        "pm linear git automation target branch delete --id id_fixture --json"
       ]
     },
     {
@@ -1382,7 +1382,7 @@
       "availability": "implemented",
       "write": "image_upload_from_url",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "url",
@@ -1392,7 +1392,7 @@
         }
       ],
       "examples": [
-        "pm linear image upload from url --json"
+        "pm linear image upload from url --url https://example.invalid/linear-fixture --json"
       ]
     },
     {
@@ -1402,7 +1402,7 @@
       "availability": "implemented",
       "write": "initiative_add_label",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1418,7 +1418,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative add label --json"
+        "pm linear initiative add label --id id_fixture --label-id id_fixture --json"
       ]
     },
     {
@@ -1428,7 +1428,7 @@
       "availability": "implemented",
       "write": "initiative_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1438,7 +1438,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative archive --json"
+        "pm linear initiative archive --id id_fixture --json"
       ]
     },
     {
@@ -1448,7 +1448,7 @@
       "availability": "implemented",
       "write": "initiative_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1458,7 +1458,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative delete --json"
+        "pm linear initiative delete --id id_fixture --json"
       ]
     },
     {
@@ -1468,7 +1468,7 @@
       "availability": "implemented",
       "write": "initiative_label_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1478,7 +1478,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative label delete --json"
+        "pm linear initiative label delete --id id_fixture --json"
       ]
     },
     {
@@ -1488,7 +1488,7 @@
       "availability": "implemented",
       "write": "initiative_label_restore",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1498,7 +1498,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative label restore --json"
+        "pm linear initiative label restore --id id_fixture --json"
       ]
     },
     {
@@ -1508,7 +1508,7 @@
       "availability": "implemented",
       "write": "initiative_label_retire",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1518,7 +1518,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative label retire --json"
+        "pm linear initiative label retire --id id_fixture --json"
       ]
     },
     {
@@ -1528,7 +1528,7 @@
       "availability": "implemented",
       "write": "initiative_relation_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1538,7 +1538,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative relation delete --json"
+        "pm linear initiative relation delete --id id_fixture --json"
       ]
     },
     {
@@ -1548,7 +1548,7 @@
       "availability": "implemented",
       "write": "initiative_remove_label",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1564,7 +1564,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative remove label --json"
+        "pm linear initiative remove label --id id_fixture --label-id id_fixture --json"
       ]
     },
     {
@@ -1574,7 +1574,7 @@
       "availability": "implemented",
       "write": "initiative_to_project_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1584,7 +1584,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative to project delete --json"
+        "pm linear initiative to project delete --id id_fixture --json"
       ]
     },
     {
@@ -1594,7 +1594,7 @@
       "availability": "implemented",
       "write": "initiative_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1604,7 +1604,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative unarchive --json"
+        "pm linear initiative unarchive --id id_fixture --json"
       ]
     },
     {
@@ -1614,7 +1614,7 @@
       "availability": "implemented",
       "write": "initiative_update_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1624,7 +1624,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative update archive --json"
+        "pm linear initiative update archive --id id_fixture --json"
       ]
     },
     {
@@ -1634,7 +1634,7 @@
       "availability": "implemented",
       "write": "initiative_update_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1644,7 +1644,7 @@
         }
       ],
       "examples": [
-        "pm linear initiative update unarchive --json"
+        "pm linear initiative update unarchive --id id_fixture --json"
       ]
     },
     {
@@ -1654,7 +1654,7 @@
       "availability": "implemented",
       "write": "integration_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1664,7 +1664,7 @@
         }
       ],
       "examples": [
-        "pm linear integration archive --json"
+        "pm linear integration archive --id id_fixture --json"
       ]
     },
     {
@@ -1674,7 +1674,7 @@
       "availability": "implemented",
       "write": "integration_git_hub_enterprise_server_connect",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "github-url",
@@ -1690,7 +1690,7 @@
         }
       ],
       "examples": [
-        "pm linear integration git hub enterprise server connect --json"
+        "pm linear integration git hub enterprise server connect --github-url https://example.invalid/linear-fixture --organization-name value_fixture --json"
       ]
     },
     {
@@ -1700,7 +1700,7 @@
       "availability": "implemented",
       "write": "integration_github_commit_create",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [],
       "examples": [
         "pm linear integration github commit create --json"
@@ -1713,7 +1713,7 @@
       "availability": "implemented",
       "write": "integration_github_import_refresh",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1723,7 +1723,7 @@
         }
       ],
       "examples": [
-        "pm linear integration github import refresh --json"
+        "pm linear integration github import refresh --id id_fixture --json"
       ]
     },
     {
@@ -1733,7 +1733,7 @@
       "availability": "implemented",
       "write": "integration_github_remove_code_access",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "integration-id",
@@ -1743,7 +1743,7 @@
         }
       ],
       "examples": [
-        "pm linear integration github remove code access --json"
+        "pm linear integration github remove code access --integration-id id_fixture --json"
       ]
     },
     {
@@ -1753,7 +1753,7 @@
       "availability": "implemented",
       "write": "integration_gitlab_test_connection",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "integration-id",
@@ -1763,7 +1763,7 @@
         }
       ],
       "examples": [
-        "pm linear integration gitlab test connection --json"
+        "pm linear integration gitlab test connection --integration-id id_fixture --json"
       ]
     },
     {
@@ -1773,36 +1773,10 @@
       "availability": "implemented",
       "write": "integration_intercom_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [],
       "examples": [
         "pm linear integration intercom delete --json"
-      ]
-    },
-    {
-      "path": "integration opsgenie refresh schedule mappings",
-      "summary": "Run Linear mutation integrationOpsgenieRefreshScheduleMappings.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "integration_opsgenie_refresh_schedule_mappings",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [],
-      "examples": [
-        "pm linear integration opsgenie refresh schedule mappings --json"
-      ]
-    },
-    {
-      "path": "integration pager duty refresh schedule mappings",
-      "summary": "Run Linear mutation integrationPagerDutyRefreshScheduleMappings.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "integration_pager_duty_refresh_schedule_mappings",
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
-      "flags": [],
-      "examples": [
-        "pm linear integration pager duty refresh schedule mappings --json"
       ]
     },
     {
@@ -1812,7 +1786,7 @@
       "availability": "implemented",
       "write": "integration_slack_or_asks_update_slack_team_name",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "integration-id",
@@ -1822,7 +1796,7 @@
         }
       ],
       "examples": [
-        "pm linear integration slack or asks update slack team name --json"
+        "pm linear integration slack or asks update slack team name --integration-id id_fixture --json"
       ]
     },
     {
@@ -1832,7 +1806,7 @@
       "availability": "implemented",
       "write": "integration_template_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1842,7 +1816,7 @@
         }
       ],
       "examples": [
-        "pm linear integration template delete --json"
+        "pm linear integration template delete --id id_fixture --json"
       ]
     },
     {
@@ -1852,7 +1826,7 @@
       "availability": "implemented",
       "write": "issue_add_label",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1868,7 +1842,7 @@
         }
       ],
       "examples": [
-        "pm linear issue add label --json"
+        "pm linear issue add label --id id_fixture --label-id id_fixture --json"
       ]
     },
     {
@@ -1878,7 +1852,7 @@
       "availability": "implemented",
       "write": "issue_external_sync_disable",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "attachment-id",
@@ -1888,7 +1862,7 @@
         }
       ],
       "examples": [
-        "pm linear issue external sync disable --json"
+        "pm linear issue external sync disable --attachment-id id_fixture --json"
       ]
     },
     {
@@ -1898,7 +1872,7 @@
       "availability": "implemented",
       "write": "issue_import_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "issue-import-id",
@@ -1908,7 +1882,7 @@
         }
       ],
       "examples": [
-        "pm linear issue import delete --json"
+        "pm linear issue import delete --issue-import-id id_fixture --json"
       ]
     },
     {
@@ -1918,7 +1892,7 @@
       "availability": "implemented",
       "write": "issue_label_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1928,7 +1902,7 @@
         }
       ],
       "examples": [
-        "pm linear issue label delete --json"
+        "pm linear issue label delete --id id_fixture --json"
       ]
     },
     {
@@ -1938,7 +1912,7 @@
       "availability": "implemented",
       "write": "issue_label_restore",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -1948,7 +1922,7 @@
         }
       ],
       "examples": [
-        "pm linear issue label restore --json"
+        "pm linear issue label restore --id id_fixture --json"
       ]
     },
     {
@@ -1958,7 +1932,7 @@
       "availability": "implemented",
       "write": "issue_label_retire",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1968,7 +1942,7 @@
         }
       ],
       "examples": [
-        "pm linear issue label retire --json"
+        "pm linear issue label retire --id id_fixture --json"
       ]
     },
     {
@@ -1978,7 +1952,7 @@
       "availability": "implemented",
       "write": "issue_relation_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -1988,7 +1962,7 @@
         }
       ],
       "examples": [
-        "pm linear issue relation delete --json"
+        "pm linear issue relation delete --id id_fixture --json"
       ]
     },
     {
@@ -1998,7 +1972,7 @@
       "availability": "implemented",
       "write": "issue_reminder",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -2014,7 +1988,7 @@
         }
       ],
       "examples": [
-        "pm linear issue reminder --json"
+        "pm linear issue reminder --id id_fixture --reminder-at value_fixture --json"
       ]
     },
     {
@@ -2024,7 +1998,7 @@
       "availability": "implemented",
       "write": "issue_remove_label",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2040,7 +2014,7 @@
         }
       ],
       "examples": [
-        "pm linear issue remove label --json"
+        "pm linear issue remove label --id id_fixture --label-id id_fixture --json"
       ]
     },
     {
@@ -2050,7 +2024,7 @@
       "availability": "implemented",
       "write": "issue_share",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -2066,7 +2040,7 @@
         }
       ],
       "examples": [
-        "pm linear issue share --json"
+        "pm linear issue share --id id_fixture --user-id id_fixture --json"
       ]
     },
     {
@@ -2076,7 +2050,7 @@
       "availability": "implemented",
       "write": "issue_to_release_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2086,7 +2060,7 @@
         }
       ],
       "examples": [
-        "pm linear issue to release delete --json"
+        "pm linear issue to release delete --id id_fixture --json"
       ]
     },
     {
@@ -2096,7 +2070,7 @@
       "availability": "implemented",
       "write": "issue_to_release_delete_by_issue_and_release",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "issue-id",
@@ -2112,7 +2086,7 @@
         }
       ],
       "examples": [
-        "pm linear issue to release delete by issue and release --json"
+        "pm linear issue to release delete by issue and release --issue-id id_fixture --release-id id_fixture --json"
       ]
     },
     {
@@ -2122,7 +2096,7 @@
       "availability": "implemented",
       "write": "issue_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2132,7 +2106,7 @@
         }
       ],
       "examples": [
-        "pm linear issue unarchive --json"
+        "pm linear issue unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2142,7 +2116,7 @@
       "availability": "implemented",
       "write": "issue_unshare",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2158,7 +2132,7 @@
         }
       ],
       "examples": [
-        "pm linear issue unshare --json"
+        "pm linear issue unshare --id id_fixture --user-id id_fixture --json"
       ]
     },
     {
@@ -2168,7 +2142,7 @@
       "availability": "implemented",
       "write": "leave_organization",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "organization-id",
@@ -2178,7 +2152,7 @@
         }
       ],
       "examples": [
-        "pm linear leave organization --json"
+        "pm linear leave organization --organization-id id_fixture --json"
       ]
     },
     {
@@ -2188,7 +2162,7 @@
       "availability": "implemented",
       "write": "logout_session",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "session-id",
@@ -2198,7 +2172,7 @@
         }
       ],
       "examples": [
-        "pm linear logout session --json"
+        "pm linear logout session --session-id id_fixture --json"
       ]
     },
     {
@@ -2208,7 +2182,7 @@
       "availability": "implemented",
       "write": "notification_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2218,7 +2192,7 @@
         }
       ],
       "examples": [
-        "pm linear notification archive --json"
+        "pm linear notification archive --id id_fixture --json"
       ]
     },
     {
@@ -2228,7 +2202,7 @@
       "availability": "implemented",
       "write": "notification_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2238,7 +2212,7 @@
         }
       ],
       "examples": [
-        "pm linear notification unarchive --json"
+        "pm linear notification unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2248,7 +2222,7 @@
       "availability": "implemented",
       "write": "oauth_application_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2258,47 +2232,7 @@
         }
       ],
       "examples": [
-        "pm linear oauth application archive --json"
-      ]
-    },
-    {
-      "path": "oauth application rotate secret",
-      "summary": "Run Linear mutation oauthApplicationRotateSecret.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "oauth_application_rotate_secret",
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id argument.",
-          "maps_to": "record.id"
-        }
-      ],
-      "examples": [
-        "pm linear oauth application rotate secret --json"
-      ]
-    },
-    {
-      "path": "oauth application rotate webhook secret",
-      "summary": "Run Linear mutation oauthApplicationRotateWebhookSecret.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "oauth_application_rotate_webhook_secret",
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id argument.",
-          "maps_to": "record.id"
-        }
-      ],
-      "examples": [
-        "pm linear oauth application rotate webhook secret --json"
+        "pm linear oauth application archive --id id_fixture --json"
       ]
     },
     {
@@ -2308,7 +2242,7 @@
       "availability": "implemented",
       "write": "organization_cancel_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [],
       "examples": [
         "pm linear organization cancel delete --json"
@@ -2321,7 +2255,7 @@
       "availability": "implemented",
       "write": "organization_delete_challenge",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [],
       "examples": [
         "pm linear organization delete challenge --json"
@@ -2334,7 +2268,7 @@
       "availability": "implemented",
       "write": "organization_domain_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2344,7 +2278,7 @@
         }
       ],
       "examples": [
-        "pm linear organization domain delete --json"
+        "pm linear organization domain delete --id id_fixture --json"
       ]
     },
     {
@@ -2354,7 +2288,7 @@
       "availability": "implemented",
       "write": "organization_invite_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2364,7 +2298,7 @@
         }
       ],
       "examples": [
-        "pm linear organization invite delete --json"
+        "pm linear organization invite delete --id id_fixture --json"
       ]
     },
     {
@@ -2374,7 +2308,7 @@
       "availability": "implemented",
       "write": "project_add_label",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -2390,7 +2324,7 @@
         }
       ],
       "examples": [
-        "pm linear project add label --json"
+        "pm linear project add label --id id_fixture --label-id id_fixture --json"
       ]
     },
     {
@@ -2400,7 +2334,7 @@
       "availability": "implemented",
       "write": "project_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2410,7 +2344,7 @@
         }
       ],
       "examples": [
-        "pm linear project delete --json"
+        "pm linear project delete --id id_fixture --json"
       ]
     },
     {
@@ -2420,7 +2354,7 @@
       "availability": "implemented",
       "write": "project_label_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2430,7 +2364,7 @@
         }
       ],
       "examples": [
-        "pm linear project label delete --json"
+        "pm linear project label delete --id id_fixture --json"
       ]
     },
     {
@@ -2440,7 +2374,7 @@
       "availability": "implemented",
       "write": "project_label_restore",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -2450,7 +2384,7 @@
         }
       ],
       "examples": [
-        "pm linear project label restore --json"
+        "pm linear project label restore --id id_fixture --json"
       ]
     },
     {
@@ -2460,7 +2394,7 @@
       "availability": "implemented",
       "write": "project_label_retire",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2470,7 +2404,7 @@
         }
       ],
       "examples": [
-        "pm linear project label retire --json"
+        "pm linear project label retire --id id_fixture --json"
       ]
     },
     {
@@ -2480,7 +2414,7 @@
       "availability": "implemented",
       "write": "project_milestone_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2490,7 +2424,7 @@
         }
       ],
       "examples": [
-        "pm linear project milestone delete --json"
+        "pm linear project milestone delete --id id_fixture --json"
       ]
     },
     {
@@ -2500,7 +2434,7 @@
       "availability": "implemented",
       "write": "project_relation_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2510,7 +2444,7 @@
         }
       ],
       "examples": [
-        "pm linear project relation delete --json"
+        "pm linear project relation delete --id id_fixture --json"
       ]
     },
     {
@@ -2520,7 +2454,7 @@
       "availability": "implemented",
       "write": "project_remove_label",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2536,7 +2470,7 @@
         }
       ],
       "examples": [
-        "pm linear project remove label --json"
+        "pm linear project remove label --id id_fixture --label-id id_fixture --json"
       ]
     },
     {
@@ -2546,7 +2480,7 @@
       "availability": "implemented",
       "write": "project_status_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2556,7 +2490,7 @@
         }
       ],
       "examples": [
-        "pm linear project status archive --json"
+        "pm linear project status archive --id id_fixture --json"
       ]
     },
     {
@@ -2566,7 +2500,7 @@
       "availability": "implemented",
       "write": "project_status_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2576,7 +2510,7 @@
         }
       ],
       "examples": [
-        "pm linear project status unarchive --json"
+        "pm linear project status unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2586,7 +2520,7 @@
       "availability": "implemented",
       "write": "project_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2596,7 +2530,7 @@
         }
       ],
       "examples": [
-        "pm linear project unarchive --json"
+        "pm linear project unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2606,7 +2540,7 @@
       "availability": "implemented",
       "write": "project_update_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2616,7 +2550,7 @@
         }
       ],
       "examples": [
-        "pm linear project update archive --json"
+        "pm linear project update archive --id id_fixture --json"
       ]
     },
     {
@@ -2626,7 +2560,7 @@
       "availability": "implemented",
       "write": "project_update_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2636,7 +2570,7 @@
         }
       ],
       "examples": [
-        "pm linear project update unarchive --json"
+        "pm linear project update unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2646,7 +2580,7 @@
       "availability": "implemented",
       "write": "push_subscription_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2656,7 +2590,7 @@
         }
       ],
       "examples": [
-        "pm linear push subscription delete --json"
+        "pm linear push subscription delete --id id_fixture --json"
       ]
     },
     {
@@ -2666,7 +2600,7 @@
       "availability": "implemented",
       "write": "reaction_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2676,7 +2610,7 @@
         }
       ],
       "examples": [
-        "pm linear reaction delete --json"
+        "pm linear reaction delete --id id_fixture --json"
       ]
     },
     {
@@ -2686,7 +2620,7 @@
       "availability": "implemented",
       "write": "release_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2696,7 +2630,7 @@
         }
       ],
       "examples": [
-        "pm linear release archive --json"
+        "pm linear release archive --id id_fixture --json"
       ]
     },
     {
@@ -2706,7 +2640,7 @@
       "availability": "implemented",
       "write": "release_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2716,7 +2650,7 @@
         }
       ],
       "examples": [
-        "pm linear release delete --json"
+        "pm linear release delete --id id_fixture --json"
       ]
     },
     {
@@ -2726,7 +2660,7 @@
       "availability": "implemented",
       "write": "release_note_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2736,7 +2670,7 @@
         }
       ],
       "examples": [
-        "pm linear release note delete --json"
+        "pm linear release note delete --id id_fixture --json"
       ]
     },
     {
@@ -2746,7 +2680,7 @@
       "availability": "implemented",
       "write": "release_pipeline_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2756,7 +2690,7 @@
         }
       ],
       "examples": [
-        "pm linear release pipeline archive --json"
+        "pm linear release pipeline archive --id id_fixture --json"
       ]
     },
     {
@@ -2766,7 +2700,7 @@
       "availability": "implemented",
       "write": "release_pipeline_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2776,7 +2710,7 @@
         }
       ],
       "examples": [
-        "pm linear release pipeline delete --json"
+        "pm linear release pipeline delete --id id_fixture --json"
       ]
     },
     {
@@ -2786,7 +2720,7 @@
       "availability": "implemented",
       "write": "release_pipeline_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2796,7 +2730,7 @@
         }
       ],
       "examples": [
-        "pm linear release pipeline unarchive --json"
+        "pm linear release pipeline unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2806,7 +2740,7 @@
       "availability": "implemented",
       "write": "release_stage_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2816,7 +2750,7 @@
         }
       ],
       "examples": [
-        "pm linear release stage archive --json"
+        "pm linear release stage archive --id id_fixture --json"
       ]
     },
     {
@@ -2826,7 +2760,7 @@
       "availability": "implemented",
       "write": "release_stage_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2836,7 +2770,7 @@
         }
       ],
       "examples": [
-        "pm linear release stage unarchive --json"
+        "pm linear release stage unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2846,7 +2780,7 @@
       "availability": "implemented",
       "write": "release_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2856,7 +2790,7 @@
         }
       ],
       "examples": [
-        "pm linear release unarchive --json"
+        "pm linear release unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2866,7 +2800,7 @@
       "availability": "implemented",
       "write": "resend_organization_invite",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -2876,7 +2810,7 @@
         }
       ],
       "examples": [
-        "pm linear resend organization invite --json"
+        "pm linear resend organization invite --id id_fixture --json"
       ]
     },
     {
@@ -2886,7 +2820,7 @@
       "availability": "implemented",
       "write": "resend_organization_invite_by_email",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "email",
@@ -2896,7 +2830,7 @@
         }
       ],
       "examples": [
-        "pm linear resend organization invite by email --json"
+        "pm linear resend organization invite by email --email fixture@example.invalid --json"
       ]
     },
     {
@@ -2906,7 +2840,7 @@
       "availability": "implemented",
       "write": "team_cycles_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2916,7 +2850,7 @@
         }
       ],
       "examples": [
-        "pm linear team cycles delete --json"
+        "pm linear team cycles delete --id id_fixture --json"
       ]
     },
     {
@@ -2926,7 +2860,7 @@
       "availability": "implemented",
       "write": "team_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2936,7 +2870,7 @@
         }
       ],
       "examples": [
-        "pm linear team delete --json"
+        "pm linear team delete --id id_fixture --json"
       ]
     },
     {
@@ -2946,7 +2880,7 @@
       "availability": "implemented",
       "write": "team_key_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2956,7 +2890,7 @@
         }
       ],
       "examples": [
-        "pm linear team key delete --json"
+        "pm linear team key delete --id id_fixture --json"
       ]
     },
     {
@@ -2966,7 +2900,7 @@
       "availability": "implemented",
       "write": "team_unarchive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2976,7 +2910,7 @@
         }
       ],
       "examples": [
-        "pm linear team unarchive --json"
+        "pm linear team unarchive --id id_fixture --json"
       ]
     },
     {
@@ -2986,7 +2920,7 @@
       "availability": "implemented",
       "write": "template_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -2996,7 +2930,7 @@
         }
       ],
       "examples": [
-        "pm linear template delete --json"
+        "pm linear template delete --id id_fixture --json"
       ]
     },
     {
@@ -3006,7 +2940,7 @@
       "availability": "implemented",
       "write": "time_schedule_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3016,7 +2950,7 @@
         }
       ],
       "examples": [
-        "pm linear time schedule delete --json"
+        "pm linear time schedule delete --id id_fixture --json"
       ]
     },
     {
@@ -3026,7 +2960,7 @@
       "availability": "implemented",
       "write": "time_schedule_refresh_integration_schedule",
       "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute.",
       "flags": [
         {
           "name": "id",
@@ -3036,7 +2970,7 @@
         }
       ],
       "examples": [
-        "pm linear time schedule refresh integration schedule --json"
+        "pm linear time schedule refresh integration schedule --id id_fixture --json"
       ]
     },
     {
@@ -3046,7 +2980,7 @@
       "availability": "implemented",
       "write": "triage_responsibility_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3056,7 +2990,7 @@
         }
       ],
       "examples": [
-        "pm linear triage responsibility delete --json"
+        "pm linear triage responsibility delete --id id_fixture --json"
       ]
     },
     {
@@ -3066,7 +3000,7 @@
       "availability": "implemented",
       "write": "user_external_user_disconnect",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "service",
@@ -3076,7 +3010,7 @@
         }
       ],
       "examples": [
-        "pm linear user external user disconnect --json"
+        "pm linear user external user disconnect --service value_fixture --json"
       ]
     },
     {
@@ -3086,7 +3020,7 @@
       "availability": "implemented",
       "write": "user_revoke_all_sessions",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3096,7 +3030,7 @@
         }
       ],
       "examples": [
-        "pm linear user revoke all sessions --json"
+        "pm linear user revoke all sessions --id id_fixture --json"
       ]
     },
     {
@@ -3106,7 +3040,7 @@
       "availability": "implemented",
       "write": "user_revoke_session",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3122,7 +3056,7 @@
         }
       ],
       "examples": [
-        "pm linear user revoke session --json"
+        "pm linear user revoke session --id id_fixture --session-id id_fixture --json"
       ]
     },
     {
@@ -3132,7 +3066,7 @@
       "availability": "implemented",
       "write": "user_unlink_from_identity_provider",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3142,7 +3076,7 @@
         }
       ],
       "examples": [
-        "pm linear user unlink from identity provider --json"
+        "pm linear user unlink from identity provider --id id_fixture --json"
       ]
     },
     {
@@ -3152,7 +3086,7 @@
       "availability": "implemented",
       "write": "view_preferences_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3162,7 +3096,7 @@
         }
       ],
       "examples": [
-        "pm linear view preferences delete --json"
+        "pm linear view preferences delete --id id_fixture --json"
       ]
     },
     {
@@ -3172,7 +3106,7 @@
       "availability": "implemented",
       "write": "webhook_delete",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3182,27 +3116,7 @@
         }
       ],
       "examples": [
-        "pm linear webhook delete --json"
-      ]
-    },
-    {
-      "path": "webhook rotate secret",
-      "summary": "Run Linear mutation webhookRotateSecret.",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "webhook_rotate_secret",
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id argument.",
-          "maps_to": "record.id"
-        }
-      ],
-      "examples": [
-        "pm linear webhook rotate secret --json"
+        "pm linear webhook delete --id id_fixture --json"
       ]
     },
     {
@@ -3212,7 +3126,7 @@
       "availability": "implemented",
       "write": "workflow_state_archive",
       "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "approval": "Reverse ETL plan \u2192 preview \u2192 explicit approval \u2192 execute with typed destructive confirmation.",
       "flags": [
         {
           "name": "id",
@@ -3222,7 +3136,7 @@
         }
       ],
       "examples": [
-        "pm linear workflow state archive --json"
+        "pm linear workflow state archive --id id_fixture --json"
       ]
     },
     {

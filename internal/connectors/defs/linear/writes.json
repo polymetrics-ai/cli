@@ -1554,46 +1554,6 @@
       }
     },
     {
-      "name": "integration_opsgenie_refresh_schedule_mappings",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [],
-        "properties": {},
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearIntegrationOpsgenieRefreshScheduleMappings",
-        "document": "mutation LinearIntegrationOpsgenieRefreshScheduleMappings { integrationOpsgenieRefreshScheduleMappings { __typename } }",
-        "variables": {}
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
-    },
-    {
-      "name": "integration_pager_duty_refresh_schedule_mappings",
-      "kind": "custom",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [],
-        "properties": {},
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearIntegrationPagerDutyRefreshScheduleMappings",
-        "document": "mutation LinearIntegrationPagerDutyRefreshScheduleMappings { integrationPagerDutyRefreshScheduleMappings { __typename } }",
-        "variables": {}
-      },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
-    },
-    {
       "name": "integration_slack_or_asks_update_slack_team_name",
       "kind": "custom",
       "method": "POST",
@@ -2334,70 +2294,6 @@
       "graphql": {
         "operation_name": "LinearOauthApplicationArchive",
         "document": "mutation LinearOauthApplicationArchive($id: String!) { oauthApplicationArchive(id: $id) { __typename } }",
-        "variables": {
-          "id": {
-            "template": "{{ record.id }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "confirm": "destructive"
-    },
-    {
-      "name": "oauth_application_rotate_secret",
-      "kind": "update",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearOauthApplicationRotateSecret",
-        "document": "mutation LinearOauthApplicationRotateSecret($id: String!) { oauthApplicationRotateSecret(id: $id) { __typename } }",
-        "variables": {
-          "id": {
-            "template": "{{ record.id }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "confirm": "destructive"
-    },
-    {
-      "name": "oauth_application_rotate_webhook_secret",
-      "kind": "update",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearOauthApplicationRotateWebhookSecret",
-        "document": "mutation LinearOauthApplicationRotateWebhookSecret($id: String!) { oauthApplicationRotateWebhookSecret(id: $id) { __typename } }",
         "variables": {
           "id": {
             "template": "{{ record.id }}",
@@ -3938,38 +3834,6 @@
           404
         ]
       }
-    },
-    {
-      "name": "webhook_rotate_secret",
-      "kind": "update",
-      "method": "POST",
-      "path": "",
-      "body_type": "graphql",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "graphql": {
-        "operation_name": "LinearWebhookRotateSecret",
-        "document": "mutation LinearWebhookRotateSecret($id: String!) { webhookRotateSecret(id: $id) { __typename } }",
-        "variables": {
-          "id": {
-            "template": "{{ record.id }}",
-            "type": "string"
-          }
-        }
-      },
-      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
-      "confirm": "destructive"
     },
     {
       "name": "workflow_state_archive",

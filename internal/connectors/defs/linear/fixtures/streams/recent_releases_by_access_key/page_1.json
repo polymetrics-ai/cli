@@ -12,11 +12,9 @@
             "__typename": "Release",
             "id": "recent_releases_by_access_key_fixture_1",
             "createdAt": "2026-01-01T00:00:00Z",
-            "updatedAt": "2026-01-01T00:00:00Z",
             "archivedAt": "2026-01-01T00:00:00Z",
             "name": "name_fixture",
-            "url": "url_fixture",
-            "description": "description_fixture"
+            "url": "url_fixture"
           }
         ]
       }

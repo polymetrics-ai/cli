@@ -1,7 +1,10 @@
 {
   "request": {
     "method": "POST",
-    "path": "/"
+    "path": "/",
+    "query": {
+      "after": "initiative_relations_cursor_page_1"
+    }
   },
   "response": {
     "status": 200,

@@ -1277,7 +1277,7 @@
       "path": "",
       "graphql": {
         "operation_name": "LinearRecentReleasesByAccessKey",
-        "document": "query LinearRecentReleasesByAccessKey { recentReleasesByAccessKey {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    url\n    description\n  } }",
+        "document": "query LinearRecentReleasesByAccessKey { recentReleasesByAccessKey {\n    __typename\n    id\n    createdAt\n    archivedAt\n    name\n    url\n  } }",
         "variables": {}
       },
       "records": {

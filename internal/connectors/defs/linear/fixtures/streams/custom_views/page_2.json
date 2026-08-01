@@ -1,7 +1,10 @@
 {
   "request": {
     "method": "POST",
-    "path": "/"
+    "path": "/",
+    "query": {
+      "after": "custom_views_cursor_page_1"
+    }
   },
   "response": {
     "status": 200,

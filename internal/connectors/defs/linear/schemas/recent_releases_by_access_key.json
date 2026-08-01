@@ -21,12 +21,6 @@
         "null"
       ]
     },
-    "updatedAt": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "archivedAt": {
       "type": [
         "string",
@@ -44,14 +38,7 @@
         "string",
         "null"
       ]
-    },
-    "description": {
-      "type": [
-        "string",
-        "null"
-      ]
     }
   },
-  "additionalProperties": true,
-  "x-cursor-field": "updatedAt"
+  "additionalProperties": true
 }

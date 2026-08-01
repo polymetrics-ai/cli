@@ -3280,8 +3280,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationOpsgenieRefreshScheduleMappings",
-      "covered_by": {
-        "write": "integration_opsgenie_refresh_schedule_mappings"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Refreshes Opsgenie schedule mappings."
       }
     },
     {
@@ -3299,8 +3305,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.integrationPagerDutyRefreshScheduleMappings",
-      "covered_by": {
-        "write": "integration_pager_duty_refresh_schedule_mappings"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "[INTERNAL] Linear schema marks this mutation as provider-internal; public connector writes do not expose provider-internal Linear mutations.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "[INTERNAL] Refreshes PagerDuty schedule mappings."
       }
     },
     {
@@ -4175,15 +4187,27 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.oauthApplicationRotateSecret",
-      "covered_by": {
-        "write": "oauth_application_rotate_secret"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear secret-rotation mutations are blocked until an approved secret handoff can capture and store the returned replacement secret without exposing it in CLI output, logs, previews, or fixtures.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "Rotates an OAuth application client secret and returns the replacement secret only in the mutation payload."
       }
     },
     {
       "method": "POST",
       "path": "/graphql#Mutation.oauthApplicationRotateWebhookSecret",
-      "covered_by": {
-        "write": "oauth_application_rotate_webhook_secret"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear secret-rotation mutations are blocked until an approved secret handoff can capture and store the returned replacement secret without exposing it in CLI output, logs, previews, or fixtures.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "Rotates an OAuth application webhook secret and returns the replacement secret only in the mutation payload."
       }
     },
     {
@@ -5508,8 +5532,14 @@
     {
       "method": "POST",
       "path": "/graphql#Mutation.webhookRotateSecret",
-      "covered_by": {
-        "write": "webhook_rotate_secret"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Linear secret-rotation mutations are blocked until an approved secret handoff can capture and store the returned replacement secret without exposing it in CLI output, logs, previews, or fixtures.",
+        "source_url": "https://raw.githubusercontent.com/linear/linear/7ef4c5024f88667b2c85057ff4c905676c4a93c2/packages/sdk/src/schema.graphql",
+        "notes": "Rotates a webhook secret and returns the replacement secret only in the mutation payload."
       }
     },
     {
