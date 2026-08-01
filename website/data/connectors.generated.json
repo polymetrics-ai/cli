@@ -167526,28 +167526,19 @@
         },
         {
           "path": "reverse activate-form",
-          "summary": "Plan and execute Monday activate_form",
+          "summary": "Planned Monday activate_form mutation",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "activate_form",
+          "write": "",
           "source_cli_path": "",
           "source_url": "https://developer.monday.com/api-reference/reference/form",
-          "flags": [
-            {
-              "name": "formtoken",
-              "type": "string",
-              "summary": "formToken argument",
-              "values": [],
-              "maps_to": "record.formToken",
-              "allow_empty": false
-            }
-          ],
+          "flags": [],
           "examples": [],
           "output_policy": "",
-          "risk": "medium: runs Monday mutation activate_form; reverse ETL approval required",
-          "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Fixed GraphQL mutation document for activate_form; no raw query text is accepted."
+          "risk": "planned medium mutation",
+          "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+          "notes": "Planned/blocked because redacted form token must not be exposed as a persistent CLI flag."
         },
         {
           "path": "reverse activate-managed-column",
@@ -171326,28 +171317,19 @@
         },
         {
           "path": "reverse shorten-form-url",
-          "summary": "Plan and execute Monday shorten_form_url",
+          "summary": "Planned Monday shorten_form_url mutation",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "shorten_form_url",
+          "write": "",
           "source_cli_path": "",
           "source_url": "https://developer.monday.com/api-reference/reference/form",
-          "flags": [
-            {
-              "name": "formtoken",
-              "type": "string",
-              "summary": "formToken argument",
-              "values": [],
-              "maps_to": "record.formToken",
-              "allow_empty": false
-            }
-          ],
+          "flags": [],
           "examples": [],
           "output_policy": "",
-          "risk": "medium: runs Monday mutation shorten_form_url; reverse ETL approval required",
-          "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Fixed GraphQL mutation document for shorten_form_url; no raw query text is accepted."
+          "risk": "planned medium mutation",
+          "approval": "blocked until a non-persistent stdin/env input path exists; no persistent CLI flag execution",
+          "notes": "Planned/blocked because redacted form token must not be exposed as a persistent CLI flag."
         },
         {
           "path": "reverse unassign-department-owners",
