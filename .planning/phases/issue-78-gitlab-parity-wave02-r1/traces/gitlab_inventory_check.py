@@ -8,29 +8,25 @@ verification helper only; it performs no credentialed provider calls.
 from __future__ import annotations
 
 import json
-import re
 import sys
 import urllib.request
 from pathlib import Path
 
 import yaml
 
+from generate_gitlab_parity import (
+    METHODS,
+    OPENAPI_URL,
+    SUPPLEMENTAL_STREAM_ROWS,
+    normalize_gitlab_path,
+)
+
 ROOT = Path(__file__).resolve().parents[4]
-OPENAPI_URL = "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml"
-METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 SURFACE = ROOT / "internal/connectors/defs/gitlab/api_surface.json"
 OPERATIONS = ROOT / "internal/connectors/defs/gitlab/operations.json"
-SUPPLEMENTAL_SURFACE = {("GET", "/users")}
-
-
-def normalize_gitlab_path(path: str) -> str:
-    path = path.replace("\\(", "(").replace("\\)", ")")
-    path = path.replace("(-/)", "")
-    path = re.sub(r"\(/\)\(\*([A-Za-z0-9_]+)\)", r"/{\1}", path)
-    path = re.sub(r"\(/\)\(\{([A-Za-z0-9_]+)\}\)", r"/{\1}", path)
-    path = re.sub(r"\(\*([A-Za-z0-9_]+)/\)", r"{\1}/", path)
-    path = re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
-    return re.sub(r"/{2,}", "/", path)
+SUPPLEMENTAL_SURFACE = {
+    (str(row["method"]), str(row["path"])) for row in SUPPLEMENTAL_STREAM_ROWS
+}
 
 
 def relative_path(path: str) -> str:
