@@ -108,15 +108,16 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 			Reason:       fmt.Sprintf("write action %q is not declared in connector manifest", cmd.Write),
 		}
 	}
+	redactFields := writeCommandRedactFields(cmd, action)
 	record, err := recordOverrides(cmd, req.Flags)
 	if err != nil {
-		return WriteCommand{}, err
+		return WriteCommand{}, redactCommandError(err, redactFields, req)
 	}
 	writeReq := connectors.WriteRequest{Action: cmd.Write, Config: req.Config}
 	records := []connectors.Record{record}
 	if validator, ok := connector.(connectors.WriteValidator); ok {
 		if err := validator.ValidateWrite(ctx, writeReq, records); err != nil {
-			return WriteCommand{}, err
+			return WriteCommand{}, redactCommandError(err, redactFields, req)
 		}
 	}
 	out := WriteCommand{
@@ -130,7 +131,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: strings.TrimSpace(action.Confirm),
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
+		RedactedRecord:        redactRecordWithFields(record, redactFields),
 	}
 	if req.Preview {
 		dryRunner, ok := connector.(connectors.DryRunWriter)
@@ -145,7 +146,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		}
 		preview, err := dryRunner.DryRunWrite(ctx, writeReq, records)
 		if err != nil {
-			return WriteCommand{}, err
+			return WriteCommand{}, redactCommandError(err, redactFields, req)
 		}
 		out.Preview = &preview
 	}
@@ -1055,6 +1056,22 @@ func findWriteAction(manifest connectors.Manifest, name string) (connectors.Writ
 		}
 	}
 	return connectors.WriteActionSpec{}, false
+}
+
+func writeCommandRedactFields(cmd connectors.CommandSurfaceCommand, action connectors.WriteActionSpec) []string {
+	fields := make([]string, 0, len(action.RedactFields)+len(cmd.RedactFields))
+	seen := map[string]bool{}
+	for _, group := range [][]string{action.RedactFields, cmd.RedactFields} {
+		for _, field := range group {
+			field = strings.TrimSpace(field)
+			if field == "" || seen[field] {
+				continue
+			}
+			seen[field] = true
+			fields = append(fields, field)
+		}
+	}
+	return fields
 }
 
 func mutationClassOf(action connectors.WriteActionSpec) string {

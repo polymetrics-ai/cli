@@ -7,7 +7,7 @@
     ]
   },
   "expect": {
-    "sql_template": "DELETE FROM \"public\".\"customers\" WHERE \"id\" = $1",
+    "sql_template": "DELETE FROM \"public\".\"customers\" WHERE \"id\" IS NOT DISTINCT FROM $1",
     "args_redacted": true
   }
 }

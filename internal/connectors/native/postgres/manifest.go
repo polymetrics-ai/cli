@@ -2,6 +2,23 @@ package postgres
 
 import "polymetrics.ai/internal/connectors"
 
+var (
+	postgresValueRedactFields = []string{"values", "value_column", "value_string", "value_int", "value_float", "value_bool", "value_null", "value_json"}
+	postgresKeyRedactFields   = []string{"keys", "key_column", "key_string", "key_int", "key_float", "key_bool", "key_null", "key_json"}
+)
+
+func postgresWriteRedactFields(groups ...[]string) []string {
+	var total int
+	for _, group := range groups {
+		total += len(group)
+	}
+	out := make([]string, 0, total)
+	for _, group := range groups {
+		out = append(out, group...)
+	}
+	return out
+}
+
 // Manifest exposes the native connector's runtime config and bounded write
 // actions to docs, CLI inspection, and command-runner planning. engine.Base
 // provides Definition()/CommandSurface() from defs/postgres, but Manifest is
@@ -25,10 +42,10 @@ func (c Connector) Manifest() connectors.Manifest {
 			{Name: "password", Description: "Database role password. Never logged.", Required: true},
 		},
 		WriteActions: []connectors.WriteActionSpec{
-			{Name: "insert_row", Description: "Insert one row with typed column values.", RequiredFields: []string{"table", "values"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "INSERT", Risk: "high: inserts a row into the selected table"},
-			{Name: "update_row", Description: "Update rows selected by explicit key fields.", RequiredFields: []string{"table", "values", "keys"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "UPDATE", Risk: "high: updates rows matching supplied keys"},
-			{Name: "upsert_row", Description: "Insert or update one row through a declared conflict key.", RequiredFields: []string{"table", "values", "keys"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "MERGE", Risk: "high: bounded upsert; no raw MERGE text"},
-			{Name: "delete_row", Description: "Delete rows selected by explicit key fields.", RequiredFields: []string{"table", "keys"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "DELETE", Risk: "critical: deletes rows matching supplied keys", Confirm: "destructive"},
+			{Name: "insert_row", Description: "Insert one row with typed column values.", RequiredFields: []string{"table", "values"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "INSERT", RedactFields: postgresWriteRedactFields(postgresValueRedactFields), Risk: "high: inserts a row into the selected table"},
+			{Name: "update_row", Description: "Update rows selected by explicit key fields.", RequiredFields: []string{"table", "values", "keys"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "UPDATE", RedactFields: postgresWriteRedactFields(postgresValueRedactFields, postgresKeyRedactFields), Risk: "high: updates rows matching supplied keys"},
+			{Name: "upsert_row", Description: "Insert or update one row through a declared conflict key.", RequiredFields: []string{"table", "values", "keys"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "MERGE", RedactFields: postgresWriteRedactFields(postgresValueRedactFields, postgresKeyRedactFields), Risk: "high: bounded upsert; no raw MERGE text"},
+			{Name: "delete_row", Description: "Delete rows selected by explicit key fields.", RequiredFields: []string{"table", "keys"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "DELETE", RedactFields: postgresWriteRedactFields(postgresKeyRedactFields), Risk: "critical: deletes rows matching supplied keys", Confirm: "destructive"},
 			{Name: "truncate_table", Description: "Truncate one table only when confirm_phrase=truncate is supplied.", RequiredFields: []string{"table", "confirm_phrase"}, OptionalFields: []string{"schema"}, Method: "SQL", Path: "TRUNCATE", Risk: "critical: truncates the selected table; cascade/restart identity are not exposed", Confirm: "destructive"},
 		},
 		SourceSyncModes: []string{"full_refresh", "incremental"},

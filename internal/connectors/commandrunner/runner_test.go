@@ -827,6 +827,45 @@ func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T)
 	}
 }
 
+func TestBuildWriteCommandUsesManifestRedactFields(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "row update",
+			Intent:       "reverse_etl",
+			Availability: "implemented",
+			Write:        "update_row",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "value", Type: "string", MapsTo: "record.value_string"},
+				{Name: "key-value", Type: "string", MapsTo: "record.key_string"},
+			},
+		}}},
+		manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{{
+			Name:         "update_row",
+			Method:       "SQL",
+			Path:         "UPDATE",
+			RedactFields: []string{"value_string", "key_string"},
+		}}},
+	}
+	cmd, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"row", "update"},
+		Flags: map[string][]string{
+			"value":     {"sensitive-row-value"},
+			"key-value": {"sensitive-key-value"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if got := cmd.Record["value_string"]; got != "sensitive-row-value" {
+		t.Fatalf("record value_string = %#v, want raw value retained", got)
+	}
+	for _, field := range []string{"value_string", "key_string"} {
+		if got := cmd.RedactedRecord[field]; got != "***" {
+			t.Fatalf("redacted %s = %#v, want ***", field, got)
+		}
+	}
+}
+
 func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) {
 	redacted := redactRecord(connectors.Record{
 		"downloadMediaUrl": "https://media.example.test/call.mp4",

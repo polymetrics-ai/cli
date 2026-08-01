@@ -7,7 +7,14 @@
       "path": "INSERT",
       "body_type": "json",
       "redact_fields": [
-        "values"
+        "values",
+        "value_column",
+        "value_string",
+        "value_int",
+        "value_float",
+        "value_bool",
+        "value_null",
+        "value_json"
       ],
       "risk": "high: inserts a row into a configured table using typed column values only",
       "record_schema": {
@@ -95,7 +102,21 @@
       "body_type": "json",
       "redact_fields": [
         "values",
-        "keys"
+        "value_column",
+        "value_string",
+        "value_int",
+        "value_float",
+        "value_bool",
+        "value_null",
+        "value_json",
+        "keys",
+        "key_column",
+        "key_string",
+        "key_int",
+        "key_float",
+        "key_bool",
+        "key_null",
+        "key_json"
       ],
       "risk": "high: updates matching rows by explicit key columns using parameterized values",
       "record_schema": {
@@ -234,7 +255,21 @@
       "body_type": "json",
       "redact_fields": [
         "values",
-        "keys"
+        "value_column",
+        "value_string",
+        "value_int",
+        "value_float",
+        "value_bool",
+        "value_null",
+        "value_json",
+        "keys",
+        "key_column",
+        "key_string",
+        "key_int",
+        "key_float",
+        "key_bool",
+        "key_null",
+        "key_json"
       ],
       "risk": "high: inserts or updates a row through a declared conflict key; no arbitrary MERGE text",
       "record_schema": {
@@ -372,7 +407,14 @@
       "path": "DELETE",
       "body_type": "json",
       "redact_fields": [
-        "keys"
+        "keys",
+        "key_column",
+        "key_string",
+        "key_int",
+        "key_float",
+        "key_bool",
+        "key_null",
+        "key_json"
       ],
       "risk": "critical: deletes rows matching explicit key columns; missing keys are rejected",
       "confirm": "destructive",

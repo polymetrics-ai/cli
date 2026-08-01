@@ -11,7 +11,7 @@
     ]
   },
   "expect": {
-    "sql_template": "MERGE INTO \"public\".\"customers\" AS target USING (VALUES ($1, $2)) AS source (\"id\", \"email\") ON target.\"id\" = source.\"id\" WHEN MATCHED THEN UPDATE SET \"email\" = source.\"email\" WHEN NOT MATCHED THEN INSERT (\"id\", \"email\") VALUES (source.\"id\", source.\"email\")",
+    "sql_template": "MERGE INTO \"public\".\"customers\" AS target USING (VALUES ($1, $2)) AS source (\"id\", \"email\") ON target.\"id\" IS NOT DISTINCT FROM source.\"id\" WHEN MATCHED THEN UPDATE SET \"email\" = source.\"email\" WHEN NOT MATCHED THEN INSERT (\"id\", \"email\") VALUES (source.\"id\", source.\"email\")",
     "args_redacted": true
   }
 }

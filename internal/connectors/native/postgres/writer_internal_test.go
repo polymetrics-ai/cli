@@ -136,8 +136,21 @@ func TestPostgresWriteBuildsParameterizedSQL(t *testing.T) {
 			}, "keys": []any{
 				map[string]any{"name": "id", "value_int": int64(42)},
 			}},
-			wantSQL:  `UPDATE "public"."customers" SET "active" = $1 WHERE "id" = $2`,
+			wantSQL:  `UPDATE "public"."customers" SET "active" = $1 WHERE "id" IS NOT DISTINCT FROM $2`,
 			wantArgs: 2,
+		},
+		{
+			name:   "update multiple keys",
+			action: "update_row",
+			record: connectors.Record{"schema": "public", "table": "customers", "values": []any{
+				map[string]any{"name": "active", "value_bool": false},
+			}, "keys": []any{
+				map[string]any{"name": "id", "value_int": int64(42)},
+				map[string]any{"name": "tenant_id", "value_string": "tenant-fixture"},
+			}},
+			wantSQL:    `UPDATE "public"."customers" SET "active" = $1 WHERE "id" IS NOT DISTINCT FROM $2 AND "tenant_id" IS NOT DISTINCT FROM $3`,
+			wantArgs:   3,
+			forbidText: "tenant-fixture",
 		},
 		{
 			name:   "upsert",
@@ -148,7 +161,7 @@ func TestPostgresWriteBuildsParameterizedSQL(t *testing.T) {
 			}, "keys": []any{
 				map[string]any{"name": "id", "value_int": int64(42)},
 			}},
-			wantSQL:    `MERGE INTO "public"."customers" AS target USING (VALUES ($1, $2)) AS source ("id", "email") ON target."id" = source."id" WHEN MATCHED THEN UPDATE SET "email" = source."email" WHEN NOT MATCHED THEN INSERT ("id", "email") VALUES (source."id", source."email")`,
+			wantSQL:    `MERGE INTO "public"."customers" AS target USING (VALUES ($1, $2)) AS source ("id", "email") ON target."id" IS NOT DISTINCT FROM source."id" WHEN MATCHED THEN UPDATE SET "email" = source."email" WHEN NOT MATCHED THEN INSERT ("id", "email") VALUES (source."id", source."email")`,
 			wantArgs:   2,
 			forbidText: "customer@example.invalid",
 		},
@@ -158,7 +171,16 @@ func TestPostgresWriteBuildsParameterizedSQL(t *testing.T) {
 			record: connectors.Record{"schema": "public", "table": "customers", "keys": []any{
 				map[string]any{"name": "id", "value_int": int64(42)},
 			}},
-			wantSQL:  `DELETE FROM "public"."customers" WHERE "id" = $1`,
+			wantSQL:  `DELETE FROM "public"."customers" WHERE "id" IS NOT DISTINCT FROM $1`,
+			wantArgs: 1,
+		},
+		{
+			name:   "delete null key",
+			action: "delete_row",
+			record: connectors.Record{"schema": "public", "table": "customers", "keys": []any{
+				map[string]any{"name": "archived_at", "value_null": true},
+			}},
+			wantSQL:  `DELETE FROM "public"."customers" WHERE "archived_at" IS NOT DISTINCT FROM $1`,
 			wantArgs: 1,
 		},
 		{
@@ -209,7 +231,7 @@ func TestPostgresFixtureWriteDryRunAndExecute(t *testing.T) {
 		t.Fatalf("preview = %+v, want one staged delete_row", preview)
 	}
 	joined := strings.Join(preview.Warnings, "\n")
-	if !strings.Contains(joined, `DELETE FROM "public"."customers" WHERE "id" = $1`) {
+	if !strings.Contains(joined, `DELETE FROM "public"."customers" WHERE "id" IS NOT DISTINCT FROM $1`) {
 		t.Fatalf("preview warnings did not include redacted SQL template: %+v", preview.Warnings)
 	}
 	if strings.Contains(joined, "42") {

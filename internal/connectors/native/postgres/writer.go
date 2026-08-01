@@ -159,8 +159,9 @@ func buildWriteStatement(defaultSchemaName, action string, record connectors.Rec
 			setParts = append(setParts, fmt.Sprintf("%s = $%d", quoteIdentifier(field.Name), i+1))
 			args = append(args, field.Value)
 		}
+		valueArgCount := len(args)
 		for i, field := range keys {
-			whereParts = append(whereParts, fmt.Sprintf("%s = $%d", quoteIdentifier(field.Name), len(args)+i+1))
+			whereParts = append(whereParts, postgresKeyPredicate(quoteIdentifier(field.Name), fmt.Sprintf("$%d", valueArgCount+i+1)))
 			args = append(args, field.Value)
 		}
 		return writeStatement{
@@ -202,7 +203,7 @@ func buildWriteStatement(defaultSchemaName, action string, record connectors.Rec
 		for _, field := range keys {
 			keyNames[field.Name] = true
 			quoted := quoteIdentifier(field.Name)
-			onParts = append(onParts, "target."+quoted+" = source."+quoted)
+			onParts = append(onParts, postgresKeyPredicate("target."+quoted, "source."+quoted))
 		}
 		updates := make([]string, 0, len(values))
 		for _, field := range values {
@@ -229,7 +230,7 @@ func buildWriteStatement(defaultSchemaName, action string, record connectors.Rec
 		whereParts := make([]string, 0, len(keys))
 		args := make([]any, 0, len(keys))
 		for i, field := range keys {
-			whereParts = append(whereParts, fmt.Sprintf("%s = $%d", quoteIdentifier(field.Name), i+1))
+			whereParts = append(whereParts, postgresKeyPredicate(quoteIdentifier(field.Name), fmt.Sprintf("$%d", i+1)))
 			args = append(args, field.Value)
 		}
 		return writeStatement{
@@ -256,6 +257,10 @@ func buildWriteStatement(defaultSchemaName, action string, record connectors.Rec
 	default:
 		return writeStatement{}, fmt.Errorf("unsupported postgres write action %q", action)
 	}
+}
+
+func postgresKeyPredicate(left, right string) string {
+	return left + " IS NOT DISTINCT FROM " + right
 }
 
 func relationFromRecord(defaultSchemaName string, record connectors.Record) (string, error) {

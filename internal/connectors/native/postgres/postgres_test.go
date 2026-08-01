@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
 	"testing"
 
@@ -274,9 +275,17 @@ func TestPostgresDefinitionIncludesBoundedWriteActions(t *testing.T) {
 		"delete_row":     "SQL",
 		"truncate_table": "SQL",
 	}
+	wantRedact := map[string][]string{
+		"insert_row": {"values", "value_string"},
+		"update_row": {"values", "value_string", "keys", "key_string"},
+		"upsert_row": {"values", "value_string", "keys", "key_string"},
+		"delete_row": {"keys", "key_string"},
+	}
 	got := make(map[string]string, len(manifest.WriteActions))
+	gotRedact := make(map[string][]string, len(manifest.WriteActions))
 	for _, action := range manifest.WriteActions {
 		got[action.Name] = action.Method
+		gotRedact[action.Name] = action.RedactFields
 		if action.Name == "truncate_table" && action.Confirm != "destructive" {
 			t.Fatalf("truncate_table confirm = %q, want destructive", action.Confirm)
 		}
@@ -284,6 +293,11 @@ func TestPostgresDefinitionIncludesBoundedWriteActions(t *testing.T) {
 	for name, method := range want {
 		if got[name] != method {
 			t.Fatalf("write action %q method = %q, want %q (all actions: %+v)", name, got[name], method, manifest.WriteActions)
+		}
+		for _, field := range wantRedact[name] {
+			if !slices.Contains(gotRedact[name], field) {
+				t.Fatalf("write action %q redact_fields = %v, want %q", name, gotRedact[name], field)
+			}
 		}
 	}
 }

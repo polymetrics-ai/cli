@@ -10,7 +10,7 @@
     ]
   },
   "expect": {
-    "sql_template": "UPDATE \"public\".\"customers\" SET \"active\" = $1 WHERE \"id\" = $2",
+    "sql_template": "UPDATE \"public\".\"customers\" SET \"active\" = $1 WHERE \"id\" IS NOT DISTINCT FROM $2",
     "args_redacted": true
   }
 }
