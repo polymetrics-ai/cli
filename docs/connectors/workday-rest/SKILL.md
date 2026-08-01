@@ -1508,6 +1508,10 @@ Reads Workday REST 2026.30 production service resources, exposes bounded provide
   - endpoint: POST /api/common/v1/workers/{{ record.id }}/businessTitleChanges
   - required fields: id
   - risk: POST /api/common/v1/workers/{ID}/businessTitleChanges against Workday REST Common v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/common_v1_20260727_oas2.json
+- create_common_v1_api_common_v1_workers_id_business_title_changes_type_me:
+  - endpoint: POST /api/common/v1/workers/{{ record.id }}/businessTitleChanges?type=me
+  - required fields: id
+  - risk: POST /api/common/v1/workers/{ID}/businessTitleChanges?type=me against Workday REST Common v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/common_v1_20260727_oas2.json
 - create_communications_v1_communications_v1_managed_recipient:
   - endpoint: POST /communications/v1/managedRecipient
   - required fields: channel, messagingContactable_ID, optInPreference, phoneNumber

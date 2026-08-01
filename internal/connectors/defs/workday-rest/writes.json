@@ -3499,6 +3499,44 @@
       ]
     },
     {
+      "name": "create_common_v1_api_common_v1_workers_id_business_title_changes_type_me",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/common/v1/workers/{{ record.id }}/businessTitleChanges?type=me",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Workday path parameter {ID}."
+          },
+          "proposedBusinessTitle": {
+            "type": "string",
+            "description": "The new business title for the \\~worker\\~ as of the effective date.  If there is no business title override, this field defaults to the job title or job profile name."
+          },
+          "descriptor": {
+            "type": "string",
+            "description": "The display name of the instance"
+          },
+          "href": {
+            "type": "string",
+            "description": "A link to the instance"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "POST /api/common/v1/workers/{ID}/businessTitleChanges?type=me against Workday REST Common v1 mutates tenant data; use reverse ETL plan, preview, explicit approval, and least-privilege Workday scopes. Source: https://community.workday.com/sites/default/files/file-hosting/restapi/common_v1_20260727_oas2.json",
+      "redact_fields": [
+        "id"
+      ],
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
       "name": "create_communications_v1_communications_v1_managed_recipient",
       "kind": "create",
       "method": "POST",

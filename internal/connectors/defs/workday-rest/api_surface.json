@@ -3,7 +3,7 @@
   "docs": "https://community.workday.com/sites/default/files/file-hosting/restapi/index.html",
   "reviewed_at": "2026-08-01",
   "operation_ledger_version": 1,
-  "scope": "Generated from the official Workday REST services2026.30.json productionConfidenceLevel manifest (52 services). Archived services are not counted. HTTP operation counts: total=920, GET=655, POST=154, PATCH=58, PUT=20, DELETE=33. Post-change connector dispositions: streams=463, direct_read=174, writes=251, blocked_binary_or_contract_gap=32.",
+  "scope": "Generated from the official Workday REST services2026.30.json productionConfidenceLevel manifest (52 services). Archived services are not counted. HTTP operation counts: total=920, GET=655, POST=154, PATCH=58, PUT=20, DELETE=33. Post-change connector dispositions: streams=463, direct_read=174, writes=252, blocked_binary_or_contract_gap=31.",
   "endpoints": [
     {
       "method": "GET",
@@ -504,14 +504,8 @@
     {
       "method": "POST",
       "path": "/api/common/v1/workers/{ID}/businessTitleChanges?type=me",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "official Workday REST mutation has a fixed query component, but the current declarative write contract has no typed per-action query map; blocked rather than adding a raw query passthrough",
-        "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/common_v1_20260727_oas2.json",
-        "notes": "official_lane=reverse_etl_write; service=Common v1; spec_file=common_v1_20260727_oas2.json; summary=<b>Secured By Business Process Type:</b> Title Change <b>Scope:</b> Staffing"
+      "covered_by": {
+        "write": "create_common_v1_api_common_v1_workers_id_business_title_changes_type_me"
       }
     },
     {
