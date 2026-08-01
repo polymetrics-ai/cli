@@ -910,6 +910,26 @@
       ]
     },
     {
+      "path": "attachment sync to slack",
+      "summary": "Run Linear mutation attachmentSyncToSlack.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "attachment_sync_to_slack",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear attachment sync to slack --json"
+      ]
+    },
+    {
       "path": "comment delete",
       "summary": "Run Linear mutation commentDelete.",
       "intent": "reverse_etl",
@@ -927,6 +947,26 @@
       ],
       "examples": [
         "pm linear comment delete --json"
+      ]
+    },
+    {
+      "path": "comment unresolve",
+      "summary": "Run Linear mutation commentUnresolve.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comment_unresolve",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear comment unresolve --json"
       ]
     },
     {
@@ -967,6 +1007,32 @@
       ],
       "examples": [
         "pm linear customer delete --json"
+      ]
+    },
+    {
+      "path": "customer merge",
+      "summary": "Run Linear mutation customerMerge.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_merge",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "source-customer-id",
+          "type": "string",
+          "summary": "sourceCustomerId argument.",
+          "maps_to": "record.sourceCustomerId"
+        },
+        {
+          "name": "target-customer-id",
+          "type": "string",
+          "summary": "targetCustomerId argument.",
+          "maps_to": "record.targetCustomerId"
+        }
+      ],
+      "examples": [
+        "pm linear customer merge --json"
       ]
     },
     {
@@ -1090,6 +1156,26 @@
       ]
     },
     {
+      "path": "cycle start upcoming cycle today",
+      "summary": "Run Linear mutation cycleStartUpcomingCycleToday.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cycle_start_upcoming_cycle_today",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear cycle start upcoming cycle today --json"
+      ]
+    },
+    {
       "path": "document delete",
       "summary": "Run Linear mutation documentDelete.",
       "intent": "reverse_etl",
@@ -1147,6 +1233,26 @@
       ],
       "examples": [
         "pm linear email intake address delete --json"
+      ]
+    },
+    {
+      "path": "email intake address refresh ses domain status",
+      "summary": "Run Linear mutation emailIntakeAddressRefreshSesDomainStatus.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "email_intake_address_refresh_ses_domain_status",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear email intake address refresh ses domain status --json"
       ]
     },
     {
@@ -1290,6 +1396,52 @@
       ]
     },
     {
+      "path": "image upload from url",
+      "summary": "Run Linear mutation imageUploadFromUrl.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "image_upload_from_url",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "url argument.",
+          "maps_to": "record.url"
+        }
+      ],
+      "examples": [
+        "pm linear image upload from url --json"
+      ]
+    },
+    {
+      "path": "initiative add label",
+      "summary": "Run Linear mutation initiativeAddLabel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_add_label",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "label-id",
+          "type": "string",
+          "summary": "labelId argument.",
+          "maps_to": "record.labelId"
+        }
+      ],
+      "examples": [
+        "pm linear initiative add label --json"
+      ]
+    },
+    {
       "path": "initiative archive",
       "summary": "Run Linear mutation initiativeArchive.",
       "intent": "reverse_etl",
@@ -1347,6 +1499,46 @@
       ],
       "examples": [
         "pm linear initiative label delete --json"
+      ]
+    },
+    {
+      "path": "initiative label restore",
+      "summary": "Run Linear mutation initiativeLabelRestore.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_label_restore",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative label restore --json"
+      ]
+    },
+    {
+      "path": "initiative label retire",
+      "summary": "Run Linear mutation initiativeLabelRetire.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_label_retire",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative label retire --json"
       ]
     },
     {
@@ -1496,6 +1688,65 @@
       ]
     },
     {
+      "path": "integration git hub enterprise server connect",
+      "summary": "Run Linear mutation integrationGitHubEnterpriseServerConnect.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_git_hub_enterprise_server_connect",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "github-url",
+          "type": "string",
+          "summary": "githubUrl argument.",
+          "maps_to": "record.githubUrl"
+        },
+        {
+          "name": "organization-name",
+          "type": "string",
+          "summary": "organizationName argument.",
+          "maps_to": "record.organizationName"
+        }
+      ],
+      "examples": [
+        "pm linear integration git hub enterprise server connect --json"
+      ]
+    },
+    {
+      "path": "integration github commit create",
+      "summary": "Run Linear mutation integrationGithubCommitCreate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_github_commit_create",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [],
+      "examples": [
+        "pm linear integration github commit create --json"
+      ]
+    },
+    {
+      "path": "integration github import refresh",
+      "summary": "Run Linear mutation integrationGithubImportRefresh.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_github_import_refresh",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear integration github import refresh --json"
+      ]
+    },
+    {
       "path": "integration github remove code access",
       "summary": "Run Linear mutation integrationGithubRemoveCodeAccess.",
       "intent": "reverse_etl",
@@ -1516,6 +1767,26 @@
       ]
     },
     {
+      "path": "integration gitlab test connection",
+      "summary": "Run Linear mutation integrationGitlabTestConnection.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_gitlab_test_connection",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "integration-id",
+          "type": "string",
+          "summary": "integrationId argument.",
+          "maps_to": "record.integrationId"
+        }
+      ],
+      "examples": [
+        "pm linear integration gitlab test connection --json"
+      ]
+    },
+    {
       "path": "integration intercom delete",
       "summary": "Run Linear mutation integrationIntercomDelete.",
       "intent": "reverse_etl",
@@ -1526,6 +1797,72 @@
       "flags": [],
       "examples": [
         "pm linear integration intercom delete --json"
+      ]
+    },
+    {
+      "path": "integration opsgenie refresh schedule mappings",
+      "summary": "Run Linear mutation integrationOpsgenieRefreshScheduleMappings.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_opsgenie_refresh_schedule_mappings",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [],
+      "examples": [
+        "pm linear integration opsgenie refresh schedule mappings --json"
+      ]
+    },
+    {
+      "path": "integration pager duty refresh schedule mappings",
+      "summary": "Run Linear mutation integrationPagerDutyRefreshScheduleMappings.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_pager_duty_refresh_schedule_mappings",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [],
+      "examples": [
+        "pm linear integration pager duty refresh schedule mappings --json"
+      ]
+    },
+    {
+      "path": "integration salesforce metadata refresh",
+      "summary": "Run Linear mutation integrationSalesforceMetadataRefresh.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_salesforce_metadata_refresh",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear integration salesforce metadata refresh --json"
+      ]
+    },
+    {
+      "path": "integration slack or asks update slack team name",
+      "summary": "Run Linear mutation integrationSlackOrAsksUpdateSlackTeamName.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_slack_or_asks_update_slack_team_name",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "integration-id",
+          "type": "string",
+          "summary": "integrationId argument.",
+          "maps_to": "record.integrationId"
+        }
+      ],
+      "examples": [
+        "pm linear integration slack or asks update slack team name --json"
       ]
     },
     {
@@ -1575,6 +1912,52 @@
       ]
     },
     {
+      "path": "issue description update from front",
+      "summary": "Run Linear mutation issueDescriptionUpdateFromFront.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_description_update_from_front",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "description argument.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue description update from front --json"
+      ]
+    },
+    {
+      "path": "issue external sync disable",
+      "summary": "Run Linear mutation issueExternalSyncDisable.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_external_sync_disable",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "attachmentId argument.",
+          "maps_to": "record.attachmentId"
+        }
+      ],
+      "examples": [
+        "pm linear issue external sync disable --json"
+      ]
+    },
+    {
       "path": "issue import delete",
       "summary": "Run Linear mutation issueImportDelete.",
       "intent": "reverse_etl",
@@ -1615,6 +1998,46 @@
       ]
     },
     {
+      "path": "issue label restore",
+      "summary": "Run Linear mutation issueLabelRestore.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_label_restore",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue label restore --json"
+      ]
+    },
+    {
+      "path": "issue label retire",
+      "summary": "Run Linear mutation issueLabelRetire.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_label_retire",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue label retire --json"
+      ]
+    },
+    {
       "path": "issue relation delete",
       "summary": "Run Linear mutation issueRelationDelete.",
       "intent": "reverse_etl",
@@ -1632,6 +2055,32 @@
       ],
       "examples": [
         "pm linear issue relation delete --json"
+      ]
+    },
+    {
+      "path": "issue reminder",
+      "summary": "Run Linear mutation issueReminder.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_reminder",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "reminder-at",
+          "type": "string",
+          "summary": "reminderAt argument.",
+          "maps_to": "record.reminderAt"
+        }
+      ],
+      "examples": [
+        "pm linear issue reminder --json"
       ]
     },
     {
@@ -1661,6 +2110,32 @@
       ]
     },
     {
+      "path": "issue share",
+      "summary": "Run Linear mutation issueShare.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_share",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "userId argument.",
+          "maps_to": "record.userId"
+        }
+      ],
+      "examples": [
+        "pm linear issue share --json"
+      ]
+    },
+    {
       "path": "issue to release delete",
       "summary": "Run Linear mutation issueToReleaseDelete.",
       "intent": "reverse_etl",
@@ -1681,20 +2156,1213 @@
       ]
     },
     {
+      "path": "issue to release delete by issue and release",
+      "summary": "Run Linear mutation issueToReleaseDeleteByIssueAndRelease.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_to_release_delete_by_issue_and_release",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "issue-id",
+          "type": "string",
+          "summary": "issueId argument.",
+          "maps_to": "record.issueId"
+        },
+        {
+          "name": "release-id",
+          "type": "string",
+          "summary": "releaseId argument.",
+          "maps_to": "record.releaseId"
+        }
+      ],
+      "examples": [
+        "pm linear issue to release delete by issue and release --json"
+      ]
+    },
+    {
+      "path": "issue unarchive",
+      "summary": "Run Linear mutation issueUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue unarchive --json"
+      ]
+    },
+    {
+      "path": "issue unshare",
+      "summary": "Run Linear mutation issueUnshare.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_unshare",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "userId argument.",
+          "maps_to": "record.userId"
+        }
+      ],
+      "examples": [
+        "pm linear issue unshare --json"
+      ]
+    },
+    {
+      "path": "leave organization",
+      "summary": "Run Linear mutation leaveOrganization.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "leave_organization",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "organizationId argument.",
+          "maps_to": "record.organizationId"
+        }
+      ],
+      "examples": [
+        "pm linear leave organization --json"
+      ]
+    },
+    {
+      "path": "logout session",
+      "summary": "Run Linear mutation logoutSession.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "logout_session",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "sessionId argument.",
+          "maps_to": "record.sessionId"
+        }
+      ],
+      "examples": [
+        "pm linear logout session --json"
+      ]
+    },
+    {
+      "path": "notification archive",
+      "summary": "Run Linear mutation notificationArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "notification_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear notification archive --json"
+      ]
+    },
+    {
+      "path": "notification unarchive",
+      "summary": "Run Linear mutation notificationUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "notification_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear notification unarchive --json"
+      ]
+    },
+    {
+      "path": "oauth application archive",
+      "summary": "Run Linear mutation oauthApplicationArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "oauth_application_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear oauth application archive --json"
+      ]
+    },
+    {
+      "path": "oauth application rotate secret",
+      "summary": "Run Linear mutation oauthApplicationRotateSecret.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "oauth_application_rotate_secret",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear oauth application rotate secret --json"
+      ]
+    },
+    {
+      "path": "oauth application rotate webhook secret",
+      "summary": "Run Linear mutation oauthApplicationRotateWebhookSecret.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "oauth_application_rotate_webhook_secret",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear oauth application rotate webhook secret --json"
+      ]
+    },
+    {
+      "path": "organization cancel delete",
+      "summary": "Run Linear mutation organizationCancelDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "organization_cancel_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [],
+      "examples": [
+        "pm linear organization cancel delete --json"
+      ]
+    },
+    {
+      "path": "organization delete challenge",
+      "summary": "Run Linear mutation organizationDeleteChallenge.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "organization_delete_challenge",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [],
+      "examples": [
+        "pm linear organization delete challenge --json"
+      ]
+    },
+    {
+      "path": "organization domain claim",
+      "summary": "Run Linear mutation organizationDomainClaim.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "organization_domain_claim",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear organization domain claim --json"
+      ]
+    },
+    {
+      "path": "organization domain delete",
+      "summary": "Run Linear mutation organizationDomainDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "organization_domain_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear organization domain delete --json"
+      ]
+    },
+    {
+      "path": "organization invite delete",
+      "summary": "Run Linear mutation organizationInviteDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "organization_invite_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear organization invite delete --json"
+      ]
+    },
+    {
+      "path": "passkey login start",
+      "summary": "Run Linear mutation passkeyLoginStart.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "passkey_login_start",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "auth-id",
+          "type": "string",
+          "summary": "authId argument.",
+          "maps_to": "record.authId"
+        }
+      ],
+      "examples": [
+        "pm linear passkey login start --json"
+      ]
+    },
+    {
+      "path": "project add label",
+      "summary": "Run Linear mutation projectAddLabel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_add_label",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "label-id",
+          "type": "string",
+          "summary": "labelId argument.",
+          "maps_to": "record.labelId"
+        }
+      ],
+      "examples": [
+        "pm linear project add label --json"
+      ]
+    },
+    {
+      "path": "project delete",
+      "summary": "Run Linear mutation projectDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project delete --json"
+      ]
+    },
+    {
+      "path": "project label delete",
+      "summary": "Run Linear mutation projectLabelDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_label_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project label delete --json"
+      ]
+    },
+    {
+      "path": "project label restore",
+      "summary": "Run Linear mutation projectLabelRestore.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_label_restore",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project label restore --json"
+      ]
+    },
+    {
+      "path": "project label retire",
+      "summary": "Run Linear mutation projectLabelRetire.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_label_retire",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project label retire --json"
+      ]
+    },
+    {
+      "path": "project milestone delete",
+      "summary": "Run Linear mutation projectMilestoneDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_milestone_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project milestone delete --json"
+      ]
+    },
+    {
+      "path": "project reassign status",
+      "summary": "Run Linear mutation projectReassignStatus.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_reassign_status",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "new-project-status-id",
+          "type": "string",
+          "summary": "newProjectStatusId argument.",
+          "maps_to": "record.newProjectStatusId"
+        },
+        {
+          "name": "original-project-status-id",
+          "type": "string",
+          "summary": "originalProjectStatusId argument.",
+          "maps_to": "record.originalProjectStatusId"
+        }
+      ],
+      "examples": [
+        "pm linear project reassign status --json"
+      ]
+    },
+    {
+      "path": "project relation delete",
+      "summary": "Run Linear mutation projectRelationDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_relation_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project relation delete --json"
+      ]
+    },
+    {
+      "path": "project remove label",
+      "summary": "Run Linear mutation projectRemoveLabel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_remove_label",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "label-id",
+          "type": "string",
+          "summary": "labelId argument.",
+          "maps_to": "record.labelId"
+        }
+      ],
+      "examples": [
+        "pm linear project remove label --json"
+      ]
+    },
+    {
+      "path": "project status archive",
+      "summary": "Run Linear mutation projectStatusArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_status_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project status archive --json"
+      ]
+    },
+    {
+      "path": "project status unarchive",
+      "summary": "Run Linear mutation projectStatusUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_status_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project status unarchive --json"
+      ]
+    },
+    {
+      "path": "project unarchive",
+      "summary": "Run Linear mutation projectUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project unarchive --json"
+      ]
+    },
+    {
+      "path": "project update archive",
+      "summary": "Run Linear mutation projectUpdateArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_update_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project update archive --json"
+      ]
+    },
+    {
+      "path": "project update unarchive",
+      "summary": "Run Linear mutation projectUpdateUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "project_update_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear project update unarchive --json"
+      ]
+    },
+    {
+      "path": "push subscription delete",
+      "summary": "Run Linear mutation pushSubscriptionDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "push_subscription_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear push subscription delete --json"
+      ]
+    },
+    {
+      "path": "reaction delete",
+      "summary": "Run Linear mutation reactionDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "reaction_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear reaction delete --json"
+      ]
+    },
+    {
+      "path": "release archive",
+      "summary": "Run Linear mutation releaseArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release archive --json"
+      ]
+    },
+    {
+      "path": "release delete",
+      "summary": "Run Linear mutation releaseDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release delete --json"
+      ]
+    },
+    {
+      "path": "release note delete",
+      "summary": "Run Linear mutation releaseNoteDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_note_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release note delete --json"
+      ]
+    },
+    {
+      "path": "release pipeline archive",
+      "summary": "Run Linear mutation releasePipelineArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_pipeline_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release pipeline archive --json"
+      ]
+    },
+    {
+      "path": "release pipeline delete",
+      "summary": "Run Linear mutation releasePipelineDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_pipeline_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release pipeline delete --json"
+      ]
+    },
+    {
+      "path": "release pipeline unarchive",
+      "summary": "Run Linear mutation releasePipelineUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_pipeline_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release pipeline unarchive --json"
+      ]
+    },
+    {
+      "path": "release stage archive",
+      "summary": "Run Linear mutation releaseStageArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_stage_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release stage archive --json"
+      ]
+    },
+    {
+      "path": "release stage unarchive",
+      "summary": "Run Linear mutation releaseStageUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_stage_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release stage unarchive --json"
+      ]
+    },
+    {
+      "path": "release unarchive",
+      "summary": "Run Linear mutation releaseUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "release_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear release unarchive --json"
+      ]
+    },
+    {
+      "path": "resend organization invite",
+      "summary": "Run Linear mutation resendOrganizationInvite.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "resend_organization_invite",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear resend organization invite --json"
+      ]
+    },
+    {
+      "path": "resend organization invite by email",
+      "summary": "Run Linear mutation resendOrganizationInviteByEmail.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "resend_organization_invite_by_email",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "email argument.",
+          "maps_to": "record.email"
+        }
+      ],
+      "examples": [
+        "pm linear resend organization invite by email --json"
+      ]
+    },
+    {
+      "path": "team cycles delete",
+      "summary": "Run Linear mutation teamCyclesDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "team_cycles_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear team cycles delete --json"
+      ]
+    },
+    {
+      "path": "team delete",
+      "summary": "Run Linear mutation teamDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "team_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear team delete --json"
+      ]
+    },
+    {
+      "path": "team key delete",
+      "summary": "Run Linear mutation teamKeyDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "team_key_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear team key delete --json"
+      ]
+    },
+    {
+      "path": "team unarchive",
+      "summary": "Run Linear mutation teamUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "team_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear team unarchive --json"
+      ]
+    },
+    {
+      "path": "template delete",
+      "summary": "Run Linear mutation templateDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "template_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear template delete --json"
+      ]
+    },
+    {
+      "path": "time schedule delete",
+      "summary": "Run Linear mutation timeScheduleDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "time_schedule_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear time schedule delete --json"
+      ]
+    },
+    {
+      "path": "time schedule refresh integration schedule",
+      "summary": "Run Linear mutation timeScheduleRefreshIntegrationSchedule.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "time_schedule_refresh_integration_schedule",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear time schedule refresh integration schedule --json"
+      ]
+    },
+    {
+      "path": "triage responsibility delete",
+      "summary": "Run Linear mutation triageResponsibilityDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "triage_responsibility_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear triage responsibility delete --json"
+      ]
+    },
+    {
+      "path": "user external user disconnect",
+      "summary": "Run Linear mutation userExternalUserDisconnect.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_external_user_disconnect",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "service",
+          "type": "string",
+          "summary": "service argument.",
+          "maps_to": "record.service"
+        }
+      ],
+      "examples": [
+        "pm linear user external user disconnect --json"
+      ]
+    },
+    {
+      "path": "user revoke all sessions",
+      "summary": "Run Linear mutation userRevokeAllSessions.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_revoke_all_sessions",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear user revoke all sessions --json"
+      ]
+    },
+    {
+      "path": "user revoke session",
+      "summary": "Run Linear mutation userRevokeSession.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_revoke_session",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "sessionId argument.",
+          "maps_to": "record.sessionId"
+        }
+      ],
+      "examples": [
+        "pm linear user revoke session --json"
+      ]
+    },
+    {
+      "path": "user unlink from identity provider",
+      "summary": "Run Linear mutation userUnlinkFromIdentityProvider.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_unlink_from_identity_provider",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear user unlink from identity provider --json"
+      ]
+    },
+    {
+      "path": "view preferences delete",
+      "summary": "Run Linear mutation viewPreferencesDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "view_preferences_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear view preferences delete --json"
+      ]
+    },
+    {
+      "path": "webhook delete",
+      "summary": "Run Linear mutation webhookDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "webhook_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear webhook delete --json"
+      ]
+    },
+    {
+      "path": "webhook rotate secret",
+      "summary": "Run Linear mutation webhookRotateSecret.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "webhook_rotate_secret",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear webhook rotate secret --json"
+      ]
+    },
+    {
+      "path": "workflow state archive",
+      "summary": "Run Linear mutation workflowStateArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "workflow_state_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear workflow state archive --json"
+      ]
+    },
+    {
       "path": "attachment get",
       "summary": "Planned bounded Linear Query.attachment command.",
       "intent": "direct_read",
       "availability": "planned",
       "operation": "linear.query.attachment",
-      "output_policy": "json_redacted",
-      "notes": "Planned only: fixed GraphQL direct operation execution is not enabled for Linear in this connector-local slice."
-    },
-    {
-      "path": "attachments list",
-      "summary": "Planned bounded Linear Query.attachments command.",
-      "intent": "direct_read",
-      "availability": "planned",
-      "operation": "linear.query.attachments",
       "output_policy": "json_redacted",
       "notes": "Planned only: fixed GraphQL direct operation execution is not enabled for Linear in this connector-local slice."
     },

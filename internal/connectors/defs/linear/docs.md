@@ -1,6 +1,6 @@
 # Overview
 
-Linear is modeled from the official Linear GraphQL schema, pinned to blob `3934265499c95f1d6b8e4d5c695ad0b6f1d52fec` from `packages/sdk/src/schema.graphql`.
+Linear is modeled from the official Linear GraphQL schema, pinned to blob `e92dc40c31e3b6e3962f93fa1d8cbe91f3e83034` from master commit `7ef4c5024f88667b2c85057ff4c905676c4a93c2` (`packages/sdk/src/schema.graphql`).
 
 This connector-local bundle now inventories every parsed root GraphQL operation in `api_surface.json` operation-ledger mode. It implements fixed GraphQL ETL streams for list/connection Query fields and fixed GraphQL reverse-ETL write actions for scalar-required mutations that can be represented safely by the current declarative engine. It does not expose a raw GraphQL query/mutation/body escape hatch.
 
@@ -8,7 +8,7 @@ Connector-local generated counts from the pinned blob:
 
 | query root fields | mutation root fields | subscription root fields | surface rows | streams | write actions | blocked operation rows |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 164 | 371 | 80 | 615 | 64 | 122 | 429 |
+| 165 | 372 | 80 | 617 | 64 | 122 | 431 |
 
 The GitHub parent/subissue r2 dispatch counts remain preserved in those issue bodies. This connector-local evidence does not claim live certification and does not fabricate implemented counts beyond the concrete stream/write rows present in this bundle.
 
@@ -32,9 +32,9 @@ Representative streams include `issues`, `teams`, `projects`, and `users`; addit
 
 ## Write actions & risks
 
-`writes.json` contains 122 fixed GraphQL reverse-ETL actions whose complete argument list is required, scalar, and non-secret-shaped in the schema. The action document is connector-owned metadata; callers provide only typed record fields declared in `record_schema`.
+`writes.json` contains 122 fixed GraphQL reverse-ETL actions whose complete argument list is required, scalar, and non-secret-shaped in the schema. The action document is connector-owned metadata; callers provide only typed record fields declared in `record_schema`. `cli_surface.json` declares one canonical provider command for each action.
 
-93 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation instead.
+93 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Their canonical commands include the same typed destructive approval language. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation instead.
 
 Fixture write captures under `fixtures/writes/*.json` are synthetic replay examples. They do not perform live Linear writes.
 
