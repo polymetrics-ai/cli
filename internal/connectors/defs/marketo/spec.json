@@ -2,35 +2,99 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Marketo Connection Specification",
   "type": "object",
-  "required": ["base_url"],
+  "required": [
+    "base_url"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
       "format": "uri",
-      "description": "Your Marketo REST identity host base URL, ending in /rest/v1 (tenant-specific; no default). Example: https://123-ABC-456.mktorest.com/rest/v1"
+      "description": "Tenant-specific Marketo host root URL, for example https://123-ABC-456.mktorest.com. Do not include /rest/v1; connector definitions add documented paths."
     },
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Marketo REST API access token, sent as a Bearer token. This connector does not refresh OAuth tokens internally; the caller must supply a valid, unexpired token."
-    },
-    "activity_type_ids": {
-      "type": "string",
-      "description": "Optional comma-separated activityTypeIds filter, sent as the activityTypeIds query parameter on the activities stream only."
-    },
-    "page_size": {
-      "type": "string",
-      "default": "300",
-      "description": "Records per page (1-300), sent as the batchSize query parameter."
-    },
-    "max_pages": {
-      "type": "string",
-      "default": "0",
-      "description": "Maximum pages to read; use 0, all, or unlimited to exhaust the stream."
+      "description": "Marketo REST API access token supplied by the caller. This connector does not perform OAuth token issuance or refresh."
     },
     "mode": {
       "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live or fixture for credential-free conformance."
+    },
+    "id": {
+      "type": "string",
+      "description": "Required path parameter id for Marketo stream get_email_by_id."
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of folder. 'Folder' or 'Program'"
+    },
+    "folder": {
+      "type": "string",
+      "description": "JSON representation of parent folder, with members 'id', and 'type' which may be 'Folder' or 'Program'"
+    },
+    "tag_type": {
+      "type": "string",
+      "description": "Type of program tag"
+    },
+    "tag_value": {
+      "type": "string",
+      "description": "Value of the tag"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "Required path parameter programId for Marketo stream get_smart_list_by_program_id."
+    },
+    "export_id": {
+      "type": "string",
+      "description": "Required path parameter exportId for Marketo stream get_export_activities_status."
+    },
+    "api_name": {
+      "type": "string",
+      "description": "Required path parameter apiName for Marketo stream get_import_custom_object_status."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "Required path parameter batchId for Marketo stream get_import_custom_object_status."
+    },
+    "activity_type_ids": {
+      "type": "string",
+      "description": "Comma-separated list of activity type ids. These can be retrieved with the Get Activity Types API."
+    },
+    "fields": {
+      "type": "string",
+      "description": "Comma-separated list of field names to return changes for. Field names can be retrieved with the Describe Lead API."
+    },
+    "since_datetime": {
+      "type": "string",
+      "description": "Earliest datetime to retrieve activities from"
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Required path parameter campaignId for Marketo stream get_campaign_by_id."
+    },
+    "filter_type": {
+      "type": "string",
+      "description": "The company field to filter on. Searchable fields can be retrieved with the Describe Company call."
+    },
+    "filter_values": {
+      "type": "string",
+      "description": "Comma-separated list of values to match against"
+    },
+    "custom_object_name": {
+      "type": "string",
+      "description": "Required path parameter customObjectName for Marketo stream get_custom_objects."
+    },
+    "lead_id": {
+      "type": "string",
+      "description": "Required path parameter leadId for Marketo stream get_lead_by_id."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "Required path parameter listId for Marketo stream get_leads_by_list_id."
+    },
+    "userid": {
+      "type": "string",
+      "description": "Required path parameter userid for Marketo stream get_user_roles_and_workspaces."
     }
   }
 }

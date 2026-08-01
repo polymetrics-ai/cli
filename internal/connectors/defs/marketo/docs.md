@@ -1,67 +1,55 @@
 # Overview
 
-Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not
-refresh OAuth tokens internally.
+Marketo is generated from the official AdobeDocs Marketo Engage REST Swagger 2.0 assets for asset, identity, lead database/bulk (`mapi`), and user-management APIs.
 
-Readable streams: `leads`, `programs`, `activities`.
+Post-change documented operation counts:
 
-This connector is read-only; no write actions are declared.
+| disposition | count |
+| --- | ---: |
+| official operations | 327 |
+| fixture-backed ETL/changefeed streams | 117 |
+| bounded redacted direct reads | 28 |
+| typed reverse-ETL writes | 158 |
+| blocked binary/InputStream downloads | 10 |
+| not-applicable identity token operations | 2 |
+| blocked write-query operations | 11 |
+| blocked dynamic custom-field body operations | 1 |
+| certified live operations | 0 |
 
-Service API documentation: https://developers.marketo.com/rest-api/.
+This connector does not expose a raw HTTP method/path/body command, generic query command, shell, arbitrary file command, or passthrough escape hatch.
 
 ## Auth setup
 
-Connection fields:
+Configure `base_url` as the tenant-specific Marketo host root, for example `https://123-ABC-456.mktorest.com`. Do not include `/rest/v1`; each stream/action declares the official path from the Swagger operation.
 
-- `access_token` (optional, secret, string); Marketo REST API access token, sent as a Bearer token.
-  This connector does not refresh OAuth tokens internally; the caller must supply a valid, unexpired
-  token.
-- `activity_type_ids` (optional, string); Optional comma-separated activityTypeIds filter, sent as
-  the activityTypeIds query parameter on the activities stream only.
-- `base_url` (required, string); format `uri`; Your Marketo REST identity host base URL, ending in
-  /rest/v1 (tenant-specific; no default). Example: https://123-ABC-456.mktorest.com/rest/v1.
-- `max_pages` (optional, string); default `0`; Maximum pages to read; use 0, all, or unlimited to
-  exhaust the stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `300`; Records per page (1-300), sent as the batchSize
-  query parameter.
+Configure `access_token` as a secret value through the credential store or stdin/environment-backed credential workflows. Do not paste secret values into prompts, docs, issue comments, or fixtures. The two `/identity/oauth/token` operations are listed as not-applicable in `api_surface.json`; this connector does not request client IDs or client secrets and does not refresh tokens.
 
-Secret fields are redacted in logs and write previews: `access_token`.
-
-Default configuration values: `max_pages=0`, `page_size=300`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.access_token`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/leads.json` with query `batchSize`=`1`.
+Some stream paths require connector config values such as `export_id`, `api_name`, `batch_id`, `program_id`, `list_id`, `lead_id`, or `field_api_name`. Use `--config key=value` with provider-safe identifiers when reading those specific streams.
 
 ## Streams notes
 
-Default pagination: cursor pagination; cursor parameter `nextPageToken`; next token from
-`nextPageToken`; stop flag `moreResult`.
+The bundle declares 117 fixture-backed streams. Cursor-paginated Marketo endpoints use `nextPageToken`/`moreResult`; offset-paginated asset/user endpoints use the documented offset and page-size parameters. Every stream has a fixture page under `fixtures/streams/<stream>/page_1.json` and a schema under `schemas/<stream>.json`.
 
-- `leads`: GET `/leads.json` - records path `result`; query `batchSize`=`{{ config.page_size }}`;
-  cursor pagination; cursor parameter `nextPageToken`; next token from `nextPageToken`; stop flag
-  `moreResult`; computed output fields `createdAt`, `email`, `id`, `updatedAt`.
-- `programs`: GET `/programs.json` - records path `result`; query `batchSize`=`{{ config.page_size
-  }}`; cursor pagination; cursor parameter `nextPageToken`; next token from `nextPageToken`; stop
-  flag `moreResult`; computed output fields `createdAt`, `id`, `name`, `updatedAt`.
-- `activities`: GET `/activities.json` - records path `result`; query `activityTypeIds` from
-  template `{{ config.activity_type_ids }}`, omitted when absent; `batchSize`=`{{ config.page_size
-  }}`; cursor pagination; cursor parameter `nextPageToken`; next token from `nextPageToken`; stop
-  flag `moreResult`; computed output fields `activityDate`, `activityTypeId`, `id`, `leadId`.
+Examples:
+
+- `pm marketo etl get-all-channels --json --limit 25`
+- `pm marketo direct get-are-leads-member-of-list --json --list-id 123 --id 456 --max-bytes 1048576`
+- `pm marketo reverse update-email --preview --json ...`
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Marketo REST API read of lead, program, and
-activity data.
+The bundle declares 158 typed write actions. Writes are only executable through reverse ETL planning:
+
+1. create a plan from a typed command or reverse ETL mapping;
+2. preview the resolved request and staged record count;
+3. approve with the plan approval token;
+4. execute the approved plan.
+
+Delete/remove/cancel/discard/deactivate/unapprove operations require `confirm: destructive` in addition to the approval token. Multipart import actions are operation-specific typed uploads with bounded file parts; they are not generic file tools.
 
 ## Known limits
 
-- Batch defaults: read_page_size=300.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  non_data_endpoint=1, out_of_scope=3.
+- Fixture replay and local conformance do not certify live Marketo behavior; certified count remains `0` until a separate live-safe certification run with approved credentials exists.
+- The current shared direct-read executor accepts bounded JSON responses only. The 10 official InputStream export/failure/warning download endpoints remain blocked in `api_surface.json` until a shared bounded binary/file transfer executor is available.
+- Optional write query parameters that are not required by the official Swagger operation are not encoded by the current declarative write contract. Write operations that require URL query parameters are blocked in `api_surface.json` until the shared declarative write contract has a structured typed query map; this avoids interpolating record values into action paths. `Sync Program Member Data` remains blocked because the official request body uses dynamic custom field names (`input[].{fieldApiName}`), which cannot be represented as a closed schema without an arbitrary-body escape hatch.
+- Generated stream schemas use passthrough projection with a small common schema envelope because the Marketo Swagger response envelopes are broad and often resource-specific; fixtures prove request/pagination wiring without claiming live certification.

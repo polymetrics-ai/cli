@@ -1,0 +1,564 @@
+{
+  "operations": [
+    {
+      "id": "marketo.get_channel_by_name",
+      "kind": "rest_read",
+      "summary": "Get Channel by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/channel/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/channel/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_email_by_name",
+      "kind": "rest_read",
+      "summary": "Get Email by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/email/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/email/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_email_content_by_id",
+      "kind": "rest_read",
+      "summary": "Get Email Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/email/{id}/content.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/email/{id}/content.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_email_dynamic_content",
+      "kind": "rest_read",
+      "summary": "Get Email Dynamic Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/email/{id}/dynamicContent/{contentId}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/email/{id}/dynamicContent/{contentId}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_template_by_name",
+      "kind": "rest_read",
+      "summary": "Get Email Template by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/emailTemplate/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/emailTemplate/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_template_content_by_id",
+      "kind": "rest_read",
+      "summary": "Get Email Template Content by Id",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/emailTemplate/{id}/content. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/emailTemplate/{id}/content",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_email_full_content",
+      "kind": "rest_read",
+      "summary": "Get Email Full Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/email/{id}/fullContent.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/email/{id}/fullContent.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_file_by_name",
+      "kind": "rest_read",
+      "summary": "Get File by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/file/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/file/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_folder_by_name",
+      "kind": "rest_read",
+      "summary": "Get Folder by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/folder/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/folder/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_lp_form_by_name",
+      "kind": "rest_read",
+      "summary": "Get Form by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/form/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/form/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_landing_page_by_name",
+      "kind": "rest_read",
+      "summary": "Get Landing Page by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/landingPage/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/landingPage/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_landing_page_content",
+      "kind": "rest_read",
+      "summary": "Get Landing Page Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/landingPage/{id}/content.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/landingPage/{id}/content.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_landing_page_dynamic_contents",
+      "kind": "rest_read",
+      "summary": "Get Landing Page Dynamic Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_landing_page_template_by_name",
+      "kind": "rest_read",
+      "summary": "Get Landing Page Template by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/landingPageTemplate/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/landingPageTemplate/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_landing_page_template_content",
+      "kind": "rest_read",
+      "summary": "Get Landing Page Template Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/landingPageTemplate/{id}/content.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/landingPageTemplate/{id}/content.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_landing_page_full_content",
+      "kind": "rest_read",
+      "summary": "Get Landing Page Full Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/landingPage/{id}/fullContent.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/landingPage/{id}/fullContent.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_program_by_name",
+      "kind": "rest_read",
+      "summary": "Get Program by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/program/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/program/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_smart_campaign_by_name",
+      "kind": "rest_read",
+      "summary": "Get Smart Campaign by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/smartCampaign/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/smartCampaign/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_dynamic_content",
+      "kind": "rest_read",
+      "summary": "Get Dynamic Content",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/snippet/{id}/dynamicContent.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/snippet/{id}/dynamicContent.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_tag_by_name",
+      "kind": "rest_read",
+      "summary": "Get Tag By Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/tagType/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/tagType/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_smart_list_by_name",
+      "kind": "rest_read",
+      "summary": "Get Smart List by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/smartList/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/smartList/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_static_list_by_name",
+      "kind": "rest_read",
+      "summary": "Get Static List by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/asset/v1/staticList/byName.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/asset/v1/staticList/byName.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_lead_field_by_name",
+      "kind": "rest_read",
+      "summary": "Get Lead Field by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/v1/leads/schema/fields/{fieldApiName}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/v1/leads/schema/fields/{fieldApiName}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_program_member_field_by_name",
+      "kind": "rest_read",
+      "summary": "Get Program Member Field by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/v1/programs/members/schema/fields/{fieldApiName}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/v1/programs/members/schema/fields/{fieldApiName}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_company_field_by_name",
+      "kind": "rest_read",
+      "summary": "Get Company Field by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/v1/companies/schema/fields/{fieldApiName}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/v1/companies/schema/fields/{fieldApiName}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_opportunity_field_by_name",
+      "kind": "rest_read",
+      "summary": "Get Opportunity Field by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/v1/opportunities/schema/fields/{fieldApiName}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/v1/opportunities/schema/fields/{fieldApiName}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_named_account_field_by_name",
+      "kind": "rest_read",
+      "summary": "Get Named Account Field by Name",
+      "description": "Executable bounded Marketo direct read for GET /rest/v1/namedaccounts/schema/fields/{fieldApiName}.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/v1/namedaccounts/schema/fields/{fieldApiName}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "marketo.get_are_leads_member_of_list",
+      "kind": "rest_read",
+      "summary": "Member of List",
+      "description": "Executable bounded Marketo direct read for GET /rest/v1/lists/{listId}/leads/ismember.json. It is a fixed typed operation, not a raw API escape hatch.",
+      "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded JSON direct read with recursive redaction",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "Marketo REST API scopes required by the official operation"
+      ],
+      "mutation_class": "none",
+      "audit_event": "marketo.direct_read",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/v1/lists/{listId}/leads/ismember.json",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

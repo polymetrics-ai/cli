@@ -1,0 +1,36 @@
+{
+  "phase": "issue-3247-marketo-parity",
+  "status": "verified",
+  "branch": "fm/cli-marketo-parity-wave05-r1",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase issue-3247-marketo-parity --dry-run",
+  "manualFallback": true,
+  "manualFallbackReason": "scripts/gsd reports unknown GSD command: programming-loop; followed .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md instead",
+  "verificationPassed": true,
+  "counts": {
+    "officialOperations": 327,
+    "streams": 117,
+    "directReads": 28,
+    "writes": 158,
+    "blockedOrNotApplicable": 24,
+    "cliCommands": 303,
+    "destructiveWrites": 53
+  },
+  "verification": {
+    "marketoConnectorgenTests": "passed",
+    "connectorgenValidate": "550 connectors checked, 0 findings",
+    "marketoConformance": "passed",
+    "cliGoldenDynamicFocused": "passed",
+    "goVetAll": "passed",
+    "goBuildPm": "passed",
+    "connectorBoundary": "clean",
+    "gitDiffCheck": "passed",
+    "makeVerify": "passed on rerun; first attempt hit unrelated flaky certify timing test that passed in isolation"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single connector-local write scope in one disposable worktree; no isolated mutating subworker worktrees allocated for this firstmate worker"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/asset/v1/form/fields.json",
+    "query": {
+      "maxReturn": "200",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_all_fields-fixture-1",
+          "pm_operation": "getAllFieldsUsingGET",
+          "name": "get_all_fields fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}

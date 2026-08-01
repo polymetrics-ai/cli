@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/asset/v1/emailTemplate/synthetic-conformance-value.json",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_template_by_id-fixture-1",
+          "pm_operation": "getTemplateByIdUsingGET",
+          "name": "get_template_by_id fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}
