@@ -15,8 +15,9 @@ Implemented connector-local Greenhouse parity refresh from the official Harvest 
 - Made `base_url` version-neutral (`https://harvest.greenhouse.io`) and made all bundle paths explicitly `/v1` or `/v2`.
 - Added fixture-backed typed writes for v2 job posts, v2 scheduled interviews, v2 user edit/disable/enable, v2 opening destroy, and candidate-tag destroy.
 - Removed unsupported attachment upload write actions and marked those official operations blocked due unbounded base64/external-URL binary payload semantics.
-- Corrected hiring-team write paths to the official `/v1/jobs/{id}` endpoints while leaving the read stream on `/v1/jobs/{id}/hiring_team`.
-- Tightened destructive/admin schemas and retained explicit destructive confirmation where appropriate.
+- Corrected hiring-team write paths to the official HTTP Request `/v1/jobs/{id}/hiring_team` endpoints while recording that the Greenhouse cURL snippets conflict by omitting `/hiring_team`.
+- Tightened destructive/admin schemas, closed hiring-team member-list bodies, and retained explicit destructive confirmation where appropriate.
+- Added a Greenhouse write hook so `destroy_openings` fails on non-empty `not_deleted` responses.
 - Updated Greenhouse docs, generated manual/skill, and connector catalog counts.
 
 ## Verification

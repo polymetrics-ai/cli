@@ -67707,21 +67707,21 @@
         "name": "replace_hiring_team",
         "kind": "update",
         "method": "PUT",
-        "path": "/v1/jobs/{{ record.job_id }}",
+        "path": "/v1/jobs/{{ record.job_id }}/hiring_team",
         "risk": "Greenhouse mutation: PUT: Replace Hiring Team."
       },
       {
         "name": "add_hiring_team_members",
         "kind": "create",
         "method": "POST",
-        "path": "/v1/jobs/{{ record.job_id }}",
+        "path": "/v1/jobs/{{ record.job_id }}/hiring_team",
         "risk": "Greenhouse mutation: POST: Add Hiring Team Members."
       },
       {
         "name": "remove_hiring_team_member",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v1/jobs/{{ record.job_id }}",
+        "path": "/v1/jobs/{{ record.job_id }}/hiring_team",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.",
         "confirm": "destructive"
       },
@@ -67840,7 +67840,7 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/jobs/{{ record.job_id }}/openings",
-        "risk": "Destructive Greenhouse mutation: DELETE: Destroy Openings (v2). Deletes only closed, unfilled openings allowed by Greenhouse validations; response may include IDs that could not be deleted.",
+        "risk": "Destructive Greenhouse mutation: DELETE: Destroy Openings (v2). Deletes only closed, unfilled openings allowed by Greenhouse validations; fails if Greenhouse returns any IDs in not_deleted.",
         "confirm": "destructive"
       },
       {

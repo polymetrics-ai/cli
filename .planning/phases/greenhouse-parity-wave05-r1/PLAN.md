@@ -21,7 +21,7 @@ Work is constrained to Greenhouse-owned connector definitions/fixtures/docs/gene
   - Add documented v2 users operations: `PATCH /v2/users`, `/v2/users/disable`, `/v2/users/enable`.
   - Add documented v2 job-post operations: `PATCH /v2/job_posts/{id}`, `/v2/job_posts/{id}/status`.
   - Add destructive async candidate-tag deletion ledger row: `DELETE /tags/candidate/{tag id}`.
-  - Correct hiring-team write paths from current `/jobs/{id}/hiring_team` rows to official `/jobs/{id}` rows.
+  - Correct hiring-team write paths to the official HTTP Request `/jobs/{id}/hiring_team` rows while preserving the conflicting cURL snippets that omit the suffix as evidence.
   - Convert existing deprecated exclusions into blocked/planned operation rows because parent count has excluded=0.
   - Reconcile binary attachment operations against the parent direct/binary lane and existing write contract truthfully.
 
@@ -34,7 +34,7 @@ Work is constrained to Greenhouse-owned connector definitions/fixtures/docs/gene
    - Update `api_surface.json` to enumerate every official operation exactly once with source-linked coverage/blocker rows and post-change counts matching the parent where supported by docs.
    - Add fixture-backed typed writes for documented supported operations that fit the existing JSON write contract.
    - For unsupported binary/asynchronous/deprecated/destructive operations, use `operation` blocked/planned rows with exact official-source evidence and no generic escape hatch.
-   - Fix Greenhouse hiring-team write paths and fixtures to match official Harvest docs.
+   - Fix Greenhouse hiring-team write paths and fixtures to match the official Harvest HTTP Request rows, with the conflicting cURL examples documented.
    - Tighten destructive write schemas where touched; avoid arbitrary request bodies.
 3. Fixtures/docs/generated surfaces
    - Add/update write fixtures for every new/changed action.
