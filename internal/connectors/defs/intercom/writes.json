@@ -21234,6 +21234,36 @@
             "type": "string",
             "description": "The style of the outgoing message. Possible values `plain` or `personal`."
           },
+          "components": {
+            "type": "array",
+            "description": "WhatsApp template components, such as body parameters for a WhatsApp template message.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The WhatsApp template component type, such as `BODY`."
+                },
+                "parameters": {
+                  "type": "array",
+                  "description": "Template parameters for the component.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "The parameter type, such as `text`."
+                      },
+                      "text": {
+                        "type": "string",
+                        "description": "Text parameter value."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "from": {
             "type": "object",
             "description": "The sender of the message. If not provided, the default sender will be used.",
@@ -21430,6 +21460,14 @@
         "anyOf": [
           {
             "title": "message_type: `email`.",
+            "properties": {
+              "message_type": {
+                "type": "string",
+                "enum": [
+                  "email"
+                ]
+              }
+            },
             "required": [
               "message_type",
               "subject",
@@ -21441,6 +21479,14 @@
           },
           {
             "title": "message_type: `inapp`.",
+            "properties": {
+              "message_type": {
+                "type": "string",
+                "enum": [
+                  "in_app"
+                ]
+              }
+            },
             "required": [
               "message_type",
               "body",
@@ -21450,6 +21496,14 @@
           },
           {
             "title": "message_type: `whatsapp`.",
+            "properties": {
+              "message_type": {
+                "type": "string",
+                "enum": [
+                  "whatsapp"
+                ]
+              }
+            },
             "required": [
               "message_type",
               "template",
@@ -21467,6 +21521,7 @@
         "subject",
         "body",
         "template",
+        "components",
         "from",
         "to",
         "cc",
@@ -22105,6 +22160,7 @@
                 "description": "The id of tag to updates."
               }
             },
+            "additionalProperties": false,
             "required": [
               "name"
             ]
@@ -22121,6 +22177,7 @@
               "companies": {
                 "type": "array",
                 "items": {
+                  "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
@@ -22130,11 +22187,13 @@
                       "type": "string",
                       "description": "The company id you have defined for the company."
                     }
-                  }
+                  },
+                  "additionalProperties": false
                 },
                 "description": "The id or company_id of the company can be passed as input parameters."
               }
             },
+            "additionalProperties": false,
             "required": [
               "name",
               "companies"
@@ -22152,6 +22211,7 @@
               "companies": {
                 "type": "array",
                 "items": {
+                  "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
@@ -22163,13 +22223,21 @@
                     },
                     "untag": {
                       "type": "boolean",
-                      "description": "Always set to true"
+                      "description": "Always set to true",
+                      "enum": [
+                        true
+                      ]
                     }
-                  }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "untag"
+                  ]
                 },
                 "description": "The id or company_id of the company can be passed as input parameters."
               }
             },
+            "additionalProperties": false,
             "required": [
               "name",
               "companies"
@@ -22187,15 +22255,18 @@
               "users": {
                 "type": "array",
                 "items": {
+                  "type": "object",
                   "properties": {
                     "id": {
                       "type": "string",
                       "description": "The Intercom defined id representing the user."
                     }
-                  }
+                  },
+                  "additionalProperties": false
                 }
               }
             },
+            "additionalProperties": false,
             "required": [
               "name",
               "users"

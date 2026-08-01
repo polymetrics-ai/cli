@@ -443,7 +443,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
 - create_message:
   - endpoint: POST /messages
-  - optional fields: message_type, subject, body, template, from, to, cc, bcc, created_at, create_conversation_without_contact_reply
+  - optional fields: message_type, subject, body, template, components, from, to, cc, bcc, created_at, create_conversation_without_contact_reply
   - risk: Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; in_app requires body/from/to; whatsapp requires template/components/from/to.
 - create_news_item:
   - endpoint: POST /news/news_items

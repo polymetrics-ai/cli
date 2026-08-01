@@ -2,8 +2,12 @@ package defs
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"io"
 	"io/fs"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -54,21 +58,24 @@ func TestProductionEmbedExcludesConformanceArtifacts(t *testing.T) {
 	}
 }
 
-func TestIntercomVariantWriteSchemasValidateTargets(t *testing.T) {
+func loadIntercomBundle(t *testing.T) engine.Bundle {
+	t.Helper()
+
 	bundles, err := engine.LoadAll(FS)
 	if err != nil {
 		t.Fatalf("LoadAll(FS): %v", err)
 	}
-	var intercom engine.Bundle
 	for _, bundle := range bundles {
 		if bundle.Name == "intercom" {
-			intercom = bundle
-			break
+			return bundle
 		}
 	}
-	if intercom.Name == "" {
-		t.Fatal("LoadAll(FS) missing intercom bundle")
-	}
+	t.Fatal("LoadAll(FS) missing intercom bundle")
+	return engine.Bundle{}
+}
+
+func TestIntercomVariantWriteSchemasValidateTargets(t *testing.T) {
+	intercom := loadIntercomBundle(t)
 
 	tests := []struct {
 		name    string
@@ -111,6 +118,59 @@ func TestIntercomVariantWriteSchemasValidateTargets(t *testing.T) {
 			record:  connectors.Record{"name": "Ada"},
 			wantErr: true,
 		},
+		{
+			name:   "create message email rejects in-app body",
+			action: "create_message",
+			record: connectors.Record{
+				"message_type": "email",
+				"body":         "hello",
+				"from":         map[string]any{"type": "admin", "id": 394051},
+				"to":           map[string]any{"type": "user", "id": "contact_id_fixture"},
+			},
+			wantErr: true,
+		},
+		{
+			name:   "create message accepts whatsapp components",
+			action: "create_message",
+			record: connectors.Record{
+				"message_type": "whatsapp",
+				"template":     "keep_live",
+				"components": []any{
+					map[string]any{
+						"type": "BODY",
+						"parameters": []any{
+							map[string]any{"type": "text", "text": "Username 123"},
+						},
+					},
+				},
+				"from": map[string]any{"type": "admin", "id": 394051},
+				"to":   map[string]any{"type": "user", "id": "contact_id_fixture"},
+			},
+		},
+		{
+			name:   "create tag accepts company variant",
+			action: "create_tag",
+			record: connectors.Record{
+				"name":      "vip",
+				"companies": []any{map[string]any{"id": "company_id_fixture"}},
+			},
+		},
+		{
+			name:   "create tag accepts company untag variant",
+			action: "create_tag",
+			record: connectors.Record{
+				"name":      "vip",
+				"companies": []any{map[string]any{"id": "company_id_fixture", "untag": true}},
+			},
+		},
+		{
+			name:   "create tag accepts user variant",
+			action: "create_tag",
+			record: connectors.Record{
+				"name":  "vip",
+				"users": []any{map[string]any{"id": "user_id_fixture"}},
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -123,5 +183,74 @@ func TestIntercomVariantWriteSchemasValidateTargets(t *testing.T) {
 				t.Fatalf("ValidateWrite() error = %v", err)
 			}
 		})
+	}
+}
+
+func TestIntercomCreateMessageWriteIncludesWhatsAppComponents(t *testing.T) {
+	intercom := loadIntercomBundle(t)
+	var gotBody map[string]any
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Errorf("method = %s, want %s", r.Method, http.MethodPost)
+		}
+		if r.URL.Path != "/messages" {
+			t.Errorf("path = %s, want /messages", r.URL.Path)
+		}
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			t.Errorf("ReadAll(body): %v", err)
+			return
+		}
+		if err := json.Unmarshal(body, &gotBody); err != nil {
+			t.Errorf("Unmarshal(body): %v", err)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if _, err := w.Write([]byte(`{}`)); err != nil {
+			t.Errorf("write response: %v", err)
+		}
+	}))
+	defer server.Close()
+
+	record := connectors.Record{
+		"message_type": "whatsapp",
+		"template":     "keep_live",
+		"components": []any{
+			map[string]any{
+				"type": "BODY",
+				"parameters": []any{
+					map[string]any{"type": "text", "text": "Username 123"},
+				},
+			},
+		},
+		"from": map[string]any{"type": "admin", "id": 394051},
+		"to":   map[string]any{"type": "user", "id": "contact_id_fixture"},
+	}
+
+	result, err := engine.Write(context.Background(), intercom, connectors.WriteRequest{
+		Action: "create_message",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL},
+			Secrets: map[string]string{"access_token": "fixture_token_placeholder"},
+		},
+	}, []connectors.Record{record}, nil)
+	if err != nil {
+		t.Fatalf("Write(): %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("Write() result = %+v, want 1 written and 0 failed", result)
+	}
+	components, ok := gotBody["components"].([]any)
+	if !ok || len(components) != 1 {
+		t.Fatalf("components = %#v, want one component", gotBody["components"])
+	}
+	component, ok := components[0].(map[string]any)
+	if !ok {
+		t.Fatalf("components[0] = %#v, want object", components[0])
+	}
+	parameters, ok := component["parameters"].([]any)
+	if !ok || len(parameters) != 1 {
+		t.Fatalf("parameters = %#v, want one parameter", component["parameters"])
 	}
 }
