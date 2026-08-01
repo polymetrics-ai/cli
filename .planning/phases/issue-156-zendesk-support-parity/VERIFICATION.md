@@ -28,3 +28,13 @@
 - [x] `cli_surface.json` validates as connector-owned command metadata.
 - [x] `docs.md` records operation-ledger provenance, safety gates, blocked dependencies, and fixture-only certification status.
 - [x] Generated Zendesk connector docs (`docs/connectors/zendesk-support/MANUAL.md`, `SKILL.md`) and `internal/cli/testdata/golden_transcripts.json` were updated for the connector command surface. Broad docs generator drift for unrelated connectors was reverted.
+
+## Parity checkpoint re-audit — 2026-08-01
+
+- [x] Official source re-fetched: `https://developer.zendesk.com/zendesk/oas.yaml` with browser-style user agent; parsed as OpenAPI 3.0.3 with `info.version` 2.0.0 after quoting the provider document's bare `=` example value for YAML parsing.
+- [x] Official operation count asserted: 434 paths, 625 unique method/path operations — GET 325, POST 111, PUT 89, PATCH 14, DELETE 86.
+- [x] Local API-surface parity asserted: 631 endpoint rows = 625 official rows + 6 supplemental existing-bundle rows; 0 missing official rows, 0 stale official rows, 0 duplicate endpoint keys, 0 unclassified rows, 0 multi-disposition rows.
+- [x] Executable dispositions asserted: 33 declared streams covered by 33 stream rows; 27 declared writes covered by 27 write rows; 0 unknown stream/write refs.
+- [x] Blocked/planned dispositions asserted: 571 blocked operation rows exactly match 571 `operations.json` entries; 0 missing/stale operation metadata entries; 0 duplicate operation IDs.
+- [x] Canonical command metadata asserted: 631 `cli_surface.json` commands reference 631 unique endpoint rows; 0 missing command refs, 0 stale command refs, 0 duplicate command paths, 0 duplicate endpoint refs.
+- [x] Delete/destructive safety asserted: 86 official DELETE operations = 9 covered delete writes with `confirm: "destructive"` + 77 blocked typed operation rows; 95 blocked destructive-action rows include those 77 DELETE rows plus 18 non-DELETE destructive mutations; 22 sensitive/secret mutation rows also require typed destructive confirmation. `operations.json` has 117 blocked destructive/sensitive typed approvals, and `cli_surface.json` has 118 destructive-confirmation command approvals including the 9 covered delete write-plan commands.

@@ -1,7 +1,7 @@
 {
   "api": "Zendesk Support API v2 (OpenAPI 2.0.0)",
   "docs": "https://developer.zendesk.com/api-reference/ticketing/introduction/; https://developer.zendesk.com/zendesk/oas.yaml",
-  "reviewed_at": "2026-07-30",
+  "reviewed_at": "2026-08-01",
   "operation_ledger_version": 1,
   "scope": "Complete official Zendesk Support OAS 2.0.0 operation ledger: 625 official operations inventoried exactly once. Existing fixture-backed streams and reverse-ETL writes remain covered; non-executable official operations are blocked by default as typed operation metadata. Supplemental covered_by rows are included only for existing Airbyte/Zendesk Guide/community bundle surfaces not present in the Support OAS so connector validation remains truthful.",
   "endpoints": [
