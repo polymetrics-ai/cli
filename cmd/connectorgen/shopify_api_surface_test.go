@@ -61,28 +61,30 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	if operations != 1123 {
 		t.Fatalf("operation endpoints = %d, want 1123", operations)
 	}
-	if destructiveConfirm != 154 {
-		t.Fatalf("destructive confirmed operations = %d, want 154", destructiveConfirm)
+	if destructiveConfirm != 157 {
+		t.Fatalf("destructive confirmed operations = %d, want 157", destructiveConfirm)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":  498,
+		"admin_reverse_etl":  495,
 		"binary_read":        17,
-		"destructive_action": 154,
+		"destructive_action": 157,
 		"direct_read":        454,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 154,
+		"critical": 157,
 		"high":     3,
 		"low":      471,
-		"medium":   495,
+		"medium":   492,
 	})
 
 	for _, path := range []string{
 		"GraphQL Mutation.customerRequestDataErasure",
 		"GraphQL Mutation.delegateAccessTokenDestroy",
+		"GraphQL Mutation.fulfillmentOrderReleaseHold",
 		"GraphQL Mutation.locationLocalPickupDisable",
 		"GraphQL Mutation.privacyFeaturesDisable",
 		"GraphQL Mutation.removeFromReturn",
+		"GraphQL Mutation.reverseFulfillmentOrderDispose",
 		"GraphQL Mutation.shopLocaleDisable",
 		"/admin/api/latest/comments/{comment_id}/remove.json",
 		"/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancel.json",
@@ -90,6 +92,7 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 		"/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancellation_request/accept.json",
 		"/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/cancellation_request/reject.json",
 		"/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/close.json",
+		"/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/release_hold.json",
 		"/admin/api/latest/fulfillments/{fulfillment_id}/cancel.json",
 		"/admin/api/latest/gift_cards/{gift_card_id}/disable.json",
 		"/admin/api/latest/orders/{order_id}/cancel.json",
@@ -107,6 +110,10 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	activate := byPath["GraphQL Mutation.discountCodeActivate"].Operation
 	if activate == nil || activate.Model != "admin_reverse_etl" || activate.Risk != "medium" || activate.Confirm != "" {
 		t.Fatalf("discountCodeActivate operation = %+v, want non-destructive admin_reverse_etl/medium", activate)
+	}
+	hold := byPath["GraphQL Mutation.fulfillmentOrderHold"].Operation
+	if hold == nil || hold.Model != "admin_reverse_etl" || hold.Risk != "medium" || hold.Confirm != "" {
+		t.Fatalf("fulfillmentOrderHold operation = %+v, want non-destructive admin_reverse_etl/medium", hold)
 	}
 }
 
@@ -163,7 +170,7 @@ func shopifyStateDestroying(ep engine.SurfaceEndpoint) bool {
 	}
 	for _, token := range tokens {
 		switch token {
-		case "archive", "cancel", "close", "deactivate", "delete", "destroy", "disable", "erasure", "remove", "revoke", "uninstall":
+		case "archive", "cancel", "close", "deactivate", "delete", "destroy", "disable", "discard", "dispose", "erasure", "expire", "release", "remove", "revoke", "uninstall", "void":
 			return true
 		}
 		if strings.HasPrefix(token, "cancel") {
@@ -233,5 +240,14 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 	}
 	if !reflect.DeepEqual(shopifyCamelTokens("delegateAccessTokenDestroy"), []string{"delegate", "access", "token", "destroy"}) {
 		t.Fatalf("unexpected delegateAccessTokenDestroy tokens")
+	}
+	if !reflect.DeepEqual(shopifyCamelTokens("reverseFulfillmentOrderDispose"), []string{"reverse", "fulfillment", "order", "dispose"}) {
+		t.Fatalf("unexpected reverseFulfillmentOrderDispose tokens")
+	}
+	if !shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: "GraphQL Mutation.fulfillmentOrderReleaseHold", Operation: &engine.SurfaceOperation{}}) {
+		t.Fatalf("fulfillmentOrderReleaseHold was not classified as state-destroying")
+	}
+	if got := shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: "GraphQL Mutation.fulfillmentOrderHold", Operation: &engine.SurfaceOperation{}}); got {
+		t.Fatalf("fulfillmentOrderHold classified as state-destroying")
 	}
 }

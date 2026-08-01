@@ -5995,12 +5995,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderReleaseHold",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderReleaseHold"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderReleaseHold",
+        "notes": "Shopify docs describe releasing fulfillment holds; treated as state-destroying hold removal"
       }
     },
     {
@@ -8609,12 +8611,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.reverseFulfillmentOrderDispose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/reverseFulfillmentOrderDispose"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/reverseFulfillmentOrderDispose",
+        "notes": "Shopify docs describe disposing reverse fulfillment order line items; treated as state-destroying disposition"
       }
     },
     {
@@ -12922,12 +12926,14 @@
       "method": "POST",
       "path": "/admin/api/latest/fulfillment_orders/{fulfillment_order_id}/release_hold.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentorder",
+        "notes": "Shopify REST docs describe releasing all holds on a fulfillment order; treated as state-destroying hold removal"
       }
     },
     {

@@ -20,7 +20,7 @@ Configure `shop_domain` with the Shopify shop host and provide the Admin API tok
 
 - Implemented REST DELETE actions are `kind: delete`, `body_type: none`, idempotent for `404`, use the official documented path variables (for example `{blog_id}` rather than generic `{id1}`), and declare `confirm: "destructive"`. They still execute only through the existing reverse ETL plan -> preview -> explicit approval -> execute path.
 - REST DELETE rows that require query identifiers, such as inventory levels (`inventory_item_id` + `location_id`) and theme assets (`asset[key]`), are blocked with an exact shared write-query foundation dependency instead of being excluded as unsafe.
-- State-destroying GraphQL mutations and REST operations that destroy, remove, cancel, close, disable, revoke, archive, deactivate, uninstall, or erase data are blocked as `destructive_action` with critical risk and `confirm: "destructive"`; non-destructive mutations such as activation remain `admin_reverse_etl`.
+- State-destroying GraphQL mutations and REST operations that destroy, remove, cancel, close, disable, revoke, archive, deactivate, uninstall, erase, expire, void, dispose, or release held state are blocked as `destructive_action` with critical risk and `confirm: "destructive"`; non-destructive mutations such as activation and applying holds remain `admin_reverse_etl`.
 - Other GraphQL mutations and REST POST/PUT rows are in scope but blocked until operation-specific typed schemas, redaction, fixtures, and approval text are added.
 
 ## Known limits
