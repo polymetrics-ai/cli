@@ -142,19 +142,8 @@
                 "type": "string",
                 "enum": ["download", "upload", "read", "write"]
               },
-              "method": { "type": "string" },
               "path": { "type": "string" },
-              "content_type": { "type": "string" },
-              "max_bytes": { "type": "integer" },
-              "query": {
-                "type": "object",
-                "additionalProperties": true
-              },
-              "body_schema": { "type": "object" },
-              "encoding": {
-                "type": "object",
-                "additionalProperties": true
-              }
+              "max_bytes": { "type": "integer" }
             }
           },
           "local_git": {

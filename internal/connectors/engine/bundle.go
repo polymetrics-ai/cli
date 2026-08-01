@@ -549,14 +549,9 @@ type BinaryOperationSpec struct {
 }
 
 type FileOperationSpec struct {
-	Direction   string            `json:"direction"`
-	Method      string            `json:"method,omitempty"`
-	Path        string            `json:"path,omitempty"`
-	ContentType string            `json:"content_type,omitempty"`
-	MaxBytes    int               `json:"max_bytes,omitempty"`
-	Query       map[string]string `json:"query,omitempty"`
-	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
-	Encoding    map[string]any    `json:"encoding,omitempty"`
+	Direction string `json:"direction"`
+	Path      string `json:"path,omitempty"`
+	MaxBytes  int    `json:"max_bytes,omitempty"`
 }
 
 type LocalGitOperationSpec struct {
@@ -1372,9 +1367,6 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	case "file_upload":
 		if op.File.Direction != "upload" {
 			return fmt.Errorf("operation %d (%q) file_upload direction must be upload, got %s", i, op.ID, op.File.Direction)
-		}
-		if method := strings.ToUpper(strings.TrimSpace(op.File.Method)); method == "GET" || method == "HEAD" {
-			return fmt.Errorf("operation %d (%q) file_upload method must be mutating, got %s", i, op.ID, method)
 		}
 		if op.File.MaxBytes <= 0 {
 			return fmt.Errorf("operation %d (%q) file_upload must declare positive max_bytes", i, op.ID)

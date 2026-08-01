@@ -176,21 +176,12 @@
       "id": "zendesk-support.validate_token",
       "kind": "rest_write",
       "summary": "Validate Token (POST /api/v2/any_channel/validate_token)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "admin",
       "rest": {
         "method": "POST",
         "path": "/api/v2/any_channel/validate_token"
@@ -660,36 +651,15 @@
       "id": "zendesk-support.update_brand_logo",
       "kind": "file_upload",
       "summary": "Update a Brand Logo (PUT /api/v2/brands/{brand_id}/logo)",
-      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
+      "description": "Official contract: PUT /api/v2/brands/{brand_id}/logo as multipart/form-data with required binary field `brand[logo][uploaded_data]` for the brand logo image. Currently blocked pending a shared bounded file-transfer schema/executor that can validate method, content type, query parameters, multipart fields, and byte caps without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "blocked pending bounded file upload approval binding",
       "output_policy": "none",
       "file": {
         "direction": "upload",
-        "method": "PUT",
         "path": "/api/v2/brands/{brand_id}/logo",
-        "content_type": "multipart/form-data",
-        "max_bytes": 10485760,
-        "body_schema": {
-          "type": "object",
-          "title": "BrandLogoUploadRequest",
-          "required": [
-            "brand[logo][uploaded_data]"
-          ],
-          "properties": {
-            "brand[logo][uploaded_data]": {
-              "type": "string",
-              "format": "binary",
-              "description": "Brand logo image file"
-            }
-          }
-        },
-        "encoding": {
-          "brand[logo][uploaded_data]": {
-            "contentType": "image/png, image/jpeg, image/jpg, image/gif"
-          }
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -1428,31 +1398,15 @@
       "id": "zendesk-support.create_custom_object_record_attachment",
       "kind": "file_upload",
       "summary": "Create Custom Object Record Attachment (POST /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments)",
-      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
+      "description": "Official contract: POST /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments as multipart/form-data with required binary field `uploaded_data`. Currently blocked pending a shared bounded file-transfer schema/executor that can validate method, content type, query parameters, multipart fields, and byte caps without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "blocked pending bounded file upload approval binding",
       "output_policy": "none",
       "file": {
         "direction": "upload",
-        "method": "POST",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
-        "content_type": "multipart/form-data",
-        "max_bytes": 10485760,
-        "body_schema": {
-          "type": "object",
-          "title": "CustomObjectRecordAttachmentCreateRequest",
-          "required": [
-            "uploaded_data"
-          ],
-          "properties": {
-            "uploaded_data": {
-              "type": "string",
-              "format": "binary",
-              "description": "The file to upload as an attachment"
-            }
-          }
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -2015,13 +1969,12 @@
       "id": "zendesk-support.restore_deleted_ticket",
       "kind": "rest_write",
       "summary": "Restore a Previously Deleted Ticket (PUT /api/v2/deleted_tickets/{ticket_id}/restore)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Source-backed recovery operation; blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/deleted_tickets/{ticket_id}/restore"
@@ -2047,16 +2000,18 @@
       "id": "zendesk-support.bulk_restore_deleted_tickets",
       "kind": "rest_write",
       "summary": "Restore Previously Deleted Tickets in Bulk (PUT /api/v2/deleted_tickets/restore_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Source-backed recovery operation; blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/deleted_tickets/restore_many"
+        "path": "/api/v2/deleted_tickets/restore_many",
+        "query": {
+          "ids": "{ids}"
+        }
       }
     },
     {
@@ -2481,24 +2436,18 @@
       "id": "zendesk-support.create_end_user_identity",
       "kind": "rest_write",
       "summary": "Create End User Identity (POST /api/v2/end_users/{user_id}/identities)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
-        "path": "/api/v2/end_users/{user_id}/identities"
+        "path": "/api/v2/end_users/{user_id}/identities",
+        "query": {
+          "brand_id": "{brand_id}"
+        }
       }
     },
     {
@@ -2536,21 +2485,12 @@
       "id": "zendesk-support.make_end_user_identity_primary",
       "kind": "rest_write",
       "summary": "Make End User Identity Primary (PUT /api/v2/end_users/{user_id}/identities/{user_identity_id}/make_primary)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}/make_primary"
@@ -2560,21 +2500,12 @@
       "id": "zendesk-support.request_end_user_verification",
       "kind": "rest_write",
       "summary": "Request End User Verification (PUT /api/v2/end_users/{user_id}/identities/{user_identity_id}/request_verification)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}/request_verification"
@@ -3809,31 +3740,15 @@
       "id": "zendesk-support.create_associated_macro_attachment",
       "kind": "file_upload",
       "summary": "Create Macro Attachment (POST /api/v2/macros/{macro_id}/attachments)",
-      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
+      "description": "Official contract: POST /api/v2/macros/{macro_id}/attachments as multipart/form-data with required binary field `uploaded_data`. Currently blocked pending a shared bounded file-transfer schema/executor that can validate method, content type, query parameters, multipart fields, and byte caps without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "blocked pending bounded file upload approval binding",
       "output_policy": "none",
       "file": {
         "direction": "upload",
-        "method": "POST",
         "path": "/api/v2/macros/{macro_id}/attachments",
-        "content_type": "multipart/form-data",
-        "max_bytes": 10485760,
-        "body_schema": {
-          "type": "object",
-          "title": "MacroAttachmentCreateRequest",
-          "required": [
-            "uploaded_data"
-          ],
-          "properties": {
-            "uploaded_data": {
-              "type": "string",
-              "format": "binary",
-              "description": "The file to upload as a macro attachment"
-            }
-          }
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -3870,31 +3785,15 @@
       "id": "zendesk-support.create_macro_attachment",
       "kind": "file_upload",
       "summary": "Create Unassociated Macro Attachment (POST /api/v2/macros/attachments)",
-      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
+      "description": "Official contract: POST /api/v2/macros/attachments as multipart/form-data with required binary field `uploaded_data`. Currently blocked pending a shared bounded file-transfer schema/executor that can validate method, content type, query parameters, multipart fields, and byte caps without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "blocked pending bounded file upload approval binding",
       "output_policy": "none",
       "file": {
         "direction": "upload",
-        "method": "POST",
         "path": "/api/v2/macros/attachments",
-        "content_type": "multipart/form-data",
-        "max_bytes": 10485760,
-        "body_schema": {
-          "type": "object",
-          "title": "MacroAttachmentCreateRequest",
-          "required": [
-            "uploaded_data"
-          ],
-          "properties": {
-            "uploaded_data": {
-              "type": "string",
-              "format": "binary",
-              "description": "The file to upload as a macro attachment"
-            }
-          }
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -4029,21 +3928,12 @@
       "id": "zendesk-support.create_oauth_client",
       "kind": "rest_write",
       "summary": "Create Client (POST /api/v2/oauth/clients)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
         "path": "/api/v2/oauth/clients"
@@ -4068,21 +3958,12 @@
       "id": "zendesk-support.update_client",
       "kind": "rest_write",
       "summary": "Update Client (PUT /api/v2/oauth/clients/{oauth_client_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/oauth/clients/{oauth_client_id}"
@@ -4108,21 +3989,12 @@
       "id": "zendesk-support.client_generate_secret",
       "kind": "rest_write",
       "summary": "Generate Secret (PUT /api/v2/oauth/clients/{oauth_client_id}/generate_secret)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/oauth/clients/{oauth_client_id}/generate_secret"
@@ -4192,24 +4064,15 @@
       "id": "zendesk-support.create_oauth_token",
       "kind": "rest_write",
       "summary": "Create Token (POST /api/v2/oauth/tokens)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
         "path": "/api/v2/oauth/tokens"
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -4308,21 +4171,12 @@
       "id": "zendesk-support.update_organization_field",
       "kind": "rest_write",
       "summary": "Update Organization Field (PUT /api/v2/organization_fields/{organization_field_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/organization_fields/{organization_field_id}"
@@ -5062,21 +4916,12 @@
       "id": "zendesk-support.create_support_address",
       "kind": "rest_write",
       "summary": "Create Support Address (POST /api/v2/recipient_addresses)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
         "path": "/api/v2/recipient_addresses"
@@ -5132,21 +4977,12 @@
       "id": "zendesk-support.verify_support_address_forwarding",
       "kind": "rest_write",
       "summary": "Verify Support Address Forwarding (PUT /api/v2/recipient_addresses/{support_address_id}/verify)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/recipient_addresses/{support_address_id}/verify"
@@ -6099,13 +5935,12 @@
       "id": "zendesk-support.recover_suspended_ticket",
       "kind": "rest_write",
       "summary": "Recover Suspended Ticket (PUT /api/v2/suspended_tickets/{id}/recover)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Source-backed recovery operation; blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/suspended_tickets/{id}/recover"
@@ -6131,13 +5966,12 @@
       "id": "zendesk-support.bulk_recover_suspended_tickets",
       "kind": "rest_write",
       "summary": "Bulk Recover Suspended Tickets (PUT /api/v2/suspended_tickets/bulk_recover)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Source-backed recovery operation; blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/suspended_tickets/bulk_recover",
@@ -6205,13 +6039,12 @@
       "id": "zendesk-support.recover_suspended_tickets",
       "kind": "rest_write",
       "summary": "Recover Multiple Suspended Tickets (PUT /api/v2/suspended_tickets/recover_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Source-backed recovery operation; blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/suspended_tickets/recover_many"
@@ -7790,26 +7623,15 @@
       "id": "zendesk-support.upload_files",
       "kind": "file_upload",
       "summary": "Upload Files (POST /api/v2/uploads)",
-      "description": "File or multipart upload needs a bounded file-transfer foundation; this connector-local row records the official operation without exposing inline raw bytes.",
+      "description": "Official contract: POST /api/v2/uploads with required query parameter `filename`, a recognized MIME Content-Type, and raw binary file bytes. Currently blocked pending a shared bounded file-transfer schema/executor that can validate method, content type, query parameters, multipart fields, and byte caps without exposing inline raw bytes.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "blocked pending bounded file upload approval binding",
       "output_policy": "none",
       "file": {
         "direction": "upload",
-        "method": "POST",
         "path": "/api/v2/uploads",
-        "content_type": "{mime_type}",
-        "max_bytes": 10485760,
-        "query": {
-          "filename": "{filename}"
-        },
-        "body_schema": {
-          "type": "string",
-          "title": "AttachmentUploadRequest",
-          "format": "binary",
-          "description": "Raw file bytes to upload; Content-Type must be a recognized MIME type."
-        }
+        "max_bytes": 10485760
       }
     },
     {
@@ -7862,21 +7684,12 @@
       "id": "zendesk-support.update_user_field",
       "kind": "rest_write",
       "summary": "Update User Field (PUT /api/v2/user_fields/{user_field_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/user_fields/{user_field_id}"
@@ -8196,24 +8009,18 @@
       "id": "zendesk-support.create_user_identity",
       "kind": "rest_write",
       "summary": "Create Identity (POST /api/v2/users/{user_id}/identities)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
-        "path": "/api/v2/users/{user_id}/identities"
+        "path": "/api/v2/users/{user_id}/identities",
+        "query": {
+          "brand_id": "{brand_id}"
+        }
       }
     },
     {
@@ -8235,21 +8042,12 @@
       "id": "zendesk-support.update_user_identity",
       "kind": "rest_write",
       "summary": "Update Identity (PUT /api/v2/users/{user_id}/identities/{user_identity_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/users/{user_id}/identities/{user_identity_id}"
@@ -8275,21 +8073,12 @@
       "id": "zendesk-support.make_user_identity_primary",
       "kind": "rest_write",
       "summary": "Make Identity Primary (PUT /api/v2/users/{user_id}/identities/{user_identity_id}/make_primary)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/make_primary"
@@ -8299,45 +8088,30 @@
       "id": "zendesk-support.request_user_verification",
       "kind": "rest_write",
       "summary": "Request User Verification (PUT /api/v2/users/{user_id}/identities/{user_identity_id}/request_verification)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/request_verification"
+        "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/request_verification",
+        "query": {
+          "brand_id": "{brand_id}"
+        }
       }
     },
     {
       "id": "zendesk-support.verify_user_identity",
       "kind": "rest_write",
       "summary": "Verify Identity (PUT /api/v2/users/{user_id}/identities/{user_identity_id}/verify)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/verify"
@@ -8522,21 +8296,12 @@
       "id": "zendesk-support.set_user_password",
       "kind": "rest_write",
       "summary": "Set a User's Password (POST /api/v2/users/{user_id}/password)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "POST",
         "path": "/api/v2/users/{user_id}/password"
@@ -8546,24 +8311,18 @@
       "id": "zendesk-support.change_own_password",
       "kind": "rest_write",
       "summary": "Change Your Password (PUT /api/v2/users/{user_id}/password)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/users/{user_id}/password"
+        "path": "/api/v2/users/{user_id}/password",
+        "query": {
+          "brand_id": "{brand_id}"
+        }
       }
     },
     {
@@ -8969,7 +8728,7 @@
       "id": "zendesk-support.create_or_update_user",
       "kind": "rest_write",
       "summary": "Create Or Update User (POST /api/v2/users/create_or_update)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Source-backed UserRequest body may include `user.password` and `user.identities[].value`; metadata remains blocked by default and redacts those fields before any future preview or execution.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
       "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
@@ -8979,7 +8738,8 @@
       "sensitive_policy": {
         "input_mode": "env_or_stdin",
         "redact_fields": [
-          "body"
+          "user.password",
+          "user.identities.value"
         ],
         "transform": "none",
         "approval_mode": "typed_confirmation"
@@ -8992,6 +8752,83 @@
         "body_schema": {
           "type": "object",
           "title": "UserRequest",
+          "required": [
+            "user"
+          ],
+          "properties": {
+            "user": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The user id for merge/update variants"
+                },
+                "external_id": {
+                  "type": "string",
+                  "description": "A unique identifier from another system"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string",
+                  "description": "The user's password"
+                },
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "email",
+                          "twitter",
+                          "facebook",
+                          "google",
+                          "phone_number",
+                          "agent_forwarding",
+                          "any_channel",
+                          "foreign",
+                          "sdk",
+                          "messaging"
+                        ]
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "primary": {
+                        "type": "boolean"
+                      },
+                      "verification_method": {
+                        "type": "string",
+                        "enum": [
+                          "none",
+                          "low",
+                          "sso",
+                          "embed",
+                          "full"
+                        ]
+                      },
+                      "verified": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "value"
+                    ]
+                  }
+                }
+              }
+            }
+          },
           "additionalProperties": true
         }
       }
@@ -9645,24 +9482,15 @@
       "id": "zendesk-support.create_token_for_grant_type",
       "kind": "rest_write",
       "summary": "Create Token for Grant Type (POST /oauth/tokens)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
+      "description": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction. Official OAS metadata does not declare a request body for this operation, so this row does not model non-inline secret input.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
       "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
+      "mutation_class": "create",
       "rest": {
         "method": "POST",
         "path": "/oauth/tokens"
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
       }
     }
   ]

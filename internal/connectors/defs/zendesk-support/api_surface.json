@@ -159,11 +159,11 @@
       "method": "POST",
       "path": "/api/v2/any_channel/validate_token",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ValidateToken; summary=Validate Token; tags=Channel Framework"
       }
@@ -1573,11 +1573,11 @@
       "method": "PUT",
       "path": "/api/v2/deleted_tickets/{ticket_id}/restore",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RestoreDeletedTicket; summary=Restore a Previously Deleted Ticket; tags=Tickets"
       }
@@ -1599,11 +1599,11 @@
       "method": "PUT",
       "path": "/api/v2/deleted_tickets/restore_many",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=BulkRestoreDeletedTickets; summary=Restore Previously Deleted Tickets in Bulk; tags=Tickets"
       }
@@ -1950,11 +1950,11 @@
       "method": "POST",
       "path": "/api/v2/end_users/{user_id}/identities",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateEndUserIdentity; summary=Create End User Identity; tags=User Identities"
       }
@@ -1989,11 +1989,11 @@
       "method": "PUT",
       "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}/make_primary",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MakeEndUserIdentityPrimary; summary=Make End User Identity Primary; tags=User Identities"
       }
@@ -2002,11 +2002,11 @@
       "method": "PUT",
       "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}/request_verification",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RequestEndUserVerification; summary=Request End User Verification; tags=User Identities"
       }
@@ -3223,11 +3223,11 @@
       "method": "POST",
       "path": "/api/v2/oauth/clients",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOAuthClient; summary=Create Client; tags=OAuth Clients"
       }
@@ -3249,11 +3249,11 @@
       "method": "PUT",
       "path": "/api/v2/oauth/clients/{oauth_client_id}",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateClient; summary=Update Client; tags=OAuth Clients"
       }
@@ -3275,11 +3275,11 @@
       "method": "PUT",
       "path": "/api/v2/oauth/clients/{oauth_client_id}/generate_secret",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ClientGenerateSecret; summary=Generate Secret; tags=OAuth Clients"
       }
@@ -3340,11 +3340,11 @@
       "method": "POST",
       "path": "/api/v2/oauth/tokens",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOAuthToken; summary=Create Token; tags=OAuth Tokens"
       }
@@ -3438,11 +3438,11 @@
       "method": "PUT",
       "path": "/api/v2/organization_fields/{organization_field_id}",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateOrganizationField; summary=Update Organization Field; tags=Organization Fields"
       }
@@ -4084,11 +4084,11 @@
       "method": "POST",
       "path": "/api/v2/recipient_addresses",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateSupportAddress; summary=Create Support Address; tags=Support Addresses"
       }
@@ -4136,11 +4136,11 @@
       "method": "PUT",
       "path": "/api/v2/recipient_addresses/{support_address_id}/verify",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=VerifySupportAddressForwarding; summary=Verify Support Address Forwarding; tags=Support Addresses"
       }
@@ -4977,11 +4977,11 @@
       "method": "PUT",
       "path": "/api/v2/suspended_tickets/{id}/recover",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RecoverSuspendedTicket; summary=Recover Suspended Ticket; tags=Suspended Tickets"
       }
@@ -5003,11 +5003,11 @@
       "method": "PUT",
       "path": "/api/v2/suspended_tickets/bulk_recover",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=BulkRecoverSuspendedTickets; summary=Bulk Recover Suspended Tickets; tags=Suspended Tickets"
       }
@@ -5042,11 +5042,11 @@
       "method": "PUT",
       "path": "/api/v2/suspended_tickets/recover_many",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RecoverSuspendedTickets; summary=Recover Multiple Suspended Tickets; tags=Suspended Tickets"
       }
@@ -6428,11 +6428,11 @@
       "method": "PUT",
       "path": "/api/v2/user_fields/{user_field_id}",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateUserField; summary=Update User Field; tags=User Fields"
       }
@@ -6729,11 +6729,11 @@
       "method": "POST",
       "path": "/api/v2/users/{user_id}/identities",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateUserIdentity; summary=Create Identity; tags=User Identities"
       }
@@ -6755,11 +6755,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/identities/{user_identity_id}",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateUserIdentity; summary=Update Identity; tags=User Identities"
       }
@@ -6781,11 +6781,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/make_primary",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MakeUserIdentityPrimary; summary=Make Identity Primary; tags=User Identities"
       }
@@ -6794,11 +6794,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/request_verification",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RequestUserVerification; summary=Request User Verification; tags=User Identities"
       }
@@ -6807,11 +6807,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/identities/{user_identity_id}/verify",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=VerifyUserIdentity; summary=Verify Identity; tags=User Identities"
       }
@@ -6963,11 +6963,11 @@
       "method": "POST",
       "path": "/api/v2/users/{user_id}/password",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetUserPassword; summary=Set a User's Password; tags=User Passwords"
       }
@@ -6976,11 +6976,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/password",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ChangeOwnPassword; summary=Change Your Password; tags=User Passwords"
       }
@@ -7797,11 +7797,11 @@
       "method": "POST",
       "path": "/oauth/tokens",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTokenForGrantType; summary=Create Token for Grant Type; tags=Grant Type Tokens"
       }
