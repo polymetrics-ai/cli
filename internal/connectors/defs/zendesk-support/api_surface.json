@@ -5029,11 +5029,11 @@
       "method": "POST",
       "path": "/api/v2/suspended_tickets/export",
       "operation": {
-        "model": "destructive_action",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ExportSuspendedTickets; summary=Export Suspended Tickets; tags=Suspended Tickets"
       }
@@ -7641,11 +7641,11 @@
       "method": "POST",
       "path": "/api/v2/views/preview",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "high",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PreviewViews; summary=Preview Views; tags=Views"
       }

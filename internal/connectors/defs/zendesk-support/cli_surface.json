@@ -7317,7 +7317,7 @@
     {
       "path": "operations export_suspended_tickets",
       "summary": "Export Suspended Tickets",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "planned",
       "operation": "zendesk-support.export_suspended_tickets",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
@@ -7328,8 +7328,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
+      "notes": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
     },
     {
       "path": "operations recover_suspended_tickets",
@@ -10513,7 +10513,7 @@
     {
       "path": "operations preview_views",
       "summary": "Preview Views",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "planned",
       "operation": "zendesk-support.preview_views",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
@@ -10523,9 +10523,9 @@
           "path": "/api/v2/views/preview"
         }
       ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+      "risk": "medium",
+      "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
+      "notes": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
     },
     {
       "path": "operations preview_count",
