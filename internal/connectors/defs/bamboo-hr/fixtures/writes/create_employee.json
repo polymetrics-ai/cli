@@ -1,0 +1,22 @@
+{
+  "record": {
+    "firstName": "Fixture Name",
+    "lastName": "Fixture Name",
+    "workEmail": "fixture@example.com",
+    "jobTitle": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employees",
+    "body": {
+      "firstName": "Fixture Name",
+      "lastName": "Fixture Name",
+      "workEmail": "fixture@example.com",
+      "jobTitle": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

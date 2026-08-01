@@ -1,0 +1,77 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "employeeId": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "SINGLE",
+        "CLOCK",
+        "MULTIPLE",
+        "HOUR"
+      ]
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "OPEN",
+        "PENDING_APPROVAL",
+        "APPROVED"
+      ]
+    },
+    "totalHours": {
+      "type": "number"
+    },
+    "overtimeHours": {
+      "type": "number"
+    },
+    "approvedBy": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "approvedAt": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "hoursLastChangedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_timesheets"
+}

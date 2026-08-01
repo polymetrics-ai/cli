@@ -1,0 +1,50 @@
+{
+  "record": {
+    "groups": [
+      {
+        "groupId": "fixture_id",
+        "groupName": "Fixture Name",
+        "levels": [
+          {
+            "levelId": "fixture_id",
+            "levelName": "Fixture Name",
+            "compensationType": "Salary",
+            "min": "fixture_value",
+            "mid": "fixture_id",
+            "max": "fixture_value",
+            "percentageRange": "fixture_value",
+            "currencyCode": "fixture_value"
+          }
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/pay-grades-and-bands/levels",
+    "body": {
+      "groups": [
+        {
+          "groupId": "fixture_id",
+          "groupName": "Fixture Name",
+          "levels": [
+            {
+              "levelId": "fixture_id",
+              "levelName": "Fixture Name",
+              "compensationType": "Salary",
+              "min": "fixture_value",
+              "mid": "fixture_id",
+              "max": "fixture_value",
+              "percentageRange": "fixture_value",
+              "currencyCode": "fixture_value"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

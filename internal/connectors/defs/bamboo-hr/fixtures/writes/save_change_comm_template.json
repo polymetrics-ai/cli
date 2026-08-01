@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "messageText": "fixture_value",
+    "subjectText": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/change_comm/template",
+    "body": {
+      "messageText": "fixture_value",
+      "subjectText": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

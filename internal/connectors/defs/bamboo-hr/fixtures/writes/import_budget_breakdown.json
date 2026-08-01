@@ -1,0 +1,33 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "budgetBreakdown": [
+      {
+        "employeeName": "Fixture Name",
+        "emailAddress": "fixture@example.com",
+        "salaryBudget": "fixture_value",
+        "bonusBudget": "fixture_value",
+        "equityBudget": "fixture_value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/budgets/import",
+    "body": {
+      "budgetBreakdown": [
+        {
+          "employeeName": "Fixture Name",
+          "emailAddress": "fixture@example.com",
+          "salaryBudget": "fixture_value",
+          "bonusBudget": "fixture_value",
+          "equityBudget": "fixture_value"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "companyName": "Fixture Name"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/company-profile-data/display-name",
+    "body": {
+      "companyName": "Fixture Name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

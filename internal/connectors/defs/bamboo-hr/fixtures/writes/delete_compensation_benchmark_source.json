@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/compensation/benchmarks/sources",
+    "body": {
+      "id": "fixture_id"
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

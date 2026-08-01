@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/hris/org/locations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "fixture_id",
+          "label": "fixture_value",
+          "archived": true,
+          "manageable": true,
+          "address": {
+            "address1": "fixture_value",
+            "address2": "fixture_value",
+            "city": "fixture_value"
+          },
+          "createdAt": "2026-01-01T00:00:00Z",
+          "archivedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

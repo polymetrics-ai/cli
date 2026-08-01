@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/meta/company"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1001,
+      "name": "Fixture Name",
+      "domain": "fixture_value",
+      "baseApiUrl": "https://example.invalid/fixture"
+    }
+  }
+}

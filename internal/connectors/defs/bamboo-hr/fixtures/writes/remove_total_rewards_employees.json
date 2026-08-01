@@ -1,0 +1,20 @@
+{
+  "record": {
+    "employeeIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/compensation/total_rewards/employees",
+    "body": {
+      "employeeIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

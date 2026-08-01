@@ -1,0 +1,429 @@
+{
+  "operations": [
+    {
+      "id": "bamboo_hr.get_break_policy_suggestions",
+      "kind": "rest_read",
+      "summary": "Get Break Policy Suggestions",
+      "description": "Uses an AI agent to analyze existing break policies and company context, then returns structured meal and rest break policy recommendations ready for form pre-fill.\n\nOAuth Scopes: time_tracking:breaks",
+      "source_url": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+      "risk": "medium",
+      "approval": "none; bounded fixed-target JSON direct read",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "time_tracking:breaks"
+      ],
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/time-tracking/break-policies/suggestions",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "prompt"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bamboo_hr.get_data_from_dataset_v1",
+      "kind": "rest_read",
+      "summary": "Get Data from Dataset (v1)",
+      "description": "Deprecated. Use \"Get Data from Dataset (v2)\" instead.\n\nRetrieves records from the specified dataset using the fields, filters, sorting, grouping, and aggregations supplied in the request body. Provide field names in the `fields` array; use \"Get Fields from Dataset (v1.2)\" to discover available names. The response contains paginated rows under `data`, an `aggregations` array (empty when none requested), and a `pagination` block with page navigation links. Results default to page 1 with 500 record",
+      "source_url": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+      "risk": "medium",
+      "approval": "none; bounded fixed-target JSON direct read",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "report"
+      ],
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/datasets/{datasetName}",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "aggregations": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "defaultAggregation": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "object",
+                    "array",
+                    "null"
+                  ]
+                },
+                "overridingAggregations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            },
+            "sortBy": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "sort": {
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ]
+                  },
+                  "aggregationType": {
+                    "type": "string",
+                    "enum": [
+                      "count",
+                      "count_unique",
+                      "sum",
+                      "avg",
+                      "min",
+                      "max"
+                    ]
+                  }
+                }
+              }
+            },
+            "filters": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "match": {
+                  "type": "string",
+                  "enum": [
+                    "all",
+                    "any"
+                  ]
+                },
+                "filters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "properties": {
+                      "field": {
+                        "type": "string"
+                      },
+                      "operator": {
+                        "type": "string",
+                        "enum": [
+                          "contains",
+                          "does_not_contain",
+                          "equal",
+                          "not_equal",
+                          "empty",
+                          "not_empty",
+                          "lt",
+                          "lte",
+                          "gt",
+                          "gte",
+                          "last",
+                          "next",
+                          "range",
+                          "checked",
+                          "not_checked",
+                          "includes",
+                          "does_not_include"
+                        ]
+                      },
+                      "value": {
+                        "type": [
+                          "string",
+                          "number",
+                          "boolean",
+                          "object",
+                          "array",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "groupBy": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "showHistory": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "fields"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bamboo_hr.get_field_options_v1",
+      "kind": "rest_read",
+      "summary": "Get Field Options (v1)",
+      "description": "Deprecated. Use \"Get Field Options (v1.2)\" instead.\n\nReturns the allowed values for one or more fields in a dataset, for use as filter values when querying data via \"Get Data from Dataset\". Pass field names in the `fields` array of the request body; the response is an object keyed by field name, where each value is an array of `{id, value}` option objects. Optionally supply `filters` to narrow the returned options (e.g. only options that exist for active employees) and `dependentFields` when one",
+      "source_url": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+      "risk": "medium",
+      "approval": "none; bounded fixed-target JSON direct read",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "field"
+      ],
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/datasets/{datasetName}/field-options",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dependentFields": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "filters": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "fields"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bamboo_hr.get_field_options_v1_2",
+      "kind": "rest_read",
+      "summary": "Get Field Options (v1.2)",
+      "description": "Returns the allowed values for one or more fields in a dataset, for use as filter values when querying data via \"Get Data from Dataset (v2)\". Pass field names in the `fields` array of the request body; the response is an object keyed by field name, where each value is an array of `{id, value}` option objects. Optionally supply `filters` to narrow the returned options (e.g. only options that exist for active employees) and `dependentFields` when one field's options depend on another field's selec",
+      "source_url": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+      "risk": "medium",
+      "approval": "none; bounded fixed-target JSON direct read",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "field"
+      ],
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1_2/datasets/{datasetName}/field-options",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dependentFields": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "filters": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "fields"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bamboo_hr.get_data_from_dataset_v2",
+      "kind": "rest_read",
+      "summary": "Get Data from Dataset (v2)",
+      "description": "Queries the named dataset and returns the matching rows. The response is a JSON object with `data` (an array of row objects, each wrapping its values under a `fields` object whose keys match the requested field names), `links` (pagination navigation URLs; `prev` and/or `next`, omitted at boundaries), and `meta` (with `page`, `pageSize`, `totalPages`, `totalItems`).\n\nUse this for tabular reporting, custom field selection across many employees, and OData-style filtering against the full dataset fi",
+      "source_url": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+      "risk": "medium",
+      "approval": "none; bounded fixed-target JSON direct read",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "report"
+      ],
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/datasets/{datasetName}/data",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "filter": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "orderBy": {
+              "type": [
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "array",
+                "null"
+              ]
+            },
+            "page": {
+              "type": "integer"
+            },
+            "pageSize": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "fields"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bamboo_hr.request_custom_report",
+      "kind": "rest_read",
+      "summary": "Request Custom Report",
+      "description": "**Deprecated. Use Datasets > Get Data from Dataset instead.**\n\nGenerates an ad-hoc employee report based on a caller-specified list of fields and optional filters. Returns report data in the requested format (JSON, XML, CSV, XLS, or PDF). The report includes all employees regardless of status (both Active and Inactive), unlike the BambooHR UI which filters to Active employees by default.\n\nThe request body may be submitted as JSON or XML. To submit JSON, set `Content-Type: application/json` exact",
+      "source_url": "https://openapi.bamboohr.io/main/latest/docs/openapi/public-openapi.yaml",
+      "risk": "medium",
+      "approval": "none; bounded fixed-target JSON direct read",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "report"
+      ],
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/reports/custom",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "filters": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "lastChanged": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "includeNull": {
+                      "type": "string",
+                      "enum": [
+                        "yes",
+                        "no"
+                      ]
+                    }
+                  }
+                },
+                "employeeIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "filterDuplicates": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

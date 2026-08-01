@@ -143,6 +143,123 @@
     "webhook_id": {
       "type": "string",
       "description": "Optional stream parameter used by BambooHR Pass B stream webhook_id."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Optional BambooHR OAuth access token for documented OAuth-scoped operations; supplied from an approved secret source, never inline in commands."
+    },
+    "check_total_rewards_profile_employee_id": {
+      "type": "string",
+      "description": "Path parameter `employeeId` for BambooHR stream `check_total_rewards_profile`."
+    },
+    "get_an_alert_configuration_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_an_alert_configuration`."
+    },
+    "get_change_communication_letter_details_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_change_communication_letter_details`."
+    },
+    "get_clock_entry_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_clock_entry`."
+    },
+    "get_compensation_benchmark_details_job_id": {
+      "type": "string",
+      "description": "Required query parameter `jobId` for BambooHR stream `get_compensation_benchmark_details`."
+    },
+    "get_compensation_planning_approval_flows_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_compensation_planning_approval_flows`."
+    },
+    "get_compensation_planning_cycle_budgets_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_compensation_planning_cycle_budgets`."
+    },
+    "get_compensation_planning_cycle_details_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_compensation_planning_cycle_details`."
+    },
+    "get_compensation_planning_cycle_summary_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_compensation_planning_cycle_summary`."
+    },
+    "get_compensation_planning_cycle_worksheet_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_compensation_planning_cycle_worksheet`."
+    },
+    "get_country_by_id_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_country_by_id`."
+    },
+    "get_employee_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_employee`."
+    },
+    "get_employee_onboarding_experience_by_id_employee_id": {
+      "type": "string",
+      "description": "Path parameter `employeeId` for BambooHR stream `get_employee_onboarding_experience_by_id`."
+    },
+    "get_employee_onboarding_experience_by_id_onboarding_experience_id": {
+      "type": "string",
+      "description": "Path parameter `onboardingExperienceId` for BambooHR stream `get_employee_onboarding_experience_by_id`."
+    },
+    "get_hour_entry_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_hour_entry`."
+    },
+    "get_location_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_location`."
+    },
+    "get_new_hire_packet_by_id_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_new_hire_packet_by_id`."
+    },
+    "get_timesheet_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_timesheet`."
+    },
+    "get_timesheet_summary_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_timesheet_summary`."
+    },
+    "get_timezone_by_id_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `get_timezone_by_id`."
+    },
+    "get_timezone_by_zip_code_zip": {
+      "type": "string",
+      "description": "Path parameter `zip` for BambooHR stream `get_timezone_by_zip_code`."
+    },
+    "get_total_rewards_printable_statement_employee_id": {
+      "type": "string",
+      "description": "Path parameter `employeeId` for BambooHR stream `get_total_rewards_printable_statement`."
+    },
+    "get_total_rewards_statement_employee_id": {
+      "type": "string",
+      "description": "Path parameter `employeeId` for BambooHR stream `get_total_rewards_statement`."
+    },
+    "list_compensation_planning_cycle_admins_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `list_compensation_planning_cycle_admins`."
+    },
+    "list_employee_files_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `list_employee_files`."
+    },
+    "list_employee_onboarding_experiences_employee_id": {
+      "type": "string",
+      "description": "Path parameter `employeeId` for BambooHR stream `list_employee_onboarding_experiences`."
+    },
+    "list_employee_verifications_by_employee_employee_id": {
+      "type": "string",
+      "description": "Path parameter `employeeId` for BambooHR stream `list_employee_verifications_by_employee`."
+    },
+    "list_employees_in_compensation_planning_cycle_id": {
+      "type": "string",
+      "description": "Path parameter `id` for BambooHR stream `list_employees_in_compensation_planning_cycle`."
     }
   }
 }

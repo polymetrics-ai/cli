@@ -1,0 +1,68 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/pay-grades-and-bands/status"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "levels": {
+        "isComplete": true,
+        "errors": [
+          {
+            "groupId": 1001,
+            "levelId": 1001
+          }
+        ],
+        "warnings": [
+          {
+            "groupId": 1001,
+            "levelId": 1001
+          }
+        ]
+      },
+      "payBands": {
+        "isComplete": true,
+        "errors": [
+          {
+            "groupId": 1001,
+            "levelId": 1001
+          }
+        ],
+        "warnings": [
+          {
+            "groupId": 1001,
+            "levelId": 1001
+          }
+        ]
+      },
+      "jobTitles": {
+        "isComplete": true,
+        "errors": [
+          "fixture_value"
+        ],
+        "warnings": [
+          {
+            "id": 1001,
+            "jobTitle": "fixture_value"
+          }
+        ]
+      },
+      "review": {
+        "isComplete": true,
+        "errors": [
+          {
+            "groupId": 1001,
+            "levelId": 1001
+          }
+        ],
+        "warnings": [
+          {
+            "groupId": 1001,
+            "levelId": 1001
+          }
+        ]
+      }
+    }
+  }
+}

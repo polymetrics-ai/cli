@@ -1,0 +1,65 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/total_rewards/synthetic-conformance-value/statement"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employeeId": "fixture_id",
+      "employeeName": "Fixture Name",
+      "jobTitle": "fixture_value",
+      "hasMixedCurrencyTypes": "fixture_value",
+      "overviewSection": {
+        "estimatedTotalCompValue": "fixture_value",
+        "paidPer": "fixture_value",
+        "multiplierValue": "fixture_value"
+      },
+      "paySection": {
+        "compSummary": {
+          "title": "fixture_value",
+          "subtitle": "fixture_value",
+          "value": "fixture_value"
+        },
+        "timelineData": [
+          {
+            "value": "fixture_value",
+            "subvalue": "fixture_value",
+            "label": "fixture_value"
+          }
+        ],
+        "placeholderText": "fixture_value"
+      },
+      "bonusSection": {
+        "compSummary": {
+          "title": "fixture_value",
+          "subtitle": "fixture_value",
+          "value": "fixture_value"
+        },
+        "timelineData": [
+          {
+            "value": "fixture_value",
+            "subvalue": "fixture_value",
+            "label": "fixture_value"
+          }
+        ],
+        "placeholderText": "fixture_value"
+      },
+      "commissionSection": {
+        "compSummary": {
+          "title": "fixture_value",
+          "subtitle": "fixture_value",
+          "value": "fixture_value"
+        },
+        "timelineData": [
+          {
+            "value": "fixture_value",
+            "subvalue": "fixture_value",
+            "label": "fixture_value"
+          }
+        ],
+        "placeholderText": "fixture_value"
+      }
+    }
+  }
+}

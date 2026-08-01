@@ -1,0 +1,22 @@
+{
+  "record": {
+    "employeeId": 1001,
+    "date": "2026-01-01T00:00:00Z",
+    "hours": 12.34,
+    "note": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/time-tracking/hour-entries",
+    "body": {
+      "employeeId": 1001,
+      "date": "2026-01-01T00:00:00Z",
+      "hours": 12.34,
+      "note": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

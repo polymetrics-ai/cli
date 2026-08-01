@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "employeeIds": [
+      "fixture_value"
+    ],
+    "notifyAdmins": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/admins",
+    "body": {
+      "employeeIds": [
+        "fixture_value"
+      ],
+      "notifyAdmins": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/pay-grades-and-bands/status-counts"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "draft": 1001,
+      "historic": 1001,
+      "published": 1001
+    }
+  }
+}

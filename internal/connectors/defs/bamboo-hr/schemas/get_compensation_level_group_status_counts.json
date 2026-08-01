@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "draft": {
+      "type": "integer"
+    },
+    "historic": {
+      "type": "integer"
+    },
+    "published": {
+      "type": "integer"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_compensation_level_group_status_counts"
+}

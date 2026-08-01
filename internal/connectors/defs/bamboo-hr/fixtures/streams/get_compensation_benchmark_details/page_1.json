@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/compensation/benchmarks/details",
+    "query": {
+      "jobId": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "employees": [
+        {
+          "id": 1001,
+          "name": "Fixture Name",
+          "jobTitle": {
+            "id": "fixture_id",
+            "value": "fixture_value",
+            "jobTitle": "fixture_value"
+          },
+          "location": {
+            "id": "fixture_id",
+            "value": "fixture_value",
+            "name": "Fixture Name"
+          },
+          "salary": {
+            "amount": 12.34,
+            "currencyCode": "fixture_value"
+          },
+          "varianceFromPayBand": {
+            "amount": 12.34,
+            "currencyCode": "fixture_value"
+          },
+          "yearsAtCompany": 1001,
+          "rangePenetration": "fixture_value"
+        }
+      ]
+    }
+  }
+}

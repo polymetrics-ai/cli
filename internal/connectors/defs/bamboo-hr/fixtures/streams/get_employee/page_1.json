@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/employees/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "employeeNumber": "fixture_value",
+      "firstName": "Fixture Name",
+      "lastName": "Fixture Name",
+      "preferredName": "Fixture Name",
+      "middleName": "Fixture Name",
+      "photoUrl": "https://example.invalid/fixture",
+      "jobTitleName": "Fixture Name"
+    }
+  }
+}

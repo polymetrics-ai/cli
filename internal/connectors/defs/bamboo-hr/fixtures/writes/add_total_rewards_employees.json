@@ -1,0 +1,20 @@
+{
+  "record": {
+    "employeeIds": [
+      1001
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/compensation/total_rewards/employees",
+    "body": {
+      "employeeIds": [
+        1001
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

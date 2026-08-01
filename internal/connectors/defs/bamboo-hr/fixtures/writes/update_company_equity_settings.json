@@ -1,0 +1,22 @@
+{
+  "record": {
+    "calculationType": "fixture_value",
+    "companyValuation": "fixture_value",
+    "outstandingShares": "fixture_value",
+    "pricePerShare": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/equity/settings",
+    "body": {
+      "calculationType": "fixture_value",
+      "companyValuation": "fixture_value",
+      "outstandingShares": "fixture_value",
+      "pricePerShare": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

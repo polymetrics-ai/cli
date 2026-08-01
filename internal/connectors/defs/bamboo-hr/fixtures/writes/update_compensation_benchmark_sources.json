@@ -1,0 +1,28 @@
+{
+  "record": {
+    "benchmarkSources": [
+      {
+        "id": "fixture_id",
+        "name": "Fixture Name",
+        "sort": "fixture_value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/benchmarks/sources",
+    "body": {
+      "benchmarkSources": [
+        {
+          "id": "fixture_id",
+          "name": "Fixture Name",
+          "sort": "fixture_value"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

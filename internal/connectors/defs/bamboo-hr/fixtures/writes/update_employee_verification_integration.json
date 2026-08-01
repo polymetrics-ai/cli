@@ -1,0 +1,16 @@
+{
+  "record": {
+    "enabled": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employee-verifications/integration",
+    "body": {
+      "enabled": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "levelsAndBands": {
+          "type": "boolean"
+        },
+        "compensationBenchmarking": {
+          "type": "boolean"
+        },
+        "compensationPlanning": {
+          "type": "boolean"
+        },
+        "totalRewards": {
+          "type": "boolean"
+        }
+      }
+    },
+    "upsell": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "accountOwnerName": {
+          "type": "string"
+        },
+        "canRequestDemo": {
+          "type": "boolean"
+        },
+        "userPermissions": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "isAdmin": {
+              "type": "boolean"
+            },
+            "isBillingContact": {
+              "type": "boolean"
+            },
+            "isOwner": {
+              "type": "boolean"
+            },
+            "isSupportAdmin": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_available_compensation_tools"
+}

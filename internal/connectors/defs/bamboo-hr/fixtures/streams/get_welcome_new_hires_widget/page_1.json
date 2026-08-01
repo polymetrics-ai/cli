@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/onboarding/new-hire-widget"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "newHires": [
+        {
+          "id": 1001,
+          "preferredFirstName": "Fixture Name",
+          "lastName": "Fixture Name",
+          "hireDate": "2026-01-01T00:00:00Z",
+          "canSeeEmployee": true,
+          "profilePictureUrl": "https://example.invalid/fixture",
+          "department": "fixture_value",
+          "location": "fixture_value"
+        }
+      ]
+    }
+  }
+}

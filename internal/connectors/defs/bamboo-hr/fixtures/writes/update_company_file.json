@@ -1,0 +1,21 @@
+{
+  "record": {
+    "file_id": "fixture_id",
+    "name": "Fixture Name",
+    "categoryId": "fixture_id",
+    "shareWithEmployee": "yes"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/files/fixture_id",
+    "body": {
+      "name": "Fixture Name",
+      "categoryId": "fixture_id",
+      "shareWithEmployee": "yes"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

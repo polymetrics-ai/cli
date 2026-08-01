@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/files/view"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "categories": [
+        {
+          "id": 1001,
+          "name": "Fixture Name",
+          "canUploadFiles": "yes",
+          "files": [
+            {
+              "id": 1001,
+              "name": "Fixture Name",
+              "originalFileName": "Fixture Name",
+              "size": "fixture_value",
+              "dateCreated": "2026-01-01T00:00:00Z",
+              "createdBy": "fixture_value",
+              "shareWithEmployees": "yes",
+              "canRenameFile": "yes"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

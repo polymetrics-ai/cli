@@ -1,0 +1,161 @@
+{
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "levels": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "isComplete": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "groupId": {
+                "type": "integer"
+              },
+              "levelId": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "groupId": {
+                "type": "integer"
+              },
+              "levelId": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "payBands": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "isComplete": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "groupId": {
+                "type": "integer"
+              },
+              "levelId": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "groupId": {
+                "type": "integer"
+              },
+              "levelId": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jobTitles": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "isComplete": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "jobTitle": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "isComplete": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "groupId": {
+                "type": "integer"
+              },
+              "levelId": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "groupId": {
+                "type": "integer"
+              },
+              "levelId": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "levels",
+    "payBands",
+    "jobTitles",
+    "review"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_levels_and_bands_status"
+}

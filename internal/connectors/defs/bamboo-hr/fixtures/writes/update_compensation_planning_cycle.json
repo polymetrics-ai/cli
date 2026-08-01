@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "cycleName": "Fixture Name",
+    "cycleCurrency": "fixture_value",
+    "cycleWindowStartYmd": "2026-01-01"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id",
+    "body": {
+      "cycleName": "Fixture Name",
+      "cycleCurrency": "fixture_value",
+      "cycleWindowStartYmd": "2026-01-01"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

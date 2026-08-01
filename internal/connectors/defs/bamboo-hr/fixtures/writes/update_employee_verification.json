@@ -1,0 +1,20 @@
+{
+  "record": {
+    "employee_id": "fixture_id",
+    "verification_id": "fixture_id",
+    "verificationType": "fixture_value",
+    "verificationStatus": "fixture_value"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/employee-verifications/employees/fixture_id/fixture_id",
+    "body": {
+      "verificationType": "fixture_value",
+      "verificationStatus": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

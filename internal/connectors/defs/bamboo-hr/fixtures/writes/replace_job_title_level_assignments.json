@@ -1,0 +1,26 @@
+{
+  "record": {
+    "jobTitles": [
+      {
+        "jobTitleId": 1001,
+        "levelId": 1001
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/pay-grades-and-bands/job-titles",
+    "body": {
+      "jobTitles": [
+        {
+          "jobTitleId": 1001,
+          "levelId": 1001
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

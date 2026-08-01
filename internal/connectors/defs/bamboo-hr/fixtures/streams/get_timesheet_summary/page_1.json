@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/timesheets/synthetic-conformance-value/summary"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "dailyEntries": [
+        {
+          "date": "2026-01-01T00:00:00Z",
+          "totalHours": 12.34,
+          "regularHours": 12.34,
+          "overtimeHours": 12.34,
+          "doubleTimeHours": 12.34
+        }
+      ]
+    }
+  }
+}

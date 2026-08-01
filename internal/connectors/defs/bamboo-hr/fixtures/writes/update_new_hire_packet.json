@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "contactEmployeeId": "fixture_id",
+    "requiresPersonalInformation": true,
+    "requiresPhoto": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/new-hire-packets/fixture_id",
+    "body": {
+      "contactEmployeeId": "fixture_id",
+      "requiresPersonalInformation": true,
+      "requiresPhoto": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

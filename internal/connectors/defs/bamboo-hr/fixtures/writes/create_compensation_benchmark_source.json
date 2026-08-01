@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "Fixture Name",
+    "colorCode": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/compensation/benchmarks/sources",
+    "body": {
+      "name": "Fixture Name",
+      "colorCode": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

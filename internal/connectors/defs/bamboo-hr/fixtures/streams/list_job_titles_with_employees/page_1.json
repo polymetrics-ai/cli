@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/pay-grades-and-bands/job-titles-with-employees"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1001,
+        "title": "fixture_value",
+        "employees": [
+          {
+            "id": 1001,
+            "name": "Fixture Name"
+          }
+        ]
+      }
+    ]
+  }
+}

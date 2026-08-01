@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/time-tracking/clock-entries/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1001,
+      "employeeId": 1001,
+      "timesheetId": 1001,
+      "date": "2026-01-01T00:00:00Z",
+      "start": "2026-01-01T00:00:00Z",
+      "end": "fixture_value",
+      "timezone": "fixture_value",
+      "hours": 12.34
+    }
+  }
+}

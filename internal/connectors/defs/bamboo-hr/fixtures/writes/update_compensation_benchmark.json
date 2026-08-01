@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "currencyCode": "fixture_value",
+    "benchmarkValue": 12.34,
+    "benchmarkMin": 12.34,
+    "benchmarkMax": 12.34
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/compensation/benchmarks",
+    "body": {
+      "id": "fixture_id",
+      "currencyCode": "fixture_value",
+      "benchmarkValue": 12.34,
+      "benchmarkMin": 12.34,
+      "benchmarkMax": 12.34
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

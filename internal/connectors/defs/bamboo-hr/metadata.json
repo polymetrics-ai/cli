@@ -1,9 +1,9 @@
 {
   "name": "bamboo-hr",
   "display_name": "BambooHR",
-  "description": "Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.",
+  "description": "Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, compensation, and webhook-management resources from the current official OpenAPI, with unsupported binary/file/inbound-webhook operations blocked in the typed ledger.",
   "integration_type": "api",
-  "docs_url": "https://documentation.bamboohr.com/reference/getting-started",
+  "docs_url": "https://documentation.bamboohr.com/reference/list-employees",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -18,8 +18,8 @@
     "write_batch_size": 1
   },
   "risk": {
-    "read": "external BambooHR API reads across HR, applicant tracking, benefits, payroll-adjacent, time off, training, goals, and metadata resources",
-    "write": "creates, updates, assigns, approves, or deletes BambooHR HR records according to the selected reverse-ETL action",
-    "approval": "reverse ETL writes require plan preview and approval token"
+    "read": "external BambooHR API reads across HR, applicant tracking, benefits, payroll-adjacent, compensation, time off, training, goals, metadata, and webhook-management resources",
+    "write": "typed reverse-ETL mutations create, update, assign, approve, import, or delete BambooHR records according to the selected named action",
+    "approval": "reverse ETL writes require plan preview, approval token, and destructive confirmation when declared"
   }
 }

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "firstName": "Fixture Name",
+    "lastName": "Fixture Name",
+    "workEmail": "fixture@example.com"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/employees/fixture_id",
+    "body": {
+      "firstName": "Fixture Name",
+      "lastName": "Fixture Name",
+      "workEmail": "fixture@example.com"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

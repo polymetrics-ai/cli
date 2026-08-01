@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "templateId": "fixture_id",
+    "assigneeEmployeeId": "fixture_id",
+    "approvalStage": 1001
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/compensation/planning_cycles/fixture_id/recommendations/send",
+    "body": {
+      "templateId": "fixture_id",
+      "assigneeEmployeeId": "fixture_id",
+      "approvalStage": 1001
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
