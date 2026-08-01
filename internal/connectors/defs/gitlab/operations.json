@@ -9755,7 +9755,7 @@
     },
     {
       "id": "gitlab.head-api-v4-projects-id-repository-branches-branch",
-      "kind": "rest_read",
+      "kind": "composite",
       "summary": "headApiV4ProjectsIdRepositoryBranchesBranch",
       "description": "GitLab direct_read_query_search operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9767,10 +9767,10 @@
       ],
       "audit_event": "gitlab.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "HEAD",
-        "path": "/projects/{id}/repository/branches/{branch}",
-        "max_bytes": 10485760
+      "composite": {
+        "steps": [
+          "HEAD /projects/{id}/repository/branches/{branch} planned metadata only"
+        ]
       }
     },
     {
@@ -15929,7 +15929,7 @@
     },
     {
       "id": "gitlab.head-api-v4-projects-id-repository-files-file-path-blame",
-      "kind": "rest_read",
+      "kind": "composite",
       "summary": "Retrieve file blame metadata",
       "description": "GitLab direct_read_query_search operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -15941,10 +15941,10 @@
       ],
       "audit_event": "gitlab.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "HEAD",
-        "path": "/projects/{id}/repository/files/{file_path}/blame",
-        "max_bytes": 10485760
+      "composite": {
+        "steps": [
+          "HEAD /projects/{id}/repository/files/{file_path}/blame planned metadata only"
+        ]
       }
     },
     {
@@ -15991,7 +15991,7 @@
     },
     {
       "id": "gitlab.head-api-v4-projects-id-repository-files-file-path",
-      "kind": "rest_read",
+      "kind": "composite",
       "summary": "Retrieve file metadata",
       "description": "GitLab direct_read_query_search operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -16003,10 +16003,10 @@
       ],
       "audit_event": "gitlab.direct_read_query_search",
       "mutation_class": "none",
-      "rest": {
-        "method": "HEAD",
-        "path": "/projects/{id}/repository/files/{file_path}",
-        "max_bytes": 10485760
+      "composite": {
+        "steps": [
+          "HEAD /projects/{id}/repository/files/{file_path} planned metadata only"
+        ]
       }
     },
     {

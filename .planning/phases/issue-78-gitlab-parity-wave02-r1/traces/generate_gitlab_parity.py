@@ -335,7 +335,7 @@ def cli_flag_for_param(location: str, name: str, param: dict[str, Any], schema: 
         flag["values"] = [str(value) for value in schema["enum"]]
     if schema.get("format") == "date-time":
         flag["format"] = "date-time"
-    if required:
+    if required and flag["type"] == "string":
         flag["allow_empty"] = False
     return flag
 
@@ -469,6 +469,8 @@ def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any
     output_policy = "binary_file_bounded" if lane == "binary_file" else "json_redacted"
     if lane == "excluded_not_applicable":
         kind = "composite"
+    elif op["method"] == "HEAD":
+        kind = "composite"
     elif lane == "binary_file" and op["method"] == "GET":
         kind = "binary_download"
     elif is_write_method(op) and not (lane == "direct_read_query_search" and op["method"] == "POST"):
@@ -531,6 +533,14 @@ def operation_row(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any
             "approval_mode": "typed_confirmation",
         }
     return row
+
+
+def api_surface_supplemental_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "method": row["method"],
+        "path": row["path"],
+        "covered_by": deepcopy(row["covered_by"]),
+    }
 
 
 def cli_command_for_stream(stream: str, method: str, path: str, source_url: str = OPENAPI_URL) -> dict[str, Any]:
@@ -748,7 +758,7 @@ def main() -> None:
             "approval": "destructive/admin operations are in scope but blocked until connector-local named actions provide confirm=destructive and verified safety evidence",
         },
     }
-    api_rows_with_supplemental = api_rows + deepcopy(SUPPLEMENTAL_STREAM_ROWS)
+    api_rows_with_supplemental = api_rows + [api_surface_supplemental_row(row) for row in SUPPLEMENTAL_STREAM_ROWS]
     api_surface = {
         "api": "GitLab REST API v4 (pinned OpenAPI v2 source)",
         "docs": "https://docs.gitlab.com/ee/api/rest/",

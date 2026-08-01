@@ -14890,9 +14890,7 @@
       "path": "/users",
       "covered_by": {
         "stream": "users"
-      },
-      "source_url": "https://docs.gitlab.com/ee/api/users/#list-users",
-      "notes": "Existing fixture-backed top-level users stream; absent from the pinned OpenAPI v2 source."
+      }
     }
   ]
 }
