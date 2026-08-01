@@ -667,8 +667,29 @@
       "output_policy": "none",
       "file": {
         "direction": "upload",
+        "method": "PUT",
         "path": "/api/v2/brands/{brand_id}/logo",
-        "max_bytes": 10485760
+        "content_type": "multipart/form-data",
+        "max_bytes": 10485760,
+        "body_schema": {
+          "type": "object",
+          "title": "BrandLogoUploadRequest",
+          "required": [
+            "brand[logo][uploaded_data]"
+          ],
+          "properties": {
+            "brand[logo][uploaded_data]": {
+              "type": "string",
+              "format": "binary",
+              "description": "Brand logo image file"
+            }
+          }
+        },
+        "encoding": {
+          "brand[logo][uploaded_data]": {
+            "contentType": "image/png, image/jpeg, image/jpg, image/gif"
+          }
+        }
       }
     },
     {
@@ -1414,8 +1435,24 @@
       "output_policy": "none",
       "file": {
         "direction": "upload",
+        "method": "POST",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
-        "max_bytes": 10485760
+        "content_type": "multipart/form-data",
+        "max_bytes": 10485760,
+        "body_schema": {
+          "type": "object",
+          "title": "CustomObjectRecordAttachmentCreateRequest",
+          "required": [
+            "uploaded_data"
+          ],
+          "properties": {
+            "uploaded_data": {
+              "type": "string",
+              "format": "binary",
+              "description": "The file to upload as an attachment"
+            }
+          }
+        }
       }
     },
     {
@@ -3779,8 +3816,24 @@
       "output_policy": "none",
       "file": {
         "direction": "upload",
+        "method": "POST",
         "path": "/api/v2/macros/{macro_id}/attachments",
-        "max_bytes": 10485760
+        "content_type": "multipart/form-data",
+        "max_bytes": 10485760,
+        "body_schema": {
+          "type": "object",
+          "title": "MacroAttachmentCreateRequest",
+          "required": [
+            "uploaded_data"
+          ],
+          "properties": {
+            "uploaded_data": {
+              "type": "string",
+              "format": "binary",
+              "description": "The file to upload as a macro attachment"
+            }
+          }
+        }
       }
     },
     {
@@ -3824,8 +3877,24 @@
       "output_policy": "none",
       "file": {
         "direction": "upload",
+        "method": "POST",
         "path": "/api/v2/macros/attachments",
-        "max_bytes": 10485760
+        "content_type": "multipart/form-data",
+        "max_bytes": 10485760,
+        "body_schema": {
+          "type": "object",
+          "title": "MacroAttachmentCreateRequest",
+          "required": [
+            "uploaded_data"
+          ],
+          "properties": {
+            "uploaded_data": {
+              "type": "string",
+              "format": "binary",
+              "description": "The file to upload as a macro attachment"
+            }
+          }
+        }
       }
     },
     {
@@ -7728,8 +7797,19 @@
       "output_policy": "none",
       "file": {
         "direction": "upload",
-        "path": "/api/v2/uploads?filename={filename}",
-        "max_bytes": 10485760
+        "method": "POST",
+        "path": "/api/v2/uploads",
+        "content_type": "{mime_type}",
+        "max_bytes": 10485760,
+        "query": {
+          "filename": "{filename}"
+        },
+        "body_schema": {
+          "type": "string",
+          "title": "AttachmentUploadRequest",
+          "format": "binary",
+          "description": "Raw file bytes to upload; Content-Type must be a recognized MIME type."
+        }
       }
     },
     {
@@ -8792,7 +8872,7 @@
           "type": "object",
           "properties": {
             "brand_id": {
-              "description": "When brand separation is enabled, scopes the autocomplete results to users\nbelonging to the specified brand. Only applicable when the account has brand separation enabled.\n\nAccepted values:\n\n* \"all\" — search all users across all brands (no brand filtering applied).\n* 0 — restrict the autocomplete results to account-scoped (brand-less) users only.\n* A numeric brand id — if the brand has user separation enabled, autocomplete\n  returns only end users belonging to that brand. Agents and admins are not included\n  in the results when filtering by a specific brand. If the brand does not have user\n  separation enabled, the request falls back to account scope (0).\n",
+              "description": "When brand separation is enabled, scopes the autocomplete results to users\nbelonging to the specified brand. Only applicable when the account has brand separation enabled.\n\nAccepted values:\n\n* \"all\" \u2014 search all users across all brands (no brand filtering applied).\n* 0 \u2014 restrict the autocomplete results to account-scoped (brand-less) users only.\n* A numeric brand id \u2014 if the brand has user separation enabled, autocomplete\n  returns only end users belonging to that brand. Agents and admins are not included\n  in the results when filtering by a specific brand. If the brand does not have user\n  separation enabled, the request falls back to account scope (0).\n",
               "oneOf": [
                 {
                   "type": "string",
