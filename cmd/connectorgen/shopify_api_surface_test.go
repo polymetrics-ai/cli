@@ -13,39 +13,58 @@ import (
 var shopifySourceDescriptionStateDestroyingPaths = map[string]struct{}{
 	"GraphQL Mutation.catalogContextUpdate":                 {},
 	"GraphQL Mutation.collectionUnpublish":                  {},
+	"GraphQL Mutation.collectionUpdate":                     {},
 	"GraphQL Mutation.combinedListingUpdate":                {},
 	"GraphQL Mutation.commentSpam":                          {},
 	"GraphQL Mutation.customerSet":                          {},
 	"GraphQL Mutation.deliveryCustomizationActivation":      {},
 	"GraphQL Mutation.deliveryProfileUpdate":                {},
 	"GraphQL Mutation.deliveryPromiseParticipantsUpdate":    {},
+	"GraphQL Mutation.discountAutomaticBasicUpdate":         {},
+	"GraphQL Mutation.discountAutomaticFreeShippingUpdate":  {},
+	"GraphQL Mutation.discountCodeBasicUpdate":              {},
+	"GraphQL Mutation.discountCodeFreeShippingUpdate":       {},
+	"GraphQL Mutation.disputeEvidenceUpdate":                {},
 	"GraphQL Mutation.draftOrderUpdate":                     {},
 	"GraphQL Mutation.eventBridgeServerPixelUpdate":         {},
+	"GraphQL Mutation.fileAcknowledgeUpdateFailed":          {},
 	"GraphQL Mutation.fileUpdate":                           {},
 	"GraphQL Mutation.giftCardDebit":                        {},
 	"GraphQL Mutation.giftCardProductSet":                   {},
+	"GraphQL Mutation.inventoryActivate":                    {},
 	"GraphQL Mutation.inventoryBulkToggleActivation":        {},
+	"GraphQL Mutation.marketUpdate":                         {},
 	"GraphQL Mutation.marketingActivityUpsertExternal":      {},
+	"GraphQL Mutation.metaobjectDefinitionUpdate":           {},
+	"GraphQL Mutation.metaobjectUpdate":                     {},
+	"GraphQL Mutation.metaobjectUpsert":                     {},
+	"GraphQL Mutation.orderAttributionDefinitionUpsert":     {},
 	"GraphQL Mutation.orderEditSetQuantity":                 {},
 	"GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer":  {},
 	"GraphQL Mutation.paymentCustomizationActivation":       {},
 	"GraphQL Mutation.priceListFixedPricesByProductUpdate":  {},
 	"GraphQL Mutation.priceListFixedPricesUpdate":           {},
 	"GraphQL Mutation.priceListUpdate":                      {},
+	"GraphQL Mutation.productChangeStatus":                  {},
 	"GraphQL Mutation.productLeaveSellingPlanGroups":        {},
+	"GraphQL Mutation.productOptionUpdate":                  {},
 	"GraphQL Mutation.productSet":                           {},
 	"GraphQL Mutation.productUnpublish":                     {},
 	"GraphQL Mutation.productVariantDetachMedia":            {},
 	"GraphQL Mutation.productVariantLeaveSellingPlanGroups": {},
 	"GraphQL Mutation.productVariantRelationshipBulkUpdate": {},
+	"GraphQL Mutation.productVariantsBulkCreate":            {},
 	"GraphQL Mutation.pubSubServerPixelUpdate":              {},
 	"GraphQL Mutation.publicationUpdate":                    {},
 	"GraphQL Mutation.publishableUnpublish":                 {},
 	"GraphQL Mutation.publishableUnpublishToCurrentChannel": {},
 	"GraphQL Mutation.quantityPricingByVariantUpdate":       {},
+	"GraphQL Mutation.sellingPlanGroupUpdate":               {},
 	"GraphQL Mutation.shopResourceFeedbackCreate":           {},
 	"GraphQL Mutation.storeCreditAccountDebit":              {},
 	"/admin/api/latest/comments/{comment_id}/spam.json":     {},
+	"/admin/api/latest/inventory_levels/connect.json":       {},
+	"/admin/api/latest/inventory_levels/set.json":           {},
 }
 
 func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
@@ -99,19 +118,20 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	if operations != 1123 {
 		t.Fatalf("operation endpoints = %d, want 1123", operations)
 	}
-	if destructiveConfirm != 192 {
-		t.Fatalf("destructive confirmed operations = %d, want 192", destructiveConfirm)
+	if destructiveConfirm != 211 {
+		t.Fatalf("destructive confirmed operations = %d, want 211", destructiveConfirm)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":  460,
-		"destructive_action": 192,
-		"direct_read":        471,
+		"admin_reverse_etl":  414,
+		"deprecated":         46,
+		"destructive_action": 211,
+		"direct_read":        452,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 192,
+		"critical": 211,
 		"high":     3,
 		"low":      471,
-		"medium":   457,
+		"medium":   438,
 	})
 
 	for _, path := range []string{
@@ -156,10 +176,14 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 
 	for _, path := range []string{
 		"GraphQL Mutation.discountCodeActivate",
+		"GraphQL Mutation.collectionReorderProducts",
 		"GraphQL Mutation.fileCreate",
 		"GraphQL Mutation.fulfillmentOrderHold",
 		"GraphQL Mutation.inventorySetQuantities",
 		"GraphQL Mutation.inventoryTransferSetItems",
+		"GraphQL Mutation.marketingActivityCreate",
+		"GraphQL Mutation.marketingActivityUpdate",
+		"GraphQL Mutation.metafieldDefinitionCreate",
 		"GraphQL Mutation.metafieldsSet",
 		"GraphQL Mutation.orderCustomerSet",
 		"GraphQL Mutation.orderUpdate",
@@ -188,13 +212,10 @@ func TestShopifyObjectMetadataReadsAreDirect(t *testing.T) {
 		method string
 		path   string
 	}{
-		{method: "POST", path: "GraphQL Query.checkoutProfile"},
-		{method: "POST", path: "GraphQL Query.checkoutProfiles"},
 		{method: "POST", path: "GraphQL Query.deliveryProfile"},
 		{method: "POST", path: "GraphQL Query.deliveryProfiles"},
 		{method: "POST", path: "GraphQL Query.files"},
 		{method: "POST", path: "GraphQL Query.fileSavedSearches"},
-		{method: "POST", path: "GraphQL Query.locationsAvailableForDeliveryProfiles"},
 		{method: "POST", path: "GraphQL Query.locationsAvailableForDeliveryProfilesConnection"},
 		{method: "POST", path: "GraphQL Query.urlRedirect"},
 		{method: "POST", path: "GraphQL Query.urlRedirectImport"},
@@ -212,6 +233,59 @@ func TestShopifyObjectMetadataReadsAreDirect(t *testing.T) {
 		}
 		if ep.Operation == nil || ep.Operation.Model != "direct_read" || ep.Operation.Risk != "low" {
 			t.Fatalf("object/metadata read endpoint %s %q operation = %+v, want direct_read/low", endpoint.method, endpoint.path, ep.Operation)
+		}
+	}
+}
+
+func TestShopifySourceDeprecatedRowsAreExplicit(t *testing.T) {
+	surface := loadShopifySurface(t)
+	byPath := map[string]engine.SurfaceEndpoint{}
+	deprecatedRows := 0
+	deprecatedModelRows := 0
+	destructiveDeprecatedRows := 0
+	for _, ep := range surface.Endpoints {
+		if ep.Path != "" {
+			byPath[ep.Path] = ep
+		}
+		if ep.Operation == nil || !strings.Contains(ep.Operation.Notes, "Deprecated.") {
+			continue
+		}
+		deprecatedRows++
+		switch ep.Operation.Model {
+		case "deprecated":
+			if ep.Operation.Confirm != "" {
+				t.Fatalf("deprecated endpoint %s has confirm %q", ep.Path, ep.Operation.Confirm)
+			}
+			deprecatedModelRows++
+		case "destructive_action":
+			if ep.Operation.Risk != "critical" || ep.Operation.Confirm != "destructive" {
+				t.Fatalf("deprecated destructive endpoint %s operation = %+v, want critical/destructive", ep.Path, ep.Operation)
+			}
+			destructiveDeprecatedRows++
+		default:
+			t.Fatalf("deprecated endpoint %s operation = %+v, want deprecated or destructive_action", ep.Path, ep.Operation)
+		}
+	}
+	if deprecatedRows != 59 || deprecatedModelRows != 46 || destructiveDeprecatedRows != 13 {
+		t.Fatalf("deprecated rows = %d/%d/%d, want 59/46/13", deprecatedRows, deprecatedModelRows, destructiveDeprecatedRows)
+	}
+
+	for _, endpoint := range []struct {
+		path  string
+		model string
+		risk  string
+	}{
+		{path: "GraphQL Query.automaticDiscount", model: "deprecated", risk: "low"},
+		{path: "GraphQL Query.checkoutProfile", model: "deprecated", risk: "low"},
+		{path: "GraphQL Query.checkoutProfiles", model: "deprecated", risk: "low"},
+		{path: "GraphQL Query.locationsAvailableForDeliveryProfiles", model: "deprecated", risk: "low"},
+		{path: "GraphQL Mutation.fulfillmentCreateV2", model: "deprecated", risk: "medium"},
+		{path: "GraphQL Mutation.collectionRemoveProducts", model: "destructive_action", risk: "critical"},
+		{path: "GraphQL Mutation.productChangeStatus", model: "destructive_action", risk: "critical"},
+	} {
+		op := byPath[endpoint.path].Operation
+		if op == nil || op.Model != endpoint.model || op.Risk != endpoint.risk || !strings.Contains(op.Notes, "Deprecated.") {
+			t.Fatalf("deprecated endpoint %s operation = %+v, want %s/%s with deprecation notes", endpoint.path, op, endpoint.model, endpoint.risk)
 		}
 	}
 }
@@ -379,24 +453,43 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 		t.Fatalf("unexpected reverseFulfillmentOrderDispose tokens")
 	}
 	for _, path := range []string{
+		"GraphQL Mutation.collectionUpdate",
 		"GraphQL Mutation.commentSpam",
 		"GraphQL Mutation.customerSet",
 		"GraphQL Mutation.deliveryCustomizationActivation",
 		"GraphQL Mutation.deliveryPromiseParticipantsUpdate",
+		"GraphQL Mutation.discountAutomaticBasicUpdate",
+		"GraphQL Mutation.discountAutomaticFreeShippingUpdate",
+		"GraphQL Mutation.discountCodeBasicUpdate",
+		"GraphQL Mutation.discountCodeFreeShippingUpdate",
+		"GraphQL Mutation.disputeEvidenceUpdate",
 		"GraphQL Mutation.eventBridgeServerPixelUpdate",
+		"GraphQL Mutation.fileAcknowledgeUpdateFailed",
 		"GraphQL Mutation.fulfillmentOrderReleaseHold",
 		"GraphQL Mutation.giftCardDebit",
+		"GraphQL Mutation.inventoryActivate",
 		"GraphQL Mutation.inventoryBulkToggleActivation",
+		"GraphQL Mutation.marketUpdate",
 		"GraphQL Mutation.marketingActivityUpsertExternal",
+		"GraphQL Mutation.metaobjectDefinitionUpdate",
+		"GraphQL Mutation.metaobjectUpdate",
+		"GraphQL Mutation.metaobjectUpsert",
+		"GraphQL Mutation.orderAttributionDefinitionUpsert",
 		"GraphQL Mutation.paymentCustomizationActivation",
 		"GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer",
+		"GraphQL Mutation.productChangeStatus",
 		"GraphQL Mutation.productLeaveSellingPlanGroups",
+		"GraphQL Mutation.productOptionUpdate",
 		"GraphQL Mutation.productSet",
 		"GraphQL Mutation.productVariantDetachMedia",
+		"GraphQL Mutation.productVariantsBulkCreate",
 		"GraphQL Mutation.pubSubServerPixelUpdate",
 		"GraphQL Mutation.publishableUnpublish",
 		"GraphQL Mutation.quantityPricingByVariantUpdate",
+		"GraphQL Mutation.sellingPlanGroupUpdate",
 		"/admin/api/latest/comments/{comment_id}/spam.json",
+		"/admin/api/latest/inventory_levels/connect.json",
+		"/admin/api/latest/inventory_levels/set.json",
 	} {
 		if !shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: path, Operation: &engine.SurfaceOperation{}}) {
 			t.Fatalf("%s was not classified as state-destroying", path)

@@ -213,48 +213,52 @@
       "method": "POST",
       "path": "GraphQL Query.automaticDiscount",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscount"
+        "reason": "Deprecated. Use `automaticDiscountNode` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscount",
+        "notes": "Deprecated. Use `automaticDiscountNode` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Query.automaticDiscountNode",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscountNode"
+        "reason": "Deprecated. Use `discountNode` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscountNode",
+        "notes": "Deprecated. Use `discountNode` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Query.automaticDiscountNodes",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscountNodes"
+        "reason": "Deprecated. Use `discountNodes` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscountNodes",
+        "notes": "Deprecated. Use `discountNodes` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Query.automaticDiscounts",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscounts"
+        "reason": "Deprecated. Use `automaticDiscountNodes` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/automaticDiscounts",
+        "notes": "Deprecated. Use `automaticDiscountNodes` instead."
       }
     },
     {
@@ -633,48 +637,52 @@
       "method": "POST",
       "path": "GraphQL Query.checkoutBranding",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutBranding"
+        "reason": "Deprecated. Use `checkoutAndAccountsConfiguration` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutBranding",
+        "notes": "Deprecated. Use `checkoutAndAccountsConfiguration` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Query.checkoutProfile",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutProfile"
+        "reason": "Deprecated. Use `checkoutAndAccountsConfiguration` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutProfile",
+        "notes": "Deprecated. Use `checkoutAndAccountsConfiguration` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Query.checkoutProfiles",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutProfiles"
+        "reason": "Deprecated. Use `checkoutAndAccountsConfigurations` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/checkoutProfiles",
+        "notes": "Deprecated. Use `checkoutAndAccountsConfigurations` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Query.codeDiscountNode",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/codeDiscountNode"
+        "reason": "Deprecated. Use `discountNode` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/codeDiscountNode",
+        "notes": "Deprecated. Use `discountNode` instead."
       }
     },
     {
@@ -693,12 +701,13 @@
       "method": "POST",
       "path": "GraphQL Query.codeDiscountNodes",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/codeDiscountNodes"
+        "reason": "Deprecated. Use `discountNodes` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/codeDiscountNodes",
+        "notes": "Deprecated. Use `discountNodes` instead."
       }
     },
     {
@@ -729,12 +738,13 @@
       "method": "POST",
       "path": "GraphQL Query.collectionByHandle",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collectionByHandle"
+        "reason": "Deprecated. Use `collectionByIdentifier` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collectionByHandle",
+        "notes": "Deprecated. Use `collectionByIdentifier` instead."
       }
     },
     {
@@ -789,12 +799,13 @@
       "method": "POST",
       "path": "GraphQL Query.collectionRulesConditions",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collectionRulesConditions"
+        "reason": "Deprecated. Use `CollectionSourceInclusionCondition` and `CollectionSourceExclusionCondition` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/collectionRulesConditions",
+        "notes": "Deprecated. Use `CollectionSourceInclusionCondition` and `CollectionSourceExclusionCondition` instead."
       }
     },
     {
@@ -981,12 +992,13 @@
       "method": "POST",
       "path": "GraphQL Query.currentBulkOperation",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/currentBulkOperation"
+        "reason": "Deprecated. Use `bulkOperations` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/currentBulkOperation",
+        "notes": "Deprecated. Use `bulkOperations` instead."
       }
     },
     {
@@ -1101,12 +1113,13 @@
       "method": "POST",
       "path": "GraphQL Query.customerSavedSearches",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customerSavedSearches"
+        "reason": "Deprecated. Saved searches are deprecated. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/customerSavedSearches",
+        "notes": "Deprecated. Saved searches are deprecated."
       }
     },
     {
@@ -1161,12 +1174,13 @@
       "method": "POST",
       "path": "GraphQL Query.deletionEvents",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/deletionEvents"
+        "reason": "Deprecated. Use `events` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/deletionEvents",
+        "notes": "Deprecated. Use `events` instead."
       }
     },
     {
@@ -1797,12 +1811,13 @@
       "method": "POST",
       "path": "GraphQL Query.locationsAvailableForDeliveryProfiles",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/locationsAvailableForDeliveryProfiles"
+        "reason": "Deprecated. Use `locationsAvailableForDeliveryProfilesConnection` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/locationsAvailableForDeliveryProfiles",
+        "notes": "Deprecated. Use `locationsAvailableForDeliveryProfilesConnection` instead."
       }
     },
     {
@@ -1857,12 +1872,13 @@
       "method": "POST",
       "path": "GraphQL Query.marketByGeography",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketByGeography"
+        "reason": "Deprecated. Use `markets` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/marketByGeography",
+        "notes": "Deprecated. Use `markets` instead."
       }
     },
     {
@@ -2409,12 +2425,13 @@
       "method": "POST",
       "path": "GraphQL Query.primaryMarket",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/primaryMarket"
+        "reason": "Deprecated. Use `markets` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/primaryMarket",
+        "notes": "Deprecated. Use `markets` instead."
       }
     },
     {
@@ -2445,12 +2462,13 @@
       "method": "POST",
       "path": "GraphQL Query.productByHandle",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/productByHandle"
+        "reason": "Deprecated. Use `productByIdentifier` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/productByHandle",
+        "notes": "Deprecated. Use `productByIdentifier` instead."
       }
     },
     {
@@ -2865,12 +2883,13 @@
       "method": "POST",
       "path": "GraphQL Query.segmentMigrations",
       "operation": {
-        "model": "direct_read",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL query document, typed variables, bounded pagination/output policy, and sanitized fixture are declared; no arbitrary GraphQL passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentMigrations"
+        "reason": "Deprecated. Use `serverPixel` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/queries/segmentMigrations",
+        "notes": "Deprecated. Use `serverPixel` instead."
       }
     },
     {
@@ -3453,12 +3472,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.abandonmentEmailStateUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/abandonmentEmailStateUpdate"
+        "reason": "Deprecated. Use `abandonmentUpdateActivitiesDeliveryStatuses` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/abandonmentEmailStateUpdate",
+        "notes": "Deprecated. Use `abandonmentUpdateActivitiesDeliveryStatuses` instead."
       }
     },
     {
@@ -3957,36 +3977,39 @@
       "method": "POST",
       "path": "GraphQL Mutation.checkoutBrandingUpsert",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/checkoutBrandingUpsert"
+        "reason": "Deprecated. Use `checkoutAndAccountsConfigurationUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/checkoutBrandingUpsert",
+        "notes": "Deprecated. Use `checkoutAndAccountsConfigurationUpdate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.collectionAddProducts",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionAddProducts"
+        "reason": "Deprecated. Use `collectionUpdate` with `inclusion.selectionsToAdd` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionAddProducts",
+        "notes": "Deprecated. Use `collectionUpdate` with `inclusion.selectionsToAdd` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.collectionAddProductsV2",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionAddProductsV2"
+        "reason": "Deprecated. Use `collectionUpdate` with `inclusion.selectionsToAdd` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionAddProductsV2",
+        "notes": "Deprecated. Use `collectionUpdate` with `inclusion.selectionsToAdd` instead."
       }
     },
     {
@@ -4069,12 +4092,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.collectionPublish",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionPublish"
+        "reason": "Deprecated. Use `publishablePublish` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionPublish",
+        "notes": "Deprecated. Use `publishablePublish` instead."
       }
     },
     {
@@ -4088,7 +4112,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionRemoveProducts",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `collectionUpdate` with `inclusion.selectionsToRemove` instead."
       }
     },
     {
@@ -4114,19 +4138,21 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionUnpublish",
-        "notes": "Shopify docs describe unpublishing a collection; treated as publication removal"
+        "notes": "Shopify docs describe unpublishing a collection; treated as publication removal. Deprecated. Use `publishableUnpublish` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.collectionUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs describe deleting the collection image and removing collection sources via `sourcesToDelete`."
       }
     },
     {
@@ -4431,12 +4457,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationAssignTaxExemptions",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationAssignTaxExemptions"
+        "reason": "Deprecated. Use `companyLocationTaxSettingsUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationAssignTaxExemptions",
+        "notes": "Deprecated. Use `companyLocationTaxSettingsUpdate` instead."
       }
     },
     {
@@ -4455,12 +4482,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationCreateTaxRegistration",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationCreateTaxRegistration"
+        "reason": "Deprecated. Use `companyLocationTaxSettingsUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationCreateTaxRegistration",
+        "notes": "Deprecated. Use `companyLocationTaxSettingsUpdate` instead."
       }
     },
     {
@@ -4516,7 +4544,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxExemptions",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `companyLocationTaxSettingsUpdate` instead."
       }
     },
     {
@@ -4530,7 +4558,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxRegistration",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `companyLocationTaxSettingsUpdate` instead."
       }
     },
     {
@@ -5131,12 +5159,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.deliveryShippingOriginAssign",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryShippingOriginAssign"
+        "reason": "Deprecated. Single origin shipping mode is no longer supported. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryShippingOriginAssign",
+        "notes": "Deprecated. Single origin shipping mode is no longer supported."
       }
     },
     {
@@ -5191,12 +5220,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountAutomaticBasicUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticBasicUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticBasicUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs include removing the minimum purchase requirement from an automatic basic discount."
       }
     },
     {
@@ -5281,12 +5312,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountAutomaticFreeShippingUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticFreeShippingUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticFreeShippingUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs include removing the minimum purchase requirement from an automatic free shipping discount."
       }
     },
     {
@@ -5367,12 +5400,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeBasicUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBasicUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBasicUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs include removing the minimum purchase requirement from a basic code discount."
       }
     },
     {
@@ -5483,12 +5518,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeFreeShippingUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeFreeShippingUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeFreeShippingUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs include removing the minimum purchase requirement from a free shipping code discount."
       }
     },
     {
@@ -5521,12 +5558,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.disputeEvidenceUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/disputeEvidenceUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/disputeEvidenceUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs include deleting a dispute evidence file."
       }
     },
     {
@@ -5699,36 +5738,40 @@
       "method": "POST",
       "path": "GraphQL Mutation.eventBridgeWebhookSubscriptionCreate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/eventBridgeWebhookSubscriptionCreate"
+        "reason": "Deprecated. Use `webhookSubscriptionCreate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/eventBridgeWebhookSubscriptionCreate",
+        "notes": "Deprecated. Use `webhookSubscriptionCreate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.eventBridgeWebhookSubscriptionUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/eventBridgeWebhookSubscriptionUpdate"
+        "reason": "Deprecated. Use `webhookSubscriptionUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/eventBridgeWebhookSubscriptionUpdate",
+        "notes": "Deprecated. Use `webhookSubscriptionUpdate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.fileAcknowledgeUpdateFailed",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileAcknowledgeUpdateFailed"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileAcknowledgeUpdateFailed",
+        "confirm": "destructive",
+        "notes": "Shopify docs describe clearing media errors while acknowledging a failed file update."
       }
     },
     {
@@ -5851,12 +5894,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentCreateV2",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentCreateV2"
+        "reason": "Deprecated. Use `fulfillmentCreate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentCreateV2",
+        "notes": "Deprecated. Use `fulfillmentCreate` instead."
       }
     },
     {
@@ -6167,12 +6211,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentTrackingInfoUpdateV2",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentTrackingInfoUpdateV2"
+        "reason": "Deprecated. Use `fulfillmentTrackingInfoUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentTrackingInfoUpdateV2",
+        "notes": "Deprecated. Use `fulfillmentTrackingInfoUpdate` instead."
       }
     },
     {
@@ -6281,12 +6326,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryActivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryActivate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryActivate",
+        "confirm": "destructive",
+        "notes": "Shopify docs say `stockAtLegacyLocation` can deactivate inventory at all other locations."
       }
     },
     {
@@ -6357,12 +6404,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventorySetOnHandQuantities",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventorySetOnHandQuantities"
+        "reason": "Deprecated. Use `inventorySetQuantities` to set `on_hand` or `available` quantities instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventorySetOnHandQuantities",
+        "notes": "Deprecated. Use `inventorySetQuantities` to set `on_hand` or `available` quantities instead."
       }
     },
     {
@@ -6721,12 +6769,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketCurrencySettingsUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketCurrencySettingsUpdate"
+        "reason": "Deprecated. Use `marketCreate` and `marketUpdate` for creating and updating market currency settings. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketCurrencySettingsUpdate",
+        "notes": "Deprecated. Use `marketCreate` and `marketUpdate` for creating and updating market currency settings."
       }
     },
     {
@@ -6773,12 +6822,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketingActivityCreateExternal",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityCreateExternal"
+        "reason": "Deprecated. Use `marketingActivityUpsertExternal` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityCreateExternal",
+        "notes": "Deprecated. Use `marketingActivityUpsertExternal` instead."
       }
     },
     {
@@ -6896,19 +6946,20 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionDelete",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `marketUpdate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.marketRegionsCreate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsCreate"
+        "reason": "Deprecated. Use `marketCreate` or `marketUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsCreate",
+        "notes": "Deprecated. Use `marketCreate` or `marketUpdate` instead."
       }
     },
     {
@@ -6922,31 +6973,34 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsDelete",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `marketUpdate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.marketUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs show `conditionsToDelete` removing market conditions."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.marketWebPresenceCreate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceCreate"
+        "reason": "Deprecated. Use `marketCreate` or `marketUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceCreate",
+        "notes": "Deprecated. Use `marketCreate` or `marketUpdate` instead."
       }
     },
     {
@@ -6960,19 +7014,20 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceDelete",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `marketUpdate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.marketWebPresenceUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceUpdate"
+        "reason": "Deprecated. Use `marketUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceUpdate",
+        "notes": "Deprecated. Use `marketUpdate` instead."
       }
     },
     {
@@ -7157,12 +7212,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.metaobjectDefinitionUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDefinitionUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDefinitionUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs include deleting a field definition from a metaobject definition."
       }
     },
     {
@@ -7183,24 +7240,28 @@
       "method": "POST",
       "path": "GraphQL Mutation.metaobjectUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs say `values` is a full replacement and omitted keys are cleared."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.metaobjectUpsert",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectUpsert"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectUpsert",
+        "confirm": "destructive",
+        "notes": "Shopify docs say `values` is a full replacement and omitted keys are cleared on an existing record."
       }
     },
     {
@@ -7259,12 +7320,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderAttributionDefinitionUpsert",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderAttributionDefinitionUpsert"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderAttributionDefinitionUpsert",
+        "confirm": "destructive",
+        "notes": "Shopify docs describe clearing the stored icon on an existing attribution definition."
       }
     },
     {
@@ -7480,7 +7543,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveLineItemDiscount",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `orderEditRemoveDiscount` instead."
       }
     },
     {
@@ -7947,12 +8010,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.productChangeStatus",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productChangeStatus"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productChangeStatus",
+        "confirm": "destructive",
+        "notes": "Shopify docs include changing product status to `ARCHIVED`. Deprecated. Use `productUpdate` instead."
       }
     },
     {
@@ -7971,12 +8036,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.productCreateMedia",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreateMedia"
+        "reason": "Deprecated. Use `fileCreate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreateMedia",
+        "notes": "Deprecated. Use `fileCreate` instead."
       }
     },
     {
@@ -8004,7 +8070,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDeleteMedia",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `fileUpdate` instead."
       }
     },
     {
@@ -8125,24 +8191,27 @@
       "method": "POST",
       "path": "GraphQL Mutation.productOptionUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs show `optionValuesToDelete` and variant deletion strategy behavior."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.productPublish",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productPublish"
+        "reason": "Deprecated. Use `publishablePublish` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productPublish",
+        "notes": "Deprecated. Use `publishablePublish` instead."
       }
     },
     {
@@ -8182,7 +8251,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productUnpublish",
-        "notes": "Shopify docs describe unpublishing a product; treated as publication removal"
+        "notes": "Shopify docs describe unpublishing a product; treated as publication removal. Deprecated. Use `publishableUnpublish` instead."
       }
     },
     {
@@ -8201,12 +8270,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.productUpdateMedia",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productUpdateMedia"
+        "reason": "Deprecated. Use `fileUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productUpdateMedia",
+        "notes": "Deprecated. Use `fileUpdate` instead."
       }
     },
     {
@@ -8279,12 +8349,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.productVariantsBulkCreate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantsBulkCreate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantsBulkCreate",
+        "confirm": "destructive",
+        "notes": "Shopify docs say the variant strategy can delete the standalone/default variant when creating variants."
       }
     },
     {
@@ -8381,12 +8453,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.publishablePublishToCurrentChannel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishablePublishToCurrentChannel"
+        "reason": "Deprecated. Use `publishablePublish` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishablePublishToCurrentChannel",
+        "notes": "Deprecated. Use `publishablePublish` instead."
       }
     },
     {
@@ -8414,7 +8487,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publishableUnpublishToCurrentChannel",
-        "notes": "Shopify docs describe unpublishing a resource from the current channel; treated as publication removal"
+        "notes": "Shopify docs describe unpublishing a resource from the current channel; treated as publication removal. Deprecated. Use `publishableUnpublish` instead."
       }
     },
     {
@@ -8435,24 +8508,26 @@
       "method": "POST",
       "path": "GraphQL Mutation.pubSubWebhookSubscriptionCreate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionCreate"
+        "reason": "Deprecated. Use `webhookSubscriptionCreate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionCreate",
+        "notes": "Deprecated. Use `webhookSubscriptionCreate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.pubSubWebhookSubscriptionUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionUpdate"
+        "reason": "Deprecated. Use `webhookSubscriptionUpdate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubWebhookSubscriptionUpdate",
+        "notes": "Deprecated. Use `webhookSubscriptionUpdate` instead."
       }
     },
     {
@@ -8596,7 +8671,7 @@
         "blocked_by_default": true,
         "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnLineItemRemoveFromReturn",
-        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied"
+        "notes": "state-destroying mutations remain in scope; no blanket unsafe exclusion is applied. Deprecated. Use `removeFromReturn` instead."
       }
     },
     {
@@ -8615,12 +8690,13 @@
       "method": "POST",
       "path": "GraphQL Mutation.returnRefund",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnRefund"
+        "reason": "Deprecated. Use `returnProcess` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnRefund",
+        "notes": "Deprecated. Use `returnProcess` instead."
       }
     },
     {
@@ -8881,12 +8957,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.sellingPlanGroupUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupUpdate",
+        "confirm": "destructive",
+        "notes": "Shopify docs return `deletedSellingPlanIds`, the IDs of deleted subscription plans."
       }
     },
     {
@@ -9057,24 +9135,26 @@
       "method": "POST",
       "path": "GraphQL Mutation.stagedUploadTargetGenerate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadTargetGenerate"
+        "reason": "Deprecated. Use `stagedUploadsCreate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadTargetGenerate",
+        "notes": "Deprecated. Use `stagedUploadsCreate` instead."
       }
     },
     {
       "method": "POST",
       "path": "GraphQL Mutation.stagedUploadTargetsGenerate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "deprecated",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadTargetsGenerate"
+        "reason": "Deprecated. Use `stagedUploadsCreate` instead. Blocked rather than generating a new fixed Shopify operation binding for a source-deprecated operation.",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/stagedUploadTargetsGenerate",
+        "notes": "Deprecated. Use `stagedUploadsCreate` instead."
       }
     },
     {
@@ -13122,24 +13202,28 @@
       "method": "POST",
       "path": "/admin/api/latest/inventory_levels/connect.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel",
+        "confirm": "destructive",
+        "notes": "Shopify REST docs say `relocate_if_necessary` can relocate inventory and disconnect other locations."
       }
     },
     {
       "method": "POST",
       "path": "/admin/api/latest/inventory_levels/set.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel",
+        "confirm": "destructive",
+        "notes": "Shopify REST docs say `disconnect_if_necessary` can set other locations to 0 and disconnect them."
       }
     },
     {

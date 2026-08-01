@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector shopify [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream, typed destructive REST delete actions, and critical blocked destructive dispositions for state-destroying official operations.
+  Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream, typed destructive REST delete actions, source-deprecated dispositions, and critical blocked destructive safeguards for state-destroying official operations.
 
 ICON
   asset: icons/shopify.svg
@@ -221,7 +221,7 @@ COMMAND SURFACE
   Typed writes
   Ledger metadata
   Other Commands
-    ledger inspect - Inspect the connector-owned Shopify operation ledger and source inventory. [intent=docs_only availability=planned]; notes: Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows, including 192 blocked state-destroying rows marked `destructive_action` with `confirm: destructive`.
+    ledger inspect - Inspect the connector-owned Shopify operation ledger and source inventory. [intent=docs_only availability=planned]; notes: Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows, including 211 blocked state-destroying rows marked `destructive_action` with `confirm: destructive` and 59 source-deprecated GraphQL rows with explicit deprecated notes.
     shop read - Read the fixed Shopify Shop REST resource through the ETL stream. [intent=etl availability=implemented stream=shop]; notes: Uses the fixed `shop` stream; no arbitrary REST path is accepted.
     delete <fixed-delete-action> - Run one of 42 connector-owned typed Shopify REST DELETE actions after preview and destructive confirmation. [intent=reverse_etl availability=planned]; approval: plan -> preview -> explicit approval -> execute with typed destructive confirmation; risk: Destructive deletes require action-specific record schemas and `destructive` typed confirmation.; notes: Individual implemented delete actions are exposed through reverse ETL action names; this metadata is not a raw method/path command. Inventory-level and theme-asset DELETE shapes remain planned until shared write-query support exists.
     graphql query <fixed-operation> - Future fixed Shopify Admin GraphQL query commands generated only from reviewed operation documents. [intent=direct_read availability=planned]; notes: No arbitrary GraphQL document, variables blob, or passthrough is accepted.
