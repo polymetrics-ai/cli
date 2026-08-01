@@ -34,10 +34,6 @@
       "type": "string",
       "description": "Optional maximum page count for paginated read/query actions; use a positive integer."
     },
-    "start_date": {
-      "type": "string",
-      "description": "Optional lower bound for LookupEvents-style reads; YYYY-MM-DD or RFC3339."
-    },
     "mode": {
       "type": "string",
       "description": "Set to fixture for credential-free native fixture tests."

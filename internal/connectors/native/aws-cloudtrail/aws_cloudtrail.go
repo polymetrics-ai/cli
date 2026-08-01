@@ -50,13 +50,13 @@ func (Connector) Metadata() connectors.Metadata {
 		Name:            connectorName,
 		DisplayName:     "AWS CloudTrail",
 		IntegrationType: "api",
-		Description:     "Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams. Provider query/direct-read and write/admin actions are planned until shared promoted-native forwarding exposes them safely at runtime.",
+		Description:     "Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.",
 		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: false, Query: false},
 	}
 }
 
 // Check verifies SigV4 credentials and endpoint reachability with a bounded
-// read-only LookupEvents call. In fixture mode it short-circuits without a
+// read-only DescribeTrails call. In fixture mode it short-circuits without a
 // network call.
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
@@ -65,11 +65,11 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	if fixtureMode(cfg) {
 		return nil
 	}
-	r, err := c.requester(cfg, "LookupEvents")
+	r, err := c.requester(cfg, "DescribeTrails")
 	if err != nil {
 		return err
 	}
-	if err := r.DoJSON(ctx, http.MethodPost, "/", nil, map[string]any{"MaxResults": 1}, nil); err != nil {
+	if err := r.DoJSON(ctx, http.MethodPost, "/", nil, map[string]any{}, nil); err != nil {
 		return fmt.Errorf("check aws-cloudtrail: %w", err)
 	}
 	return nil
@@ -98,13 +98,22 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 		stream = "describe_trails"
 	}
 	action, ok := cloudTrailStreamActions[stream]
-	if !ok {
+	if !ok || !cloudTrailStreamPublished(stream) {
 		return fmt.Errorf("aws-cloudtrail stream %q not found", stream)
 	}
 	if fixtureMode(req.Config) {
 		return c.readFixture(ctx, stream, action, req, emit)
 	}
 	return c.readAction(ctx, action, stream, req, emit)
+}
+
+func cloudTrailStreamPublished(stream string) bool {
+	for _, published := range cloudTrailPublishedStreams {
+		if stream == published {
+			return true
+		}
+	}
+	return false
 }
 
 func (c Connector) readAction(ctx context.Context, action, stream string, req connectors.ReadRequest, emit func(connectors.Record) error) error {
@@ -125,15 +134,6 @@ func (c Connector) readAction(ctx context.Context, action, stream string, req co
 			body["MaxResults"] = maxItems
 		}
 	}
-	if action == "LookupEvents" {
-		if startTime, err := startTimeBound(req); err != nil {
-			return err
-		} else if startTime != nil {
-			body["StartTime"] = startTime.Unix()
-		}
-		applyLookupAliasFilter(stream, body)
-	}
-
 	maxPages := maxPages(req.Config)
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {
@@ -159,8 +159,8 @@ func (c Connector) readAction(ctx context.Context, action, stream string, req co
 	return nil
 }
 
-// OperationDirectRead executes one definition-owned provider query/lookup
-// operation. It supports only the ten operation IDs declared in operations.json.
+// OperationDirectRead rejects provider query/lookup operations until shared
+// promoted-native forwarding exposes them safely.
 func (c Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err

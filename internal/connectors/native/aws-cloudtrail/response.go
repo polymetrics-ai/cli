@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"hash/fnv"
 	"strings"
-	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -40,7 +39,7 @@ func recordsForAction(action string, decoded map[string]any) []connectors.Record
 }
 
 func isCollectionAction(action string) bool {
-	return action == "DescribeTrails" || strings.HasPrefix(action, "List") || action == "LookupEvents"
+	return action == "DescribeTrails" || strings.HasPrefix(action, "List")
 }
 
 func firstArray(decoded map[string]any) ([]any, bool) {
@@ -169,44 +168,6 @@ func redactValue(value any, redact map[string]bool) any {
 	}
 }
 
-func startTimeBound(req connectors.ReadRequest) (*time.Time, error) {
-	if raw := strings.TrimSpace(req.Query["StartTime"]); raw != "" {
-		return parseBoundTime(raw)
-	}
-	if raw := strings.TrimSpace(req.Query["start_time"]); raw != "" {
-		return parseBoundTime(raw)
-	}
-	if req.Config.Config != nil {
-		if raw := strings.TrimSpace(req.Config.Config["start_date"]); raw != "" && raw != "synthetic-conformance-value" {
-			return parseBoundTime(raw)
-		}
-	}
-	return nil, nil
-}
-
-func parseBoundTime(raw string) (*time.Time, error) {
-	if t, err := time.Parse(time.RFC3339, raw); err == nil {
-		return &t, nil
-	}
-	if t, err := time.Parse("2006-01-02", raw); err == nil {
-		return &t, nil
-	}
-	return nil, fmt.Errorf("aws-cloudtrail start time must be RFC3339 or YYYY-MM-DD")
-}
-
-func applyLookupAliasFilter(stream string, body map[string]any) {
-	switch stream {
-	case "management_events":
-		body["EventCategory"] = "Management"
-	case "read_only_events":
-		body["LookupAttributes"] = []any{map[string]any{"AttributeKey": "ReadOnly", "AttributeValue": "true"}}
-	case "write_only_events":
-		body["LookupAttributes"] = []any{map[string]any{"AttributeKey": "ReadOnly", "AttributeValue": "false"}}
-	case "console_logins":
-		body["LookupAttributes"] = []any{map[string]any{"AttributeKey": "EventName", "AttributeValue": "ConsoleLogin"}}
-	}
-}
-
 func isMissingOK(writeAction string, err error) bool {
 	if !cloudTrailDeleteActions[writeAction] {
 		return false
@@ -228,9 +189,6 @@ func (c Connector) readFixture(ctx context.Context, stream, action string, req c
 	}
 	body := map[string]any{"pm_record_id": stream + "_fixture", "operation": action}
 	switch action {
-	case "LookupEvents":
-		body["EventName"] = "ConsoleLogin"
-		body["EventTime"] = time.Now().UTC().Format(time.RFC3339)
 	case "DescribeTrails":
 		body["Name"] = "fixture-trail"
 		body["TrailARN"] = "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"

@@ -20,7 +20,7 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := len(bundle.Surface.Endpoints), 60; got != want {
 		t.Fatalf("api_surface rows = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Streams), 19; got != want {
+	if got, want := len(bundle.Streams), 9; got != want {
 		t.Fatalf("streams = %d, want %d", got, want)
 	}
 	if got, want := len(bundle.Operations), 0; got != want {
@@ -39,11 +39,35 @@ func TestOperationLedgerCounts(t *testing.T) {
 			blocked++
 		}
 	}
-	if got, want := coveredStreams, 19; got != want {
+	if got, want := coveredStreams, 9; got != want {
 		t.Fatalf("stream-covered operations = %d, want %d", got, want)
 	}
-	if got, want := blocked, 41; got != want {
+	if got, want := blocked, 51; got != want {
 		t.Fatalf("blocked/planned operations = %d, want %d", got, want)
+	}
+}
+
+func TestPublishedStreamsNeedNoRequiredRequestFields(t *testing.T) {
+	published := map[string]bool{}
+	for _, stream := range cloudTrailPublishedStreams {
+		published[stream] = true
+		action, ok := cloudTrailStreamActions[stream]
+		if !ok {
+			t.Fatalf("published stream %s missing action", stream)
+		}
+		for _, field := range cloudTrailActionFields[action] {
+			if field.Required {
+				t.Fatalf("published stream %s action %s requires %s", stream, action, field.Name)
+			}
+		}
+	}
+	if len(cloudTrailStreamActions) != len(cloudTrailPublishedStreams) {
+		t.Fatalf("stream action map has %d entries, want %d", len(cloudTrailStreamActions), len(cloudTrailPublishedStreams))
+	}
+	for stream := range cloudTrailStreamActions {
+		if !published[stream] {
+			t.Fatalf("unpublished stream %s is dispatchable", stream)
+		}
 	}
 }
 
@@ -69,6 +93,31 @@ func TestOperationLedgerNoRawEscapes(t *testing.T) {
 		if endpoint.Operation.Status != "blocked" || !endpoint.Operation.BlockedByDefault {
 			t.Fatalf("blocked endpoint %+v is not blocked by default", endpoint)
 		}
+	}
+}
+
+func TestNativeCloudTrailCheckUsesImplementedTarget(t *testing.T) {
+	var gotTarget string
+	var gotBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotTarget = r.Header.Get("X-Amz-Target")
+		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"trailList":[]}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	if err := c.Check(context.Background(), fixtureRuntimeConfig(srv.URL)); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if got, want := gotTarget, cloudTrailTarget("DescribeTrails"); got != want {
+		t.Fatalf("X-Amz-Target = %q, want %q", got, want)
+	}
+	if len(gotBody) != 0 {
+		t.Fatalf("body = %#v, want empty DescribeTrails body by default", gotBody)
 	}
 }
 
@@ -106,6 +155,37 @@ func TestNativeCloudTrailReadDispatchesStreamTarget(t *testing.T) {
 	}
 	if len(gotBody) != 0 {
 		t.Fatalf("body = %#v, want empty DescribeTrails body by default", gotBody)
+	}
+}
+
+func TestNativeCloudTrailRejectsBlockedReadStreams(t *testing.T) {
+	blocked := []string{
+		"get_channel",
+		"get_dashboard",
+		"get_event_data_store",
+		"get_event_selectors",
+		"get_import",
+		"get_resource_policy",
+		"get_trail",
+		"get_trail_status",
+		"list_import_failures",
+		"list_tags",
+		"management_events",
+		"read_only_events",
+		"write_only_events",
+		"console_logins",
+	}
+	c := Connector{}
+	for _, stream := range blocked {
+		t.Run(stream, func(t *testing.T) {
+			err := c.Read(context.Background(), connectors.ReadRequest{Stream: stream}, func(connectors.Record) error {
+				t.Fatalf("emit called for blocked stream %s", stream)
+				return nil
+			})
+			if err == nil {
+				t.Fatalf("Read(%s) unexpectedly succeeded", stream)
+			}
+		})
 	}
 }
 
