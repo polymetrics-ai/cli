@@ -28,6 +28,13 @@ git diff --check
 - PASS — `make connector-boundary` (existing non-GitLab allowlist output only; no GitLab boundary violation).
 - PASS — `git diff --check`.
 
+## Review-fix refresh
+
+- PASS — `go run ./cmd/pm help docs`: reviewed the docs generator contract before regeneration.
+- PASS — `go run ./cmd/pm docs generate --dir .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/generated-docs-work/cli --connectors-dir .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/generated-docs-work/connectors`: regenerated connector docs into a phase-local temp tree, then copied the GitLab manual/skill plus connector catalog/index artifacts.
+- PASS — `node website/scripts/gen-connector-bundles.mjs && node website/scripts/gen-connector-catalog.mjs && node website/scripts/gen-connectors.mjs`: regenerated website connector data/catalog artifacts from the updated GitLab bundle; GitLab now carries 1,147 provider command metadata rows in website data.
+- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py` plus focused GitLab docs/website JSON checks: HEAD rows are blocked composite metadata and generated GitLab docs/website data are fresh.
+
 ## Safety verification
 
 - No live GitLab connector calls, credentials, or writes.

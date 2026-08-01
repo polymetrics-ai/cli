@@ -59084,7 +59084,7 @@
   {
     "name": "gitlab",
     "display_name": "GitLab",
-    "description": "Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.",
+    "description": "Reads GitLab projects, groups, users, and issues; carries a complete planned official GitLab operation ledger for future typed streams, writes, direct reads, binary transfers, and changefeeds.",
     "integration_type": "api",
     "docs_url": "https://docs.gitlab.com/ee/api/rest/",
     "release_stage": "ga",
@@ -59181,7 +59181,9 @@
       }
     ],
     "risk": {
-      "read": "external GitLab API read of projects, groups, users, and issues"
+      "read": "external GitLab API reads for the four implemented streams; planned reads remain metadata-only until fixture-backed",
+      "write": "no executable write actions in this wave; planned mutations require reverse ETL plan, preview, explicit approval, and destructive typed confirmation where applicable",
+      "approval": "destructive/admin operations are in scope but blocked until connector-local named actions provide confirm=destructive and verified safety evidence"
     },
     "icon": {
       "id": "gitlab",

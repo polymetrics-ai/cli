@@ -115,7 +115,7 @@ def main() -> int:
         if method == "HEAD":
             if audit_event != "gitlab.direct_read_query_search":
                 problems.append(f"{op.get('id')} HEAD audit_event={audit_event}")
-            if op.get("kind") != "rest_read":
+            if op.get("kind") != "composite":
                 problems.append(f"{op.get('id')} HEAD kind={op.get('kind')}")
             if command.get("intent") != "direct_read":
                 problems.append(f"{op.get('id')} HEAD cli intent={command.get('intent')!r}")

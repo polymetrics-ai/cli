@@ -187,7 +187,7 @@
 - [giphy](giphy/MANUAL.md): Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoints. Read-only.
 - [gitbook](gitbook/MANUAL.md): Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations through the GitBook API.
 - [github](github/MANUAL.md): Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).
-- [gitlab](gitlab/MANUAL.md): Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
+- [gitlab](gitlab/MANUAL.md): Reads GitLab projects, groups, users, and issues; carries a complete planned official GitLab operation ledger for future typed streams, writes, direct reads, binary transfers, and changefeeds.
 - [glassfrog](glassfrog/MANUAL.md): Reads GlassFrog circles, roles, people, projects, and assignments through the GlassFrog API v3 (read-only full-refresh source).
 - [gmail](gmail/MANUAL.md): Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases, delegates, forwarding addresses, and mailbox profile, and writes approved reverse-ETL mutations (send/insert/import/modify/trash/delete messages and threads; draft and label lifecycle; filter, send-as, delegate, and forwarding-address management; vacation/language/IMAP/POP/auto-forwarding settings) via the Google OAuth 2.0 refresh-token grant.
 - [gnews](gnews/MANUAL.md): Reads GNews articles from the keyword search and top-headlines endpoints of the GNews REST API. Read-only.
