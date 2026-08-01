@@ -1,6 +1,6 @@
 {
   "tagline": "Read Freshchat data and safely plan Freshchat write actions without raw provider escape hatches.",
-  "usage": "pm freshchat <agents|users|conversations|groups|channels|roles|reports|metrics|business-hours|direct|binary> <command> [flags]",
+  "usage": "pm freshchat <account|agents|users|conversations|groups|channels|roles|outbound|reports|metrics|business-hours|csat|direct|binary> <command> [flags]",
   "source_cli": {
     "name": "Freshchat API",
     "docs": "https://developers.freshchat.com/api/",

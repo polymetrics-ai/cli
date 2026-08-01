@@ -152,6 +152,52 @@ func TestRunImplementedStreamCommand(t *testing.T) {
 	}
 }
 
+func TestRunImplementedStreamCommandConfigFlagOverridesConfig(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "agents view",
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       "agent_details",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "agent-id", Type: "string", MapsTo: "config.agent_id"},
+					{Name: "include", Type: "string", MapsTo: "query.include"},
+				},
+			},
+		},
+	}}
+	cfg := connectors.RuntimeConfig{
+		Config:  map[string]string{"agent_id": "connection-agent", "base_url": "https://api.example.test"},
+		Secrets: map[string]string{"api_key": "credential-secret"},
+	}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path: []string{"agents", "view"},
+		Flags: map[string][]string{
+			"agent-id": {"flag-agent"},
+			"include":  {"availability"},
+		},
+		Config: cfg,
+		Limit:  1,
+	}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got := connector.readReq.Config.Config["agent_id"]; got != "flag-agent" {
+		t.Fatalf("read config agent_id = %q, want flag-agent", got)
+	}
+	if got := connector.readReq.Config.Config["base_url"]; got != "https://api.example.test" {
+		t.Fatalf("read config base_url = %q, want preserved base_url", got)
+	}
+	if got := connector.readReq.Query["include"]; got != "availability" {
+		t.Fatalf("read query include = %q, want availability", got)
+	}
+	if got := cfg.Config["agent_id"]; got != "connection-agent" {
+		t.Fatalf("input config was mutated: agent_id = %q", got)
+	}
+}
+
 func TestRunCoreStreamMappings(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
