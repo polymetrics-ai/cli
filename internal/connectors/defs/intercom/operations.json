@@ -178,6 +178,7 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "title": "Create Content Import Source Payload",
           "type": "object",
           "description": "You can add an Content Import Source to your Fin Content Library.",
           "properties": {
@@ -194,14 +195,26 @@
               "enum": [
                 "active",
                 "deactivated"
-              ]
+              ],
+              "default": "active"
             },
             "url": {
               "type": "string",
               "description": "The URL of the content import source."
             },
             "audience_ids": {
-              "type": "object"
+              "description": "The unique identifiers for the audiences to associate with this content import source. Can be a single integer or an array of integers.",
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              ]
             }
           },
           "required": [
@@ -259,6 +272,7 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "title": "Create Content Import Source Payload",
           "type": "object",
           "description": "You can modify a Content Import Source of your Fin Content Library.",
           "properties": {
@@ -277,18 +291,31 @@
               "enum": [
                 "active",
                 "deactivated"
-              ]
+              ],
+              "default": "active"
             },
             "url": {
               "type": "string",
               "description": "The URL of the content import source. This may only be different from the existing value if the sync behavior is API."
             },
             "audience_ids": {
-              "type": "object"
+              "description": "The unique identifiers for the audiences to associate with this content import source. Can be a single integer or an array of integers. Set to null or an empty array to remove all audiences.",
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              ]
             },
             "apply_audience_to_existing_content": {
               "type": "boolean",
-              "description": "When true, the audience will be applied to all existing external pages belonging to this content import source."
+              "description": "When true, the audience will be applied to all existing external pages belonging to this content import source.",
+              "default": false
             }
           },
           "required": [
@@ -522,7 +549,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -4772,7 +4799,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
               "format": "date-time"
             },
             "scheduled_unpublish_at": {
@@ -4780,7 +4807,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
               "format": "date-time"
             }
           },
@@ -4874,7 +4901,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -9124,7 +9151,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
               "format": "date-time"
             },
             "scheduled_unpublish_at": {
@@ -9132,7 +9159,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
               "format": "date-time"
             }
           }
@@ -9273,7 +9300,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -13523,7 +13550,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
               "format": "date-time"
             },
             "scheduled_unpublish_at": {
@@ -13531,7 +13558,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
               "format": "date-time"
             }
           }
@@ -13717,7 +13744,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "The request payload for updating an audience. All fields are optional — only provided fields will be updated.",
+          "description": "The request payload for updating an audience. All fields are optional \u2014 only provided fields will be updated.",
           "properties": {
             "name": {
               "type": "string",
@@ -14225,75 +14252,112 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "role": {
-              "type": "string"
-            },
-            "external_id": {
-              "type": "string"
-            },
-            "email_verified": {
-              "type": [
-                "boolean",
-                "null"
-              ]
-            },
-            "email": {
-              "type": "string"
-            },
-            "phone": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "name": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "avatar": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "signed_up_at": {
-              "type": [
-                "integer",
-                "null"
-              ],
-              "format": "date-time"
-            },
-            "last_seen_at": {
-              "type": [
-                "integer",
-                "null"
-              ],
-              "format": "date-time"
-            },
-            "owner_id": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "unsubscribed_from_emails": {
-              "type": [
-                "boolean",
-                "null"
-              ]
-            },
-            "custom_attributes": {
-              "type": [
-                "object",
-                "null"
+          "oneOf": [
+            {
+              "description": "Payload to create a contact",
+              "type": "object",
+              "title": "Create Contact Request Payload",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "description": "The role of the contact."
+                },
+                "external_id": {
+                  "type": "string",
+                  "description": "A unique identifier for the contact which is given to Intercom"
+                },
+                "email_verified": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
+                  "description": "Whether the contact's email address has been verified. Set to true to indicate you have verified the contact owns this email address, or false to mark it as unverified. Must be supplied together with an email in the same request; sending it without an email returns a 400."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The contacts email"
+                },
+                "phone": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The contacts phone"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The contacts name"
+                },
+                "avatar": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "An image URL containing the avatar of a contact"
+                },
+                "signed_up_at": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "(Unix timestamp in seconds) The time specified for when a contact signed up."
+                },
+                "last_seen_at": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "(Unix timestamp in seconds) The time when the contact was last seen (either where the Intercom Messenger was installed or when specified manually)."
+                },
+                "owner_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The id of an admin that has been assigned account ownership of the contact"
+                },
+                "unsubscribed_from_emails": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
+                  "description": "Whether the contact is unsubscribed from emails"
+                },
+                "custom_attributes": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "description": "The custom attributes which are set for the contact"
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "email"
+                  ],
+                  "title": "Create contact with email"
+                },
+                {
+                  "required": [
+                    "external_id"
+                  ],
+                  "title": "Create contact with external_id"
+                },
+                {
+                  "required": [
+                    "role"
+                  ],
+                  "title": "Create contact with role"
+                }
               ]
             }
-          },
-          "minProperties": 1
+          ]
         }
       }
     },
@@ -14490,86 +14554,92 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "role": {
-              "type": "string",
-              "description": "The role of the contact."
-            },
-            "external_id": {
-              "type": "string",
-              "description": "A unique identifier for the contact which is given to Intercom"
-            },
-            "email": {
-              "type": "string",
-              "description": "The contacts email"
-            },
-            "email_verified": {
-              "type": [
-                "boolean",
-                "null"
-              ],
-              "description": "Whether the contact's email address has been verified. Set to true to indicate you have verified the contact owns this email address, or false to mark it as unverified. Must be supplied together with an email in the same request; sending it without an email returns a 400."
-            },
-            "phone": {
-              "type": [
-                "string",
-                "null"
-              ],
-              "description": "The contacts phone"
-            },
-            "name": {
-              "type": [
-                "string",
-                "null"
-              ],
-              "description": "The contacts name"
-            },
-            "avatar": {
-              "type": [
-                "string",
-                "null"
-              ],
-              "description": "An image URL containing the avatar of a contact"
-            },
-            "signed_up_at": {
-              "type": [
-                "integer",
-                "null"
-              ],
-              "description": "(Unix timestamp in seconds) The time specified for when a contact signed up.",
-              "format": "date-time"
-            },
-            "last_seen_at": {
-              "type": [
-                "integer",
-                "null"
-              ],
-              "description": "(Unix timestamp in seconds) The time when the contact was last seen (either where the Intercom Messenger was installed or when specified manually).",
-              "format": "date-time"
-            },
-            "owner_id": {
-              "type": [
-                "string",
-                "null"
-              ],
-              "description": "The id of an admin that has been assigned account ownership of the contact"
-            },
-            "unsubscribed_from_emails": {
-              "type": [
-                "boolean",
-                "null"
-              ],
-              "description": "Whether the contact is unsubscribed from emails"
-            },
-            "custom_attributes": {
-              "type": [
-                "object",
-                "null"
-              ],
-              "description": "The custom attributes which are set for the contact"
+          "oneOf": [
+            {
+              "description": "You can update a contact",
+              "type": "object",
+              "title": "Update Contact Request Payload",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "description": "The role of the contact."
+                },
+                "external_id": {
+                  "type": "string",
+                  "description": "A unique identifier for the contact which is given to Intercom"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The contacts email"
+                },
+                "email_verified": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
+                  "description": "Whether the contact's email address has been verified. Set to true to indicate you have verified the contact owns this email address, or false to mark it as unverified. Must be supplied together with an email in the same request; sending it without an email returns a 400."
+                },
+                "phone": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The contacts phone"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The contacts name"
+                },
+                "avatar": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "An image URL containing the avatar of a contact"
+                },
+                "signed_up_at": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "(Unix timestamp in seconds) The time specified for when a contact signed up."
+                },
+                "last_seen_at": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "(Unix timestamp in seconds) The time when the contact was last seen (either where the Intercom Messenger was installed or when specified manually)."
+                },
+                "owner_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The id of an admin that has been assigned account ownership of the contact"
+                },
+                "unsubscribed_from_emails": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
+                  "description": "Whether the contact is unsubscribed from emails"
+                },
+                "custom_attributes": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "description": "The custom attributes which are set for the contact"
+                }
+              }
             }
-          }
+          ]
         }
       }
     },
@@ -14981,7 +15051,7 @@
             },
             "availability": {
               "type": "object",
-              "description": "Required when `action` is `set_availability`. Each field is optional — only the properties present in the request are toggled.",
+              "description": "Required when `action` is `set_availability`. Each field is optional \u2014 only the properties present in the request are toggled.",
               "properties": {
                 "ai_agent": {
                   "type": "boolean",
@@ -15096,7 +15166,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "The request payload for creating a content snippet. You must provide either `json_blocks` or `body_markdown` for the snippet content — they are mutually exclusive.",
+          "description": "The request payload for creating a content snippet. You must provide either `json_blocks` or `body_markdown` for the snippet content \u2014 they are mutually exclusive.",
           "properties": {
             "title": {
               "type": "string",
@@ -15111,7 +15181,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the snippet in markdown. An alternative to `json_blocks` — you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
+              "description": "The content of the snippet in markdown. An alternative to `json_blocks` \u2014 you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
             },
             "locale": {
               "type": "string",
@@ -15248,7 +15318,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "The request payload for updating a content snippet. All fields are optional — only provided fields will be updated. `json_blocks` and `body_markdown` are mutually exclusive.",
+          "description": "The request payload for updating a content snippet. All fields are optional \u2014 only provided fields will be updated. `json_blocks` and `body_markdown` are mutually exclusive.",
           "properties": {
             "title": {
               "type": "string",
@@ -15263,7 +15333,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the snippet in markdown. An alternative to `json_blocks` — you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
+              "description": "The content of the snippet in markdown. An alternative to `json_blocks` \u2014 you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
             },
             "locale": {
               "type": "string",
@@ -15416,89 +15486,525 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "Name of the attribute."
-            },
-            "description": {
-              "type": "string",
-              "description": "Readable description of the attribute."
-            },
-            "data_type": {
-              "type": "string",
-              "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
-              "enum": [
-                "string",
-                "integer",
-                "list",
-                "decimal",
-                "boolean",
-                "datetime",
-                "relationship",
-                "files"
-              ]
-            },
-            "required": {
-              "type": "boolean",
-              "description": "Whether this attribute is required."
-            },
-            "visible_to_team_ids": {
-              "type": "array",
-              "description": "Team IDs that can see this attribute. Empty array means all teams.",
-              "items": {
-                "type": "string"
-              }
-            },
-            "multiline": {
-              "type": "boolean",
-              "description": "Whether this string attribute is multiline."
-            },
-            "options": {
-              "type": "array",
-              "description": "Initial options for this list attribute. Each option must have a `label`.",
-              "items": {
-                "type": "object",
-                "description": "Payload for adding a new option to a list-type conversation attribute.",
-                "properties": {
-                  "label": {
-                    "type": "string",
-                    "description": "The label for the new option."
+          "title": "Create Conversation Attribute Request",
+          "description": "Payload for creating a new conversation attribute.",
+          "oneOf": [
+            {
+              "title": "Create Conversation Attribute Request (String)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
                   }
                 },
-                "required": [
-                  "label"
-                ]
-              }
-            },
-            "reference": {
-              "type": "object",
-              "description": "Reference configuration for related objects.",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "description": "The cardinality of the relationship: `one` or `many`.",
-                  "enum": [
-                    "one",
-                    "many"
-                  ]
-                },
-                "object_type_id": {
-                  "type": "string",
-                  "description": "The ID of the related custom object type."
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "string"
+                      ]
+                    },
+                    "multiline": {
+                      "type": "boolean",
+                      "description": "Whether this string attribute is multiline."
+                    }
+                  }
                 }
-              },
-              "required": [
-                "type"
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (Integer)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "integer"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (List)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "options": {
+                      "type": "array",
+                      "description": "Initial options for this list attribute. Each option must have a `label`.",
+                      "items": {
+                        "title": "Create Conversation Attribute Option Request",
+                        "type": "object",
+                        "description": "Payload for adding a new option to a list-type conversation attribute.",
+                        "required": [
+                          "label"
+                        ],
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "description": "The label for the new option."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (Decimal)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "decimal"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (Boolean)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "boolean"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (Datetime)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "datetime"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (Relationship)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "relationship"
+                      ]
+                    },
+                    "reference": {
+                      "type": "object",
+                      "description": "Reference configuration for related objects.",
+                      "required": [
+                        "type"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "The cardinality of the relationship: `one` or `many`.",
+                          "enum": [
+                            "one",
+                            "many"
+                          ]
+                        },
+                        "object_type_id": {
+                          "type": "string",
+                          "description": "The ID of the related custom object type."
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "title": "Create Conversation Attribute Request (Files)",
+              "allOf": [
+                {
+                  "title": "Create Conversation Attribute Request Base",
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "data_type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the attribute."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Readable description of the attribute."
+                    },
+                    "data_type": {
+                      "type": "string",
+                      "description": "The data type of the attribute. Allowed types: string, integer, list, decimal, boolean, datetime, relationship, files.",
+                      "enum": [
+                        "string",
+                        "integer",
+                        "list",
+                        "decimal",
+                        "boolean",
+                        "datetime",
+                        "relationship",
+                        "files"
+                      ]
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "Whether this attribute is required."
+                    },
+                    "visible_to_team_ids": {
+                      "type": "array",
+                      "description": "Team IDs that can see this attribute. Empty array means all teams.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data_type": {
+                      "type": "string",
+                      "enum": [
+                        "files"
+                      ]
+                    }
+                  }
+                }
               ]
             }
-          },
-          "required": [
-            "name",
-            "data_type"
-          ],
-          "additionalProperties": false
+          ]
         }
       }
     },
@@ -15710,35 +16216,62 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "description": "The type of resource being redacted.",
-              "enum": [
-                "conversation_part",
-                "source"
+          "oneOf": [
+            {
+              "title": "Redact Conversation Part Request",
+              "type": "object",
+              "description": "Payload of the request to redact a conversation part",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "conversation_part"
+                  ],
+                  "description": "The type of resource being redacted."
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "description": "The id of the conversation."
+                },
+                "conversation_part_id": {
+                  "type": "string",
+                  "description": "The id of the conversation_part."
+                }
+              },
+              "required": [
+                "type",
+                "conversation_id",
+                "conversation_part_id"
               ]
             },
-            "conversation_id": {
-              "type": "string",
-              "description": "The id of the conversation."
-            },
-            "conversation_part_id": {
-              "type": "string",
-              "description": "The id of the conversation_part."
-            },
-            "source_id": {
-              "type": "string",
-              "description": "The id of the source."
+            {
+              "title": "Redact Conversation Source Request",
+              "type": "object",
+              "description": "Payload of the request to redact a conversation source",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "source"
+                  ],
+                  "description": "The type of resource being redacted."
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "description": "The id of the conversation."
+                },
+                "source_id": {
+                  "type": "string",
+                  "description": "The id of the source."
+                }
+              },
+              "required": [
+                "type",
+                "conversation_id",
+                "source_id"
+              ]
             }
-          },
-          "required": [
-            "type",
-            "conversation_id"
-          ],
-          "minProperties": 3,
-          "additionalProperties": false
+          ]
         }
       }
     },
@@ -15939,6 +16472,7 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "title": "Assign Conversation Request",
           "type": "object",
           "description": "Payload of the request to assign a conversation",
           "properties": {
@@ -15948,37 +16482,176 @@
             },
             "customer": {
               "type": "object",
-              "properties": {
-                "intercom_user_id": {
-                  "type": "string",
-                  "description": "The identifier for the contact as given by Intercom."
-                },
-                "customer": {
-                  "type": "object",
+              "oneOf": [
+                {
+                  "title": "Intercom User ID",
                   "properties": {
                     "intercom_user_id": {
                       "type": "string",
                       "description": "The identifier for the contact as given by Intercom."
                     },
+                    "customer": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "oneOf": [
+                        {
+                          "title": "Intercom User ID",
+                          "properties": {
+                            "intercom_user_id": {
+                              "type": "string",
+                              "description": "The identifier for the contact as given by Intercom."
+                            }
+                          },
+                          "required": [
+                            "intercom_user_id"
+                          ]
+                        },
+                        {
+                          "title": "User ID",
+                          "properties": {
+                            "user_id": {
+                              "type": "string",
+                              "description": "The external_id you have defined for the contact who is being added as a participant."
+                            }
+                          },
+                          "required": [
+                            "user_id"
+                          ]
+                        },
+                        {
+                          "title": "Email",
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email you have defined for the contact who is being added as a participant."
+                            }
+                          },
+                          "required": [
+                            "email"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "intercom_user_id"
+                  ]
+                },
+                {
+                  "title": "User ID",
+                  "properties": {
                     "user_id": {
                       "type": "string",
                       "description": "The external_id you have defined for the contact who is being added as a participant."
                     },
+                    "customer": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "oneOf": [
+                        {
+                          "title": "Intercom User ID",
+                          "properties": {
+                            "intercom_user_id": {
+                              "type": "string",
+                              "description": "The identifier for the contact as given by Intercom."
+                            }
+                          },
+                          "required": [
+                            "intercom_user_id"
+                          ]
+                        },
+                        {
+                          "title": "User ID",
+                          "properties": {
+                            "user_id": {
+                              "type": "string",
+                              "description": "The external_id you have defined for the contact who is being added as a participant."
+                            }
+                          },
+                          "required": [
+                            "user_id"
+                          ]
+                        },
+                        {
+                          "title": "Email",
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email you have defined for the contact who is being added as a participant."
+                            }
+                          },
+                          "required": [
+                            "email"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "user_id"
+                  ]
+                },
+                {
+                  "title": "Email",
+                  "properties": {
                     "email": {
                       "type": "string",
                       "description": "The email you have defined for the contact who is being added as a participant."
+                    },
+                    "customer": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "oneOf": [
+                        {
+                          "title": "Intercom User ID",
+                          "properties": {
+                            "intercom_user_id": {
+                              "type": "string",
+                              "description": "The identifier for the contact as given by Intercom."
+                            }
+                          },
+                          "required": [
+                            "intercom_user_id"
+                          ]
+                        },
+                        {
+                          "title": "User ID",
+                          "properties": {
+                            "user_id": {
+                              "type": "string",
+                              "description": "The external_id you have defined for the contact who is being added as a participant."
+                            }
+                          },
+                          "required": [
+                            "user_id"
+                          ]
+                        },
+                        {
+                          "title": "Email",
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email you have defined for the contact who is being added as a participant."
+                            }
+                          },
+                          "required": [
+                            "email"
+                          ]
+                        }
+                      ]
                     }
-                  }
-                },
-                "user_id": {
-                  "type": "string",
-                  "description": "The external_id you have defined for the contact who is being added as a participant."
-                },
-                "email": {
-                  "type": "string",
-                  "description": "The email you have defined for the contact who is being added as a participant."
+                  },
+                  "required": [
+                    "email"
+                  ]
                 }
-              }
+              ]
             }
           }
         }
@@ -16030,47 +16703,126 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "message_type": {
-              "type": "string",
-              "enum": [
-                "close",
-                "snoozed",
-                "open",
-                "assignment"
+          "oneOf": [
+            {
+              "title": "Close Conversation Request",
+              "type": "object",
+              "description": "Payload of the request to close a conversation",
+              "properties": {
+                "message_type": {
+                  "type": "string",
+                  "enum": [
+                    "close"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "admin"
+                  ]
+                },
+                "admin_id": {
+                  "type": "string",
+                  "description": "The id of the admin who is performing the action."
+                },
+                "body": {
+                  "type": "string",
+                  "description": "Optionally you can leave a message in the conversation to provide additional context to the user and other teammates."
+                }
+              },
+              "required": [
+                "message_type",
+                "type",
+                "admin_id"
               ]
             },
-            "type": {
-              "type": "string",
-              "enum": [
-                "admin",
-                "team"
+            {
+              "title": "Snooze Conversation Request",
+              "type": "object",
+              "description": "Payload of the request to snooze a conversation",
+              "properties": {
+                "message_type": {
+                  "type": "string",
+                  "enum": [
+                    "snoozed"
+                  ]
+                },
+                "admin_id": {
+                  "type": "string",
+                  "description": "The id of the admin who is performing the action."
+                },
+                "snoozed_until": {
+                  "type": "integer",
+                  "format": "timestamp",
+                  "description": "The time you want the conversation to reopen."
+                }
+              },
+              "required": [
+                "message_type",
+                "admin_id",
+                "snoozed_until"
               ]
             },
-            "admin_id": {
-              "type": "string",
-              "description": "The id of the admin who is performing the action."
+            {
+              "title": "Open Conversation Request",
+              "type": "object",
+              "description": "Payload of the request to open a conversation",
+              "properties": {
+                "message_type": {
+                  "type": "string",
+                  "enum": [
+                    "open"
+                  ]
+                },
+                "admin_id": {
+                  "type": "string",
+                  "description": "The id of the admin who is performing the action."
+                }
+              },
+              "required": [
+                "message_type",
+                "admin_id"
+              ]
             },
-            "body": {
-              "type": "string",
-              "description": "Optionally you can leave a message in the conversation to provide additional context to the user and other teammates."
-            },
-            "snoozed_until": {
-              "type": "integer",
-              "description": "The time you want the conversation to reopen.",
-              "format": "timestamp"
-            },
-            "assignee_id": {
-              "type": "string",
-              "description": "The `id` of the `admin` or `team` which will be assigned the conversation. A conversation can be assigned both an admin and a team.\\nSet `0` if you want this assign to no admin or team (ie. Unassigned)."
+            {
+              "title": "Assign Conversation Request",
+              "type": "object",
+              "description": "Payload of the request to assign a conversation",
+              "properties": {
+                "message_type": {
+                  "type": "string",
+                  "enum": [
+                    "assignment"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "admin",
+                    "team"
+                  ]
+                },
+                "admin_id": {
+                  "type": "string",
+                  "description": "The id of the admin who is performing the action."
+                },
+                "assignee_id": {
+                  "type": "string",
+                  "description": "The `id` of the `admin` or `team` which will be assigned the conversation. A conversation can be assigned both an admin and a team.\\nSet `0` if you want this assign to no admin or team (ie. Unassigned)."
+                },
+                "body": {
+                  "type": "string",
+                  "description": "Optionally you can send a response in the conversation when it is assigned."
+                }
+              },
+              "required": [
+                "message_type",
+                "type",
+                "admin_id",
+                "assignee_id"
+              ]
             }
-          },
-          "required": [
-            "message_type",
-            "admin_id"
-          ],
-          "additionalProperties": false
+          ]
         }
       }
     },
@@ -16090,109 +16842,419 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "message_type": {
-              "type": "string",
-              "enum": [
-                "comment",
-                "note",
-                "quick_reply"
-              ]
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "user",
-                "admin"
-              ]
-            },
-            "body": {
-              "type": "string",
-              "description": "The text body of the comment."
-            },
-            "created_at": {
-              "type": "integer",
-              "description": "The time the reply was created. If not provided, the current time will be used."
-            },
-            "attachment_urls": {
-              "type": "array",
-              "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
-              "items": {
-                "type": "string",
-                "format": "uri"
-              }
-            },
-            "reply_options": {
-              "type": "array",
-              "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "text": {
-                    "type": "string",
-                    "description": "The text of the chosen reply option."
+          "oneOf": [
+            {
+              "title": "Contact Reply",
+              "oneOf": [
+                {
+                  "title": "Intercom User ID",
+                  "type": "object",
+                  "description": "Payload of the request to reply on behalf of a contact using their `intercom_user_id`",
+                  "allOf": [
+                    {
+                      "title": "Contact Reply Base Object",
+                      "type": "object",
+                      "properties": {
+                        "message_type": {
+                          "type": "string",
+                          "enum": [
+                            "comment"
+                          ]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The text body of the comment."
+                        },
+                        "created_at": {
+                          "type": "integer",
+                          "description": "The time the reply was created. If not provided, the current time will be used."
+                        },
+                        "attachment_urls": {
+                          "title": "Attachment URLs",
+                          "type": "array",
+                          "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "reply_options": {
+                          "title": "Contact Quick Reply",
+                          "type": "array",
+                          "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
+                          "items": {
+                            "title": "Quick Reply Option",
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The text of the chosen reply option."
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier for the quick reply option selected."
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "uuid"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "message_type",
+                        "type",
+                        "body"
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "intercom_user_id": {
+                      "type": "string",
+                      "description": "The identifier for the contact as given by Intercom."
+                    },
+                    "attachment_files": {
+                      "type": "array",
+                      "description": "A list of files that will be added as attachments.",
+                      "items": {
+                        "title": "Conversation attachment files",
+                        "type": "object",
+                        "description": "Properties of the attachment files in a conversation part",
+                        "properties": {
+                          "content_type": {
+                            "type": "string",
+                            "description": "The content type of the file"
+                          },
+                          "data": {
+                            "type": "string",
+                            "description": "The base64 encoded file data."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the file."
+                          }
+                        }
+                      }
+                    }
                   },
-                  "uuid": {
-                    "type": "string",
-                    "description": "The unique identifier for the quick reply option selected.",
-                    "format": "uuid"
+                  "required": [
+                    "intercom_user_id"
+                  ]
+                },
+                {
+                  "title": "Email",
+                  "type": "object",
+                  "description": "Payload of the request to reply on behalf of a contact using their `email`",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "The email you have defined for the user."
+                    },
+                    "attachment_files": {
+                      "type": "array",
+                      "description": "A list of files that will be added as attachments.",
+                      "items": {
+                        "title": "Conversation attachment files",
+                        "type": "object",
+                        "description": "Properties of the attachment files in a conversation part",
+                        "properties": {
+                          "content_type": {
+                            "type": "string",
+                            "description": "The content type of the file"
+                          },
+                          "data": {
+                            "type": "string",
+                            "description": "The base64 encoded file data."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the file."
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "title": "Contact Reply Base Object",
+                      "type": "object",
+                      "properties": {
+                        "message_type": {
+                          "type": "string",
+                          "enum": [
+                            "comment"
+                          ]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The text body of the comment."
+                        },
+                        "created_at": {
+                          "type": "integer",
+                          "description": "The time the reply was created. If not provided, the current time will be used."
+                        },
+                        "attachment_urls": {
+                          "title": "Attachment URLs",
+                          "type": "array",
+                          "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "reply_options": {
+                          "title": "Contact Quick Reply",
+                          "type": "array",
+                          "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
+                          "items": {
+                            "title": "Quick Reply Option",
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The text of the chosen reply option."
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier for the quick reply option selected."
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "uuid"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "message_type",
+                        "type",
+                        "body"
+                      ]
+                    }
+                  ],
+                  "required": [
+                    "email"
+                  ]
+                },
+                {
+                  "title": "User ID",
+                  "type": "object",
+                  "description": "Payload of the request to reply on behalf of a contact using their `user_id`",
+                  "allOf": [
+                    {
+                      "title": "Contact Reply Base Object",
+                      "type": "object",
+                      "properties": {
+                        "message_type": {
+                          "type": "string",
+                          "enum": [
+                            "comment"
+                          ]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The text body of the comment."
+                        },
+                        "created_at": {
+                          "type": "integer",
+                          "description": "The time the reply was created. If not provided, the current time will be used."
+                        },
+                        "attachment_urls": {
+                          "title": "Attachment URLs",
+                          "type": "array",
+                          "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "reply_options": {
+                          "title": "Contact Quick Reply",
+                          "type": "array",
+                          "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
+                          "items": {
+                            "title": "Quick Reply Option",
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The text of the chosen reply option."
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier for the quick reply option selected."
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "uuid"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "message_type",
+                        "type",
+                        "body"
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "user_id": {
+                      "type": "string",
+                      "description": "The external_id you have defined for the contact."
+                    },
+                    "attachment_files": {
+                      "type": "array",
+                      "description": "A list of files that will be added as attachments. You can include up to 10 files.",
+                      "items": {
+                        "title": "Conversation attachment files",
+                        "type": "object",
+                        "description": "Properties of the attachment files in a conversation part",
+                        "properties": {
+                          "content_type": {
+                            "type": "string",
+                            "description": "The content type of the file"
+                          },
+                          "data": {
+                            "type": "string",
+                            "description": "The base64 encoded file data."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the file."
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "user_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Admin Reply",
+              "type": "object",
+              "description": "Payload of the request to reply on behalf of an admin",
+              "properties": {
+                "message_type": {
+                  "type": "string",
+                  "enum": [
+                    "comment",
+                    "note",
+                    "quick_reply"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "admin"
+                  ]
+                },
+                "body": {
+                  "type": "string",
+                  "description": "The text body of the reply. Notes accept some HTML formatting. Must be present for comment and note message types."
+                },
+                "admin_id": {
+                  "type": "string",
+                  "description": "The id of the admin who is authoring the comment."
+                },
+                "created_at": {
+                  "type": "integer",
+                  "description": "The time the reply was created. If not provided, the current time will be used."
+                },
+                "reply_options": {
+                  "title": "Quick Reply Options",
+                  "type": "array",
+                  "description": "The quick reply options to display to the end user. Must be present for quick_reply message types.",
+                  "items": {
+                    "title": "Quick Reply Option",
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "description": "The text to display in this quick reply option."
+                      },
+                      "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "A unique identifier for this quick reply option. This value will be available within the metadata of the comment conversation part that is created when a user clicks on this reply option."
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "uuid"
+                    ]
                   }
                 },
-                "required": [
-                  "text",
-                  "uuid"
-                ]
-              }
-            },
-            "intercom_user_id": {
-              "type": "string",
-              "description": "The identifier for the contact as given by Intercom."
-            },
-            "attachment_files": {
-              "type": "array",
-              "description": "A list of files that will be added as attachments.",
-              "items": {
-                "type": "object",
-                "description": "Properties of the attachment files in a conversation part",
-                "properties": {
-                  "content_type": {
+                "attachment_urls": {
+                  "type": "array",
+                  "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                  "items": {
                     "type": "string",
-                    "description": "The content type of the file"
-                  },
-                  "data": {
-                    "type": "string",
-                    "description": "The base64 encoded file data."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "The name of the file."
+                    "format": "uri"
                   }
+                },
+                "attachment_files": {
+                  "type": "array",
+                  "description": "A list of files that will be added as attachments. You can include up to 10 files",
+                  "items": {
+                    "title": "Conversation attachment files",
+                    "type": "object",
+                    "description": "Properties of the attachment files in a conversation part",
+                    "properties": {
+                      "content_type": {
+                        "type": "string",
+                        "description": "The content type of the file"
+                      },
+                      "data": {
+                        "type": "string",
+                        "description": "The base64 encoded file data."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the file."
+                      }
+                    }
+                  }
+                },
+                "skip_notifications": {
+                  "type": "boolean",
+                  "description": "Option to disable notifications when replying to a conversation."
                 }
-              }
-            },
-            "email": {
-              "type": "string",
-              "description": "The email you have defined for the user."
-            },
-            "user_id": {
-              "type": "string",
-              "description": "The external_id you have defined for the contact."
-            },
-            "admin_id": {
-              "type": "string",
-              "description": "The id of the admin who is authoring the comment."
-            },
-            "skip_notifications": {
-              "type": "boolean",
-              "description": "Option to disable notifications when replying to a conversation."
+              },
+              "required": [
+                "message_type",
+                "type",
+                "admin_id"
+              ]
             }
-          },
-          "required": [
-            "message_type",
-            "type"
-          ],
-          "additionalProperties": false
+          ]
         }
       }
     },
@@ -16466,51 +17528,29 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "description": "",
           "type": "object",
+          "title": "Create Data Attribute Request",
           "properties": {
-            "data_type": {
-              "type": "string",
-              "enum": [
-                "options",
-                "string",
-                "integer",
-                "float",
-                "boolean",
-                "datetime",
-                "date"
-              ]
-            },
-            "options": {
-              "type": "array",
-              "description": "Array of objects representing the options of the list, with `value` as the key and the option as the value. At least two options are required.",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
             "name": {
               "type": "string",
-              "description": "Name of the data attribute."
+              "description": "The name of the data attribute."
             },
             "model": {
               "type": "string",
+              "description": "The model that the data attribute belongs to.",
               "enum": [
                 "contact",
                 "company"
-              ],
-              "description": "The model this data attribute belongs to."
+              ]
             },
             "description": {
               "type": "string",
-              "description": "Description of the data attribute."
+              "description": "The readable description you see in the UI for the attribute."
             },
             "messenger_writable": {
               "type": "boolean",
-              "description": "Whether the attribute can be updated from the Messenger."
+              "description": "Can this attribute be updated by the Messenger"
             }
           },
           "required": [
@@ -16518,7 +17558,48 @@
             "model",
             "data_type"
           ],
-          "additionalProperties": false
+          "oneOf": [
+            {
+              "properties": {
+                "data_type": {
+                  "enum": [
+                    "options"
+                  ]
+                },
+                "options": {
+                  "type": "array",
+                  "description": "Array of objects representing the options of the list, with `value` as the key and the option as the value. At least two options are required.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "options"
+              ],
+              "title": "list attribute"
+            },
+            {
+              "properties": {
+                "data_type": {
+                  "enum": [
+                    "string",
+                    "integer",
+                    "float",
+                    "boolean",
+                    "datetime",
+                    "date"
+                  ]
+                }
+              },
+              "title": "other type"
+            }
+          ]
         }
       }
     },
@@ -16538,34 +17619,53 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "description": "",
           "type": "object",
+          "title": "Update Data Attribute Request",
           "properties": {
-            "options": {
-              "type": "array",
-              "description": "Array of objects representing the options of the list, with `value` as the key and the option as the value. At least two options are required.",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
             "archived": {
               "type": "boolean",
-              "description": "Whether the data attribute is archived."
+              "description": "Whether the attribute is to be archived or not."
             },
             "description": {
               "type": "string",
-              "description": "Description of the data attribute."
+              "description": "The readable description you see in the UI for the attribute."
             },
             "messenger_writable": {
               "type": "boolean",
-              "description": "Whether the attribute can be updated from the Messenger."
+              "description": "Can this attribute be updated by the Messenger"
             }
           },
-          "additionalProperties": false
+          "oneOf": [
+            {
+              "properties": {
+                "options": {
+                  "type": "array",
+                  "description": "Array of objects representing the options of the list, with `value` as the key and the option as the value. At least two options are required.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "options"
+              ],
+              "title": "list attribute"
+            },
+            {
+              "title": "other type",
+              "properties": {
+                "options": {
+                  "type": "null"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -16807,7 +17907,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "Update an existing data connector. All fields are optional — only provided fields will be updated. Set `state` to `live` or `draft` to change the connector's state.",
+          "description": "Update an existing data connector. All fields are optional \u2014 only provided fields will be updated. Set `state` to `live` or `draft` to change the connector's state.",
           "properties": {
             "name": {
               "type": "string",
@@ -17030,34 +18130,62 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "description": "",
           "type": "object",
+          "title": "Create Data Event Request",
           "properties": {
             "event_name": {
-              "type": "string"
+              "type": "string",
+              "description": "The name of the event that occurred. This is presented to your App's admins when filtering and creating segments - a good event name is typically a past tense 'verb-noun' combination, to improve readability, for example `updated-plan`."
             },
             "created_at": {
               "type": "integer",
-              "format": "date-time"
+              "format": "date-time",
+              "description": "The time the event occurred as a UTC Unix timestamp"
             },
             "user_id": {
-              "type": "string"
+              "type": "string",
+              "description": "Your identifier for the user."
             },
             "id": {
-              "type": "string"
+              "type": "string",
+              "description": "The unique identifier for the contact (lead or user) which is given by Intercom."
             },
             "email": {
-              "type": "string"
+              "type": "string",
+              "description": "An email address for your user. An email should only be used where your application uses email to uniquely identify users."
             },
             "metadata": {
               "type": "object",
-              "additionalProperties": true
+              "description": "Optional metadata about the event."
             }
           },
-          "required": [
-            "event_name",
-            "created_at"
-          ],
-          "minProperties": 3
+          "anyOf": [
+            {
+              "title": "id required",
+              "required": [
+                "event_name",
+                "created_at",
+                "id"
+              ]
+            },
+            {
+              "title": "user_id required",
+              "required": [
+                "event_name",
+                "created_at",
+                "user_id"
+              ]
+            },
+            {
+              "title": "email required",
+              "required": [
+                "event_name",
+                "created_at",
+                "email"
+              ]
+            }
+          ]
         }
       }
     },
@@ -17286,11 +18414,11 @@
           "properties": {
             "conversation_id": {
               "type": "string",
-              "description": "Your external conversation ID — the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
+              "description": "Your external conversation ID \u2014 the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
             },
             "rating": {
               "type": "string",
-              "description": "The rating the user selected — one of the `key` values from the `csat_requested` event's options.",
+              "description": "The rating the user selected \u2014 one of the `key` values from the `csat_requested` event's options.",
               "enum": [
                 "terrible",
                 "bad",
@@ -17301,7 +18429,7 @@
             },
             "remark": {
               "type": "string",
-              "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once — the rating locks after a remark is recorded."
+              "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once \u2014 the rating locks after a remark is recorded."
             }
           },
           "required": [
@@ -20154,7 +21282,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -20274,7 +21402,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -20493,42 +21621,48 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
+          "description": "You can create a message",
+          "type": [
+            "object",
+            "null"
+          ],
+          "title": "Create Message Request Payload",
           "properties": {
             "message_type": {
               "type": "string",
+              "description": "The kind of message being created. Values: `in_app`, `email` or `whatsapp`.",
               "enum": [
-                "email",
                 "in_app",
+                "email",
                 "whatsapp"
               ]
             },
             "subject": {
-              "type": "string"
+              "type": "string",
+              "description": "The title of the email."
             },
             "body": {
-              "type": [
-                "string",
-                "null"
-              ]
+              "type": "string",
+              "description": "The content of the message. HTML and plaintext are supported."
             },
             "template": {
-              "type": "string"
+              "type": "string",
+              "description": "The style of the outgoing message. Possible values `plain` or `personal`."
             },
             "from": {
               "type": "object",
+              "description": "The sender of the message. If not provided, the default sender will be used.",
               "properties": {
                 "type": {
                   "type": "string",
+                  "description": "Always `admin`.",
                   "enum": [
                     "admin"
                   ]
                 },
                 "id": {
-                  "type": [
-                    "integer",
-                    "string"
-                  ]
+                  "type": "integer",
+                  "description": "The identifier for the admin which is given by Intercom."
                 }
               },
               "required": [
@@ -20537,43 +21671,209 @@
               ]
             },
             "to": {
-              "type": [
-                "object",
-                "array"
+              "oneOf": [
+                {
+                  "type": "object",
+                  "title": "Recipient",
+                  "description": "A recipient of a message",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "The role associated to the contact - `user` or `lead`.",
+                      "enum": [
+                        "user",
+                        "lead"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "The identifier for the contact which is given by Intercom."
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "id"
+                  ]
+                },
+                {
+                  "type": "array",
+                  "description": "The recipients of the message.",
+                  "items": {
+                    "type": "object",
+                    "title": "Recipient",
+                    "description": "A recipient of a message",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "The role associated to the contact - `user` or `lead`.",
+                        "enum": [
+                          "user",
+                          "lead"
+                        ]
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "The identifier for the contact which is given by Intercom."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ]
+                  }
+                }
               ]
             },
             "cc": {
-              "type": [
-                "object",
-                "array"
+              "oneOf": [
+                {
+                  "type": "object",
+                  "title": "Recipient",
+                  "description": "A recipient of a message",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "The role associated to the contact - `user` or `lead`.",
+                      "enum": [
+                        "user",
+                        "lead"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "The identifier for the contact which is given by Intercom."
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "id"
+                  ]
+                },
+                {
+                  "type": "array",
+                  "description": "The CC recipients of the message.",
+                  "items": {
+                    "type": "object",
+                    "title": "Recipient",
+                    "description": "A recipient of a message",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "The role associated to the contact - `user` or `lead`.",
+                        "enum": [
+                          "user",
+                          "lead"
+                        ]
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "The identifier for the contact which is given by Intercom."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ]
+                  }
+                }
               ]
             },
             "bcc": {
-              "type": [
-                "object",
-                "array"
+              "oneOf": [
+                {
+                  "type": "object",
+                  "title": "Recipient",
+                  "description": "A recipient of a message",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "The role associated to the contact - `user` or `lead`.",
+                      "enum": [
+                        "user",
+                        "lead"
+                      ]
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "The identifier for the contact which is given by Intercom."
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "id"
+                  ]
+                },
+                {
+                  "type": "array",
+                  "description": "The BCC recipients of the message.",
+                  "items": {
+                    "type": "object",
+                    "title": "Recipient",
+                    "description": "A recipient of a message",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "The role associated to the contact - `user` or `lead`.",
+                        "enum": [
+                          "user",
+                          "lead"
+                        ]
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "The identifier for the contact which is given by Intercom."
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ]
+                  }
+                }
               ]
             },
-            "components": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            },
             "created_at": {
-              "type": "integer"
+              "type": "integer",
+              "description": "The time the message was created. If not provided, the current time will be used."
             },
             "create_conversation_without_contact_reply": {
-              "type": "boolean"
+              "type": "boolean",
+              "description": "Whether a conversation should be opened in the inbox for the message without the contact replying. Defaults to false if not provided.",
+              "default": false
             }
           },
-          "required": [
-            "message_type",
-            "from",
-            "to"
-          ],
-          "minProperties": 4,
-          "additionalProperties": false
+          "anyOf": [
+            {
+              "title": "message_type: `email`.",
+              "required": [
+                "message_type",
+                "subject",
+                "body",
+                "template",
+                "from",
+                "to"
+              ]
+            },
+            {
+              "title": "message_type: `inapp`.",
+              "required": [
+                "message_type",
+                "body",
+                "from",
+                "to"
+              ]
+            },
+            {
+              "title": "message_type: `whatsapp`.",
+              "required": [
+                "message_type",
+                "template",
+                "components",
+                "from",
+                "to"
+              ]
+            }
+          ]
         }
       }
     },
@@ -20947,7 +22247,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -21037,7 +22337,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -21117,7 +22417,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -21222,7 +22522,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -21348,50 +22648,118 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "The name of the tag, which will be created if not found, or the new name for the tag if this is an update request. Names are case insensitive."
+          "oneOf": [
+            {
+              "description": "You can create or update an existing tag.",
+              "type": "object",
+              "title": "Create or Update Tag Request Payload",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the tag, which will be created if not found, or the new name for the tag if this is an update request. Names are case insensitive."
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The id of tag to updates."
+                }
+              },
+              "required": [
+                "name"
+              ]
             },
-            "id": {
-              "type": "string",
-              "description": "The id of tag to updates."
-            },
-            "companies": {
-              "type": "array",
-              "description": "The id or company_id of the company can be passed as input parameters.",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "The Intercom defined id representing the company."
+            {
+              "description": "You can tag a single company or a list of companies.",
+              "type": "object",
+              "title": "Tag Company Request Payload",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the tag, which will be created if not found."
+                },
+                "companies": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Intercom defined id representing the company."
+                      },
+                      "company_id": {
+                        "type": "string",
+                        "description": "The company id you have defined for the company."
+                      }
+                    }
                   },
-                  "company_id": {
-                    "type": "string",
-                    "description": "The company id you have defined for the company."
-                  }
+                  "description": "The id or company_id of the company can be passed as input parameters."
                 }
-              }
+              },
+              "required": [
+                "name",
+                "companies"
+              ]
             },
-            "users": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "The Intercom defined id representing the user."
+            {
+              "description": "You can tag a single company or a list of companies.",
+              "type": "object",
+              "title": "Untag Company Request Payload",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the tag which will be untagged from the company"
+                },
+                "companies": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Intercom defined id representing the company."
+                      },
+                      "company_id": {
+                        "type": "string",
+                        "description": "The company id you have defined for the company."
+                      },
+                      "untag": {
+                        "type": "boolean",
+                        "description": "Always set to true"
+                      }
+                    }
+                  },
+                  "description": "The id or company_id of the company can be passed as input parameters."
+                }
+              },
+              "required": [
+                "name",
+                "companies"
+              ]
+            },
+            {
+              "description": "You can tag a list of users.",
+              "type": "object",
+              "title": "Tag Users Request Payload",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the tag, which will be created if not found."
+                },
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "The Intercom defined id representing the user."
+                      }
+                    }
                   }
                 }
-              }
+              },
+              "required": [
+                "name",
+                "users"
+              ]
             }
-          },
-          "required": [
-            "name"
-          ],
-          "additionalProperties": false
+          ]
         }
       }
     },
@@ -21782,71 +23150,104 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "ticket_type_id": {
-              "type": "string",
-              "description": "The ID of the type of ticket you want to create"
-            },
-            "contacts": {
-              "type": "array",
-              "description": "The list of contacts (users or leads) affected by this ticket. Currently only one is allowed",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "The identifier for the contact as given by Intercom."
-                  },
-                  "external_id": {
-                    "type": "string",
-                    "description": "The external_id you have defined for the contact who is being added as a participant."
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "The email you have defined for the contact who is being added as a participant. If a contact with this email does not exist, one will be created."
+          "allOf": [
+            {
+              "description": "You can create a Ticket",
+              "type": "object",
+              "title": "Create Ticket Request Payload",
+              "properties": {
+                "ticket_type_id": {
+                  "type": "string",
+                  "description": "The ID of the type of ticket you want to create"
+                },
+                "contacts": {
+                  "type": "array",
+                  "description": "The list of contacts (users or leads) affected by this ticket. Currently only one is allowed",
+                  "items": {
+                    "type": "object",
+                    "oneOf": [
+                      {
+                        "title": "ID",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "The identifier for the contact as given by Intercom."
+                          }
+                        },
+                        "required": [
+                          "id"
+                        ]
+                      },
+                      {
+                        "title": "External ID",
+                        "properties": {
+                          "external_id": {
+                            "type": "string",
+                            "description": "The external_id you have defined for the contact who is being added as a participant."
+                          }
+                        },
+                        "required": [
+                          "external_id"
+                        ]
+                      },
+                      {
+                        "title": "Email",
+                        "properties": {
+                          "email": {
+                            "type": "string",
+                            "description": "The email you have defined for the contact who is being added as a participant. If a contact with this email does not exist, one will be created."
+                          }
+                        },
+                        "required": [
+                          "email"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "conversation_to_link_id": {
+                  "type": "string",
+                  "description": "The ID of the conversation you want to link to the ticket. Here are the valid ways of linking two tickets:\n - conversation | back-office ticket\n - customer tickets | non-shared back-office ticket\n - conversation | tracker ticket\n - customer ticket | tracker ticket"
+                },
+                "company_id": {
+                  "type": "string",
+                  "description": "The ID of the company that the ticket is associated with. The unique identifier for the company which is given by Intercom"
+                },
+                "created_at": {
+                  "type": "integer",
+                  "description": "The time the ticket was created. If not provided, the current time will be used."
+                },
+                "ticket_attributes": {
+                  "title": "Ticket Attributes",
+                  "type": "object",
+                  "description": "The attributes set on the ticket. When setting the default title and description attributes, the attribute keys that should be used are `_default_title_` and `_default_description_`. When setting ticket type attributes of the list attribute type, the key should be the attribute name and the value of the attribute should be the list item id, obtainable by [listing the ticket type](ref:get_ticket-types). For example, if the ticket type has an attribute called `priority` of type `list`, the key should be `priority` and the value of the attribute should be the guid of the list item (e.g. `de1825a0-0164-4070-8ca6-13e22462fa7e`)."
+                },
+                "assignment": {
+                  "type": "object",
+                  "properties": {
+                    "admin_assignee_id": {
+                      "type": "string",
+                      "description": "The ID of the admin to which the ticket is assigned. If not provided, the ticket will be unassigned."
+                    },
+                    "team_assignee_id": {
+                      "type": "string",
+                      "description": "The ID of the team to which the ticket is assigned. If not provided, the ticket will be unassigned."
+                    }
                   }
                 }
-              }
-            },
-            "conversation_to_link_id": {
-              "type": "string",
-              "description": "The ID of the conversation you want to link to the ticket. Here are the valid ways of linking two tickets: - conversation | back-office ticket - customer tickets | non-shared back-office ticket - conversation | tracker ticket - customer ticket | tracker ticket"
-            },
-            "company_id": {
-              "type": "string",
-              "description": "The ID of the company that the ticket is associated with. The unique identifier for the company which is given by Intercom"
-            },
-            "created_at": {
-              "type": "integer",
-              "description": "The time the ticket was created. If not provided, the current time will be used."
-            },
-            "ticket_attributes": {
-              "type": "object",
-              "description": "The attributes set on the ticket. When setting the default title and description attributes, the attribute keys that should be used are `_default_title_` and `_default_description_`. When setting ticket type attributes of the list attribute type, the key should be the attribute name and the value of the attribute should be the list item id, obtainable by [listing the ticket type](ref:get_ticket-types). For example, if the ticket type has an attribute called `priority` of type `list`, the key sho"
-            },
-            "assignment": {
-              "type": "object",
-              "properties": {
-                "admin_assignee_id": {
-                  "type": "string",
-                  "description": "The ID of the admin to which the ticket is assigned. If not provided, the ticket will be unassigned."
-                },
-                "team_assignee_id": {
-                  "type": "string",
-                  "description": "The ID of the team to which the ticket is assigned. If not provided, the ticket will be unassigned."
-                }
-              }
-            },
+              },
+              "required": [
+                "ticket_type_id",
+                "contacts"
+              ]
+            }
+          ],
+          "properties": {
             "skip_notifications": {
               "type": "boolean",
               "description": "Option to disable notifications when a Ticket is created."
             }
-          },
-          "required": [
-            "contacts",
-            "ticket_type_id"
-          ]
+          }
         }
       }
     },
@@ -21866,71 +23267,104 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "ticket_type_id": {
-              "type": "string",
-              "description": "The ID of the type of ticket you want to create"
-            },
-            "contacts": {
-              "type": "array",
-              "description": "The list of contacts (users or leads) affected by this ticket. Currently only one is allowed",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "description": "The identifier for the contact as given by Intercom."
-                  },
-                  "external_id": {
-                    "type": "string",
-                    "description": "The external_id you have defined for the contact who is being added as a participant."
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "The email you have defined for the contact who is being added as a participant. If a contact with this email does not exist, one will be created."
+          "allOf": [
+            {
+              "description": "You can create a Ticket",
+              "type": "object",
+              "title": "Create Ticket Request Payload",
+              "properties": {
+                "ticket_type_id": {
+                  "type": "string",
+                  "description": "The ID of the type of ticket you want to create"
+                },
+                "contacts": {
+                  "type": "array",
+                  "description": "The list of contacts (users or leads) affected by this ticket. Currently only one is allowed",
+                  "items": {
+                    "type": "object",
+                    "oneOf": [
+                      {
+                        "title": "ID",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "The identifier for the contact as given by Intercom."
+                          }
+                        },
+                        "required": [
+                          "id"
+                        ]
+                      },
+                      {
+                        "title": "External ID",
+                        "properties": {
+                          "external_id": {
+                            "type": "string",
+                            "description": "The external_id you have defined for the contact who is being added as a participant."
+                          }
+                        },
+                        "required": [
+                          "external_id"
+                        ]
+                      },
+                      {
+                        "title": "Email",
+                        "properties": {
+                          "email": {
+                            "type": "string",
+                            "description": "The email you have defined for the contact who is being added as a participant. If a contact with this email does not exist, one will be created."
+                          }
+                        },
+                        "required": [
+                          "email"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "conversation_to_link_id": {
+                  "type": "string",
+                  "description": "The ID of the conversation you want to link to the ticket. Here are the valid ways of linking two tickets:\n - conversation | back-office ticket\n - customer tickets | non-shared back-office ticket\n - conversation | tracker ticket\n - customer ticket | tracker ticket"
+                },
+                "company_id": {
+                  "type": "string",
+                  "description": "The ID of the company that the ticket is associated with. The unique identifier for the company which is given by Intercom"
+                },
+                "created_at": {
+                  "type": "integer",
+                  "description": "The time the ticket was created. If not provided, the current time will be used."
+                },
+                "ticket_attributes": {
+                  "title": "Ticket Attributes",
+                  "type": "object",
+                  "description": "The attributes set on the ticket. When setting the default title and description attributes, the attribute keys that should be used are `_default_title_` and `_default_description_`. When setting ticket type attributes of the list attribute type, the key should be the attribute name and the value of the attribute should be the list item id, obtainable by [listing the ticket type](ref:get_ticket-types). For example, if the ticket type has an attribute called `priority` of type `list`, the key should be `priority` and the value of the attribute should be the guid of the list item (e.g. `de1825a0-0164-4070-8ca6-13e22462fa7e`)."
+                },
+                "assignment": {
+                  "type": "object",
+                  "properties": {
+                    "admin_assignee_id": {
+                      "type": "string",
+                      "description": "The ID of the admin to which the ticket is assigned. If not provided, the ticket will be unassigned."
+                    },
+                    "team_assignee_id": {
+                      "type": "string",
+                      "description": "The ID of the team to which the ticket is assigned. If not provided, the ticket will be unassigned."
+                    }
                   }
                 }
-              }
-            },
-            "conversation_to_link_id": {
-              "type": "string",
-              "description": "The ID of the conversation you want to link to the ticket. Here are the valid ways of linking two tickets: - conversation | back-office ticket - customer tickets | non-shared back-office ticket - conversation | tracker ticket - customer ticket | tracker ticket"
-            },
-            "company_id": {
-              "type": "string",
-              "description": "The ID of the company that the ticket is associated with. The unique identifier for the company which is given by Intercom"
-            },
-            "created_at": {
-              "type": "integer",
-              "description": "The time the ticket was created. If not provided, the current time will be used."
-            },
-            "ticket_attributes": {
-              "type": "object",
-              "description": "The attributes set on the ticket. When setting the default title and description attributes, the attribute keys that should be used are `_default_title_` and `_default_description_`. When setting ticket type attributes of the list attribute type, the key should be the attribute name and the value of the attribute should be the list item id, obtainable by [listing the ticket type](ref:get_ticket-types). For example, if the ticket type has an attribute called `priority` of type `list`, the key sho"
-            },
-            "assignment": {
-              "type": "object",
-              "properties": {
-                "admin_assignee_id": {
-                  "type": "string",
-                  "description": "The ID of the admin to which the ticket is assigned. If not provided, the ticket will be unassigned."
-                },
-                "team_assignee_id": {
-                  "type": "string",
-                  "description": "The ID of the team to which the ticket is assigned. If not provided, the ticket will be unassigned."
-                }
-              }
-            },
+              },
+              "required": [
+                "ticket_type_id",
+                "contacts"
+              ]
+            }
+          ],
+          "properties": {
             "skip_notifications": {
               "type": "boolean",
               "description": "Option to disable notifications when a Ticket is created."
             }
-          },
-          "required": [
-            "contacts",
-            "ticket_type_id"
-          ]
+          }
         }
       }
     },
@@ -22054,41 +23488,49 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "ticket_attributes": {
+          "allOf": [
+            {
+              "description": "You can update a Ticket",
               "type": "object",
-              "description": "The attributes set on the ticket."
-            },
-            "ticket_state_id": {
-              "type": "string",
-              "description": "The ID of the ticket state associated with the ticket type."
-            },
-            "company_id": {
-              "type": "string",
-              "description": "The ID of the company that the ticket is associated with. The unique identifier for the company which is given by Intercom. Set to nil to remove company."
-            },
-            "open": {
-              "type": "boolean",
-              "description": "Specify if a ticket is open. Set to false to close a ticket. Closing a ticket will also unsnooze it."
-            },
-            "is_shared": {
-              "type": "boolean",
-              "description": "Specify whether the ticket is visible to users."
-            },
-            "snoozed_until": {
-              "type": "integer",
-              "description": "The time you want the ticket to reopen.",
-              "format": "timestamp"
-            },
-            "admin_id": {
-              "type": "integer",
-              "description": "The ID of the admin performing ticket update. Needed for workflows execution and attributing actions to specific admins."
-            },
-            "assignee_id": {
-              "type": "string",
-              "description": "The ID of the admin or team to which the ticket is assigned. Set this 0 to unassign it."
-            },
+              "title": "Update Ticket Request Payload",
+              "properties": {
+                "ticket_attributes": {
+                  "type": "object",
+                  "description": "The attributes set on the ticket."
+                },
+                "ticket_state_id": {
+                  "type": "string",
+                  "description": "The ID of the ticket state associated with the ticket type."
+                },
+                "company_id": {
+                  "type": "string",
+                  "description": "The ID of the company that the ticket is associated with. The unique identifier for the company which is given by Intercom. Set to nil to remove company."
+                },
+                "open": {
+                  "type": "boolean",
+                  "description": "Specify if a ticket is open. Set to false to close a ticket. Closing a ticket will also unsnooze it."
+                },
+                "is_shared": {
+                  "type": "boolean",
+                  "description": "Specify whether the ticket is visible to users."
+                },
+                "snoozed_until": {
+                  "type": "integer",
+                  "format": "timestamp",
+                  "description": "The time you want the ticket to reopen."
+                },
+                "admin_id": {
+                  "type": "integer",
+                  "description": "The ID of the admin performing ticket update. Needed for workflows execution and attributing actions to specific admins."
+                },
+                "assignee_id": {
+                  "type": "string",
+                  "description": "The ID of the admin or team to which the ticket is assigned. Set this 0 to unassign it."
+                }
+              }
+            }
+          ],
+          "properties": {
             "skip_notifications": {
               "type": "boolean",
               "description": "Option to disable notifications when a Ticket is updated."
@@ -22198,113 +23640,356 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
-          "properties": {
-            "message_type": {
-              "type": "string",
-              "enum": [
-                "comment",
-                "note",
-                "quick_reply"
-              ]
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "user",
-                "admin"
-              ]
-            },
-            "body": {
-              "type": "string",
-              "description": "The text body of the comment."
-            },
-            "created_at": {
-              "type": "integer",
-              "description": "The time the reply was created. If not provided, the current time will be used."
-            },
-            "attachment_urls": {
-              "type": "array",
-              "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
-              "items": {
-                "type": "string",
-                "format": "uri"
-              }
-            },
-            "reply_options": {
-              "type": "array",
-              "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "text": {
-                    "type": "string",
-                    "description": "The text of the chosen reply option."
+          "oneOf": [
+            {
+              "title": "Contact Reply on ticket",
+              "oneOf": [
+                {
+                  "title": "Intercom User ID",
+                  "type": "object",
+                  "description": "Payload of the request to reply on behalf of a contact using their `intercom_user_id`",
+                  "allOf": [
+                    {
+                      "title": "Contact Reply Base Object",
+                      "type": "object",
+                      "properties": {
+                        "message_type": {
+                          "type": "string",
+                          "enum": [
+                            "comment"
+                          ]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The text body of the comment."
+                        },
+                        "created_at": {
+                          "type": "integer",
+                          "description": "The time the reply was created. If not provided, the current time will be used."
+                        },
+                        "attachment_urls": {
+                          "title": "Attachment URLs",
+                          "type": "array",
+                          "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "reply_options": {
+                          "title": "Contact Quick Reply",
+                          "type": "array",
+                          "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
+                          "items": {
+                            "title": "Quick Reply Option",
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The text of the chosen reply option."
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier for the quick reply option selected."
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "uuid"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "message_type",
+                        "type",
+                        "body"
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "intercom_user_id": {
+                      "type": "string",
+                      "description": "The identifier for the contact as given by Intercom."
+                    }
                   },
-                  "uuid": {
-                    "type": "string",
-                    "description": "The unique identifier for the quick reply option selected.",
-                    "format": "uuid"
+                  "required": [
+                    "intercom_user_id"
+                  ]
+                },
+                {
+                  "title": "User ID",
+                  "type": "object",
+                  "description": "Payload of the request to reply on behalf of a contact using their `user_id`",
+                  "allOf": [
+                    {
+                      "title": "Contact Reply Base Object",
+                      "type": "object",
+                      "properties": {
+                        "message_type": {
+                          "type": "string",
+                          "enum": [
+                            "comment"
+                          ]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The text body of the comment."
+                        },
+                        "created_at": {
+                          "type": "integer",
+                          "description": "The time the reply was created. If not provided, the current time will be used."
+                        },
+                        "attachment_urls": {
+                          "title": "Attachment URLs",
+                          "type": "array",
+                          "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "reply_options": {
+                          "title": "Contact Quick Reply",
+                          "type": "array",
+                          "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
+                          "items": {
+                            "title": "Quick Reply Option",
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The text of the chosen reply option."
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier for the quick reply option selected."
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "uuid"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "message_type",
+                        "type",
+                        "body"
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "user_id": {
+                      "type": "string",
+                      "description": "The external_id you have defined for the contact."
+                    }
+                  },
+                  "required": [
+                    "user_id"
+                  ]
+                },
+                {
+                  "title": "Email",
+                  "type": "object",
+                  "description": "Payload of the request to reply on behalf of a contact using their `email`",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "The email you have defined for the user."
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "title": "Contact Reply Base Object",
+                      "type": "object",
+                      "properties": {
+                        "message_type": {
+                          "type": "string",
+                          "enum": [
+                            "comment"
+                          ]
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "user"
+                          ]
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The text body of the comment."
+                        },
+                        "created_at": {
+                          "type": "integer",
+                          "description": "The time the reply was created. If not provided, the current time will be used."
+                        },
+                        "attachment_urls": {
+                          "title": "Attachment URLs",
+                          "type": "array",
+                          "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "reply_options": {
+                          "title": "Contact Quick Reply",
+                          "type": "array",
+                          "description": "The quick reply selection the contact wishes to respond with. These map to buttons displayed in the Messenger UI if sent by a bot, or the reply options sent by an Admin via the API.",
+                          "items": {
+                            "title": "Quick Reply Option",
+                            "type": "object",
+                            "properties": {
+                              "text": {
+                                "type": "string",
+                                "description": "The text of the chosen reply option."
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "format": "uuid",
+                                "description": "The unique identifier for the quick reply option selected."
+                              }
+                            },
+                            "required": [
+                              "text",
+                              "uuid"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "message_type",
+                        "type",
+                        "body"
+                      ]
+                    }
+                  ],
+                  "required": [
+                    "email"
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Admin Reply on ticket",
+              "type": "object",
+              "description": "Payload of the request to reply on behalf of an admin",
+              "properties": {
+                "message_type": {
+                  "type": "string",
+                  "enum": [
+                    "comment",
+                    "note",
+                    "quick_reply"
+                  ]
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "admin"
+                  ]
+                },
+                "body": {
+                  "type": "string",
+                  "description": "The text body of the reply. Notes accept some HTML formatting. Must be present for comment and note message types."
+                },
+                "admin_id": {
+                  "type": "string",
+                  "description": "The id of the admin who is authoring the comment."
+                },
+                "created_at": {
+                  "type": "integer",
+                  "description": "The time the reply was created. If not provided, the current time will be used."
+                },
+                "reply_options": {
+                  "title": "Quick Reply Options",
+                  "type": "array",
+                  "description": "The quick reply options to display. Must be present for quick_reply message types.",
+                  "items": {
+                    "title": "Quick Reply Option",
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "description": "The text to display in this quick reply option."
+                      },
+                      "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "A unique identifier for this quick reply option. This value will be available within the metadata of the comment ticket part that is created when a user clicks on this reply option."
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "uuid"
+                    ]
                   }
                 },
-                "required": [
-                  "text",
-                  "uuid"
-                ]
-              }
-            },
-            "intercom_user_id": {
-              "type": "string",
-              "description": "The identifier for the contact as given by Intercom."
-            },
-            "user_id": {
-              "type": "string",
-              "description": "The external_id you have defined for the contact."
-            },
-            "email": {
-              "type": "string",
-              "description": "The email you have defined for the user."
-            },
-            "admin_id": {
-              "type": "string",
-              "description": "The id of the admin who is authoring the comment."
-            },
-            "attachment_files": {
-              "type": "array",
-              "description": "A list of files that will be added as attachments. You can include up to 10 files. If both attachment_files and attachment_urls are provided, attachment_files takes precedence.",
-              "items": {
-                "type": "object",
-                "description": "Properties of the attachment files in a conversation part",
-                "properties": {
-                  "content_type": {
+                "attachment_urls": {
+                  "type": "array",
+                  "description": "A list of image URLs that will be added as attachments. You can include up to 10 URLs.",
+                  "items": {
                     "type": "string",
-                    "description": "The content type of the file"
-                  },
-                  "data": {
-                    "type": "string",
-                    "description": "The base64 encoded file data."
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "The name of the file."
+                    "format": "uri"
                   }
+                },
+                "attachment_files": {
+                  "type": "array",
+                  "description": "A list of files that will be added as attachments. You can include up to 10 files. If both attachment_files and attachment_urls are provided, attachment_files takes precedence.",
+                  "items": {
+                    "title": "Conversation attachment files",
+                    "type": "object",
+                    "description": "Properties of the attachment files in a conversation part",
+                    "properties": {
+                      "content_type": {
+                        "type": "string",
+                        "description": "The content type of the file"
+                      },
+                      "data": {
+                        "type": "string",
+                        "description": "The base64 encoded file data."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The name of the file."
+                      }
+                    }
+                  }
+                },
+                "cross_post": {
+                  "type": "boolean",
+                  "description": "If set to true, the note will be cross-posted to all linked conversations. Only applicable to note message types on back-office tickets."
                 }
-              }
-            },
-            "cross_post": {
-              "type": "boolean",
-              "description": "If set to true, the note will be cross-posted to all linked conversations. Only applicable to note message types on back-office tickets."
-            },
+              },
+              "required": [
+                "message_type",
+                "type",
+                "admin_id"
+              ]
+            }
+          ],
+          "properties": {
             "skip_notifications": {
               "type": "boolean",
               "description": "Option to disable notifications when replying to a Ticket."
             }
-          },
-          "required": [
-            "message_type",
-            "type"
-          ],
-          "additionalProperties": false
+          }
         }
       }
     },
@@ -22403,23 +24088,39 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "description": "Update an existing visitor.",
           "type": "object",
+          "title": "Update Visitor Request Payload",
           "properties": {
             "id": {
-              "type": "string"
+              "type": "string",
+              "description": "A unique identified for the visitor which is given by Intercom."
             },
             "user_id": {
-              "type": "string"
+              "type": "string",
+              "description": "A unique identified for the visitor which is given by you."
             },
             "name": {
-              "type": "string"
+              "type": "string",
+              "description": "The visitor's name."
             },
             "custom_attributes": {
               "type": "object",
-              "additionalProperties": true
+              "description": "The custom attributes which are set for the visitor."
             }
           },
-          "minProperties": 1
+          "anyOf": [
+            {
+              "required": [
+                "id"
+              ]
+            },
+            {
+              "required": [
+                "user_id"
+              ]
+            }
+          ]
         }
       }
     },
@@ -22439,18 +24140,78 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "type": "object",
           "description": "You can merge a Visitor to a Contact of role type lead or user.",
+          "type": "object",
+          "title": "Convert Visitor Request Payload",
           "properties": {
             "type": {
               "type": "string",
               "description": "Represents the role of the Contact model. Accepts `lead` or `user`."
             },
             "user": {
-              "type": "object"
+              "type": "object",
+              "description": "The unique identifiers retained after converting or merging.",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The unique identifier for the contact which is given by Intercom."
+                },
+                "user_id": {
+                  "type": "string",
+                  "description": "A unique identifier for the contact which is given to Intercom, which will be represented as external_id."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The contact's email, retained by default if one is present."
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "id"
+                  ]
+                },
+                {
+                  "required": [
+                    "user_id"
+                  ]
+                }
+              ]
             },
             "visitor": {
-              "type": "object"
+              "type": "object",
+              "description": "The unique identifiers to convert a single Visitor.",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "The unique identifier for the contact which is given by Intercom."
+                },
+                "user_id": {
+                  "type": "string",
+                  "description": "A unique identifier for the contact which is given to Intercom."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "The visitor's email."
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "id"
+                  ]
+                },
+                {
+                  "required": [
+                    "user_id"
+                  ]
+                },
+                {
+                  "required": [
+                    "email"
+                  ]
+                }
+              ]
             }
           },
           "required": [

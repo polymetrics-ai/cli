@@ -1,23 +1,23 @@
 {
   "record": {
-    "type": "type_fixture",
+    "type": "user",
     "user": {
-      "fixture_key": "fixture_value"
+      "user_id": "user_fixture"
     },
     "visitor": {
-      "fixture_key": "fixture_value"
+      "id": "visitor_fixture"
     }
   },
   "expect": {
     "method": "POST",
     "path": "/visitors/convert",
     "body": {
-      "type": "type_fixture",
+      "type": "user",
       "user": {
-        "fixture_key": "fixture_value"
+        "user_id": "user_fixture"
       },
       "visitor": {
-        "fixture_key": "fixture_value"
+        "id": "visitor_fixture"
       }
     }
   },

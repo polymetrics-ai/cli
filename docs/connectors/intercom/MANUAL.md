@@ -251,8 +251,7 @@ REVERSE ETL ACTIONS
     risk: Creates a conversation: live Intercom mutation against /conversations; reverse ETL requires plan, preview, explicit approval, execute
   create_conversation_attribute:
     endpoint: POST /conversations/attributes
-    required fields: name, data_type
-    optional fields: description, required, visible_to_team_ids, multiline, options, reference
+    optional fields: name, description, data_type, required, visible_to_team_ids, multiline, options, reference
     risk: Create a conversation attribute: live Intercom mutation against /conversations/attributes; reverse ETL requires plan, preview, explicit approval, execute
   delete_conversation_attribute:
     endpoint: DELETE /conversations/attributes/{{ record.id }}
@@ -277,8 +276,7 @@ REVERSE ETL ACTIONS
     risk: Update an option on a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options/{option_id}; reverse ETL requires plan, preview, explicit approval, execute
   redact_conversation:
     endpoint: POST /conversations/redact
-    required fields: type, conversation_id
-    optional fields: conversation_part_id, source_id
+    optional fields: type, conversation_id, conversation_part_id, source_id
     risk: Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation; variant rules: type=conversation_part requires conversation_part_id; type=source requires source_id.
   delete_conversation:
     endpoint: DELETE /conversations/{{ record.conversation_id }}
@@ -305,13 +303,13 @@ REVERSE ETL ACTIONS
     risk: Detach a contact from a group conversation: live Intercom mutation against /conversations/{conversation_id}/customers/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
   manage_conversation:
     endpoint: POST /conversations/{{ record.conversation_id }}/parts
-    required fields: conversation_id, message_type, admin_id
-    optional fields: type, body, snoozed_until, assignee_id
+    required fields: conversation_id
+    optional fields: message_type, type, admin_id, body, snoozed_until, assignee_id
     risk: Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: close requires type=admin; snoozed requires snoozed_until; assignment requires type admin/team and assignee_id.
   reply_conversation:
     endpoint: POST /conversations/{{ record.conversation_id }}/reply
-    required fields: conversation_id, message_type, type
-    optional fields: body, created_at, attachment_urls, reply_options, intercom_user_id, attachment_files, email, user_id, admin_id, skip_notifications
+    required fields: conversation_id
+    optional fields: intercom_user_id, attachment_files, message_type, type, body, created_at, attachment_urls, reply_options, email, user_id, admin_id, skip_notifications
     risk: Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id.
   attach_tag_to_conversation:
     endpoint: POST /conversations/{{ record.conversation_id }}/tags
@@ -364,8 +362,7 @@ REVERSE ETL ACTIONS
     risk: Update a data connector: live Intercom mutation against /data_connectors/{id}; reverse ETL requires plan, preview, explicit approval, execute
   create_data_event:
     endpoint: POST /events
-    required fields: event_name, created_at
-    optional fields: user_id, id, email, metadata
+    optional fields: event_name, created_at, user_id, id, email, metadata
     risk: Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of id, user_id, or email.
   cancel_data_export:
     endpoint: POST /export/cancel/{{ record.job_identifier }}
@@ -442,8 +439,7 @@ REVERSE ETL ACTIONS
     risk: Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
   create_message:
     endpoint: POST /messages
-    required fields: message_type, from, to
-    optional fields: subject, body, template, cc, bcc, components, created_at, create_conversation_without_contact_reply
+    optional fields: message_type, subject, body, template, from, to, cc, bcc, created_at, create_conversation_without_contact_reply
     risk: Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; in_app requires body/from/to; whatsapp requires template/components/from/to.
   create_news_item:
     endpoint: POST /news/news_items
@@ -493,8 +489,7 @@ REVERSE ETL ACTIONS
     risk: Create a phone Switch: live Intercom mutation against /phone_call_redirects; reverse ETL requires plan, preview, explicit approval, execute
   create_tag:
     endpoint: POST /tags
-    required fields: name
-    optional fields: id, companies, users
+    optional fields: name, id, companies, users
     risk: Create or update a tag, Tag or untag companies, Tag contacts: live Intercom mutation against /tags; reverse ETL requires plan, preview, explicit approval, execute
   delete_tag:
     endpoint: DELETE /tags/{{ record.tag_id }}
@@ -522,13 +517,13 @@ REVERSE ETL ACTIONS
     risk: Update an existing attribute for a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}/attributes/{attribute_id}; reverse ETL requires plan, preview, explicit approval, execute
   create_ticket:
     endpoint: POST /tickets
-    required fields: contacts, ticket_type_id
-    optional fields: conversation_to_link_id, company_id, created_at, ticket_attributes, assignment, skip_notifications
+    required fields: ticket_type_id, contacts
+    optional fields: skip_notifications, conversation_to_link_id, company_id, created_at, ticket_attributes, assignment
     risk: Create a ticket: live Intercom mutation against /tickets; reverse ETL requires plan, preview, explicit approval, execute
   enqueue_create_ticket:
     endpoint: POST /tickets/enqueue
-    required fields: contacts, ticket_type_id
-    optional fields: conversation_to_link_id, company_id, created_at, ticket_attributes, assignment, skip_notifications
+    required fields: ticket_type_id, contacts
+    optional fields: skip_notifications, conversation_to_link_id, company_id, created_at, ticket_attributes, assignment
     risk: Enqueue create ticket: live Intercom mutation against /tickets/enqueue; reverse ETL requires plan, preview, explicit approval, execute
   delete_ticket:
     endpoint: DELETE /tickets/{{ record.ticket_id }}
@@ -537,7 +532,7 @@ REVERSE ETL ACTIONS
   update_ticket:
     endpoint: PUT /tickets/{{ record.ticket_id }}
     required fields: ticket_id
-    optional fields: ticket_attributes, ticket_state_id, company_id, open, is_shared, snoozed_until, admin_id, assignee_id, skip_notifications
+    optional fields: skip_notifications, ticket_attributes, ticket_state_id, company_id, open, is_shared, snoozed_until, admin_id, assignee_id
     risk: Update a ticket: live Intercom mutation against /tickets/{ticket_id}; reverse ETL requires plan, preview, explicit approval, execute
   change_ticket_type:
     endpoint: POST /tickets/{{ record.ticket_id }}/change_type
@@ -554,8 +549,8 @@ REVERSE ETL ACTIONS
     risk: Unlink a conversation from a ticket: live Intercom mutation against /tickets/{ticket_id}/linked_conversations/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
   reply_ticket:
     endpoint: POST /tickets/{{ record.ticket_id }}/reply
-    required fields: ticket_id, message_type, type
-    optional fields: body, created_at, attachment_urls, reply_options, intercom_user_id, user_id, email, admin_id, attachment_files, cross_post, skip_notifications
+    required fields: ticket_id
+    optional fields: skip_notifications, intercom_user_id, message_type, type, body, created_at, attachment_urls, reply_options, user_id, email, admin_id, attachment_files, cross_post
     risk: Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id.
   attach_tag_to_ticket:
     endpoint: POST /tickets/{{ record.ticket_id }}/tags
