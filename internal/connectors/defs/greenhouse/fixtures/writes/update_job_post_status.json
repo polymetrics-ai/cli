@@ -1,0 +1,17 @@
+{
+  "record": {
+    "job_post_id": "job_post_id_fixture",
+    "status": "offline"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/job_posts/job_post_id_fixture/status",
+    "body": {
+      "status": "offline"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

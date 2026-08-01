@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/scorecards",
+    "path": "/v1/scorecards",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

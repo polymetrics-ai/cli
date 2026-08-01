@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/users/synthetic-conformance-value/pending_approvals",
+    "path": "/v1/users/synthetic-conformance-value/pending_approvals",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

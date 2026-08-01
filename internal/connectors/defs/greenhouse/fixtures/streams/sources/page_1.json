@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/sources",
+    "path": "/v1/sources",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/scheduled_interviews/synthetic-conformance-value"
+    "path": "/v1/scheduled_interviews/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

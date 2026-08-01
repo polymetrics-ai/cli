@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/jobs",
+    "path": "/v1/jobs",
     "query": {
       "per_page": "1"
     }

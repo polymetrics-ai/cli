@@ -1,0 +1,38 @@
+{
+  "record": {
+    "application_id": 69306314,
+    "interview_id": 9876,
+    "interviewers": [
+      {
+        "email": "interviewer.fixture@example.test",
+        "response_status": "accepted"
+      }
+    ],
+    "start": "2026-01-01T15:00:00Z",
+    "end": "2026-01-01T16:00:00Z",
+    "external_event_id": "greenhouse_fixture_event_1",
+    "location": "Fixture Room"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/scheduled_interviews",
+    "body": {
+      "application_id": 69306314,
+      "interview_id": 9876,
+      "interviewers": [
+        {
+          "email": "interviewer.fixture@example.test",
+          "response_status": "accepted"
+        }
+      ],
+      "start": "2026-01-01T15:00:00Z",
+      "end": "2026-01-01T16:00:00Z",
+      "external_event_id": "greenhouse_fixture_event_1",
+      "location": "Fixture Room"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "scheduled_interview_id": "scheduled_interview_id_fixture",
+    "start": "2026-01-02T15:00:00Z",
+    "end": "2026-01-02T16:00:00Z",
+    "location": "Fixture Room 2"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/scheduled_interviews/scheduled_interview_id_fixture",
+    "body": {
+      "start": "2026-01-02T15:00:00Z",
+      "end": "2026-01-02T16:00:00Z",
+      "location": "Fixture Room 2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

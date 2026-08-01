@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/user_roles",
+    "path": "/v1/user_roles",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

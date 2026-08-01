@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/applications/synthetic-conformance-value/scheduled_interviews",
+    "path": "/v1/applications/synthetic-conformance-value/scheduled_interviews",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

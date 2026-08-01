@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/close_reasons",
+    "path": "/v1/close_reasons",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

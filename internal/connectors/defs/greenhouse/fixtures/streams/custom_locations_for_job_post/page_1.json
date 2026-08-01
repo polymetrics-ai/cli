@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/job_posts/synthetic-conformance-value/custom_locations",
+    "path": "/v1/job_posts/synthetic-conformance-value/custom_locations",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

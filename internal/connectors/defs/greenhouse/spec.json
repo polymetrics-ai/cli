@@ -14,8 +14,8 @@
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://harvest.greenhouse.io/v1",
-      "description": "Greenhouse Harvest API v1 base URL override, for tests or proxies."
+      "default": "https://harvest.greenhouse.io",
+      "description": "Greenhouse Harvest API origin override, for tests or proxies. Paths in the bundle include /v1 or /v2 explicitly."
     },
     "page_size": {
       "type": "string",

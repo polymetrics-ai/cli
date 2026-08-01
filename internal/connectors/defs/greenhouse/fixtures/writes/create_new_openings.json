@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/jobs/job_id_fixture/openings"
+    "path": "/v1/jobs/job_id_fixture/openings"
   },
   "response": {
     "status": 200,

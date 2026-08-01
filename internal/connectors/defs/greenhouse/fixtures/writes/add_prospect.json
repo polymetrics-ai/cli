@@ -2,7 +2,7 @@
   "record": {},
   "expect": {
     "method": "POST",
-    "path": "/prospects"
+    "path": "/v1/prospects"
   },
   "response": {
     "status": 200,

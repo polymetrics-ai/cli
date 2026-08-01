@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "PATCH",
-    "path": "/departments/department_id_fixture"
+    "path": "/v1/departments/department_id_fixture"
   },
   "response": {
     "status": 200,

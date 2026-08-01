@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "PATCH",
-    "path": "/custom_fields/custom_field_id_fixture"
+    "path": "/v1/custom_fields/custom_field_id_fixture"
   },
   "response": {
     "status": 200,

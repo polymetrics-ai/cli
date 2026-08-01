@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/custom_field/synthetic-conformance-value"
+    "path": "/v1/custom_field/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

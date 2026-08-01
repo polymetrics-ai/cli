@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/jobs/synthetic-conformance-value/hiring_team"
+    "path": "/v1/jobs/synthetic-conformance-value/hiring_team"
   },
   "response": {
     "status": 200,

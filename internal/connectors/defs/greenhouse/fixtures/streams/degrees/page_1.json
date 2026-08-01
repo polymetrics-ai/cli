@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/degrees",
+    "path": "/v1/degrees",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

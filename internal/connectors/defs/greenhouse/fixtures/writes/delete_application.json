@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/applications/application_id_fixture"
+    "path": "/v1/applications/application_id_fixture"
   },
   "response": {
     "status": 200,
