@@ -2,7 +2,7 @@
 
 ## Overview
 
-Google Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave is fixture-only: it does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.
+Google Ads is implemented as a connector-owned fixture-only parity slice against the public Google Ads API v22 REST discovery document. This wave does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.
 
 Public source audit:
 

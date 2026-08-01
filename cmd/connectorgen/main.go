@@ -124,12 +124,6 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-// renderText renders a Report as human-readable lines: one finding per line
-// naming connector/file/rule, followed by a summary count. The summary
-// line's wording ("N findings") is a stable self-verify contract (PLAN.md/
-// SPEC.md grep for "0 findings") and is deliberately unaffected by
-// Warnings, which render separately (N2, wave0 REVIEW.md carried flag: a
-// warning never blocks the gate or changes the finding count).
 // validatePath validates either a defs root containing connector bundle
 // directories or a single connector bundle directory. The latter keeps
 // connector-local gates easy to run without accidentally treating schemas/ and
@@ -152,6 +146,12 @@ func isBundleDir(dir string) bool {
 	return err == nil && !info.IsDir()
 }
 
+// renderText renders a Report as human-readable lines: one finding per line
+// naming connector/file/rule, followed by a summary count. The summary
+// line's wording ("N findings") is a stable self-verify contract (PLAN.md/
+// SPEC.md grep for "0 findings") and is deliberately unaffected by
+// Warnings, which render separately (N2, wave0 REVIEW.md carried flag: a
+// warning never blocks the gate or changes the finding count).
 func renderText(w io.Writer, report Report) {
 	for _, f := range report.Findings {
 		logf(w, "%s: %s: [%s] %s\n", f.Connector, f.File, f.Rule, f.Message)
