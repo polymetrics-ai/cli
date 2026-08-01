@@ -213607,6 +213607,13 @@
           "maps_to": ""
         },
         {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum direct-read response bytes; typed operations declare their own lower cap.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
           "name": "plan",
           "type": "string",
           "summary": "Execute an approved reverse-ETL plan by id.",
