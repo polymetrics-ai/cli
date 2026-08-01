@@ -429,6 +429,7 @@
 | `sharetribe` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Sharetribe | `api` | ga | check, catalog, read, write | 7 | 16 | [Documentation](https://www.sharetribe.com/api-reference/integration.html) | bundle definition |
 | `shippo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Shippo | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.goshippo.com/docs/intro) | bundle definition |
 | `shipstation` | [`icons/shipstation.svg`](../icons/shipstation.svg) | ShipStation | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://www.shipstation.com/docs/api/) | bundle definition |
+| `shopify` | [`icons/shopify.svg`](../icons/shopify.svg) | Shopify | `api` | alpha | check, catalog, read, write | 1 | 42 | [Documentation](https://shopify.dev/docs/api/admin-graphql/latest/full-index) | bundle definition |
 | `shopwired` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | ShopWired | `api` | ga | check, catalog, read, write | 88 | 119 | [Documentation](https://shopwired.readme.io/reference) | bundle definition |
 | `shortcut` | [`icons/shortcut.svg`](../icons/shortcut.svg) | Shortcut | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.shortcut.com/api/rest/v3) | bundle definition |
 | `shortio` | [`icons/shortio.svg`](../icons/shortio.svg) | Short.io | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://developers.short.io/) | bundle definition |
