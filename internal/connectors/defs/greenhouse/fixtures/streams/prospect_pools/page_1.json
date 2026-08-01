@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/prospect_pools",
+    "path": "/v1/prospect_pools",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

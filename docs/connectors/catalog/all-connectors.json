@@ -63530,8 +63530,8 @@
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://harvest.greenhouse.io/v1",
-          "description": "Greenhouse Harvest API v1 base URL override, for tests or proxies."
+          "default": "https://harvest.greenhouse.io",
+          "description": "Greenhouse Harvest API origin override, for tests or proxies. Paths in the bundle include /v1 or /v2 explicitly."
         },
         "page_size": {
           "type": "string",
@@ -64151,7 +64151,7 @@
         "name": "delete_application",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/applications/{{ record.application_id }}",
+        "path": "/v1/applications/{{ record.application_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Delete Application.",
         "confirm": "destructive"
       },
@@ -64159,63 +64159,56 @@
         "name": "add_application_to_candidate_prospect",
         "kind": "create",
         "method": "POST",
-        "path": "/candidates/{{ record.candidate_id }}/applications",
+        "path": "/v1/candidates/{{ record.candidate_id }}/applications",
         "risk": "Greenhouse mutation: POST: Add Application to Candidate/Prospect."
       },
       {
         "name": "update_application",
         "kind": "update",
         "method": "PATCH",
-        "path": "/applications/{{ record.application_id }}",
+        "path": "/v1/applications/{{ record.application_id }}",
         "risk": "Greenhouse mutation: PATCH: Update Application."
       },
       {
         "name": "advance_application",
         "kind": "create",
         "method": "POST",
-        "path": "/applications/{{ record.application_id }}/advance",
+        "path": "/v1/applications/{{ record.application_id }}/advance",
         "risk": "Greenhouse mutation: POST: Advance Application."
       },
       {
         "name": "move_application_different_job",
         "kind": "create",
         "method": "POST",
-        "path": "/applications/{{ record.application_id }}/transfer_to_job",
+        "path": "/v1/applications/{{ record.application_id }}/transfer_to_job",
         "risk": "Greenhouse mutation: POST: Move Application (Different Job)."
       },
       {
         "name": "move_application_same_job",
         "kind": "create",
         "method": "POST",
-        "path": "/applications/{{ record.application_id }}/move",
+        "path": "/v1/applications/{{ record.application_id }}/move",
         "risk": "Greenhouse mutation: POST: Move Application (Same Job)."
       },
       {
         "name": "convert_prospect_to_candidate",
         "kind": "update",
         "method": "PATCH",
-        "path": "/applications/{{ record.application_id }}/convert_prospect",
+        "path": "/v1/applications/{{ record.application_id }}/convert_prospect",
         "risk": "Greenhouse mutation: PATCH: Convert Prospect To Candidate."
-      },
-      {
-        "name": "add_attachment_to_application",
-        "kind": "create",
-        "method": "POST",
-        "path": "/applications/{{ record.application_id }}/attachments",
-        "risk": "Greenhouse mutation: POST: Add Attachment to Application."
       },
       {
         "name": "hire_application",
         "kind": "create",
         "method": "POST",
-        "path": "/applications/{{ record.application_id }}/hire",
+        "path": "/v1/applications/{{ record.application_id }}/hire",
         "risk": "Greenhouse mutation: POST: Hire Application."
       },
       {
         "name": "reject_application",
         "kind": "create",
         "method": "POST",
-        "path": "/applications/{{ record.application_id }}/reject",
+        "path": "/v1/applications/{{ record.application_id }}/reject",
         "risk": "Destructive Greenhouse mutation: POST: Reject Application.",
         "confirm": "destructive"
       },
@@ -64223,42 +64216,42 @@
         "name": "update_rejection_reason",
         "kind": "update",
         "method": "PATCH",
-        "path": "/applications/{{ record.application_id }}/reject",
+        "path": "/v1/applications/{{ record.application_id }}/reject",
         "risk": "Greenhouse mutation: PATCH: Update Rejection Reason."
       },
       {
         "name": "unreject_application",
         "kind": "create",
         "method": "POST",
-        "path": "/applications/{{ record.application_id }}/unreject",
+        "path": "/v1/applications/{{ record.application_id }}/unreject",
         "risk": "Greenhouse mutation: POST: Unreject Application."
       },
       {
         "name": "request_approvals",
         "kind": "create",
         "method": "POST",
-        "path": "/approval_flows/{{ record.approval_flow_id }}/request_approvals",
+        "path": "/v1/approval_flows/{{ record.approval_flow_id }}/request_approvals",
         "risk": "Greenhouse mutation: POST: Request Approvals."
       },
       {
         "name": "replace_an_approver_in_an_approver_group",
         "kind": "update",
         "method": "PUT",
-        "path": "/approver_groups/{{ record.approver_group_id }}/replace_approvers",
+        "path": "/v1/approver_groups/{{ record.approver_group_id }}/replace_approvers",
         "risk": "Greenhouse mutation: PUT: Replace an approver in an approver group."
       },
       {
         "name": "create_or_replace_an_approval_flow",
         "kind": "update",
         "method": "PUT",
-        "path": "/jobs/{{ record.job_id }}/approval_flows",
+        "path": "/v1/jobs/{{ record.job_id }}/approval_flows",
         "risk": "Greenhouse mutation: PUT: Create or replace an approval flow."
       },
       {
         "name": "delete_candidate",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/candidates/{{ record.candidate_id }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Delete Candidate.",
         "confirm": "destructive"
       },
@@ -64266,49 +64259,42 @@
         "name": "edit_candidate",
         "kind": "update",
         "method": "PATCH",
-        "path": "/candidates/{{ record.candidate_id }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}",
         "risk": "Greenhouse mutation: PATCH: Edit Candidate."
-      },
-      {
-        "name": "add_attachment",
-        "kind": "create",
-        "method": "POST",
-        "path": "/candidates/{{ record.candidate_id }}/attachments",
-        "risk": "Greenhouse mutation: POST: Add Attachment."
       },
       {
         "name": "add_candidate",
         "kind": "create",
         "method": "POST",
-        "path": "/candidates",
+        "path": "/v1/candidates",
         "risk": "Greenhouse mutation: POST: Add Candidate."
       },
       {
         "name": "add_note",
         "kind": "create",
         "method": "POST",
-        "path": "/candidates/{{ record.candidate_id }}/activity_feed/notes",
+        "path": "/v1/candidates/{{ record.candidate_id }}/activity_feed/notes",
         "risk": "Greenhouse mutation: POST: Add Note."
       },
       {
         "name": "add_e_mail_note",
         "kind": "create",
         "method": "POST",
-        "path": "/candidates/{{ record.candidate_id }}/activity_feed/emails",
+        "path": "/v1/candidates/{{ record.candidate_id }}/activity_feed/emails",
         "risk": "Greenhouse mutation: POST: Add E-mail Note."
       },
       {
         "name": "add_education",
         "kind": "create",
         "method": "POST",
-        "path": "/candidates/{{ record.candidate_id }}/educations",
+        "path": "/v1/candidates/{{ record.candidate_id }}/educations",
         "risk": "Greenhouse mutation: POST: Add Education."
       },
       {
         "name": "remove_education_from_candidate",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/candidates/{{ record.candidate_id }}/educations/{{ record.education_id }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}/educations/{{ record.education_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove Education From Candidate.",
         "confirm": "destructive"
       },
@@ -64316,14 +64302,14 @@
         "name": "add_employment",
         "kind": "create",
         "method": "POST",
-        "path": "/candidates/{{ record.candidate_id }}/employments",
+        "path": "/v1/candidates/{{ record.candidate_id }}/employments",
         "risk": "Greenhouse mutation: POST: Add Employment."
       },
       {
         "name": "remove_employment_from_candidate",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/candidates/{{ record.candidate_id }}/employments/{{ record.employment_id }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}/employments/{{ record.employment_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove Employment From Candidate.",
         "confirm": "destructive"
       },
@@ -64331,14 +64317,14 @@
         "name": "add_prospect",
         "kind": "create",
         "method": "POST",
-        "path": "/prospects",
+        "path": "/v1/prospects",
         "risk": "Greenhouse mutation: POST: Add Prospect."
       },
       {
         "name": "anonymize_candidate",
         "kind": "update",
         "method": "PUT",
-        "path": "/candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names }}",
         "risk": "Destructive Greenhouse mutation: PUT: Anonymize Candidate.",
         "confirm": "destructive"
       },
@@ -64346,7 +64332,7 @@
         "name": "merge_candidates",
         "kind": "update",
         "method": "PUT",
-        "path": "/candidates/merge",
+        "path": "/v1/candidates/merge",
         "risk": "Destructive Greenhouse mutation: PUT: Merge Candidates.",
         "confirm": "destructive"
       },
@@ -64354,21 +64340,21 @@
         "name": "create_custom_field",
         "kind": "create",
         "method": "POST",
-        "path": "/custom_fields",
+        "path": "/v1/custom_fields",
         "risk": "Greenhouse mutation: POST: Create Custom Field."
       },
       {
         "name": "update_custom_field",
         "kind": "update",
         "method": "PATCH",
-        "path": "/custom_fields/{{ record.custom_field_id }}",
+        "path": "/v1/custom_fields/{{ record.custom_field_id }}",
         "risk": "Greenhouse mutation: PATCH: Update Custom Field."
       },
       {
         "name": "delete_custom_field",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/custom_fields/{{ record.custom_field_id }}",
+        "path": "/v1/custom_fields/{{ record.custom_field_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Delete Custom Field.",
         "confirm": "destructive"
       },
@@ -64376,21 +64362,21 @@
         "name": "create_custom_field_options",
         "kind": "create",
         "method": "POST",
-        "path": "/custom_field/{{ record.custom_field_id }}/custom_field_options",
+        "path": "/v1/custom_field/{{ record.custom_field_id }}/custom_field_options",
         "risk": "Greenhouse mutation: POST: Create Custom Field Options."
       },
       {
         "name": "update_custom_field_options",
         "kind": "update",
         "method": "PATCH",
-        "path": "/custom_field/{{ record.custom_field_id }}/custom_field_options",
+        "path": "/v1/custom_field/{{ record.custom_field_id }}/custom_field_options",
         "risk": "Greenhouse mutation: PATCH: Update Custom Field Options."
       },
       {
         "name": "remove_custom_field_options",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/custom_field/{{ record.custom_field_id }}/custom_field_options",
+        "path": "/v1/custom_field/{{ record.custom_field_id }}/custom_field_options",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove Custom Field Options.",
         "confirm": "destructive"
       },
@@ -64398,63 +64384,63 @@
         "name": "edit_department",
         "kind": "update",
         "method": "PATCH",
-        "path": "/departments/{{ record.department_id }}",
+        "path": "/v1/departments/{{ record.department_id }}",
         "risk": "Greenhouse mutation: PATCH: Edit Department."
       },
       {
         "name": "add_department",
         "kind": "create",
         "method": "POST",
-        "path": "/departments",
+        "path": "/v1/departments",
         "risk": "Greenhouse mutation: POST: Add Department."
       },
       {
         "name": "edit_openings",
         "kind": "update",
         "method": "PATCH",
-        "path": "/jobs/{{ record.job_id }}/openings/{{ record.opening_id }}",
+        "path": "/v1/jobs/{{ record.job_id }}/openings/{{ record.opening_id }}",
         "risk": "Greenhouse mutation: PATCH: Edit Openings."
       },
       {
         "name": "create_new_openings",
         "kind": "create",
         "method": "POST",
-        "path": "/jobs/{{ record.job_id }}/openings",
+        "path": "/v1/jobs/{{ record.job_id }}/openings",
         "risk": "Greenhouse mutation: POST: Create New Openings."
       },
       {
         "name": "update_job",
         "kind": "update",
         "method": "PATCH",
-        "path": "/jobs/{{ record.job_id }}",
+        "path": "/v1/jobs/{{ record.job_id }}",
         "risk": "Greenhouse mutation: PATCH: Update Job."
       },
       {
         "name": "create_job",
         "kind": "create",
         "method": "POST",
-        "path": "/jobs",
+        "path": "/v1/jobs",
         "risk": "Greenhouse mutation: POST: Create Job."
       },
       {
         "name": "replace_hiring_team",
         "kind": "update",
         "method": "PUT",
-        "path": "/jobs/{{ record.job_id }}/hiring_team",
+        "path": "/v1/jobs/{{ record.job_id }}",
         "risk": "Greenhouse mutation: PUT: Replace Hiring Team."
       },
       {
         "name": "add_hiring_team_members",
         "kind": "create",
         "method": "POST",
-        "path": "/jobs/{{ record.job_id }}/hiring_team",
+        "path": "/v1/jobs/{{ record.job_id }}",
         "risk": "Greenhouse mutation: POST: Add Hiring Team Members."
       },
       {
         "name": "remove_hiring_team_member",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/jobs/{{ record.job_id }}/hiring_team",
+        "path": "/v1/jobs/{{ record.job_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.",
         "confirm": "destructive"
       },
@@ -64462,28 +64448,28 @@
         "name": "update_current_offer",
         "kind": "update",
         "method": "PATCH",
-        "path": "/applications/{{ record.application_id }}/offers/current_offer",
+        "path": "/v1/applications/{{ record.application_id }}/offers/current_offer",
         "risk": "Greenhouse mutation: PATCH: Update Current Offer."
       },
       {
         "name": "edit_office",
         "kind": "update",
         "method": "PATCH",
-        "path": "/offices/{{ record.office_id }}",
+        "path": "/v1/offices/{{ record.office_id }}",
         "risk": "Greenhouse mutation: PATCH: Edit Office."
       },
       {
         "name": "add_office",
         "kind": "create",
         "method": "POST",
-        "path": "/offices",
+        "path": "/v1/offices",
         "risk": "Greenhouse mutation: POST: Add Office."
       },
       {
         "name": "remove_scheduled_interview",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/scheduled_interviews/{{ record.scheduled_interview_id }}",
+        "path": "/v1/scheduled_interviews/{{ record.scheduled_interview_id }}",
         "risk": "Destructive Greenhouse mutation: Delete: Remove Scheduled Interview.",
         "confirm": "destructive"
       },
@@ -64491,14 +64477,14 @@
         "name": "add_candidate_tag",
         "kind": "create",
         "method": "POST",
-        "path": "/tags/candidate",
+        "path": "/v1/tags/candidate",
         "risk": "Greenhouse mutation: POST: Add New Candidate Tag."
       },
       {
         "name": "remove_tag_from_candidate",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove tag from candidate.",
         "confirm": "destructive"
       },
@@ -64506,35 +64492,35 @@
         "name": "add_a_candidate_tag",
         "kind": "update",
         "method": "PUT",
-        "path": "/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}",
+        "path": "/v1/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}",
         "risk": "Greenhouse mutation: PUT: Add a candidate tag."
       },
       {
         "name": "change_user_permission_level",
         "kind": "update",
         "method": "PATCH",
-        "path": "/users/permission_level",
+        "path": "/v1/users/permission_level",
         "risk": "Greenhouse mutation: PATCH: Change user permission level."
       },
       {
         "name": "add_user",
         "kind": "create",
         "method": "POST",
-        "path": "/users",
+        "path": "/v1/users",
         "risk": "Greenhouse mutation: POST: Add User."
       },
       {
         "name": "add_e_mail_address_to_user",
         "kind": "create",
         "method": "POST",
-        "path": "/users/{{ record.user_id }}/email_addresses",
+        "path": "/v1/users/{{ record.user_id }}/email_addresses",
         "risk": "Greenhouse mutation: POST: Add E-mail Address To User."
       },
       {
         "name": "remove_a_job_permission",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/users/{{ record.user_id }}/permissions/jobs",
+        "path": "/v1/users/{{ record.user_id }}/permissions/jobs",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove a Job Permission.",
         "confirm": "destructive"
       },
@@ -64542,14 +64528,14 @@
         "name": "add_a_job_permission",
         "kind": "update",
         "method": "PUT",
-        "path": "/users/{{ record.user_id }}/permissions/jobs",
+        "path": "/v1/users/{{ record.user_id }}/permissions/jobs",
         "risk": "Greenhouse mutation: PUT: Add a Job Permission."
       },
       {
         "name": "remove_a_future_job_permission",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/users/{{ record.user_id }}/permissions/future_jobs",
+        "path": "/v1/users/{{ record.user_id }}/permissions/future_jobs",
         "risk": "Destructive Greenhouse mutation: DELETE: Remove a Future Job Permission.",
         "confirm": "destructive"
       },
@@ -64557,8 +64543,74 @@
         "name": "add_a_future_job_permission",
         "kind": "update",
         "method": "PUT",
-        "path": "/users/{{ record.user_id }}/permissions/future_jobs",
+        "path": "/v1/users/{{ record.user_id }}/permissions/future_jobs",
         "risk": "Greenhouse mutation: PUT: Add a Future Job Permission."
+      },
+      {
+        "name": "destroy_candidate_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v1/tags/candidate/{{ record.tag_id }}",
+        "risk": "Destructive Greenhouse mutation: DELETE: Destroy a candidate tag. Enqueues asynchronous irreversible removal of the tag from the organization and all applied candidates; Greenhouse states completion may take up to 24 hours.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "destroy_openings",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v2/jobs/{{ record.job_id }}/openings",
+        "risk": "Destructive Greenhouse mutation: DELETE: Destroy Openings (v2). Deletes only closed, unfilled openings allowed by Greenhouse validations; response may include IDs that could not be deleted.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_scheduled_interview",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/scheduled_interviews",
+        "risk": "Greenhouse mutation: POST: Create Scheduled Interview (v2). V1 is deprecated by Greenhouse; v2 matches Greenhouse Recruiting validations."
+      },
+      {
+        "name": "update_scheduled_interview",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/scheduled_interviews/{{ record.scheduled_interview_id }}",
+        "risk": "Greenhouse mutation: PATCH: Update Scheduled Interview (v2). V1 is deprecated by Greenhouse; v2 matches Greenhouse Recruiting validations."
+      },
+      {
+        "name": "update_job_post",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/job_posts/{{ record.job_post_id }}",
+        "risk": "Greenhouse mutation: PATCH: Update Job Post (v2). Updates title, location, or content; status is intentionally separated into update_job_post_status."
+      },
+      {
+        "name": "update_job_post_status",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/job_posts/{{ record.job_post_id }}/status",
+        "risk": "Greenhouse mutation: PATCH: Update Job Post Status (v2). Updates a job post status to live or offline; Greenhouse split this from other job-post edits for permission accuracy."
+      },
+      {
+        "name": "edit_user_v2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/users",
+        "risk": "Admin Greenhouse mutation: PATCH: Edit User (v2). Looks up one user by email, user_id, or employee_id and updates only the closed payload fields declared in this action schema."
+      },
+      {
+        "name": "disable_user_v2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/users/disable",
+        "risk": "Admin Greenhouse mutation: PATCH: Disable User (v2). Greenhouse documents this as idempotent: calling it for an already disabled user does nothing.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enable_user_v2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/users/enable",
+        "risk": "Admin Greenhouse mutation: PATCH: Enable User (v2). Greenhouse documents this as idempotent: calling it for an already enabled user does nothing."
       }
     ],
     "risk": {

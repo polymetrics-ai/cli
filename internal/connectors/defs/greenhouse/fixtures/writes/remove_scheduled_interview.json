@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/scheduled_interviews/scheduled_interview_id_fixture"
+    "path": "/v1/scheduled_interviews/scheduled_interview_id_fixture"
   },
   "response": {
     "status": 200,

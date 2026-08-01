@@ -5,7 +5,7 @@
   },
   "expect": {
     "method": "PATCH",
-    "path": "/jobs/job_id_fixture/openings/opening_id_fixture"
+    "path": "/v1/jobs/job_id_fixture/openings/opening_id_fixture"
   },
   "response": {
     "status": 200,

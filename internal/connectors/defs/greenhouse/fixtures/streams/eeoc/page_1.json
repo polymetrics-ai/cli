@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/eeoc",
+    "path": "/v1/eeoc",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

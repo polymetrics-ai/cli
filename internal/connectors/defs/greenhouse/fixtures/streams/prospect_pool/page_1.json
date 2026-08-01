@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/prospect_pools/synthetic-conformance-value"
+    "path": "/v1/prospect_pools/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

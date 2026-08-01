@@ -2,7 +2,7 @@
   "record": {},
   "expect": {
     "method": "PATCH",
-    "path": "/users/permission_level"
+    "path": "/v1/users/permission_level"
   },
   "response": {
     "status": 200,

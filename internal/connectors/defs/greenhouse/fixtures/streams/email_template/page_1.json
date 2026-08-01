@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/email_templates/synthetic-conformance-value"
+    "path": "/v1/email_templates/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

@@ -2,7 +2,7 @@
   "record": {},
   "expect": {
     "method": "POST",
-    "path": "/custom_fields"
+    "path": "/v1/custom_fields"
   },
   "response": {
     "status": 200,

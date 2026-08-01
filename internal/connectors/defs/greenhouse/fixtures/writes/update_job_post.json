@@ -1,0 +1,19 @@
+{
+  "record": {
+    "job_post_id": "job_post_id_fixture",
+    "title": "Fixture Job Post",
+    "content": "<p>Fixture content</p>"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/job_posts/job_post_id_fixture",
+    "body": {
+      "title": "Fixture Job Post",
+      "content": "<p>Fixture content</p>"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

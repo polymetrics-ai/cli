@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/candidates",
+    "path": "/v1/candidates",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

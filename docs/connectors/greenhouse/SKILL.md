@@ -213,223 +213,252 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
 ## Reverse ETL Actions
 
 - delete_application:
-  - endpoint: DELETE /applications/{{ record.application_id }}
+  - endpoint: DELETE /v1/applications/{{ record.application_id }}
   - required fields: application_id
   - risk: Destructive Greenhouse mutation: DELETE: Delete Application.
 - add_application_to_candidate_prospect:
-  - endpoint: POST /candidates/{{ record.candidate_id }}/applications
+  - endpoint: POST /v1/candidates/{{ record.candidate_id }}/applications
   - required fields: candidate_id
   - risk: Greenhouse mutation: POST: Add Application to Candidate/Prospect.
 - update_application:
-  - endpoint: PATCH /applications/{{ record.application_id }}
+  - endpoint: PATCH /v1/applications/{{ record.application_id }}
   - required fields: application_id
   - risk: Greenhouse mutation: PATCH: Update Application.
 - advance_application:
-  - endpoint: POST /applications/{{ record.application_id }}/advance
+  - endpoint: POST /v1/applications/{{ record.application_id }}/advance
   - required fields: application_id
   - risk: Greenhouse mutation: POST: Advance Application.
 - move_application_different_job:
-  - endpoint: POST /applications/{{ record.application_id }}/transfer_to_job
+  - endpoint: POST /v1/applications/{{ record.application_id }}/transfer_to_job
   - required fields: application_id
   - risk: Greenhouse mutation: POST: Move Application (Different Job).
 - move_application_same_job:
-  - endpoint: POST /applications/{{ record.application_id }}/move
+  - endpoint: POST /v1/applications/{{ record.application_id }}/move
   - required fields: application_id
   - risk: Greenhouse mutation: POST: Move Application (Same Job).
 - convert_prospect_to_candidate:
-  - endpoint: PATCH /applications/{{ record.application_id }}/convert_prospect
+  - endpoint: PATCH /v1/applications/{{ record.application_id }}/convert_prospect
   - required fields: application_id
   - risk: Greenhouse mutation: PATCH: Convert Prospect To Candidate.
-- add_attachment_to_application:
-  - endpoint: POST /applications/{{ record.application_id }}/attachments
-  - required fields: application_id
-  - risk: Greenhouse mutation: POST: Add Attachment to Application.
 - hire_application:
-  - endpoint: POST /applications/{{ record.application_id }}/hire
+  - endpoint: POST /v1/applications/{{ record.application_id }}/hire
   - required fields: application_id
   - risk: Greenhouse mutation: POST: Hire Application.
 - reject_application:
-  - endpoint: POST /applications/{{ record.application_id }}/reject
+  - endpoint: POST /v1/applications/{{ record.application_id }}/reject
   - required fields: application_id
   - risk: Destructive Greenhouse mutation: POST: Reject Application.
 - update_rejection_reason:
-  - endpoint: PATCH /applications/{{ record.application_id }}/reject
+  - endpoint: PATCH /v1/applications/{{ record.application_id }}/reject
   - required fields: application_id
   - risk: Greenhouse mutation: PATCH: Update Rejection Reason.
 - unreject_application:
-  - endpoint: POST /applications/{{ record.application_id }}/unreject
+  - endpoint: POST /v1/applications/{{ record.application_id }}/unreject
   - required fields: application_id
   - risk: Greenhouse mutation: POST: Unreject Application.
 - request_approvals:
-  - endpoint: POST /approval_flows/{{ record.approval_flow_id }}/request_approvals
+  - endpoint: POST /v1/approval_flows/{{ record.approval_flow_id }}/request_approvals
   - required fields: approval_flow_id
   - risk: Greenhouse mutation: POST: Request Approvals.
 - replace_an_approver_in_an_approver_group:
-  - endpoint: PUT /approver_groups/{{ record.approver_group_id }}/replace_approvers
+  - endpoint: PUT /v1/approver_groups/{{ record.approver_group_id }}/replace_approvers
   - required fields: approver_group_id
   - risk: Greenhouse mutation: PUT: Replace an approver in an approver group.
 - create_or_replace_an_approval_flow:
-  - endpoint: PUT /jobs/{{ record.job_id }}/approval_flows
+  - endpoint: PUT /v1/jobs/{{ record.job_id }}/approval_flows
   - required fields: job_id
   - risk: Greenhouse mutation: PUT: Create or replace an approval flow.
 - delete_candidate:
-  - endpoint: DELETE /candidates/{{ record.candidate_id }}
+  - endpoint: DELETE /v1/candidates/{{ record.candidate_id }}
   - required fields: candidate_id
   - risk: Destructive Greenhouse mutation: DELETE: Delete Candidate.
 - edit_candidate:
-  - endpoint: PATCH /candidates/{{ record.candidate_id }}
+  - endpoint: PATCH /v1/candidates/{{ record.candidate_id }}
   - required fields: candidate_id
   - risk: Greenhouse mutation: PATCH: Edit Candidate.
-- add_attachment:
-  - endpoint: POST /candidates/{{ record.candidate_id }}/attachments
-  - required fields: candidate_id
-  - risk: Greenhouse mutation: POST: Add Attachment.
 - add_candidate:
-  - endpoint: POST /candidates
+  - endpoint: POST /v1/candidates
   - risk: Greenhouse mutation: POST: Add Candidate.
 - add_note:
-  - endpoint: POST /candidates/{{ record.candidate_id }}/activity_feed/notes
+  - endpoint: POST /v1/candidates/{{ record.candidate_id }}/activity_feed/notes
   - required fields: candidate_id
   - risk: Greenhouse mutation: POST: Add Note.
 - add_e_mail_note:
-  - endpoint: POST /candidates/{{ record.candidate_id }}/activity_feed/emails
+  - endpoint: POST /v1/candidates/{{ record.candidate_id }}/activity_feed/emails
   - required fields: candidate_id
   - risk: Greenhouse mutation: POST: Add E-mail Note.
 - add_education:
-  - endpoint: POST /candidates/{{ record.candidate_id }}/educations
+  - endpoint: POST /v1/candidates/{{ record.candidate_id }}/educations
   - required fields: candidate_id
   - risk: Greenhouse mutation: POST: Add Education.
 - remove_education_from_candidate:
-  - endpoint: DELETE /candidates/{{ record.candidate_id }}/educations/{{ record.education_id }}
+  - endpoint: DELETE /v1/candidates/{{ record.candidate_id }}/educations/{{ record.education_id }}
   - required fields: candidate_id, education_id
   - risk: Destructive Greenhouse mutation: DELETE: Remove Education From Candidate.
 - add_employment:
-  - endpoint: POST /candidates/{{ record.candidate_id }}/employments
+  - endpoint: POST /v1/candidates/{{ record.candidate_id }}/employments
   - required fields: candidate_id
   - risk: Greenhouse mutation: POST: Add Employment.
 - remove_employment_from_candidate:
-  - endpoint: DELETE /candidates/{{ record.candidate_id }}/employments/{{ record.employment_id }}
+  - endpoint: DELETE /v1/candidates/{{ record.candidate_id }}/employments/{{ record.employment_id }}
   - required fields: candidate_id, employment_id
   - risk: Destructive Greenhouse mutation: DELETE: Remove Employment From Candidate.
 - add_prospect:
-  - endpoint: POST /prospects
+  - endpoint: POST /v1/prospects
   - risk: Greenhouse mutation: POST: Add Prospect.
 - anonymize_candidate:
-  - endpoint: PUT /candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names }}
+  - endpoint: PUT /v1/candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names }}
   - required fields: candidate_id, field_names
   - risk: Destructive Greenhouse mutation: PUT: Anonymize Candidate.
 - merge_candidates:
-  - endpoint: PUT /candidates/merge
+  - endpoint: PUT /v1/candidates/merge
+  - required fields: primary_candidate_id, duplicate_candidate_id
   - risk: Destructive Greenhouse mutation: PUT: Merge Candidates.
 - create_custom_field:
-  - endpoint: POST /custom_fields
+  - endpoint: POST /v1/custom_fields
   - risk: Greenhouse mutation: POST: Create Custom Field.
 - update_custom_field:
-  - endpoint: PATCH /custom_fields/{{ record.custom_field_id }}
+  - endpoint: PATCH /v1/custom_fields/{{ record.custom_field_id }}
   - required fields: custom_field_id
   - risk: Greenhouse mutation: PATCH: Update Custom Field.
 - delete_custom_field:
-  - endpoint: DELETE /custom_fields/{{ record.custom_field_id }}
+  - endpoint: DELETE /v1/custom_fields/{{ record.custom_field_id }}
   - required fields: custom_field_id
   - risk: Destructive Greenhouse mutation: DELETE: Delete Custom Field.
 - create_custom_field_options:
-  - endpoint: POST /custom_field/{{ record.custom_field_id }}/custom_field_options
+  - endpoint: POST /v1/custom_field/{{ record.custom_field_id }}/custom_field_options
   - required fields: custom_field_id
   - risk: Greenhouse mutation: POST: Create Custom Field Options.
 - update_custom_field_options:
-  - endpoint: PATCH /custom_field/{{ record.custom_field_id }}/custom_field_options
+  - endpoint: PATCH /v1/custom_field/{{ record.custom_field_id }}/custom_field_options
   - required fields: custom_field_id
   - risk: Greenhouse mutation: PATCH: Update Custom Field Options.
 - remove_custom_field_options:
-  - endpoint: DELETE /custom_field/{{ record.custom_field_id }}/custom_field_options
-  - required fields: custom_field_id
+  - endpoint: DELETE /v1/custom_field/{{ record.custom_field_id }}/custom_field_options
+  - required fields: custom_field_id, option_ids
   - risk: Destructive Greenhouse mutation: DELETE: Remove Custom Field Options.
 - edit_department:
-  - endpoint: PATCH /departments/{{ record.department_id }}
+  - endpoint: PATCH /v1/departments/{{ record.department_id }}
   - required fields: department_id
   - risk: Greenhouse mutation: PATCH: Edit Department.
 - add_department:
-  - endpoint: POST /departments
+  - endpoint: POST /v1/departments
   - risk: Greenhouse mutation: POST: Add Department.
 - edit_openings:
-  - endpoint: PATCH /jobs/{{ record.job_id }}/openings/{{ record.opening_id }}
+  - endpoint: PATCH /v1/jobs/{{ record.job_id }}/openings/{{ record.opening_id }}
   - required fields: job_id, opening_id
   - risk: Greenhouse mutation: PATCH: Edit Openings.
 - create_new_openings:
-  - endpoint: POST /jobs/{{ record.job_id }}/openings
+  - endpoint: POST /v1/jobs/{{ record.job_id }}/openings
   - required fields: job_id
   - risk: Greenhouse mutation: POST: Create New Openings.
 - update_job:
-  - endpoint: PATCH /jobs/{{ record.job_id }}
+  - endpoint: PATCH /v1/jobs/{{ record.job_id }}
   - required fields: job_id
   - risk: Greenhouse mutation: PATCH: Update Job.
 - create_job:
-  - endpoint: POST /jobs
+  - endpoint: POST /v1/jobs
   - risk: Greenhouse mutation: POST: Create Job.
 - replace_hiring_team:
-  - endpoint: PUT /jobs/{{ record.job_id }}/hiring_team
+  - endpoint: PUT /v1/jobs/{{ record.job_id }}
   - required fields: job_id
   - risk: Greenhouse mutation: PUT: Replace Hiring Team.
 - add_hiring_team_members:
-  - endpoint: POST /jobs/{{ record.job_id }}/hiring_team
+  - endpoint: POST /v1/jobs/{{ record.job_id }}
   - required fields: job_id
   - risk: Greenhouse mutation: POST: Add Hiring Team Members.
 - remove_hiring_team_member:
-  - endpoint: DELETE /jobs/{{ record.job_id }}/hiring_team
+  - endpoint: DELETE /v1/jobs/{{ record.job_id }}
   - required fields: job_id
   - risk: Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.
 - update_current_offer:
-  - endpoint: PATCH /applications/{{ record.application_id }}/offers/current_offer
+  - endpoint: PATCH /v1/applications/{{ record.application_id }}/offers/current_offer
   - required fields: application_id
   - risk: Greenhouse mutation: PATCH: Update Current Offer.
 - edit_office:
-  - endpoint: PATCH /offices/{{ record.office_id }}
+  - endpoint: PATCH /v1/offices/{{ record.office_id }}
   - required fields: office_id
   - risk: Greenhouse mutation: PATCH: Edit Office.
 - add_office:
-  - endpoint: POST /offices
+  - endpoint: POST /v1/offices
   - risk: Greenhouse mutation: POST: Add Office.
 - remove_scheduled_interview:
-  - endpoint: DELETE /scheduled_interviews/{{ record.scheduled_interview_id }}
+  - endpoint: DELETE /v1/scheduled_interviews/{{ record.scheduled_interview_id }}
   - required fields: scheduled_interview_id
   - risk: Destructive Greenhouse mutation: Delete: Remove Scheduled Interview.
 - add_candidate_tag:
-  - endpoint: POST /tags/candidate
+  - endpoint: POST /v1/tags/candidate
   - risk: Greenhouse mutation: POST: Add New Candidate Tag.
 - remove_tag_from_candidate:
-  - endpoint: DELETE /candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}
+  - endpoint: DELETE /v1/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}
   - required fields: candidate_id, tag_id
   - risk: Destructive Greenhouse mutation: DELETE: Remove tag from candidate.
 - add_a_candidate_tag:
-  - endpoint: PUT /candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}
+  - endpoint: PUT /v1/candidates/{{ record.candidate_id }}/tags/{{ record.tag_id }}
   - required fields: candidate_id, tag_id
   - risk: Greenhouse mutation: PUT: Add a candidate tag.
 - change_user_permission_level:
-  - endpoint: PATCH /users/permission_level
+  - endpoint: PATCH /v1/users/permission_level
   - risk: Greenhouse mutation: PATCH: Change user permission level.
 - add_user:
-  - endpoint: POST /users
+  - endpoint: POST /v1/users
   - risk: Greenhouse mutation: POST: Add User.
 - add_e_mail_address_to_user:
-  - endpoint: POST /users/{{ record.user_id }}/email_addresses
+  - endpoint: POST /v1/users/{{ record.user_id }}/email_addresses
   - required fields: user_id
   - risk: Greenhouse mutation: POST: Add E-mail Address To User.
 - remove_a_job_permission:
-  - endpoint: DELETE /users/{{ record.user_id }}/permissions/jobs
-  - required fields: user_id
+  - endpoint: DELETE /v1/users/{{ record.user_id }}/permissions/jobs
+  - required fields: user_id, job_permission_id
   - risk: Destructive Greenhouse mutation: DELETE: Remove a Job Permission.
 - add_a_job_permission:
-  - endpoint: PUT /users/{{ record.user_id }}/permissions/jobs
+  - endpoint: PUT /v1/users/{{ record.user_id }}/permissions/jobs
   - required fields: user_id
   - risk: Greenhouse mutation: PUT: Add a Job Permission.
 - remove_a_future_job_permission:
-  - endpoint: DELETE /users/{{ record.user_id }}/permissions/future_jobs
-  - required fields: user_id
+  - endpoint: DELETE /v1/users/{{ record.user_id }}/permissions/future_jobs
+  - required fields: user_id, future_job_permission_id
   - risk: Destructive Greenhouse mutation: DELETE: Remove a Future Job Permission.
 - add_a_future_job_permission:
-  - endpoint: PUT /users/{{ record.user_id }}/permissions/future_jobs
+  - endpoint: PUT /v1/users/{{ record.user_id }}/permissions/future_jobs
   - required fields: user_id
   - risk: Greenhouse mutation: PUT: Add a Future Job Permission.
+- destroy_candidate_tag:
+  - endpoint: DELETE /v1/tags/candidate/{{ record.tag_id }}
+  - required fields: tag_id
+  - risk: Destructive Greenhouse mutation: DELETE: Destroy a candidate tag. Enqueues asynchronous irreversible removal of the tag from the organization and all applied candidates; Greenhouse states completion may take up to 24 hours.
+- destroy_openings:
+  - endpoint: DELETE /v2/jobs/{{ record.job_id }}/openings
+  - required fields: job_id, ids
+  - risk: Destructive Greenhouse mutation: DELETE: Destroy Openings (v2). Deletes only closed, unfilled openings allowed by Greenhouse validations; response may include IDs that could not be deleted.
+- create_scheduled_interview:
+  - endpoint: POST /v2/scheduled_interviews
+  - required fields: application_id, interview_id, interviewers, start, end, external_event_id
+  - risk: Greenhouse mutation: POST: Create Scheduled Interview (v2). V1 is deprecated by Greenhouse; v2 matches Greenhouse Recruiting validations.
+- update_scheduled_interview:
+  - endpoint: PATCH /v2/scheduled_interviews/{{ record.scheduled_interview_id }}
+  - required fields: scheduled_interview_id
+  - risk: Greenhouse mutation: PATCH: Update Scheduled Interview (v2). V1 is deprecated by Greenhouse; v2 matches Greenhouse Recruiting validations.
+- update_job_post:
+  - endpoint: PATCH /v2/job_posts/{{ record.job_post_id }}
+  - required fields: job_post_id
+  - risk: Greenhouse mutation: PATCH: Update Job Post (v2). Updates title, location, or content; status is intentionally separated into update_job_post_status.
+- update_job_post_status:
+  - endpoint: PATCH /v2/job_posts/{{ record.job_post_id }}/status
+  - required fields: job_post_id, status
+  - risk: Greenhouse mutation: PATCH: Update Job Post Status (v2). Updates a job post status to live or offline; Greenhouse split this from other job-post edits for permission accuracy.
+- edit_user_v2:
+  - endpoint: PATCH /v2/users
+  - required fields: user, payload
+  - risk: Admin Greenhouse mutation: PATCH: Edit User (v2). Looks up one user by email, user_id, or employee_id and updates only the closed payload fields declared in this action schema.
+- disable_user_v2:
+  - endpoint: PATCH /v2/users/disable
+  - required fields: user
+  - risk: Admin Greenhouse mutation: PATCH: Disable User (v2). Greenhouse documents this as idempotent: calling it for an already disabled user does nothing.
+- enable_user_v2:
+  - endpoint: PATCH /v2/users/enable
+  - required fields: user
+  - risk: Admin Greenhouse mutation: PATCH: Enable User (v2). Greenhouse documents this as idempotent: calling it for an already enabled user does nothing.
 
 ## Security
 

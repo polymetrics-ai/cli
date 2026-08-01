@@ -18,7 +18,7 @@
     },
     "check": {
       "method": "GET",
-      "path": "/jobs",
+      "path": "/v1/jobs",
       "query": {
         "per_page": "1"
       }
@@ -42,7 +42,7 @@
   "streams": [
     {
       "name": "candidates",
-      "path": "/candidates",
+      "path": "/v1/candidates",
       "query": {
         "per_page": {
           "template": "{{ config.page_size }}",
@@ -56,7 +56,7 @@
     },
     {
       "name": "applications",
-      "path": "/applications",
+      "path": "/v1/applications",
       "query": {
         "per_page": {
           "template": "{{ config.page_size }}",
@@ -70,7 +70,7 @@
     },
     {
       "name": "jobs",
-      "path": "/jobs",
+      "path": "/v1/jobs",
       "query": {
         "per_page": {
           "template": "{{ config.page_size }}",
@@ -84,7 +84,7 @@
     },
     {
       "name": "offers",
-      "path": "/offers",
+      "path": "/v1/offers",
       "query": {
         "per_page": {
           "template": "{{ config.page_size }}",
@@ -98,7 +98,7 @@
     },
     {
       "name": "users",
-      "path": "/users",
+      "path": "/v1/users",
       "query": {
         "per_page": {
           "template": "{{ config.page_size }}",
@@ -112,7 +112,7 @@
     },
     {
       "name": "activity_feed",
-      "path": "/candidates/{{ config.candidate_id }}/activity_feed",
+      "path": "/v1/candidates/{{ config.candidate_id }}/activity_feed",
       "records": {
         "path": ""
       },
@@ -127,7 +127,7 @@
     },
     {
       "name": "application",
-      "path": "/applications/{{ config.application_id }}",
+      "path": "/v1/applications/{{ config.application_id }}",
       "records": {
         "path": ""
       },
@@ -139,7 +139,7 @@
     },
     {
       "name": "approvals_for_job",
-      "path": "/jobs/{{ config.job_id }}/approval_flows",
+      "path": "/v1/jobs/{{ config.job_id }}/approval_flows",
       "records": {
         "path": ""
       },
@@ -154,7 +154,7 @@
     },
     {
       "name": "approval_flow",
-      "path": "/approval_flows/{{ config.approval_flow_id }}",
+      "path": "/v1/approval_flows/{{ config.approval_flow_id }}",
       "records": {
         "path": ""
       },
@@ -166,7 +166,7 @@
     },
     {
       "name": "pending_approvals_for_user",
-      "path": "/users/{{ config.user_id }}/pending_approvals",
+      "path": "/v1/users/{{ config.user_id }}/pending_approvals",
       "records": {
         "path": ""
       },
@@ -181,7 +181,7 @@
     },
     {
       "name": "candidate",
-      "path": "/candidates/{{ config.candidate_id }}",
+      "path": "/v1/candidates/{{ config.candidate_id }}",
       "records": {
         "path": ""
       },
@@ -193,7 +193,7 @@
     },
     {
       "name": "close_reasons",
-      "path": "/close_reasons",
+      "path": "/v1/close_reasons",
       "records": {
         "path": ""
       },
@@ -208,7 +208,7 @@
     },
     {
       "name": "custom_fields",
-      "path": "/custom_fields/{{ config.field_type }}",
+      "path": "/v1/custom_fields/{{ config.field_type }}",
       "records": {
         "path": ""
       },
@@ -223,7 +223,7 @@
     },
     {
       "name": "custom_field",
-      "path": "/custom_field/{{ config.custom_field_id }}",
+      "path": "/v1/custom_field/{{ config.custom_field_id }}",
       "records": {
         "path": ""
       },
@@ -235,7 +235,7 @@
     },
     {
       "name": "custom_field_options",
-      "path": "/custom_field/{{ config.custom_field_id }}/custom_field_options",
+      "path": "/v1/custom_field/{{ config.custom_field_id }}/custom_field_options",
       "records": {
         "path": ""
       },
@@ -250,7 +250,7 @@
     },
     {
       "name": "demographic_question_sets",
-      "path": "/demographics/question_sets",
+      "path": "/v1/demographics/question_sets",
       "records": {
         "path": ""
       },
@@ -265,7 +265,7 @@
     },
     {
       "name": "demographic_question_set",
-      "path": "/demographics/question_sets/{{ config.demographic_question_set_id }}",
+      "path": "/v1/demographics/question_sets/{{ config.demographic_question_set_id }}",
       "records": {
         "path": ""
       },
@@ -277,7 +277,7 @@
     },
     {
       "name": "demographic_questions",
-      "path": "/demographics/questions",
+      "path": "/v1/demographics/questions",
       "records": {
         "path": ""
       },
@@ -292,7 +292,7 @@
     },
     {
       "name": "demographic_questions_for_demographic_question_set",
-      "path": "/demographics/question_sets/{{ config.demographic_question_set_id }}/questions",
+      "path": "/v1/demographics/question_sets/{{ config.demographic_question_set_id }}/questions",
       "records": {
         "path": ""
       },
@@ -307,7 +307,7 @@
     },
     {
       "name": "demographic_question",
-      "path": "/demographics/questions/{{ config.demographic_question_id }}",
+      "path": "/v1/demographics/questions/{{ config.demographic_question_id }}",
       "records": {
         "path": ""
       },
@@ -319,7 +319,7 @@
     },
     {
       "name": "demographic_answer_options",
-      "path": "/demographics/answer_options",
+      "path": "/v1/demographics/answer_options",
       "records": {
         "path": ""
       },
@@ -334,7 +334,7 @@
     },
     {
       "name": "demographic_answer_options_for_demographic_question",
-      "path": "/demographics/questions/{{ config.demographic_question_id }}/answer_options",
+      "path": "/v1/demographics/questions/{{ config.demographic_question_id }}/answer_options",
       "records": {
         "path": ""
       },
@@ -349,7 +349,7 @@
     },
     {
       "name": "demographic_answer_option",
-      "path": "/demographics/answer_options/{{ config.demographic_answer_option_id }}",
+      "path": "/v1/demographics/answer_options/{{ config.demographic_answer_option_id }}",
       "records": {
         "path": ""
       },
@@ -361,7 +361,7 @@
     },
     {
       "name": "demographic_answers",
-      "path": "/demographics/answers",
+      "path": "/v1/demographics/answers",
       "records": {
         "path": ""
       },
@@ -376,7 +376,7 @@
     },
     {
       "name": "demographic_answers_for_application",
-      "path": "/applications/{{ config.application_id }}/demographics/answers",
+      "path": "/v1/applications/{{ config.application_id }}/demographics/answers",
       "records": {
         "path": ""
       },
@@ -391,7 +391,7 @@
     },
     {
       "name": "demographic_answer",
-      "path": "/demographics/answers/{{ config.demographic_answer_id }}",
+      "path": "/v1/demographics/answers/{{ config.demographic_answer_id }}",
       "records": {
         "path": ""
       },
@@ -403,7 +403,7 @@
     },
     {
       "name": "departments",
-      "path": "/departments",
+      "path": "/v1/departments",
       "records": {
         "path": ""
       },
@@ -418,7 +418,7 @@
     },
     {
       "name": "department",
-      "path": "/departments/{{ config.department_id }}",
+      "path": "/v1/departments/{{ config.department_id }}",
       "records": {
         "path": ""
       },
@@ -430,7 +430,7 @@
     },
     {
       "name": "degrees",
-      "path": "/degrees",
+      "path": "/v1/degrees",
       "records": {
         "path": ""
       },
@@ -445,7 +445,7 @@
     },
     {
       "name": "disciplines",
-      "path": "/disciplines",
+      "path": "/v1/disciplines",
       "records": {
         "path": ""
       },
@@ -460,7 +460,7 @@
     },
     {
       "name": "schools",
-      "path": "/schools",
+      "path": "/v1/schools",
       "records": {
         "path": ""
       },
@@ -475,7 +475,7 @@
     },
     {
       "name": "eeoc",
-      "path": "/eeoc",
+      "path": "/v1/eeoc",
       "records": {
         "path": ""
       },
@@ -490,7 +490,7 @@
     },
     {
       "name": "eeoc_data_for_application",
-      "path": "/applications/{{ config.application_id }}/eeoc",
+      "path": "/v1/applications/{{ config.application_id }}/eeoc",
       "records": {
         "path": ""
       },
@@ -502,7 +502,7 @@
     },
     {
       "name": "email_templates",
-      "path": "/email_templates",
+      "path": "/v1/email_templates",
       "records": {
         "path": ""
       },
@@ -517,7 +517,7 @@
     },
     {
       "name": "email_template",
-      "path": "/email_templates/{{ config.email_template_id }}",
+      "path": "/v1/email_templates/{{ config.email_template_id }}",
       "records": {
         "path": ""
       },
@@ -529,7 +529,7 @@
     },
     {
       "name": "job_openings",
-      "path": "/jobs/{{ config.job_id }}/openings",
+      "path": "/v1/jobs/{{ config.job_id }}/openings",
       "records": {
         "path": ""
       },
@@ -544,7 +544,7 @@
     },
     {
       "name": "opening_for_job",
-      "path": "/jobs/{{ config.job_id }}/openings/{{ config.opening_id }}",
+      "path": "/v1/jobs/{{ config.job_id }}/openings/{{ config.opening_id }}",
       "records": {
         "path": ""
       },
@@ -556,7 +556,7 @@
     },
     {
       "name": "job_posts",
-      "path": "/job_posts",
+      "path": "/v1/job_posts",
       "records": {
         "path": ""
       },
@@ -571,7 +571,7 @@
     },
     {
       "name": "job_post",
-      "path": "/job_posts/{{ config.job_post_id }}",
+      "path": "/v1/job_posts/{{ config.job_post_id }}",
       "records": {
         "path": ""
       },
@@ -583,7 +583,7 @@
     },
     {
       "name": "job_posts_for_job",
-      "path": "/jobs/{{ config.job_id }}/job_posts",
+      "path": "/v1/jobs/{{ config.job_id }}/job_posts",
       "records": {
         "path": ""
       },
@@ -598,7 +598,7 @@
     },
     {
       "name": "job_post_for_job",
-      "path": "/jobs/{{ config.job_id }}/job_post",
+      "path": "/v1/jobs/{{ config.job_id }}/job_post",
       "records": {
         "path": ""
       },
@@ -610,7 +610,7 @@
     },
     {
       "name": "custom_locations_for_job_post",
-      "path": "/job_posts/{{ config.job_post_id }}/custom_locations",
+      "path": "/v1/job_posts/{{ config.job_post_id }}/custom_locations",
       "records": {
         "path": ""
       },
@@ -625,7 +625,7 @@
     },
     {
       "name": "job_stages",
-      "path": "/job_stages",
+      "path": "/v1/job_stages",
       "records": {
         "path": ""
       },
@@ -640,7 +640,7 @@
     },
     {
       "name": "job_stages_for_job",
-      "path": "/jobs/{{ config.job_id }}/stages",
+      "path": "/v1/jobs/{{ config.job_id }}/stages",
       "records": {
         "path": ""
       },
@@ -655,7 +655,7 @@
     },
     {
       "name": "job_stage",
-      "path": "/job_stages/{{ config.job_stage_id }}",
+      "path": "/v1/job_stages/{{ config.job_stage_id }}",
       "records": {
         "path": ""
       },
@@ -667,7 +667,7 @@
     },
     {
       "name": "job",
-      "path": "/jobs/{{ config.job_id }}",
+      "path": "/v1/jobs/{{ config.job_id }}",
       "records": {
         "path": ""
       },
@@ -679,7 +679,7 @@
     },
     {
       "name": "hiring_team",
-      "path": "/jobs/{{ config.job_id }}/hiring_team",
+      "path": "/v1/jobs/{{ config.job_id }}/hiring_team",
       "records": {
         "path": ""
       },
@@ -691,7 +691,7 @@
     },
     {
       "name": "offers_for_application",
-      "path": "/applications/{{ config.application_id }}/offers",
+      "path": "/v1/applications/{{ config.application_id }}/offers",
       "records": {
         "path": ""
       },
@@ -706,7 +706,7 @@
     },
     {
       "name": "current_offer_for_application",
-      "path": "/applications/{{ config.application_id }}/offers/current_offer",
+      "path": "/v1/applications/{{ config.application_id }}/offers/current_offer",
       "records": {
         "path": ""
       },
@@ -718,7 +718,7 @@
     },
     {
       "name": "offer",
-      "path": "/offers/{{ config.offer_id }}",
+      "path": "/v1/offers/{{ config.offer_id }}",
       "records": {
         "path": ""
       },
@@ -730,7 +730,7 @@
     },
     {
       "name": "offices",
-      "path": "/offices",
+      "path": "/v1/offices",
       "records": {
         "path": ""
       },
@@ -745,7 +745,7 @@
     },
     {
       "name": "office",
-      "path": "/offices/{{ config.office_id }}",
+      "path": "/v1/offices/{{ config.office_id }}",
       "records": {
         "path": ""
       },
@@ -757,7 +757,7 @@
     },
     {
       "name": "prospect_pools",
-      "path": "/prospect_pools",
+      "path": "/v1/prospect_pools",
       "records": {
         "path": ""
       },
@@ -772,7 +772,7 @@
     },
     {
       "name": "prospect_pool",
-      "path": "/prospect_pools/{{ config.prospect_pool_id }}",
+      "path": "/v1/prospect_pools/{{ config.prospect_pool_id }}",
       "records": {
         "path": ""
       },
@@ -784,7 +784,7 @@
     },
     {
       "name": "rejection_reasons",
-      "path": "/rejection_reasons",
+      "path": "/v1/rejection_reasons",
       "records": {
         "path": ""
       },
@@ -799,7 +799,7 @@
     },
     {
       "name": "scheduled_interviews",
-      "path": "/scheduled_interviews",
+      "path": "/v1/scheduled_interviews",
       "records": {
         "path": ""
       },
@@ -814,7 +814,7 @@
     },
     {
       "name": "scheduled_interviews_for_application",
-      "path": "/applications/{{ config.application_id }}/scheduled_interviews",
+      "path": "/v1/applications/{{ config.application_id }}/scheduled_interviews",
       "records": {
         "path": ""
       },
@@ -829,7 +829,7 @@
     },
     {
       "name": "scheduled_interview",
-      "path": "/scheduled_interviews/{{ config.scheduled_interview_id }}",
+      "path": "/v1/scheduled_interviews/{{ config.scheduled_interview_id }}",
       "records": {
         "path": ""
       },
@@ -841,7 +841,7 @@
     },
     {
       "name": "scorecards",
-      "path": "/scorecards",
+      "path": "/v1/scorecards",
       "records": {
         "path": ""
       },
@@ -856,7 +856,7 @@
     },
     {
       "name": "scorecards_for_application",
-      "path": "/applications/{{ config.application_id }}/scorecards",
+      "path": "/v1/applications/{{ config.application_id }}/scorecards",
       "records": {
         "path": ""
       },
@@ -871,7 +871,7 @@
     },
     {
       "name": "scorecard",
-      "path": "/scorecards/{{ config.scorecard_id }}",
+      "path": "/v1/scorecards/{{ config.scorecard_id }}",
       "records": {
         "path": ""
       },
@@ -883,7 +883,7 @@
     },
     {
       "name": "sources",
-      "path": "/sources",
+      "path": "/v1/sources",
       "records": {
         "path": ""
       },
@@ -898,7 +898,7 @@
     },
     {
       "name": "candidate_tags",
-      "path": "/tags/candidate",
+      "path": "/v1/tags/candidate",
       "records": {
         "path": ""
       },
@@ -913,7 +913,7 @@
     },
     {
       "name": "tags_applied_to_candidate",
-      "path": "/candidates/{{ config.candidate_id }}/tags",
+      "path": "/v1/candidates/{{ config.candidate_id }}/tags",
       "records": {
         "path": ""
       },
@@ -928,7 +928,7 @@
     },
     {
       "name": "tracking_link_data_for_token",
-      "path": "/tracking_links/{{ config.token }}",
+      "path": "/v1/tracking_links/{{ config.token }}",
       "records": {
         "path": ""
       },
@@ -940,7 +940,7 @@
     },
     {
       "name": "user",
-      "path": "/users/{{ config.user_id }}",
+      "path": "/v1/users/{{ config.user_id }}",
       "records": {
         "path": ""
       },
@@ -952,7 +952,7 @@
     },
     {
       "name": "job_permissions",
-      "path": "/users/{{ config.user_id }}/permissions/jobs",
+      "path": "/v1/users/{{ config.user_id }}/permissions/jobs",
       "records": {
         "path": ""
       },
@@ -967,7 +967,7 @@
     },
     {
       "name": "future_job_permissions",
-      "path": "/users/{{ config.user_id }}/permissions/future_jobs",
+      "path": "/v1/users/{{ config.user_id }}/permissions/future_jobs",
       "records": {
         "path": ""
       },
@@ -982,7 +982,7 @@
     },
     {
       "name": "user_roles",
-      "path": "/user_roles",
+      "path": "/v1/user_roles",
       "records": {
         "path": ""
       },

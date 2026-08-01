@@ -5,7 +5,7 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/users/user_id_fixture/permissions/future_jobs",
+    "path": "/v1/users/user_id_fixture/permissions/future_jobs",
     "body": {
       "future_job_permission_id": 427600
     }

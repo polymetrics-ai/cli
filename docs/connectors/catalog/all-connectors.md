@@ -204,7 +204,7 @@
 | `gorgias` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gorgias | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.gorgias.com/reference) | bundle definition |
 | `grafana` | [`icons/grafana.svg`](../icons/grafana.svg) | Grafana | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/) | bundle definition |
 | `granola` | [`icons/source-granola.svg`](../icons/source-granola.svg) | Granola | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.granola.ai/introduction) | bundle definition |
-| `greenhouse` | [`icons/greenhouse.svg`](../icons/greenhouse.svg) | Greenhouse | `api` | ga | check, catalog, read, write | 69 | 57 | [Documentation](https://developers.greenhouse.io/harvest.html) | bundle definition |
+| `greenhouse` | [`icons/greenhouse.svg`](../icons/greenhouse.svg) | Greenhouse | `api` | ga | check, catalog, read, write | 69 | 64 | [Documentation](https://developers.greenhouse.io/harvest.html) | bundle definition |
 | `gridly` | [`icons/gridly.svg`](../icons/gridly.svg) | Gridly | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://api.gridly.com/docs) | bundle definition |
 | `guru` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Guru | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.getguru.com/) | bundle definition |
 | `gutendex` | [`icons/source-gutendex.svg`](../icons/source-gutendex.svg) | Gutendex | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://gutendex.com/) | bundle definition |

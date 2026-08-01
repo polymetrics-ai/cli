@@ -1,0 +1,20 @@
+{
+  "record": {
+    "user": {
+      "user_id": 11234
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/users/disable",
+    "body": {
+      "user": {
+        "user_id": 11234
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

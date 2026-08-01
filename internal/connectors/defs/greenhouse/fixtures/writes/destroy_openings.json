@@ -1,0 +1,30 @@
+{
+  "record": {
+    "job_id": "job_id_fixture",
+    "ids": [
+      101,
+      102
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/jobs/job_id_fixture/openings",
+    "body": {
+      "ids": [
+        101,
+        102
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "deleted": [
+        101
+      ],
+      "not_deleted": [
+        102
+      ]
+    }
+  }
+}
