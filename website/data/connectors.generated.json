@@ -213570,7 +213570,71 @@
           ]
         }
       ],
-      "global_flags": [],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the Zendesk Support request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value; never pass secret values here.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to emit from stream commands.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "plan",
+          "type": "string",
+          "summary": "Execute an approved reverse-ETL plan by id.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
       "commands": [
         {
           "path": "streams account_attributes list",
@@ -214788,11 +214852,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "token",
-            "body"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations list_approval_requests",
@@ -218392,12 +218452,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-          "redact_fields": [
-            "clients.secret",
-            "client.secret",
-            "secret"
-          ]
+          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
         },
         {
           "path": "operations create_oauth_client",
@@ -218413,12 +218468,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "client.secret",
-            "secret",
-            "client_secret"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations show_client",
@@ -218434,11 +218484,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-          "redact_fields": [
-            "client.secret",
-            "secret"
-          ]
+          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
         },
         {
           "path": "operations update_client",
@@ -218454,12 +218500,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "client.secret",
-            "secret",
-            "client_secret"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations delete_client",
@@ -218491,12 +218532,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "client.secret",
-            "secret",
-            "client_secret"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations list_global_oauth_clients",
@@ -218560,13 +218596,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-          "redact_fields": [
-            "tokens.token",
-            "tokens.refresh_token",
-            "token",
-            "refresh_token"
-          ]
+          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
         },
         {
           "path": "operations create_oauth_token",
@@ -218582,13 +218612,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "token",
-            "refresh_token",
-            "token.token",
-            "token.refresh_token"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations show_token",
@@ -218604,11 +218628,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-          "redact_fields": [
-            "token",
-            "refresh_token"
-          ]
+          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
         },
         {
           "path": "operations revoke_oauth_token",
@@ -218640,11 +218660,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-          "redact_fields": [
-            "token",
-            "refresh_token"
-          ]
+          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
         },
         {
           "path": "operations revoke_current_oauth_token",
@@ -222788,11 +222804,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "password",
-            "user.password"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations change_own_password",
@@ -222808,13 +222820,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "password",
-            "current_password",
-            "previous_password",
-            "old_password"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations get_user_password_requirements",
@@ -223182,11 +223188,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "user.password",
-            "user.identities.value"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         },
         {
           "path": "operations create_or_update_many_users",
@@ -223282,12 +223284,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-          "redact_fields": [
-            "clients.secret",
-            "client.secret",
-            "secret"
-          ]
+          "notes": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough."
         },
         {
           "path": "operations show_currently_authenticated_session",
@@ -223799,14 +223796,7 @@
           "output_policy": "",
           "risk": "critical",
           "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-          "redact_fields": [
-            "client_secret",
-            "refresh_token",
-            "access_token",
-            "token",
-            "code"
-          ]
+          "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation."
         }
       ],
       "help_topics": [

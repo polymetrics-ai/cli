@@ -30,6 +30,53 @@
       ]
     }
   ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Zendesk Support request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from stream commands."
+    },
+    {
+      "name": "plan",
+      "type": "string",
+      "summary": "Execute an approved reverse-ETL plan by id."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation challenge for destructive reverse-ETL writes."
+    }
+  ],
   "commands": [
     {
       "path": "streams account_attributes list",
