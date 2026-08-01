@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projectgroup",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "project_groups_fixture_1",
+        "name": "Hubplanner project groups fixture",
+        "status": "ACTIVE",
+        "createdDate": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}

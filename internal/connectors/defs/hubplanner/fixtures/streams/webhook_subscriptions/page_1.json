@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subscription",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "webhook_subscriptions_fixture_1",
+        "name": "Hubplanner webhook subscriptions fixture",
+        "status": "ACTIVE",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "target_url": "https://example.invalid/hubplanner-webhook",
+        "event": "project.update"
+      }
+    ]
+  }
+}

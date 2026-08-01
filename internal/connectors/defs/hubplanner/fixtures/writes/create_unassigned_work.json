@@ -1,0 +1,22 @@
+{
+  "record": {
+    "project": "project_fixture_1",
+    "start": "2026-01-14T09:00:00Z",
+    "end": "2026-01-14T12:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/unassigned-work",
+    "body": {
+      "project": "project_fixture_1",
+      "start": "2026-01-14T09:00:00Z",
+      "end": "2026-01-14T12:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_unassigned_work_fixture"
+    }
+  }
+}

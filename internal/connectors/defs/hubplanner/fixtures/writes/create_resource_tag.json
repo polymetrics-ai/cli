@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Resource Tag",
+    "color": "#336699"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/resource-tag",
+    "body": {
+      "name": "Fixture Resource Tag",
+      "color": "#336699"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_resource_tag_fixture"
+    }
+  }
+}

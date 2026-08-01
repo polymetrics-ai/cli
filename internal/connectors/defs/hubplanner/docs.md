@@ -1,67 +1,24 @@
-# Overview
+# Hubplanner connector
 
-Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through
-the Hubplanner REST API.
+## Overview
 
-Readable streams: `resources`, `projects`, `clients`, `events`, `holidays`, `bookings`,
-`billing_rates`.
-
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://github.com/hubplanner/API.
+Hubplanner (`hubplanner`) uses the provider-owned Hubplanner API v1 documentation in `hubplanner/API` at the source set recorded by issue #3239. This bundle now records the complete official operation ledger from `Sections/*.md` plus the `webhooks.md` supported event table: 107 official operations total, with 97 implemented as declarative streams, bounded typed direct reads, or typed reverse-ETL writes, and 10 outbound webhook event deliveries blocked on the shared CDC/changefeed runtime.
 
 ## Auth setup
 
-Connection fields:
-
-- `api_key` (required, secret, string); Hubplanner API key, sent verbatim (no Bearer prefix) as the
-  Authorization header. Never logged.
-- `base_url` (optional, string); default `https://api.hubplanner.com/v1`; format `uri`; Hubplanner
-  API base URL override for tests or proxies.
-- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
-  the stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `200`; Records per page (1-1000).
-
-Secret fields are redacted in logs and write previews: `api_key`.
-
-Default configuration values: `base_url=https://api.hubplanner.com/v1`, `max_pages=0`,
-`page_size=200`.
-
-Authentication behavior:
-
-- API key authentication in `Authorization` using `secrets.api_key`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/resource` with query `limit`=`1`; `page`=`0`.
+Create credentials with `pm credentials add` using `api_key` from an environment variable or stdin. The connector sends that value in the Hubplanner `Authorization` header. Do not paste API keys into prompts, shell history, fixtures, issue comments, or docs. `base_url` defaults to `https://api.hubplanner.com/v1`.
 
 ## Streams notes
 
-Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
-0; page size 200.
-
-- `resources`: GET `/resource` - records at response root; page-number pagination; page parameter
-  `page`; size parameter `limit`; starts at 0; page size 200.
-- `projects`: GET `/project` - records at response root; page-number pagination; page parameter
-  `page`; size parameter `limit`; starts at 0; page size 200.
-- `clients`: GET `/client` - records at response root; page-number pagination; page parameter
-  `page`; size parameter `limit`; starts at 0; page size 200.
-- `events`: GET `/event` - records at response root; page-number pagination; page parameter `page`;
-  size parameter `limit`; starts at 0; page size 200.
-- `holidays`: GET `/holiday` - records at response root; page-number pagination; page parameter
-  `page`; size parameter `limit`; starts at 0; page size 200.
-- `bookings`: GET `/booking` - records at response root; page-number pagination; page parameter
-  `page`; size parameter `limit`; starts at 0; page size 200.
-- `billing_rates`: GET `/billingrate` - records at response root; page-number pagination; page
-  parameter `page`; size parameter `limit`; starts at 0; page size 200.
+List-style GET resources use the shared Hubplanner `page=0&limit=200` pagination shape. The first stream (`resources`) keeps a two-page fixture to prove the zero-indexed page-number paginator terminates; other stream fixtures are sanitized single-page provider-shape samples. Detail GET endpoints that require an object id are exposed as bounded direct reads instead of ETL streams because the declarative stream contract has no per-record path-parameter input. The official operation allocation represented in `api_surface.json` is: 33 read operations, 59 reverse-ETL write operations, 2 provider-search/direct-read operations, and 13 CDC/webhook operations.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Hubplanner API read of scheduling, project, and
-billing data.
+`writes.json` declares 61 typed write actions: the 59 official reverse-ETL operations plus create/delete webhook subscription control operations from the CDC lane. Every action uses a fixed documented Hubplanner path, a closed `record_schema`, fixture-backed request-shape validation, and no raw method/path/body/query escape hatch. Delete actions and webhook-subscription creation are marked `confirm: destructive` because webhook creation approves future data egress to an HTTPS target; operators must use plan -> preview -> explicit approval -> execute, with typed confirmation for destructive actions. The Hubplanner docs do not document a universal idempotent-delete status contract, so delete actions do not claim missing-404 success unless a future provider source adds that evidence.
 
 ## Known limits
 
-- Batch defaults: read_page_size=200.
-- API coverage includes 7 stream-backed endpoint group(s).
+- Fixture-only parity is not live certification. `certification.json` records a default stream but no live-safe write pairing or direct-read candidate; no provider credentials or live Hubplanner calls were used.
+- `create_webhook_subscription` intentionally does not expose the optional `authorization_token` request field because command records are persisted for plan/preview evidence; accepting a secret-bearing webhook token requires a future non-persisted secret input path.
+- The 10 outbound webhook event names in `webhooks.md` (`project.update`, `resource.update`, `booking.create`, `timeEntry.create`, `timeEntry.update`, `timeEntry.create.update`, `timeEntry.delete`, `booking.update`, `booking.delete`, and `booking.delete.multiple`) are ledgered as blocked because the current connector contract cannot receive provider callbacks as CDC. The documented shared dependency is the CDC/changefeed runtime foundation tracked by #2986 and #2988.
+- Relationship/helper endpoints present in the Markdown prose but outside the fixed r2 audit allocation (for example project/resource group membership helpers and project/resource tag attachment helpers) are not added as generic writes; adding them requires a future official-count refresh and typed action evidence.

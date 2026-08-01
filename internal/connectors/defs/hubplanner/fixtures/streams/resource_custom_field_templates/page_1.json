@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resource/customField/template",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "resource_custom_field_templates_fixture_1",
+        "name": "Hubplanner resource custom field templates fixture",
+        "status": "ACTIVE",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "label": "Hubplanner resource custom field templates label",
+        "type": "TEXT"
+      }
+    ]
+  }
+}

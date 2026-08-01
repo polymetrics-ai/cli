@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resourcegroup",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "resource_groups_fixture_1",
+        "name": "Hubplanner resource groups fixture",
+        "status": "ACTIVE",
+        "createdDate": "2026-01-01T00:00:00Z"
+      }
+    ]
+  }
+}
