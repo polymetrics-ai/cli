@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "project_tag_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/project-tag/project_tag_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "project_tag_fixture_1"
+    }
+  }
+}

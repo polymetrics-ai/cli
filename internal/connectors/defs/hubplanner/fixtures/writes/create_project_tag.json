@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Project Tag",
+    "color": "#336699"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/project-tag",
+    "body": {
+      "name": "Fixture Project Tag",
+      "color": "#336699"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_project_tag_fixture"
+    }
+  }
+}

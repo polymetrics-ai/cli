@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Booking Category",
+    "status": "ACTIVE"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/categories",
+    "body": {
+      "name": "Fixture Booking Category",
+      "status": "ACTIVE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_booking_category_fixture"
+    }
+  }
+}

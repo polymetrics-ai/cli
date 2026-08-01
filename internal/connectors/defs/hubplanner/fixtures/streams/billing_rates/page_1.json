@@ -1,8 +1,11 @@
 {
   "request": {
     "method": "GET",
-    "path": "/billingrate",
-    "query": { "page": "0", "limit": "200" }
+    "path": "/billingRate",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
   },
   "response": {
     "status": 200,

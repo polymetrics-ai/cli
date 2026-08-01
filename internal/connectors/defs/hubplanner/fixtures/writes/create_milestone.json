@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "Fixture Milestone",
+    "date": "2026-01-10"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/milestone",
+    "body": {
+      "name": "Fixture Milestone",
+      "date": "2026-01-10"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_milestone_fixture"
+    }
+  }
+}
