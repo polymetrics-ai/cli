@@ -629,7 +629,8 @@
         "type": "object",
         "properties": {
           "meetingId": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$"
           },
           "startTime": {
             "type": "string",
@@ -688,7 +689,8 @@
         "type": "object",
         "properties": {
           "meetingId": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$"
           },
           "organizerEmail": {
             "type": "string",
@@ -1133,7 +1135,8 @@
         "type": "object",
         "properties": {
           "integrationId": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$"
           },
           "clientRequestId": {
             "type": "string"
@@ -1600,7 +1603,8 @@
         "type": "object",
         "properties": {
           "taskId": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$"
           },
           "userId": {
             "type": "string",

@@ -518,7 +518,6 @@ func TestGongRequiredQueryCommandsRejectMissingOrInvalidFlagsBeforeHTTP(t *testi
 		{name: "permissions profile-users missing profile", path: []string{"permissions", "profile-users", "list"}, want: "--profileId is required"},
 		{name: "crm entity schema missing integration", path: []string{"crm", "entity-schema", "get"}, want: "--integrationId is required"},
 		{name: "crm entity schema missing object type", path: []string{"crm", "entity-schema", "get"}, flags: map[string][]string{"integrationId": {"123"}}, want: "--objectType is required"},
-		{name: "crm entities missing crm ids", path: []string{"crm", "entities", "get"}, flags: map[string][]string{"integrationId": {"123"}, "objectType": {"ACCOUNT"}}, want: "--objectsCrmIds is required"},
 		{name: "logs missing log type", path: []string{"logs", "list"}, want: "--logType is required"},
 		{name: "logs missing from", path: []string{"logs", "list"}, flags: map[string][]string{"logType": {"AccessLog"}}, want: "--fromDateTime is required"},
 		{name: "entities get brief missing workspace", path: []string{"entities", "get-brief"}, want: "--workspaceId is required"},
@@ -566,6 +565,38 @@ func TestGongRequiredQueryCommandsRejectMissingOrInvalidFlagsBeforeHTTP(t *testi
 	}
 }
 
+func TestGongCrmEntitiesGetIsBlockedUntilRepeatedQuerySupport(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+	hits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits++
+		_ = json.NewEncoder(w).Encode(map[string]any{})
+	}))
+	defer server.Close()
+
+	_, err := Run(context.Background(), connector, Request{
+		Path: []string{"crm", "entities", "get"},
+		Flags: map[string][]string{
+			"integrationId": {"123"},
+			"objectType":    {"ACCOUNT"},
+			"objectsCrmIds": {"account-1", "account-2"},
+		},
+		Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "2"}),
+		Limit:  1,
+	}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("Run error = nil, want blocked repeated-query dependency")
+	}
+	for _, want := range []string{"crm entities get", "FORM/explode", "objectsCrmIds"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("Run error = %q, want to contain %q", err.Error(), want)
+		}
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+}
+
 func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 
@@ -606,14 +637,6 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 			flags:      map[string][]string{"integrationId": {"123"}, "objectType": {"ACCOUNT"}},
 			wantPath:   "/v2/crm/entity-schema",
 			wantQuery:  map[string]string{"integrationId": "123", "objectType": "ACCOUNT"},
-			directRead: true,
-		},
-		{
-			name:       "crm entities required query",
-			path:       []string{"crm", "entities", "get"},
-			flags:      map[string][]string{"integrationId": {"123"}, "objectType": {"ACCOUNT"}, "objectsCrmIds": {"account-1"}},
-			wantPath:   "/v2/crm/entities",
-			wantQuery:  map[string]string{"integrationId": "123", "objectType": "ACCOUNT", "objectsCrmIds": "account-1"},
 			directRead: true,
 		},
 		{
@@ -802,6 +825,141 @@ func TestGongUploadTargetAssignmentsSendsWorkspaceQueryAndMultipartFile(t *testi
 	}
 	if result.RecordsWritten != 1 {
 		t.Fatalf("RecordsWritten = %d, want 1", result.RecordsWritten)
+	}
+}
+
+func TestGongIntegerWriteParametersValidateBeforeInterpolation(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name          string
+		action        string
+		invalidRecord connectors.Record
+		validRecord   connectors.Record
+		wantMethod    string
+		wantPath      string
+		wantQuery     map[string]string
+	}{
+		{
+			name:   "update meeting meetingId",
+			action: "update_meeting",
+			invalidRecord: connectors.Record{
+				"meetingId":      "meeting-987",
+				"startTime":      "2026-01-01T00:00:00Z",
+				"endTime":        "2026-01-01T01:00:00Z",
+				"organizerEmail": "organizer.fixture@example.com",
+				"invitees":       []any{},
+			},
+			validRecord: connectors.Record{
+				"meetingId":      "987",
+				"startTime":      "2026-01-01T00:00:00Z",
+				"endTime":        "2026-01-01T01:00:00Z",
+				"organizerEmail": "organizer.fixture@example.com",
+				"invitees":       []any{},
+			},
+			wantMethod: http.MethodPut,
+			wantPath:   "/v2/meetings/987",
+		},
+		{
+			name:          "delete meeting meetingId",
+			action:        "delete_meeting",
+			invalidRecord: connectors.Record{"meetingId": "meeting-456"},
+			validRecord:   connectors.Record{"meetingId": "456"},
+			wantMethod:    http.MethodDelete,
+			wantPath:      "/v2/meetings/456",
+		},
+		{
+			name:          "delete crm integration integrationId",
+			action:        "delete_crm_integration",
+			invalidRecord: connectors.Record{"integrationId": "crm-789", "clientRequestId": "request-1"},
+			validRecord:   connectors.Record{"integrationId": "789", "clientRequestId": "request-1"},
+			wantMethod:    http.MethodDelete,
+			wantPath:      "/v2/crm/integrations",
+			wantQuery:     map[string]string{"integrationId": "789", "clientRequestId": "request-1"},
+		},
+		{
+			name:          "update task taskId",
+			action:        "update_task",
+			invalidRecord: connectors.Record{"taskId": "task-321", "userId": "user-1"},
+			validRecord:   connectors.Record{"taskId": "321", "userId": "user-1"},
+			wantMethod:    http.MethodPatch,
+			wantPath:      "/v2/tasks/321",
+		},
+		{
+			name:   "upload crm entity schema integrationId",
+			action: "upload_crm_entity_schema",
+			invalidRecord: connectors.Record{
+				"integrationId":   "integration-654",
+				"objectType":      "ACCOUNT",
+				"selected_fields": []any{map[string]any{"name": "AccountName"}},
+			},
+			validRecord: connectors.Record{
+				"integrationId":   "654",
+				"objectType":      "ACCOUNT",
+				"selected_fields": []any{map[string]any{"name": "AccountName"}},
+			},
+			wantMethod: http.MethodPost,
+			wantPath:   "/v2/crm/entity-schema",
+			wantQuery:  map[string]string{"integrationId": "654", "objectType": "ACCOUNT"},
+		},
+		{
+			name:          "upload target assignments targetId",
+			action:        "upload_target_assignments",
+			invalidRecord: connectors.Record{"targetId": "target-987", "workspaceId": "123", "assignments_file_path": "target_assignments.csv"},
+		},
+		{
+			name:          "upload target assignments workspaceId",
+			action:        "upload_target_assignments",
+			invalidRecord: connectors.Record{"targetId": "987", "workspaceId": "workspace-123", "assignments_file_path": "target_assignments.csv"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name+" rejects invalid", func(t *testing.T) {
+			hits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				hits++
+				_ = json.NewEncoder(w).Encode(map[string]any{"ok": true})
+			}))
+			defer server.Close()
+
+			_, err := connector.Write(context.Background(), connectors.WriteRequest{Action: tt.action, Config: gongCommandRunnerTestConfig(server.URL, nil)}, []connectors.Record{tt.invalidRecord})
+			if err == nil || !strings.Contains(err.Error(), "pattern") {
+				t.Fatalf("Write error = %v, want record_schema pattern error", err)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
+
+		if tt.validRecord == nil {
+			continue
+		}
+		t.Run(tt.name+" interpolates valid", func(t *testing.T) {
+			hits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				hits++
+				if r.Method != tt.wantMethod || r.URL.Path != tt.wantPath {
+					t.Fatalf("request = %s %s, want %s %s", r.Method, r.URL.Path, tt.wantMethod, tt.wantPath)
+				}
+				query := r.URL.Query()
+				for key, want := range tt.wantQuery {
+					if got := query.Get(key); got != want {
+						t.Fatalf("query[%s] = %q, want %q (full query %v)", key, got, want, query)
+					}
+				}
+				_ = json.NewEncoder(w).Encode(map[string]any{"ok": true})
+			}))
+			defer server.Close()
+
+			result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: tt.action, Config: gongCommandRunnerTestConfig(server.URL, nil)}, []connectors.Record{tt.validRecord})
+			if err != nil {
+				t.Fatalf("Write: %v", err)
+			}
+			if result.RecordsWritten != 1 || hits != 1 {
+				t.Fatalf("RecordsWritten/hits = %d/%d, want 1/1", result.RecordsWritten, hits)
+			}
+		})
 	}
 }
 

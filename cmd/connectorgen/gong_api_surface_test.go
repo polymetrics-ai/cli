@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -34,6 +35,7 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	totalByMethod := map[string]int{}
 	coveredByMethod := map[string]int{}
 	operationByMethod := map[string]int{}
+	operationByKey := map[string]*gongSurfaceOperation{}
 	models := map[string]int{}
 	covered, excluded, operations := 0, 0, 0
 	seen := map[string]bool{}
@@ -55,6 +57,7 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		if ep.Operation != nil {
 			operations++
 			operationByMethod[ep.Method]++
+			operationByKey[key] = ep.Operation
 			models[ep.Operation.Model]++
 			if !ep.Operation.BlockedByDefault {
 				t.Fatalf("endpoint %d operation is not blocked by default: %+v", i, ep.Operation)
@@ -71,11 +74,14 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	if len(surface.Endpoints) != 69 {
 		t.Fatalf("endpoints = %d, want 69", len(surface.Endpoints))
 	}
-	if covered != 69 {
-		t.Fatalf("covered endpoints = %d, want 69", covered)
+	if covered != 68 {
+		t.Fatalf("covered endpoints = %d, want 68", covered)
 	}
-	if operations != 0 {
-		t.Fatalf("operation endpoints = %d, want 0", operations)
+	if covered+operations != 69 {
+		t.Fatalf("classified endpoints = %d, want 69", covered+operations)
+	}
+	if operations != 1 {
+		t.Fatalf("operation endpoints = %d, want 1", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -89,13 +95,20 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	})
 	assertGongStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE": 3,
-		"GET":    29,
+		"GET":    28,
 		"PATCH":  1,
 		"POST":   28,
 		"PUT":    8,
 	})
-	assertGongStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{})
-	assertGongStringIntMap(t, "models", models, map[string]int{})
+	assertGongStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{"GET": 1})
+	assertGongStringIntMap(t, "models", models, map[string]int{"direct_read": 1})
+	crmEntitiesOp, ok := operationByKey["GET /v2/crm/entities"]
+	if !ok {
+		t.Fatalf("GET /v2/crm/entities should be an explicit blocked operation")
+	}
+	if !strings.Contains(crmEntitiesOp.Reason, "FORM/explode") || !strings.Contains(crmEntitiesOp.Reason, "objectsCrmIds") {
+		t.Fatalf("GET /v2/crm/entities reason = %q, want FORM/explode objectsCrmIds dependency", crmEntitiesOp.Reason)
+	}
 
 	for _, key := range []string{
 		"POST /v2/calls/extensive",

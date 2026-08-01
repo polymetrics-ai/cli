@@ -603,7 +603,7 @@
       "path": "crm entities get",
       "summary": "Get CRM objects (/v2/crm/entities)",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "flags": [
         {
           "name": "integrationId",
@@ -626,23 +626,13 @@
         },
         {
           "name": "objectsCrmIds",
-          "type": "string",
-          "summary": "<b>Request Body:</b> The requested objects crm ids (should be sent in the request body)",
-          "maps_to": "query.objectsCrmIds",
-          "allow_empty": false
+          "type": "string_array",
+          "summary": "Required CRM object IDs; Gong OpenAPI models objectsCrmIds as FORM/explode repeated query values.",
+          "maps_to": "query.objectsCrmIds"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v2/crm/entities"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
-      "examples": [
-        "pm gong crm entities get --integrationId 123 --objectType ACCOUNT --objectsCrmIds account-1 --json --max-bytes 1048576"
-      ],
+      "risk": "blocked until shared direct-read query serialization supports OpenAPI FORM/explode repeated query values for the required objectsCrmIds array",
+      "notes": "Do not dispatch this command through the scalar query runner; a valid request must encode objectsCrmIds as repeated query parameters.",
       "constraints": [
         {
           "kind": "required",

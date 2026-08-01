@@ -2757,7 +2757,7 @@
       "id": "gong.get_crm_objects",
       "kind": "rest_read",
       "summary": "Get CRM objects (/v2/crm/entities)",
-      "description": "Official Gong OpenAPI read/query operation `getCrmObjects` covered by bounded direct-read command `crm entities get`.",
+      "description": "Official Gong OpenAPI read/query operation `getCrmObjects`; explicit blocked direct-read disposition until shared OpenAPI FORM/explode repeated query serialization can model the required `objectsCrmIds` array.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
       "approval": "none: read-only bounded output with connector-owned redaction policy",

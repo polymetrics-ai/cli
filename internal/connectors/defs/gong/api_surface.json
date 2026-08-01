@@ -295,8 +295,13 @@
     {
       "method": "GET",
       "path": "/v2/crm/entities",
-      "covered_by": {
-        "direct_read": "crm entities get"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "requires shared OpenAPI FORM/explode repeated query serialization for the required objectsCrmIds array before it can be executable",
+        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version="
       }
     },
     {
