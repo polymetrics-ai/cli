@@ -1,0 +1,17 @@
+{
+  "record": {
+    "callAccessList": [
+      {
+        "callId": "call_fixture_1",
+        "userIds": ["user_fixture_1"]
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/calls/users-access",
+    "body": {
+      "callAccessList": "[map[callId:call_fixture_1 userIds:[user_fixture_1]]]"
+    }
+  }
+}

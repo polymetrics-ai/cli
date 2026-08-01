@@ -7,7 +7,7 @@ description: Gong connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
+Reads Gong users, calls, scorecards, targets, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, target assignment CSV uploads, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
 
 ## Icon
 
@@ -87,11 +87,11 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - required fields: profileId
   - risk: high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation
 - update_meeting:
-  - endpoint: PUT /meetings/{meetingId}
+  - endpoint: PUT /meetings/{{ record.meetingId }}
   - required fields: meetingId, endTime, invitees, organizerEmail, startTime
   - risk: medium: mutates Gong API state; requires reverse ETL approval
 - delete_meeting:
-  - endpoint: DELETE /meetings/{meetingId}
+  - endpoint: DELETE /meetings/{{ record.meetingId }}
   - required fields: meetingId
   - risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
 - content_viewed:
@@ -116,9 +116,11 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
 - add_calls_users_access:
   - endpoint: PUT /calls/users-access
+  - required fields: callAccessList
   - risk: medium: mutates Gong API state; requires reverse ETL approval
 - delete_calls_users_access:
   - endpoint: DELETE /calls/users-access
+  - required fields: callAccessList
   - risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
 - create_meeting:
   - endpoint: POST /meetings
@@ -161,26 +163,30 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - required fields: emailAddress
   - risk: critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation
 - update_task:
-  - endpoint: PATCH /tasks/{taskId}
+  - endpoint: PATCH /tasks/{{ record.taskId }}
   - required fields: taskId, userId
   - risk: medium: mutates Gong API state; requires reverse ETL approval
 - upload_call_media:
-  - endpoint: PUT /v2/calls/{{ record.id }}/media
+  - endpoint: PUT /calls/{{ record.id }}/media
   - required fields: id, media_file_path
   - risk: high: uploads call media from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval
 - upload_crm_entities:
-  - endpoint: POST /v2/crm/entities
+  - endpoint: POST /crm/entities
   - required fields: data_file_path
   - risk: high: uploads CRM data from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval
 - upload_crm_entity_schema:
-  - endpoint: POST /v2/crm/entity-schema
-  - required fields: selected_fields
+  - endpoint: POST /crm/entity-schema?integrationId={{ record.integrationId }}&objectType={{ record.objectType }}
+  - required fields: integrationId, objectType, selected_fields
   - risk: high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval
+- upload_target_assignments:
+  - endpoint: POST /targets/{{ record.targetId }}/assignments?workspaceId={{ record.workspaceId }}
+  - required fields: targetId, workspaceId, assignments_file_path
+  - risk: high: uploads target assignment CSV data from a bounded project-local file path to Gong; file path/content are redacted in plans and require reverse ETL approval
 
 ## Security
 
 - read risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted
-- write risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure
+- write risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, targets, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure
 - approval: reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind a SHA-256 payload identity that is snapshot-verified before network send
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
@@ -236,7 +242,7 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - crm integrations register - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=register_crm_integration]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --name, --ownerEmail
   - crm integrations delete - removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=delete_crm_integration]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --clientRequestId, --integrationId
   - crm upload-entities - Upload CRM objects (/v2/crm/entities) [intent=reverse_etl availability=implemented write=upload_crm_entities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads CRM data from a bounded project-local file path; file path/content are redacted in plans; notes: Uses typed multipart write support; no generic upload command is exposed.; flags: --data-file-path
-  - crm upload-entity-schema - Upload Object Schema (/v2/crm/entity-schema) [intent=reverse_etl availability=partial write=upload_crm_entity_schema]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed; notes: Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.
+  - crm upload-entity-schema - Upload Object Schema (/v2/crm/entity-schema) [intent=reverse_etl availability=partial write=upload_crm_entity_schema]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed; notes: Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.; flags: --integration-id, --object-type
 - Meetings
   - meetings update - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=update_meeting]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --endTime, --invitees, --meetingId, --organizerEmail, --startTime
   - meetings delete - removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=delete_meeting]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --meetingId
@@ -287,6 +293,9 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - call-outcomes list - List Gong call outcomes as ETL records. [intent=etl availability=implemented stream=call_outcomes]
 - Integration Settings
   - integration-settings update - administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=integration_settings]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --integrationTypeSettings
+- Targets
+  - targets list - List target definitions (/v2/targets) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --workspaceId
+  - targets upload-assignments - Upload target assignments from a bounded CSV file (/v2/targets/{targetId}/assignments) [intent=reverse_etl availability=implemented write=upload_target_assignments]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive confirmation required; risk: high: uploads target assignment CSV data from a bounded project-local file path; file path/content are redacted in plans; notes: Uses typed multipart write support with a declared CSV file part; no generic upload command is exposed. Gong defaults validateOnly to false; optional validate-only query mode needs shared optional write-query support before it can be exposed without making the parameter mandatory.; flags: --target-id, --workspace-id, --assignments-file-path
 - Help topics:
   - gong-auth - Use Gong access key and access key secret via credentials; never pass secrets in command text.
   - gong-writes - Gong mutations are typed reverse-ETL actions with plan, preview, approval, execute gates.
