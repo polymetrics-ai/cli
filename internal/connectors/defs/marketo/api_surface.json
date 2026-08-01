@@ -1,60 +1,2441 @@
 {
-  "api": "Marketo REST API (tenant-specific identity host, https://developers.marketo.com/rest-api/)",
+  "api": "Official Adobe Marketo Engage REST Swagger 2.0 assets (asset, identity, mapi, user management)",
   "docs": "https://developers.marketo.com/rest-api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave1 migration: the 3 legacy-parity read streams only (leads, programs, activities); Marketo's write/lead-database-bulk-import surface is out of scope for this read-only migration, matching legacy's own read-only Write stub",
+  "reviewed_at": "2026-08-01",
+  "operation_ledger_version": 1,
+  "scope": "Complete official Swagger operation ledger: 327 operations. Post-change mapping covers 117 fixture-backed ETL streams, 28 bounded redacted direct reads, 158 typed reverse-ETL writes, and 24 blocked/not-applicable operation rows (10 InputStream binary downloads, 2 identity token issuance rows, 11 write-query operations, and 1 dynamic custom-field body operation).",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/rest/v1/leads.json",
+      "path": "/rest/asset/v1/channel/byName.json",
       "covered_by": {
-        "stream": "leads"
+        "direct_read": "direct get-channel-by-name"
       }
     },
     {
       "method": "GET",
-      "path": "/rest/v1/programs.json",
+      "path": "/rest/asset/v1/channels.json",
       "covered_by": {
-        "stream": "programs"
+        "stream": "get_all_channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-email-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}.json",
+      "covered_by": {
+        "stream": "get_email_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}.json",
+      "covered_by": {
+        "write": "update_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/approveDraft.json",
+      "covered_by": {
+        "write": "approve_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/content.json",
+      "covered_by": {
+        "direct_read": "direct get-email-content-by-id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content.json",
+      "covered_by": {
+        "write": "update_email_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content/rearrange.json",
+      "covered_by": {
+        "write": "rearrange_modules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content/{htmlId}.json",
+      "covered_by": {
+        "write": "update_email_component_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content/{moduleId}/add.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=addModuleUsingPOST; summary=Add Email Module; blocked write action=add_module"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content/{moduleId}/delete.json",
+      "covered_by": {
+        "write": "delete_module"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content/{moduleId}/duplicate.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=duplicateModuleUsingPOST; summary=Duplicate Email Module; blocked write action=duplicate_module"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/content/{moduleId}/rename.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=renameUsingPOST; summary=Rename Email Module; blocked write action=rename"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_draft"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/dynamicContent/{contentId}.json",
+      "covered_by": {
+        "direct_read": "direct get-email-dynamic-content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/dynamicContent/{contentId}.json",
+      "covered_by": {
+        "write": "update_email_dynamic_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/sendSample.json",
+      "covered_by": {
+        "write": "send_sample_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/unapprove.json",
+      "covered_by": {
+        "write": "unapprove_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/variable/{name}.json",
+      "covered_by": {
+        "write": "update_variable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/variables.json",
+      "covered_by": {
+        "stream": "get_email_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/ccFields.json",
+      "covered_by": {
+        "stream": "get_email_ccfields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplate/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-template-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplate/{id}.json",
+      "covered_by": {
+        "stream": "get_template_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}.json",
+      "covered_by": {
+        "write": "update_email_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}/approveDraft.json",
+      "covered_by": {
+        "write": "approve_draft_using_post_1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplate/{id}/content",
+      "covered_by": {
+        "direct_read": "direct get-template-content-by-id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}/content.json",
+      "covered_by": {
+        "write": "update_email_template_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_draft_using_post_1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplate/{id}/unapprove.json",
+      "covered_by": {
+        "write": "unapprove_draft_using_post_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplates.json",
+      "covered_by": {
+        "stream": "get_email_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emailTemplates.json",
+      "covered_by": {
+        "write": "create_email_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplates/{id}/usedBy.json",
+      "covered_by": {
+        "stream": "get_email_template_used_by"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emails.json",
+      "covered_by": {
+        "stream": "get_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/emails.json",
+      "covered_by": {
+        "write": "create_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/fullContent.json",
+      "covered_by": {
+        "direct_read": "direct get-email-full-content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/email/{id}/fullContent.json",
+      "covered_by": {
+        "write": "create_email_full_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/file/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-file-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/file/{id}.json",
+      "covered_by": {
+        "stream": "get_file_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/file/{id}/content.json",
+      "covered_by": {
+        "write": "update_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/files.json",
+      "covered_by": {
+        "stream": "get_files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/files.json",
+      "covered_by": {
+        "write": "create_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/folder/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-folder-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/folder/{id}.json",
+      "covered_by": {
+        "stream": "get_folder_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/folder/{id}.json",
+      "covered_by": {
+        "write": "update_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/folder/{id}/content.json",
+      "covered_by": {
+        "stream": "get_folder_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/folder/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/folder/{id}/tokens.json",
+      "covered_by": {
+        "stream": "get_tokens_by_folder_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/folder/{id}/tokens.json",
+      "covered_by": {
+        "write": "add_token_tofolder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/folder/{id}/tokens/delete.json",
+      "covered_by": {
+        "write": "delete_token_by_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/folders.json",
+      "covered_by": {
+        "stream": "get_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/folders.json",
+      "covered_by": {
+        "write": "create_folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-lp-form-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/fields.json",
+      "covered_by": {
+        "stream": "get_all_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/programMemberFields.json",
+      "covered_by": {
+        "stream": "get_all_program_member_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{formId}/field/{fieldId}/visibility.json",
+      "covered_by": {
+        "write": "add_form_field_visibility_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/{id}.json",
+      "covered_by": {
+        "stream": "get_lp_form_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}.json",
+      "covered_by": {
+        "write": "update_forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/approveDraft.json",
+      "covered_by": {
+        "write": "approve_from"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_lp_forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_form_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_form_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/field/{fieldId}.json",
+      "covered_by": {
+        "write": "update_form_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/field/{fieldId}/delete.json",
+      "covered_by": {
+        "write": "delete_form_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/fieldSet.json",
+      "covered_by": {
+        "write": "add_field_set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/fieldSet/{fieldSetId}/field/{fieldId}/delete.json",
+      "covered_by": {
+        "write": "delete_form_field_from_field_set"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/{id}/fields.json",
+      "covered_by": {
+        "stream": "get_form_field_by_form_vid"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/fields.json",
+      "covered_by": {
+        "write": "add_field_to_aform"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/reArrange.json",
+      "covered_by": {
+        "write": "update_field_positions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/richText.json",
+      "covered_by": {
+        "write": "add_rich_text_field"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/submitButton.json",
+      "covered_by": {
+        "write": "update_form_submit_button"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/{id}/thankYouPage.json",
+      "covered_by": {
+        "stream": "get_thank_you_page_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/form/{id}/thankYouPage.json",
+      "covered_by": {
+        "write": "update_thank_you_page_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/forms.json",
+      "covered_by": {
+        "stream": "get_browse_forms2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/forms.json",
+      "covered_by": {
+        "write": "create_lp_forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/{id}/usedBy.json",
+      "covered_by": {
+        "stream": "get_form_used_by"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-landing-page-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}.json",
+      "covered_by": {
+        "stream": "get_landing_page_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}.json",
+      "covered_by": {
+        "write": "update_landing_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/approveDraft.json",
+      "covered_by": {
+        "write": "approve_landing_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_landing_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/content.json",
+      "covered_by": {
+        "direct_read": "direct get-landing-page-content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/content.json",
+      "covered_by": {
+        "write": "add_landing_page_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/content/{contentId}.json",
+      "covered_by": {
+        "write": "update_landing_page_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/content/{contentId}/delete.json",
+      "covered_by": {
+        "write": "remove_landing_page_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_landing_page_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_landing_page_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json",
+      "covered_by": {
+        "direct_read": "direct get-landing-page-dynamic-contents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json",
+      "covered_by": {
+        "write": "update_landing_page_dynamic_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/unapprove.json",
+      "covered_by": {
+        "write": "unapprove_landing_page_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPage/{id}/variable/{variableId}.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=updateLandingPageVariableUsingPOST; summary=Update Landing Page Variable; blocked write action=update_landing_page_variable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/variables.json",
+      "covered_by": {
+        "stream": "get_variables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageTemplate/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-landing-page-template-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}.json",
+      "covered_by": {
+        "stream": "get_landing_page_template_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}.json",
+      "covered_by": {
+        "write": "update_lp_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/approveDraft.json",
+      "covered_by": {
+        "write": "approve_landing_page_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_lp_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/content.json",
+      "covered_by": {
+        "direct_read": "direct get-landing-page-template-content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/content.json",
+      "covered_by": {
+        "write": "update_landing_page_template_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_lp_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_draft_using_post_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/unapprove.json",
+      "covered_by": {
+        "write": "unapprove_landing_page_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageTemplates.json",
+      "covered_by": {
+        "stream": "get_landing_page_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPageTemplates.json",
+      "covered_by": {
+        "write": "create_lp_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPages.json",
+      "covered_by": {
+        "stream": "get_browse_landing_pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/landingPages.json",
+      "covered_by": {
+        "write": "create_landing_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/fullContent.json",
+      "covered_by": {
+        "direct_read": "direct get-landing-page-full-content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/redirectRules.json",
+      "covered_by": {
+        "stream": "get_landing_page_redirect_rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/redirectRules.json",
+      "covered_by": {
+        "write": "create_landing_page_redirect_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/redirectRule/{id}.json",
+      "covered_by": {
+        "stream": "get_landing_page_redirect_rule_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/redirectRule/{id}.json",
+      "covered_by": {
+        "write": "update_landing_page_redirect_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/redirectRule/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_landing_page_redirect_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageDomains.json",
+      "covered_by": {
+        "stream": "get_landing_page_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/program/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-program-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/program/byTag.json",
+      "covered_by": {
+        "stream": "get_program_list_by_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/program/{id}.json",
+      "covered_by": {
+        "stream": "get_program_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/program/{id}.json",
+      "covered_by": {
+        "write": "update_program"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/program/{programId}/smartList.json",
+      "covered_by": {
+        "stream": "get_smart_list_by_program_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/program/{id}/approve.json",
+      "covered_by": {
+        "write": "approve_program"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/program/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_program"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/program/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_program"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/program/{id}/unapprove.json",
+      "covered_by": {
+        "write": "unapprove_program"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/programs.json",
+      "covered_by": {
+        "stream": "get_browse_programs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/programs.json",
+      "covered_by": {
+        "write": "create_program"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/segmentation.json",
+      "covered_by": {
+        "stream": "get_segmentation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/segmentation/{id}/segments.json",
+      "covered_by": {
+        "stream": "get_segments_for_segmentation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartCampaign/{id}.json",
+      "covered_by": {
+        "stream": "get_smart_campaign_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartCampaign/{id}.json",
+      "covered_by": {
+        "write": "update_smart_campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartCampaign/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-smart-campaign-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartCampaign/{id}/smartList.json",
+      "covered_by": {
+        "stream": "get_smart_list_by_smart_campaign_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartCampaigns.json",
+      "covered_by": {
+        "stream": "get_all_smart_campaigns_get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartCampaigns.json",
+      "covered_by": {
+        "write": "create_smart_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartCampaign/{id}/activate.json",
+      "covered_by": {
+        "write": "activate_smart_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartCampaign/{id}/deactivate.json",
+      "covered_by": {
+        "write": "deactivate_smart_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartCampaign/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_smart_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartCampaign/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_smart_campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/snippet/{id}.json",
+      "covered_by": {
+        "stream": "get_snippet_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}.json",
+      "covered_by": {
+        "write": "update_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/approveDraft.json",
+      "covered_by": {
+        "write": "approve_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/snippet/{id}/content.json",
+      "covered_by": {
+        "stream": "get_snippet_content_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/content.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=updateContentUsingPOST_1; summary=Update Snippet Content; blocked write action=update_content_using_post_1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/snippet/{id}/dynamicContent.json",
+      "covered_by": {
+        "direct_read": "direct get-dynamic-content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/dynamicContent/{segmentId}.json",
+      "covered_by": {
+        "write": "update_dynamic_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippet/{id}/unapprove.json",
+      "covered_by": {
+        "write": "unapprove_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/snippets.json",
+      "covered_by": {
+        "stream": "get_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/snippets.json",
+      "covered_by": {
+        "write": "create_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/tagType/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-tag-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartList/{id}.json",
+      "covered_by": {
+        "stream": "get_smart_list_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartList/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-smart-list-by-name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartList/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_smart_list_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartLists.json",
+      "covered_by": {
+        "stream": "get_smart_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/smartList/{id}/clone.json",
+      "covered_by": {
+        "write": "clone_smart_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/staticList/{id}.json",
+      "covered_by": {
+        "stream": "get_static_list_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/staticList/{id}.json",
+      "covered_by": {
+        "write": "update_static_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/staticLists.json",
+      "covered_by": {
+        "stream": "get_static_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/staticLists.json",
+      "covered_by": {
+        "write": "create_static_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/staticList/byName.json",
+      "covered_by": {
+        "direct_read": "direct get-static-list-by-name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/asset/v1/staticList/{id}/delete.json",
+      "covered_by": {
+        "write": "delete_static_list_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/tagTypes.json",
+      "covered_by": {
+        "stream": "get_tag_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/identity/oauth/token",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "OAuth token issuance is an authentication workflow, not a data read or reverse-ETL operation; this connector accepts caller-supplied access_token and never requests client secret values",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-identity.json",
+        "notes": "official_lane=excluded_not_applicable; operation_id=identityUsingGET; summary=Identity; source=Marketo identity REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/identity/oauth/token",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "OAuth token issuance is an authentication workflow, not a data read or reverse-ETL operation; this connector accepts caller-supplied access_token and never requests client secret values",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-identity.json",
+        "notes": "official_lane=excluded_not_applicable; operation_id=identityUsingPOST; summary=Identity; source=Marketo identity REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/activities/export.json",
+      "covered_by": {
+        "stream": "get_export_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/activities/export/create.json",
+      "covered_by": {
+        "write": "create_export_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/activities/export/{exportId}/cancel.json",
+      "covered_by": {
+        "write": "cancel_export_activities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/activities/export/{exportId}/enqueue.json",
+      "covered_by": {
+        "write": "enqueue_export_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/activities/export/{exportId}/file.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getExportActivitiesFileUsingGET; summary=Get Export Activity File; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/activities/export/{exportId}/status.json",
+      "covered_by": {
+        "stream": "get_export_activities_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/customobjects/{apiName}/import.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=importCustomObjectUsingPOST; summary=Import Custom Objects; blocked write action=import_custom_object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/customobjects/{apiName}/import/{batchId}/failures.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getImportCustomObjectFailuresUsingGET; summary=Get Import Custom Object Failures; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/customobjects/{apiName}/import/{batchId}/status.json",
+      "covered_by": {
+        "stream": "get_import_custom_object_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/customobjects/{apiName}/import/{batchId}/warnings.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getImportCustomObjectWarningsUsingGET; summary=Get Import Custom Object Warnings; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/program/{programId}/members/import.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=importProgramMemberUsingPOST; summary=Import Program Members; blocked write action=import_program_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/program/members/import/{batchId}/failures.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getImportProgramMemberFailuresUsingGET; summary=Get Import Program Member Failures; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/program/members/import/{batchId}/status.json",
+      "covered_by": {
+        "stream": "get_import_program_member_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/program/members/import/{batchId}/warnings.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getImportProgramMemberWarningsUsingGET; summary=Get Import Program Member Warnings; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/leads.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=importLeadUsingPOST; summary=Import Leads; blocked write action=import_lead"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/leads/batch/{batchId}.json",
+      "covered_by": {
+        "stream": "get_import_lead_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/leads/batch/{batchId}/failures.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getImportLeadFailuresUsingGET; summary=Get Import Lead Failures; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/leads/batch/{batchId}/warnings.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getImportLeadWarningsUsingGET; summary=Get Import Lead Warnings; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/leads/export.json",
+      "covered_by": {
+        "stream": "get_export_leads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/leads/export/create.json",
+      "covered_by": {
+        "write": "create_export_leads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/leads/export/{exportId}/cancel.json",
+      "covered_by": {
+        "write": "cancel_export_leads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/leads/export/{exportId}/enqueue.json",
+      "covered_by": {
+        "write": "enqueue_export_leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/leads/export/{exportId}/file.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getExportLeadsFileUsingGET; summary=Get Export Lead File; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/leads/export/{exportId}/status.json",
+      "covered_by": {
+        "stream": "get_export_leads_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/customobjects/{apiName}/export.json",
+      "covered_by": {
+        "stream": "get_export_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/customobjects/{apiName}/export/create.json",
+      "covered_by": {
+        "write": "create_export_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/customobjects/{apiName}/export/{exportId}/cancel.json",
+      "covered_by": {
+        "write": "cancel_export_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/customobjects/{apiName}/export/{exportId}/enqueue.json",
+      "covered_by": {
+        "write": "enqueue_export_custom_objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/customobjects/{apiName}/export/{exportId}/file.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getExportCustomObjectsFileUsingGET; summary=Get Export Custom Object File; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/customobjects/{apiName}/export/{exportId}/status.json",
+      "covered_by": {
+        "stream": "get_export_custom_objects_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/program/members/export.json",
+      "covered_by": {
+        "stream": "get_export_program_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/program/members/export/create.json",
+      "covered_by": {
+        "write": "create_export_program_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/program/members/export/{exportId}/cancel.json",
+      "covered_by": {
+        "write": "cancel_export_program_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk/v1/program/members/export/{exportId}/enqueue.json",
+      "covered_by": {
+        "write": "enqueue_export_program_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/program/members/export/{exportId}/file.json",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official response schema is InputStream content; current Marketo executable direct reads are bounded JSON only, and the shared bounded binary/file transfer executor is not available in this connector-local wave",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=binary_file; operation_id=getExportProgramMembersFileUsingGET; summary=Get Export Program Member File; source=Marketo lead database/bulk REST Swagger 2.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk/v1/program/members/export/{exportId}/status.json",
+      "covered_by": {
+        "stream": "get_export_program_members_status"
       }
     },
     {
       "method": "GET",
       "path": "/rest/v1/activities.json",
       "covered_by": {
-        "stream": "activities"
+        "stream": "get_lead_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities/deletedleads.json",
+      "covered_by": {
+        "stream": "get_deleted_leads"
       }
     },
     {
       "method": "POST",
-      "path": "/rest/v1/leads.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "write/upsert surface; legacy is read-only, no write parity to migrate"
+      "path": "/rest/v1/activities/external.json",
+      "covered_by": {
+        "write": "add_custom_activity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type.json",
+      "covered_by": {
+        "write": "create_custom_activity_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}.json",
+      "covered_by": {
+        "write": "update_custom_activity_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}/approve.json",
+      "covered_by": {
+        "write": "approve_custom_activity_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}/attributes/create.json",
+      "covered_by": {
+        "write": "create_custom_activity_type_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}/attributes/delete.json",
+      "covered_by": {
+        "write": "delete_custom_activity_type_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}/attributes/update.json",
+      "covered_by": {
+        "write": "update_custom_activity_type_attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}/delete.json",
+      "covered_by": {
+        "write": "delete_custom_activity_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities/external/type/{apiName}/describe.json",
+      "covered_by": {
+        "stream": "get_describe_custom_activity_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/activities/external/type/{apiName}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_draftof_custom_activity_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities/external/types.json",
+      "covered_by": {
+        "stream": "get_custom_activity_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities/leadchanges.json",
+      "covered_by": {
+        "stream": "get_lead_changes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities/pagingtoken.json",
+      "covered_by": {
+        "stream": "get_activities_paging_token"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/activities/types.json",
+      "covered_by": {
+        "stream": "get_all_activity_types"
       }
     },
     {
       "method": "GET",
       "path": "/rest/v1/campaigns.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "stream": "get_campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/campaigns/{campaignId}.json",
+      "covered_by": {
+        "stream": "get_campaign_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/campaigns/{campaignId}/schedule.json",
+      "covered_by": {
+        "write": "schedule_campaign"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/campaigns/{campaignId}/trigger.json",
+      "covered_by": {
+        "write": "trigger_campaign"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/companies.json",
+      "covered_by": {
+        "stream": "get_companies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/companies.json",
+      "covered_by": {
+        "write": "sync_companies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/companies/delete.json",
+      "covered_by": {
+        "write": "delete_companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/companies/describe.json",
+      "covered_by": {
+        "stream": "get_describe"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects.json",
+      "covered_by": {
+        "stream": "get_list_custom_objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/{customObjectName}.json",
+      "covered_by": {
+        "stream": "get_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/{customObjectName}.json",
+      "covered_by": {
+        "write": "sync_custom_objects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/{customObjectName}/delete.json",
+      "covered_by": {
+        "write": "delete_custom_objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/{customObjectName}/describe.json",
+      "covered_by": {
+        "stream": "get_describe_using_get_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/schema.json",
+      "covered_by": {
+        "stream": "get_list_custom_object_types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema.json",
+      "covered_by": {
+        "write": "sync_custom_object_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema/{apiName}/approve.json",
+      "covered_by": {
+        "write": "approve_custom_object_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema/{apiName}/discardDraft.json",
+      "covered_by": {
+        "write": "discard_custom_object_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema/{apiName}/delete.json",
+      "covered_by": {
+        "write": "delete_custom_object_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/schema/{apiName}/describe.json",
+      "covered_by": {
+        "stream": "get_describe_custom_object_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema/{apiName}/addField.json",
+      "covered_by": {
+        "write": "add_custom_object_type_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema/{apiName}/deleteField.json",
+      "covered_by": {
+        "write": "delete_custom_object_type_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/customobjects/schema/{apiName}/{fieldApiName}/updateField.json",
+      "covered_by": {
+        "write": "update_custom_object_type_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/schema/fieldDataTypes.json",
+      "covered_by": {
+        "stream": "get_custom_object_type_field_data_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/schema/linkableObjects.json",
+      "covered_by": {
+        "stream": "get_custom_object_type_linkable_objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/customobjects/schema/{apiName}/dependentAssets.json",
+      "covered_by": {
+        "stream": "get_custom_object_type_dependent_assets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/lead/{leadId}.json",
+      "covered_by": {
+        "stream": "get_lead_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads.json",
+      "covered_by": {
+        "stream": "get_leads_by_filter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads.json",
+      "covered_by": {
+        "write": "sync_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/delete.json",
+      "covered_by": {
+        "write": "delete_leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/describe.json",
+      "covered_by": {
+        "stream": "get_describe_using_get_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/describe2.json",
+      "covered_by": {
+        "stream": "get_describe_using_get_6"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "direct_read": "direct get-lead-field-by-name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "write": "update_lead_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/schema/fields.json",
+      "covered_by": {
+        "stream": "get_lead_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/schema/fields.json",
+      "covered_by": {
+        "write": "create_lead_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/programs/members/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "direct_read": "direct get-program-member-field-by-name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/programs/members/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "write": "update_program_member_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/programs/members/schema/fields.json",
+      "covered_by": {
+        "stream": "get_program_member_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/programs/members/schema/fields.json",
+      "covered_by": {
+        "write": "create_program_member_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/companies/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "direct_read": "direct get-company-field-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/companies/schema/fields.json",
+      "covered_by": {
+        "stream": "get_company_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "direct_read": "direct get-opportunity-field-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities/schema/fields.json",
+      "covered_by": {
+        "stream": "get_opportunity_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedaccounts/schema/fields/{fieldApiName}.json",
+      "covered_by": {
+        "direct_read": "direct get-named-account-field-by-name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedaccounts/schema/fields.json",
+      "covered_by": {
+        "stream": "get_named_account_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/program/members/describe.json",
+      "covered_by": {
+        "stream": "get_describe_program_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/programs/{programId}/members/status.json",
+      "covered_by": {
+        "write": "sync_program_member_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/programs/{programId}/members.json",
+      "covered_by": {
+        "stream": "get_program_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/programs/{programId}/members.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "official request body requires dynamic custom field names such as input[].{fieldApiName}; the current declarative write contract requires closed schemas and cannot express dynamic body keys without an unsafe arbitrary-body escape hatch",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=syncProgramMemberDataUsingPOST; summary=Sync Program Member Data; blocked shared-runtime dependency: typed dynamic-key write-body support"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/programs/{programId}/members/delete.json",
+      "covered_by": {
+        "write": "delete_program_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/programs/members/describe.json",
+      "covered_by": {
+        "stream": "get_describe_program_member_using_get2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/partitions.json",
+      "covered_by": {
+        "stream": "get_lead_partitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/partitions.json",
+      "covered_by": {
+        "write": "update_partitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/programs/{programId}.json",
+      "covered_by": {
+        "stream": "get_leads_by_program_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/programs/{programId}/status.json",
+      "covered_by": {
+        "write": "change_lead_program_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/push.json",
+      "covered_by": {
+        "write": "push_to_marketo"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/submitForm.json",
+      "covered_by": {
+        "write": "submit_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/{leadId}/associate.json",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=associateLeadUsingPOST; summary=Associate Lead; blocked write action=associate_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/leads/{leadId}/merge.json",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official Marketo merge leads requires losing-lead selectors in URL query parameters. The current declarative write contract has no structured typed query map for writes, and executing a merge with only the winning lead path id is unsafe.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=mergeLeadsUsingPOST; summary=Merge Leads; blocked write action=merge_leads"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/{leadId}/listMembership.json",
+      "covered_by": {
+        "stream": "get_list_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/{leadId}/programMembership.json",
+      "covered_by": {
+        "stream": "get_program_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/{leadId}/smartCampaignMembership.json",
+      "covered_by": {
+        "stream": "get_smart_campaign_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/list/{listId}/leads.json",
+      "covered_by": {
+        "stream": "get_leads_by_list_id"
       }
     },
     {
       "method": "GET",
       "path": "/rest/v1/lists.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "stream": "get_lists"
       }
     },
     {
       "method": "GET",
-      "path": "/identity/oauth/token",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "OAuth token issuance; this connector expects a caller-supplied access_token and does not refresh tokens itself, matching legacy"
+      "path": "/rest/v1/lists/{listId}.json",
+      "covered_by": {
+        "stream": "get_list_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/lists/{listId}/leads.json",
+      "covered_by": {
+        "stream": "get_leads_by_list_id_using_get_1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/lists/{listId}/leads.json",
+      "covered_by": {
+        "write": "add_leads_to_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rest/v1/lists/{listId}/leads.json",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official Marketo operation requires URL query parameters on a write request. The current declarative write contract has no structured typed query map for writes, and interpolating record values into action.path query strings is disallowed for this connector-local safety wave.",
+        "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
+        "notes": "official_lane=reverse_etl_write; operation_id=removeLeadsFromListUsingDELETE; summary=Remove from List; blocked write action=remove_leads_from_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/lists/{listId}/leads/ismember.json",
+      "covered_by": {
+        "direct_read": "direct get-are-leads-member-of-list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedAccountList/{id}/namedAccounts.json",
+      "covered_by": {
+        "stream": "get_named_account_list_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/namedAccountList/{id}/namedAccounts.json",
+      "covered_by": {
+        "write": "add_named_account_list_members"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/namedAccountList/{id}/namedAccounts/remove.json",
+      "covered_by": {
+        "write": "remove_named_account_list_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedAccountLists.json",
+      "covered_by": {
+        "stream": "get_named_account_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/namedAccountLists.json",
+      "covered_by": {
+        "write": "sync_named_account_lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/namedAccountLists/delete.json",
+      "covered_by": {
+        "write": "delete_named_account_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedaccounts.json",
+      "covered_by": {
+        "stream": "get_named_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/namedaccounts.json",
+      "covered_by": {
+        "write": "sync_named_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/namedaccounts/delete.json",
+      "covered_by": {
+        "write": "delete_named_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedaccounts/describe.json",
+      "covered_by": {
+        "stream": "get_describe_using_get_3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities.json",
+      "covered_by": {
+        "stream": "get_opportunities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/opportunities.json",
+      "covered_by": {
+        "write": "sync_opportunities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/opportunities/delete.json",
+      "covered_by": {
+        "write": "delete_opportunities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities/describe.json",
+      "covered_by": {
+        "stream": "get_describe_using_get_4"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities/roles.json",
+      "covered_by": {
+        "stream": "get_opportunity_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/opportunities/roles.json",
+      "covered_by": {
+        "write": "sync_opportunity_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/opportunities/roles/delete.json",
+      "covered_by": {
+        "write": "delete_opportunity_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities/roles/describe.json",
+      "covered_by": {
+        "stream": "get_describe_opportunity_role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/salespersons.json",
+      "covered_by": {
+        "stream": "get_sales_person"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/salespersons.json",
+      "covered_by": {
+        "write": "sync_sales_persons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rest/v1/salespersons/delete.json",
+      "covered_by": {
+        "write": "delete_sales_person"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/salespersons/describe.json",
+      "covered_by": {
+        "stream": "get_describe_using_get_5"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/stats/errors.json",
+      "covered_by": {
+        "stream": "get_daily_errors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/stats/errors/last7days.json",
+      "covered_by": {
+        "stream": "get_last7_days_errors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/stats/usage.json",
+      "covered_by": {
+        "stream": "get_daily_usage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/stats/usage/last7days.json",
+      "covered_by": {
+        "stream": "get_last7_days_usage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/userservice/management/v1/users/allusers.json",
+      "covered_by": {
+        "stream": "get_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/userservice/management/v1/users/invite.json",
+      "covered_by": {
+        "write": "invite_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/userservice/management/v1/users/roles.json",
+      "covered_by": {
+        "stream": "get_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/userservice/management/v1/users/workspaces.json",
+      "covered_by": {
+        "stream": "get_workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/userservice/management/v1/users/{userid}/delete.json",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/userservice/management/v1/users/{userid}/invite/delete.json",
+      "covered_by": {
+        "write": "delete_invited_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/userservice/management/v1/users/{userid}/update.json",
+      "covered_by": {
+        "write": "update_user_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/userservice/management/v1/users/{userid}/roles.json",
+      "covered_by": {
+        "stream": "get_user_roles_and_workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/userservice/management/v1/users/{userid}/roles/create.json",
+      "covered_by": {
+        "write": "add_roles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/userservice/management/v1/users/{userid}/roles/delete.json",
+      "covered_by": {
+        "write": "delete_roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/userservice/management/v1/users/{userid}/user.json",
+      "covered_by": {
+        "stream": "get_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/userservice/management/v1/users/{userid}/invite.json",
+      "covered_by": {
+        "stream": "get_invited_user"
       }
     }
   ]

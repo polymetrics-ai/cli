@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_daily_usage",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "Provider identifier when present."
+    },
+    "pm_operation": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Source Marketo operation identifier added to fixtures and available for diagnostics."
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "activityDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "leadId": {
+      "type": [
+        "integer",
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true,
+  "description": "Get Daily Usage"
+}

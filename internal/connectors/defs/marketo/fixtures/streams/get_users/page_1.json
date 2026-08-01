@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/userservice/management/v1/users/allusers.json",
+    "query": {
+      "pageSize": "200",
+      "pageOffset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_users-fixture-1",
+          "pm_operation": "getUsersUsingGET",
+          "name": "get_users fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}

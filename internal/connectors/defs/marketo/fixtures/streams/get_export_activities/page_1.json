@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/bulk/v1/activities/export.json",
+    "query": {
+      "batchSize": "300"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_export_activities-fixture-1",
+          "pm_operation": "getExportActivitiesUsingGET",
+          "name": "get_export_activities fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/v1/activities.json",
+    "query": {
+      "batchSize": "300",
+      "activityTypeIds": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_lead_activities-fixture-1",
+          "pm_operation": "getLeadActivitiesUsingGET",
+          "name": "get_lead_activities fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z",
+          "activityDate": "2026-01-01T00:00:00Z",
+          "leadId": 101
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}

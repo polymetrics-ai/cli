@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/asset/v1/program/byTag.json",
+    "query": {
+      "tagType": "synthetic-conformance-value",
+      "tagValue": "synthetic-conformance-value",
+      "maxReturn": "200",
+      "offset": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": "get_program_list_by_tag-fixture-1",
+          "pm_operation": "getProgramListByTagUsingGET",
+          "name": "get_program_list_by_tag fixture",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "createdAt": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "moreResult": false
+    }
+  }
+}

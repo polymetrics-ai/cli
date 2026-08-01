@@ -3,63 +3,2192 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
-    "pagination": {
-      "type": "cursor",
-      "cursor_param": "nextPageToken",
-      "token_path": "nextPageToken",
-      "stop_path": "moreResult"
+    "check": {
+      "method": "GET",
+      "path": "/rest/v1/leads.json",
+      "query": {
+        "batchSize": "1"
+      }
     },
-    "check": { "method": "GET", "path": "/leads.json", "query": { "batchSize": "1" } },
     "error_map": [
-      { "status": 401, "hint": "marketo access_token is missing, expired, or invalid; supply a fresh REST API access token" },
-      { "status": 403, "hint": "marketo access_token lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "marketo rate limit exceeded; the connector will retry with backoff" }
-    ]
+      {
+        "status": 401,
+        "hint": "marketo access_token is missing, expired, or invalid; supply a fresh REST API access token"
+      },
+      {
+        "status": 403,
+        "hint": "marketo access_token lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "marketo rate limit exceeded; retry after the provider window"
+      }
+    ],
+    "rate_limit": {
+      "requests_per_minute": 100
+    }
   },
   "streams": [
     {
-      "name": "leads",
-      "path": "/leads.json",
-      "query": { "batchSize": "{{ config.page_size }}" },
-      "records": { "path": "result" },
-      "computed_fields": {
-        "id": "{{ record.id }}",
-        "email": "{{ record.email }}",
-        "updatedAt": "{{ record.updatedAt }}",
-        "createdAt": "{{ record.createdAt }}"
+      "name": "get_all_channels",
+      "path": "/rest/asset/v1/channels.json",
+      "query": {},
+      "records": {
+        "path": "result"
       },
-      "schema": "schemas/leads.json"
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getAllChannelsUsingGET"
+      },
+      "schema": "schemas/get_all_channels.json"
     },
     {
-      "name": "programs",
-      "path": "/programs.json",
-      "query": { "batchSize": "{{ config.page_size }}" },
-      "records": { "path": "result" },
-      "computed_fields": {
-        "id": "{{ record.id }}",
-        "name": "{{ record.name }}",
-        "updatedAt": "{{ record.updatedAt }}",
-        "createdAt": "{{ record.createdAt }}"
+      "name": "get_email_by_id",
+      "path": "/rest/asset/v1/email/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
       },
-      "schema": "schemas/programs.json"
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getEmailByIdUsingGET"
+      },
+      "schema": "schemas/get_email_by_id.json"
     },
     {
-      "name": "activities",
-      "path": "/activities.json",
+      "name": "get_email_variables",
+      "path": "/rest/asset/v1/email/{{ config.id }}/variables.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getEmailVariablesUsingGET"
+      },
+      "schema": "schemas/get_email_variables.json"
+    },
+    {
+      "name": "get_email_ccfields",
+      "path": "/rest/asset/v1/email/ccFields.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getEmailCCFieldsUsingGET"
+      },
+      "schema": "schemas/get_email_ccfields.json"
+    },
+    {
+      "name": "get_template_by_id",
+      "path": "/rest/asset/v1/emailTemplate/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getTemplateByIdUsingGET"
+      },
+      "schema": "schemas/get_template_by_id.json"
+    },
+    {
+      "name": "get_email_templates",
+      "path": "/rest/asset/v1/emailTemplates.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getEmailTemplatesUsingGET"
+      },
+      "schema": "schemas/get_email_templates.json"
+    },
+    {
+      "name": "get_email_template_used_by",
+      "path": "/rest/asset/v1/emailTemplates/{{ config.id }}/usedBy.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getEmailTemplateUsedByUsingGET"
+      },
+      "schema": "schemas/get_email_template_used_by.json"
+    },
+    {
+      "name": "get_email",
+      "path": "/rest/asset/v1/emails.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getEmailUsingGET"
+      },
+      "schema": "schemas/get_email.json"
+    },
+    {
+      "name": "get_file_by_id",
+      "path": "/rest/asset/v1/file/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getFileByIdUsingGET"
+      },
+      "schema": "schemas/get_file_by_id.json"
+    },
+    {
+      "name": "get_files",
+      "path": "/rest/asset/v1/files.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getFilesUsingGET"
+      },
+      "schema": "schemas/get_files.json"
+    },
+    {
+      "name": "get_folder_by_id",
+      "path": "/rest/asset/v1/folder/{{ config.id }}.json",
       "query": {
-        "batchSize": "{{ config.page_size }}",
-        "activityTypeIds": { "template": "{{ config.activity_type_ids }}", "omit_when_absent": true }
+        "type": "{{ config.type }}"
       },
-      "records": { "path": "result" },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
       "computed_fields": {
-        "id": "{{ record.id }}",
-        "activityTypeId": "{{ record.activityTypeId }}",
-        "activityDate": "{{ record.activityDate }}",
-        "leadId": "{{ record.leadId }}"
+        "pm_operation": "getFolderByIdUsingGET"
       },
-      "schema": "schemas/activities.json"
+      "schema": "schemas/get_folder_by_id.json"
+    },
+    {
+      "name": "get_folder_content",
+      "path": "/rest/asset/v1/folder/{{ config.id }}/content.json",
+      "query": {
+        "type": "{{ config.type }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getFolderContentUsingGET"
+      },
+      "schema": "schemas/get_folder_content.json"
+    },
+    {
+      "name": "get_tokens_by_folder_id",
+      "path": "/rest/asset/v1/folder/{{ config.id }}/tokens.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getTokensByFolderIdUsingGET"
+      },
+      "schema": "schemas/get_tokens_by_folder_id.json"
+    },
+    {
+      "name": "get_folder",
+      "path": "/rest/asset/v1/folders.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getFolderUsingGET"
+      },
+      "schema": "schemas/get_folder.json"
+    },
+    {
+      "name": "get_all_fields",
+      "path": "/rest/asset/v1/form/fields.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getAllFieldsUsingGET"
+      },
+      "schema": "schemas/get_all_fields.json"
+    },
+    {
+      "name": "get_all_program_member_fields",
+      "path": "/rest/asset/v1/form/programMemberFields.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getAllProgramMemberFieldsUsingGET"
+      },
+      "schema": "schemas/get_all_program_member_fields.json"
+    },
+    {
+      "name": "get_lp_form_by_id",
+      "path": "/rest/asset/v1/form/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLpFormByIdUsingGET"
+      },
+      "schema": "schemas/get_lp_form_by_id.json"
+    },
+    {
+      "name": "get_form_field_by_form_vid",
+      "path": "/rest/asset/v1/form/{{ config.id }}/fields.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getFormFieldByFormVidUsingGET"
+      },
+      "schema": "schemas/get_form_field_by_form_vid.json"
+    },
+    {
+      "name": "get_thank_you_page_by_id",
+      "path": "/rest/asset/v1/form/{{ config.id }}/thankYouPage.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getThankYouPageByIdUsingGET"
+      },
+      "schema": "schemas/get_thank_you_page_by_id.json"
+    },
+    {
+      "name": "get_browse_forms2",
+      "path": "/rest/asset/v1/forms.json",
+      "query": {
+        "folder": "{{ config.folder }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "browseForms2UsingGET"
+      },
+      "schema": "schemas/get_browse_forms2.json"
+    },
+    {
+      "name": "get_form_used_by",
+      "path": "/rest/asset/v1/form/{{ config.id }}/usedBy.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getFormUsedByUsingGET"
+      },
+      "schema": "schemas/get_form_used_by.json"
+    },
+    {
+      "name": "get_landing_page_by_id",
+      "path": "/rest/asset/v1/landingPage/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLandingPageByIdUsingGET"
+      },
+      "schema": "schemas/get_landing_page_by_id.json"
+    },
+    {
+      "name": "get_variables",
+      "path": "/rest/asset/v1/landingPage/{{ config.id }}/variables.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getVariablesUsingGET"
+      },
+      "schema": "schemas/get_variables.json"
+    },
+    {
+      "name": "get_landing_page_template_by_id",
+      "path": "/rest/asset/v1/landingPageTemplate/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLandingPageTemplateByIdUsingGET"
+      },
+      "schema": "schemas/get_landing_page_template_by_id.json"
+    },
+    {
+      "name": "get_landing_page_templates",
+      "path": "/rest/asset/v1/landingPageTemplates.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLandingPageTemplatesUsingGET"
+      },
+      "schema": "schemas/get_landing_page_templates.json"
+    },
+    {
+      "name": "get_browse_landing_pages",
+      "path": "/rest/asset/v1/landingPages.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "browseLandingPagesUsingGET"
+      },
+      "schema": "schemas/get_browse_landing_pages.json"
+    },
+    {
+      "name": "get_landing_page_redirect_rules",
+      "path": "/rest/asset/v1/redirectRules.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLandingPageRedirectRulesUsingGET"
+      },
+      "schema": "schemas/get_landing_page_redirect_rules.json"
+    },
+    {
+      "name": "get_landing_page_redirect_rule_by_id",
+      "path": "/rest/asset/v1/redirectRule/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLandingPageRedirectRuleByIdUsingGET"
+      },
+      "schema": "schemas/get_landing_page_redirect_rule_by_id.json"
+    },
+    {
+      "name": "get_landing_page_domains",
+      "path": "/rest/asset/v1/landingPageDomains.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLandingPageDomainsUsingGET"
+      },
+      "schema": "schemas/get_landing_page_domains.json"
+    },
+    {
+      "name": "get_program_list_by_tag",
+      "path": "/rest/asset/v1/program/byTag.json",
+      "query": {
+        "tagType": "{{ config.tag_type }}",
+        "tagValue": "{{ config.tag_value }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getProgramListByTagUsingGET"
+      },
+      "schema": "schemas/get_program_list_by_tag.json"
+    },
+    {
+      "name": "get_program_by_id",
+      "path": "/rest/asset/v1/program/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getProgramByIdUsingGET"
+      },
+      "schema": "schemas/get_program_by_id.json"
+    },
+    {
+      "name": "get_smart_list_by_program_id",
+      "path": "/rest/asset/v1/program/{{ config.program_id }}/smartList.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSmartListByProgramIdUsingGET"
+      },
+      "schema": "schemas/get_smart_list_by_program_id.json"
+    },
+    {
+      "name": "get_browse_programs",
+      "path": "/rest/asset/v1/programs.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "browseProgramsUsingGET"
+      },
+      "schema": "schemas/get_browse_programs.json"
+    },
+    {
+      "name": "get_segmentation",
+      "path": "/rest/asset/v1/segmentation.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSegmentationUsingGET"
+      },
+      "schema": "schemas/get_segmentation.json"
+    },
+    {
+      "name": "get_segments_for_segmentation",
+      "path": "/rest/asset/v1/segmentation/{{ config.id }}/segments.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSegmentsForSegmentationUsingGET"
+      },
+      "schema": "schemas/get_segments_for_segmentation.json"
+    },
+    {
+      "name": "get_smart_campaign_by_id",
+      "path": "/rest/asset/v1/smartCampaign/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSmartCampaignByIdUsingGET"
+      },
+      "schema": "schemas/get_smart_campaign_by_id.json"
+    },
+    {
+      "name": "get_smart_list_by_smart_campaign_id",
+      "path": "/rest/asset/v1/smartCampaign/{{ config.id }}/smartList.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSmartListBySmartCampaignIdUsingGET"
+      },
+      "schema": "schemas/get_smart_list_by_smart_campaign_id.json"
+    },
+    {
+      "name": "get_all_smart_campaigns_get",
+      "path": "/rest/asset/v1/smartCampaigns.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getAllSmartCampaignsGET"
+      },
+      "schema": "schemas/get_all_smart_campaigns_get.json"
+    },
+    {
+      "name": "get_snippet_by_id",
+      "path": "/rest/asset/v1/snippet/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSnippetByIdUsingGET"
+      },
+      "schema": "schemas/get_snippet_by_id.json"
+    },
+    {
+      "name": "get_snippet_content_by_id",
+      "path": "/rest/asset/v1/snippet/{{ config.id }}/content.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSnippetContentByIdUsingGET"
+      },
+      "schema": "schemas/get_snippet_content_by_id.json"
+    },
+    {
+      "name": "get_snippet",
+      "path": "/rest/asset/v1/snippets.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSnippetUsingGET"
+      },
+      "schema": "schemas/get_snippet.json"
+    },
+    {
+      "name": "get_smart_list_by_id",
+      "path": "/rest/asset/v1/smartList/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSmartListByIdUsingGET"
+      },
+      "schema": "schemas/get_smart_list_by_id.json"
+    },
+    {
+      "name": "get_smart_lists",
+      "path": "/rest/asset/v1/smartLists.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSmartListsUsingGET"
+      },
+      "schema": "schemas/get_smart_lists.json"
+    },
+    {
+      "name": "get_static_list_by_id",
+      "path": "/rest/asset/v1/staticList/{{ config.id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getStaticListByIdUsingGET"
+      },
+      "schema": "schemas/get_static_list_by_id.json"
+    },
+    {
+      "name": "get_static_lists",
+      "path": "/rest/asset/v1/staticLists.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getStaticListsUsingGET"
+      },
+      "schema": "schemas/get_static_lists.json"
+    },
+    {
+      "name": "get_tag_types",
+      "path": "/rest/asset/v1/tagTypes.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "maxReturn",
+        "offset_param": "offset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getTagTypesUsingGET"
+      },
+      "schema": "schemas/get_tag_types.json"
+    },
+    {
+      "name": "get_export_activities",
+      "path": "/bulk/v1/activities/export.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportActivitiesUsingGET"
+      },
+      "schema": "schemas/get_export_activities.json"
+    },
+    {
+      "name": "get_export_activities_status",
+      "path": "/bulk/v1/activities/export/{{ config.export_id }}/status.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportActivitiesStatusUsingGET"
+      },
+      "schema": "schemas/get_export_activities_status.json"
+    },
+    {
+      "name": "get_import_custom_object_status",
+      "path": "/bulk/v1/customobjects/{{ config.api_name }}/import/{{ config.batch_id }}/status.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getImportCustomObjectStatusUsingGET"
+      },
+      "schema": "schemas/get_import_custom_object_status.json"
+    },
+    {
+      "name": "get_import_program_member_status",
+      "path": "/bulk/v1/program/members/import/{{ config.batch_id }}/status.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getImportProgramMemberStatusUsingGET"
+      },
+      "schema": "schemas/get_import_program_member_status.json"
+    },
+    {
+      "name": "get_import_lead_status",
+      "path": "/bulk/v1/leads/batch/{{ config.batch_id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getImportLeadStatusUsingGET"
+      },
+      "schema": "schemas/get_import_lead_status.json"
+    },
+    {
+      "name": "get_export_leads",
+      "path": "/bulk/v1/leads/export.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportLeadsUsingGET"
+      },
+      "schema": "schemas/get_export_leads.json"
+    },
+    {
+      "name": "get_export_leads_status",
+      "path": "/bulk/v1/leads/export/{{ config.export_id }}/status.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportLeadsStatusUsingGET"
+      },
+      "schema": "schemas/get_export_leads_status.json"
+    },
+    {
+      "name": "get_export_custom_objects",
+      "path": "/bulk/v1/customobjects/{{ config.api_name }}/export.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportCustomObjectsUsingGET"
+      },
+      "schema": "schemas/get_export_custom_objects.json"
+    },
+    {
+      "name": "get_export_custom_objects_status",
+      "path": "/bulk/v1/customobjects/{{ config.api_name }}/export/{{ config.export_id }}/status.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportCustomObjectsStatusUsingGET"
+      },
+      "schema": "schemas/get_export_custom_objects_status.json"
+    },
+    {
+      "name": "get_export_program_members",
+      "path": "/bulk/v1/program/members/export.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportProgramMembersUsingGET"
+      },
+      "schema": "schemas/get_export_program_members.json"
+    },
+    {
+      "name": "get_export_program_members_status",
+      "path": "/bulk/v1/program/members/export/{{ config.export_id }}/status.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getExportProgramMembersStatusUsingGET"
+      },
+      "schema": "schemas/get_export_program_members_status.json"
+    },
+    {
+      "name": "get_lead_activities",
+      "path": "/rest/v1/activities.json",
+      "query": {
+        "batchSize": "300",
+        "activityTypeIds": "{{ config.activity_type_ids }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadActivitiesUsingGET"
+      },
+      "schema": "schemas/get_lead_activities.json"
+    },
+    {
+      "name": "get_deleted_leads",
+      "path": "/rest/v1/activities/deletedleads.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getDeletedLeadsUsingGET"
+      },
+      "schema": "schemas/get_deleted_leads.json"
+    },
+    {
+      "name": "get_describe_custom_activity_type",
+      "path": "/rest/v1/activities/external/type/{{ config.api_name }}/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeCustomActivityTypeUsingGET"
+      },
+      "schema": "schemas/get_describe_custom_activity_type.json"
+    },
+    {
+      "name": "get_custom_activity_type",
+      "path": "/rest/v1/activities/external/types.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCustomActivityTypeUsingGET"
+      },
+      "schema": "schemas/get_custom_activity_type.json"
+    },
+    {
+      "name": "get_lead_changes",
+      "path": "/rest/v1/activities/leadchanges.json",
+      "query": {
+        "batchSize": "300",
+        "fields": "{{ config.fields }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadChangesUsingGET"
+      },
+      "schema": "schemas/get_lead_changes.json"
+    },
+    {
+      "name": "get_activities_paging_token",
+      "path": "/rest/v1/activities/pagingtoken.json",
+      "query": {
+        "sinceDatetime": "{{ config.since_datetime }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getActivitiesPagingTokenUsingGET"
+      },
+      "schema": "schemas/get_activities_paging_token.json"
+    },
+    {
+      "name": "get_all_activity_types",
+      "path": "/rest/v1/activities/types.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getAllActivityTypesUsingGET"
+      },
+      "schema": "schemas/get_all_activity_types.json"
+    },
+    {
+      "name": "get_campaigns",
+      "path": "/rest/v1/campaigns.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCampaignsUsingGET"
+      },
+      "schema": "schemas/get_campaigns.json"
+    },
+    {
+      "name": "get_campaign_by_id",
+      "path": "/rest/v1/campaigns/{{ config.campaign_id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCampaignByIdUsingGET"
+      },
+      "schema": "schemas/get_campaign_by_id.json"
+    },
+    {
+      "name": "get_companies",
+      "path": "/rest/v1/companies.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCompaniesUsingGET"
+      },
+      "schema": "schemas/get_companies.json"
+    },
+    {
+      "name": "get_describe",
+      "path": "/rest/v1/companies/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET"
+      },
+      "schema": "schemas/get_describe.json"
+    },
+    {
+      "name": "get_list_custom_objects",
+      "path": "/rest/v1/customobjects.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "listCustomObjectsUsingGET"
+      },
+      "schema": "schemas/get_list_custom_objects.json"
+    },
+    {
+      "name": "get_custom_objects",
+      "path": "/rest/v1/customobjects/{{ config.custom_object_name }}.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCustomObjectsUsingGET"
+      },
+      "schema": "schemas/get_custom_objects.json"
+    },
+    {
+      "name": "get_describe_using_get_1",
+      "path": "/rest/v1/customobjects/{{ config.custom_object_name }}/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET_1"
+      },
+      "schema": "schemas/get_describe_using_get_1.json"
+    },
+    {
+      "name": "get_list_custom_object_types",
+      "path": "/rest/v1/customobjects/schema.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "listCustomObjectTypesUsingGET"
+      },
+      "schema": "schemas/get_list_custom_object_types.json"
+    },
+    {
+      "name": "get_describe_custom_object_type",
+      "path": "/rest/v1/customobjects/schema/{{ config.api_name }}/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeCustomObjectTypeUsingGET"
+      },
+      "schema": "schemas/get_describe_custom_object_type.json"
+    },
+    {
+      "name": "get_custom_object_type_field_data_types",
+      "path": "/rest/v1/customobjects/schema/fieldDataTypes.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCustomObjectTypeFieldDataTypesUsingGET"
+      },
+      "schema": "schemas/get_custom_object_type_field_data_types.json"
+    },
+    {
+      "name": "get_custom_object_type_linkable_objects",
+      "path": "/rest/v1/customobjects/schema/linkableObjects.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCustomObjectTypeLinkableObjectsUsingGET"
+      },
+      "schema": "schemas/get_custom_object_type_linkable_objects.json"
+    },
+    {
+      "name": "get_custom_object_type_dependent_assets",
+      "path": "/rest/v1/customobjects/schema/{{ config.api_name }}/dependentAssets.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCustomObjectTypeDependentAssetsUsingGET"
+      },
+      "schema": "schemas/get_custom_object_type_dependent_assets.json"
+    },
+    {
+      "name": "get_lead_by_id",
+      "path": "/rest/v1/lead/{{ config.lead_id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadByIdUsingGET"
+      },
+      "schema": "schemas/get_lead_by_id.json"
+    },
+    {
+      "name": "get_leads_by_filter",
+      "path": "/rest/v1/leads.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadsByFilterUsingGET"
+      },
+      "schema": "schemas/get_leads_by_filter.json"
+    },
+    {
+      "name": "get_describe_using_get_2",
+      "path": "/rest/v1/leads/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET_2"
+      },
+      "schema": "schemas/get_describe_using_get_2.json"
+    },
+    {
+      "name": "get_describe_using_get_6",
+      "path": "/rest/v1/leads/describe2.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET_6"
+      },
+      "schema": "schemas/get_describe_using_get_6.json"
+    },
+    {
+      "name": "get_lead_fields",
+      "path": "/rest/v1/leads/schema/fields.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadFieldsUsingGET"
+      },
+      "schema": "schemas/get_lead_fields.json"
+    },
+    {
+      "name": "get_program_member_fields",
+      "path": "/rest/v1/programs/members/schema/fields.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getProgramMemberFieldsUsingGET"
+      },
+      "schema": "schemas/get_program_member_fields.json"
+    },
+    {
+      "name": "get_company_fields",
+      "path": "/rest/v1/companies/schema/fields.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getCompanyFieldsUsingGET"
+      },
+      "schema": "schemas/get_company_fields.json"
+    },
+    {
+      "name": "get_opportunity_fields",
+      "path": "/rest/v1/opportunities/schema/fields.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getOpportunityFieldsUsingGET"
+      },
+      "schema": "schemas/get_opportunity_fields.json"
+    },
+    {
+      "name": "get_named_account_fields",
+      "path": "/rest/v1/namedaccounts/schema/fields.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getNamedAccountFieldsUsingGET"
+      },
+      "schema": "schemas/get_named_account_fields.json"
+    },
+    {
+      "name": "get_describe_program_member",
+      "path": "/rest/v1/program/members/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeProgramMemberUsingGET"
+      },
+      "schema": "schemas/get_describe_program_member.json"
+    },
+    {
+      "name": "get_program_members",
+      "path": "/rest/v1/programs/{{ config.program_id }}/members.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getProgramMembersUsingGET"
+      },
+      "schema": "schemas/get_program_members.json"
+    },
+    {
+      "name": "get_describe_program_member_using_get2",
+      "path": "/rest/v1/programs/members/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeProgramMemberUsingGET2"
+      },
+      "schema": "schemas/get_describe_program_member_using_get2.json"
+    },
+    {
+      "name": "get_lead_partitions",
+      "path": "/rest/v1/leads/partitions.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadPartitionsUsingGET"
+      },
+      "schema": "schemas/get_lead_partitions.json"
+    },
+    {
+      "name": "get_leads_by_program_id",
+      "path": "/rest/v1/leads/programs/{{ config.program_id }}.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadsByProgramIdUsingGET"
+      },
+      "schema": "schemas/get_leads_by_program_id.json"
+    },
+    {
+      "name": "get_list_membership",
+      "path": "/rest/v1/leads/{{ config.lead_id }}/listMembership.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getListMembershipUsingGET"
+      },
+      "schema": "schemas/get_list_membership.json"
+    },
+    {
+      "name": "get_program_membership",
+      "path": "/rest/v1/leads/{{ config.lead_id }}/programMembership.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getProgramMembershipUsingGET"
+      },
+      "schema": "schemas/get_program_membership.json"
+    },
+    {
+      "name": "get_smart_campaign_membership",
+      "path": "/rest/v1/leads/{{ config.lead_id }}/smartCampaignMembership.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSmartCampaignMembershipUsingGET"
+      },
+      "schema": "schemas/get_smart_campaign_membership.json"
+    },
+    {
+      "name": "get_leads_by_list_id",
+      "path": "/rest/v1/list/{{ config.list_id }}/leads.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadsByListIdUsingGET"
+      },
+      "schema": "schemas/get_leads_by_list_id.json"
+    },
+    {
+      "name": "get_lists",
+      "path": "/rest/v1/lists.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getListsUsingGET"
+      },
+      "schema": "schemas/get_lists.json"
+    },
+    {
+      "name": "get_list_by_id",
+      "path": "/rest/v1/lists/{{ config.list_id }}.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getListByIdUsingGET"
+      },
+      "schema": "schemas/get_list_by_id.json"
+    },
+    {
+      "name": "get_leads_by_list_id_using_get_1",
+      "path": "/rest/v1/lists/{{ config.list_id }}/leads.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLeadsByListIdUsingGET_1"
+      },
+      "schema": "schemas/get_leads_by_list_id_using_get_1.json"
+    },
+    {
+      "name": "get_named_account_list_members",
+      "path": "/rest/v1/namedAccountList/{{ config.id }}/namedAccounts.json",
+      "query": {
+        "batchSize": "300"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getNamedAccountListMembersUsingGET"
+      },
+      "schema": "schemas/get_named_account_list_members.json"
+    },
+    {
+      "name": "get_named_account_lists",
+      "path": "/rest/v1/namedAccountLists.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getNamedAccountListsUsingGET"
+      },
+      "schema": "schemas/get_named_account_lists.json"
+    },
+    {
+      "name": "get_named_accounts",
+      "path": "/rest/v1/namedaccounts.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getNamedAccountsUsingGET"
+      },
+      "schema": "schemas/get_named_accounts.json"
+    },
+    {
+      "name": "get_describe_using_get_3",
+      "path": "/rest/v1/namedaccounts/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET_3"
+      },
+      "schema": "schemas/get_describe_using_get_3.json"
+    },
+    {
+      "name": "get_opportunities",
+      "path": "/rest/v1/opportunities.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getOpportunitiesUsingGET"
+      },
+      "schema": "schemas/get_opportunities.json"
+    },
+    {
+      "name": "get_describe_using_get_4",
+      "path": "/rest/v1/opportunities/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET_4"
+      },
+      "schema": "schemas/get_describe_using_get_4.json"
+    },
+    {
+      "name": "get_opportunity_roles",
+      "path": "/rest/v1/opportunities/roles.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getOpportunityRolesUsingGET"
+      },
+      "schema": "schemas/get_opportunity_roles.json"
+    },
+    {
+      "name": "get_describe_opportunity_role",
+      "path": "/rest/v1/opportunities/roles/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeOpportunityRoleUsingGET"
+      },
+      "schema": "schemas/get_describe_opportunity_role.json"
+    },
+    {
+      "name": "get_sales_person",
+      "path": "/rest/v1/salespersons.json",
+      "query": {
+        "batchSize": "300",
+        "filterType": "{{ config.filter_type }}",
+        "filterValues": "{{ config.filter_values }}"
+      },
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "nextPageToken",
+        "token_path": "nextPageToken",
+        "stop_path": "moreResult",
+        "page_size": 300
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getSalesPersonUsingGET"
+      },
+      "schema": "schemas/get_sales_person.json"
+    },
+    {
+      "name": "get_describe_using_get_5",
+      "path": "/rest/v1/salespersons/describe.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "describeUsingGET_5"
+      },
+      "schema": "schemas/get_describe_using_get_5.json"
+    },
+    {
+      "name": "get_daily_errors",
+      "path": "/rest/v1/stats/errors.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getDailyErrorsUsingGET"
+      },
+      "schema": "schemas/get_daily_errors.json"
+    },
+    {
+      "name": "get_last7_days_errors",
+      "path": "/rest/v1/stats/errors/last7days.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLast7DaysErrorsUsingGET"
+      },
+      "schema": "schemas/get_last7_days_errors.json"
+    },
+    {
+      "name": "get_daily_usage",
+      "path": "/rest/v1/stats/usage.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getDailyUsageUsingGET"
+      },
+      "schema": "schemas/get_daily_usage.json"
+    },
+    {
+      "name": "get_last7_days_usage",
+      "path": "/rest/v1/stats/usage/last7days.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getLast7DaysUsageUsingGET"
+      },
+      "schema": "schemas/get_last7_days_usage.json"
+    },
+    {
+      "name": "get_users",
+      "path": "/userservice/management/v1/users/allusers.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "offset_limit",
+        "limit_param": "pageSize",
+        "offset_param": "pageOffset",
+        "page_size": 200
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getUsersUsingGET"
+      },
+      "schema": "schemas/get_users.json"
+    },
+    {
+      "name": "get_roles",
+      "path": "/userservice/management/v1/users/roles.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getRolesUsingGET"
+      },
+      "schema": "schemas/get_roles.json"
+    },
+    {
+      "name": "get_workspaces",
+      "path": "/userservice/management/v1/users/workspaces.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getWorkspacesUsingGET"
+      },
+      "schema": "schemas/get_workspaces.json"
+    },
+    {
+      "name": "get_user_roles_and_workspaces",
+      "path": "/userservice/management/v1/users/{{ config.userid }}/roles.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getUserRolesAndWorkspacesUsingGET"
+      },
+      "schema": "schemas/get_user_roles_and_workspaces.json"
+    },
+    {
+      "name": "get_user",
+      "path": "/userservice/management/v1/users/{{ config.userid }}/user.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getUserUsingGET"
+      },
+      "schema": "schemas/get_user.json"
+    },
+    {
+      "name": "get_invited_user",
+      "path": "/userservice/management/v1/users/{{ config.userid }}/invite.json",
+      "query": {},
+      "records": {
+        "path": "result"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "computed_fields": {
+        "pm_operation": "getInvitedUserUsingGET"
+      },
+      "schema": "schemas/get_invited_user.json"
     }
   ]
 }
