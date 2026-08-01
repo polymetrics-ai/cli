@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -11,10 +12,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[4]
 DEF_DIR = ROOT / "internal/connectors/defs/gitlab"
 EXPECTED = {
-    "gitlab.etl_read": 392,
+    "gitlab.etl_read": 398,
     "gitlab.reverse_etl_write": 637,
     "gitlab.direct_read_query_search": 6,
-    "gitlab.binary_file": 94,
+    "gitlab.binary_file": 88,
     "gitlab.cdc_changefeed": 15,
     "gitlab.excluded_not_applicable": 2,
 }
@@ -27,6 +28,16 @@ METADATA_REST_ROWS = {
     ("GET", "/projects/{id}/uploads"),
     ("GET", "/projects/{id}/packages/{package_id}/package_files"),
     ("GET", "/group/{id}/-/packages/composer/packages"),
+    ("GET", "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}"),
+    ("GET", "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}"),
+    ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/versions"),
+    ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/download"),
+    ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}"),
+    ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/download"),
+    ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}"),
+}
+TERRAFORM_MODULE_FILE_ROWS = {
+    ("GET", "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/file"),
 }
 
 
@@ -55,6 +66,10 @@ def cli_api_surface_paths(cli: dict[str, Any]) -> list[str]:
             if isinstance(row, dict):
                 paths.append(str(row.get("path")))
     return paths
+
+
+def path_param_names(path: str) -> set[str]:
+    return set(re.findall(r"\{([A-Za-z0-9_]+)\}", path))
 
 
 def main() -> int:
@@ -99,9 +114,32 @@ def main() -> int:
         problems.append(f"operations has /api/v4-prefixed paths {prefixed_ops}")
     if prefixed_cli:
         problems.append(f"cli_surface has /api/v4-prefixed paths {prefixed_cli}")
+    splat_api = sorted(path for _, path in api_keys if isinstance(path, str) and "*" in path)[:5]
+    splat_ops = sorted(path for _, path in operation_keys if "*" in path)[:5]
+    splat_cli = sorted(path for path in cli_api_surface_paths(cli) if "*" in path)[:5]
+    if splat_api:
+        problems.append(f"api_surface has unresolved splat paths {splat_api}")
+    if splat_ops:
+        problems.append(f"operations has unresolved splat paths {splat_ops}")
+    if splat_cli:
+        problems.append(f"cli_surface has unresolved splat paths {splat_cli}")
     missing_api = sorted(operation_keys - api_keys)[:5]
     if missing_api:
         problems.append(f"operations paths missing from api_surface {missing_api}")
+    for command in cli.get("commands", []):
+        if not isinstance(command, dict):
+            continue
+        names: set[str] = set()
+        for row in command.get("api_surface", []):
+            if isinstance(row, dict):
+                names.update(path_param_names(str(row.get("path"))))
+        for flag in command.get("flags", []):
+            if not isinstance(flag, dict):
+                continue
+            maps_to = str(flag.get("maps_to", ""))
+            if maps_to.startswith("query.") and maps_to.removeprefix("query.") in names:
+                problems.append(f"{command.get('operation') or command.get('path')} path param mapped as {maps_to}")
+                break
     for op in operations:
         key = row_key(op)
         if key is None:
@@ -125,6 +163,9 @@ def main() -> int:
                 problems.append(f"{op.get('id')} metadata row classified as {op.get('kind')}/{audit_event}")
             if op.get("output_policy") == "binary_file_bounded":
                 problems.append(f"{op.get('id')} metadata row uses binary output policy")
+        if key in TERRAFORM_MODULE_FILE_ROWS:
+            if op.get("kind") != "binary_download" or audit_event != "gitlab.binary_file":
+                problems.append(f"{op.get('id')} terraform module file row classified as {op.get('kind')}/{audit_event}")
         if op.get("secret_sensitive") is True:
             if op.get("risk") in {"low", "none"}:
                 problems.append(f"{op.get('id')} secret-sensitive risk={op.get('risk')!r}")

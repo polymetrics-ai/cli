@@ -23,10 +23,10 @@
     "officialOperations": 1146,
     "pinnedSource": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
     "laneCounts": {
-      "etl_read": 392,
+      "etl_read": 398,
       "reverse_etl_write": 637,
       "direct_read_query_search": 6,
-      "binary_file": 94,
+      "binary_file": 88,
       "cdc_changefeed": 15,
       "excluded_not_applicable": 2
     },

@@ -2477,7 +2477,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/Release.gpg"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/Release.gpg"
         }
       ],
       "flags": [
@@ -2489,10 +2489,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         }
       ],
@@ -2510,7 +2510,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/Release"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/Release"
         }
       ],
       "flags": [
@@ -2522,10 +2522,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         }
       ],
@@ -2543,7 +2543,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/InRelease"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/InRelease"
         }
       ],
       "flags": [
@@ -2555,10 +2555,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         }
       ],
@@ -2576,7 +2576,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/Packages"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/Packages"
         }
       ],
       "flags": [
@@ -2588,10 +2588,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -2623,7 +2623,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}"
         }
       ],
       "flags": [
@@ -2635,10 +2635,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -2677,7 +2677,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/source/Sources"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/source/Sources"
         }
       ],
       "flags": [
@@ -2689,10 +2689,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -2717,7 +2717,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/source/by-hash/SHA256/{file_sha256}"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/source/by-hash/SHA256/{file_sha256}"
         }
       ],
       "flags": [
@@ -2729,10 +2729,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -2764,7 +2764,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/binary-{architecture}/Packages"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/binary-{architecture}/Packages"
         }
       ],
       "flags": [
@@ -2776,10 +2776,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -2811,7 +2811,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}"
+          "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}"
         }
       ],
       "flags": [
@@ -2823,10 +2823,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -6617,7 +6617,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/maven/*path/{file_name}"
+          "path": "/groups/{id}/-/packages/maven/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -6636,10 +6636,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-path",
+          "name": "path-path",
           "type": "string",
           "summary": "Package path",
-          "maps_to": "query.path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -7652,7 +7652,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags"
+          "path": "/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags"
         }
       ],
       "flags": [
@@ -7664,10 +7664,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -7683,7 +7683,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags/{tag}"
+          "path": "/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags/{tag}"
         }
       ],
       "flags": [
@@ -7699,6 +7699,13 @@
           "type": "string",
           "summary": "Package dist-tag",
           "maps_to": "path.tag",
+          "allow_empty": false
+        },
+        {
+          "name": "path-package-name",
+          "type": "string",
+          "summary": "path parameter package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ],
@@ -7716,7 +7723,7 @@
       "api_surface": [
         {
           "method": "DELETE",
-          "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags/{tag}"
+          "path": "/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags/{tag}"
         }
       ],
       "flags": [
@@ -7728,10 +7735,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
@@ -7808,7 +7815,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/npm/*package_name"
+          "path": "/groups/{id}/-/packages/npm/{package_name}"
         }
       ],
       "flags": [
@@ -7820,10 +7827,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -7862,7 +7869,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/nuget/symbolfiles/*file_name/*signature/*same_file_name"
+          "path": "/groups/{id}/-/packages/nuget/symbolfiles/{file_name}/{signature}/{same_file_name}"
         }
       ],
       "flags": [
@@ -7873,24 +7880,24 @@
           "maps_to": "path.id"
         },
         {
-          "name": "query-file-name",
+          "name": "path-file-name",
           "type": "string",
           "summary": "The symbol file name",
-          "maps_to": "query.file_name",
+          "maps_to": "path.file_name",
           "allow_empty": false
         },
         {
-          "name": "query-signature",
+          "name": "path-signature",
           "type": "string",
           "summary": "The symbol file signature",
-          "maps_to": "query.signature",
+          "maps_to": "path.signature",
           "allow_empty": false
         },
         {
-          "name": "query-same-file-name",
+          "name": "path-same-file-name",
           "type": "string",
           "summary": "The symbol file name. Must match the 'file_name' parameter",
-          "maps_to": "query.same_file_name",
+          "maps_to": "path.same_file_name",
           "allow_empty": false
         }
       ],
@@ -7954,7 +7961,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/index"
+          "path": "/groups/{id}/-/packages/nuget/metadata/{package_name}/index"
         }
       ],
       "flags": [
@@ -7965,10 +7972,10 @@
           "maps_to": "path.id"
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -7984,7 +7991,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/*package_version"
+          "path": "/groups/{id}/-/packages/nuget/metadata/{package_name}/{package_version}"
         }
       ],
       "flags": [
@@ -7995,17 +8002,17 @@
           "maps_to": "path.id"
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
-          "name": "query-package-version",
+          "name": "path-package-version",
           "type": "string",
           "summary": "The NuGet package version",
-          "maps_to": "query.package_version",
+          "maps_to": "path.package_version",
           "allow_empty": false
         }
       ]
@@ -8068,7 +8075,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/pypi/files/{sha256}/*file_identifier"
+          "path": "/groups/{id}/-/packages/pypi/files/{sha256}/{file_identifier}"
         }
       ],
       "flags": [
@@ -8079,10 +8086,10 @@
           "maps_to": "path.id"
         },
         {
-          "name": "query-file-identifier",
+          "name": "path-file-identifier",
           "type": "string",
           "summary": "The PyPi package file identifier",
-          "maps_to": "query.file_identifier",
+          "maps_to": "path.file_identifier",
           "allow_empty": false
         },
         {
@@ -8130,7 +8137,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/groups/{id}/-/packages/pypi/simple/*package_name"
+          "path": "/groups/{id}/-/packages/pypi/simple/{package_name}"
         }
       ],
       "flags": [
@@ -8141,10 +8148,10 @@
           "maps_to": "path.id"
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The PyPi package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -10369,7 +10376,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/jobs/artifacts/{ref_name}/raw/*artifact_path"
+          "path": "/projects/{id}/jobs/artifacts/{ref_name}/raw/{artifact_path}"
         }
       ],
       "flags": [
@@ -10395,10 +10402,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-artifact-path",
+          "name": "path-artifact-path",
           "type": "string",
           "summary": "Path to a file inside the artifacts archive.",
-          "maps_to": "query.artifact_path",
+          "maps_to": "path.artifact_path",
           "allow_empty": false
         },
         {
@@ -10558,7 +10565,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/jobs/{job_id}/artifacts/*artifact_path"
+          "path": "/projects/{id}/jobs/{job_id}/artifacts/{artifact_path}"
         }
       ],
       "flags": [
@@ -10576,10 +10583,10 @@
           "maps_to": "path.job_id"
         },
         {
-          "name": "query-artifact-path",
+          "name": "path-artifact-path",
           "type": "string",
           "summary": "Path to a file inside the artifacts archive.",
-          "maps_to": "query.artifact_path",
+          "maps_to": "path.artifact_path",
           "allow_empty": false
         },
         {
@@ -14153,7 +14160,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/composer/archives/*package_name"
+          "path": "/projects/{id}/packages/composer/archives/{package_name}"
         }
       ],
       "flags": [
@@ -14172,10 +14179,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The Composer package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ],
@@ -16548,7 +16555,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/Release.gpg"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/Release.gpg"
         }
       ],
       "flags": [
@@ -16560,10 +16567,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         }
       ],
@@ -16581,7 +16588,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/Release"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/Release"
         }
       ],
       "flags": [
@@ -16593,10 +16600,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         }
       ],
@@ -16614,7 +16621,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/InRelease"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/InRelease"
         }
       ],
       "flags": [
@@ -16626,10 +16633,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         }
       ],
@@ -16647,7 +16654,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/Packages"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/Packages"
         }
       ],
       "flags": [
@@ -16659,10 +16666,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -16694,7 +16701,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}"
         }
       ],
       "flags": [
@@ -16706,10 +16713,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -16748,7 +16755,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/source/Sources"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/source/Sources"
         }
       ],
       "flags": [
@@ -16760,10 +16767,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -16788,7 +16795,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/source/by-hash/SHA256/{file_sha256}"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/source/by-hash/SHA256/{file_sha256}"
         }
       ],
       "flags": [
@@ -16800,10 +16807,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -16835,7 +16842,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/binary-{architecture}/Packages"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/binary-{architecture}/Packages"
         }
       ],
       "flags": [
@@ -16847,10 +16854,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -16882,7 +16889,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}"
+          "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}"
         }
       ],
       "flags": [
@@ -16894,10 +16901,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-distribution",
+          "name": "path-distribution",
           "type": "string",
           "summary": "The Debian Codename or Suite",
-          "maps_to": "query.distribution",
+          "maps_to": "path.distribution",
           "allow_empty": false
         },
         {
@@ -19504,7 +19511,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/generic/{package_name}/*package_version/(*path/){file_name}/authorize"
+          "path": "/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}/authorize"
         }
       ],
       "flags": [
@@ -19527,6 +19534,20 @@
           "type": "string",
           "summary": "Package file name",
           "maps_to": "path.file_name",
+          "allow_empty": false
+        },
+        {
+          "name": "path-package-version",
+          "type": "string",
+          "summary": "path parameter package_version",
+          "maps_to": "path.package_version",
+          "allow_empty": false
+        },
+        {
+          "name": "path-path",
+          "type": "string",
+          "summary": "path parameter path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -19544,7 +19565,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/generic/{package_name}/*package_version/(*path/){file_name}"
+          "path": "/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -19567,6 +19588,20 @@
           "type": "string",
           "summary": "Package file name",
           "maps_to": "path.file_name",
+          "allow_empty": false
+        },
+        {
+          "name": "path-package-version",
+          "type": "string",
+          "summary": "path parameter package_version",
+          "maps_to": "path.package_version",
+          "allow_empty": false
+        },
+        {
+          "name": "path-path",
+          "type": "string",
+          "summary": "path parameter path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -19584,7 +19619,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/generic/{package_name}/*package_version/(*path/){file_name}"
+          "path": "/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -19610,17 +19645,18 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-version",
+          "name": "path-package-version",
           "type": "string",
           "summary": "Package version",
-          "maps_to": "query.package_version",
+          "maps_to": "path.package_version",
           "allow_empty": false
         },
         {
-          "name": "query-path",
+          "name": "path-path",
           "type": "string",
           "summary": "File directory path",
-          "maps_to": "query.path"
+          "maps_to": "path.path",
+          "allow_empty": false
         }
       ],
       "output_policy": "binary_file_bounded",
@@ -19637,7 +19673,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/go/*module_name/@v/list"
+          "path": "/projects/{id}/packages/go/{module_name}/@v/list"
         }
       ],
       "flags": [
@@ -19649,10 +19685,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-name",
+          "name": "path-module-name",
           "type": "string",
           "summary": "The name of the Go module",
-          "maps_to": "query.module_name",
+          "maps_to": "path.module_name",
           "allow_empty": false
         }
       ]
@@ -19668,7 +19704,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.info"
+          "path": "/projects/{id}/packages/go/{module_name}/@v/{module_version}.info"
         }
       ],
       "flags": [
@@ -19680,10 +19716,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-name",
+          "name": "path-module-name",
           "type": "string",
           "summary": "The name of the Go module",
-          "maps_to": "query.module_name",
+          "maps_to": "path.module_name",
           "allow_empty": false
         },
         {
@@ -19706,7 +19742,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.mod"
+          "path": "/projects/{id}/packages/go/{module_name}/@v/{module_version}.mod"
         }
       ],
       "flags": [
@@ -19718,10 +19754,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-name",
+          "name": "path-module-name",
           "type": "string",
           "summary": "The name of the Go module",
-          "maps_to": "query.module_name",
+          "maps_to": "path.module_name",
           "allow_empty": false
         },
         {
@@ -19746,7 +19782,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.zip"
+          "path": "/projects/{id}/packages/go/{module_name}/@v/{module_version}.zip"
         }
       ],
       "flags": [
@@ -19758,10 +19794,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-name",
+          "name": "path-module-name",
           "type": "string",
           "summary": "The name of the Go module",
-          "maps_to": "query.module_name",
+          "maps_to": "path.module_name",
           "allow_empty": false
         },
         {
@@ -24763,7 +24799,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/maven/*path/{file_name}"
+          "path": "/projects/{id}/packages/maven/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -24782,10 +24818,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-path",
+          "name": "path-path",
           "type": "string",
           "summary": "Package path",
-          "maps_to": "query.path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -24803,7 +24839,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/maven/*path/{file_name}"
+          "path": "/projects/{id}/packages/maven/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -24819,6 +24855,13 @@
           "type": "string",
           "summary": "Package file name",
           "maps_to": "path.file_name",
+          "allow_empty": false
+        },
+        {
+          "name": "path-path",
+          "type": "string",
+          "summary": "path parameter path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -24836,7 +24879,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/maven/*path/{file_name}/authorize"
+          "path": "/projects/{id}/packages/maven/{path}/{file_name}/authorize"
         }
       ],
       "flags": [
@@ -24852,6 +24895,13 @@
           "type": "string",
           "summary": "Package file name",
           "maps_to": "path.file_name",
+          "allow_empty": false
+        },
+        {
+          "name": "path-path",
+          "type": "string",
+          "summary": "path parameter path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -26681,7 +26731,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/(*path/){file_name}/authorize"
+          "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}/authorize"
         }
       ],
       "flags": [
@@ -26704,6 +26754,13 @@
           "type": "string",
           "summary": "Model version id",
           "maps_to": "path.model_version_id",
+          "allow_empty": false
+        },
+        {
+          "name": "path-path",
+          "type": "string",
+          "summary": "path parameter path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -26721,7 +26778,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/(*path/){file_name}"
+          "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -26745,6 +26802,13 @@
           "summary": "Model version id",
           "maps_to": "path.model_version_id",
           "allow_empty": false
+        },
+        {
+          "name": "path-path",
+          "type": "string",
+          "summary": "path parameter path",
+          "maps_to": "path.path",
+          "allow_empty": false
         }
       ],
       "risk": "Planned GitLab mutation; execution requires a named reverse-ETL action with typed schema, redaction, and safety evidence.",
@@ -26761,7 +26825,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/(*path/){file_name}"
+          "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -26780,10 +26844,11 @@
           "allow_empty": false
         },
         {
-          "name": "query-path",
+          "name": "path-path",
           "type": "string",
           "summary": "File directory path",
-          "maps_to": "query.path"
+          "maps_to": "path.path",
+          "allow_empty": false
         },
         {
           "name": "query-status",
@@ -26817,7 +26882,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags"
+          "path": "/projects/{id}/packages/npm/-/package/{package_name}/dist-tags"
         }
       ],
       "flags": [
@@ -26829,10 +26894,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -26848,7 +26913,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags/{tag}"
+          "path": "/projects/{id}/packages/npm/-/package/{package_name}/dist-tags/{tag}"
         }
       ],
       "flags": [
@@ -26864,6 +26929,13 @@
           "type": "string",
           "summary": "Package dist-tag",
           "maps_to": "path.tag",
+          "allow_empty": false
+        },
+        {
+          "name": "path-package-name",
+          "type": "string",
+          "summary": "path parameter package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ],
@@ -26881,7 +26953,7 @@
       "api_surface": [
         {
           "method": "DELETE",
-          "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags/{tag}"
+          "path": "/projects/{id}/packages/npm/-/package/{package_name}/dist-tags/{tag}"
         }
       ],
       "flags": [
@@ -26893,10 +26965,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
@@ -26973,7 +27045,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/npm/*package_name/-/*file_name"
+          "path": "/projects/{id}/packages/npm/{package_name}/-/{file_name}"
         }
       ],
       "flags": [
@@ -26985,17 +27057,17 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
-          "name": "query-file-name",
+          "name": "path-file-name",
           "type": "string",
           "summary": "Package file name",
-          "maps_to": "query.file_name",
+          "maps_to": "path.file_name",
           "allow_empty": false
         }
       ],
@@ -27046,7 +27118,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/npm/*package_name"
+          "path": "/projects/{id}/packages/npm/{package_name}"
         }
       ],
       "flags": [
@@ -27058,10 +27130,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -27101,7 +27173,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/nuget/symbolfiles/*file_name/*signature/*same_file_name"
+          "path": "/projects/{id}/packages/nuget/symbolfiles/{file_name}/{signature}/{same_file_name}"
         }
       ],
       "flags": [
@@ -27113,24 +27185,24 @@
           "allow_empty": false
         },
         {
-          "name": "query-file-name",
+          "name": "path-file-name",
           "type": "string",
           "summary": "The symbol file name",
-          "maps_to": "query.file_name",
+          "maps_to": "path.file_name",
           "allow_empty": false
         },
         {
-          "name": "query-signature",
+          "name": "path-signature",
           "type": "string",
           "summary": "The symbol file signature",
-          "maps_to": "query.signature",
+          "maps_to": "path.signature",
           "allow_empty": false
         },
         {
-          "name": "query-same-file-name",
+          "name": "path-same-file-name",
           "type": "string",
           "summary": "The symbol file name. Must match the 'file_name' parameter",
-          "maps_to": "query.same_file_name",
+          "maps_to": "path.same_file_name",
           "allow_empty": false
         }
       ],
@@ -27222,7 +27294,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/nuget/metadata/*package_name/index"
+          "path": "/projects/{id}/packages/nuget/metadata/{package_name}/index"
         }
       ],
       "flags": [
@@ -27234,10 +27306,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -27253,7 +27325,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/nuget/metadata/*package_name/*package_version"
+          "path": "/projects/{id}/packages/nuget/metadata/{package_name}/{package_version}"
         }
       ],
       "flags": [
@@ -27265,17 +27337,17 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
-          "name": "query-package-version",
+          "name": "path-package-version",
           "type": "string",
           "summary": "The NuGet package version",
-          "maps_to": "query.package_version",
+          "maps_to": "path.package_version",
           "allow_empty": false
         }
       ]
@@ -27339,7 +27411,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/nuget/download/*package_name/index"
+          "path": "/projects/{id}/packages/nuget/download/{package_name}/index"
         }
       ],
       "flags": [
@@ -27351,10 +27423,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ],
@@ -27372,7 +27444,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/nuget/download/*package_name/*package_version/*package_filename"
+          "path": "/projects/{id}/packages/nuget/download/{package_name}/{package_version}/{package_filename}"
         }
       ],
       "flags": [
@@ -27384,24 +27456,24 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
-          "name": "query-package-version",
+          "name": "path-package-version",
           "type": "string",
           "summary": "The NuGet package version",
-          "maps_to": "query.package_version",
+          "maps_to": "path.package_version",
           "allow_empty": false
         },
         {
-          "name": "query-package-filename",
+          "name": "path-package-filename",
           "type": "string",
           "summary": "The NuGet package filename",
-          "maps_to": "query.package_filename",
+          "maps_to": "path.package_filename",
           "allow_empty": false
         }
       ],
@@ -27523,7 +27595,7 @@
       "api_surface": [
         {
           "method": "DELETE",
-          "path": "/projects/{id}/packages/nuget/*package_name/*package_version"
+          "path": "/projects/{id}/packages/nuget/{package_name}/{package_version}"
         }
       ],
       "flags": [
@@ -27535,17 +27607,17 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
-          "name": "query-package-version",
+          "name": "path-package-version",
           "type": "string",
           "summary": "The NuGet package version",
-          "maps_to": "query.package_version",
+          "maps_to": "path.package_version",
           "allow_empty": false
         }
       ],
@@ -27651,7 +27723,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='*package_name',Version='*package_version'\\)"
+          "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='{package_name}',Version='{package_version}'\\)"
         }
       ],
       "flags": [
@@ -27663,17 +27735,17 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The NuGet package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
-          "name": "query-package-version",
+          "name": "path-package-version",
           "type": "string",
           "summary": "The NuGet package version",
-          "maps_to": "query.package_version",
+          "maps_to": "path.package_version",
           "allow_empty": false
         }
       ]
@@ -34966,7 +35038,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/pypi/files/{sha256}/*file_identifier"
+          "path": "/projects/{id}/packages/pypi/files/{sha256}/{file_identifier}"
         }
       ],
       "flags": [
@@ -34978,10 +35050,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-file-identifier",
+          "name": "path-file-identifier",
           "type": "string",
           "summary": "The PyPi package file identifier",
-          "maps_to": "query.file_identifier",
+          "maps_to": "path.file_identifier",
           "allow_empty": false
         },
         {
@@ -35030,7 +35102,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/pypi/simple/*package_name"
+          "path": "/projects/{id}/packages/pypi/simple/{package_name}"
         }
       ],
       "flags": [
@@ -35042,10 +35114,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The PyPi package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -35318,7 +35390,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/releases/{tag_name}/downloads/*direct_asset_path"
+          "path": "/projects/{id}/releases/{tag_name}/downloads/{direct_asset_path}"
         }
       ],
       "flags": [
@@ -35337,10 +35409,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-direct-asset-path",
+          "name": "path-direct-asset-path",
           "type": "string",
           "summary": "The path to the file to download, as specified when creating the release asset",
-          "maps_to": "query.direct_asset_path",
+          "maps_to": "path.direct_asset_path",
           "allow_empty": false
         }
       ],
@@ -35358,7 +35430,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/releases/permalink/latest(/)(*suffix_path)"
+          "path": "/projects/{id}/releases/permalink/latest(/)({suffix_path})"
         }
       ],
       "flags": [
@@ -35370,10 +35442,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-suffix-path",
+          "name": "path-suffix-path",
           "type": "string",
           "summary": "The path to be suffixed to the latest release",
-          "maps_to": "query.suffix_path",
+          "maps_to": "path.suffix_path",
           "allow_empty": false
         }
       ]
@@ -36573,7 +36645,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/rpm/repodata/*file_name"
+          "path": "/projects/{id}/packages/rpm/repodata/{file_name}"
         }
       ],
       "flags": [
@@ -36585,10 +36657,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-file-name",
+          "name": "path-file-name",
           "type": "string",
           "summary": "Repository metadata file name",
-          "maps_to": "query.file_name",
+          "maps_to": "path.file_name",
           "allow_empty": false
         }
       ],
@@ -36606,7 +36678,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/rpm/*package_file_id/*file_name"
+          "path": "/projects/{id}/packages/rpm/{package_file_id}/{file_name}"
         }
       ],
       "flags": [
@@ -36618,16 +36690,16 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-file-id",
+          "name": "path-package-file-id",
           "type": "integer",
           "summary": "RPM package file id",
-          "maps_to": "query.package_file_id"
+          "maps_to": "path.package_file_id"
         },
         {
-          "name": "query-file-name",
+          "name": "path-file-name",
           "type": "string",
           "summary": "RPM package file name",
-          "maps_to": "query.file_name",
+          "maps_to": "path.file_name",
           "allow_empty": false
         }
       ],
@@ -37265,11 +37337,11 @@
     {
       "path": "operation get projects-id-packages-terraform-modules-module-name-module-system",
       "summary": "Download the latest version of a module",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-terraform-modules-module-name-module-system",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -37298,22 +37370,20 @@
           "maps_to": "path.module_system",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-terraform-modules-module-name-module-system-module-version",
       "summary": "Download a specific version of a module",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-terraform-modules-module-name-module-system-module-version",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version"
+          "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}"
         }
       ],
       "flags": [
@@ -37339,15 +37409,13 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-version",
+          "name": "path-module-version",
           "type": "string",
           "summary": "Module version",
-          "maps_to": "query.module_version",
+          "maps_to": "path.module_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put projects-id-packages-terraform-modules-module-name-module-system-module-version-file-authorize",
@@ -37360,7 +37428,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version/file/authorize"
+          "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}/file/authorize"
         }
       ],
       "flags": [
@@ -37383,6 +37451,13 @@
           "type": "string",
           "summary": "Module system",
           "maps_to": "path.module_system",
+          "allow_empty": false
+        },
+        {
+          "name": "path-module-version",
+          "type": "string",
+          "summary": "path parameter module_version",
+          "maps_to": "path.module_version",
           "allow_empty": false
         }
       ],
@@ -37400,7 +37475,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version/file"
+          "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}/file"
         }
       ],
       "flags": [
@@ -37437,6 +37512,13 @@
           "type": "string",
           "summary": "The package file to be published (generated by Multipart middleware)",
           "maps_to": "body.file",
+          "allow_empty": false
+        },
+        {
+          "name": "path-module-version",
+          "type": "string",
+          "summary": "path parameter module_version",
+          "maps_to": "path.module_version",
           "allow_empty": false
         }
       ],
@@ -40020,7 +40102,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/group/{id}/-/packages/composer/p2/*package_name"
+          "path": "/group/{id}/-/packages/composer/p2/{package_name}"
         }
       ],
       "flags": [
@@ -40032,10 +40114,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The Composer package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -40051,7 +40133,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/group/{id}/-/packages/composer/*package_name"
+          "path": "/group/{id}/-/packages/composer/{package_name}"
         }
       ],
       "flags": [
@@ -40063,10 +40145,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "The Composer package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -41095,7 +41177,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/packages/maven/*path/{file_name}"
+          "path": "/packages/maven/{path}/{file_name}"
         }
       ],
       "flags": [
@@ -41107,10 +41189,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-path",
+          "name": "path-path",
           "type": "string",
           "summary": "Package path",
-          "maps_to": "query.path",
+          "maps_to": "path.path",
           "allow_empty": false
         }
       ],
@@ -41128,15 +41210,15 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/packages/npm/-/package/*package_name/dist-tags"
+          "path": "/packages/npm/-/package/{package_name}/dist-tags"
         }
       ],
       "flags": [
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -41152,7 +41234,7 @@
       "api_surface": [
         {
           "method": "PUT",
-          "path": "/packages/npm/-/package/*package_name/dist-tags/{tag}"
+          "path": "/packages/npm/-/package/{package_name}/dist-tags/{tag}"
         }
       ],
       "flags": [
@@ -41161,6 +41243,13 @@
           "type": "string",
           "summary": "Package dist-tag",
           "maps_to": "path.tag",
+          "allow_empty": false
+        },
+        {
+          "name": "path-package-name",
+          "type": "string",
+          "summary": "path parameter package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ],
@@ -41178,15 +41267,15 @@
       "api_surface": [
         {
           "method": "DELETE",
-          "path": "/packages/npm/-/package/*package_name/dist-tags/{tag}"
+          "path": "/packages/npm/-/package/{package_name}/dist-tags/{tag}"
         }
       ],
       "flags": [
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         },
         {
@@ -41245,15 +41334,15 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/packages/npm/*package_name"
+          "path": "/packages/npm/{package_name}"
         }
       ],
       "flags": [
         {
-          "name": "query-package-name",
+          "name": "path-package-name",
           "type": "string",
           "summary": "Package name",
-          "maps_to": "query.package_name",
+          "maps_to": "path.package_name",
           "allow_empty": false
         }
       ]
@@ -41299,11 +41388,11 @@
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-download",
       "summary": "Retrieve download URL for latest module version",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-download",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -41332,18 +41421,16 @@
           "maps_to": "path.module_system",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system",
       "summary": "Retrieve latest version for a module",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -41372,22 +41459,20 @@
           "maps_to": "path.module_system",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version-download",
       "summary": "Get download location for specific version of a module",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version-download",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version/download"
+          "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/download"
         }
       ],
       "flags": [
@@ -41413,15 +41498,13 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-version",
+          "name": "path-module-version",
           "type": "string",
           "summary": "Version of the module",
-          "maps_to": "query.module_version",
+          "maps_to": "path.module_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version-file",
@@ -41434,7 +41517,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version/file"
+          "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/file"
         }
       ],
       "flags": [
@@ -41460,10 +41543,10 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-version",
+          "name": "path-module-version",
           "type": "string",
           "summary": "Version of the module",
-          "maps_to": "query.module_version",
+          "maps_to": "path.module_version",
           "allow_empty": false
         }
       ],
@@ -41473,15 +41556,15 @@
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version",
       "summary": "Get details about specific version of a module",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version"
+          "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}"
         }
       ],
       "flags": [
@@ -41507,15 +41590,13 @@
           "allow_empty": false
         },
         {
-          "name": "query-module-version",
+          "name": "path-module-version",
           "type": "string",
           "summary": "Version of the module",
-          "maps_to": "query.module_version",
+          "maps_to": "path.module_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post container-registry-event-events",

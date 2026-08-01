@@ -2217,7 +2217,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/Release.gpg",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/Release.gpg",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2239,7 +2239,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/Release",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/Release",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2261,7 +2261,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/InRelease",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/InRelease",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2283,7 +2283,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/Packages",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/Packages",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2305,7 +2305,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2327,7 +2327,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/source/Sources",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/source/Sources",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2349,7 +2349,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/source/by-hash/SHA256/{file_sha256}",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/source/by-hash/SHA256/{file_sha256}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2371,7 +2371,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/binary-{architecture}/Packages",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/binary-{architecture}/Packages",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -2393,7 +2393,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/debian/dists/*distribution/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}",
+        "path": "/groups/{id}/-/packages/debian/dists/{distribution}/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -7616,7 +7616,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/maven/*path/{file_name}",
+        "path": "/groups/{id}/-/packages/maven/{path}/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -8083,7 +8083,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags",
+        "path": "/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags",
         "max_bytes": 1048576
       }
     },
@@ -8103,7 +8103,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags/{tag}",
+        "path": "/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags/{tag}",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -8137,7 +8137,7 @@
       "mutation_class": "delete",
       "rest": {
         "method": "DELETE",
-        "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags/{tag}",
+        "path": "/groups/{id}/-/packages/npm/-/package/{package_name}/dist-tags/{tag}",
         "max_bytes": 1048576
       },
       "destructive": true
@@ -8200,7 +8200,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/npm/*package_name",
+        "path": "/groups/{id}/-/packages/npm/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -8240,7 +8240,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/nuget/symbolfiles/*file_name/*signature/*same_file_name",
+        "path": "/groups/{id}/-/packages/nuget/symbolfiles/{file_name}/{signature}/{same_file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -8302,7 +8302,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/index",
+        "path": "/groups/{id}/-/packages/nuget/metadata/{package_name}/index",
         "max_bytes": 1048576
       }
     },
@@ -8322,7 +8322,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/*package_version",
+        "path": "/groups/{id}/-/packages/nuget/metadata/{package_name}/{package_version}",
         "max_bytes": 1048576
       }
     },
@@ -8362,7 +8362,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/pypi/files/{sha256}/*file_identifier",
+        "path": "/groups/{id}/-/packages/pypi/files/{sha256}/{file_identifier}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -8404,7 +8404,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/groups/{id}/-/packages/pypi/simple/*package_name",
+        "path": "/groups/{id}/-/packages/pypi/simple/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -9940,7 +9940,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/jobs/artifacts/{ref_name}/raw/*artifact_path",
+        "path": "/projects/{id}/jobs/artifacts/{ref_name}/raw/{artifact_path}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -10025,7 +10025,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/jobs/{job_id}/artifacts/*artifact_path",
+        "path": "/projects/{id}/jobs/{job_id}/artifacts/{artifact_path}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -12789,7 +12789,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/composer/archives/*package_name",
+        "path": "/projects/{id}/packages/composer/archives/{package_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13720,7 +13720,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/Release.gpg",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/Release.gpg",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13742,7 +13742,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/Release",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/Release",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13764,7 +13764,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/InRelease",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/InRelease",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13786,7 +13786,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/Packages",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/Packages",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13808,7 +13808,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/debian-installer/binary-{architecture}/by-hash/SHA256/{file_sha256}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13830,7 +13830,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/source/Sources",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/source/Sources",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13852,7 +13852,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/source/by-hash/SHA256/{file_sha256}",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/source/by-hash/SHA256/{file_sha256}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13874,7 +13874,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/binary-{architecture}/Packages",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/binary-{architecture}/Packages",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -13896,7 +13896,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/debian/dists/*distribution/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}",
+        "path": "/projects/{id}/packages/debian/dists/{distribution}/{component}/binary-{architecture}/by-hash/SHA256/{file_sha256}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -16201,7 +16201,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/generic/{package_name}/*package_version/(*path/){file_name}/authorize",
+        "path": "/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}/authorize",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -16248,7 +16248,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/generic/{package_name}/*package_version/(*path/){file_name}",
+        "path": "/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -16306,7 +16306,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/generic/{package_name}/*package_version/(*path/){file_name}",
+        "path": "/projects/{id}/packages/generic/{package_name}/{package_version}/{path}/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -16328,7 +16328,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/go/*module_name/@v/list",
+        "path": "/projects/{id}/packages/go/{module_name}/@v/list",
         "max_bytes": 1048576
       }
     },
@@ -16348,7 +16348,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.info",
+        "path": "/projects/{id}/packages/go/{module_name}/@v/{module_version}.info",
         "max_bytes": 1048576
       }
     },
@@ -16368,7 +16368,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.mod",
+        "path": "/projects/{id}/packages/go/{module_name}/@v/{module_version}.mod",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -16390,7 +16390,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.zip",
+        "path": "/projects/{id}/packages/go/{module_name}/@v/{module_version}.zip",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -25049,7 +25049,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/maven/*path/{file_name}",
+        "path": "/projects/{id}/packages/maven/{path}/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -25071,7 +25071,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/maven/*path/{file_name}",
+        "path": "/projects/{id}/packages/maven/{path}/{file_name}",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -25110,7 +25110,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/maven/*path/{file_name}/authorize",
+        "path": "/projects/{id}/packages/maven/{path}/{file_name}/authorize",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -26435,7 +26435,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/(*path/){file_name}/authorize",
+        "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}/authorize",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -26474,7 +26474,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/(*path/){file_name}",
+        "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -26520,7 +26520,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/(*path/){file_name}",
+        "path": "/projects/{id}/packages/ml_models/{model_version_id}/files/{path}/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -26542,7 +26542,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags",
+        "path": "/projects/{id}/packages/npm/-/package/{package_name}/dist-tags",
         "max_bytes": 1048576
       }
     },
@@ -26562,7 +26562,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags/{tag}",
+        "path": "/projects/{id}/packages/npm/-/package/{package_name}/dist-tags/{tag}",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -26596,7 +26596,7 @@
       "mutation_class": "delete",
       "rest": {
         "method": "DELETE",
-        "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags/{tag}",
+        "path": "/projects/{id}/packages/npm/-/package/{package_name}/dist-tags/{tag}",
         "max_bytes": 1048576
       },
       "destructive": true
@@ -26659,7 +26659,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/npm/*package_name/-/*file_name",
+        "path": "/projects/{id}/packages/npm/{package_name}/-/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -26715,7 +26715,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/npm/*package_name",
+        "path": "/projects/{id}/packages/npm/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -26755,7 +26755,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/nuget/symbolfiles/*file_name/*signature/*same_file_name",
+        "path": "/projects/{id}/packages/nuget/symbolfiles/{file_name}/{signature}/{same_file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -26851,7 +26851,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/nuget/metadata/*package_name/index",
+        "path": "/projects/{id}/packages/nuget/metadata/{package_name}/index",
         "max_bytes": 1048576
       }
     },
@@ -26871,7 +26871,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/nuget/metadata/*package_name/*package_version",
+        "path": "/projects/{id}/packages/nuget/metadata/{package_name}/{package_version}",
         "max_bytes": 1048576
       }
     },
@@ -26911,7 +26911,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/nuget/download/*package_name/index",
+        "path": "/projects/{id}/packages/nuget/download/{package_name}/index",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -26933,7 +26933,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/nuget/download/*package_name/*package_version/*package_filename",
+        "path": "/projects/{id}/packages/nuget/download/{package_name}/{package_version}/{package_filename}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -27065,7 +27065,7 @@
       "mutation_class": "delete",
       "rest": {
         "method": "DELETE",
-        "path": "/projects/{id}/packages/nuget/*package_name/*package_version",
+        "path": "/projects/{id}/packages/nuget/{package_name}/{package_version}",
         "max_bytes": 1048576
       },
       "destructive": true
@@ -27147,7 +27147,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='*package_name',Version='*package_version'\\)",
+        "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='{package_name}',Version='{package_version}'\\)",
         "max_bytes": 1048576
       }
     },
@@ -34926,7 +34926,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/pypi/files/{sha256}/*file_identifier",
+        "path": "/projects/{id}/packages/pypi/files/{sha256}/{file_identifier}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -34968,7 +34968,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/pypi/simple/*package_name",
+        "path": "/projects/{id}/packages/pypi/simple/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -35284,7 +35284,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/releases/{tag_name}/downloads/*direct_asset_path",
+        "path": "/projects/{id}/releases/{tag_name}/downloads/{direct_asset_path}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -35306,7 +35306,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/projects/{id}/releases/permalink/latest(/)(*suffix_path)",
+        "path": "/projects/{id}/releases/permalink/latest(/)({suffix_path})",
         "max_bytes": 1048576
       }
     },
@@ -36190,7 +36190,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/rpm/repodata/*file_name",
+        "path": "/projects/{id}/packages/rpm/repodata/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -36212,7 +36212,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/projects/{id}/packages/rpm/*package_file_id/*file_name",
+        "path": "/projects/{id}/packages/rpm/{package_file_id}/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -36632,46 +36632,48 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-terraform-modules-module-name-module-system",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Download the latest version of a module",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576,
+        "query": {
+          "terraform-get": "1"
+        }
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-terraform-modules-module-name-module-system-module-version",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Download a specific version of a module",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
-        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}",
+        "max_bytes": 1048576,
+        "query": {
+          "terraform-get": "1"
+        }
       }
     },
     {
@@ -36690,7 +36692,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version/file/authorize",
+        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}/file/authorize",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -36724,7 +36726,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version/file",
+        "path": "/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/{module_version}/file",
         "max_bytes": 1048576,
         "content_type": "multipart/form-data",
         "body_schema": {
@@ -39848,7 +39850,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/group/{id}/-/packages/composer/p2/*package_name",
+        "path": "/group/{id}/-/packages/composer/p2/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -39868,7 +39870,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/group/{id}/-/packages/composer/*package_name",
+        "path": "/group/{id}/-/packages/composer/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -40353,7 +40355,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/packages/maven/*path/{file_name}",
+        "path": "/packages/maven/{path}/{file_name}",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -40375,7 +40377,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/packages/npm/-/package/*package_name/dist-tags",
+        "path": "/packages/npm/-/package/{package_name}/dist-tags",
         "max_bytes": 1048576
       }
     },
@@ -40395,7 +40397,7 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/packages/npm/-/package/*package_name/dist-tags/{tag}",
+        "path": "/packages/npm/-/package/{package_name}/dist-tags/{tag}",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -40429,7 +40431,7 @@
       "mutation_class": "delete",
       "rest": {
         "method": "DELETE",
-        "path": "/packages/npm/-/package/*package_name/dist-tags/{tag}",
+        "path": "/packages/npm/-/package/{package_name}/dist-tags/{tag}",
         "max_bytes": 1048576
       },
       "destructive": true
@@ -40492,7 +40494,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "/packages/npm/*package_name",
+        "path": "/packages/npm/{package_name}",
         "max_bytes": 1048576
       }
     },
@@ -40518,68 +40520,62 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-download",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve download URL for latest module version",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/download",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve latest version for a module",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version-download",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get download location for specific version of a module",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
-        "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version/download",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/download",
+        "max_bytes": 1048576
       }
     },
     {
@@ -40598,7 +40594,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version/file",
+        "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}/file",
         "max_bytes": 16777216,
         "allow_overwrite": false,
         "extract_archives": false
@@ -40606,24 +40602,22 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get details about specific version of a module",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
-        "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/{module_version}",
+        "max_bytes": 1048576
       }
     },
     {

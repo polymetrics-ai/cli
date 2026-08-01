@@ -8,6 +8,7 @@ verification helper only; it performs no credentialed provider calls.
 from __future__ import annotations
 
 import json
+import re
 import sys
 import urllib.request
 from pathlib import Path
@@ -22,7 +23,13 @@ OPERATIONS = ROOT / "internal/connectors/defs/gitlab/operations.json"
 SUPPLEMENTAL_SURFACE = {("GET", "/users")}
 
 
+def normalize_gitlab_path(path: str) -> str:
+    path = re.sub(r"\(\*([A-Za-z0-9_]+)/\)", r"{\1}/", path)
+    return re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
+
+
 def relative_path(path: str) -> str:
+    path = normalize_gitlab_path(path)
     if path.startswith("/api/v4"):
         stripped = path[len("/api/v4") :]
         return stripped or "/"

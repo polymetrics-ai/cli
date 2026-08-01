@@ -4,7 +4,7 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4 
 
 Implemented fixture-backed streams: `projects`, `groups`, `users`, `issues`.
 
-The complete official ledger has 1,146 operations: 392 ETL/read, 637 reverse-ETL write/mutation, 6 direct/provider query/search/metadata, 94 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.
+The complete official ledger has 1,146 operations: 398 ETL/read, 637 reverse-ETL write/mutation, 6 direct/provider query/search/metadata, 88 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.
 
 Only the four streams are executable in this wave. `api_surface.json`, `operations.json`, and `cli_surface.json` keep every other operation represented as typed planned/blocked metadata until a future connector-local stream/action/command adds fixtures and execution evidence.
 
@@ -65,4 +65,4 @@ No generic HTTP method/path/body, arbitrary GraphQL, shell, file, SQL write/read
 - Destructive/admin write rows depend on per-action schemas, redaction, fixtures, and typed confirmation evidence before execution can be claimed.
 - The current top-level `/users` stream is fixture-backed legacy behavior; the pinned OpenAPI source omits that exact row, so api surface coverage uses a connector-local supplemental row and does not mark project-scoped users as implemented.
 - The two excluded rows are GitLab Slack integration callback endpoints (`/integrations/slack/interactions` and `/integrations/slack/options`), not user-invoked connector operations.
-- Generated lane counts: etl_read=392, reverse_etl_write=637, direct_read_query_search=6, binary_file=94, cdc_changefeed=15, excluded_not_applicable=2.
+- Generated lane counts: etl_read=398, reverse_etl_write=637, direct_read_query_search=6, binary_file=88, cdc_changefeed=15, excluded_not_applicable=2.

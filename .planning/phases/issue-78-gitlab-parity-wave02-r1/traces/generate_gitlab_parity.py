@@ -25,10 +25,10 @@ OPENAPI_URL = "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e
 MASTER_BRANCH_URL = "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master"
 METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 PARENT_COUNTS = {
-    "etl_read": 392,
+    "etl_read": 398,
     "reverse_etl_write": 637,
     "direct_read_query_search": 6,
-    "binary_file": 94,
+    "binary_file": 88,
     "cdc_changefeed": 15,
     "excluded_not_applicable": 2,
 }
@@ -42,17 +42,23 @@ DIRECT = {
     ("GET", "/api/v4/projects/{id}/(-/)search"),
     ("GET", "/api/v4/search"),
 }
-# Four package metadata endpoints are durable JSON record reads, not binary payload transfers.
 FORCE_ETL = {
     ("GET", "/api/v4/groups/{id}/packages"),
     ("GET", "/api/v4/projects/{id}/packages"),
     ("GET", "/api/v4/projects/{id}/packages/{package_id}"),
     ("GET", "/api/v4/projects/{id}/packages/{package_id}/pipelines"),
+    ("GET", "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}"),
+    ("GET", "/api/v4/projects/{id}/packages/terraform/modules/{module_name}/{module_system}/*module_version"),
+    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/download"),
+    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}"),
+    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version/download"),
+    ("GET", "/api/v4/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/*module_version"),
 }
-# Project export downloads are binary even though other project_import status/import operations remain writes/ETL.
 FORCE_BINARY = {
     ("GET", "/api/v4/projects/{id}/export/download"),
     ("GET", "/api/v4/projects/{id}/export_relations/download"),
+    ("GET", "/api/v4/projects/{id}/terraform/state/{name}"),
+    ("GET", "/api/v4/projects/{id}/terraform/state/{name}/versions/{serial}"),
 }
 # Package deletions are safer to represent as named destructive reverse-ETL plans than binary operations.
 FORCE_REVERSE = {
@@ -68,7 +74,6 @@ BINARY_TERMS = (
     "archive",
     "raw",
     "blobs",
-    "terraform",
     "dependency_proxy",
 )
 METADATA_READ_SUMMARY_PATTERNS = tuple(
@@ -166,11 +171,21 @@ def operation_id(method: str, path: str, used: set[str]) -> str:
     return candidate
 
 
+def normalize_gitlab_path(path: str) -> str:
+    path = re.sub(r"\(\*([A-Za-z0-9_]+)/\)", r"{\1}/", path)
+    return re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
+
+
 def relative_path(path: str) -> str:
+    path = normalize_gitlab_path(path)
     if path.startswith("/api/v4"):
         stripped = path[len("/api/v4") :]
         return stripped or "/"
     return path
+
+
+def path_param_names(path: str) -> set[str]:
+    return {match.group(1) for match in re.finditer(r"\{([A-Za-z0-9_]+)\}", normalize_gitlab_path(path))}
 
 
 def op_blob(op: dict[str, Any]) -> str:
@@ -423,19 +438,22 @@ def parameter_contract(op: dict[str, Any], spec: dict[str, Any]) -> tuple[list[d
     body_schema: dict[str, Any] | None = None
     form_props: dict[str, Any] = {}
     form_required: list[str] = []
+    path_names = path_param_names(op["path"])
     for param in op.get("parameters") or []:
         if not isinstance(param, dict):
             continue
         location = param.get("in")
         name = param.get("name")
         if location in {"path", "query"} and name:
+            name = str(name)
+            effective_location = "path" if name in path_names else str(location)
             schema = json_type_for_param(param)
             enum = schema.get("enum")
-            if location == "query" and isinstance(enum, list) and len(enum) == 1:
-                fixed_query[str(name)] = str(enum[0])
+            if effective_location == "query" and isinstance(enum, list) and len(enum) == 1:
+                fixed_query[name] = str(enum[0])
                 continue
-            required = location == "path" or bool(param.get("required"))
-            add_cli_flag(flags, cli_flag_for_param(location, str(name), param, schema, required), seen_maps_to, seen_names)
+            required = effective_location == "path" or bool(param.get("required"))
+            add_cli_flag(flags, cli_flag_for_param(effective_location, name, param, schema, required), seen_maps_to, seen_names)
         elif location == "body":
             body_schema = clean_schema(param.get("schema") or {"type": "object"}, spec)
         elif location == "formData" and name:
@@ -445,6 +463,15 @@ def parameter_contract(op: dict[str, Any], spec: dict[str, Any]) -> tuple[list[d
             if required:
                 form_required.append(str(name))
             add_cli_flag(flags, cli_flag_for_param("body", str(name), param, schema, required), seen_maps_to, seen_names)
+    for name in sorted(path_names):
+        if f"path.{name}" in seen_maps_to:
+            continue
+        add_cli_flag(
+            flags,
+            cli_flag_for_param("path", name, {"description": f"path parameter {name}"}, {"type": "string"}, True),
+            seen_maps_to,
+            seen_names,
+        )
     if form_props:
         body_schema = {"type": "object", "properties": form_props}
         if form_required:

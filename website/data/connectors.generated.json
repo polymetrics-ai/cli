@@ -52062,11 +52062,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             }
           ],
@@ -52095,11 +52095,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             }
           ],
@@ -52128,11 +52128,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             }
           ],
@@ -52161,11 +52161,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -52210,11 +52210,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -52267,11 +52267,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -52308,11 +52308,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -52357,11 +52357,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -52406,11 +52406,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -56282,11 +56282,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-path",
+              "name": "path-path",
               "type": "string",
               "summary": "Package path",
               "values": [],
-              "maps_to": "query.path",
+              "maps_to": "path.path",
               "allow_empty": false
             }
           ],
@@ -57385,11 +57385,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -57424,6 +57424,14 @@
               "values": [],
               "maps_to": "path.tag",
               "allow_empty": false
+            },
+            {
+              "name": "path-package-name",
+              "type": "string",
+              "summary": "path parameter package_name",
+              "values": [],
+              "maps_to": "path.package_name",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -57451,11 +57459,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
@@ -57542,11 +57550,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -57598,27 +57606,27 @@
               "maps_to": "path.id"
             },
             {
-              "name": "query-file-name",
+              "name": "path-file-name",
               "type": "string",
               "summary": "The symbol file name",
               "values": [],
-              "maps_to": "query.file_name",
+              "maps_to": "path.file_name",
               "allow_empty": false
             },
             {
-              "name": "query-signature",
+              "name": "path-signature",
               "type": "string",
               "summary": "The symbol file signature",
               "values": [],
-              "maps_to": "query.signature",
+              "maps_to": "path.signature",
               "allow_empty": false
             },
             {
-              "name": "query-same-file-name",
+              "name": "path-same-file-name",
               "type": "string",
               "summary": "The symbol file name. Must match the 'file_name' parameter",
               "values": [],
-              "maps_to": "query.same_file_name",
+              "maps_to": "path.same_file_name",
               "allow_empty": false
             }
           ],
@@ -57694,11 +57702,11 @@
               "maps_to": "path.id"
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -57726,19 +57734,19 @@
               "maps_to": "path.id"
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
-              "name": "query-package-version",
+              "name": "path-package-version",
               "type": "string",
               "summary": "The NuGet package version",
               "values": [],
-              "maps_to": "query.package_version",
+              "maps_to": "path.package_version",
               "allow_empty": false
             }
           ],
@@ -57818,11 +57826,11 @@
               "maps_to": "path.id"
             },
             {
-              "name": "query-file-identifier",
+              "name": "path-file-identifier",
               "type": "string",
               "summary": "The PyPi package file identifier",
               "values": [],
-              "maps_to": "query.file_identifier",
+              "maps_to": "path.file_identifier",
               "allow_empty": false
             },
             {
@@ -57882,11 +57890,11 @@
               "maps_to": "path.id"
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The PyPi package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -60243,11 +60251,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-artifact-path",
+              "name": "path-artifact-path",
               "type": "string",
               "summary": "Path to a file inside the artifacts archive.",
               "values": [],
-              "maps_to": "query.artifact_path",
+              "maps_to": "path.artifact_path",
               "allow_empty": false
             },
             {
@@ -60435,11 +60443,11 @@
               "maps_to": "path.job_id"
             },
             {
-              "name": "query-artifact-path",
+              "name": "path-artifact-path",
               "type": "string",
               "summary": "Path to a file inside the artifacts archive.",
               "values": [],
-              "maps_to": "query.artifact_path",
+              "maps_to": "path.artifact_path",
               "allow_empty": false
             },
             {
@@ -64169,11 +64177,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The Composer package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -66727,11 +66735,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             }
           ],
@@ -66760,11 +66768,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             }
           ],
@@ -66793,11 +66801,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             }
           ],
@@ -66826,11 +66834,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -66875,11 +66883,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -66932,11 +66940,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -66973,11 +66981,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -67022,11 +67030,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -67071,11 +67079,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-distribution",
+              "name": "path-distribution",
               "type": "string",
               "summary": "The Debian Codename or Suite",
               "values": [],
-              "maps_to": "query.distribution",
+              "maps_to": "path.distribution",
               "allow_empty": false
             },
             {
@@ -69796,6 +69804,22 @@
               "values": [],
               "maps_to": "path.file_name",
               "allow_empty": false
+            },
+            {
+              "name": "path-package-version",
+              "type": "string",
+              "summary": "path parameter package_version",
+              "values": [],
+              "maps_to": "path.package_version",
+              "allow_empty": false
+            },
+            {
+              "name": "path-path",
+              "type": "string",
+              "summary": "path parameter path",
+              "values": [],
+              "maps_to": "path.path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -69836,6 +69860,22 @@
               "summary": "Package file name",
               "values": [],
               "maps_to": "path.file_name",
+              "allow_empty": false
+            },
+            {
+              "name": "path-package-version",
+              "type": "string",
+              "summary": "path parameter package_version",
+              "values": [],
+              "maps_to": "path.package_version",
+              "allow_empty": false
+            },
+            {
+              "name": "path-path",
+              "type": "string",
+              "summary": "path parameter path",
+              "values": [],
+              "maps_to": "path.path",
               "allow_empty": false
             }
           ],
@@ -69880,19 +69920,20 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-version",
+              "name": "path-package-version",
               "type": "string",
               "summary": "Package version",
               "values": [],
-              "maps_to": "query.package_version",
+              "maps_to": "path.package_version",
               "allow_empty": false
             },
             {
-              "name": "query-path",
+              "name": "path-path",
               "type": "string",
               "summary": "File directory path",
               "values": [],
-              "maps_to": "query.path"
+              "maps_to": "path.path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -69920,11 +69961,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-name",
+              "name": "path-module-name",
               "type": "string",
               "summary": "The name of the Go module",
               "values": [],
-              "maps_to": "query.module_name",
+              "maps_to": "path.module_name",
               "allow_empty": false
             }
           ],
@@ -69953,11 +69994,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-name",
+              "name": "path-module-name",
               "type": "string",
               "summary": "The name of the Go module",
               "values": [],
-              "maps_to": "query.module_name",
+              "maps_to": "path.module_name",
               "allow_empty": false
             },
             {
@@ -69994,11 +70035,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-name",
+              "name": "path-module-name",
               "type": "string",
               "summary": "The name of the Go module",
               "values": [],
-              "maps_to": "query.module_name",
+              "maps_to": "path.module_name",
               "allow_empty": false
             },
             {
@@ -70035,11 +70076,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-name",
+              "name": "path-module-name",
               "type": "string",
               "summary": "The name of the Go module",
               "values": [],
-              "maps_to": "query.module_name",
+              "maps_to": "path.module_name",
               "allow_empty": false
             },
             {
@@ -75053,11 +75094,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-path",
+              "name": "path-path",
               "type": "string",
               "summary": "Package path",
               "values": [],
-              "maps_to": "query.path",
+              "maps_to": "path.path",
               "allow_empty": false
             }
           ],
@@ -75092,6 +75133,14 @@
               "values": [],
               "maps_to": "path.file_name",
               "allow_empty": false
+            },
+            {
+              "name": "path-path",
+              "type": "string",
+              "summary": "path parameter path",
+              "values": [],
+              "maps_to": "path.path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -75124,6 +75173,14 @@
               "summary": "Package file name",
               "values": [],
               "maps_to": "path.file_name",
+              "allow_empty": false
+            },
+            {
+              "name": "path-path",
+              "type": "string",
+              "summary": "path parameter path",
+              "values": [],
+              "maps_to": "path.path",
               "allow_empty": false
             }
           ],
@@ -77087,6 +77144,14 @@
               "values": [],
               "maps_to": "path.model_version_id",
               "allow_empty": false
+            },
+            {
+              "name": "path-path",
+              "type": "string",
+              "summary": "path parameter path",
+              "values": [],
+              "maps_to": "path.path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -77128,6 +77193,14 @@
               "values": [],
               "maps_to": "path.model_version_id",
               "allow_empty": false
+            },
+            {
+              "name": "path-path",
+              "type": "string",
+              "summary": "path parameter path",
+              "values": [],
+              "maps_to": "path.path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -77163,11 +77236,12 @@
               "allow_empty": false
             },
             {
-              "name": "query-path",
+              "name": "path-path",
               "type": "string",
               "summary": "File directory path",
               "values": [],
-              "maps_to": "query.path"
+              "maps_to": "path.path",
+              "allow_empty": false
             },
             {
               "name": "query-status",
@@ -77213,11 +77287,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -77252,6 +77326,14 @@
               "values": [],
               "maps_to": "path.tag",
               "allow_empty": false
+            },
+            {
+              "name": "path-package-name",
+              "type": "string",
+              "summary": "path parameter package_name",
+              "values": [],
+              "maps_to": "path.package_name",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -77279,11 +77361,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
@@ -77370,19 +77452,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
-              "name": "query-file-name",
+              "name": "path-file-name",
               "type": "string",
               "summary": "Package file name",
               "values": [],
-              "maps_to": "query.file_name",
+              "maps_to": "path.file_name",
               "allow_empty": false
             }
           ],
@@ -77444,11 +77526,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -77502,27 +77584,27 @@
               "allow_empty": false
             },
             {
-              "name": "query-file-name",
+              "name": "path-file-name",
               "type": "string",
               "summary": "The symbol file name",
               "values": [],
-              "maps_to": "query.file_name",
+              "maps_to": "path.file_name",
               "allow_empty": false
             },
             {
-              "name": "query-signature",
+              "name": "path-signature",
               "type": "string",
               "summary": "The symbol file signature",
               "values": [],
-              "maps_to": "query.signature",
+              "maps_to": "path.signature",
               "allow_empty": false
             },
             {
-              "name": "query-same-file-name",
+              "name": "path-same-file-name",
               "type": "string",
               "summary": "The symbol file name. Must match the 'file_name' parameter",
               "values": [],
-              "maps_to": "query.same_file_name",
+              "maps_to": "path.same_file_name",
               "allow_empty": false
             }
           ],
@@ -77626,11 +77708,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -77659,19 +77741,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
-              "name": "query-package-version",
+              "name": "path-package-version",
               "type": "string",
               "summary": "The NuGet package version",
               "values": [],
-              "maps_to": "query.package_version",
+              "maps_to": "path.package_version",
               "allow_empty": false
             }
           ],
@@ -77753,11 +77835,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -77786,27 +77868,27 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
-              "name": "query-package-version",
+              "name": "path-package-version",
               "type": "string",
               "summary": "The NuGet package version",
               "values": [],
-              "maps_to": "query.package_version",
+              "maps_to": "path.package_version",
               "allow_empty": false
             },
             {
-              "name": "query-package-filename",
+              "name": "path-package-filename",
               "type": "string",
               "summary": "The NuGet package filename",
               "values": [],
-              "maps_to": "query.package_filename",
+              "maps_to": "path.package_filename",
               "allow_empty": false
             }
           ],
@@ -77935,19 +78017,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
-              "name": "query-package-version",
+              "name": "path-package-version",
               "type": "string",
               "summary": "The NuGet package version",
               "values": [],
-              "maps_to": "query.package_version",
+              "maps_to": "path.package_version",
               "allow_empty": false
             }
           ],
@@ -78067,19 +78149,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The NuGet package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
-              "name": "query-package-version",
+              "name": "path-package-version",
               "type": "string",
               "summary": "The NuGet package version",
               "values": [],
-              "maps_to": "query.package_version",
+              "maps_to": "path.package_version",
               "allow_empty": false
             }
           ],
@@ -85769,11 +85851,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-file-identifier",
+              "name": "path-file-identifier",
               "type": "string",
               "summary": "The PyPi package file identifier",
               "values": [],
-              "maps_to": "query.file_identifier",
+              "maps_to": "path.file_identifier",
               "allow_empty": false
             },
             {
@@ -85835,11 +85917,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The PyPi package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -86139,11 +86221,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-direct-asset-path",
+              "name": "path-direct-asset-path",
               "type": "string",
               "summary": "The path to the file to download, as specified when creating the release asset",
               "values": [],
-              "maps_to": "query.direct_asset_path",
+              "maps_to": "path.direct_asset_path",
               "allow_empty": false
             }
           ],
@@ -86172,11 +86254,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-suffix-path",
+              "name": "path-suffix-path",
               "type": "string",
               "summary": "The path to be suffixed to the latest release",
               "values": [],
-              "maps_to": "query.suffix_path",
+              "maps_to": "path.suffix_path",
               "allow_empty": false
             }
           ],
@@ -87444,11 +87526,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-file-name",
+              "name": "path-file-name",
               "type": "string",
               "summary": "Repository metadata file name",
               "values": [],
-              "maps_to": "query.file_name",
+              "maps_to": "path.file_name",
               "allow_empty": false
             }
           ],
@@ -87477,18 +87559,18 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-file-id",
+              "name": "path-package-file-id",
               "type": "integer",
               "summary": "RPM package file id",
               "values": [],
-              "maps_to": "query.package_file_id"
+              "maps_to": "path.package_file_id"
             },
             {
-              "name": "query-file-name",
+              "name": "path-file-name",
               "type": "string",
               "summary": "RPM package file name",
               "values": [],
-              "maps_to": "query.file_name",
+              "maps_to": "path.file_name",
               "allow_empty": false
             }
           ],
@@ -88144,7 +88226,7 @@
         {
           "path": "operation get projects-id-packages-terraform-modules-module-name-module-system",
           "summary": "Download the latest version of a module",
-          "intent": "direct_read",
+          "intent": "etl",
           "availability": "planned",
           "stream": "",
           "write": "",
@@ -88177,15 +88259,15 @@
             }
           ],
           "examples": [],
-          "output_policy": "binary_file_bounded",
-          "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata.",
+          "output_policy": "",
+          "risk": "",
           "approval": "",
-          "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
+          "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
         },
         {
           "path": "operation get projects-id-packages-terraform-modules-module-name-module-system-module-version",
           "summary": "Download a specific version of a module",
-          "intent": "direct_read",
+          "intent": "etl",
           "availability": "planned",
           "stream": "",
           "write": "",
@@ -88217,19 +88299,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-version",
+              "name": "path-module-version",
               "type": "string",
               "summary": "Module version",
               "values": [],
-              "maps_to": "query.module_version",
+              "maps_to": "path.module_version",
               "allow_empty": false
             }
           ],
           "examples": [],
-          "output_policy": "binary_file_bounded",
-          "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata.",
+          "output_policy": "",
+          "risk": "",
           "approval": "",
-          "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
+          "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
         },
         {
           "path": "operation put projects-id-packages-terraform-modules-module-name-module-system-module-version-file-authorize",
@@ -88263,6 +88345,14 @@
               "summary": "Module system",
               "values": [],
               "maps_to": "path.module_system",
+              "allow_empty": false
+            },
+            {
+              "name": "path-module-version",
+              "type": "string",
+              "summary": "path parameter module_version",
+              "values": [],
+              "maps_to": "path.module_version",
               "allow_empty": false
             }
           ],
@@ -88320,6 +88410,14 @@
               "summary": "The package file to be published (generated by Multipart middleware)",
               "values": [],
               "maps_to": "body.file",
+              "allow_empty": false
+            },
+            {
+              "name": "path-module-version",
+              "type": "string",
+              "summary": "path parameter module_version",
+              "values": [],
+              "maps_to": "path.module_version",
               "allow_empty": false
             }
           ],
@@ -90910,11 +91008,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The Composer package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -90943,11 +91041,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "The Composer package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -92052,11 +92150,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-path",
+              "name": "path-path",
               "type": "string",
               "summary": "Package path",
               "values": [],
-              "maps_to": "query.path",
+              "maps_to": "path.path",
               "allow_empty": false
             }
           ],
@@ -92077,11 +92175,11 @@
           "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
           "flags": [
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -92108,6 +92206,14 @@
               "values": [],
               "maps_to": "path.tag",
               "allow_empty": false
+            },
+            {
+              "name": "path-package-name",
+              "type": "string",
+              "summary": "path parameter package_name",
+              "values": [],
+              "maps_to": "path.package_name",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -92127,11 +92233,11 @@
           "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
           "flags": [
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             },
             {
@@ -92192,11 +92298,11 @@
           "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
           "flags": [
             {
-              "name": "query-package-name",
+              "name": "path-package-name",
               "type": "string",
               "summary": "Package name",
               "values": [],
-              "maps_to": "query.package_name",
+              "maps_to": "path.package_name",
               "allow_empty": false
             }
           ],
@@ -92250,7 +92356,7 @@
         {
           "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-download",
           "summary": "Retrieve download URL for latest module version",
-          "intent": "direct_read",
+          "intent": "etl",
           "availability": "planned",
           "stream": "",
           "write": "",
@@ -92283,15 +92389,15 @@
             }
           ],
           "examples": [],
-          "output_policy": "binary_file_bounded",
-          "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata.",
+          "output_policy": "",
+          "risk": "",
           "approval": "",
-          "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
+          "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
         },
         {
           "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system",
           "summary": "Retrieve latest version for a module",
-          "intent": "direct_read",
+          "intent": "etl",
           "availability": "planned",
           "stream": "",
           "write": "",
@@ -92324,15 +92430,15 @@
             }
           ],
           "examples": [],
-          "output_policy": "binary_file_bounded",
-          "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata.",
+          "output_policy": "",
+          "risk": "",
           "approval": "",
-          "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
+          "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
         },
         {
           "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version-download",
           "summary": "Get download location for specific version of a module",
-          "intent": "direct_read",
+          "intent": "etl",
           "availability": "planned",
           "stream": "",
           "write": "",
@@ -92364,19 +92470,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-version",
+              "name": "path-module-version",
               "type": "string",
               "summary": "Version of the module",
               "values": [],
-              "maps_to": "query.module_version",
+              "maps_to": "path.module_version",
               "allow_empty": false
             }
           ],
           "examples": [],
-          "output_policy": "binary_file_bounded",
-          "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata.",
+          "output_policy": "",
+          "risk": "",
           "approval": "",
-          "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
+          "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
         },
         {
           "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version-file",
@@ -92413,11 +92519,11 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-version",
+              "name": "path-module-version",
               "type": "string",
               "summary": "Version of the module",
               "values": [],
-              "maps_to": "query.module_version",
+              "maps_to": "path.module_version",
               "allow_empty": false
             }
           ],
@@ -92430,7 +92536,7 @@
         {
           "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-module-version",
           "summary": "Get details about specific version of a module",
-          "intent": "direct_read",
+          "intent": "etl",
           "availability": "planned",
           "stream": "",
           "write": "",
@@ -92462,19 +92568,19 @@
               "allow_empty": false
             },
             {
-              "name": "query-module-version",
+              "name": "path-module-version",
               "type": "string",
               "summary": "Version of the module",
               "values": [],
-              "maps_to": "query.module_version",
+              "maps_to": "path.module_version",
               "allow_empty": false
             }
           ],
           "examples": [],
-          "output_policy": "binary_file_bounded",
-          "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata.",
+          "output_policy": "",
+          "risk": "",
           "approval": "",
-          "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
+          "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence."
         },
         {
           "path": "operation post container-registry-event-events",
@@ -97071,7 +97177,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nReads GitLab projects, groups, users, and issues through the GitLab REST API v4 and carries a complete connector-local operation ledger for the pinned official GitLab OpenAPI v2 source.\n\nImplemented fixture-backed streams: `projects`, `groups`, `users`, `issues`.\n\nThe complete official ledger has 1,146 operations: 392 ETL/read, 637 reverse-ETL write/mutation, 6 direct/provider query/search/metadata, 94 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.\n\nOnly the four streams are executable in this wave. `api_surface.json`, `operations.json`, and `cli_surface.json` keep every other operation represented as typed planned/blocked metadata until a future connector-local stream/action/command adds fixtures and execution evidence.\n\n`api_surface.json` also includes one connector-local supplemental GET `/users` row for the fixture-backed users stream because that documented top-level endpoint is absent from the pinned OpenAPI source; official GET `/projects/{id}/users` remains planned metadata.\n\nOfficial source: https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml\nBranch provenance source: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); GitLab personal access token or OAuth access token. Used only for Bearer auth and redacted by the connector runtime.\n- `base_url` (optional, string); default `https://gitlab.com/api/v4`; format `uri`; use `https://gitlab.example.com/api/v4` for self-managed instances or fixture replay.\n- `start_date` (optional, string); format `date-time`; used by the current read stream filters where upstream supports a date bound.\n- `page_size` (optional, string); default `50`; current streams send `per_page=50`.\n- `mode` (optional, string); fixture/live mode marker used by local harnesses.\n\nRequests use Bearer authentication from `secrets.access_token`. No fixture or metadata file contains credential values.\n\nConnection checks call GET `/user` against the configured API base URL.\n\n## Streams notes\n\nDefault pagination follows RFC 5988 `Link` headers with `rel=next`; fixture pages are bounded and sanitized.\n\n- `projects`: GET `/projects`; records at the response root; sends `per_page=50`; optionally sends `last_activity_after` from `start_date`.\n- `groups`: GET `/groups`; records at the response root; sends `per_page=50`.\n- `users`: GET `/users`; records at the response root; sends `per_page=50`; optionally sends `created_after` from `start_date`. The pinned OpenAPI source does not enumerate this top-level users collection, so `api_surface.json` uses a connector-local supplemental coverage row and leaves GET `/projects/{id}/users` as planned metadata.\n- `issues`: GET `/issues`; records at the response root; sends `per_page=50`; optionally sends `updated_after` from `start_date`; derives `author_id` from `author.id`.\n\nPlanned ETL/read rows in `operations.json` are metadata only. They are not advertised as executable streams until each has a schema, fixture replay, and conformance evidence.\n\n## Write actions & risks\n\nNo `writes.json` actions are executable in this wave, and connector metadata keeps `capabilities.write=false` until named actions and fixtures are added.\n\nThe official ledger still includes all 637 mutation operations, including DELETE, destructive, admin, token/key/variable, hook, runner, package delete, and other high-risk operations. These are not blanket-excluded as unsafe. They are represented as planned/blocked typed metadata with risk, source URL, bounded request schemas where available, and approval notes.\n\nBefore any GitLab mutation can execute it must become a named reverse-ETL action with:\n\n1. a bounded record schema and redaction contract;\n2. dry-run plan and preview evidence;\n3. explicit approval token;\n4. `confirm: \"destructive\"` and typed confirmation for destructive/admin actions;\n5. idempotency and cleanup notes where upstream behavior allows them;\n6. fixture/conformance evidence proving request shape without live credentials.\n\nNo generic HTTP method/path/body, arbitrary GraphQL, shell, file, SQL write/read, extension, binary, or raw passthrough command is exposed.\n\n## Known limits\n\n- Fixture-backed implementation remains limited to 4 streams; all other official operations are planned/blocked metadata.\n- This connector is not live-certified; fixture success must not be reported as provider certification.\n- Direct/provider search/query/metadata rows depend on shared foundation #2985 before execution can be claimed.\n- Binary/file transfer rows depend on shared foundation #2987 before bounded download/upload execution can be claimed.\n- CDC/changefeed/audit/webhook rows depend on shared foundations #2986 and #2988 before CDC/changefeed claims can be made.\n- Destructive/admin write rows depend on per-action schemas, redaction, fixtures, and typed confirmation evidence before execution can be claimed.\n- The current top-level `/users` stream is fixture-backed legacy behavior; the pinned OpenAPI source omits that exact row, so api surface coverage uses a connector-local supplemental row and does not mark project-scoped users as implemented.\n- The two excluded rows are GitLab Slack integration callback endpoints (`/integrations/slack/interactions` and `/integrations/slack/options`), not user-invoked connector operations.\n- Generated lane counts: etl_read=392, reverse_etl_write=637, direct_read_query_search=6, binary_file=94, cdc_changefeed=15, excluded_not_applicable=2.\n",
+    "docs_md": "# Overview\n\nReads GitLab projects, groups, users, and issues through the GitLab REST API v4 and carries a complete connector-local operation ledger for the pinned official GitLab OpenAPI v2 source.\n\nImplemented fixture-backed streams: `projects`, `groups`, `users`, `issues`.\n\nThe complete official ledger has 1,146 operations: 398 ETL/read, 637 reverse-ETL write/mutation, 6 direct/provider query/search/metadata, 88 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.\n\nOnly the four streams are executable in this wave. `api_surface.json`, `operations.json`, and `cli_surface.json` keep every other operation represented as typed planned/blocked metadata until a future connector-local stream/action/command adds fixtures and execution evidence.\n\n`api_surface.json` also includes one connector-local supplemental GET `/users` row for the fixture-backed users stream because that documented top-level endpoint is absent from the pinned OpenAPI source; official GET `/projects/{id}/users` remains planned metadata.\n\nOfficial source: https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml\nBranch provenance source: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); GitLab personal access token or OAuth access token. Used only for Bearer auth and redacted by the connector runtime.\n- `base_url` (optional, string); default `https://gitlab.com/api/v4`; format `uri`; use `https://gitlab.example.com/api/v4` for self-managed instances or fixture replay.\n- `start_date` (optional, string); format `date-time`; used by the current read stream filters where upstream supports a date bound.\n- `page_size` (optional, string); default `50`; current streams send `per_page=50`.\n- `mode` (optional, string); fixture/live mode marker used by local harnesses.\n\nRequests use Bearer authentication from `secrets.access_token`. No fixture or metadata file contains credential values.\n\nConnection checks call GET `/user` against the configured API base URL.\n\n## Streams notes\n\nDefault pagination follows RFC 5988 `Link` headers with `rel=next`; fixture pages are bounded and sanitized.\n\n- `projects`: GET `/projects`; records at the response root; sends `per_page=50`; optionally sends `last_activity_after` from `start_date`.\n- `groups`: GET `/groups`; records at the response root; sends `per_page=50`.\n- `users`: GET `/users`; records at the response root; sends `per_page=50`; optionally sends `created_after` from `start_date`. The pinned OpenAPI source does not enumerate this top-level users collection, so `api_surface.json` uses a connector-local supplemental coverage row and leaves GET `/projects/{id}/users` as planned metadata.\n- `issues`: GET `/issues`; records at the response root; sends `per_page=50`; optionally sends `updated_after` from `start_date`; derives `author_id` from `author.id`.\n\nPlanned ETL/read rows in `operations.json` are metadata only. They are not advertised as executable streams until each has a schema, fixture replay, and conformance evidence.\n\n## Write actions & risks\n\nNo `writes.json` actions are executable in this wave, and connector metadata keeps `capabilities.write=false` until named actions and fixtures are added.\n\nThe official ledger still includes all 637 mutation operations, including DELETE, destructive, admin, token/key/variable, hook, runner, package delete, and other high-risk operations. These are not blanket-excluded as unsafe. They are represented as planned/blocked typed metadata with risk, source URL, bounded request schemas where available, and approval notes.\n\nBefore any GitLab mutation can execute it must become a named reverse-ETL action with:\n\n1. a bounded record schema and redaction contract;\n2. dry-run plan and preview evidence;\n3. explicit approval token;\n4. `confirm: \"destructive\"` and typed confirmation for destructive/admin actions;\n5. idempotency and cleanup notes where upstream behavior allows them;\n6. fixture/conformance evidence proving request shape without live credentials.\n\nNo generic HTTP method/path/body, arbitrary GraphQL, shell, file, SQL write/read, extension, binary, or raw passthrough command is exposed.\n\n## Known limits\n\n- Fixture-backed implementation remains limited to 4 streams; all other official operations are planned/blocked metadata.\n- This connector is not live-certified; fixture success must not be reported as provider certification.\n- Direct/provider search/query/metadata rows depend on shared foundation #2985 before execution can be claimed.\n- Binary/file transfer rows depend on shared foundation #2987 before bounded download/upload execution can be claimed.\n- CDC/changefeed/audit/webhook rows depend on shared foundations #2986 and #2988 before CDC/changefeed claims can be made.\n- Destructive/admin write rows depend on per-action schemas, redaction, fixtures, and typed confirmation evidence before execution can be claimed.\n- The current top-level `/users` stream is fixture-backed legacy behavior; the pinned OpenAPI source omits that exact row, so api surface coverage uses a connector-local supplemental row and does not mark project-scoped users as implemented.\n- The two excluded rows are GitLab Slack integration callback endpoints (`/integrations/slack/interactions` and `/integrations/slack/options`), not user-invoked connector operations.\n- Generated lane counts: etl_read=398, reverse_etl_write=637, direct_read_query_search=6, binary_file=88, cdc_changefeed=15, excluded_not_applicable=2.\n",
     "icon": {
       "id": "gitlab",
       "path": "icons/gitlab.svg",
