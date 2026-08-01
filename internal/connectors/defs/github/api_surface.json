@@ -7728,10 +7728,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-      "covered_by": {
-        "direct_reads": [
-          "branches protection view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7763,10 +7766,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-      "covered_by": {
-        "direct_reads": [
-          "branches enforce_admins view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7798,10 +7804,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-      "covered_by": {
-        "direct_reads": [
-          "branches required_pull_request_reviews view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7833,10 +7842,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-      "covered_by": {
-        "direct_reads": [
-          "branches required_signatures view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7868,10 +7880,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-      "covered_by": {
-        "direct_reads": [
-          "branches required_status_checks view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7903,10 +7918,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-      "covered_by": {
-        "direct_reads": [
-          "branches contexts view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7951,10 +7969,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
-      "covered_by": {
-        "direct_reads": [
-          "branches restrictions view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -7973,10 +7994,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-      "covered_by": {
-        "direct_reads": [
-          "branches apps view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -8021,10 +8045,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-      "covered_by": {
-        "direct_reads": [
-          "branches teams view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -8069,10 +8096,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-      "covered_by": {
-        "direct_reads": [
-          "branches users view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Branch path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -8801,37 +8831,49 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs",
-      "covered_by": {
-        "direct_reads": [
-          "commits check-runs view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Commit ref path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites",
-      "covered_by": {
-        "direct_reads": [
-          "commits check-suites view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Commit ref path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{ref}/status",
-      "covered_by": {
-        "direct_reads": [
-          "commits status view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Commit ref path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{ref}/statuses",
-      "covered_by": {
-        "direct_reads": [
-          "commits statuses view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Commit ref path parameters require GitHub ref-like values that the shared direct-read path encoder does not yet support.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {

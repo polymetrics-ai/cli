@@ -994,7 +994,8 @@
               "insecure_ssl": {
                 "type": "string"
               }
-            }
+            },
+            "additionalProperties": false
           },
           "events": {
             "type": "array",
@@ -1049,7 +1050,8 @@
               "insecure_ssl": {
                 "type": "string"
               }
-            }
+            },
+            "additionalProperties": false
           },
           "events": {
             "type": "array",

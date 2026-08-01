@@ -3733,7 +3733,7 @@
       "path": "branches protection view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection2",
       "source_cli_path": "",
       "flags": [
@@ -3744,13 +3744,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches protection set",
@@ -3792,7 +3786,7 @@
       "path": "branches enforce_admins view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_enforce_admins2",
       "source_cli_path": "",
       "flags": [
@@ -3803,13 +3797,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches enforce_admins create",
@@ -3851,7 +3839,7 @@
       "path": "branches required_pull_request_reviews view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_required_pull_request_reviews2",
       "source_cli_path": "",
       "flags": [
@@ -3862,13 +3850,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches required_pull_request_reviews update",
@@ -3910,7 +3892,7 @@
       "path": "branches required_signatures view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_required_signatures2",
       "source_cli_path": "",
       "flags": [
@@ -3921,13 +3903,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches required_signatures create",
@@ -3969,7 +3945,7 @@
       "path": "branches required_status_checks view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_required_status_checks2",
       "source_cli_path": "",
       "flags": [
@@ -3980,13 +3956,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches required_status_checks update",
@@ -4028,7 +3998,7 @@
       "path": "branches contexts view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_required_status_checks_contexts2",
       "source_cli_path": "",
       "flags": [
@@ -4039,13 +4009,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches contexts create",
@@ -4105,7 +4069,7 @@
       "path": "branches restrictions view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_restrictions2",
       "source_cli_path": "",
       "flags": [
@@ -4116,13 +4080,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches apps delete",
@@ -4146,7 +4104,7 @@
       "path": "branches apps view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_restrictions_apps2",
       "source_cli_path": "",
       "flags": [
@@ -4157,13 +4115,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches apps create",
@@ -4223,7 +4175,7 @@
       "path": "branches teams view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_restrictions_teams2",
       "source_cli_path": "",
       "flags": [
@@ -4234,13 +4186,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches teams create",
@@ -4300,7 +4246,7 @@
       "path": "branches users view",
       "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.branches_branch_protection_restrictions_users2",
       "source_cli_path": "",
       "flags": [
@@ -4311,13 +4257,7 @@
           "maps_to": "path.branch"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Branch names may contain slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "branches users create",
@@ -5273,7 +5213,7 @@
       "path": "commits check-runs view",
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-runs",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.commits_ref_check_runs",
       "source_cli_path": "",
       "flags": [
@@ -5284,19 +5224,13 @@
           "maps_to": "path.ref"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Commit refs may contain branch-style slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "commits check-suites view",
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-suites",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.commits_ref_check_suites",
       "source_cli_path": "",
       "flags": [
@@ -5307,19 +5241,13 @@
           "maps_to": "path.ref"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Commit refs may contain branch-style slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "commits status view",
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/status",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.commits_ref_status",
       "source_cli_path": "",
       "flags": [
@@ -5330,19 +5258,13 @@
           "maps_to": "path.ref"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/commits/{ref}/status"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Commit refs may contain branch-style slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "commits statuses view",
       "summary": "Read /repos/{owner}/{repo}/commits/{ref}/statuses",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.commits_ref_statuses",
       "source_cli_path": "",
       "flags": [
@@ -5353,13 +5275,7 @@
           "maps_to": "path.ref"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/commits/{ref}/statuses"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Commit refs may contain branch-style slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "community profile view",
