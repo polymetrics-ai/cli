@@ -195818,11 +195818,20 @@
               "maps_to": "record.completedAt"
             },
             {
-              "name": "fieldvalues",
-              "type": "string_array",
-              "summary": "Lever fieldValues value.",
+              "name": "fieldvalue-id",
+              "type": "string",
+              "summary": "Feedback field identifier for the first field value.",
               "values": [],
-              "maps_to": "record.fieldValues"
+              "maps_to": "record.fieldValues.0.id",
+              "allow_empty": false
+            },
+            {
+              "name": "fieldvalue-value",
+              "type": "string",
+              "summary": "Feedback value for the first field value.",
+              "values": [],
+              "maps_to": "record.fieldValues.0.value",
+              "allow_empty": false
             }
           ],
           "examples": [
@@ -195903,11 +195912,51 @@
               "allow_empty": false
             },
             {
-              "name": "fields",
-              "type": "string_array",
-              "summary": "Lever fields value.",
+              "name": "field-id",
+              "type": "string",
+              "summary": "Identifier for the first template field.",
               "values": [],
-              "maps_to": "record.fields"
+              "maps_to": "record.fields.0.id",
+              "allow_empty": false
+            },
+            {
+              "name": "field-type",
+              "type": "string",
+              "summary": "Type for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.type",
+              "allow_empty": false
+            },
+            {
+              "name": "field-text",
+              "type": "string",
+              "summary": "Text label for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.text",
+              "allow_empty": false
+            },
+            {
+              "name": "field-required",
+              "type": "boolean",
+              "summary": "Whether the first template field is required.",
+              "values": [],
+              "maps_to": "record.fields.0.required"
+            },
+            {
+              "name": "field-description",
+              "type": "string",
+              "summary": "Description for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.description",
+              "allow_empty": false
+            },
+            {
+              "name": "field-prompt",
+              "type": "string",
+              "summary": "Prompt for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.prompt",
+              "allow_empty": false
             }
           ],
           "examples": [
@@ -195961,11 +196010,51 @@
               "allow_empty": false
             },
             {
-              "name": "fields",
-              "type": "string_array",
-              "summary": "Lever fields value.",
+              "name": "field-id",
+              "type": "string",
+              "summary": "Identifier for the first template field.",
               "values": [],
-              "maps_to": "record.fields"
+              "maps_to": "record.fields.0.id",
+              "allow_empty": false
+            },
+            {
+              "name": "field-type",
+              "type": "string",
+              "summary": "Type for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.type",
+              "allow_empty": false
+            },
+            {
+              "name": "field-text",
+              "type": "string",
+              "summary": "Text label for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.text",
+              "allow_empty": false
+            },
+            {
+              "name": "field-required",
+              "type": "boolean",
+              "summary": "Whether the first template field is required.",
+              "values": [],
+              "maps_to": "record.fields.0.required"
+            },
+            {
+              "name": "field-description",
+              "type": "string",
+              "summary": "Description for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.description",
+              "allow_empty": false
+            },
+            {
+              "name": "field-prompt",
+              "type": "string",
+              "summary": "Prompt for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.prompt",
+              "allow_empty": false
             }
           ],
           "examples": [
@@ -196045,11 +196134,51 @@
               "maps_to": "record.secretByDefault"
             },
             {
-              "name": "fields",
-              "type": "string_array",
-              "summary": "Lever fields value.",
+              "name": "field-id",
+              "type": "string",
+              "summary": "Identifier for the first template field.",
               "values": [],
-              "maps_to": "record.fields"
+              "maps_to": "record.fields.0.id",
+              "allow_empty": false
+            },
+            {
+              "name": "field-type",
+              "type": "string",
+              "summary": "Type for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.type",
+              "allow_empty": false
+            },
+            {
+              "name": "field-text",
+              "type": "string",
+              "summary": "Text label for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.text",
+              "allow_empty": false
+            },
+            {
+              "name": "field-required",
+              "type": "boolean",
+              "summary": "Whether the first template field is required.",
+              "values": [],
+              "maps_to": "record.fields.0.required"
+            },
+            {
+              "name": "field-description",
+              "type": "string",
+              "summary": "Description for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.description",
+              "allow_empty": false
+            },
+            {
+              "name": "field-prompt",
+              "type": "string",
+              "summary": "Prompt for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.prompt",
+              "allow_empty": false
             }
           ],
           "examples": [
@@ -196110,11 +196239,51 @@
               "maps_to": "record.secretByDefault"
             },
             {
-              "name": "fields",
-              "type": "string_array",
-              "summary": "Lever fields value.",
+              "name": "field-id",
+              "type": "string",
+              "summary": "Identifier for the first template field.",
               "values": [],
-              "maps_to": "record.fields"
+              "maps_to": "record.fields.0.id",
+              "allow_empty": false
+            },
+            {
+              "name": "field-type",
+              "type": "string",
+              "summary": "Type for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.type",
+              "allow_empty": false
+            },
+            {
+              "name": "field-text",
+              "type": "string",
+              "summary": "Text label for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.text",
+              "allow_empty": false
+            },
+            {
+              "name": "field-required",
+              "type": "boolean",
+              "summary": "Whether the first template field is required.",
+              "values": [],
+              "maps_to": "record.fields.0.required"
+            },
+            {
+              "name": "field-description",
+              "type": "string",
+              "summary": "Description for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.description",
+              "allow_empty": false
+            },
+            {
+              "name": "field-prompt",
+              "type": "string",
+              "summary": "Prompt for the first template field.",
+              "values": [],
+              "maps_to": "record.fields.0.prompt",
+              "allow_empty": false
             }
           ],
           "examples": [
