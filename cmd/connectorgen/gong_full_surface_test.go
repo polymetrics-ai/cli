@@ -193,6 +193,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 
 	minimumExampleFlags := map[string][]string{
+		"calls list":                         {"from", "to"},
 		"calls get":                          {"id"},
 		"permissions profiles list":          {"workspaceId"},
 		"permissions profile get":            {"profileId"},
@@ -264,7 +265,11 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	if _, err := os.Stat("../../internal/connectors/defs/gong/fixtures/writes/upload_target_assignments.json"); err != nil {
 		t.Fatalf("missing upload_target_assignments write fixture: %v", err)
 	}
-	assertGongFlag(t, flagsByPath, "permissions profiles list", "workspaceId", "query.workspaceId", "integer", nil)
+	assertGongFlagFormat(t, flagsByPath, "calls list", "from", "date-time")
+	assertGongFlagFormat(t, flagsByPath, "calls list", "to", "date-time")
+	assertGongRequiredConstraint(t, constraintsByPath, "calls list", "query.fromDateTime")
+	assertGongRequiredConstraint(t, constraintsByPath, "calls list", "query.toDateTime")
+	assertGongFlag(t, flagsByPath, "permissions profiles list", "workspaceId", "query.workspaceId", "string", boolPtr(false))
 	assertGongRequiredConstraint(t, constraintsByPath, "permissions profiles list", "query.workspaceId")
 	assertGongFlag(t, flagsByPath, "permissions profile get", "profileId", "query.profileId", "string", boolPtr(false))
 	assertGongRequiredConstraint(t, constraintsByPath, "permissions profile get", "query.profileId")

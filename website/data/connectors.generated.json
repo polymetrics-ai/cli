@@ -50882,7 +50882,7 @@
   {
     "slug": "gong",
     "name": "Gong",
-    "description": "Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
+    "description": "Reads Gong users, calls, scorecards, targets, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, target assignment CSV uploads, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
     "docs_url": "https://us-66463.app.gong.io/settings/api/documentation",
     "integration_type": "api",
     "release_stage": "ga",
@@ -51104,6 +51104,11 @@
         "name": "upload_crm_entity_schema",
         "method": "POST",
         "kind": "create"
+      },
+      {
+        "name": "upload_target_assignments",
+        "method": "POST",
+        "kind": "upsert"
       }
     ],
     "cli_surface": {
@@ -51255,6 +51260,13 @@
           "commands": [
             "integration-settings"
           ]
+        },
+        {
+          "id": "targets",
+          "title": "Targets",
+          "commands": [
+            "targets"
+          ]
         }
       ],
       "global_flags": [
@@ -51378,21 +51390,40 @@
             }
           ],
           "examples": [
-            "pm gong calls list --json --limit 25",
             "pm gong calls list --json --from 2026-07-01T00:00:00Z --to 2026-07-02T00:00:00Z --limit 25"
           ],
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": "Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.",
+          "notes": "Requires --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.",
           "constraints": [
+            {
+              "kind": "required",
+              "left": "query.fromDateTime",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--from is required for Gong calls list"
+            },
+            {
+              "kind": "required",
+              "left": "query.toDateTime",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--to is required for Gong calls list"
+            },
             {
               "kind": "order",
               "left": "query.fromDateTime",
               "right": "query.toDateTime",
               "op": "lt",
               "value_type": "date-time",
-              "left_fallback": "config.start_date",
+              "left_fallback": "",
               "right_fallback": "",
               "message": "invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)"
             }
@@ -51515,14 +51546,36 @@
           "write": "",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [],
+          "flags": [
+            {
+              "name": "flowOwnerEmail",
+              "type": "string",
+              "summary": "Required Engage flow owner email for the official Gong flow list query.",
+              "values": [],
+              "maps_to": "query.flowOwnerEmail",
+              "format": "email",
+              "allow_empty": false
+            }
+          ],
           "examples": [
-            "pm gong flows list --json --limit 25"
+            "pm gong flows list --flowOwnerEmail owner.fixture@example.com --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.flowOwnerEmail",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--flowOwnerEmail is required for Gong flows list"
+            }
+          ]
         },
         {
           "path": "flows folders list",
@@ -51533,14 +51586,36 @@
           "write": "",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [],
+          "flags": [
+            {
+              "name": "flowFolderOwnerEmail",
+              "type": "string",
+              "summary": "Required Engage flow folder owner email for the official Gong flow folders query.",
+              "values": [],
+              "maps_to": "query.flowFolderOwnerEmail",
+              "format": "email",
+              "allow_empty": false
+            }
+          ],
           "examples": [
-            "pm gong flows folders list --json --limit 25"
+            "pm gong flows folders list --flowFolderOwnerEmail owner.fixture@example.com --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.flowFolderOwnerEmail",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--flowFolderOwnerEmail is required for Gong flows folders list"
+            }
+          ]
         },
         {
           "path": "call-outcomes list",
@@ -51569,14 +51644,35 @@
           "write": "",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [],
+          "flags": [
+            {
+              "name": "workspaceId",
+              "type": "string",
+              "summary": "Required Gong workspace identifier string for the official permission profiles query.",
+              "values": [],
+              "maps_to": "query.workspaceId",
+              "allow_empty": false
+            }
+          ],
           "examples": [
-            "pm gong permissions profiles list --json --limit 25"
+            "pm gong permissions profiles list --workspaceId workspace-123 --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.workspaceId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--workspaceId is required for Gong permissions profiles list"
+            }
+          ]
         },
         {
           "path": "calls get",
@@ -51593,11 +51689,12 @@
               "type": "string",
               "summary": "Gong's unique numeric identifier for the call (up to 20 digits).",
               "values": [],
-              "maps_to": "path.id"
+              "maps_to": "path.id",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong calls get --json --max-bytes 1048576"
+            "pm gong calls get --id call-id --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
@@ -51619,16 +51716,29 @@
               "type": "string",
               "summary": "Permission profile identifier.",
               "values": [],
-              "maps_to": "query.profileId"
+              "maps_to": "query.profileId",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong permissions profile get --json --max-bytes 1048576"
+            "pm gong permissions profile get --profileId profile-id --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.profileId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--profileId is required for Gong permissions profile get"
+            }
+          ]
         },
         {
           "path": "crm entity-schema get",
@@ -51649,19 +51759,47 @@
             },
             {
               "name": "objectType",
-              "type": "string",
-              "summary": "Type of object to retrieve the schema fields for (case-sensitive). <br>Omitting this parameter returns the schema for all object types.",
-              "values": [],
-              "maps_to": "query.objectType"
+              "type": "enum",
+              "summary": "Type of object to retrieve the schema fields for (case-sensitive).",
+              "values": [
+                "ACCOUNT",
+                "CONTACT",
+                "DEAL",
+                "LEAD"
+              ],
+              "maps_to": "query.objectType",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong crm entity-schema get --json --max-bytes 1048576"
+            "pm gong crm entity-schema get --integrationId 123 --objectType ACCOUNT --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.integrationId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--integrationId is required for Gong crm entity-schema get"
+            },
+            {
+              "kind": "required",
+              "left": "query.objectType",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--objectType is required for Gong crm entity-schema get"
+            }
+          ]
         },
         {
           "path": "crm entities get",
@@ -51682,26 +51820,65 @@
             },
             {
               "name": "objectType",
-              "type": "string",
+              "type": "enum",
               "summary": "Requested objects type",
-              "values": [],
-              "maps_to": "query.objectType"
+              "values": [
+                "ACCOUNT",
+                "CONTACT",
+                "DEAL",
+                "LEAD"
+              ],
+              "maps_to": "query.objectType",
+              "allow_empty": false
             },
             {
               "name": "objectsCrmIds",
               "type": "string",
               "summary": "<b>Request Body:</b> The requested objects crm ids (should be sent in the request body)",
               "values": [],
-              "maps_to": "query.objectsCrmIds"
+              "maps_to": "query.objectsCrmIds",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong crm entities get --json --max-bytes 1048576"
+            "pm gong crm entities get --integrationId 123 --objectType ACCOUNT --objectsCrmIds account-1 --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.integrationId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--integrationId is required for Gong crm entities get"
+            },
+            {
+              "kind": "required",
+              "left": "query.objectType",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--objectType is required for Gong crm entities get"
+            },
+            {
+              "kind": "required",
+              "left": "query.objectsCrmIds",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--objectsCrmIds is required for Gong crm entities get"
+            }
+          ]
         },
         {
           "path": "users get",
@@ -51718,11 +51895,12 @@
               "type": "string",
               "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
               "values": [],
-              "maps_to": "path.id"
+              "maps_to": "path.id",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong users get --json --max-bytes 1048576"
+            "pm gong users get --id user-id --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
@@ -51744,11 +51922,12 @@
               "type": "string",
               "summary": "Gong's unique numeric identifier for the user (up to 20 digits).",
               "values": [],
-              "maps_to": "path.id"
+              "maps_to": "path.id",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong users settings-history --json --max-bytes 1048576"
+            "pm gong users settings-history --id user-id --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
@@ -51770,16 +51949,29 @@
               "type": "string",
               "summary": "Permission profile identifier.",
               "values": [],
-              "maps_to": "query.profileId"
+              "maps_to": "query.profileId",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong permissions profile-users list --json --max-bytes 1048576"
+            "pm gong permissions profile-users list --profileId profile-id --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.profileId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--profileId is required for Gong permissions profile-users list"
+            }
+          ]
         },
         {
           "path": "logs list",
@@ -51793,24 +51985,35 @@
           "flags": [
             {
               "name": "logType",
-              "type": "string",
+              "type": "enum",
               "summary": "Type of logs requested.",
-              "values": [],
-              "maps_to": "query.logType"
+              "values": [
+                "AccessLog",
+                "UserActivityLog",
+                "UserCallPlay",
+                "ExternallySharedCallAccess",
+                "ExternallySharedCallPlay"
+              ],
+              "maps_to": "query.logType",
+              "allow_empty": false
             },
             {
               "name": "fromDateTime",
               "type": "string",
               "summary": "The time from which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
               "values": [],
-              "maps_to": "query.fromDateTime"
+              "maps_to": "query.fromDateTime",
+              "format": "date-time",
+              "allow_empty": false
             },
             {
               "name": "toDateTime",
               "type": "string",
               "summary": "The time until which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC); if not specified, the lo",
               "values": [],
-              "maps_to": "query.toDateTime"
+              "maps_to": "query.toDateTime",
+              "format": "date-time",
+              "allow_empty": false
             },
             {
               "name": "cursor",
@@ -51821,12 +52024,34 @@
             }
           ],
           "examples": [
-            "pm gong logs list --json --max-bytes 1048576"
+            "pm gong logs list --logType AccessLog --fromDateTime 2026-01-01T00:00:00Z --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.logType",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--logType is required for Gong logs list"
+            },
+            {
+              "kind": "required",
+              "left": "query.fromDateTime",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--fromDateTime is required for Gong logs list"
+            }
+          ]
         },
         {
           "path": "library folder-content list",
@@ -51869,11 +52094,12 @@
               "type": "string",
               "summary": "",
               "values": [],
-              "maps_to": "path.id"
+              "maps_to": "path.id",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong flows bulk-assignment get --json --max-bytes 1048576"
+            "pm gong flows bulk-assignment get --id assignment-id --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
@@ -51902,51 +52128,127 @@
               "type": "string",
               "summary": "The name of the brief to generate. Briefs are configured in the Agent Studio > AI Briefer.",
               "values": [],
-              "maps_to": "query.briefName"
+              "maps_to": "query.briefName",
+              "allow_empty": false
             },
             {
               "name": "crmEntityType",
-              "type": "string",
+              "type": "enum",
               "summary": "The object type of the entity in the CRM.",
-              "values": [],
-              "maps_to": "query.crmEntityType"
+              "values": [
+                "ACCOUNT",
+                "CONTACT",
+                "DEAL",
+                "LEAD"
+              ],
+              "maps_to": "query.crmEntityType",
+              "allow_empty": false
             },
             {
               "name": "crmEntityId",
               "type": "string",
               "summary": "The CRM Id of the entity the question is asked about.",
               "values": [],
-              "maps_to": "query.crmEntityId"
+              "maps_to": "query.crmEntityId",
+              "allow_empty": false
             },
             {
               "name": "timePeriod",
-              "type": "string",
+              "type": "enum",
               "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified",
-              "values": [],
-              "maps_to": "query.timePeriod"
+              "values": [
+                "LAST_7DAYS",
+                "LAST_30DAYS",
+                "LAST_90DAYS",
+                "LAST_90_DAYS_SINCE_LAST_ACTIVITY",
+                "LAST_YEAR_SINCE_LAST_ACTIVITY",
+                "LAST_YEAR",
+                "THIS_WEEK",
+                "THIS_MONTH",
+                "THIS_YEAR",
+                "THIS_QUARTER",
+                "CUSTOM_RANGE",
+                "ALL_CONVERSATIONS"
+              ],
+              "maps_to": "query.timePeriod",
+              "allow_empty": false
             },
             {
               "name": "fromDateTime",
               "type": "string",
               "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
               "values": [],
-              "maps_to": "query.fromDateTime"
+              "maps_to": "query.fromDateTime",
+              "format": "date-time"
             },
             {
               "name": "toDateTime",
               "type": "string",
               "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
               "values": [],
-              "maps_to": "query.toDateTime"
+              "maps_to": "query.toDateTime",
+              "format": "date-time"
             }
           ],
           "examples": [
-            "pm gong entities get-brief --json --max-bytes 1048576"
+            "pm gong entities get-brief --workspaceId 123 --briefName executive-summary --crmEntityType ACCOUNT --crmEntityId account-1 --timePeriod LAST_30DAYS --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.workspaceId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--workspaceId is required for Gong entities get-brief"
+            },
+            {
+              "kind": "required",
+              "left": "query.briefName",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--briefName is required for Gong entities get-brief"
+            },
+            {
+              "kind": "required",
+              "left": "query.crmEntityType",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--crmEntityType is required for Gong entities get-brief"
+            },
+            {
+              "kind": "required",
+              "left": "query.crmEntityId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--crmEntityId is required for Gong entities get-brief"
+            },
+            {
+              "kind": "required",
+              "left": "query.timePeriod",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--timePeriod is required for Gong entities get-brief"
+            }
+          ]
         },
         {
           "path": "entities ask",
@@ -51967,54 +52269,130 @@
             },
             {
               "name": "crmEntityType",
-              "type": "string",
+              "type": "enum",
               "summary": "The object type of the entity in the CRM.",
-              "values": [],
-              "maps_to": "query.crmEntityType"
+              "values": [
+                "ACCOUNT",
+                "CONTACT",
+                "DEAL",
+                "LEAD"
+              ],
+              "maps_to": "query.crmEntityType",
+              "allow_empty": false
             },
             {
               "name": "crmEntityId",
               "type": "string",
               "summary": "The CRM Id of the entity the question is asked about.",
               "values": [],
-              "maps_to": "query.crmEntityId"
+              "maps_to": "query.crmEntityId",
+              "allow_empty": false
             },
             {
               "name": "timePeriod",
-              "type": "string",
+              "type": "enum",
               "summary": "Specifies the time period during which associated calls and emails must have occurred to be used to generate the answer. The calls and emails must be associated with the specified",
-              "values": [],
-              "maps_to": "query.timePeriod"
+              "values": [
+                "LAST_7DAYS",
+                "LAST_30DAYS",
+                "LAST_90DAYS",
+                "LAST_90_DAYS_SINCE_LAST_ACTIVITY",
+                "LAST_YEAR_SINCE_LAST_ACTIVITY",
+                "LAST_YEAR",
+                "THIS_WEEK",
+                "THIS_MONTH",
+                "THIS_YEAR",
+                "THIS_QUARTER",
+                "CUSTOM_RANGE",
+                "ALL_CONVERSATIONS"
+              ],
+              "maps_to": "query.timePeriod",
+              "allow_empty": false
             },
             {
               "name": "fromDateTime",
               "type": "string",
               "summary": "Required when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) on or after which calls (based on call start time) and emails must have occurred to be included when gene",
               "values": [],
-              "maps_to": "query.fromDateTime"
+              "maps_to": "query.fromDateTime",
+              "format": "date-time"
             },
             {
               "name": "toDateTime",
               "type": "string",
               "summary": "Relevant only when timePeriod is CUSTOM_RANGE\nSpecifies the date and time (UTC) before which calls (based on call start time) and emails must have occurred to be included when gene",
               "values": [],
-              "maps_to": "query.toDateTime"
+              "maps_to": "query.toDateTime",
+              "format": "date-time"
             },
             {
               "name": "question",
               "type": "string",
               "summary": "The question to answer.",
               "values": [],
-              "maps_to": "query.question"
+              "maps_to": "query.question",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong entities ask --json --max-bytes 1048576"
+            "pm gong entities ask --workspaceId 123 --crmEntityType ACCOUNT --crmEntityId account-1 --timePeriod LAST_30DAYS --question \"Summarize account risk\" --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.workspaceId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--workspaceId is required for Gong entities ask"
+            },
+            {
+              "kind": "required",
+              "left": "query.crmEntityType",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--crmEntityType is required for Gong entities ask"
+            },
+            {
+              "kind": "required",
+              "left": "query.crmEntityId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--crmEntityId is required for Gong entities ask"
+            },
+            {
+              "kind": "required",
+              "left": "query.timePeriod",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--timePeriod is required for Gong entities ask"
+            },
+            {
+              "kind": "required",
+              "left": "query.question",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--question is required for Gong entities ask"
+            }
+          ]
         },
         {
           "path": "privacy find-phone",
@@ -52031,16 +52409,29 @@
               "type": "string",
               "summary": "The phone number.\n\nThis number must start with a + (plus) sign followed by the country code, area code, and local phone number. All other non-digits are ignored.\n\nThe following are",
               "values": [],
-              "maps_to": "query.phoneNumber"
+              "maps_to": "query.phoneNumber",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong privacy find-phone --json --max-bytes 1048576"
+            "pm gong privacy find-phone --phoneNumber +15551234567 --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.phoneNumber",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--phoneNumber is required for Gong privacy find-phone"
+            }
+          ]
         },
         {
           "path": "privacy find-email",
@@ -52057,16 +52448,30 @@
               "type": "string",
               "summary": "The email address.",
               "values": [],
-              "maps_to": "query.emailAddress"
+              "maps_to": "query.emailAddress",
+              "format": "email",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong privacy find-email --json --max-bytes 1048576"
+            "pm gong privacy find-email --emailAddress user.fixture@example.com --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.emailAddress",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--emailAddress is required for Gong privacy find-email"
+            }
+          ]
         },
         {
           "path": "crm request-status get",
@@ -52090,16 +52495,39 @@
               "type": "string",
               "summary": "The client request ID used in the asynchronous endpoint you want to get a status for",
               "values": [],
-              "maps_to": "query.clientRequestId"
+              "maps_to": "query.clientRequestId",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong crm request-status get --json --max-bytes 1048576"
+            "pm gong crm request-status get --integrationId 123 --clientRequestId request-1 --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.integrationId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--integrationId is required for Gong crm request-status get"
+            },
+            {
+              "kind": "required",
+              "left": "query.clientRequestId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--clientRequestId is required for Gong crm request-status get"
+            }
+          ]
         },
         {
           "path": "coaching list",
@@ -52130,23 +52558,69 @@
               "type": "string",
               "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
               "values": [],
-              "maps_to": "query.from"
+              "maps_to": "query.from",
+              "format": "date-time",
+              "allow_empty": false
             },
             {
               "name": "to",
               "type": "string",
               "summary": "Association time filter - only the associations made after that time will be listed. The time is in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z'",
               "values": [],
-              "maps_to": "query.to"
+              "maps_to": "query.to",
+              "format": "date-time",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm gong coaching list --json --max-bytes 1048576"
+            "pm gong coaching list --workspace-id 123 --manager-id 456 --from 2026-01-01T00:00:00Z --to 2026-01-31T00:00:00Z --json --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
           "approval": "",
-          "notes": ""
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.workspace-id",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--workspace-id is required for Gong coaching list"
+            },
+            {
+              "kind": "required",
+              "left": "query.manager-id",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--manager-id is required for Gong coaching list"
+            },
+            {
+              "kind": "required",
+              "left": "query.from",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--from is required for Gong coaching list"
+            },
+            {
+              "kind": "required",
+              "left": "query.to",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--to is required for Gong coaching list"
+            }
+          ]
         },
         {
           "path": "calls create",
@@ -53717,14 +54191,16 @@
               "type": "string",
               "summary": "Gong call ID whose media should be uploaded.",
               "values": [],
-              "maps_to": "record.id"
+              "maps_to": "record.id",
+              "allow_empty": false
             },
             {
               "name": "media-file-path",
               "type": "string",
               "summary": "Project-relative media file path to upload.",
               "values": [],
-              "maps_to": "record.media_file_path"
+              "maps_to": "record.media_file_path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -53748,7 +54224,8 @@
               "type": "string",
               "summary": "Project-relative CRM data file path to upload.",
               "values": [],
-              "maps_to": "record.data_file_path"
+              "maps_to": "record.data_file_path",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -53766,12 +54243,116 @@
           "write": "upload_crm_entity_schema",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [],
-          "examples": [],
+          "flags": [
+            {
+              "name": "integration-id",
+              "type": "string",
+              "summary": "Integration ID generated when creating the Gong CRM integration.",
+              "values": [],
+              "maps_to": "record.integrationId",
+              "allow_empty": false
+            },
+            {
+              "name": "object-type",
+              "type": "enum",
+              "summary": "CRM object type to set the schema for (case-sensitive).",
+              "values": [
+                "ACCOUNT",
+                "CONTACT",
+                "DEAL",
+                "LEAD"
+              ],
+              "maps_to": "record.objectType"
+            }
+          ],
+          "examples": [
+            "pm gong crm upload-entity-schema --integration-id 12345678901234567890 --object-type ACCOUNT --preview --confirm destructive"
+          ],
           "output_policy": "",
           "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
           "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
           "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable."
+        },
+        {
+          "path": "targets list",
+          "summary": "List target definitions (/v2/targets)",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "workspaceId",
+              "type": "integer",
+              "summary": "Required workspace identifier whose target definitions should be listed.",
+              "values": [],
+              "maps_to": "query.workspaceId"
+            }
+          ],
+          "examples": [
+            "pm gong targets list --workspaceId 123 --json --max-bytes 1048576"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
+          "approval": "",
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "required",
+              "left": "query.workspaceId",
+              "right": "",
+              "op": "",
+              "value_type": "",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--workspaceId is required for Gong targets list"
+            }
+          ]
+        },
+        {
+          "path": "targets upload-assignments",
+          "summary": "Upload target assignments from a bounded CSV file (/v2/targets/{targetId}/assignments)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "upload_target_assignments",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "target-id",
+              "type": "string",
+              "summary": "Gong target ID from the target definitions list.",
+              "values": [],
+              "maps_to": "record.targetId",
+              "allow_empty": false
+            },
+            {
+              "name": "workspace-id",
+              "type": "string",
+              "summary": "Workspace ID that owns the target.",
+              "values": [],
+              "maps_to": "record.workspaceId",
+              "allow_empty": false
+            },
+            {
+              "name": "assignments-file-path",
+              "type": "string",
+              "summary": "Project-relative target assignments CSV file path to upload.",
+              "values": [],
+              "maps_to": "record.assignments_file_path",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm gong targets upload-assignments --target-id 12345678901234567890 --workspace-id 123 --assignments-file-path internal/connectors/defs/gong/fixtures/files/target_assignments.csv"
+          ],
+          "output_policy": "",
+          "risk": "high: uploads target assignment CSV data from a bounded project-local file path; file path/content are redacted in plans",
+          "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive confirmation required",
+          "notes": "Uses typed multipart write support with a declared CSV file part; no generic upload command is exposed. Gong defaults validateOnly to false; optional validate-only query mode needs shared optional write-query support before it can be exposed without making the parameter mandatory."
         }
       ],
       "help_topics": [
@@ -53789,7 +54370,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nReads Gong users, calls, scorecards, settings, flows, and related API resources through the Gong REST API.\n\nExecutable ETL streams: `users`, `calls`, `scorecards`, `crm_integrations`, `workspaces`, `trackers`, `briefs`, `library_folders`, `flows`, `flow_folders`, `call_outcomes`, `permission_profiles`.\n\nBounded direct-read commands cover the official GET detail/query endpoints and all 13 POST read-query endpoints with the `json_redacted` output policy. POST reads execute through typed operation metadata with connector-authored flags and schema-gated JSON bodies; no raw body flag exists. Call transcripts are available through `pm gong calls transcript` with call ID, time range, workspace, and cursor filters and a 16 MiB response cap. JSON mutations, typed multipart uploads, and top-level array CRM schema uploads are modeled as reverse-ETL write actions where the engine supports the request shape.\n\nService API documentation: https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=.\n\n## Auth setup\n\nConnection fields:\n\n- `access_key` (required, secret, string); Gong generated access key. Used for HTTP Basic auth; never logged.\n- `access_key_secret` (required, secret, string); Gong generated access key secret. Used for HTTP Basic auth; never logged.\n- `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL override for tests or proxies.\n- `max_pages` (optional, string); default `0`; maximum pages; use 0, all, or unlimited to exhaust a paginated stream.\n- `mode` (optional, string); fixture mode is used by credential-free conformance.\n- `page_size` (optional, string); default `100`; compatibility page-size request value for legacy Gong list streams; current Gong OpenAPI does not document a provider-side page-size parameter. CLI `--limit` remains the PM output cap.\n- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for supported incremental streams.\n\nSecret fields are redacted in logs and write previews: `access_key`, `access_key_secret`.\n\nAuthentication behavior: HTTP Basic authentication using `secrets.access_key`, `secrets.access_key_secret`.\n\nConnection checks call GET `/users` with query `limit`=`1`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `cursor`; next token from `records.cursor`.\n\nThe original incremental streams remain `users`, `calls`, and `scorecards`; additional list streams are full-refresh stream runners over public Gong list endpoints. `pm gong calls list` accepts `--from` and `--to` ISO-8601/RFC3339 bounds mapped to Gong `fromDateTime` and `toDateTime`; the upper bound is exclusive. Commands such as `pm gong workspaces list --json` use the same credential and bounded PM output `--limit` behavior as other connector stream commands. Global `--limit` caps emitted PM records only; it does not claim to control Gong page size or total provider-side results.\n\n## Write actions & risks\n\nWrite actions are declared in `writes.json` for JSON Gong mutations, including calls, meetings, CRM integration registration/deletion, permission profiles, calls user access, flows assignments, engagement events, digital interactions, tasks, integration settings, data privacy erasure, bounded multipart media/CRM uploads, and the top-level JSON array CRM entity-schema upload.\n\nSafety gates:\n\n- Use reverse ETL plan -> preview -> approval -> execute.\n- Destructive/admin actions declare `confirm: destructive`.\n- No generic raw HTTP write, raw JSON body, arbitrary GraphQL mutation, shell write, or SQL write is exposed.\n- Multipart upload commands accept only declared project-local file path fields, bind approvals to a SHA-256 content digest, snapshot and verify the approved bytes before any HTTP request, and enforce byte limits during preflight, snapshotting, and streaming; file/path/content-like fields are redacted in command plans.\n- Top-level JSON array writes use a declared `body_field` and `body_schema`; no raw JSON CLI flag is exposed.\n\nRead risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted.\n\nWrite risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, and data privacy erasure.\n\nApproval: reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage is inventoried from the public Gong OpenAPI 3.0.1 spec fetched on 2026-07-10: 57 paths and 67 operations.\n- Executable coverage: 12 stream endpoints, 29 bounded direct reads (16 GET plus all 13 typed POST read-query commands), and 26 typed reverse-ETL write actions.\n- All 67 official operations have executable stream, direct-read, or typed reverse-ETL coverage; no API-ledger operation blockers remain.\n- POST read-query filters are allow-listed as typed command flags. Arbitrary/raw request bodies remain intentionally unavailable.\n",
+    "docs_md": "# Overview\n\nReads Gong users, calls, scorecards, targets, settings, flows, and related API resources through the Gong REST API.\n\nExecutable ETL streams: `users`, `calls`, `scorecards`, `crm_integrations`, `workspaces`, `trackers`, `briefs`, `library_folders`, `flows`, `flow_folders`, `call_outcomes`, `permission_profiles`. Bounded target definition lookup is exposed as `pm gong targets list --workspaceId <id>` because the official endpoint requires a workspace query parameter rather than a connection-global stream.\n\nBounded direct-read commands cover the official GET detail/query endpoints and all 13 POST read-query endpoints with the `json_redacted` output policy. POST reads execute through typed operation metadata with connector-authored flags and schema-gated JSON bodies; no raw body flag exists. Call transcripts are available through `pm gong calls transcript` with call ID, time range, workspace, and cursor filters and a 16 MiB response cap. JSON mutations, typed multipart uploads, target assignment CSV uploads, and top-level array CRM schema uploads are modeled as reverse-ETL write actions where the engine supports the request shape.\n\nService API documentation: https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=.\n\n## Auth setup\n\nConnection fields:\n\n- `access_key` (required, secret, string); Gong generated access key. Used for HTTP Basic auth; never logged.\n- `access_key_secret` (required, secret, string); Gong generated access key secret. Used for HTTP Basic auth; never logged.\n- `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL override for tests or proxies.\n- `max_pages` (optional, string); default `0`; maximum pages; use 0, all, or unlimited to exhaust a paginated stream.\n- `mode` (optional, string); fixture mode is used by credential-free conformance.\n- `page_size` (optional, string); default `100`; compatibility page-size request value for legacy Gong list streams; current Gong OpenAPI does not document a provider-side page-size parameter. CLI `--limit` remains the PM output cap.\n- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for supported incremental streams.\n\nSecret fields are redacted in logs and write previews: `access_key`, `access_key_secret`.\n\nAuthentication behavior: HTTP Basic authentication using `secrets.access_key`, `secrets.access_key_secret`.\n\nConnection checks call GET `/users` with query `limit`=`1`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `cursor`; next token from `records.cursor`.\n\nThe original incremental streams remain `users`, `calls`, and `scorecards`; additional list streams are full-refresh stream runners over public Gong list endpoints. `pm gong calls list` requires `--from` and `--to` ISO-8601/RFC3339 bounds mapped to Gong `fromDateTime` and `toDateTime`; the upper bound is exclusive. Gong list endpoints with official required query fields enforce typed flags: `permissions profiles list --workspaceId`, `flows list --flowOwnerEmail`, `flows folders list --flowFolderOwnerEmail`, and `targets list --workspaceId`. Gong GET direct reads with official required query fields also enforce typed flags before HTTP dispatch, including permission profile IDs, CRM integration/object selectors, log type/from time, entity brief/ask selectors, privacy identifiers, CRM request status IDs, and coaching workspace/manager/time bounds. Commands such as `pm gong workspaces list --json` use the same credential and bounded PM output `--limit` behavior as other connector stream commands. Global `--limit` caps emitted PM records only; it does not claim to control Gong page size or total provider-side results.\n\n## Write actions & risks\n\nWrite actions are declared in `writes.json` for JSON Gong mutations, including calls, meetings, CRM integration registration/deletion, permission profiles, calls user access, flows assignments, targets assignment CSV uploads, engagement events, digital interactions, tasks, integration settings, data privacy erasure, bounded multipart media/CRM uploads, and the top-level JSON array CRM entity-schema upload.\n\nSafety gates:\n\n- Use reverse ETL plan -> preview -> approval -> execute.\n- Destructive/admin actions declare `confirm: destructive`.\n- No generic raw HTTP write, raw JSON body, arbitrary GraphQL mutation, shell write, or SQL write is exposed.\n- Multipart upload commands accept only declared project-local file path fields, bind approvals to a SHA-256 content digest, snapshot and verify the approved bytes before any HTTP request, and enforce byte limits during preflight, snapshotting, and streaming; file/path/content-like fields are redacted in command plans.\n- Top-level JSON array writes use a declared `body_field` and `body_schema`; no raw JSON CLI flag is exposed.\n- Gong DELETE operations (`meetings delete`, `crm integrations delete`, and `calls users-access delete`) are canonical reverse-ETL write actions with `confirm: destructive`, typed record schemas, and plan -> preview -> explicit approval -> execute safeguards.\n\nRead risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted.\n\nWrite risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, targets, engagement, and data privacy erasure.\n\nApproval: reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage was re-audited against the public Gong OpenAPI 3.0.1 spec on 2026-08-01: 59 paths and 69 operations (GET 29, POST 28, PUT 8, PATCH 1, DELETE 3). The source remains `https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=`.\n- Executable coverage after the 2026-08-01 checkpoint: 12 stream endpoints, 30 bounded direct reads (17 GET plus all 13 typed POST read-query commands), and 27 typed reverse-ETL write actions; `api_surface.json` has 69/69 covered rows and 0 excluded/planned/blocked rows.\n- The checkpoint found 0 missing/stale official operation rows, 0 required write parameter/schema gaps, and 0 required direct-read flag gaps after fixing connector-local metadata. Certification remains 0 because this work used fixture/local validation only and no live Gong credentials or provider calls.\n- `targets upload-assignments` uses Gong's default `validateOnly=false`. Gong's optional `validateOnly` query parameter is not exposed as a flag because the current write-action path dialect has no optional query/default mechanism for write paths; exposing it as `{{ record.validateOnly }}` would make an optional provider parameter mandatory. The operation itself remains executable with typed target/workspace/file inputs and destructive approval.\n- POST read-query filters are allow-listed as typed command flags. Arbitrary/raw request bodies remain intentionally unavailable.\n",
     "icon": {
       "id": "gong",
       "path": "icons/gong.svg",

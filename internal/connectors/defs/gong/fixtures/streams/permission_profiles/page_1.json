@@ -3,11 +3,11 @@
     "method": "GET",
     "path": "/all-permission-profiles",
     "query": {
-      "workspaceId": "123"
+      "workspaceId": "workspace-123"
     }
   },
   "read_query": {
-    "workspaceId": "123"
+    "workspaceId": "workspace-123"
   },
   "response": {
     "status": 200,

@@ -347,22 +347,20 @@ func TestGongCallsListDateFlagsMapToQuery(t *testing.T) {
 		want  map[string]string
 	}{
 		{
-			name:  "from only with offset",
-			flags: map[string][]string{"from": {"2026-07-01T00:00:00-07:00"}},
-			want:  map[string]string{"fromDateTime": "2026-07-01T00:00:00-07:00", "toDateTime": ""},
-		},
-		{
-			name:  "to only",
-			flags: map[string][]string{"to": {"2026-07-02T00:00:00Z"}},
-			want:  map[string]string{"fromDateTime": "", "toDateTime": "2026-07-02T00:00:00Z"},
-		},
-		{
-			name: "both",
+			name: "both with zulu bounds",
 			flags: map[string][]string{
 				"from": {"2026-07-01T00:00:00Z"},
 				"to":   {"2026-07-02T00:00:00Z"},
 			},
 			want: map[string]string{"fromDateTime": "2026-07-01T00:00:00Z", "toDateTime": "2026-07-02T00:00:00Z"},
+		},
+		{
+			name: "both with offset bounds",
+			flags: map[string][]string{
+				"from": {"2026-07-01T00:00:00-07:00"},
+				"to":   {"2026-07-02T00:00:00-07:00"},
+			},
+			want: map[string]string{"fromDateTime": "2026-07-01T00:00:00-07:00", "toDateTime": "2026-07-02T00:00:00-07:00"},
 		},
 	}
 
@@ -406,56 +404,36 @@ func TestGongCallsListDateFlagsMapToQuery(t *testing.T) {
 	}
 }
 
-func TestGongCallsListFromFlagOverridesStartDateConfig(t *testing.T) {
+func TestGongCallsListDateFlagsOverrideStartDateConfig(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 
-	tests := []struct {
-		name      string
-		config    map[string]string
-		flags     map[string][]string
-		wantFrom  string
-		wantLimit string
-	}{
-		{
-			name:      "start date config remains compatible",
-			config:    map[string]string{"start_date": "2026-06-01T00:00:00Z", "page_size": "4"},
-			wantFrom:  "2026-06-01T00:00:00Z",
-			wantLimit: "4",
+	var gotQuery url.Values
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		writeGongCallsPage(w, []int{1}, "")
+	}))
+	defer server.Close()
+
+	_, err := Run(context.Background(), connector, Request{
+		Path: []string{"calls", "list"},
+		Flags: map[string][]string{
+			"from": {"2026-07-01T00:00:00Z"},
+			"to":   {"2026-07-02T00:00:00Z"},
 		},
-		{
-			name:      "explicit from wins over configured start date",
-			config:    map[string]string{"start_date": "2026-06-01T00:00:00Z", "page_size": "4"},
-			flags:     map[string][]string{"from": {"2026-07-01T00:00:00Z"}},
-			wantFrom:  "2026-07-01T00:00:00Z",
-			wantLimit: "4",
-		},
+		Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"start_date": "2026-06-01T00:00:00Z", "page_size": "4"}),
+		Limit:  1,
+	}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run: %v", err)
 	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var gotQuery url.Values
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				gotQuery = r.URL.Query()
-				writeGongCallsPage(w, []int{1}, "")
-			}))
-			defer server.Close()
-
-			_, err := Run(context.Background(), connector, Request{
-				Path:   []string{"calls", "list"},
-				Flags:  tt.flags,
-				Config: gongCommandRunnerTestConfig(server.URL, tt.config),
-				Limit:  1,
-			}, func(connectors.Record) error { return nil })
-			if err != nil {
-				t.Fatalf("Run: %v", err)
-			}
-			if got := gotQuery.Get("fromDateTime"); got != tt.wantFrom {
-				t.Fatalf("query[fromDateTime] = %q, want %q (full query %v)", got, tt.wantFrom, gotQuery)
-			}
-			if got := gotQuery.Get("limit"); got != tt.wantLimit {
-				t.Fatalf("query[limit] = %q, want %q", got, tt.wantLimit)
-			}
-		})
+	if got := gotQuery.Get("fromDateTime"); got != "2026-07-01T00:00:00Z" {
+		t.Fatalf("query[fromDateTime] = %q, want explicit --from (full query %v)", got, gotQuery)
+	}
+	if got := gotQuery.Get("toDateTime"); got != "2026-07-02T00:00:00Z" {
+		t.Fatalf("query[toDateTime] = %q, want explicit --to (full query %v)", got, gotQuery)
+	}
+	if got := gotQuery.Get("limit"); got != "4" {
+		t.Fatalf("query[limit] = %q, want 4", got)
 	}
 }
 
@@ -468,6 +446,8 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 		config map[string]string
 		want   string
 	}{
+		{name: "missing from and to", want: "--from is required"},
+		{name: "missing to", flags: map[string][]string{"from": {"2026-07-01T00:00:00Z"}}, want: "--to is required"},
 		{name: "invalid from", flags: map[string][]string{"from": {"2026-07-01"}}, want: "invalid --from"},
 		{name: "invalid to", flags: map[string][]string{"to": {"tomorrow"}}, want: "invalid --to"},
 		{name: "blank from", flags: map[string][]string{"from": {""}}, want: "invalid --from"},
@@ -489,10 +469,10 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 			want: "invalid Gong calls list date range",
 		},
 		{
-			name:   "configured start date after explicit to",
+			name:   "configured start date does not satisfy from",
 			flags:  map[string][]string{"to": {"2026-07-01T00:00:00Z"}},
-			config: map[string]string{"start_date": "2026-07-02T00:00:00Z"},
-			want:   "invalid Gong calls list date range",
+			config: map[string]string{"start_date": "2026-06-01T00:00:00Z"},
+			want:   "--from is required",
 		},
 	}
 
@@ -553,7 +533,7 @@ func TestGongRequiredQueryCommandsRejectMissingOrInvalidFlagsBeforeHTTP(t *testi
 		{name: "flows missing owner", path: []string{"flows", "list"}, want: "--flowOwnerEmail is required"},
 		{name: "flow folders missing owner", path: []string{"flows", "folders", "list"}, want: "--flowFolderOwnerEmail is required"},
 		{name: "targets missing workspace", path: []string{"targets", "list"}, want: "--workspaceId is required"},
-		{name: "permissions profiles invalid workspace", path: []string{"permissions", "profiles", "list"}, flags: map[string][]string{"workspaceId": {"abc"}}, want: "invalid --workspaceId"},
+		{name: "permissions profiles blank workspace", path: []string{"permissions", "profiles", "list"}, flags: map[string][]string{"workspaceId": {" "}}, want: "invalid --workspaceId"},
 		{name: "crm entity schema invalid object type", path: []string{"crm", "entity-schema", "get"}, flags: map[string][]string{"integrationId": {"123"}, "objectType": {"CASE"}}, want: "invalid --objectType"},
 		{name: "logs invalid date", path: []string{"logs", "list"}, flags: map[string][]string{"logType": {"AccessLog"}, "fromDateTime": {"2026-01-01"}}, want: "invalid --fromDateTime"},
 		{name: "privacy email invalid email", path: []string{"privacy", "find-email"}, flags: map[string][]string{"emailAddress": {"not-an-email"}}, want: "invalid --emailAddress"},
@@ -600,9 +580,9 @@ func TestGongRequiredQueryCommandsSendOfficialQueryParams(t *testing.T) {
 		{
 			name:      "permissions profiles workspace",
 			path:      []string{"permissions", "profiles", "list"},
-			flags:     map[string][]string{"workspaceId": {"123"}},
+			flags:     map[string][]string{"workspaceId": {"workspace-abc"}},
 			wantPath:  "/v2/all-permission-profiles",
-			wantQuery: map[string]string{"workspaceId": "123"},
+			wantQuery: map[string]string{"workspaceId": "workspace-abc"},
 		},
 		{
 			name:       "permissions profile id",
@@ -885,7 +865,11 @@ func TestGongCallsListLimitCapsEmittedRecordsAcrossCursorPages(t *testing.T) {
 
 			var records []connectors.Record
 			result, err := Run(context.Background(), connector, Request{
-				Path:   []string{"calls", "list"},
+				Path: []string{"calls", "list"},
+				Flags: map[string][]string{
+					"from": {"2026-07-01T00:00:00Z"},
+					"to":   {"2026-07-31T00:00:00Z"},
+				},
 				Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "3"}),
 				Limit:  tt.limit,
 			}, func(record connectors.Record) error {
@@ -905,6 +889,12 @@ func TestGongCallsListLimitCapsEmittedRecordsAcrossCursorPages(t *testing.T) {
 				t.Fatalf("requests = %d, want %d (queries=%v)", len(requests), tt.wantRequests, requests)
 			}
 			for i, query := range requests {
+				if got := query.Get("fromDateTime"); got != "2026-07-01T00:00:00Z" {
+					t.Fatalf("request %d query[fromDateTime] = %q, want required from", i+1, got)
+				}
+				if got := query.Get("toDateTime"); got != "2026-07-31T00:00:00Z" {
+					t.Fatalf("request %d query[toDateTime] = %q, want required to", i+1, got)
+				}
 				if got := query.Get("limit"); got != "3" {
 					t.Fatalf("request %d query[limit] = %q, want compatibility page_size 3", i+1, got)
 				}
