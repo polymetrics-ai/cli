@@ -12335,7 +12335,7 @@
       "mutation_class": "secret",
       "rest": {
         "method": "POST",
-        "path": "/projects/{id}/(ref/{ref}/)trigger/pipeline",
+        "path": "/projects/{id}/ref/{ref}/trigger/pipeline",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {

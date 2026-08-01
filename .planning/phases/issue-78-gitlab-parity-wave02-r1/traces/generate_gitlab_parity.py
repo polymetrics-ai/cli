@@ -195,6 +195,7 @@ def normalize_gitlab_path(path: str) -> str:
     path = re.sub(r"\(/\)\(\*([A-Za-z0-9_]+)\)", r"/{\1}", path)
     path = re.sub(r"\(/\)\(\{([A-Za-z0-9_]+)\}\)", r"/{\1}", path)
     path = re.sub(r"\(\*([A-Za-z0-9_]+)/\)", r"{\1}/", path)
+    path = re.sub(r"\(([^()]*/[^()]*)\)", r"\1", path)
     path = re.sub(r"\*([A-Za-z0-9_]+)", r"{\1}", path)
     return re.sub(r"/{2,}", "/", path)
 

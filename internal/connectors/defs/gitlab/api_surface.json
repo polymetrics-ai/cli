@@ -4044,7 +4044,7 @@
     },
     {
       "method": "POST",
-      "path": "/projects/{id}/(ref/{ref}/)trigger/pipeline",
+      "path": "/projects/{id}/ref/{ref}/trigger/pipeline",
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",

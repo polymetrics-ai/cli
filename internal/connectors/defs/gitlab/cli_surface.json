@@ -12608,7 +12608,7 @@
       "api_surface": [
         {
           "method": "POST",
-          "path": "/projects/{id}/(ref/{ref}/)trigger/pipeline"
+          "path": "/projects/{id}/ref/{ref}/trigger/pipeline"
         }
       ],
       "flags": [

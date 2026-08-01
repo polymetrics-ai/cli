@@ -21,7 +21,7 @@ EXPECTED = {
 }
 WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 TYPED_DESTRUCTIVE_APPROVAL = "typed_confirmation + plan_preview_approval_execute"
-ROUTE_GRAMMAR_PATTERN = re.compile(r"\(-/\)|\(/\)\(\{[A-Za-z0-9_]+\}\)|\\[()]")
+ROUTE_GRAMMAR_PATTERN = re.compile(r"\(-/\)|\(/\)\(\{[A-Za-z0-9_]+\}\)|\([^)]*/[^)]*\)|\\[()]")
 METADATA_REST_ROWS = {
     ("GET", "/groups/{id}/registry/repositories"),
     ("GET", "/projects/{id}/registry/repositories"),
