@@ -3,7 +3,7 @@
     "resource": "resource_fixture_1",
     "project": "project_fixture_1",
     "date": "2026-01-12",
-    "hours": 4,
+    "minutes": 240,
     "note": "fixture time"
   },
   "expect": {
@@ -13,7 +13,7 @@
       "resource": "resource_fixture_1",
       "project": "project_fixture_1",
       "date": "2026-01-12",
-      "hours": 4,
+      "minutes": 240,
       "note": "fixture time"
     }
   },

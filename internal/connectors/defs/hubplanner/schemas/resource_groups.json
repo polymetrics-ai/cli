@@ -18,19 +18,16 @@
         "null"
       ]
     },
-    "label": {
+    "resources": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
+      ],
+      "items": {
+        "type": "string"
+      }
     },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
+    "metadata": {
       "type": [
         "string",
         "null"
@@ -47,6 +44,21 @@
         "string",
         "null"
       ]
+    },
+    "parentGroupId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "approvers": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
     }
   }
 }

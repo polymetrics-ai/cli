@@ -1,15 +1,13 @@
 {
   "record": {
     "id": "resource_tag_fixture_1",
-    "name": "Updated Resource Tag",
-    "color": "#663399"
+    "value": "Updated Resource Tag"
   },
   "expect": {
     "method": "PUT",
     "path": "/resource-tag/resource_tag_fixture_1",
     "body": {
-      "name": "Updated Resource Tag",
-      "color": "#663399"
+      "value": "Updated Resource Tag"
     }
   },
   "response": {

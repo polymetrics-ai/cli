@@ -1,13 +1,13 @@
 {
   "record": {
-    "ids": "resource_fixture_1,resource_fixture_2"
+    "ids": [
+      "resource_fixture_1",
+      "resource_fixture_2"
+    ]
   },
   "expect": {
     "method": "DELETE",
-    "path": "/resource",
-    "body": {
-      "ids": "resource_fixture_1,resource_fixture_2"
-    }
+    "path": "/resource"
   },
   "response": {
     "status": 200,

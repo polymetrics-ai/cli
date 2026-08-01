@@ -1,18 +1,16 @@
 {
   "record": {
-    "name": "Fixture Billing Rate",
+    "label": "Fixture Billing Rate",
     "rate": 75,
-    "currency": "USD",
-    "default": false
+    "currency": "USD"
   },
   "expect": {
     "method": "POST",
     "path": "/billingRate",
     "body": {
-      "name": "Fixture Billing Rate",
+      "label": "Fixture Billing Rate",
       "rate": 75,
-      "currency": "USD",
-      "default": false
+      "currency": "USD"
     }
   },
   "response": {

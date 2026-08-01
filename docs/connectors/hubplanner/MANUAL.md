@@ -40,7 +40,7 @@ ETL STREAMS
     fields: _id(), createdDate(), email(), name(), note(), phone()
   events:
     primary key: _id
-    fields: _id(), end(), name(), note(), start(), type()
+    fields: _id(), backgroundColor(), createdDate(), eventCode(), metadata(), name(), updatedDate()
   holidays:
     primary key: _id
     fields: _id(), date(), end(), holidayGroup(), name(), start()
@@ -49,46 +49,46 @@ ETL STREAMS
     fields: _id(), category(), end(), note(), project(), resource(), start(), state()
   billing_rates:
     primary key: _id
-    fields: _id(), currency(), default(), name(), rate()
+    fields: _id(), createdDate(), currency(), label(), metadata(), rate(), updatedDate()
   booking_categories:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), categoryGroupId(), categoryGroupName(), createdDate(), gridColor(), group(), name(), type(), updatedDate()
   resource_custom_field_templates:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), allowMultipleValues(), canResourceEdit(), category(), characterLimit(), choices(), createdDate(), defaultRadioId(), defaultValue(), filterGrid(), instructions(), isChoicesSortedAlphabetically(), isRequired(), label(), maxValue(), minValue(), placeholderText(), status(), stepValue(), type(), updatedDate(), weekStartOn()
   project_custom_field_templates:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), allowMultipleValues(), canResourceEdit(), category(), characterLimit(), choices(), createdDate(), defaultRadioId(), defaultValue(), filterGrid(), instructions(), isChoicesSortedAlphabetically(), isRequired(), label(), maxValue(), minValue(), placeholderText(), status(), stepValue(), type(), updatedDate(), weekStartOn()
   project_groups:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), createdDate(), metadata(), name(), parentGroupId(), projects(), updatedDate()
   resource_groups:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), approvers(), createdDate(), metadata(), name(), parentGroupId(), resources(), updatedDate()
   cost_categories:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), createdDate(), name(), updatedDate()
   project_managers:
     primary key: _id
-    fields: _id(), createdDate(), email(), firstName(), label(), lastName(), name(), status(), type(), updatedDate()
+    fields: _id(), createdDate(), email(), firstName(), isProjectManager(), lastName(), links(), metadata(), note(), role(), status(), updatedDate()
   project_tags:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), category(), value()
   resource_tags:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), category(), value()
   time_entries:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), categoryName(), categoryTemplateId(), createdDate(), creator(), date(), locked(), metadata(), minutes(), note(), project(), projectName(), projectStatus(), projectType(), resource(), status(), updatedDate()
   unassigned_work:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), value()
   vacations:
     primary key: _id
-    fields: _id(), createdDate(), label(), name(), status(), type(), updatedDate()
+    fields: _id(), approvalInfo(), creatorId(), end(), metadata(), minutesPerDay(), percentAllocation(), resource(), resourceType(), start(), state(), title(), type()
   webhook_subscriptions:
     primary key: _id
-    fields: _id(), createdDate(), event(), label(), name(), status(), target_url(), type(), updatedDate()
+    fields: _id(), companyId(), creationDate(), event(), target_url()
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -96,11 +96,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_billing_rate:
     endpoint: POST /billingRate
-    required fields: name, rate
+    required fields: label, currency, rate
     risk: creates a Hubplanner billing rate
   update_billing_rate:
     endpoint: PUT /billingRate/{{ record.id }}
-    required fields: id, name
+    required fields: id, label, currency, rate
     risk: updates a Hubplanner billing rate
   delete_billing_rate:
     endpoint: DELETE /billingRate/{{ record.id }}
@@ -172,11 +172,11 @@ REVERSE ETL ACTIONS
     risk: deletes a Hubplanner project custom field template
   create_event:
     endpoint: POST /event
-    required fields: name, start, end
+    required fields: name
     risk: creates a Hubplanner event
   update_event:
     endpoint: PUT /event/{{ record.id }}
-    required fields: id, name, start, end
+    required fields: id, name
     risk: updates a Hubplanner event
   delete_event:
     endpoint: DELETE /event/{{ record.id }}
@@ -208,11 +208,11 @@ REVERSE ETL ACTIONS
     risk: deletes a Hubplanner holiday
   create_milestone:
     endpoint: POST /milestone
-    required fields: name, date
+    required fields: name, date, project
     risk: creates a Hubplanner milestone
   update_milestone:
     endpoint: PUT /milestone/{{ record.id }}
-    required fields: id, name, date
+    required fields: id, name, date, project
     risk: updates a Hubplanner milestone
   delete_milestone:
     endpoint: DELETE /milestone/{{ record.id }}
@@ -232,11 +232,11 @@ REVERSE ETL ACTIONS
     risk: deletes a Hubplanner project cost category
   create_project_tag:
     endpoint: POST /project-tag
-    required fields: name
+    required fields: value
     risk: creates a Hubplanner project tag
   update_project_tag:
     endpoint: PUT /project-tag/{{ record.id }}
-    required fields: id, name
+    required fields: id, value
     risk: updates a Hubplanner project tag
   delete_project_tag:
     endpoint: DELETE /project-tag/{{ record.id }}
@@ -244,11 +244,11 @@ REVERSE ETL ACTIONS
     risk: deletes a Hubplanner project tag
   create_resource_tag:
     endpoint: POST /resource-tag
-    required fields: name
+    required fields: value
     risk: creates a Hubplanner resource tag
   update_resource_tag:
     endpoint: PUT /resource-tag/{{ record.id }}
-    required fields: id, name
+    required fields: id, value
     risk: updates a Hubplanner resource tag
   delete_resource_tag:
     endpoint: DELETE /resource-tag/{{ record.id }}
@@ -288,11 +288,11 @@ REVERSE ETL ACTIONS
     risk: deletes multiple Hubplanner resources by ids
   create_time_entry:
     endpoint: POST /timeentry
-    required fields: resource, project, date, hours
+    required fields: resource, project, date, minutes
     risk: creates a Hubplanner time entry
   update_time_entry:
     endpoint: PUT /timeentry/{{ record.id }}
-    required fields: id, resource, project, date, hours
+    required fields: id, resource, project, date, minutes
     risk: updates a Hubplanner time entry
   delete_time_entry:
     endpoint: DELETE /timeentry/{{ record.id }}
@@ -304,11 +304,11 @@ REVERSE ETL ACTIONS
     risk: deletes multiple Hubplanner time entries by ids
   create_unassigned_work:
     endpoint: POST /unassigned-work
-    required fields: project, start, end
+    required fields: value
     risk: creates Hubplanner unassigned work
   update_unassigned_work:
     endpoint: PUT /unassigned-work/{{ record.id }}
-    required fields: id, project, start, end
+    required fields: id, value
     risk: updates Hubplanner unassigned work
   delete_unassigned_work:
     endpoint: DELETE /unassigned-work/{{ record.id }}
@@ -420,11 +420,11 @@ COMMAND SURFACE
     vacations get - Get a Hubplanner vacation by id. [intent=direct_read availability=implemented]; flags: --id
     resource-custom-fields search - Search Hubplanner resource custom field templates. [intent=direct_read availability=implemented]; flags: --type, --label, --required
     project-custom-fields search - Search Hubplanner project custom field templates. [intent=direct_read availability=implemented]; flags: --type, --label, --required
-    billing-rates create - Plan or preview Hubplanner write action `create_billing_rate`. [intent=reverse_etl availability=implemented write=create_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner billing rate; flags: --name, --rate, --currency, --default
-    billing-rates update - Plan or preview Hubplanner write action `update_billing_rate`. [intent=reverse_etl availability=implemented write=update_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner billing rate; flags: --id, --name, --rate, --currency, --default
+    billing-rates create - Plan or preview Hubplanner write action `create_billing_rate`. [intent=reverse_etl availability=implemented write=create_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner billing rate; flags: --label, --rate, --currency
+    billing-rates update - Plan or preview Hubplanner write action `update_billing_rate`. [intent=reverse_etl availability=implemented write=update_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner billing rate; flags: --id, --label, --rate, --currency
     billing-rates delete - Plan or preview Hubplanner write action `delete_billing_rate`. [intent=reverse_etl availability=implemented write=delete_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner billing rate; flags: --id
-    booking-categories create - Plan or preview Hubplanner write action `create_booking_category`. [intent=reverse_etl availability=implemented write=create_booking_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner booking category; flags: --name, --note, --status
-    booking-categories update - Plan or preview Hubplanner write action `update_booking_category`. [intent=reverse_etl availability=implemented write=update_booking_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner booking category; flags: --id, --name, --note, --status
+    booking-categories create - Plan or preview Hubplanner write action `create_booking_category`. [intent=reverse_etl availability=implemented write=create_booking_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner booking category; flags: --name, --type, --gridColor, --group
+    booking-categories update - Plan or preview Hubplanner write action `update_booking_category`. [intent=reverse_etl availability=implemented write=update_booking_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner booking category; flags: --id, --name, --type, --gridColor, --group
     bookings create - Plan or preview Hubplanner write action `create_booking`. [intent=reverse_etl availability=implemented write=create_booking]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner booking; flags: --id, --resource, --project, --start, --end, --note, --state, --category
     bookings update - Plan or preview Hubplanner write action `update_booking`. [intent=reverse_etl availability=implemented write=update_booking]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner booking; flags: --id, --resource, --project, --start, --end, --note, --state, --category
     bookings patch - Plan or preview Hubplanner write action `patch_booking`. [intent=reverse_etl availability=implemented write=patch_booking]; approval: reverse ETL plan -> preview -> approval -> execute; risk: patches selected Hubplanner booking fields; flags: --id, --resource, --project, --start, --end, --note, --state, --category
@@ -439,26 +439,26 @@ COMMAND SURFACE
     project-custom-field-templates create - Plan or preview Hubplanner write action `create_project_custom_field_template`. [intent=reverse_etl availability=implemented write=create_project_custom_field_template]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project custom field template; flags: --id, --label, --type, --status, --instructions, --choices
     project-custom-field-templates update - Plan or preview Hubplanner write action `update_project_custom_field_template`. [intent=reverse_etl availability=implemented write=update_project_custom_field_template]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project custom field template; flags: --id, --label, --type, --status, --instructions, --choices
     project-custom-field-templates delete - Plan or preview Hubplanner write action `delete_project_custom_field_template`. [intent=reverse_etl availability=implemented write=delete_project_custom_field_template]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner project custom field template; flags: --id
-    events create - Plan or preview Hubplanner write action `create_event`. [intent=reverse_etl availability=implemented write=create_event]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner event; flags: --id, --name, --start, --end, --type, --note
-    events update - Plan or preview Hubplanner write action `update_event`. [intent=reverse_etl availability=implemented write=update_event]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner event; flags: --id, --name, --start, --end, --type, --note
+    events create - Plan or preview Hubplanner write action `create_event`. [intent=reverse_etl availability=implemented write=create_event]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner event; flags: --name, --eventCode, --backgroundColor, --metadata
+    events update - Plan or preview Hubplanner write action `update_event`. [intent=reverse_etl availability=implemented write=update_event]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner event; flags: --id, --name, --eventCode, --backgroundColor, --metadata
     events delete - Plan or preview Hubplanner write action `delete_event`. [intent=reverse_etl availability=implemented write=delete_event]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner event; flags: --id
-    project-groups create - Plan or preview Hubplanner write action `create_project_group`. [intent=reverse_etl availability=implemented write=create_project_group]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project group; flags: --id, --name, --groupType, --parent
-    project-groups update - Plan or preview Hubplanner write action `update_project_group`. [intent=reverse_etl availability=implemented write=update_project_group]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project group; flags: --id, --name, --groupType, --parent
+    project-groups create - Plan or preview Hubplanner write action `create_project_group`. [intent=reverse_etl availability=implemented write=create_project_group]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project group; flags: --name, --parentGroupId, --projects
+    project-groups update - Plan or preview Hubplanner write action `update_project_group`. [intent=reverse_etl availability=implemented write=update_project_group]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project group; flags: --id, --name, --parentGroupId, --projects
     project-groups delete - Plan or preview Hubplanner write action `delete_project_group`. [intent=reverse_etl availability=implemented write=delete_project_group]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner project group; flags: --id
     holidays create - Plan or preview Hubplanner write action `create_holiday`. [intent=reverse_etl availability=implemented write=create_holiday]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner holiday; flags: --id, --name, --date, --start, --end, --holidayGroup
     holidays update - Plan or preview Hubplanner write action `update_holiday`. [intent=reverse_etl availability=implemented write=update_holiday]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner holiday; flags: --id, --name, --date, --start, --end, --holidayGroup
     holidays delete - Plan or preview Hubplanner write action `delete_holiday`. [intent=reverse_etl availability=implemented write=delete_holiday]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner holiday; flags: --id
-    milestones create - Plan or preview Hubplanner write action `create_milestone`. [intent=reverse_etl availability=implemented write=create_milestone]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner milestone; flags: --id, --name, --date, --project, --note
-    milestones update - Plan or preview Hubplanner write action `update_milestone`. [intent=reverse_etl availability=implemented write=update_milestone]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner milestone; flags: --id, --name, --date, --project, --note
+    milestones create - Plan or preview Hubplanner write action `create_milestone`. [intent=reverse_etl availability=implemented write=create_milestone]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner milestone; flags: --name, --date, --project
+    milestones update - Plan or preview Hubplanner write action `update_milestone`. [intent=reverse_etl availability=implemented write=update_milestone]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner milestone; flags: --id, --name, --date, --project
     milestones delete - Plan or preview Hubplanner write action `delete_milestone`. [intent=reverse_etl availability=implemented write=delete_milestone]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner milestone; flags: --id
-    cost-categories create - Plan or preview Hubplanner write action `create_cost_category`. [intent=reverse_etl availability=implemented write=create_cost_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project cost category; flags: --id, --name, --code, --note
-    cost-categories update - Plan or preview Hubplanner write action `update_cost_category`. [intent=reverse_etl availability=implemented write=update_cost_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project cost category; flags: --id, --name, --code, --note
+    cost-categories create - Plan or preview Hubplanner write action `create_cost_category`. [intent=reverse_etl availability=implemented write=create_cost_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project cost category; flags: --name
+    cost-categories update - Plan or preview Hubplanner write action `update_cost_category`. [intent=reverse_etl availability=implemented write=update_cost_category]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project cost category; flags: --id, --name
     cost-categories delete - Plan or preview Hubplanner write action `delete_cost_category`. [intent=reverse_etl availability=implemented write=delete_cost_category]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner project cost category; flags: --id
-    project-tags create - Plan or preview Hubplanner write action `create_project_tag`. [intent=reverse_etl availability=implemented write=create_project_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project tag; flags: --id, --name, --color
-    project-tags update - Plan or preview Hubplanner write action `update_project_tag`. [intent=reverse_etl availability=implemented write=update_project_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project tag; flags: --id, --name, --color
+    project-tags create - Plan or preview Hubplanner write action `create_project_tag`. [intent=reverse_etl availability=implemented write=create_project_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project tag; flags: --value
+    project-tags update - Plan or preview Hubplanner write action `update_project_tag`. [intent=reverse_etl availability=implemented write=update_project_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner project tag; flags: --id, --value
     project-tags delete - Plan or preview Hubplanner write action `delete_project_tag`. [intent=reverse_etl availability=implemented write=delete_project_tag]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner project tag; flags: --id
-    resource-tags create - Plan or preview Hubplanner write action `create_resource_tag`. [intent=reverse_etl availability=implemented write=create_resource_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner resource tag; flags: --id, --name, --color
-    resource-tags update - Plan or preview Hubplanner write action `update_resource_tag`. [intent=reverse_etl availability=implemented write=update_resource_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner resource tag; flags: --id, --name, --color
+    resource-tags create - Plan or preview Hubplanner write action `create_resource_tag`. [intent=reverse_etl availability=implemented write=create_resource_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner resource tag; flags: --value
+    resource-tags update - Plan or preview Hubplanner write action `update_resource_tag`. [intent=reverse_etl availability=implemented write=update_resource_tag]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner resource tag; flags: --id, --value
     resource-tags delete - Plan or preview Hubplanner write action `delete_resource_tag`. [intent=reverse_etl availability=implemented write=delete_resource_tag]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner resource tag; flags: --id
     projects create - Plan or preview Hubplanner write action `create_project`. [intent=reverse_etl availability=implemented write=create_project]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner project; flags: --id, --name, --status, --projectCode
     projects patch - Plan or preview Hubplanner write action `patch_project`. [intent=reverse_etl availability=implemented write=patch_project]; approval: reverse ETL plan -> preview -> approval -> execute; risk: patches a Hubplanner project by _id in the typed body; flags: --id, --name, --status, --projectCode
@@ -468,12 +468,12 @@ COMMAND SURFACE
     resources patch - Plan or preview Hubplanner write action `patch_resource`. [intent=reverse_etl availability=implemented write=patch_resource]; approval: reverse ETL plan -> preview -> approval -> execute; risk: patches a Hubplanner resource by _id in the typed body; flags: --id, --firstName, --lastName, --email, --status
     resources delete - Plan or preview Hubplanner write action `delete_resource`. [intent=reverse_etl availability=implemented write=delete_resource]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner resource; flags: --id
     resources delete-many - Plan or preview Hubplanner write action `delete_resources` (bulk). [intent=reverse_etl availability=implemented write=delete_resources]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes multiple Hubplanner resources by ids; flags: --ids
-    time-entries create - Plan or preview Hubplanner write action `create_time_entry`. [intent=reverse_etl availability=implemented write=create_time_entry]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner time entry; flags: --id, --resource, --project, --date, --hours, --note
-    time-entries update - Plan or preview Hubplanner write action `update_time_entry`. [intent=reverse_etl availability=implemented write=update_time_entry]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner time entry; flags: --id, --resource, --project, --date, --hours, --note
+    time-entries create - Plan or preview Hubplanner write action `create_time_entry`. [intent=reverse_etl availability=implemented write=create_time_entry]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner time entry; flags: --resource, --project, --date, --minutes, --note, --categoryTemplateId
+    time-entries update - Plan or preview Hubplanner write action `update_time_entry`. [intent=reverse_etl availability=implemented write=update_time_entry]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner time entry; flags: --id, --resource, --project, --date, --minutes, --note, --categoryTemplateId
     time-entries delete - Plan or preview Hubplanner write action `delete_time_entry`. [intent=reverse_etl availability=implemented write=delete_time_entry]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner time entry; flags: --id
     time-entries delete-many - Plan or preview Hubplanner write action `delete_time_entries` (bulk). [intent=reverse_etl availability=implemented write=delete_time_entries]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes multiple Hubplanner time entries by ids; flags: --ids
-    unassigned-work create - Plan or preview Hubplanner write action `create_unassigned_work`. [intent=reverse_etl availability=implemented write=create_unassigned_work]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates Hubplanner unassigned work; flags: --id, --project, --start, --end, --note
-    unassigned-work update - Plan or preview Hubplanner write action `update_unassigned_work`. [intent=reverse_etl availability=implemented write=update_unassigned_work]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates Hubplanner unassigned work; flags: --id, --project, --start, --end, --note
+    unassigned-work create - Plan or preview Hubplanner write action `create_unassigned_work`. [intent=reverse_etl availability=implemented write=create_unassigned_work]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates Hubplanner unassigned work; flags: --value
+    unassigned-work update - Plan or preview Hubplanner write action `update_unassigned_work`. [intent=reverse_etl availability=implemented write=update_unassigned_work]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates Hubplanner unassigned work; flags: --id, --value
     unassigned-work delete - Plan or preview Hubplanner write action `delete_unassigned_work`. [intent=reverse_etl availability=implemented write=delete_unassigned_work]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes Hubplanner unassigned work; flags: --id
     vacations create - Plan or preview Hubplanner write action `create_vacation`. [intent=reverse_etl availability=implemented write=create_vacation]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner vacation; flags: --id, --resource, --start, --end, --note, --status
     vacations update - Plan or preview Hubplanner write action `update_vacation`. [intent=reverse_etl availability=implemented write=update_vacation]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner vacation; flags: --id, --resource, --start, --end, --note, --status

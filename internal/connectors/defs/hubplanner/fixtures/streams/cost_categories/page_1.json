@@ -11,10 +11,10 @@
     "status": 200,
     "body": [
       {
-        "_id": "cost_categories_fixture_1",
-        "name": "Hubplanner project cost categories fixture",
-        "status": "ACTIVE",
-        "createdDate": "2026-01-01T00:00:00Z"
+        "_id": "cost_category_fixture_1",
+        "name": "Fixture Cost Category",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": "2026-01-02T00:00:00Z"
       }
     ]
   }

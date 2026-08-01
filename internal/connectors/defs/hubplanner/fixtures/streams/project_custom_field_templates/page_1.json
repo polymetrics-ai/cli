@@ -11,12 +11,26 @@
     "status": 200,
     "body": [
       {
-        "_id": "project_custom_field_templates_fixture_1",
-        "name": "Hubplanner project custom field templates fixture",
+        "_id": "project_custom_field_template_fixture_1",
+        "filterGrid": true,
+        "label": "Project Phase",
+        "instructions": "Enter the phase",
+        "placeholderText": "",
+        "choices": [
+          {
+            "value": "Discovery"
+          }
+        ],
+        "canResourceEdit": false,
+        "type": "TEXT",
+        "category": "PROJECT",
         "status": "ACTIVE",
+        "allowMultipleValues": false,
+        "characterLimit": "30",
+        "isRequired": false,
+        "isChoicesSortedAlphabetically": true,
         "createdDate": "2026-01-01T00:00:00Z",
-        "label": "Hubplanner project custom field templates label",
-        "type": "TEXT"
+        "updatedDate": "2026-01-02T00:00:00Z"
       }
     ]
   }

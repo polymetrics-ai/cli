@@ -2,16 +2,16 @@
   "record": {
     "id": "event_fixture_1",
     "name": "Updated Event",
-    "start": "2026-01-07T11:00:00Z",
-    "end": "2026-01-07T12:00:00Z"
+    "eventCode": "EVT-2",
+    "backgroundColor": "#663399"
   },
   "expect": {
     "method": "PUT",
     "path": "/event/event_fixture_1",
     "body": {
       "name": "Updated Event",
-      "start": "2026-01-07T11:00:00Z",
-      "end": "2026-01-07T12:00:00Z"
+      "eventCode": "EVT-2",
+      "backgroundColor": "#663399"
     }
   },
   "response": {

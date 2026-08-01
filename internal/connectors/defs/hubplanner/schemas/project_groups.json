@@ -18,19 +18,16 @@
         "null"
       ]
     },
-    "label": {
+    "projects": {
       "type": [
-        "string",
+        "array",
         "null"
-      ]
+      ],
+      "items": {
+        "type": "string"
+      }
     },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
+    "metadata": {
       "type": [
         "string",
         "null"
@@ -43,6 +40,12 @@
       ]
     },
     "updatedDate": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parentGroupId": {
       "type": [
         "string",
         "null"

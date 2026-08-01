@@ -1,14 +1,16 @@
 {
   "record": {
     "name": "Fixture Booking Category",
-    "status": "ACTIVE"
+    "type": "CUSTOM",
+    "gridColor": "#336699"
   },
   "expect": {
     "method": "POST",
     "path": "/categories",
     "body": {
       "name": "Fixture Booking Category",
-      "status": "ACTIVE"
+      "type": "CUSTOM",
+      "gridColor": "#336699"
     }
   },
   "response": {

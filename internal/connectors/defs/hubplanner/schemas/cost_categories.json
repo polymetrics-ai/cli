@@ -18,24 +18,6 @@
         "null"
       ]
     },
-    "label": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "createdDate": {
       "type": [
         "string",

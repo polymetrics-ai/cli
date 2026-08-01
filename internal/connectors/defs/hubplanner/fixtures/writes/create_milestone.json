@@ -1,14 +1,16 @@
 {
   "record": {
     "name": "Fixture Milestone",
-    "date": "2026-01-10"
+    "date": "2026-01-10",
+    "project": "project_fixture_1"
   },
   "expect": {
     "method": "POST",
     "path": "/milestone",
     "body": {
       "name": "Fixture Milestone",
-      "date": "2026-01-10"
+      "date": "2026-01-10",
+      "project": "project_fixture_1"
     }
   },
   "response": {

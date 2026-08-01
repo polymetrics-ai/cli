@@ -11,10 +11,15 @@
     "status": 200,
     "body": [
       {
-        "_id": "booking_categories_fixture_1",
-        "name": "Hubplanner booking categories fixture",
-        "status": "ACTIVE",
-        "createdDate": "2026-01-01T00:00:00Z"
+        "_id": "booking_category_fixture_1",
+        "name": "Fixture Booking Category",
+        "type": "CUSTOM",
+        "gridColor": "#336699",
+        "group": "group_fixture_1",
+        "categoryGroupId": "category_group_fixture_1",
+        "categoryGroupName": "Default group",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": "2026-01-02T00:00:00Z"
       }
     ]
   }

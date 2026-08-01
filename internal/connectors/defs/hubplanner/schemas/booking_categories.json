@@ -18,19 +18,31 @@
         "null"
       ]
     },
-    "label": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gridColor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "categoryGroupId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "categoryGroupName": {
       "type": [
         "string",
         "null"

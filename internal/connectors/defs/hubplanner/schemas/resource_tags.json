@@ -12,37 +12,13 @@
     "_id": {
       "type": "string"
     },
-    "name": {
+    "value": {
       "type": [
         "string",
         "null"
       ]
     },
-    "label": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "createdDate": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "updatedDate": {
+    "category": {
       "type": [
         "string",
         "null"

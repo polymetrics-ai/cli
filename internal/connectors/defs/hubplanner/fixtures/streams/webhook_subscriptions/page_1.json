@@ -11,11 +11,10 @@
     "status": 200,
     "body": [
       {
-        "_id": "webhook_subscriptions_fixture_1",
-        "name": "Hubplanner webhook subscriptions fixture",
-        "status": "ACTIVE",
-        "createdDate": "2026-01-01T00:00:00Z",
-        "target_url": "https://example.invalid/hubplanner-webhook",
+        "_id": "webhook_subscription_fixture_1",
+        "companyId": "company_fixture_1",
+        "creationDate": "2026-01-01T00:00:00Z",
+        "target_url": "https://example.com/webhooks/hubplanner",
         "event": "project.update"
       }
     ]

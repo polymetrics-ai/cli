@@ -11,10 +11,21 @@
     "status": 200,
     "body": [
       {
-        "_id": "vacations_fixture_1",
-        "name": "Hubplanner vacations fixture",
-        "status": "ACTIVE",
-        "createdDate": "2026-01-01T00:00:00Z"
+        "_id": "vacation_fixture_1",
+        "title": "Fixture Vacation",
+        "start": "2026-01-20",
+        "end": "2026-01-21",
+        "minutesPerDay": 480,
+        "resource": "resource_fixture_1",
+        "state": "PERCENTAGE",
+        "approvalInfo": {
+          "status": "WAITING_FOR_APPROVAL"
+        },
+        "type": "WAITING_FOR_APPROVAL",
+        "resourceType": "REGULAR",
+        "metadata": "",
+        "percentAllocation": "100",
+        "creatorId": "resource_fixture_1"
       }
     ]
   }

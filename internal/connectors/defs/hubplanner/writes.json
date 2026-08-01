@@ -8,25 +8,26 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "name",
+          "label",
+          "currency",
           "rate"
         ],
         "additionalProperties": false,
         "properties": {
-          "name": {
+          "label": {
+            "type": "string"
+          },
+          "currency": {
             "type": "string"
           },
           "rate": {
-            "type": "integer"
+            "type": "number"
           },
-          "currency": {
+          "metadata": {
             "type": [
               "string",
               "null"
             ]
-          },
-          "default": {
-            "type": "boolean"
           }
         }
       },
@@ -41,7 +42,9 @@
         "type": "object",
         "required": [
           "id",
-          "name"
+          "label",
+          "currency",
+          "rate"
         ],
         "additionalProperties": false,
         "properties": {
@@ -49,23 +52,23 @@
             "type": "string",
             "pattern": "^[A-Za-z0-9._:-]+$"
           },
-          "name": {
+          "label": {
+            "type": "string"
+          },
+          "currency": {
             "type": "string"
           },
           "rate": {
-            "type": "integer"
+            "type": "number"
           },
-          "currency": {
+          "metadata": {
             "type": [
               "string",
               "null"
             ]
-          },
-          "default": {
-            "type": "boolean"
           }
         },
-        "minProperties": 2
+        "minProperties": 4
       },
       "risk": "updates a Hubplanner billing rate",
       "path_fields": [
@@ -112,13 +115,19 @@
           "name": {
             "type": "string"
           },
-          "note": {
+          "type": {
             "type": [
               "string",
               "null"
             ]
           },
-          "status": {
+          "gridColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
             "type": [
               "string",
               "null"
@@ -148,13 +157,19 @@
           "name": {
             "type": "string"
           },
-          "note": {
+          "type": {
             "type": [
               "string",
               "null"
             ]
           },
-          "status": {
+          "gridColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
             "type": [
               "string",
               "null"
@@ -791,32 +806,26 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "name",
-          "start",
-          "end"
+          "name"
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
           "name": {
             "type": "string"
           },
-          "start": {
-            "type": "string"
-          },
-          "end": {
-            "type": "string"
-          },
-          "type": {
+          "eventCode": {
             "type": [
               "string",
               "null"
             ]
           },
-          "note": {
+          "backgroundColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
             "type": [
               "string",
               "null"
@@ -835,9 +844,7 @@
         "type": "object",
         "required": [
           "id",
-          "name",
-          "start",
-          "end"
+          "name"
         ],
         "additionalProperties": false,
         "properties": {
@@ -848,19 +855,19 @@
           "name": {
             "type": "string"
           },
-          "start": {
-            "type": "string"
-          },
-          "end": {
-            "type": "string"
-          },
-          "type": {
+          "eventCode": {
             "type": [
               "string",
               "null"
             ]
           },
-          "note": {
+          "backgroundColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
             "type": [
               "string",
               "null"
@@ -911,24 +918,23 @@
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
           "name": {
             "type": "string"
           },
-          "groupType": {
+          "parentGroupId": {
             "type": [
               "string",
               "null"
             ]
           },
-          "parent": {
+          "projects": {
             "type": [
-              "string",
+              "array",
               "null"
-            ]
+            ],
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -954,17 +960,20 @@
           "name": {
             "type": "string"
           },
-          "groupType": {
+          "parentGroupId": {
             "type": [
               "string",
               "null"
             ]
           },
-          "parent": {
+          "projects": {
             "type": [
-              "string",
+              "array",
               "null"
-            ]
+            ],
+            "items": {
+              "type": "string"
+            }
           }
         },
         "minProperties": 2
@@ -1128,14 +1137,11 @@
         "type": "object",
         "required": [
           "name",
-          "date"
+          "date",
+          "project"
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
           "name": {
             "type": "string"
           },
@@ -1143,16 +1149,7 @@
             "type": "string"
           },
           "project": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "note": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         }
       },
@@ -1168,7 +1165,8 @@
         "required": [
           "id",
           "name",
-          "date"
+          "date",
+          "project"
         ],
         "additionalProperties": false,
         "properties": {
@@ -1183,19 +1181,10 @@
             "type": "string"
           },
           "project": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "note": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
-        "minProperties": 2
+        "minProperties": 4
       },
       "risk": "updates a Hubplanner milestone",
       "path_fields": [
@@ -1239,24 +1228,8 @@
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
           "name": {
             "type": "string"
-          },
-          "code": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "note": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         }
       },
@@ -1281,18 +1254,6 @@
           },
           "name": {
             "type": "string"
-          },
-          "code": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "note": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         },
         "minProperties": 2
@@ -1335,22 +1296,12 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "name"
+          "value"
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
-          "name": {
+          "value": {
             "type": "string"
-          },
-          "color": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         }
       },
@@ -1365,7 +1316,7 @@
         "type": "object",
         "required": [
           "id",
-          "name"
+          "value"
         ],
         "additionalProperties": false,
         "properties": {
@@ -1373,14 +1324,8 @@
             "type": "string",
             "pattern": "^[A-Za-z0-9._:-]+$"
           },
-          "name": {
+          "value": {
             "type": "string"
-          },
-          "color": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         },
         "minProperties": 2
@@ -1423,22 +1368,12 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "name"
+          "value"
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
-          "name": {
+          "value": {
             "type": "string"
-          },
-          "color": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         }
       },
@@ -1453,7 +1388,7 @@
         "type": "object",
         "required": [
           "id",
-          "name"
+          "value"
         ],
         "additionalProperties": false,
         "properties": {
@@ -1461,14 +1396,8 @@
             "type": "string",
             "pattern": "^[A-Za-z0-9._:-]+$"
           },
-          "name": {
+          "value": {
             "type": "string"
-          },
-          "color": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         },
         "minProperties": 2
@@ -1612,21 +1541,28 @@
         "additionalProperties": false,
         "properties": {
           "ids": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+(,[A-Za-z0-9._:-]+)*$",
-            "description": "Comma-separated Hubplanner ids; fixed typed bulk-delete target, not a raw query string."
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            }
           }
         }
       },
       "risk": "deletes multiple Hubplanner projects by ids",
-      "body_type": "none",
-      "body_fields": [
-        "ids"
-      ],
+      "body_type": "json_array",
       "confirm": "destructive",
       "redact_fields": [
         "ids"
-      ]
+      ],
+      "body_field": "ids",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
     },
     {
       "name": "create_resource",
@@ -1744,21 +1680,28 @@
         "additionalProperties": false,
         "properties": {
           "ids": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+(,[A-Za-z0-9._:-]+)*$",
-            "description": "Comma-separated Hubplanner ids; fixed typed bulk-delete target, not a raw query string."
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            }
           }
         }
       },
       "risk": "deletes multiple Hubplanner resources by ids",
-      "body_type": "none",
-      "body_fields": [
-        "ids"
-      ],
+      "body_type": "json_array",
       "confirm": "destructive",
       "redact_fields": [
         "ids"
-      ]
+      ],
+      "body_field": "ids",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
     },
     {
       "name": "create_time_entry",
@@ -1771,14 +1714,10 @@
           "resource",
           "project",
           "date",
-          "hours"
+          "minutes"
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
           "resource": {
             "type": "string"
           },
@@ -1788,10 +1727,16 @@
           "date": {
             "type": "string"
           },
-          "hours": {
+          "minutes": {
             "type": "integer"
           },
           "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "categoryTemplateId": {
             "type": [
               "string",
               "null"
@@ -1813,7 +1758,7 @@
           "resource",
           "project",
           "date",
-          "hours"
+          "minutes"
         ],
         "additionalProperties": false,
         "properties": {
@@ -1830,7 +1775,7 @@
           "date": {
             "type": "string"
           },
-          "hours": {
+          "minutes": {
             "type": "integer"
           },
           "note": {
@@ -1838,9 +1783,15 @@
               "string",
               "null"
             ]
+          },
+          "categoryTemplateId": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
-        "minProperties": 2
+        "minProperties": 5
       },
       "risk": "updates a Hubplanner time entry",
       "path_fields": [
@@ -1885,21 +1836,28 @@
         "additionalProperties": false,
         "properties": {
           "ids": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+(,[A-Za-z0-9._:-]+)*$",
-            "description": "Comma-separated Hubplanner ids; fixed typed bulk-delete target, not a raw query string."
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            }
           }
         }
       },
       "risk": "deletes multiple Hubplanner time entries by ids",
-      "body_type": "none",
-      "body_fields": [
-        "ids"
-      ],
+      "body_type": "json_array",
       "confirm": "destructive",
       "redact_fields": [
         "ids"
-      ]
+      ],
+      "body_field": "ids",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
     },
     {
       "name": "create_unassigned_work",
@@ -1909,30 +1867,12 @@
       "record_schema": {
         "type": "object",
         "required": [
-          "project",
-          "start",
-          "end"
+          "value"
         ],
         "additionalProperties": false,
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9._:-]+$"
-          },
-          "project": {
+          "value": {
             "type": "string"
-          },
-          "start": {
-            "type": "string"
-          },
-          "end": {
-            "type": "string"
-          },
-          "note": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         }
       },
@@ -1947,9 +1887,7 @@
         "type": "object",
         "required": [
           "id",
-          "project",
-          "start",
-          "end"
+          "value"
         ],
         "additionalProperties": false,
         "properties": {
@@ -1957,20 +1895,8 @@
             "type": "string",
             "pattern": "^[A-Za-z0-9._:-]+$"
           },
-          "project": {
+          "value": {
             "type": "string"
-          },
-          "start": {
-            "type": "string"
-          },
-          "end": {
-            "type": "string"
-          },
-          "note": {
-            "type": [
-              "string",
-              "null"
-            ]
           }
         },
         "minProperties": 2
