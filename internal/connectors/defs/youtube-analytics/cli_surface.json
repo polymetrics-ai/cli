@@ -29,7 +29,7 @@
       "availability": "implemented",
       "stream": "jobs",
       "source_cli_path": "GET /v1/jobs",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/list",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/list",
       "flags": [
         { "name": "include-system-managed", "type": "boolean", "summary": "Include system-managed reporting jobs.", "maps_to": "query.includeSystemManaged" }
       ],
@@ -43,7 +43,7 @@
       "availability": "implemented",
       "stream": "job",
       "source_cli_path": "GET /v1/jobs/{jobId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/get",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/get",
       "api_surface": [{ "method": "GET", "path": "/v1/jobs/{jobId}" }],
       "notes": "Pass --config job_id=<job id>; ETL command flags intentionally map only to query parameters, not connector config path variables.",
       "examples": ["pm youtube-analytics jobs get --credential youtube-prod --config job_id=job_fixture_1 --json"]
@@ -55,10 +55,10 @@
       "availability": "implemented",
       "write": "create_job",
       "source_cli_path": "POST /v1/jobs",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/create",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/create",
       "flags": [
-        { "name": "report-type-id", "type": "string", "summary": "ReportType id the job should generate.", "maps_to": "record.reportTypeId", "allow_empty": false },
-        { "name": "name", "type": "string", "summary": "Optional reporting job display name.", "maps_to": "record.name", "allow_empty": false }
+        { "name": "report-type-id", "type": "string", "summary": "Required ReportType id the job should generate.", "maps_to": "record.reportTypeId", "allow_empty": false },
+        { "name": "name", "type": "string", "summary": "Required reporting job display name.", "maps_to": "record.name", "allow_empty": false }
       ],
       "api_surface": [{ "method": "POST", "path": "/v1/jobs" }],
       "risk": "Creates a scheduled YouTube Reporting job; requires reverse ETL plan, preview, explicit approval, then execute.",
@@ -72,7 +72,7 @@
       "availability": "implemented",
       "write": "delete_job",
       "source_cli_path": "DELETE /v1/jobs/{jobId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/delete",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/delete",
       "flags": [
         { "name": "job-id", "type": "string", "summary": "Reporting job ID to delete.", "maps_to": "record.job_id", "allow_empty": false }
       ],
@@ -89,7 +89,7 @@
       "availability": "implemented",
       "stream": "report_types",
       "source_cli_path": "GET /v1/reportTypes",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/reportTypes/list",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/reportTypes/list",
       "flags": [
         { "name": "include-system-managed", "type": "boolean", "summary": "Include system-managed report types.", "maps_to": "query.includeSystemManaged" }
       ],
@@ -103,7 +103,7 @@
       "availability": "implemented",
       "stream": "reports",
       "source_cli_path": "GET /v1/jobs/{jobId}/reports",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/reports/list",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/list",
       "flags": [
         { "name": "created-after", "type": "string", "format": "date-time", "summary": "createdAfter filter for reports.list.", "maps_to": "query.createdAfter", "allow_empty": false },
         { "name": "start-time-at-or-after", "type": "string", "format": "date-time", "summary": "startTimeAtOrAfter filter for reports.list.", "maps_to": "query.startTimeAtOrAfter", "allow_empty": false },
@@ -120,7 +120,7 @@
       "availability": "implemented",
       "stream": "report",
       "source_cli_path": "GET /v1/jobs/{jobId}/reports/{reportId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/reports/get",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/get",
       "api_surface": [{ "method": "GET", "path": "/v1/jobs/{jobId}/reports/{reportId}" }],
       "notes": "Pass --config job_id=<job id> --config report_id=<report id>; downloaded report bytes remain a blocked binary operation.",
       "examples": ["pm youtube-analytics reports get --credential youtube-prod --config job_id=job_fixture_1 --config report_id=report_fixture_1 --json"]
@@ -171,12 +171,13 @@
       "source_cli_path": "POST /v2/groups",
       "source_url": "https://developers.google.com/youtube/analytics/reference/groups/insert",
       "flags": [
-        { "name": "title", "type": "string", "summary": "Group title.", "maps_to": "record.snippet.title", "allow_empty": false }
+        { "name": "title", "type": "string", "summary": "Required group title.", "maps_to": "record.snippet.title", "allow_empty": false },
+        { "name": "item-type", "type": "enum", "values": ["youtube#channel", "youtube#playlist", "youtube#video", "youtubePartner#asset"], "summary": "Required resource type all group items must share.", "maps_to": "record.contentDetails.itemType" }
       ],
       "api_surface": [{ "method": "POST", "path": "/v2/groups" }],
       "risk": "Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.",
       "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
-      "examples": ["pm youtube-analytics groups create --credential youtube-prod --title 'Owned fixture group' --preview --json"]
+      "examples": ["pm youtube-analytics groups create --credential youtube-prod --title 'Owned fixture group' --item-type youtube#video --preview --json"]
     },
     {
       "path": "groups update",

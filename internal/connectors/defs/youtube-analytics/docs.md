@@ -94,10 +94,10 @@ Default pagination: cursor pagination; cursor parameter `pageToken`; next token 
 Write actions are available only through reverse ETL plan → preview → explicit approval → execute.
 Destructive delete actions also require typed `--confirm destructive` at execution time.
 
-- `create_job`: POST `/jobs`; required `reportTypeId`; optional `name`.
+- `create_job`: POST `/jobs`; required `reportTypeId` and `name`.
 - `delete_job`: DELETE `/jobs/{{ record.job_id }}`; required `job_id`; redacted preview/error
   field `job_id`; destructive confirmation required.
-- `create_group`: POST `{{ config.analytics_base_url }}/groups`; required `snippet.title`.
+- `create_group`: POST `{{ config.analytics_base_url }}/groups`; required `snippet.title` and `contentDetails.itemType`; item type must be one of `youtube#channel`, `youtube#playlist`, `youtube#video`, or `youtubePartner#asset`.
 - `update_group`: PUT `{{ config.analytics_base_url }}/groups`; required `id` and
   `snippet.title`; group ID redacted in write errors.
 - `delete_group`: DELETE `{{ config.analytics_base_url }}/groups?id={{ record.id | urlencode }}`;

@@ -9,7 +9,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["reportTypeId"],
+        "required": ["reportTypeId", "name"],
         "additionalProperties": false,
         "properties": {
           "reportTypeId": { "type": "string" },
@@ -47,7 +47,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["snippet"],
+        "required": ["snippet", "contentDetails"],
         "additionalProperties": false,
         "properties": {
           "snippet": {
@@ -56,6 +56,14 @@
             "additionalProperties": false,
             "properties": {
               "title": { "type": "string" }
+            }
+          },
+          "contentDetails": {
+            "type": "object",
+            "required": ["itemType"],
+            "additionalProperties": false,
+            "properties": {
+              "itemType": { "type": "string", "enum": ["youtube#channel", "youtube#playlist", "youtube#video", "youtubePartner#asset"] }
             }
           }
         }

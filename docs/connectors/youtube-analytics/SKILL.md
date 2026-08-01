@@ -80,7 +80,7 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
 
 - create_job:
   - endpoint: POST /jobs
-  - required fields: reportTypeId
+  - required fields: reportTypeId, name
   - risk: creates a YouTube Reporting job that schedules future report generation; requires reverse ETL plan, preview, and explicit approval
 - delete_job:
   - endpoint: DELETE /jobs/{{ record.job_id }}
@@ -88,7 +88,7 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
   - risk: deletes a scheduled YouTube Reporting job and stops future report generation; destructive, redacts job_id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation
 - create_group:
   - endpoint: POST {{ config.analytics_base_url }}/groups
-  - required fields: snippet
+  - required fields: snippet, contentDetails
   - risk: creates a YouTube Analytics group; requires reverse ETL plan, preview, and explicit approval
 - update_group:
   - endpoint: PUT {{ config.analytics_base_url }}/groups
@@ -139,7 +139,7 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
   - reports download - Documented YouTube Reporting media.download operation for generated report bytes (blocked by default). [intent=direct_read availability=planned]; notes: Blocked until a bounded binary file-download executor exists with destination path safety, size limits, digest/audit evidence, and explicit approval.
 - YouTube Analytics groups
   - groups list - Read YouTube Analytics groups through the declared ETL stream. [intent=etl availability=implemented stream=groups]; flags: --mine, --group-ids
-  - groups create - Plan creation of a YouTube Analytics group. [intent=reverse_etl availability=implemented write=create_group]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --title
+  - groups create - Plan creation of a YouTube Analytics group. [intent=reverse_etl availability=implemented write=create_group]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --title, --item-type
   - groups update - Plan update of a YouTube Analytics group's title. [intent=reverse_etl availability=implemented write=update_group]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Mutates YouTube Analytics group metadata; redacts group id from write errors; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --id, --title
   - groups delete - Plan deletion of a YouTube Analytics group with typed destructive confirmation. [intent=reverse_etl availability=implemented write=delete_group]; approval: Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.; risk: Destructive group deletion; redacts group id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.; flags: --id
   - group-items list - Read items in a YouTube Analytics group through the declared ETL stream. [intent=etl availability=implemented stream=group_items]; flags: --group-id

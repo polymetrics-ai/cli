@@ -1274,6 +1274,73 @@ func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T)
 	}
 }
 
+func TestRunYouTubeAnalyticsCreateCommandsRequireProviderFields(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "youtube-analytics")
+	if err != nil {
+		t.Fatalf("load YouTube Analytics bundle: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+
+	tests := []struct {
+		name    string
+		path    []string
+		flags   map[string][]string
+		wantErr string
+	}{
+		{
+			name:    "job missing name",
+			path:    []string{"jobs", "create"},
+			flags:   map[string][]string{"report-type-id": {"channel_basic_a3"}},
+			wantErr: "name",
+		},
+		{
+			name:    "job complete",
+			path:    []string{"jobs", "create"},
+			flags:   map[string][]string{"report-type-id": {"channel_basic_a3"}, "name": {"Daily channel basics"}},
+			wantErr: "",
+		},
+		{
+			name:    "group missing item type",
+			path:    []string{"groups", "create"},
+			flags:   map[string][]string{"title": {"Owned fixture group"}},
+			wantErr: "contentDetails",
+		},
+		{
+			name:    "group invalid item type",
+			path:    []string{"groups", "create"},
+			flags:   map[string][]string{"title": {"Owned fixture group"}, "item-type": {"youtube#asset"}},
+			wantErr: "invalid --item-type",
+		},
+		{
+			name:    "group complete",
+			path:    []string{"groups", "create"},
+			flags:   map[string][]string{"title": {"Owned fixture group"}, "item-type": {"youtube#video"}},
+			wantErr: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cmd, err := BuildWriteCommand(context.Background(), connector, Request{Path: tt.path, Flags: tt.flags})
+			if tt.wantErr != "" {
+				if err == nil {
+					t.Fatal("BuildWriteCommand error = nil, want rejection")
+				}
+				if !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %q, want %q", err.Error(), tt.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if strings.Join(tt.path, " ") != cmd.Command {
+				t.Fatalf("command = %q, want %q", cmd.Command, strings.Join(tt.path, " "))
+			}
+		})
+	}
+}
+
 func TestRunImplementedOperationCommandRequiresTypedMetadata(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
