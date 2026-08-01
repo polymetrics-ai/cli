@@ -24,14 +24,16 @@
     "pinnedSource": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
     "laneCounts": {
       "etl_read": 308,
-      "reverse_etl_write": 498,
-      "direct_read_query_search": 6,
-      "binary_file": 298,
-      "cdc_changefeed": 34,
+      "reverse_etl_write": 640,
+      "direct_read_query_search": 3,
+      "binary_file": 178,
+      "cdc_changefeed": 15,
       "excluded_not_applicable": 2
     },
+    "apiSurfaceEndpoints": 1147,
+    "supplementalStreamEndpoints": [{"method": "GET", "path": "/users", "stream": "users"}],
     "implementedStreamsPreserved": ["projects", "groups", "users", "issues"],
-    "plannedOrBlockedOperations": 1140,
+    "plannedOrBlockedOperations": 1141,
     "excludedNotApplicable": 2,
     "destructivePolicy": "included as typed planned/admin/destructive operations; execution requires typed destructive confirmation plus plan -> preview -> explicit approval -> execute"
   },
@@ -48,11 +50,11 @@
   "verification": [
     {
       "command": "python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py",
-      "result": "pass: PASS GitLab inventory parity: 1146 official operations represented"
+      "result": "pass: PASS GitLab inventory parity: 1146 official operations plus 1 supplemental stream row represented"
     },
     {
       "command": "python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py",
-      "result": "pass: lane counts match parent ledger"
+      "result": "pass: lane counts and GitLab safety/path invariants match connector-local ledger"
     },
     {
       "command": "go run ./cmd/connectorgen validate internal/connectors/defs --json",

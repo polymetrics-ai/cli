@@ -19,9 +19,17 @@ OPENAPI_URL = "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e
 METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 SURFACE = ROOT / "internal/connectors/defs/gitlab/api_surface.json"
 OPERATIONS = ROOT / "internal/connectors/defs/gitlab/operations.json"
+SUPPLEMENTAL_SURFACE = {("GET", "/users")}
 
 
-def load_official_count() -> int:
+def relative_path(path: str) -> str:
+    if path.startswith("/api/v4"):
+        stripped = path[len("/api/v4") :]
+        return stripped or "/"
+    return path
+
+
+def load_official_operations() -> set[tuple[str, str]]:
     with urllib.request.urlopen(OPENAPI_URL, timeout=60) as response:
         spec = yaml.safe_load(response.read())
     seen: set[tuple[str, str]] = set()
@@ -30,29 +38,56 @@ def load_official_count() -> int:
             continue
         for method in item:
             if method.lower() in METHODS:
-                seen.add((method.upper(), path))
-    return len(seen)
+                seen.add((method.upper(), relative_path(path)))
+    return seen
+
+
+def operation_keys(rows: list[dict[str, object]]) -> set[tuple[str, str]]:
+    keys: set[tuple[str, str]] = set()
+    for row in rows:
+        rest = row.get("rest")
+        if isinstance(rest, dict):
+            keys.add((str(rest.get("method")), str(rest.get("path"))))
+            continue
+        composite = row.get("composite")
+        if isinstance(composite, dict):
+            steps = composite.get("steps")
+            if isinstance(steps, list) and steps:
+                method, path, *_ = str(steps[0]).split(" ", 2)
+                keys.add((method, path))
+    return keys
 
 
 def main() -> int:
-    official = load_official_count()
-    surface_rows = len(json.loads(SURFACE.read_text()).get("endpoints", []))
-    operations_rows = 0
-    if OPERATIONS.exists():
-        operations_rows = len(json.loads(OPERATIONS.read_text()).get("operations", []))
+    official = load_official_operations()
+    surface_rows = json.loads(SURFACE.read_text()).get("endpoints", [])
+    operations_rows = json.loads(OPERATIONS.read_text()).get("operations", []) if OPERATIONS.exists() else []
+    surface_keys = {(row.get("method"), row.get("path")) for row in surface_rows if isinstance(row, dict)}
+    operations_keys = operation_keys(operations_rows)
     problems = []
-    if surface_rows != official:
-        problems.append(f"local api_surface row count {surface_rows} != official operation count {official}")
-    if OPERATIONS.exists() and operations_rows != official:
-        problems.append(f"local operations row count {operations_rows} != official operation count {official}")
-    elif not OPERATIONS.exists():
-        problems.append("local operations.json missing")
+    if len(surface_rows) != len(official) + len(SUPPLEMENTAL_SURFACE):
+        problems.append(
+            f"local api_surface row count {len(surface_rows)} != official operation count {len(official)} plus supplemental {len(SUPPLEMENTAL_SURFACE)}"
+        )
+    if operations_keys != official:
+        missing = sorted(official - operations_keys)[:5]
+        extra = sorted(operations_keys - official)[:5]
+        problems.append(f"operations path set mismatch missing={missing} extra={extra}")
+    if not SUPPLEMENTAL_SURFACE.issubset(surface_keys):
+        problems.append(f"missing supplemental api_surface rows {sorted(SUPPLEMENTAL_SURFACE - surface_keys)}")
+    expected_surface = official | SUPPLEMENTAL_SURFACE
+    if surface_keys != expected_surface:
+        missing = sorted(expected_surface - surface_keys)[:5]
+        extra = sorted(surface_keys - expected_surface)[:5]
+        problems.append(f"api_surface path set mismatch missing={missing} extra={extra}")
     if problems:
         print("FAIL GitLab inventory parity")
         for problem in problems:
             print(f"- {problem}")
         return 1
-    print(f"PASS GitLab inventory parity: {official} official operations represented")
+    print(
+        f"PASS GitLab inventory parity: {len(official)} official operations plus {len(SUPPLEMENTAL_SURFACE)} supplemental stream row represented"
+    )
     return 0
 
 

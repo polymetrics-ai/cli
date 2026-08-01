@@ -16,8 +16,8 @@ git diff --check
 
 ## Results
 
-- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py`: `PASS GitLab inventory parity: 1146 official operations represented`.
-- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py`: generated counts match parent ledger: 308 ETL/read, 498 reverse ETL write, 6 direct/query/search, 298 binary/file, 34 CDC/changefeed, 2 excluded/not-applicable; operations total 1,146.
+- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py`: `PASS GitLab inventory parity: 1146 official operations plus 1 supplemental stream row represented`.
+- PASS — `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py`: generated counts match connector-local ledger: 308 ETL/read, 640 reverse ETL write, 3 direct/query/search, 178 binary/file, 15 CDC/changefeed, 2 excluded/not-applicable; operations total 1,146, api/CLI rows total 1,147.
 - PASS — `go run ./cmd/connectorgen validate internal/connectors/defs --json`: 0 total findings, 0 GitLab findings.
 - PASS — `go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1`: `ok polymetrics.ai/internal/connectors/conformance`.
 - PASS — `go test ./internal/cli -run TestGoldenTranscripts -count=1 -timeout=10m`: regenerated and verified GitLab-influenced root command golden transcripts.

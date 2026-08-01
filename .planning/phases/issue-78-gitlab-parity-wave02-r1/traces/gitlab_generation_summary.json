@@ -1,11 +1,12 @@
 {
   "official_operations": 1146,
+  "api_surface_endpoints": 1147,
   "lane_counts": {
     "etl_read": 308,
-    "reverse_etl_write": 498,
-    "binary_file": 298,
-    "cdc_changefeed": 34,
-    "direct_read_query_search": 6,
+    "reverse_etl_write": 640,
+    "cdc_changefeed": 15,
+    "binary_file": 178,
+    "direct_read_query_search": 3,
     "excluded_not_applicable": 2
   },
   "covered_streams": [
@@ -14,7 +15,23 @@
     "projects",
     "users"
   ],
-  "blocked_or_planned": 1140,
+  "official_covered_streams": [
+    "groups",
+    "issues",
+    "projects"
+  ],
+  "supplemental_stream_endpoints": [
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      },
+      "source_url": "https://docs.gitlab.com/ee/api/users/#list-users",
+      "notes": "Existing fixture-backed top-level users stream; absent from the pinned OpenAPI v2 source."
+    }
+  ],
+  "blocked_or_planned": 1141,
   "excluded_not_applicable": 2,
   "source": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml"
 }

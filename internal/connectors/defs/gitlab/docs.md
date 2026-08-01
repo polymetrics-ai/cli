@@ -4,9 +4,11 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4 
 
 Implemented fixture-backed streams: `projects`, `groups`, `users`, `issues`.
 
-The complete official ledger has 1,146 operations: 308 ETL/read, 498 reverse-ETL write/mutation, 6 direct/provider query/search, 298 binary/file, 34 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.
+The complete official ledger has 1,146 operations: 308 ETL/read, 640 reverse-ETL write/mutation, 3 direct/provider query/search, 178 binary/file read/transfer, 15 CDC/changefeed/audit/webhook, and 2 excluded/not-applicable callback endpoints.
 
 Only the four streams are executable in this wave. `api_surface.json`, `operations.json`, and `cli_surface.json` keep every other operation represented as typed planned/blocked metadata until a future connector-local stream/action/command adds fixtures and execution evidence.
+
+`api_surface.json` also includes one connector-local supplemental GET `/users` row for the fixture-backed users stream because that documented top-level endpoint is absent from the pinned OpenAPI source; official GET `/projects/{id}/users` remains planned metadata.
 
 Official source: https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml
 Branch provenance source: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master
@@ -31,7 +33,7 @@ Default pagination follows RFC 5988 `Link` headers with `rel=next`; fixture page
 
 - `projects`: GET `/projects`; records at the response root; sends `per_page=50`; optionally sends `last_activity_after` from `start_date`.
 - `groups`: GET `/groups`; records at the response root; sends `per_page=50`.
-- `users`: GET `/users`; records at the response root; sends `per_page=50`; optionally sends `created_after` from `start_date`. The pinned OpenAPI source does not enumerate this top-level users collection, so `api_surface.json` keeps the stream represented through the official project-users collection row without adding a non-OpenAPI operation.
+- `users`: GET `/users`; records at the response root; sends `per_page=50`; optionally sends `created_after` from `start_date`. The pinned OpenAPI source does not enumerate this top-level users collection, so `api_surface.json` uses a connector-local supplemental coverage row and leaves GET `/projects/{id}/users` as planned metadata.
 - `issues`: GET `/issues`; records at the response root; sends `per_page=50`; optionally sends `updated_after` from `start_date`; derives `author_id` from `author.id`.
 
 Planned ETL/read rows in `operations.json` are metadata only. They are not advertised as executable streams until each has a schema, fixture replay, and conformance evidence.
@@ -40,7 +42,7 @@ Planned ETL/read rows in `operations.json` are metadata only. They are not adver
 
 No `writes.json` actions are executable in this wave, and connector metadata keeps `capabilities.write=false` until named actions and fixtures are added.
 
-The official ledger still includes all 498 mutation operations, including DELETE, destructive, admin, token/key/variable, hook, runner, package delete, and other high-risk operations. These are not blanket-excluded as unsafe. They are represented as planned/blocked typed metadata with risk, source URL, bounded request schemas where available, and approval notes.
+The official ledger still includes all 640 mutation operations, including DELETE, destructive, admin, token/key/variable, hook, runner, package delete, and other high-risk operations. These are not blanket-excluded as unsafe. They are represented as planned/blocked typed metadata with risk, source URL, bounded request schemas where available, and approval notes.
 
 Before any GitLab mutation can execute it must become a named reverse-ETL action with:
 
@@ -61,6 +63,6 @@ No generic HTTP method/path/body, arbitrary GraphQL, shell, file, SQL write/read
 - Binary/file transfer rows depend on shared foundation #2987 before bounded download/upload execution can be claimed.
 - CDC/changefeed/audit/webhook rows depend on shared foundations #2986 and #2988 before CDC/changefeed claims can be made.
 - Destructive/admin write rows depend on per-action schemas, redaction, fixtures, and typed confirmation evidence before execution can be claimed.
-- The current top-level `/users` stream is fixture-backed legacy behavior; the pinned OpenAPI source omits that exact row, so this wave records the shared documentation/source mismatch and does not claim new user-stream parity beyond existing fixtures.
+- The current top-level `/users` stream is fixture-backed legacy behavior; the pinned OpenAPI source omits that exact row, so api surface coverage uses a connector-local supplemental row and does not mark project-scoped users as implemented.
 - The two excluded rows are GitLab Slack integration callback endpoints (`/integrations/slack/interactions` and `/integrations/slack/options`), not user-invoked connector operations.
-- Generated lane counts: etl_read=308, reverse_etl_write=498, direct_read_query_search=6, binary_file=298, cdc_changefeed=34, excluded_not_applicable=2.
+- Generated lane counts: etl_read=308, reverse_etl_write=640, direct_read_query_search=3, binary_file=178, cdc_changefeed=15, excluded_not_applicable=2.

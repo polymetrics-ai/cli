@@ -14,7 +14,7 @@ Expected initial result: fail with `local api_surface row count 11 != official o
 
 ## Green target
 
-- `internal/connectors/defs/gitlab/api_surface.json` has exactly 1,146 rows, one per official `(method,path)` operation from the pinned OpenAPI source.
+- `internal/connectors/defs/gitlab/api_surface.json` has exactly 1,147 rows: one per official `(method,path)` operation from the pinned OpenAPI source plus one connector-local supplemental GET `/users` stream coverage row.
 - `internal/connectors/defs/gitlab/operations.json` has exactly 1,146 typed metadata rows and no executable claims for rows that lack connector-local action/command evidence.
 - `internal/connectors/defs/gitlab/cli_surface.json` has connector-local command metadata for implemented streams and planned typed operations; no generic raw API operation is exposed.
 - Existing four streams remain fixture-backed and conformance-valid.
@@ -30,8 +30,8 @@ Expected initial result: fail with `local api_surface row count 11 != official o
 ## Evidence log
 
 - [x] Red inventory mismatch captured: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py` failed before production edits with `local api_surface row count 11 != official operation count 1146` and `local operations.json missing`.
-- [x] Green inventory count captured after generation: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py` passed with `PASS GitLab inventory parity: 1146 official operations represented`.
-- [x] Surface count check captured: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py` reports 1,146 operations with lane counts 308 ETL/read, 498 reverse ETL write, 6 direct/query/search, 298 binary/file, 34 CDC/changefeed, and 2 excluded/not-applicable.
+- [x] Green inventory count captured after generation: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py` passed with `PASS GitLab inventory parity: 1146 official operations plus 1 supplemental stream row represented`.
+- [x] Surface count check captured: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py` reports 1,146 official operations, 1,147 api/CLI rows, lane counts 308 ETL/read, 640 reverse ETL write, 3 direct/query/search, 178 binary/file, 15 CDC/changefeed, and 2 excluded/not-applicable.
 - [x] `connectorgen validate` result recorded: `go run ./cmd/connectorgen validate internal/connectors/defs --json` passed with 0 findings, including 0 GitLab findings.
 - [x] GitLab conformance result recorded: `go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1` passed.
 - [x] CLI targeted test result recorded: `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1 -timeout=10m` passed after regenerating GitLab-influenced golden root transcripts.
