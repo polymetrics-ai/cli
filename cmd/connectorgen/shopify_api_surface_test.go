@@ -15,6 +15,7 @@ var shopifySourceDescriptionStateDestroyingPaths = map[string]struct{}{
 	"GraphQL Mutation.collectionUnpublish":                  {},
 	"GraphQL Mutation.combinedListingUpdate":                {},
 	"GraphQL Mutation.commentSpam":                          {},
+	"GraphQL Mutation.customerSet":                          {},
 	"GraphQL Mutation.deliveryCustomizationActivation":      {},
 	"GraphQL Mutation.deliveryProfileUpdate":                {},
 	"GraphQL Mutation.deliveryPromiseParticipantsUpdate":    {},
@@ -98,19 +99,19 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	if operations != 1123 {
 		t.Fatalf("operation endpoints = %d, want 1123", operations)
 	}
-	if destructiveConfirm != 191 {
-		t.Fatalf("destructive confirmed operations = %d, want 191", destructiveConfirm)
+	if destructiveConfirm != 192 {
+		t.Fatalf("destructive confirmed operations = %d, want 192", destructiveConfirm)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":  461,
-		"destructive_action": 191,
+		"admin_reverse_etl":  460,
+		"destructive_action": 192,
 		"direct_read":        471,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 191,
+		"critical": 192,
 		"high":     3,
 		"low":      471,
-		"medium":   458,
+		"medium":   457,
 	})
 
 	for _, path := range []string{
@@ -157,7 +158,10 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 		"GraphQL Mutation.discountCodeActivate",
 		"GraphQL Mutation.fileCreate",
 		"GraphQL Mutation.fulfillmentOrderHold",
+		"GraphQL Mutation.inventorySetQuantities",
 		"GraphQL Mutation.inventoryTransferSetItems",
+		"GraphQL Mutation.metafieldsSet",
+		"GraphQL Mutation.orderCustomerSet",
 		"GraphQL Mutation.orderUpdate",
 		"GraphQL Mutation.shippingLabelPurchase",
 	} {
@@ -376,6 +380,7 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 	}
 	for _, path := range []string{
 		"GraphQL Mutation.commentSpam",
+		"GraphQL Mutation.customerSet",
 		"GraphQL Mutation.deliveryCustomizationActivation",
 		"GraphQL Mutation.deliveryPromiseParticipantsUpdate",
 		"GraphQL Mutation.eventBridgeServerPixelUpdate",
@@ -400,7 +405,10 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 	for _, path := range []string{
 		"GraphQL Mutation.discountCodeActivate",
 		"GraphQL Mutation.fulfillmentOrderHold",
+		"GraphQL Mutation.inventorySetQuantities",
 		"GraphQL Mutation.inventoryTransferSetItems",
+		"GraphQL Mutation.metafieldsSet",
+		"GraphQL Mutation.orderCustomerSet",
 	} {
 		if shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: path, Operation: &engine.SurfaceOperation{}}) {
 			t.Fatalf("%s classified as state-destroying", path)

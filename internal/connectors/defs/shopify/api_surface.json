@@ -4901,12 +4901,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerSet",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerSet"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerSet",
+        "notes": "Shopify docs say existing entries not included in customer list fields will be deleted."
       }
     },
     {
