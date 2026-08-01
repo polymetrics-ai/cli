@@ -123,8 +123,10 @@ Connection checks call GET `/Accounts/{{ secrets.account_sid }}/Messages.json`.
 
 Default pagination: single request; no pagination.
 
-Streams derived from the REST API reference use passthrough projection with minimal schemas, so
-fields Twilio adds to responses flow through without schema changes.
+Streams derived from the REST API reference generally use passthrough projection with minimal
+schemas, so fields Twilio adds to responses flow through without schema changes. The `account` and
+`accounts` streams use schema projection so Twilio's response-level `auth_token` is not emitted as
+ETL data.
 
 Pagination by stream: none: `messages`, `calls`, `recordings`, `conferences`, `usage_records`,
 `account`, `address_2`, `application`, `authorized_connect_app`, `available_phone_number_country`,
@@ -166,10 +168,10 @@ page_number: `accounts`, `address`, `applications`, `authorized_connect_apps`,
 - `usage_records`: GET `/Accounts/{{ secrets.account_sid }}/Usage/Records.json` - records path
   `usage_records`.
 - `account`: GET `/Accounts/{{ config.sid }}.json` - single-object response; records path `.`; emits
-  passthrough records.
+  schema-projected records with Twilio `auth_token` removed.
 - `accounts`: GET `/Accounts.json` - records path `accounts`; page-number pagination; page parameter
   `Page`; size parameter `PageSize`; starts at 0; page size 50; maximum 25 page(s); emits
-  passthrough records.
+  schema-projected records with Twilio `auth_token` removed.
 - `address`: GET `/Accounts/{{ secrets.account_sid }}/Addresses.json` - records path `addresses`;
   page-number pagination; page parameter `Page`; size parameter `PageSize`; starts at 0; page size
   50; maximum 25 page(s); emits passthrough records.
@@ -473,7 +475,9 @@ page_number: `accounts`, `address`, `applications`, `authorized_connect_apps`,
 Overall write risk: creates, updates, and deletes Twilio v2010 resources including messages, calls,
 phone numbers, recordings, queues, SIP resources, keys, and usage triggers.
 
-Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+Reverse ETL writes should be planned, previewed, approved, and then executed. Action-local
+redaction masks SIP credential passwords and call tokens in plan samples, previews, and write
+errors. Declared actions:
 
 - `create_account`: POST `/Accounts.json` - kind `create`; body type `form`; accepted fields
   `FriendlyName`; risk: creates Twilio account resources in the connected account; approval

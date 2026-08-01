@@ -486,6 +486,10 @@
       "method": "POST",
       "path": "/Accounts/{{ secrets.account_sid }}/Calls.json",
       "path_fields": [],
+      "redact_fields": [
+        "SipAuthPassword",
+        "CallToken"
+      ],
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -4014,6 +4018,10 @@
       "path_fields": [
         "conference_sid"
       ],
+      "redact_fields": [
+        "SipAuthPassword",
+        "CallToken"
+      ],
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6494,6 +6502,9 @@
       "path_fields": [
         "credential_list_sid"
       ],
+      "redact_fields": [
+        "Password"
+      ],
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -6568,6 +6579,9 @@
       "path_fields": [
         "credential_list_sid",
         "sid"
+      ],
+      "redact_fields": [
+        "Password"
       ],
       "body_type": "form",
       "record_schema": {

@@ -6,12 +6,6 @@
     "sid"
   ],
   "properties": {
-    "auth_token": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "date_created": {
       "type": [
         "string",

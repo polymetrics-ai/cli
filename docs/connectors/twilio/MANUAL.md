@@ -73,10 +73,10 @@ ETL STREAMS
     fields: account_sid(), category(), count(), count_unit(), description(), end_date(), price(), price_unit(), start_date(), usage(), usage_unit()
   account:
     primary key: sid
-    fields: auth_token(), date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
+    fields: date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
   accounts:
     primary key: sid
-    fields: auth_token(), date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
+    fields: date_created(), date_updated(), friendly_name(), owner_account_sid(), sid(), status(), subresource_uris(), type(), uri()
   address:
     primary key: sid
     fields: account_sid(), city(), customer_name(), date_created(), date_updated(), emergency_enabled(), friendly_name(), iso_country(), postal_code(), region(), sid(), street(), street_secondary(), uri(), validated(), verified()

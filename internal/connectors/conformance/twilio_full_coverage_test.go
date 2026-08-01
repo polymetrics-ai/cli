@@ -2,6 +2,7 @@ package conformance
 
 import (
 	"io/fs"
+	"slices"
 	"strings"
 	"testing"
 
@@ -45,6 +46,60 @@ func TestTwilioOfficialParityLedgerAndFixtureCoverage(t *testing.T) {
 	}
 	if got := len(bundle.Writes); got != 94 {
 		t.Fatalf("write actions = %d, want 94", got)
+	}
+
+	for _, streamName := range []string{"account", "accounts"} {
+		var stream engine.StreamSpec
+		found := false
+		for _, candidate := range bundle.Streams {
+			if candidate.Name == streamName {
+				stream = candidate
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("stream %q is missing", streamName)
+		}
+		if stream.Projection == "passthrough" {
+			t.Fatalf("stream %q projection = passthrough, want schema boundary for Twilio auth_token", streamName)
+		}
+		schema := bundle.Schemas[streamName]
+		if schema == nil {
+			t.Fatalf("stream %q schema is missing", streamName)
+		}
+		if slices.Contains(schema.Properties(), "auth_token") {
+			t.Fatalf("stream %q schema exposes auth_token", streamName)
+		}
+	}
+
+	redactionChecks := []struct {
+		name   string
+		fields []string
+	}{
+		{name: "create_call", fields: []string{"SipAuthPassword", "CallToken"}},
+		{name: "create_participant", fields: []string{"SipAuthPassword", "CallToken"}},
+		{name: "create_sip_credential", fields: []string{"Password"}},
+		{name: "update_sip_credential", fields: []string{"Password"}},
+	}
+	for _, check := range redactionChecks {
+		var action engine.WriteAction
+		found := false
+		for _, candidate := range bundle.Writes {
+			if candidate.Name == check.name {
+				action = candidate
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("write action %q is missing", check.name)
+		}
+		for _, field := range check.fields {
+			if !slices.Contains(action.RedactFields, field) {
+				t.Fatalf("write action %q redact_fields = %v, want %q", check.name, action.RedactFields, field)
+			}
+		}
 	}
 
 	assertTwilioCoverage(t, bundle, "GET", "/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json", "stream", "medias")
