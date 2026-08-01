@@ -26,13 +26,6 @@ func (h Hooks) ConnectorName() string { return "ashby" }
 
 var streamAliases = map[string]string{}
 
-var legacyStreams = map[string]struct{}{
-	"candidates":   {},
-	"jobs":         {},
-	"applications": {},
-	"users":        {},
-}
-
 func (h Hooks) connector() connectors.Connector {
 	if h.Connector != nil {
 		return h.Connector
@@ -55,9 +48,6 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	}
 	if req.Stream == "" {
 		return true, fmt.Errorf("ashby" + " stream name is required")
-	}
-	if _, ok := legacyStreams[req.Stream]; !ok {
-		return false, nil
 	}
 	return true, h.connector().Read(ctx, req, emit)
 }

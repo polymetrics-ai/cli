@@ -1,57 +1,31 @@
-# Overview
+# Ashby Connector
 
-Reads Ashby applicant-tracking data - candidates, jobs, applications, and users - through the Ashby
-REST API.
+## Overview
 
-Readable streams: `candidates`, `jobs`, `applications`, `users`.
+Ashby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.
 
-This connector is read-only; no write actions are declared.
+Coverage summary:
 
-Service API documentation: https://developers.ashbyhq.com/.
+- REST operations in source: 185
+- OpenAPI webhook events in source: 27
+- Implemented ETL/changefeed streams: 72
+- Implemented bounded direct reads/search/file metadata operations: 7
+- Implemented reverse-ETL write actions: 101
+- Reverse-ETL CLI commands with scalar flags: 95; partial nested-object flag surfaces: 6
+- Blocked/non-executable ledger rows: 32
 
 ## Auth setup
 
-Connection fields:
-
-- `api_key` (required, secret, string); The Ashby API Key, see <a
-  href=\"https://developers.ashbyhq.com/reference/authentication\">doc</a> here.
-- `base_url` (optional, string).
-- `mode` (optional, string).
-- `start_date` (required, string); UTC date and time in the format 2017-01-25T00:00:00Z. Any data
-  before this date will not be replicated.
-
-Secret fields are redacted in logs and write previews: `api_key`.
-
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Authentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `candidates`: GET connector-managed request path - records path `data`; incremental cursor
-  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `jobs`: GET connector-managed request path - records path `data`; incremental cursor `updatedAt`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `applications`: GET connector-managed request path - records path `data`; incremental cursor
-  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `users`: GET connector-managed request path - records path `data`; incremental cursor `updatedAt`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+Ashby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
+Reverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.
 
 ## Known limits
 
-- API coverage includes 4 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `candidates`, `jobs`, `applications`, `users`.
+Blocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.

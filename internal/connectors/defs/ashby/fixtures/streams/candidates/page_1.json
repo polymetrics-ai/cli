@@ -1,20 +1,22 @@
 {
-  "data": [
+  "success": true,
+  "results": [
     {
-      "id": "fixture",
-      "name": "fixture",
+      "id": "candidate_fixture_1",
+      "name": "Fixture Candidate",
       "primaryEmailAddress": {
-        "fixture": "value"
+        "value": "fixture@example.invalid"
       },
       "primaryPhoneNumber": {
-        "fixture": "value"
+        "value": "+15550100"
       },
-      "company": "fixture",
-      "title": "fixture",
-      "locationSummary": "fixture",
-      "timezone": "fixture",
-      "createdAt": "fixture",
-      "updatedAt": "fixture"
+      "company": "Example Inc",
+      "title": "Engineer",
+      "locationSummary": "Remote",
+      "timezone": "UTC",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-02T00:00:00Z"
     }
-  ]
+  ],
+  "moreDataAvailable": false
 }
