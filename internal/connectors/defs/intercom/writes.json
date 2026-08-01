@@ -379,7 +379,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+            "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
           },
           "author_id": {
             "type": "integer",
@@ -4629,7 +4629,7 @@
               "string",
               "null"
             ],
-            "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+            "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
             "format": "date-time"
           },
           "scheduled_unpublish_at": {
@@ -4637,7 +4637,7 @@
               "string",
               "null"
             ],
-            "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+            "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
             "format": "date-time"
           }
         },
@@ -4726,7 +4726,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+            "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
           },
           "author_id": {
             "type": "integer",
@@ -8976,7 +8976,7 @@
               "string",
               "null"
             ],
-            "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+            "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
             "format": "date-time"
           },
           "scheduled_unpublish_at": {
@@ -8984,7 +8984,7 @@
               "string",
               "null"
             ],
-            "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+            "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
             "format": "date-time"
           }
         },
@@ -9127,7 +9127,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+            "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
           },
           "author_id": {
             "type": "integer",
@@ -13377,7 +13377,7 @@
               "string",
               "null"
             ],
-            "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+            "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
             "format": "date-time"
           },
           "scheduled_unpublish_at": {
@@ -13385,7 +13385,7 @@
               "string",
               "null"
             ],
-            "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+            "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
             "format": "date-time"
           }
         },
@@ -13941,9 +13941,26 @@
           }
         },
         "additionalProperties": false,
-        "minProperties": 1
+        "minProperties": 1,
+        "anyOf": [
+          {
+            "required": [
+              "email"
+            ]
+          },
+          {
+            "required": [
+              "external_id"
+            ]
+          },
+          {
+            "required": [
+              "role"
+            ]
+          }
+        ]
       },
-      "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of email, external_id, or role.",
       "body_fields": [
         "role",
         "external_id",
@@ -13957,6 +13974,11 @@
         "owner_id",
         "unsubscribed_from_emails",
         "custom_attributes"
+      ],
+      "redact_fields": [
+        "email",
+        "external_id",
+        "phone"
       ]
     },
     {
@@ -14582,7 +14604,7 @@
           },
           "availability": {
             "type": "object",
-            "description": "Required when `action` is `set_availability`. Each field is optional — only the properties present in the request are toggled.",
+            "description": "Required when `action` is `set_availability`. Each field is optional \u2014 only the properties present in the request are toggled.",
             "properties": {
               "ai_agent": {
                 "type": "boolean",
@@ -14680,7 +14702,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the snippet in markdown. An alternative to `json_blocks` — you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
+            "description": "The content of the snippet in markdown. An alternative to `json_blocks` \u2014 you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
           },
           "locale": {
             "type": "string",
@@ -14868,7 +14890,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the snippet in markdown. An alternative to `json_blocks` — you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
+            "description": "The content of the snippet in markdown. An alternative to `json_blocks` \u2014 you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
           },
           "locale": {
             "type": "string",
@@ -15357,9 +15379,39 @@
           "type",
           "conversation_id"
         ],
-        "minProperties": 3
+        "minProperties": 3,
+        "oneOf": [
+          {
+            "required": [
+              "type",
+              "conversation_id",
+              "conversation_part_id"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "conversation_part"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "type",
+              "conversation_id",
+              "source_id"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "source"
+                ]
+              }
+            }
+          }
+        ]
       },
-      "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation; variant rules: type=conversation_part requires conversation_part_id; type=source requires source_id.",
       "body_fields": [
         "type",
         "conversation_id",
@@ -15666,14 +15718,85 @@
           "conversation_id",
           "message_type",
           "admin_id"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "message_type",
+              "type",
+              "admin_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "close"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "admin"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "admin_id",
+              "snoozed_until"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "snoozed"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "admin_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "open"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "admin_id",
+              "assignee_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "assignment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "admin",
+                  "team"
+                ]
+              }
+            }
+          }
         ]
       },
-      "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: close requires type=admin; snoozed requires snoozed_until; assignment requires type admin/team and assignee_id.",
       "path_fields": [
         "conversation_id"
       ],
       "redact_fields": [
-        "conversation_id"
+        "conversation_id",
+        "admin_id",
+        "assignee_id"
       ],
       "body_fields": [
         "message_type",
@@ -15797,14 +15920,101 @@
           "conversation_id",
           "message_type",
           "type"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "message_type",
+              "type",
+              "body",
+              "intercom_user_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "user"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "body",
+              "user_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "user"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "body",
+              "email"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "user"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "admin_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment",
+                  "note",
+                  "quick_reply"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "admin"
+                ]
+              }
+            }
+          }
         ]
       },
-      "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id.",
       "path_fields": [
         "conversation_id"
       ],
       "redact_fields": [
-        "conversation_id"
+        "conversation_id",
+        "intercom_user_id",
+        "user_id",
+        "email",
+        "admin_id"
       ],
       "body_fields": [
         "message_type",
@@ -16136,9 +16346,41 @@
           "name",
           "model",
           "data_type"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "data_type",
+              "options"
+            ],
+            "properties": {
+              "data_type": {
+                "enum": [
+                  "options"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "data_type"
+            ],
+            "properties": {
+              "data_type": {
+                "enum": [
+                  "string",
+                  "integer",
+                  "float",
+                  "boolean",
+                  "datetime",
+                  "date"
+                ]
+              }
+            }
+          }
         ]
       },
-      "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute; variant rules: data_type=options requires options.",
       "body_fields": [
         "name",
         "model",
@@ -16188,9 +16430,31 @@
         "additionalProperties": false,
         "required": [
           "data_attribute_id"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "options"
+            ]
+          },
+          {
+            "required": [
+              "archived"
+            ]
+          },
+          {
+            "required": [
+              "description"
+            ]
+          },
+          {
+            "required": [
+              "messenger_writable"
+            ]
+          }
         ]
       },
-      "risk": "Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute; variant rules: list-attribute updates carry options; non-list updates carry archived, description, or messenger_writable.",
       "path_fields": [
         "data_attribute_id"
       ],
@@ -16597,9 +16861,26 @@
           "event_name",
           "created_at"
         ],
-        "minProperties": 3
+        "minProperties": 3,
+        "anyOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "user_id"
+            ]
+          },
+          {
+            "required": [
+              "email"
+            ]
+          }
+        ]
       },
-      "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of id, user_id, or email.",
       "body_fields": [
         "event_name",
         "created_at",
@@ -16607,6 +16888,11 @@
         "id",
         "email",
         "metadata"
+      ],
+      "redact_fields": [
+        "id",
+        "user_id",
+        "email"
       ]
     },
     {
@@ -16647,11 +16933,11 @@
         "properties": {
           "conversation_id": {
             "type": "string",
-            "description": "Your external conversation ID — the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
+            "description": "Your external conversation ID \u2014 the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
           },
           "rating": {
             "type": "string",
-            "description": "The rating the user selected — one of the `key` values from the `csat_requested` event's options.",
+            "description": "The rating the user selected \u2014 one of the `key` values from the `csat_requested` event's options.",
             "enum": [
               "terrible",
               "bad",
@@ -16662,7 +16948,7 @@
           },
           "remark": {
             "type": "string",
-            "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once — the rating locks after a remark is recorded."
+            "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once \u2014 the rating locks after a remark is recorded."
           }
         },
         "required": [
@@ -19384,7 +19670,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the article in markdown. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+            "description": "The content of the article in markdown. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
           },
           "author_id": {
             "type": "integer",
@@ -19493,7 +19779,7 @@
           },
           "body_markdown": {
             "type": "string",
-            "description": "The content of the article in markdown. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+            "description": "The content of the article in markdown. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
           },
           "author_id": {
             "type": "integer",
@@ -19813,9 +20099,59 @@
           "from",
           "to"
         ],
-        "minProperties": 4
+        "minProperties": 4,
+        "anyOf": [
+          {
+            "required": [
+              "message_type",
+              "subject",
+              "body",
+              "template",
+              "from",
+              "to"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "email"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "body",
+              "from",
+              "to"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "inapp"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "template",
+              "components",
+              "from",
+              "to"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "whatsapp"
+                ]
+              }
+            }
+          }
+        ]
       },
-      "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; inapp requires body/from/to; whatsapp requires template/components/from/to.",
       "body_fields": [
         "message_type",
         "subject",
@@ -19828,6 +20164,12 @@
         "components",
         "created_at",
         "create_conversation_without_contact_reply"
+      ],
+      "redact_fields": [
+        "from.id",
+        "to.id",
+        "cc.id",
+        "bcc.id"
       ]
     },
     {
@@ -20082,7 +20424,7 @@
                 },
                 "day_of_week": {
                   "type": "integer",
-                  "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                  "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                 }
               }
             }
@@ -20173,7 +20515,7 @@
                 },
                 "day_of_week": {
                   "type": "integer",
-                  "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                  "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                 }
               }
             }
@@ -20246,7 +20588,7 @@
                 },
                 "day_of_week": {
                   "type": "integer",
-                  "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                  "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                 }
               }
             }
@@ -20372,7 +20714,7 @@
                 },
                 "day_of_week": {
                   "type": "integer",
-                  "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                  "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                 }
               }
             }
@@ -21327,14 +21669,101 @@
           "ticket_id",
           "message_type",
           "type"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "message_type",
+              "type",
+              "body",
+              "intercom_user_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "user"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "body",
+              "user_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "user"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "body",
+              "email"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "user"
+                ]
+              }
+            }
+          },
+          {
+            "required": [
+              "message_type",
+              "type",
+              "admin_id"
+            ],
+            "properties": {
+              "message_type": {
+                "enum": [
+                  "comment",
+                  "note",
+                  "quick_reply"
+                ]
+              },
+              "type": {
+                "enum": [
+                  "admin"
+                ]
+              }
+            }
+          }
         ]
       },
-      "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id.",
       "path_fields": [
         "ticket_id"
       ],
       "redact_fields": [
-        "ticket_id"
+        "ticket_id",
+        "intercom_user_id",
+        "user_id",
+        "email",
+        "admin_id"
       ],
       "body_fields": [
         "message_type",
@@ -21467,14 +21896,30 @@
           }
         },
         "additionalProperties": false,
-        "minProperties": 1
+        "minProperties": 1,
+        "anyOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "user_id"
+            ]
+          }
+        ]
       },
-      "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute",
+      "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide id or user_id.",
       "body_fields": [
         "id",
         "user_id",
         "name",
         "custom_attributes"
+      ],
+      "redact_fields": [
+        "id",
+        "user_id"
       ]
     },
     {

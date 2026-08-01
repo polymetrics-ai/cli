@@ -49,6 +49,23 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"object","additionalProperties":false,"properties":{"a":{"type":"string"}}}`,
 		},
 		{
+			name: "oneOf combinator",
+			raw:  `{"type":"object","oneOf":[{"required":["a"]},{"required":["b"]}]}`,
+		},
+		{
+			name: "anyOf combinator",
+			raw:  `{"type":"object","anyOf":[{"required":["a"]},{"required":["b"]}]}`,
+		},
+		{
+			name: "allOf combinator",
+			raw:  `{"type":"object","allOf":[{"required":["a"]},{"required":["b"]}]}`,
+		},
+		{
+			name:    "empty oneOf is compile error",
+			raw:     `{"type":"object","oneOf":[]}`,
+			wantErr: true,
+		},
+		{
 			name: "annotations preserved but not enforced",
 			raw:  `{"type":"string","format":"date-time","default":"x","title":"t","description":"d","$schema":"http://json-schema.org/draft-07/schema#"}`,
 		},
@@ -177,6 +194,42 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `{"user":{"login":5}}`,
 			wantErr:   true,
 			errSubstr: "/user/login",
+		},
+		{
+			name:     "anyOf accepts one matched schema",
+			raw:      `{"type":"object","anyOf":[{"required":["email"]},{"required":["user_id"]}]}`,
+			instance: `{"email":"a@example.com"}`,
+		},
+		{
+			name:      "anyOf rejects no matched schemas",
+			raw:       `{"type":"object","anyOf":[{"required":["email"]},{"required":["user_id"]}]}`,
+			instance:  `{}`,
+			wantErr:   true,
+			errSubstr: "anyOf",
+		},
+		{
+			name:     "oneOf accepts exactly one matched schema",
+			raw:      `{"type":"object","oneOf":[{"required":["email"]},{"required":["user_id"]}]}`,
+			instance: `{"email":"a@example.com"}`,
+		},
+		{
+			name:      "oneOf rejects multiple matched schemas",
+			raw:       `{"type":"object","oneOf":[{"required":["email"]},{"required":["user_id"]}]}`,
+			instance:  `{"email":"a@example.com","user_id":"u_123"}`,
+			wantErr:   true,
+			errSubstr: "oneOf",
+		},
+		{
+			name:     "allOf accepts all matched schemas",
+			raw:      `{"type":"object","allOf":[{"required":["email"]},{"required":["user_id"]}]}`,
+			instance: `{"email":"a@example.com","user_id":"u_123"}`,
+		},
+		{
+			name:      "allOf rejects missing schema",
+			raw:       `{"type":"object","allOf":[{"required":["email"]},{"required":["user_id"]}]}`,
+			instance:  `{"email":"a@example.com"}`,
+			wantErr:   true,
+			errSubstr: "allOf",
 		},
 	}
 

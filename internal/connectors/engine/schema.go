@@ -26,6 +26,9 @@ type schemaNode struct {
 	required             []string
 	properties           map[string]*schemaNode
 	items                *schemaNode
+	oneOf                []*schemaNode
+	anyOf                []*schemaNode
+	allOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	minProperties        int
@@ -68,6 +71,9 @@ var structuralKeywords = map[string]bool{
 	"pattern":              true,
 	"minProperties":        true,
 	"additionalProperties": true,
+	"oneOf":                true,
+	"anyOf":                true,
+	"allOf":                true,
 	"x-secret":             true,
 	"x-primary-key":        true,
 	"x-cursor-field":       true,
@@ -150,6 +156,25 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		n.items = child
 	}
 
+	for _, keyword := range []string{"oneOf", "anyOf", "allOf"} {
+		raw, ok := m[keyword]
+		if !ok {
+			continue
+		}
+		children, err := compileNodeList(raw, keyword)
+		if err != nil {
+			return nil, err
+		}
+		switch keyword {
+		case "oneOf":
+			n.oneOf = children
+		case "anyOf":
+			n.anyOf = children
+		case "allOf":
+			n.allOf = children
+		}
+	}
+
 	if raw, ok := m["enum"]; ok {
 		var vals []any
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
@@ -228,6 +253,25 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	return n, nil
 }
 
+func compileNodeList(raw json.RawMessage, keyword string) ([]*schemaNode, error) {
+	var subs []map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &subs); err != nil {
+		return nil, fmt.Errorf("compile schema: %s: %w", keyword, err)
+	}
+	if len(subs) == 0 {
+		return nil, fmt.Errorf("compile schema: %s: must contain at least one schema", keyword)
+	}
+	children := make([]*schemaNode, 0, len(subs))
+	for i, sub := range subs {
+		child, err := compileNode(sub)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: %s[%d]: %w", keyword, i, err)
+		}
+		children = append(children, child)
+	}
+	return children, nil
+}
+
 func compileTypes(raw json.RawMessage) ([]string, error) {
 	var single string
 	if err := json.Unmarshal(raw, &single); err == nil {
@@ -288,6 +332,34 @@ func (n *schemaNode) validate(v any, path string) error {
 			if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
 				return err
 			}
+		}
+	}
+
+	for i, sub := range n.allOf {
+		if err := sub.validate(v, path); err != nil {
+			return fmt.Errorf("%s: allOf[%d]: %w", displayPath(path), i, err)
+		}
+	}
+	if len(n.anyOf) > 0 {
+		matched := 0
+		for _, sub := range n.anyOf {
+			if err := sub.validate(v, path); err == nil {
+				matched++
+			}
+		}
+		if matched == 0 {
+			return fmt.Errorf("%s: value does not match anyOf", displayPath(path))
+		}
+	}
+	if len(n.oneOf) > 0 {
+		matched := 0
+		for _, sub := range n.oneOf {
+			if err := sub.validate(v, path); err == nil {
+				matched++
+			}
+		}
+		if matched != 1 {
+			return fmt.Errorf("%s: value matches %d oneOf schemas", displayPath(path), matched)
 		}
 	}
 

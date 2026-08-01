@@ -68855,7 +68855,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/contacts",
-        "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of email, external_id, or role."
       },
       {
         "name": "merge_contact",
@@ -69064,7 +69064,7 @@
         "kind": "custom",
         "method": "POST",
         "path": "/conversations/redact",
-        "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+        "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation; variant rules: type=conversation_part requires conversation_part_id; type=source requires source_id.",
         "confirm": "destructive"
       },
       {
@@ -69109,14 +69109,14 @@
         "kind": "custom",
         "method": "POST",
         "path": "/conversations/{{ record.conversation_id }}/parts",
-        "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: close requires type=admin; snoozed requires snoozed_until; assignment requires type admin/team and assignee_id."
       },
       {
         "name": "reply_conversation",
         "kind": "custom",
         "method": "POST",
         "path": "/conversations/{{ record.conversation_id }}/reply",
-        "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id."
       },
       {
         "name": "attach_tag_to_conversation",
@@ -69169,14 +69169,14 @@
         "kind": "create",
         "method": "POST",
         "path": "/data_attributes",
-        "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute; variant rules: data_type=options requires options."
       },
       {
         "name": "update_data_attribute",
         "kind": "update",
         "method": "PUT",
         "path": "/data_attributes/{{ record.data_attribute_id }}",
-        "risk": "Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute; variant rules: list-attribute updates carry options; non-list updates carry archived, description, or messenger_writable."
       },
       {
         "name": "create_data_connector",
@@ -69205,7 +69205,7 @@
         "kind": "custom",
         "method": "POST",
         "path": "/events",
-        "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of id, user_id, or email."
       },
       {
         "name": "cancel_data_export",
@@ -69330,7 +69330,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/messages",
-        "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; inapp requires body/from/to; whatsapp requires template/components/from/to."
       },
       {
         "name": "create_news_item",
@@ -69504,7 +69504,7 @@
         "kind": "custom",
         "method": "POST",
         "path": "/tickets/{{ record.ticket_id }}/reply",
-        "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id."
       },
       {
         "name": "attach_tag_to_ticket",
@@ -69526,7 +69526,7 @@
         "kind": "update",
         "method": "PUT",
         "path": "/visitors",
-        "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute"
+        "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide id or user_id."
       },
       {
         "name": "convert_visitor",

@@ -160,7 +160,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
 - create_contact:
   - endpoint: POST /contacts
   - optional fields: role, external_id, email_verified, email, phone, name, avatar, signed_up_at, last_seen_at, owner_id, unsubscribed_from_emails, custom_attributes
-  - risk: Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute
+  - risk: Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of email, external_id, or role.
 - merge_contact:
   - endpoint: POST /contacts/merge
   - required fields: from, into
@@ -255,7 +255,8 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Creates a conversation: live Intercom mutation against /conversations; reverse ETL requires plan, preview, explicit approval, execute
 - create_conversation_attribute:
   - endpoint: POST /conversations/attributes
-  - optional fields: name, description, data_type, required, visible_to_team_ids, multiline, options, reference
+  - required fields: name, data_type
+  - optional fields: description, required, visible_to_team_ids, multiline, options, reference
   - risk: Create a conversation attribute: live Intercom mutation against /conversations/attributes; reverse ETL requires plan, preview, explicit approval, execute
 - delete_conversation_attribute:
   - endpoint: DELETE /conversations/attributes/{{ record.id }}
@@ -280,8 +281,9 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Update an option on a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options/{option_id}; reverse ETL requires plan, preview, explicit approval, execute
 - redact_conversation:
   - endpoint: POST /conversations/redact
-  - optional fields: type, conversation_id, conversation_part_id, source_id
-  - risk: Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
+  - required fields: type, conversation_id
+  - optional fields: conversation_part_id, source_id
+  - risk: Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation; variant rules: type=conversation_part requires conversation_part_id; type=source requires source_id.
 - delete_conversation:
   - endpoint: DELETE /conversations/{{ record.conversation_id }}
   - required fields: conversation_id
@@ -307,14 +309,14 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Detach a contact from a group conversation: live Intercom mutation against /conversations/{conversation_id}/customers/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
 - manage_conversation:
   - endpoint: POST /conversations/{{ record.conversation_id }}/parts
-  - required fields: conversation_id
-  - optional fields: message_type, type, admin_id, body, snoozed_until, assignee_id
-  - risk: Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute
+  - required fields: conversation_id, message_type, admin_id
+  - optional fields: type, body, snoozed_until, assignee_id
+  - risk: Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute; variant rules: close requires type=admin; snoozed requires snoozed_until; assignment requires type admin/team and assignee_id.
 - reply_conversation:
   - endpoint: POST /conversations/{{ record.conversation_id }}/reply
-  - required fields: conversation_id
-  - optional fields: message_type, type, body, created_at, attachment_urls, reply_options, intercom_user_id, attachment_files, email, user_id, admin_id, skip_notifications
-  - risk: Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute
+  - required fields: conversation_id, message_type, type
+  - optional fields: body, created_at, attachment_urls, reply_options, intercom_user_id, attachment_files, email, user_id, admin_id, skip_notifications
+  - risk: Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id.
 - attach_tag_to_conversation:
   - endpoint: POST /conversations/{{ record.conversation_id }}/tags
   - required fields: conversation_id, id, admin_id
@@ -342,13 +344,14 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Delete a Custom Object Instance by ID: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
 - create_data_attribute:
   - endpoint: POST /data_attributes
-  - optional fields: data_type, options
-  - risk: Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute
+  - required fields: name, model, data_type
+  - optional fields: description, messenger_writable, options
+  - risk: Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute; variant rules: data_type=options requires options.
 - update_data_attribute:
   - endpoint: PUT /data_attributes/{{ record.data_attribute_id }}
   - required fields: data_attribute_id
-  - optional fields: options
-  - risk: Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute
+  - optional fields: archived, description, messenger_writable, options
+  - risk: Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute; variant rules: list-attribute updates carry options; non-list updates carry archived, description, or messenger_writable.
 - create_data_connector:
   - endpoint: POST /data_connectors
   - required fields: name
@@ -367,7 +370,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - endpoint: POST /events
   - required fields: event_name, created_at
   - optional fields: user_id, id, email, metadata
-  - risk: Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute
+  - risk: Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide at least one of id, user_id, or email.
 - cancel_data_export:
   - endpoint: POST /export/cancel/{{ record.job_identifier }}
   - required fields: job_identifier
@@ -445,7 +448,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - endpoint: POST /messages
   - required fields: message_type, from, to
   - optional fields: subject, body, template, cc, bcc, components, created_at, create_conversation_without_contact_reply
-  - risk: Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute
+  - risk: Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute; variant rules: email requires subject/body/template/from/to; inapp requires body/from/to; whatsapp requires template/components/from/to.
 - create_news_item:
   - endpoint: POST /news/news_items
   - required fields: title, sender_id
@@ -494,7 +497,8 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Create a phone Switch: live Intercom mutation against /phone_call_redirects; reverse ETL requires plan, preview, explicit approval, execute
 - create_tag:
   - endpoint: POST /tags
-  - optional fields: name, id, companies, users
+  - required fields: name
+  - optional fields: id, companies, users
   - risk: Create or update a tag, Tag or untag companies, Tag contacts: live Intercom mutation against /tags; reverse ETL requires plan, preview, explicit approval, execute
 - delete_tag:
   - endpoint: DELETE /tags/{{ record.tag_id }}
@@ -554,9 +558,9 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
   - risk: Unlink a conversation from a ticket: live Intercom mutation against /tickets/{ticket_id}/linked_conversations/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation
 - reply_ticket:
   - endpoint: POST /tickets/{{ record.ticket_id }}/reply
-  - required fields: ticket_id
-  - optional fields: message_type, type, body, created_at, attachment_urls, reply_options, intercom_user_id, user_id, email, admin_id, attachment_files, cross_post
-  - risk: Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute
+  - required fields: ticket_id, message_type, type
+  - optional fields: body, created_at, attachment_urls, reply_options, intercom_user_id, user_id, email, admin_id, attachment_files, cross_post, skip_notifications
+  - risk: Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute; variant rules: user replies require body and exactly one of intercom_user_id, user_id, or email; admin replies require admin_id.
 - attach_tag_to_ticket:
   - endpoint: POST /tickets/{{ record.ticket_id }}/tags
   - required fields: ticket_id, id, admin_id
@@ -568,7 +572,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags; declares ty
 - update_visitor:
   - endpoint: PUT /visitors
   - optional fields: id, user_id, name, custom_attributes
-  - risk: Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute
+  - risk: Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute; variant rules: provide id or user_id.
 - convert_visitor:
   - endpoint: POST /visitors/convert
   - required fields: type, user, visitor
