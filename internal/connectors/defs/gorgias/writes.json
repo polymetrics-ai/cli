@@ -1205,19 +1205,38 @@
           },
           "id": {
             "type": "integer"
+          },
+          "value": {
+            "type": [
+              "string",
+              "integer",
+              "boolean"
+            ],
+            "description": "Custom field value payload."
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "customer_id",
-          "id"
-        ]
+          "id",
+          "value"
+        ],
+        "minProperties": 3
       },
       "risk": "Update customer field value via Gorgias PUT /customers/{customer_id}/custom-fields/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
       "path_fields": [
         "customer_id",
         "id"
-      ]
+      ],
+      "body_type": "json_array",
+      "body_field": "value",
+      "body_schema": {
+        "type": [
+          "string",
+          "integer",
+          "boolean"
+        ]
+      }
     },
     {
       "name": "update_customer_data",
@@ -2302,7 +2321,10 @@
           "type"
         ]
       },
-      "risk": "Create an integration via Gorgias POST /integrations. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval."
+      "risk": "Create an integration via Gorgias POST /integrations. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
+      "redact_fields": [
+        "http.hmac_secret"
+      ]
     },
     {
       "name": "delete_integration",
@@ -2474,6 +2496,9 @@
       "risk": "Update an integration via Gorgias PUT /integrations/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
       "path_fields": [
         "id"
+      ],
+      "redact_fields": [
+        "http.hmac_secret"
       ]
     },
     {
@@ -4250,19 +4275,38 @@
           },
           "id": {
             "type": "integer"
+          },
+          "value": {
+            "type": [
+              "string",
+              "integer",
+              "boolean"
+            ],
+            "description": "Custom field value payload."
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "ticket_id",
-          "id"
-        ]
+          "id",
+          "value"
+        ],
+        "minProperties": 3
       },
       "risk": "Update ticket field value via Gorgias PUT /tickets/{ticket_id}/custom-fields/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
       "path_fields": [
         "ticket_id",
         "id"
-      ]
+      ],
+      "body_type": "json_array",
+      "body_field": "value",
+      "body_schema": {
+        "type": [
+          "string",
+          "integer",
+          "boolean"
+        ]
+      }
     },
     {
       "name": "create_ticket_message",
@@ -6375,6 +6419,12 @@
       "risk": "Update a user via Gorgias PUT /users/{id}. External Gorgias mutation or provider-side computation; requires reverse ETL plan, preview, and explicit approval.",
       "path_fields": [
         "id"
+      ],
+      "redact_fields": [
+        "new_password",
+        "old_password",
+        "password_confirmation",
+        "two_fa_code"
       ]
     },
     {

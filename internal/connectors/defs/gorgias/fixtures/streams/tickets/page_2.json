@@ -1,34 +1,27 @@
 {
-  "request": {
-    "method": "GET",
-    "path": "/tickets",
-    "query": {
-      "limit": "synthetic-conformance-value",
-      "cursor": "fixture_cursor_2"
-    }
-  },
+  "request": { "method": "GET", "path": "/tickets", "query": { "limit": "synthetic-conformance-value", "cursor": "fixture_cursor_2" } },
   "response": {
     "status": 200,
     "body": {
       "data": [
         {
           "id": 3,
-          "operation_id": "list-tickets",
-          "summary": "List tickets",
+          "subject": "Fixture ticket 3",
+          "status": "open",
+          "channel": "email",
+          "via": "email",
+          "priority": "normal",
+          "language": "en",
+          "is_unread": true,
+          "spam": false,
+          "trashed_datetime": null,
           "created_datetime": "2026-01-01T00:00:03Z",
           "updated_datetime": "2026-01-02T00:00:03Z",
-          "name": "Fixture ticket 3",
-          "title": "Fixture ticket 3",
-          "status": "open",
-          "type": "Tickets",
-          "data": {
-            "source": "fixture"
-          }
+          "opened_datetime": "2026-01-01T00:07:00Z",
+          "closed_datetime": null
         }
       ],
-      "meta": {
-        "next_cursor": null
-      }
+      "meta": { "next_cursor": null }
     }
   }
 }

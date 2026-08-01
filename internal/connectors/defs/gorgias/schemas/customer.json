@@ -11,15 +11,51 @@
   ],
   "properties": {
     "id": {
+      "type": "integer"
+    },
+    "external_id": {
       "type": [
-        "integer",
-        "string"
+        "string",
+        "null"
       ]
     },
-    "operation_id": {
-      "type": "string"
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
-    "summary": {
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "firstname": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastname": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timezone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "channel": {
       "type": [
         "string",
         "null"
@@ -36,38 +72,6 @@
         "string",
         "null"
       ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "title": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "data": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "additionalProperties": true
     }
-  },
-  "additionalProperties": true
+  }
 }

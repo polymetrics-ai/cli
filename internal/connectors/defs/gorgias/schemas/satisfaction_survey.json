@@ -11,15 +11,33 @@
   ],
   "properties": {
     "id": {
+      "type": "integer"
+    },
+    "ticket_id": {
       "type": [
         "integer",
-        "string"
+        "null"
       ]
     },
-    "operation_id": {
-      "type": "string"
+    "customer_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
     },
-    "summary": {
+    "score": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "scale_range": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "body_text": {
       "type": [
         "string",
         "null"
@@ -31,43 +49,17 @@
         "null"
       ]
     },
-    "updated_datetime": {
+    "sent_datetime": {
       "type": [
         "string",
         "null"
       ]
     },
-    "name": {
+    "scored_datetime": {
       "type": [
         "string",
         "null"
       ]
-    },
-    "title": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "data": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "additionalProperties": true
     }
-  },
-  "additionalProperties": true
+  }
 }

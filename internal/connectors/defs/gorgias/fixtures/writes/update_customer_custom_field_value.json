@@ -1,7 +1,8 @@
 {
   "record": {
     "customer_id": 123,
-    "id": 123
+    "id": 123,
+    "value": "fixture-value"
   },
   "expect": {
     "method": "PUT",

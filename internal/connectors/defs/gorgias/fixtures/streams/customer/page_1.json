@@ -6,18 +6,17 @@
   "response": {
     "status": 200,
     "body": {
-      "id": 1,
-      "operation_id": "get-customer",
-      "summary": "Retrieve a customer",
+      "id": 201,
+      "external_id": "ext_201",
+      "email": "fixture1@example.com",
+      "name": "Fixture Customer 1",
+      "firstname": "Fixture",
+      "lastname": "One",
+      "language": "en",
+      "timezone": "UTC",
+      "channel": "email",
       "created_datetime": "2026-01-01T00:00:01Z",
-      "updated_datetime": "2026-01-02T00:00:01Z",
-      "name": "Fixture customer",
-      "title": "Retrieve a customer",
-      "status": "active",
-      "type": "Customers",
-      "data": {
-        "source": "fixture"
-      }
+      "updated_datetime": "2026-01-02T00:00:01Z"
     }
   }
 }

@@ -11,17 +11,53 @@
   ],
   "properties": {
     "id": {
+      "type": "integer"
+    },
+    "ticket_id": {
       "type": [
         "integer",
-        "string"
+        "null"
       ]
     },
-    "operation_id": {
-      "type": "string"
-    },
-    "summary": {
+    "channel": {
       "type": [
         "string",
+        "null"
+      ]
+    },
+    "via": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "from_agent": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "subject": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "body_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stripped_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "public": {
+      "type": [
+        "boolean",
         "null"
       ]
     },
@@ -31,43 +67,11 @@
         "null"
       ]
     },
-    "updated_datetime": {
+    "sent_datetime": {
       "type": [
         "string",
         "null"
       ]
-    },
-    "name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "title": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "data": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "additionalProperties": true
     }
-  },
-  "additionalProperties": true
+  }
 }

@@ -517,7 +517,16 @@
         }
       ],
       "examples": [
-        "pm gorgias custom-field get --json --limit 25"
+        "pm gorgias custom-field get --custom-field-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "custom-field-id",
+          "type": "string",
+          "summary": "Gorgias custom field ID path parameter.",
+          "maps_to": "config.custom_field_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -551,7 +560,16 @@
         }
       ],
       "examples": [
-        "pm gorgias customer-custom-fields-values list --json --limit 25"
+        "pm gorgias customer-custom-fields-values list --customer-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Gorgias customer ID path parameter.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -568,7 +586,16 @@
         }
       ],
       "examples": [
-        "pm gorgias customer get --json --limit 25"
+        "pm gorgias customer get --customer-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Gorgias customer ID path parameter.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -602,7 +629,16 @@
         }
       ],
       "examples": [
-        "pm gorgias event get --json --limit 25"
+        "pm gorgias event get --event-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "event-id",
+          "type": "string",
+          "summary": "Gorgias event ID path parameter.",
+          "maps_to": "config.event_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -636,7 +672,16 @@
         }
       ],
       "examples": [
-        "pm gorgias integration get --json --limit 25"
+        "pm gorgias integration get --integration-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "integration-id",
+          "type": "string",
+          "summary": "Gorgias integration ID path parameter.",
+          "maps_to": "config.integration_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -670,7 +715,16 @@
         }
       ],
       "examples": [
-        "pm gorgias job get --json --limit 25"
+        "pm gorgias job get --job-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "string",
+          "summary": "Gorgias job ID path parameter.",
+          "maps_to": "config.job_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -704,7 +758,16 @@
         }
       ],
       "examples": [
-        "pm gorgias macro get --json --limit 25"
+        "pm gorgias macro get --macro-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "macro-id",
+          "type": "string",
+          "summary": "Gorgias macro ID path parameter.",
+          "maps_to": "config.macro_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -738,7 +801,16 @@
         }
       ],
       "examples": [
-        "pm gorgias metric-card get --json --limit 25"
+        "pm gorgias metric-card get --slug ticket-volume --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Gorgias slug path parameter.",
+          "maps_to": "config.slug",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -772,7 +844,16 @@
         }
       ],
       "examples": [
-        "pm gorgias voice-call-event get --json --limit 25"
+        "pm gorgias voice-call-event get --voice-call-event-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "voice-call-event-id",
+          "type": "string",
+          "summary": "Gorgias voice call event ID path parameter.",
+          "maps_to": "config.voice_call_event_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -806,7 +887,16 @@
         }
       ],
       "examples": [
-        "pm gorgias voice-call get --json --limit 25"
+        "pm gorgias voice-call get --voice-call-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "voice-call-id",
+          "type": "string",
+          "summary": "Gorgias voice call ID path parameter.",
+          "maps_to": "config.voice_call_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -840,7 +930,16 @@
         }
       ],
       "examples": [
-        "pm gorgias rule get --json --limit 25"
+        "pm gorgias rule get --rule-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "rule-id",
+          "type": "string",
+          "summary": "Gorgias rule ID path parameter.",
+          "maps_to": "config.rule_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -874,7 +973,16 @@
         }
       ],
       "examples": [
-        "pm gorgias satisfaction-survey get --json --limit 25"
+        "pm gorgias satisfaction-survey get --satisfaction-survey-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "satisfaction-survey-id",
+          "type": "string",
+          "summary": "Gorgias satisfaction survey ID path parameter.",
+          "maps_to": "config.satisfaction_survey_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -908,7 +1016,16 @@
         }
       ],
       "examples": [
-        "pm gorgias tag get --json --limit 25"
+        "pm gorgias tag get --tag-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "tag-id",
+          "type": "string",
+          "summary": "Gorgias tag ID path parameter.",
+          "maps_to": "config.tag_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -942,7 +1059,16 @@
         }
       ],
       "examples": [
-        "pm gorgias team get --json --limit 25"
+        "pm gorgias team get --team-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Gorgias team ID path parameter.",
+          "maps_to": "config.team_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -959,7 +1085,16 @@
         }
       ],
       "examples": [
-        "pm gorgias ticket get --json --limit 25"
+        "pm gorgias ticket get --ticket-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Gorgias ticket ID path parameter.",
+          "maps_to": "config.ticket_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -976,7 +1111,16 @@
         }
       ],
       "examples": [
-        "pm gorgias ticket-custom-fields list --json --limit 25"
+        "pm gorgias ticket-custom-fields list --ticket-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Gorgias ticket ID path parameter.",
+          "maps_to": "config.ticket_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -993,7 +1137,16 @@
         }
       ],
       "examples": [
-        "pm gorgias ticket-messages list --json --limit 25"
+        "pm gorgias ticket-messages list --ticket-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Gorgias ticket ID path parameter.",
+          "maps_to": "config.ticket_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -1010,7 +1163,23 @@
         }
       ],
       "examples": [
-        "pm gorgias ticket-message get --json --limit 25"
+        "pm gorgias ticket-message get --ticket-id 123 --ticket-message-id 456 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Gorgias ticket ID path parameter.",
+          "maps_to": "config.ticket_id",
+          "allow_empty": false
+        },
+        {
+          "name": "ticket-message-id",
+          "type": "string",
+          "summary": "Gorgias ticket message ID path parameter.",
+          "maps_to": "config.ticket_message_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -1027,7 +1196,16 @@
         }
       ],
       "examples": [
-        "pm gorgias ticket-tags list --json --limit 25"
+        "pm gorgias ticket-tags list --ticket-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Gorgias ticket ID path parameter.",
+          "maps_to": "config.ticket_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -1061,7 +1239,16 @@
         }
       ],
       "examples": [
-        "pm gorgias user get --json --limit 25"
+        "pm gorgias user get --user-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Gorgias user ID path parameter.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -1095,7 +1282,16 @@
         }
       ],
       "examples": [
-        "pm gorgias view get --json --limit 25"
+        "pm gorgias view get --view-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Gorgias view ID path parameter.",
+          "maps_to": "config.view_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -1112,7 +1308,16 @@
         }
       ],
       "examples": [
-        "pm gorgias view-items list --json --limit 25"
+        "pm gorgias view-items list --view-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Gorgias view ID path parameter.",
+          "maps_to": "config.view_id",
+          "allow_empty": false
+        }
       ]
     },
     {
@@ -1146,7 +1351,16 @@
         }
       ],
       "examples": [
-        "pm gorgias widget get --json --limit 25"
+        "pm gorgias widget get --widget-id 123 --json --limit 25"
+      ],
+      "flags": [
+        {
+          "name": "widget-id",
+          "type": "string",
+          "summary": "Gorgias widget ID path parameter.",
+          "maps_to": "config.widget_id",
+          "allow_empty": false
+        }
       ]
     },
     {

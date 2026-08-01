@@ -11,15 +11,57 @@
   ],
   "properties": {
     "id": {
+      "type": "integer"
+    },
+    "subject": {
       "type": [
-        "integer",
-        "string"
+        "string",
+        "null"
       ]
     },
-    "operation_id": {
-      "type": "string"
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
-    "summary": {
+    "channel": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "via": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "priority": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_unread": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "spam": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "trashed_datetime": {
       "type": [
         "string",
         "null"
@@ -37,37 +79,17 @@
         "null"
       ]
     },
-    "name": {
+    "opened_datetime": {
       "type": [
         "string",
         "null"
       ]
     },
-    "title": {
+    "closed_datetime": {
       "type": [
         "string",
         "null"
       ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "type": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "data": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "additionalProperties": true
     }
-  },
-  "additionalProperties": true
+  }
 }
