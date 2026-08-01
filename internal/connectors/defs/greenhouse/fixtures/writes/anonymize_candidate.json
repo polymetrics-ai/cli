@@ -1,7 +1,10 @@
 {
   "record": {
     "candidate_id": "candidate_id_fixture",
-    "field_names": "field_names_fixture"
+    "field_names": [
+      "full_name",
+      "email_addresses"
+    ]
   },
   "expect": {
     "method": "PUT",

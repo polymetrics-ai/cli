@@ -307,8 +307,8 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
   - endpoint: POST /v1/prospects
   - risk: Greenhouse mutation: POST: Add Prospect.
 - anonymize_candidate:
-  - endpoint: PUT /v1/candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names }}
-  - required fields: candidate_id, field_names
+  - endpoint: PUT /v1/candidates/{{ record.candidate_id }}/anonymize?fields={{ record.field_names | join:, }}
+  - required fields: candidate_id, non-empty field_names array of documented anonymize fields
   - risk: Destructive Greenhouse mutation: PUT: Anonymize Candidate.
 - merge_candidates:
   - endpoint: PUT /v1/candidates/merge
@@ -361,15 +361,15 @@ Reads and writes documented Greenhouse Harvest REST API resources through the de
   - risk: Greenhouse mutation: POST: Create Job.
 - replace_hiring_team:
   - endpoint: PUT /v1/jobs/{{ record.job_id }}/hiring_team
-  - required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list
+  - required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list; every supplied list must be non-empty
   - risk: Greenhouse mutation: PUT: Replace Hiring Team.
 - add_hiring_team_members:
   - endpoint: POST /v1/jobs/{{ record.job_id }}/hiring_team
-  - required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list
+  - required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list; every supplied list must be non-empty
   - risk: Greenhouse mutation: POST: Add Hiring Team Members.
 - remove_hiring_team_member:
   - endpoint: DELETE /v1/jobs/{{ record.job_id }}/hiring_team
-  - required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list
+  - required fields: job_id plus at least one non-empty hiring_managers, recruiters, coordinators, or sourcers list; every supplied list must be non-empty
   - risk: Destructive Greenhouse mutation: DELETE: Remove Hiring Team Member.
 - update_current_offer:
   - endpoint: PATCH /v1/applications/{{ record.application_id }}/offers/current_offer

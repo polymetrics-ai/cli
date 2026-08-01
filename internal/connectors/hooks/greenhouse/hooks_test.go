@@ -130,8 +130,60 @@ func TestExecuteWriteHiringTeamRequiresNonEmptyMemberList(t *testing.T) {
 			wantErr: true,
 		},
 		{
+			name:    "empty list with non-empty list",
+			record:  connectors.Record{"job_id": "job_id_fixture", "hiring_managers": []any{float64(1234)}, "recruiters": []any{}},
+			wantErr: true,
+		},
+		{
 			name:    "non-empty list",
 			record:  connectors.Record{"job_id": "job_id_fixture", "hiring_managers": []any{float64(1234)}},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			handled, err := New().ExecuteWrite(context.Background(), action, tt.record, nil)
+			if handled {
+				t.Fatalf("ExecuteWrite handled = true, want declarative fallback")
+			}
+			if tt.wantErr && err == nil {
+				t.Fatalf("ExecuteWrite error = nil, want error")
+			}
+			if !tt.wantErr && err != nil {
+				t.Fatalf("ExecuteWrite error = %v, want nil", err)
+			}
+		})
+	}
+}
+
+func TestExecuteWriteAnonymizeCandidateRequiresDocumentedFields(t *testing.T) {
+	t.Parallel()
+
+	action := engine.WriteAction{Name: "anonymize_candidate"}
+	tests := []struct {
+		name    string
+		record  connectors.Record
+		wantErr bool
+	}{
+		{
+			name:    "empty fields",
+			record:  connectors.Record{"candidate_id": "candidate_id_fixture", "field_names": []any{}},
+			wantErr: true,
+		},
+		{
+			name:    "unsupported field",
+			record:  connectors.Record{"candidate_id": "candidate_id_fixture", "field_names": []any{"not_a_documented_field"}},
+			wantErr: true,
+		},
+		{
+			name:    "duplicate field",
+			record:  connectors.Record{"candidate_id": "candidate_id_fixture", "field_names": []any{"full_name", "full_name"}},
+			wantErr: true,
+		},
+		{
+			name:    "documented fields",
+			record:  connectors.Record{"candidate_id": "candidate_id_fixture", "field_names": []any{"full_name", "email_addresses"}},
 			wantErr: false,
 		},
 	}
