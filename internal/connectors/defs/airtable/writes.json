@@ -2211,7 +2211,8 @@
           "records": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^rec[A-Za-z0-9]{14}$"
             }
           }
         },
