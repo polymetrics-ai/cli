@@ -1,0 +1,31 @@
+{
+  "record": {
+    "form_template": "form_template_fixture_1",
+    "text": "Fixture text",
+    "instructions": "Fixture instructions",
+    "group": "Fixture group",
+    "secretByDefault": false,
+    "fields": [
+      {
+        "id": "field_fixture_1",
+        "value": "Fixture value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/form_templates/form_template_fixture_1",
+    "body": {
+      "text": "Fixture text",
+      "instructions": "Fixture instructions",
+      "group": "Fixture group",
+      "secretByDefault": false,
+      "fields": [
+        {
+          "id": "field_fixture_1",
+          "value": "Fixture value"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1220 @@
+[
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/applications/:application",
+    "title": "Retrieve a single application",
+    "id": "retrieve-a-single-application",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/applications",
+    "title": "List all applications",
+    "id": "list-all-applications",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/applications/deleted",
+    "title": "List deleted applications",
+    "id": "list-deleted-applications",
+    "params": [
+      "deleted_at_start, deleted_at_end",
+      "limit",
+      "offset"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/archive_reasons/:archive_reason",
+    "title": "Retrieve a single archive reason",
+    "id": "retrieve-a-single-archive-reason",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/archive_reasons",
+    "title": "List all archive reasons",
+    "id": "list-all-archive-reasons",
+    "params": [
+      "type"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/audit_events",
+    "title": "List all audit events",
+    "id": "list-all-audit-events",
+    "params": [
+      "type",
+      "user_id",
+      "target_type",
+      "target_id",
+      "created_at_start",
+      "created_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/contacts/:contact",
+    "title": "Retrieve a single contact",
+    "id": "retrieve-a-single-contact",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/contacts/:contact",
+    "title": "Update a contact",
+    "id": "update-a-contact",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/disposition_stages",
+    "title": "List disposition stages",
+    "id": "list-disposition-stages",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/v1/eeo/responses/pii",
+    "title": "Retrieve EEO responses with PII",
+    "id": "retrieve-eeo-responses-with-pii",
+    "params": [
+      "expand",
+      "created_at_start",
+      "created_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/feedback/:feedback",
+    "title": "Retrieve a feedback form",
+    "id": "retrieve-a-feedback-form",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/feedback",
+    "title": "List all feedback",
+    "id": "list-all-feedback",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/feedback",
+    "title": "Create a feedback form",
+    "id": "create-a-feedback-form",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "baseTemplateId",
+      "panel",
+      "interview",
+      "fieldValues",
+      "createdAt",
+      "completedAt"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/opportunities/:opportunity/feedback/:feedback",
+    "title": "Update feedback",
+    "id": "update-feedback",
+    "params": [],
+    "fields": [
+      "completedAt",
+      "fieldValues",
+      "id",
+      "value"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/opportunities/:opportunity/feedback/:feedback",
+    "title": "Delete Feedback",
+    "id": "delete-feedback",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/feedback_templates/:feedback_template",
+    "title": "Retrieve a feedback template",
+    "id": "retrieve-a-feedback-template",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/feedback_templates",
+    "title": "List all feedback templates",
+    "id": "list-all-feedback-templates",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/feedback_templates",
+    "title": "Create a feedback template",
+    "id": "create-a-feedback-template",
+    "params": [],
+    "fields": [
+      "text",
+      "instructions",
+      "group",
+      "fields"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/feedback_templates/:feedback_template",
+    "title": "Update a feedback template",
+    "id": "update-a-feedback-template",
+    "params": [],
+    "fields": [
+      "text",
+      "instructions",
+      "group",
+      "fields"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/feedback_templates/:feedback_template",
+    "title": "Delete a feedback template",
+    "id": "delete-a-feedback-template",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/files",
+    "title": "Upload a single file",
+    "id": "upload-a-single-file",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "file"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/files/:file",
+    "title": "Retrieve a single file",
+    "id": "retrieve-a-single-file",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/files",
+    "title": "List all files",
+    "id": "list-all-files",
+    "params": [
+      "uploaded_at_start, uploaded_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/files/:file/download",
+    "title": "Download a file",
+    "id": "download-a-file",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/opportunities/:opportunity/files/:file",
+    "title": "Delete a file",
+    "id": "delete-a-file",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/interviews/:interview",
+    "title": "Retrieve a single interview",
+    "id": "retrieve-a-single-interview",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/interviews",
+    "title": "List all interviews",
+    "id": "list-all-interviews",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/interviews",
+    "title": "Create an interview",
+    "id": "create-an-interview",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/opportunities/:opportunity/interviews/:interview",
+    "title": "Update an interview",
+    "id": "update-an-interview",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/opportunities/:opportunity/interviews/:interview",
+    "title": "Delete an interview",
+    "id": "delete-an-interview",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/notes/:note",
+    "title": "Retrieve a single note",
+    "id": "retrieve-a-single-note",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/notes",
+    "title": "List all notes",
+    "id": "list-all-notes",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/notes",
+    "title": "Create a note",
+    "id": "create-a-note",
+    "params": [
+      "perform_as",
+      "note_id"
+    ],
+    "fields": [
+      "value",
+      "secret",
+      "score",
+      "notifyFollowers",
+      "createdAt"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/opportunities/:opportunity/notes/:noteId",
+    "title": "Delete a note",
+    "id": "delete-a-note",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/opportunities/:opportunity/notes/:note",
+    "title": "Update a note",
+    "id": "update-a-note",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/offers",
+    "title": "List all offers",
+    "id": "list-all-offers",
+    "params": [
+      "expand"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/offers/:offer/download",
+    "title": "Download offer file",
+    "id": "download-offer-file",
+    "params": [
+      "status"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity",
+    "title": "Retrieve a single opportunity",
+    "id": "retrieve-a-single-opportunity",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities",
+    "title": "List all opportunities",
+    "id": "list-all-opportunities",
+    "params": [
+      "include",
+      "expand",
+      "tag",
+      "email",
+      "origin",
+      "source",
+      "confidentiality",
+      "stage_id",
+      "posting_id",
+      "archived_posting_id",
+      "created_at_start, created_at_end",
+      "updated_at_start, updated_at_end",
+      "advanced_at_start, advanced_at_end",
+      "archived_at_start, archived_at_end",
+      "archived",
+      "archive_reason_id",
+      "snoozed",
+      "contact_id"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/deleted",
+    "title": "List deleted opportunities",
+    "id": "list-deleted-opportunities",
+    "params": [
+      "deleted_at_start, deleted_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/file_actions",
+    "title": "List opportunity file actions",
+    "id": "list-opportunity-file-actions",
+    "params": [
+      "occurred_at_start",
+      "occurred_at_end",
+      "limit",
+      "offset"
+    ],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities",
+    "title": "Create an opportunity",
+    "id": "create-an-opportunity",
+    "params": [
+      "perform_as",
+      "parse",
+      "perform_as_posting_owner"
+    ],
+    "fields": [
+      "name",
+      "headline",
+      "stage",
+      "location",
+      "phones",
+      "value",
+      "type",
+      "emails",
+      "links",
+      "tags",
+      "sources",
+      "origin",
+      "owner",
+      "followers",
+      "resumeFile",
+      "files",
+      "postings",
+      "createdAt",
+      "archived",
+      "archivedAt",
+      "reason",
+      "contact"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/opportunities/:opportunity/stage",
+    "title": "Update opportunity stage",
+    "id": "update-opportunity-stage",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "stage"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/opportunities/:opportunity/archived",
+    "title": "Update opportunity archived state",
+    "id": "update-opportunity-archived-state",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "reason",
+      "cleanInterviews",
+      "requisitionId"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/addLinks",
+    "title": "Update contact links by opportunity",
+    "id": "update-contact-links-by-opportunity",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "links"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/removeLinks",
+    "title": "Update contact links by opportunity",
+    "id": "update-contact-links-by-opportunity",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "links"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/addTags",
+    "title": "Update opportunity tags",
+    "id": "update-opportunity-tags",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "tags"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/removeTags",
+    "title": "Update opportunity tags",
+    "id": "update-opportunity-tags",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "tags"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/addSources",
+    "title": "Update opportunity sources",
+    "id": "update-opportunity-sources",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "sources"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/removeSources",
+    "title": "Update opportunity sources",
+    "id": "update-opportunity-sources",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "sources"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/panels/:panel",
+    "title": "Retrieve a single panel",
+    "id": "retrieve-a-single-panel",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/panels",
+    "title": "List all panels",
+    "id": "list-all-panels",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/panels",
+    "title": "Create a panel",
+    "id": "create-a-panel",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/opportunities/:opportunity/panels/:panel",
+    "title": "Update a panel",
+    "id": "update-a-panel",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/opportunities/:opportunity/panels/:panel",
+    "title": "Delete a panel",
+    "id": "delete-a-panel",
+    "params": [
+      "perform_as"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/postings/:posting",
+    "title": "Retrieve a single posting",
+    "id": "retrieve-a-single-posting",
+    "params": [
+      "distribution"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/postings",
+    "title": "List all postings",
+    "id": "list-all-postings",
+    "params": [
+      "include",
+      "expand",
+      "state",
+      "distributionChannel",
+      "confidentiality",
+      "group",
+      "team",
+      "department",
+      "location",
+      "commitment",
+      "level",
+      "tag",
+      "updated_at_start, updated_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/postings?include=content",
+    "title": "List all postings",
+    "id": "list-all-postings",
+    "params": [
+      "include",
+      "expand",
+      "state",
+      "distributionChannel",
+      "confidentiality",
+      "group",
+      "team",
+      "department",
+      "location",
+      "commitment",
+      "level",
+      "tag",
+      "updated_at_start, updated_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/postings?expand=followers",
+    "title": "List all postings",
+    "id": "list-all-postings",
+    "params": [
+      "include",
+      "expand",
+      "state",
+      "distributionChannel",
+      "confidentiality",
+      "group",
+      "team",
+      "department",
+      "location",
+      "commitment",
+      "level",
+      "tag",
+      "updated_at_start, updated_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/postings/deleted",
+    "title": "List deleted postings",
+    "id": "list-deleted-postings",
+    "params": [
+      "deleted_at_start, deleted_at_end",
+      "limit",
+      "offset"
+    ],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/postings",
+    "title": "Create a posting",
+    "id": "create-a-posting",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "text",
+      "state",
+      "distributionChannels",
+      "owner",
+      "hiringManager",
+      "categories",
+      "team",
+      "department",
+      "location",
+      "commitment",
+      "tags",
+      "content",
+      "descriptionHtml",
+      "lists",
+      "text",
+      "content",
+      "closingPostingHtml",
+      "workplaceType",
+      "requisitionCodes"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/postings/:posting",
+    "title": "Update a posting",
+    "id": "update-a-posting",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "text",
+      "state",
+      "distributionChannels",
+      "categories",
+      "team",
+      "department",
+      "location",
+      "commitment",
+      "tags",
+      "content",
+      "descriptionHtml",
+      "lists",
+      "text",
+      "content",
+      "closingPostingHtml",
+      "workplaceType",
+      "requisitionCodes"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/postings/:posting/apply",
+    "title": "Retrieve posting application questions",
+    "id": "retrieve-posting-application-questions",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/postings/:posting/users",
+    "title": "List users with access to a posting",
+    "id": "list-users-with-access-to-a-posting",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/postings/:posting/apply",
+    "title": "Apply to a posting",
+    "id": "apply-to-a-posting",
+    "params": [
+      "send_confirmation_email"
+    ],
+    "fields": [
+      "customQuestions",
+      "id",
+      "fields",
+      "personalInformation",
+      "eeoResponses",
+      "urls",
+      "ipAddress",
+      "timezone",
+      "userAgent",
+      "acceptLanguage",
+      "referer",
+      "source",
+      "consent",
+      "marketing",
+      "diversitySurvey",
+      "surveyId",
+      "candidateSelectedLocation",
+      "responses",
+      "questionId",
+      "questionText",
+      "questionType",
+      "answer",
+      "origin"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/forms/:form",
+    "title": "Retrieve a profile form",
+    "id": "retrieve-a-profile-form",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/forms",
+    "title": "List all profile forms",
+    "id": "list-all-profile-forms",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/opportunities/:opportunity/forms",
+    "title": "Create a profile form",
+    "id": "create-a-profile-form",
+    "params": [
+      "perform_as"
+    ],
+    "fields": [
+      "baseTemplateId",
+      "fields",
+      "secret"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/form_templates/:form_template",
+    "title": "Retrieve a profile form template",
+    "id": "retrieve-a-profile-form-template",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/form_templates",
+    "title": "List all profile form templates",
+    "id": "list-all-profile-form-templates",
+    "params": [
+      "include"
+    ],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/form_templates",
+    "title": "Create a profile form template",
+    "id": "create-a-profile-form-template",
+    "params": [],
+    "fields": [
+      "text",
+      "instructions",
+      "group",
+      "secretByDefault",
+      "fields"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/form_templates/:form_template",
+    "title": "Update a profile form template",
+    "id": "update-a-profile-form-template",
+    "params": [],
+    "fields": [
+      "text",
+      "instructions",
+      "group",
+      "secretByDefault",
+      "fields"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/form_templates/:form_template",
+    "title": "Delete a profile form template",
+    "id": "delete-a-profile-form-template",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/referrals/:referral",
+    "title": "Retrieve a single referral",
+    "id": "retrieve-a-single-referral",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/referrals",
+    "title": "List all referrals",
+    "id": "list-all-referrals",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/requisitions/:requisition",
+    "title": "Retrieve a single requisition",
+    "id": "retrieve-a-single-requisition",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/requisitions",
+    "title": "List all requisitions",
+    "id": "list-all-requisitions",
+    "params": [
+      "created_at_start, created_at_end",
+      "requisition_code",
+      "status",
+      "confidentiality"
+    ],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/requisitions",
+    "title": "Create a requisition",
+    "id": "create-a-requisition",
+    "params": [],
+    "fields": [
+      "headcountTotal",
+      "name",
+      "requisitionCode",
+      "backfill",
+      "compensationBand",
+      "currency",
+      "interval",
+      "min",
+      "max",
+      "createdAt",
+      "customFields",
+      "employmentStatus",
+      "hiringManager",
+      "internalNotes",
+      "location",
+      "owner",
+      "status",
+      "team",
+      "postingIds"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/requisitions/:requisition",
+    "title": "Update a requisition",
+    "id": "update-a-requisition",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/requisitions/:requisition",
+    "title": "Delete a requisition",
+    "id": "delete-a-requisition",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/requisition_fields/:requisition_field",
+    "title": "Retrieve a single requisition field",
+    "id": "retrieve-a-single-requisition-field",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/requisition_fields",
+    "title": "List all requisition fields",
+    "id": "list-all-requisition-fields",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/requisition_fields",
+    "title": "Create a requisition field",
+    "id": "create-a-requisition-field",
+    "params": [],
+    "fields": [
+      "id",
+      "text",
+      "type",
+      "subfields",
+      "id",
+      "text",
+      "type",
+      "options",
+      "text",
+      "isRequired"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/requisition_fields/:requisition_field",
+    "title": "Update a requisition field",
+    "id": "update-a-requisition-field",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/requisition_fields/:requisition_field/options",
+    "title": "Updating dropdown fields",
+    "id": "updating-dropdown-fields",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/requisition_fields/:requisition_field/options",
+    "title": "Updating dropdown fields",
+    "id": "updating-dropdown-fields",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/requisition_fields/:requisition_field/options",
+    "title": "Updating dropdown fields",
+    "id": "updating-dropdown-fields",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/requisition_fields/:requisition_field",
+    "title": "Delete a requisition field",
+    "id": "delete-a-requisition-field",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/resumes/:resume",
+    "title": "Retrieve a single resume",
+    "id": "retrieve-a-single-resume",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/resumes",
+    "title": "List all resumes",
+    "id": "list-all-resumes",
+    "params": [
+      "uploaded_at_start, uploaded_at_end"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/opportunities/:opportunity/resumes/:resume/download",
+    "title": "Download a resume file",
+    "id": "download-a-resume-file",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/sources",
+    "title": "List all sources",
+    "id": "list-all-sources",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/stages/:stage",
+    "title": "Retrieve a single stage",
+    "id": "retrieve-a-single-stage",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/stages",
+    "title": "List all stages",
+    "id": "list-all-stages",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/surveys/diversity/:posting",
+    "title": "Retrieve a diversity survey",
+    "id": "retrieve-a-diversity-survey",
+    "params": [
+      "country_code"
+    ],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/tags",
+    "title": "List all tags",
+    "id": "list-all-tags",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/uploads",
+    "title": "Upload a file",
+    "id": "upload-a-file",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/users/:user",
+    "title": "Retrieve a single user",
+    "id": "retrieve-a-single-user",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/users",
+    "title": "List all users",
+    "id": "list-all-users",
+    "params": [
+      "email",
+      "accessRole",
+      "includeDeactivated",
+      "external_directory_id"
+    ],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/users",
+    "title": "Create a user",
+    "id": "create-a-user",
+    "params": [
+      "name",
+      "email",
+      "accessRole",
+      "externalDirectoryId",
+      "jobTitle",
+      "managerId"
+    ],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/users/:user",
+    "title": "Update a user",
+    "id": "update-a-user",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/users/:user/deactivate",
+    "title": "Deactivate a user",
+    "id": "deactivate-a-user",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/users/:user/reactivate",
+    "title": "Reactivate a user",
+    "id": "reactivate-a-user",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "GET",
+    "path": "/webhooks",
+    "title": "List Webhooks",
+    "id": "list-webhooks",
+    "params": [],
+    "fields": []
+  },
+  {
+    "method": "POST",
+    "path": "/webhooks",
+    "title": "Create a Webhook",
+    "id": "create-a-webhook",
+    "params": [
+      "url",
+      "event",
+      "configuration",
+      "conditions",
+      "verifyConnection"
+    ],
+    "fields": []
+  },
+  {
+    "method": "PUT",
+    "path": "/webhooks/",
+    "title": "Update a Webhook",
+    "id": "update-a-webhook",
+    "params": [
+      "data",
+      "id",
+      "url",
+      "configuration",
+      "conditions",
+      "verifyConnection"
+    ],
+    "fields": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/webhooks/:webhookId",
+    "title": "Delete a Webhook",
+    "id": "delete-a-webhook",
+    "params": [],
+    "fields": []
+  }
+]

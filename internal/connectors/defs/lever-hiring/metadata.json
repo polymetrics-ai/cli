@@ -1,14 +1,14 @@
 {
   "name": "lever-hiring",
   "display_name": "Lever Hiring",
-  "description": "Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).",
+  "description": "Reads Lever Hiring opportunities, postings, users, requisitions, stages, and related hiring resources; exposes bounded direct reads and selected typed reverse-ETL write plans.",
   "integration_type": "api",
   "docs_url": "https://hire.lever.co/developer/documentation",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Lever API read of candidate and hiring pipeline data"
+    "read": "external Lever API read of candidate and hiring pipeline data",
+    "write": "selected Lever mutations are exposed only through reverse ETL plan, preview, explicit approval, and execute; destructive actions require typed confirmation"
   }
 }

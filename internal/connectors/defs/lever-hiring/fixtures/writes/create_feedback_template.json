@@ -1,0 +1,28 @@
+{
+  "record": {
+    "text": "Fixture text",
+    "instructions": "Fixture instructions",
+    "group": "Fixture group",
+    "fields": [
+      {
+        "id": "field_fixture_1",
+        "value": "Fixture value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/feedback_templates",
+    "body": {
+      "text": "Fixture text",
+      "instructions": "Fixture instructions",
+      "group": "Fixture group",
+      "fields": [
+        {
+          "id": "field_fixture_1",
+          "value": "Fixture value"
+        }
+      ]
+    }
+  }
+}

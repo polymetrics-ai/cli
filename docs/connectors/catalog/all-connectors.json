@@ -77903,7 +77903,7 @@
   {
     "name": "lever-hiring",
     "display_name": "Lever Hiring",
-    "description": "Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).",
+    "description": "Reads Lever Hiring opportunities, postings, users, requisitions, stages, and related hiring resources; exposes bounded direct reads and selected typed reverse-ETL write plans.",
     "integration_type": "api",
     "docs_url": "https://hire.lever.co/developer/documentation",
     "release_stage": "ga",
@@ -77911,7 +77911,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -78000,10 +78000,339 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "deleted_applications",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "archive_reasons",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_events",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "disposition_stages",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "feedback_templates",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "deleted_opportunities",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "deleted_postings",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "form_templates",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "requisition_fields",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sources",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "applications",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_feedback",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_interviews",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_notes",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_offers",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_file_actions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_panels",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_forms",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunity_referrals",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "posting_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "update_feedback",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/opportunities/{{ record.opportunity }}/feedback/{{ record.feedback }}",
+        "risk": "Updates a feedback form for an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute."
+      },
+      {
+        "name": "delete_feedback",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/opportunities/{{ record.opportunity }}/feedback/{{ record.feedback }}",
+        "risk": "Deletes a feedback form from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_feedback_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/feedback_templates",
+        "risk": "Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+      },
+      {
+        "name": "update_feedback_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/feedback_templates/{{ record.feedback_template }}",
+        "risk": "Updates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+      },
+      {
+        "name": "delete_feedback_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/feedback_templates/{{ record.feedback_template }}",
+        "risk": "Deletes a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_form_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/form_templates",
+        "risk": "Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+      },
+      {
+        "name": "update_form_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/form_templates/{{ record.form_template }}",
+        "risk": "Updates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute."
+      },
+      {
+        "name": "delete_form_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/form_templates/{{ record.form_template }}",
+        "risk": "Deletes a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_note",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/opportunities/{{ record.opportunity }}/notes/{{ record.noteId }}",
+        "risk": "Deletes a note from an opportunity. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_requisition",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/requisitions/{{ record.requisition }}",
+        "risk": "Deletes a requisition. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_requisition_field_options",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/requisition_fields/{{ record.requisition_field }}/options",
+        "risk": "Deletes dropdown options for a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_requisition_field",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/requisition_fields/{{ record.requisition_field }}",
+        "risk": "Deletes a requisition field. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deactivate_user",
+        "kind": "update",
+        "method": "POST",
+        "path": "/users/{{ record.user }}/deactivate",
+        "risk": "Deactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reactivate_user",
+        "kind": "update",
+        "method": "POST",
+        "path": "/users/{{ record.user }}/reactivate",
+        "risk": "Reactivates a Lever user. Reverse ETL writes require plan, preview, explicit approval, and execute."
       }
     ],
     "risk": {
-      "read": "external Lever API read of candidate and hiring pipeline data"
+      "read": "external Lever API read of candidate and hiring pipeline data",
+      "write": "selected Lever mutations are exposed only through reverse ETL plan, preview, explicit approval, and execute; destructive actions require typed confirmation"
     },
     "icon": {
       "id": "pm-sample",
